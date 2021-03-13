@@ -22,6 +22,7 @@ error.subtitle=Pahoittelumme, on tapahtunut virhe.
 error.status=Status:
 error.message=Viesti:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> tilin aktivointi
 email.activation.greeting=Hyvä {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> salasanan resetointi
 email.reset.greeting=Hyvä {0}
 email.reset.text1=Sinun <%= baseName %> käyttäjätilisi salasanan resetointia on pyydetty, klikkaa alla olevaa URLia resetoidaksesi sen:
 email.reset.text2=Terveisin,
+<%_ } _%>

@@ -29,10 +29,10 @@ const { logger } = cliUtils;
  * Add jdl extension to the file
  */
 const toJdlFile = file => {
-    if (!path.extname(file)) {
-        return `${file}.jdl`;
-    }
-    return file;
+  if (!path.extname(file)) {
+    return `${file}.jdl`;
+  }
+  return file;
 };
 
 /**
@@ -44,19 +44,19 @@ const toJdlFile = file => {
  * @param {function} forkProcess the method to use for process forking
  */
 module.exports = ([jdlFiles = []], options = {}, env, forkProcess) => {
-    logger.debug('cmd: import-jdl from ./import-jdl');
-    logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
-    if (options.inline) {
-        return importJdl(jdlFiles, options, env, forkProcess);
+  logger.debug('cmd: import-jdl from ./import-jdl');
+  logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
+  if (options.inline) {
+    return importJdl(jdlFiles, options, env, forkProcess);
+  }
+  if (!jdlFiles || jdlFiles.length === 0) {
+    logger.fatal(chalk.red('\nAt least one jdl file is required.\n'));
+  }
+  const promises = jdlFiles.map(toJdlFile).map(filename => {
+    if (!fs.existsSync(filename)) {
+      return download([[filename]], options);
     }
-    if (!jdlFiles || jdlFiles.length === 0) {
-        logger.fatal(chalk.red('\nAt least one jdl file is required.\n'));
-    }
-    const promises = jdlFiles.map(toJdlFile).map(filename => {
-        if (!fs.existsSync(filename)) {
-            return download([[filename]], options);
-        }
-        return Promise.resolve(filename);
-    });
-    return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, forkProcess));
+    return Promise.resolve(filename);
+  });
+  return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles.flat(), options, env, forkProcess));
 };

@@ -22,56 +22,56 @@ const Lexer = require('chevrotain').Lexer;
 const TokenCollectorVisitor = require('./token-collector-visitor');
 
 module.exports = {
-    checkTokens,
-    checkConfigKeys,
+  checkTokens,
+  checkConfigKeys,
 };
 
 function checkTokens(allDefinedTokens, rules) {
-    const usedTokens = getUsedTokens(rules);
-    const unusedTokens = getUselessTokens(usedTokens, allDefinedTokens);
-    if (unusedTokens.length !== 0) {
-        const unusedTokenTypeNames = unusedTokens.map(tokenType => tokenType.name);
-        throw Error(`Unused token definitions found: [ ${unusedTokenTypeNames.join(', ')} ]`);
-    }
+  const usedTokens = getUsedTokens(rules);
+  const unusedTokens = getUselessTokens(usedTokens, allDefinedTokens);
+  if (unusedTokens.length !== 0) {
+    const unusedTokenTypeNames = unusedTokens.map(tokenType => tokenType.name);
+    throw Error(`Unused token definitions found: [ ${unusedTokenTypeNames.join(', ')} ]`);
+  }
 }
 
 function getUsedTokens(rules) {
-    return rules.reduce((result, currentRule) => {
-        const collector = new TokenCollectorVisitor();
-        currentRule.accept(collector);
-        return _.uniq(result.concat(collector.actualTokens));
-    }, []);
+  return rules.reduce((result, currentRule) => {
+    const collector = new TokenCollectorVisitor();
+    currentRule.accept(collector);
+    return _.uniq(result.concat(collector.actualTokens));
+  }, []);
 }
 
 function getUselessTokens(usedTokens, allDefinedTokens) {
-    const usedCategories = _.uniq(_.flatMap(usedTokens, 'CATEGORIES'));
-    const notDirectlyUsedTokens = _.difference(allDefinedTokens, _.uniq(usedTokens, usedCategories));
-    const redundant = _.reject(notDirectlyUsedTokens, token => {
-        const tokCategories = token.CATEGORIES;
-        return _.some(tokCategories, category => _.includes(usedCategories, category));
-    });
-    return _.reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
+  const usedCategories = _.uniq(_.flatMap(usedTokens, 'CATEGORIES'));
+  const notDirectlyUsedTokens = _.difference(allDefinedTokens, _.uniq(usedTokens, usedCategories));
+  const redundant = _.reject(notDirectlyUsedTokens, token => {
+    const tokCategories = token.CATEGORIES;
+    return _.some(tokCategories, category => _.includes(usedCategories, category));
+  });
+  return _.reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
 }
 
 function checkConfigKeys(definedTokensMap, usedConfigKeys) {
-    checkForUselessConfigurationKeys(definedTokensMap, usedConfigKeys);
-    checkForMissingConfigurationKeys(definedTokensMap, usedConfigKeys);
+  checkForUselessConfigurationKeys(definedTokensMap, usedConfigKeys);
+  checkForMissingConfigurationKeys(definedTokensMap, usedConfigKeys);
 }
 
 function checkForUselessConfigurationKeys(definedTokensMap, usedConfigKeys) {
-    const redundantConfigKeys = _.difference(usedConfigKeys, Object.keys(definedTokensMap));
-    if (!_.isEmpty(redundantConfigKeys)) {
-        throw Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
-    }
+  const redundantConfigKeys = _.difference(usedConfigKeys, Object.keys(definedTokensMap));
+  if (!_.isEmpty(redundantConfigKeys)) {
+    throw Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
+  }
 }
 
 function checkForMissingConfigurationKeys(definedTokensMap, usedConfigKeys) {
-    const definedConfigKeyNames = _.values(definedTokensMap)
-        .filter(tokenType => _.includes(tokenType.CATEGORIES, definedTokensMap.CONFIG_KEY))
-        .map(tokenType => tokenType.name);
+  const definedConfigKeyNames = _.values(definedTokensMap)
+    .filter(tokenType => _.includes(tokenType.CATEGORIES, definedTokensMap.CONFIG_KEY))
+    .map(tokenType => tokenType.name);
 
-    const missingConfigKeys = _.difference(definedConfigKeyNames, usedConfigKeys);
-    if (!_.isEmpty(missingConfigKeys)) {
-        throw Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
-    }
+  const missingConfigKeys = _.difference(definedConfigKeyNames, usedConfigKeys);
+  if (!_.isEmpty(missingConfigKeys)) {
+    throw Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
+  }
 }

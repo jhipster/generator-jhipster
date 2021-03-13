@@ -1,4 +1,4 @@
-import { $, browser, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by, ExpectedConditions as ec<% } %> } from 'protractor';
+import { $, browser, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by<% } %> } from 'protractor';
 
 import BasePage from './base-component';
 
@@ -54,7 +54,7 @@ export default class SignInPage extends BasePage {
   }
   <%_ } else { _%>
   async loginWithOAuth(username: string, password: string) {
-    await browser.wait(ec.presenceOf(this.username), 5000);
+    await browser.sleep(1000);
     if (await this.username.isPresent()) {
       await this.setUserName(username);
       await this.setPassword(password);

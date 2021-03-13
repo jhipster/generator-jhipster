@@ -63,10 +63,12 @@
         for (idx in addedRelationships) {
             const relationshipData = addedRelationships[idx];
             if (relationshipData.unique) {
+                const idField = relationship.otherEntity.primaryKey.ownFields[0];
+                const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
         _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
             columnNames="<%= relationshipData.columnName %>_id"
-            constraintName="<%= _getUniqueConstraintName(entityTableName, relationshipData.columnName) %>"/>
+            constraintName="<%= uniqueConstraintName %>"/>
         <% }
         if (!relationshipData.nullable) {
         _%>
@@ -89,7 +91,7 @@
             if (relationship.shouldWriteRelationship) {
                 const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
                 let baseColumnName = getColumnName(relationshipName) + '_id';
-                if (relationship.relationshipType === 'one-to-one' && relationship.useJPADerivedIdentifier === true) {
+                if (relationship.relationshipType === 'one-to-one' && relationship.id === true) {
                     baseColumnName = 'id';
                 }
         %>

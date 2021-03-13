@@ -58,7 +58,7 @@ public class TestSecurityConfiguration {
         metadata.put("end_session_endpoint", "https://jhipster.org/logout");
 
         return ClientRegistration.withRegistrationId("oidc")
-            .redirectUriTemplate("{baseUrl}/{action}/oauth2/code/{registrationId}")
+            .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
             .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
             .scope("read:user")

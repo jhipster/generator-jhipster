@@ -46,9 +46,9 @@
                 <%_ }
             } _%>
             <%_ for (relationship of relationships) {
-                if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true
-                            && (relationship.useJPADerivedIdentifier == null || relationship.useJPADerivedIdentifier === false))) {
-                    relationship.otherEntity.idFields.forEach(idField => {
+                if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
+                            && !relationship.id) {
+                    relationship.otherEntity.primaryKey.ownFields.forEach(idField => {
                     const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
                      _%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
@@ -103,7 +103,7 @@
     -->
     <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityClass %>.csv"
+                  file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
                   separator=";"
                   tableName="<%= entity.entityTableName %>">
             <%_ for (field of fields) {
@@ -117,7 +117,7 @@
                     if (relationship.relationshipValidate === true && relationship.relationshipRequired
                         && (relationship.relationshipType === "many-to-one"
                             || (relationship.relationshipType === "one-to-one" && relationship.ownerSide === true
-                                && (relationship.useJPADerivedIdentifier == null || relationship.useJPADerivedIdentifier === false))
+                                && (relationship.id == null || relationship.id === false))
                     )) {
                         _%>
                         <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>

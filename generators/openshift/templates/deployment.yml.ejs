@@ -126,7 +126,7 @@ objects:
             env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod,api-docs
-            <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+            <%_ if (!app.serviceDiscoveryType ) { _%>
             - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
               value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
             <%_ } _%>
@@ -242,7 +242,7 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-      <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+      <%_ if (!app.serviceDiscoveryType) { _%>
         port: 80
         targetPort: ${{APP_PORT}}
       <%_ } else { _%>

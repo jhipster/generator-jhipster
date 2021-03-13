@@ -77,13 +77,13 @@ import org.springframework.data.couchbase.core.query.FetchType;
 import org.springframework.data.couchbase.core.query.N1qlJoin;
     <%_ } _%>
 <%_ } else if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Property;
-import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 <%_ if (hasRelationship) { _%>
-import org.neo4j.springframework.data.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } _%>
 <%_ } if (databaseType === 'sql') { _%>
     <%_ if (reactive) { _%>
@@ -122,7 +122,7 @@ import java.util.Set;
 <%_ } if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -137,7 +137,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 <%_ if (typeof javadoc == 'undefined') { _%>
 /**
- * A <%= asEntity(entityClass) %>.
+ * A <%= persistClass %>.
  */
 <%_ } else { _%>
 <%- formatAsClassJavadoc(javadoc) %>
@@ -170,7 +170,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
-public class <%= asEntity(entityClass) %> implements Serializable {
+public class <%= persistClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
     <%_ if (databaseType === 'couchbase' && !embedded) { _%>
@@ -304,7 +304,7 @@ relationships.forEach((relationship, idx) => {
     const relationshipRequired = relationship.relationshipRequired;
     const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
     const ownerSide = relationship.ownerSide || false;
-    const isUsingMapsId = relationship.useJPADerivedIdentifier;
+    const isUsingMapsId = relationship.id;
     if (otherEntityRelationshipName) {
         mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
     }
@@ -497,7 +497,7 @@ relationships.forEach((relationship, idx) => {
     }
 
     <%_ if (fluentMethods) { _%>
-    public <%= asEntity(entityClass) %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
+    public <%= persistClass %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
         this.<%= primaryKey.name %> = <%= primaryKey.name %>;
         return this;
     }
@@ -519,9 +519,9 @@ relationships.forEach((relationship, idx) => {
     <%_ if (fluentMethods) { _%>
 
         <%_ if (fieldTypeBlobContent !== 'text') { _%>
-    public <%= asEntity(entityClass) %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
+    public <%= persistClass %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
         <%_ } else { _%>
-    public <%= asEntity(entityClass) %> <%= fieldName %>(String <%= fieldName %>) {
+    public <%= persistClass %> <%= fieldName %>(String <%= fieldName %>) {
         <%_ } _%>
         <%_ if (fieldType === 'BigDecimal' && databaseType === 'sql' && reactive) { _%>
         this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
@@ -550,7 +550,7 @@ relationships.forEach((relationship, idx) => {
     }
     <%_ if (fluentMethods) { _%>
 
-    public <%= asEntity(entityClass) %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
+    public <%= persistClass %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
         return this;
     }
@@ -581,9 +581,9 @@ relationships.forEach((relationship, idx) => {
             continue;
         }
 
-        const useJPADerivedIdentifier = relationship.useJPADerivedIdentifier;
+        const id = relationship.id;
         const reactiveRelationshipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' &&
-                (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
+                (ownerSide === false || (ownerSide === true && id === true))));
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
@@ -592,7 +592,7 @@ relationships.forEach((relationship, idx) => {
     }
         <%_ if (fluentMethods) { _%>
 
-    public <%= asEntity(entityClass) %> <%= relationshipFieldNamePlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
+    public <%= persistClass %> <%= relationshipFieldNamePlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
         this.set<%= relationshipNameCapitalizedPlural %>(<%= otherEntityNamePlural %>);
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
         this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
@@ -602,7 +602,7 @@ relationships.forEach((relationship, idx) => {
         return this;
     }
 
-    public <%= asEntity(entityClass) %> add<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+    public <%= persistClass %> add<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
         <%_ if (!otherEntityIsEmbedded || embedded && ownerSide === true) { _%>
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
@@ -622,7 +622,7 @@ relationships.forEach((relationship, idx) => {
         return this;
     }
 
-    public <%= asEntity(entityClass) %> remove<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+    public <%= persistClass %> remove<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
         <%_ if (!otherEntityIsEmbedded || (embedded && ownerSide === true)) { _%>
             <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
@@ -674,10 +674,10 @@ relationships.forEach((relationship, idx) => {
     }
         <%_ if (fluentMethods) { _%>
 
-    public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+    public <%= persistClass %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
             <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>() : null;
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
             <%_ } _%>
         return this;
     }
@@ -702,7 +702,7 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>() : null;
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
         <%_ } _%>
     }
         <%_ if (reactiveRelationshipWithId) { _%>
@@ -724,11 +724,11 @@ relationships.forEach((relationship, idx) => {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof <%= asEntity(entityClass) %>)) {
+        if (!(o instanceof <%= persistClass %>)) {
             return false;
         }
         <%_ if (!embedded) { _%>
-        return <%= primaryKey.name %> != null && <%= primaryKey.name %>.equals(((<%= asEntity(entityClass) %>) o).<%= primaryKey.name %>);
+        return <%= primaryKey.name %> != null && <%= primaryKey.name %>.equals(((<%= persistClass %>) o).<%= primaryKey.name %>);
         <%_ } else { _%>
         return false;
         <%_ } _%>
@@ -743,7 +743,7 @@ relationships.forEach((relationship, idx) => {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= asEntity(entityClass) %>{" +
+        return "<%= persistClass %>{" +
         <%_ if (!embedded) { _%>
             "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
         <%_ } _%>

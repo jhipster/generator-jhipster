@@ -31,7 +31,7 @@ spec:
   <%_ if (kubernetesStorageClassName) { _%>
   storageClassName: <%= kubernetesStorageClassName %>
   <%_ } _%>
-  ---
+---
 <%_ } _%>
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret

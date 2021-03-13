@@ -27,7 +27,7 @@ const areJHipsterEntitiesEqual = require('../utils/object-utils').areEntitiesEqu
 let configuration = {};
 
 module.exports = {
-    exportEntities,
+  exportEntities,
 };
 
 /**
@@ -44,30 +44,30 @@ module.exports = {
  * @returns {Array<JSONEntity>} the exported entities.
  */
 function exportEntities(passedConfiguration) {
-    init(passedConfiguration);
-    if (configuration.entities.length === 0) {
-        return configuration.entities;
-    }
-    const subFolder = passedConfiguration.application.forSeveralApplications ? configuration.application.name : '';
-    configuration.entities = updateEntities(subFolder);
-    if (!configuration.forceNoFiltering) {
-        configuration.entities = filterOutUnchangedEntities(subFolder);
-    }
-    if (shouldFilterOutEntitiesBasedOnMicroservice()) {
-        configuration.entities = filterOutEntitiesByMicroservice();
-    }
-    if (!passedConfiguration.skipFileGeneration) {
-        createJHipsterJSONFolder(subFolder);
-        writeEntities(subFolder);
-    }
+  init(passedConfiguration);
+  if (configuration.entities.length === 0) {
     return configuration.entities;
+  }
+  const subFolder = passedConfiguration.application.forSeveralApplications ? configuration.application.name : '';
+  configuration.entities = updateEntities(subFolder);
+  if (!configuration.forceNoFiltering) {
+    configuration.entities = filterOutUnchangedEntities(subFolder);
+  }
+  if (shouldFilterOutEntitiesBasedOnMicroservice()) {
+    configuration.entities = filterOutEntitiesByMicroservice();
+  }
+  if (!passedConfiguration.skipFileGeneration) {
+    createJHipsterJSONFolder(subFolder);
+    writeEntities(subFolder);
+  }
+  return configuration.entities;
 }
 
 function init(passedConfiguration) {
-    if (!passedConfiguration || !passedConfiguration.entities) {
-        throw new Error('Entities have to be passed to be exported.');
-    }
-    configuration = passedConfiguration;
+  if (!passedConfiguration || !passedConfiguration.entities) {
+    throw new Error('Entities have to be passed to be exported.');
+  }
+  configuration = passedConfiguration;
 }
 
 /**
@@ -75,7 +75,7 @@ function init(passedConfiguration) {
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
 function createJHipsterJSONFolder(subFolder) {
-    FileUtils.createFolderIfItDoesNotExist(path.join(subFolder, '.jhipster'));
+  FileUtils.createFolderIfItDoesNotExist(path.join(subFolder, '.jhipster'));
 }
 
 /**
@@ -83,10 +83,10 @@ function createJHipsterJSONFolder(subFolder) {
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
 function updateEntities(subFolder) {
-    return configuration.entities.map(entity => {
-        const filePath = path.join(subFolder, toFilePath(entity.name));
-        return updateEntityToGenerateWithExistingOne(filePath, entity);
-    });
+  return configuration.entities.map(entity => {
+    const filePath = path.join(subFolder, toFilePath(entity.name));
+    return updateEntityToGenerateWithExistingOne(filePath, entity);
+  });
 }
 
 /**
@@ -94,38 +94,38 @@ function updateEntities(subFolder) {
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
 function writeEntities(subFolder) {
-    configuration.entities.forEach(entity => {
-        const filePath = path.join(subFolder, toFilePath(entity.name));
-        fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
-    });
+  configuration.entities.forEach(entity => {
+    const filePath = path.join(subFolder, toFilePath(entity.name));
+    fs.writeFileSync(filePath, JSON.stringify(entity, null, 2).concat('\n'));
+  });
 }
 
 function updateEntityToGenerateWithExistingOne(filePath, entity) {
-    if (FileUtils.doesFileExist(filePath)) {
-        const fileOnDisk = readJSONFile(filePath);
-        if (fileOnDisk && fileOnDisk.changelogDate) {
-            entity.changelogDate = fileOnDisk.changelogDate;
-            return { ...fileOnDisk, ...entity };
-        }
+  if (FileUtils.doesFileExist(filePath)) {
+    const fileOnDisk = readJSONFile(filePath);
+    if (fileOnDisk && fileOnDisk.changelogDate) {
+      entity.changelogDate = fileOnDisk.changelogDate;
+      return { ...fileOnDisk, ...entity };
     }
-    return entity;
+  }
+  return entity;
 }
 
 function filterOutUnchangedEntities(subFolder) {
-    return configuration.entities.filter(entity => {
-        const filePath = path.join(subFolder, toFilePath(entity.name));
-        return !(FileUtils.doesFileExist(filePath) && areJHipsterEntitiesEqual(readJSONFile(filePath), entity));
-    });
+  return configuration.entities.filter(entity => {
+    const filePath = path.join(subFolder, toFilePath(entity.name));
+    return !(FileUtils.doesFileExist(filePath) && areJHipsterEntitiesEqual(readJSONFile(filePath), entity));
+  });
 }
 
 function shouldFilterOutEntitiesBasedOnMicroservice() {
-    return (
-        configuration.application.type && configuration.application.type === ApplicationTypes.MICROSERVICE && configuration.application.name
-    );
+  return (
+    configuration.application.type && configuration.application.type === ApplicationTypes.MICROSERVICE && configuration.application.name
+  );
 }
 
 function filterOutEntitiesByMicroservice() {
-    return configuration.entities.filter(entity => {
-        return !(entity.microserviceName && entity.microserviceName.toLowerCase() !== configuration.application.name.toLowerCase());
-    });
+  return configuration.entities.filter(entity => {
+    return !(entity.microserviceName && entity.microserviceName.toLowerCase() !== configuration.application.name.toLowerCase());
+  });
 }

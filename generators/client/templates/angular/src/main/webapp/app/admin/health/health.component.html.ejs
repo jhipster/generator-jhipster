@@ -17,44 +17,52 @@
  limitations under the License.
 -%>
 <div>
-    <h2>
-        <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading">Health Checks</span>
+  <h2>
+    <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading">Health Checks</span>
 
-        <button class="btn btn-primary float-right" (click)="refresh()">
-            <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button">Refresh</span>
-        </button>
-    </h2>
+    <button class="btn btn-primary float-right" (click)="refresh()">
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button">Refresh</span>
+    </button>
+  </h2>
 
-    <div class="table-responsive">
-        <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" <%= jhiPrefix %>Translate="health.table.service">Service Name</th>
-                    <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status">Status</th>
-                    <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details">Details</th>
-                </tr>
-            </thead>
-            <tbody *ngIf="health">
-                <tr *ngFor="let componentHealth of health.components | keyvalue">
-                    <td>
-                        <%_ if (enableTranslation) { _%>
-                        {{ 'health.indicator.' + componentHealth.key | translate }}
-                        <%_ } else { _%>
-                        <span class="text-capitalize">{{ componentHealth.key }}</span>
-                        <%_ } _%>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge" [ngClass]="getBadgeClass(componentHealth.value!.status)" <%= jhiPrefix %>Translate="{{ 'health.status.' + componentHealth.value!.status }}">
-                            {{ componentHealth.value!.status }}
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <a class="hand" (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })" *ngIf="componentHealth.value!.details">
-                            <fa-icon icon="eye"></fa-icon>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="table-responsive">
+    <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
+      <thead>
+        <tr>
+          <th scope="col" <%= jhiPrefix %>Translate="health.table.service">Service Name</th>
+          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status">Status</th>
+          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details">Details</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="health">
+        <tr *ngFor="let componentHealth of health.components | keyvalue">
+          <td>
+            <%_ if (enableTranslation) { _%>
+            {{ 'health.indicator.' + componentHealth.key | translate }}
+            <%_ } else { _%>
+            <span class="text-capitalize">{{ componentHealth.key }}</span>
+            <%_ } _%>
+          </td>
+          <td class="text-center">
+            <span
+              class="badge"
+              [ngClass]="getBadgeClass(componentHealth.value!.status)"
+              <%= jhiPrefix %>Translate="{{ 'health.status.' + componentHealth.value!.status }}"
+            >
+              {{ componentHealth.value!.status }}
+            </span>
+          </td>
+          <td class="text-center">
+            <a
+              class="hand"
+              (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })"
+              *ngIf="componentHealth.value!.details"
+            >
+              <fa-icon icon="eye"></fa-icon>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

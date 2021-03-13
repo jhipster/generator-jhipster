@@ -18,10 +18,10 @@
  */
 
 module.exports = {
-    /** To inform of a better way to do things. */
-    INFO: { name: 'info', priority: 0 },
-    /** To warn there's something that can be improved (readability, etc.) */
-    WARNING: { name: 'warning', priority: 1 },
-    /** To tell there's a problem in the JDL (syntax error). */
-    ERROR: { name: 'error', priority: 2 },
+  /** To inform of a better way to do things. */
+  INFO: { name: 'info', priority: 0 },
+  /** To warn there's something that can be improved (readability, etc.) */
+  WARNING: { name: 'warning', priority: 1 },
+  /** To tell there's a problem in the JDL (syntax error). */
+  ERROR: { name: 'error', priority: 2 },
 };

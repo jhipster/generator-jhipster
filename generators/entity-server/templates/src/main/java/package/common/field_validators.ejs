@@ -21,54 +21,54 @@
 let result = '';
 
 if (field.fieldValidate === true) {
-    const rules = field.fieldValidateRules;
-    const validators = [];
-    const MAX_VALUE = 2147483647;
-    const isBlob = field.fieldType === 'byte[]';
+  const rules = field.fieldValidateRules;
+  const validators = [];
+  const MAX_VALUE = 2147483647;
+  const isBlob = field.fieldType === 'byte[]';
 
-    if (rules.includes('required') && !isBlob) {
-        // reactive tests need a default validation message because lookup is blocking
-        validators.push('@NotNull' + (reactive ? '(message = "must not be null")' : ''));
+  if (rules.includes('required') && !isBlob) {
+    // reactive tests need a default validation message because lookup is blocking
+    validators.push('@NotNull' + (reactive ? '(message = "must not be null")' : ''));
+  }
+  if (rules.includes('minlength') && !rules.includes('maxlength')) {
+    validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
+  }
+  if (rules.includes('maxlength') && !rules.includes('minlength')) {
+    validators.push('@Size(max = ' + field.fieldValidateRulesMaxlength + ')');
+  }
+  if (rules.includes('minlength') && rules.includes('maxlength')) {
+    validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
+  }
+  // Not supported anymore because the server can't check the size of the blob before downloading it completely.
+  // if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
+  //   validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
+  // }
+  // if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
+  //   validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
+  // }
+  // if (rules.includes('minbytes') && rules.includes('maxbytes')) {
+  //   validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
+  // }
+  if (rules.includes('min')) {
+    if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
+      validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');
+    } else {
+      const isLong = (field.fieldValidateRulesMin > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
+      validators.push('@Min(value = ' + field.fieldValidateRulesMin + isLong + ')');
     }
-    if (rules.includes('minlength') && !rules.includes('maxlength')) {
-        validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
+  }
+  if (rules.includes('max')) {
+    if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
+      validators.push('@DecimalMax(value = "' + field.fieldValidateRulesMax + '")');
+    } else {
+      const isLong = (field.fieldValidateRulesMax > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
+      validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
     }
-    if (rules.includes('maxlength') && !rules.includes('minlength')) {
-        validators.push('@Size(max = ' + field.fieldValidateRulesMaxlength + ')');
-    }
-    if (rules.includes('minlength') && rules.includes('maxlength')) {
-        validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
-    }
-    // Not supported anymore because the server can't check the size of the blob before downloading it completely.
-    // if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
-    //     validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
-    // }
-    // if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
-    //     validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
-    // }
-    // if (rules.includes('minbytes') && rules.includes('maxbytes')) {
-    //     validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
-    // }
-    if (rules.includes('min')) {
-        if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
-            validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');
-        } else {
-            const isLong = (field.fieldValidateRulesMin > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
-            validators.push('@Min(value = ' + field.fieldValidateRulesMin + isLong + ')');
-        }
-    }
-    if (rules.includes('max')) {
-        if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
-            validators.push('@DecimalMax(value = "' + field.fieldValidateRulesMax + '")');
-        } else {
-            const isLong = (field.fieldValidateRulesMax > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
-            validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
-        }
-    }
-    if (rules.includes('pattern')) {
-        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
-    }
-    result =  validators.join('\n    ');
-    result += '\n';
+  }
+  if (rules.includes('pattern')) {
+    validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
+  }
+  result =  validators.join('\n    ');
+  result += '\n';
 } -%>
 <%- result -%>

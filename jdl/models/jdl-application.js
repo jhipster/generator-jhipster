@@ -22,91 +22,91 @@ const JDLApplicationEntities = require('./jdl-application-entities');
 const JDLOptions = require('./jdl-options');
 
 module.exports = class JDLApplication {
-    constructor({ config = {}, entityNames = [] } = {}) {
-        this.config = createApplicationConfigurationFromObject(config);
-        this.entityNames = new JDLApplicationEntities(entityNames);
-        this.options = new JDLOptions();
-    }
+  constructor({ config = {}, entityNames = [] } = {}) {
+    this.config = createApplicationConfigurationFromObject(config);
+    this.entityNames = new JDLApplicationEntities(entityNames);
+    this.options = new JDLOptions();
+  }
 
-    setConfigurationOption(option) {
-        if (!option) {
-            throw new Error('An option has to be passed to set an option.');
-        }
-        this.config.setOption(option);
+  setConfigurationOption(option) {
+    if (!option) {
+      throw new Error('An option has to be passed to set an option.');
     }
+    this.config.setOption(option);
+  }
 
-    hasConfigurationOption(optionName) {
-        return this.config.hasOption(optionName);
-    }
+  hasConfigurationOption(optionName) {
+    return this.config.hasOption(optionName);
+  }
 
-    getConfigurationOptionValue(optionName) {
-        if (!optionName) {
-            throw new Error('An option name has to be passed to get a value.');
-        }
-        if (!this.config.hasOption(optionName)) {
-            return undefined;
-        }
-        const option = this.config.getOption(optionName);
-        return option.getValue();
+  getConfigurationOptionValue(optionName) {
+    if (!optionName) {
+      throw new Error('An option name has to be passed to get a value.');
     }
+    if (!this.config.hasOption(optionName)) {
+      return undefined;
+    }
+    const option = this.config.getOption(optionName);
+    return option.getValue();
+  }
 
-    forEachConfigurationOption(passedFunction) {
-        this.config.forEachOption(passedFunction);
-    }
+  forEachConfigurationOption(passedFunction) {
+    this.config.forEachOption(passedFunction);
+  }
 
-    addEntityName(entityName) {
-        if (!entityName) {
-            throw new Error('An entity name has to be passed so as to be added to the application.');
-        }
-        this.entityNames.add(entityName);
+  addEntityName(entityName) {
+    if (!entityName) {
+      throw new Error('An entity name has to be passed so as to be added to the application.');
     }
+    this.entityNames.add(entityName);
+  }
 
-    addEntityNames(entityNames = []) {
-        this.entityNames.addEntityNames(entityNames);
-    }
+  addEntityNames(entityNames = []) {
+    this.entityNames.addEntityNames(entityNames);
+  }
 
-    getEntityNames() {
-        return this.entityNames.toArray();
-    }
+  getEntityNames() {
+    return this.entityNames.toArray();
+  }
 
-    hasEntityName(entityName) {
-        if (!entityName) {
-            return false;
-        }
-        return this.entityNames.has(entityName);
+  hasEntityName(entityName) {
+    if (!entityName) {
+      return false;
     }
+    return this.entityNames.has(entityName);
+  }
 
-    forEachEntityName(passedFunction) {
-        this.entityNames.forEach(passedFunction);
-    }
+  forEachEntityName(passedFunction) {
+    this.entityNames.forEach(passedFunction);
+  }
 
-    addOption(jdlOption) {
-        if (!jdlOption) {
-            throw new Error("Can't add a nil option.");
-        }
-        this.options.addOption(jdlOption);
+  addOption(jdlOption) {
+    if (!jdlOption) {
+      throw new Error("Can't add a nil option.");
     }
+    this.options.addOption(jdlOption);
+  }
 
-    forEachOption(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.options.forEach(passedFunction);
+  forEachOption(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.options.forEach(passedFunction);
+  }
 
-    getOptionQuantity() {
-        return this.options.size();
-    }
+  getOptionQuantity() {
+    return this.options.size();
+  }
 
-    toString() {
-        let stringifiedApplication = `application {\n${this.config.toString(2)}\n`;
-        if (this.entityNames.size() !== 0) {
-            stringifiedApplication += `\n${this.entityNames.toString(2)}\n`;
-        }
-        if (this.options.size() !== 0) {
-            stringifiedApplication += `\n${this.options.toString(2)}\n`;
-        }
-        stringifiedApplication += '}';
-        return stringifiedApplication;
+  toString() {
+    let stringifiedApplication = `application {\n${this.config.toString(2)}\n`;
+    if (this.entityNames.size() !== 0) {
+      stringifiedApplication += `\n${this.entityNames.toString(2)}\n`;
     }
+    if (this.options.size() !== 0) {
+      stringifiedApplication += `\n${this.options.toString(2)}\n`;
+    }
+    stringifiedApplication += '}';
+    return stringifiedApplication;
+  }
 };

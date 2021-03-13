@@ -1,70 +1,70 @@
 {
-    "name": "JpaFilteringOtherSide",
-    "fields": [
-        {
-            "fieldName": "createdBy",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "createdOn",
-            "fieldType": "Instant"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "jpaFilteringRelationship",
-            "otherEntityRelationshipName": "requiredOneToOne",
-            "relationshipName": "requiredOneToOneOtherSide",
-            "ownerSide": false
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "jpaFilteringRelationship",
-            "otherEntityRelationshipName": "oneToOne",
-            "relationshipName": "oneToOneOtherSide",
-            "ownerSide": false
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "jpaFilteringRelationship",
-            "otherEntityRelationshipName": "requiredOneToMany",
-            "relationshipName": "requiredOneToManyOtherSide",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "jpaFilteringRelationship",
-            "otherEntityRelationshipName": "oneToMany",
-            "relationshipName": "oneToManyOtherSide",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "jpaFilteringRelationship",
-            "otherEntityRelationshipName": "requiredManyToMany",
-            "relationshipName": "requiredManyToManyOtherSide",
-            "otherEntityField": "id",
-            "ownerSide": false
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "jpaFilteringRelationship",
-            "otherEntityRelationshipName": "manyToMany",
-            "relationshipName": "manyToManyOtherSide",
-            "otherEntityField": "id",
-            "ownerSide": false
-        }
-    ],
-    "changelogDate": "20200820222459",
-    "entityTableName": "jpa_filtering_other_side",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "applications": ["jhipster"],
-    "skipUiGrouping": false
+  "name": "JpaFilteringOtherSide",
+  "fields": [
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdOn",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "requiredOneToOne",
+      "relationshipName": "requiredOneToOneOtherSide",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "oneToOne",
+      "relationshipName": "oneToOneOtherSide",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "requiredOneToMany",
+      "relationshipName": "requiredOneToManyOtherSide",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "oneToMany",
+      "relationshipName": "oneToManyOtherSide",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "requiredManyToMany",
+      "relationshipName": "requiredManyToManyOtherSide",
+      "otherEntityField": "id",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "manyToMany",
+      "relationshipName": "manyToManyOtherSide",
+      "otherEntityField": "id",
+      "ownerSide": false
+    }
+  ],
+  "changelogDate": "20200820222459",
+  "entityTableName": "jpa_filtering_other_side",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["jhipster"],
+  "skipUiGrouping": false
 }

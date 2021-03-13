@@ -19,63 +19,63 @@
 const dockerPrompts = require('../docker-prompts');
 
 module.exports = {
-    askForOpenShiftNamespace,
-    askForStorageType,
-    ...dockerPrompts,
+  askForOpenShiftNamespace,
+  askForStorageType,
+  ...dockerPrompts,
 };
 
 async function askForOpenShiftNamespace() {
-    if (this.regenerate) return;
+  if (this.regenerate) return;
 
-    const prompts = [
-        {
-            type: 'input',
-            name: 'openshiftNamespace',
-            message: 'What should we use for the OpenShift namespace?',
-            default: this.openshiftNamespace ? this.openshiftNamespace : 'default',
-        },
-    ];
+  const prompts = [
+    {
+      type: 'input',
+      name: 'openshiftNamespace',
+      message: 'What should we use for the OpenShift namespace?',
+      default: this.openshiftNamespace ? this.openshiftNamespace : 'default',
+    },
+  ];
 
-    const props = await this.prompt(prompts);
-    this.openshiftNamespace = props.openshiftNamespace;
+  const props = await this.prompt(prompts);
+  this.openshiftNamespace = props.openshiftNamespace;
 }
 
 async function askForStorageType() {
-    if (this.regenerate) return;
+  if (this.regenerate) return;
 
-    let storageEnabled = false;
-    this.appConfigs.some((appConfig, index) => {
-        if (appConfig.prodDatabaseType !== 'no' || appConfig.searchEngine === 'elasticsearch' || appConfig.monitoring === 'prometheus') {
-            storageEnabled = true;
-            return storageEnabled;
-        }
-        return false;
-    });
-
-    if (storageEnabled === false) {
-        return;
+  let storageEnabled = false;
+  this.appConfigs.some((appConfig, index) => {
+    if (appConfig.prodDatabaseType !== 'no' || appConfig.searchEngine === 'elasticsearch' || appConfig.monitoring === 'prometheus') {
+      storageEnabled = true;
+      return storageEnabled;
     }
+    return false;
+  });
 
-    // prompt this only when prodDatabaseType !== 'no' for any of the chosen apps
-    const prompts = [
+  if (storageEnabled === false) {
+    return;
+  }
+
+  // prompt this only when prodDatabaseType !== 'no' for any of the chosen apps
+  const prompts = [
+    {
+      type: 'list',
+      name: 'storageType',
+      message: 'Which *type* of database storage would you like to use?',
+      choices: [
         {
-            type: 'list',
-            name: 'storageType',
-            message: 'Which *type* of database storage would you like to use?',
-            choices: [
-                {
-                    value: 'persistent',
-                    name: 'Persistent Storage',
-                },
-                {
-                    value: 'ephemeral',
-                    name: 'Ephemeral Storage',
-                },
-            ],
-            default: 'ephemeral',
+          value: 'persistent',
+          name: 'Persistent Storage',
         },
-    ];
+        {
+          value: 'ephemeral',
+          name: 'Ephemeral Storage',
+        },
+      ],
+      default: 'ephemeral',
+    },
+  ];
 
-    const props = await this.prompt(prompts);
-    this.storageType = props.storageType;
+  const props = await this.prompt(prompts);
+  this.storageType = props.storageType;
 }

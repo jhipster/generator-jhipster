@@ -16,8 +16,9 @@
 import './commands';
 import './navbar';
 import './entity';
+import './management';
 <%_ if (authenticationType === 'oauth2') { _%>
-import './keycloak-oauth2';
+import './oauth2';
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 Cypress.Cookies.defaults({

@@ -18,15 +18,15 @@
  */
 
 const {
-    transports: { Console },
-    format: { printf, combine },
-    createLogger,
+  transports: { Console },
+  format: { printf, combine },
+  createLogger,
 } = require('winston');
 
 const myFormat = printf(info => `${info.level}: ${info.message}`);
 
 module.exports = createLogger({
-    transports: [new Console()],
-    format: combine(myFormat),
-    handleExceptions: true,
+  transports: [new Console()],
+  format: combine(myFormat),
+  handleExceptions: true,
 });

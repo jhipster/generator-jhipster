@@ -113,6 +113,11 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
 
     private static final String DEFAULT_LOGIN = "johndoe";
 
+<%_ const DEFAULT_USER = {firstName: 'john', lastName: 'doe'}; _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    private static final String DEFAULT_<%= field.fieldName.toUpperCase() %> = "<%= DEFAULT_USER [field.fieldName] %>";
+<%_ } _%>
+
     @Autowired
     private UserRepository userRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -180,6 +185,9 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+            .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(DEFAULT_<%= field.fieldName.toUpperCase() %>)))
+<%_ } _%>
             .andExpect(jsonPath("$.[*].email").doesNotExist())
             <%_ if (databaseType !== 'cassandra') { _%>
             .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
@@ -194,6 +202,9 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+<%_ } _%>       
         <% } _%>
     }
 

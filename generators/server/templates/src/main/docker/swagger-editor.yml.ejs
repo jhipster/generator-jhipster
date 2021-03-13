@@ -19,7 +19,7 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    swagger-editor:
-        image: <%= DOCKER_SWAGGER_EDITOR %>
-        ports:
-            - 127.0.0.1:7742:8080
+  swagger-editor:
+    image: <%= DOCKER_SWAGGER_EDITOR %>
+    ports:
+      - 127.0.0.1:7742:8080

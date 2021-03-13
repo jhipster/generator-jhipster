@@ -19,43 +19,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<%_ if (authenticationType !== 'uaa') { _%>
 import { map } from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
-<%_ } _%>
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from '../config/application-config.service';
 import { Login } from 'app/login/login.model';
 
-<%_ if (authenticationType !== 'uaa') { _%>
 type JwtToken = {
   id_token: string;
 };
-<%_ } else { _%>
-export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
-<%_ } _%>
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
   constructor(
     private http: HttpClient,
-    <%_ if (authenticationType !== 'uaa') { _%>
     private $localStorage: LocalStorageService,
-    private $sessionStorage: SessionStorageService
-    <%_ } _%>
+    private $sessionStorage: SessionStorageService,
+    private applicationConfigService: ApplicationConfigService
   ) {}
-
-  <%_ if (authenticationType === 'uaa') { _%>
-
-  login(credentials: Login): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'auth/login', credentials);
-  }
-
-  logout(): Observable<{}> {
-    return this.http.post(LOGOUT_URL, null);
-  }
-
-  <%_ } else { _%>
 
   getToken(): string {
     const tokenInLocalStorage: string | null = this.$localStorage.retrieve('authenticationToken');
@@ -65,7 +46,7 @@ export class AuthServerProvider {
 
   login(credentials: Login): Observable<void> {
     return this.http
-      .post<JwtToken>(SERVER_API_URL + 'api/authenticate', credentials)
+      .post<JwtToken>(this.applicationConfigService.getEndpointFor('api/authenticate'), credentials)
       .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
   }
 
@@ -87,6 +68,4 @@ export class AuthServerProvider {
       this.$localStorage.clear('authenticationToken');
     }
   }
-
-  <%_ } _%>
 }

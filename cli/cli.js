@@ -23,6 +23,6 @@ const { done, logger } = require('./utils');
 module.exports = runJHipster().catch(done);
 
 process.on('unhandledRejection', up => {
-    logger.error('Unhandled promise rejection at:');
-    logger.fatal(up);
+  logger.error('Unhandled promise rejection at:');
+  logger.fatal(up);
 });

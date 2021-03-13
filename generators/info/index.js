@@ -24,121 +24,122 @@ const BaseGenerator = require('../generator-base');
 // stderr unlike yeoman's log() so that user can easily redirect output to a file.
 /* eslint-disable no-console */
 module.exports = class extends BaseGenerator {
-    get initializing() {
-        return {
-            sayHello() {
-                this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
-            },
+  constructor(args, options) {
+    super(args, options, { unique: 'namespace' });
 
-            checkJHipster() {
-                const done = this.async();
-                console.log('##### **JHipster Version(s)**');
-                shelljs.exec('npm list generator-jhipster', { silent: true }, (err, stdout, stderr) => {
-                    if (stdout) {
-                        console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
-                    }
-                    done();
-                });
-            },
+    this.option('skipCommit', {
+      desc: 'Skip commit',
+      type: Boolean,
+      hide: true,
+      defaults: true,
+    });
 
-            displayConfiguration() {
-                const done = this.async();
-                let result = shelljs.cat('.yo-rc.json');
-                result = result.replace(
-                    /"rememberMeKey": ".*"/g,
-                    '"rememberMeKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
-                );
-                result = result.replace(
-                    /"jwtSecretKey": ".*"/g,
-                    '"jwtSecretKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
-                );
-                console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
-                console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
-                done();
-            },
+    this.env.options.skipInstall = true;
+  }
 
-            displayEntities() {
-                const done = this.async();
-                console.log(
-                    '\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n'
-                );
-                const jdl = this.generateJDLFromEntities();
-                console.log('<details>\n<summary>JDL entity definitions</summary>\n');
-                console.log(`<pre>\n${jdl.toString()}\n</pre>\n</details>\n`);
-                done();
-            },
+  get initializing() {
+    return {
+      sayHello() {
+        this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+      },
 
-            checkJava() {
-                const done = this.async();
-                console.log('\n##### **Environment and Tools**\n');
-                shelljs.exec('java -version', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(stderr);
-                    }
-                    done();
-                });
-            },
+      checkJHipster() {
+        const done = this.async();
+        console.log('##### **JHipster Version(s)**');
+        shelljs.exec('npm list generator-jhipster', { silent: true }, (err, stdout, stderr) => {
+          if (stdout) {
+            console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
+          }
+          done();
+        });
+      },
 
-            checkGit() {
-                const done = this.async();
-                shelljs.exec('git version', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(stdout);
-                    }
-                    done();
-                });
-            },
+      displayConfiguration() {
+        const done = this.async();
+        let result = shelljs.cat('.yo-rc.json');
+        result = result.replace(
+          /"rememberMeKey": ".*"/g,
+          '"rememberMeKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
+        );
+        result = result.replace(
+          /"jwtSecretKey": ".*"/g,
+          '"jwtSecretKey": "YourJWTSecretKeyWasReplacedByThisMeaninglessTextByTheJHipsterInfoCommandForObviousSecurityReasons"'
+        );
+        console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
+        console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        done();
+      },
 
-            checkNode() {
-                const done = this.async();
-                shelljs.exec('node -v', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(`node: ${stdout}`);
-                    }
-                    done();
-                });
-            },
+      displayEntities() {
+        const done = this.async();
+        console.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
+        const jdl = this.generateJDLFromEntities();
+        console.log('<details>\n<summary>JDL entity definitions</summary>\n');
+        console.log(`<pre>\n${jdl.toString()}\n</pre>\n</details>\n`);
+        done();
+      },
 
-            checkNpm() {
-                const done = this.async();
-                shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(`npm: ${stdout}`);
-                    }
-                    done();
-                });
-            },
+      checkJava() {
+        const done = this.async();
+        console.log('\n##### **Environment and Tools**\n');
+        shelljs.exec('java -version', { silent: true }, (err, stdout, stderr) => {
+          if (!err) {
+            console.log(stderr);
+          }
+          done();
+        });
+      },
 
-            checkYeoman() {
-                const done = this.async();
-                shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(`yeoman: ${stdout}`);
-                    }
-                    done();
-                });
-            },
+      checkGit() {
+        const done = this.async();
+        shelljs.exec('git version', { silent: true }, (err, stdout, stderr) => {
+          if (!err) {
+            console.log(stdout);
+          }
+          done();
+        });
+      },
 
-            checkDocker() {
-                const done = this.async();
-                shelljs.exec('docker -v', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(stdout);
-                    }
-                    done();
-                });
-            },
+      checkNode() {
+        const done = this.async();
+        shelljs.exec('node -v', { silent: true }, (err, stdout, stderr) => {
+          if (!err) {
+            console.log(`node: ${stdout}`);
+          }
+          done();
+        });
+      },
 
-            checkDockerCompose() {
-                const done = this.async();
-                shelljs.exec('docker-compose -v', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(stdout);
-                    }
-                    done();
-                });
-            },
-        };
-    }
+      checkNpm() {
+        const done = this.async();
+        shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
+          if (!err) {
+            console.log(`npm: ${stdout}`);
+          }
+          done();
+        });
+      },
+
+      checkDocker() {
+        const done = this.async();
+        shelljs.exec('docker -v', { silent: true }, (err, stdout, stderr) => {
+          if (!err) {
+            console.log(stdout);
+          }
+          done();
+        });
+      },
+
+      checkDockerCompose() {
+        const done = this.async();
+        shelljs.exec('docker-compose -v', { silent: true }, (err, stdout, stderr) => {
+          if (!err) {
+            console.log(stdout);
+          }
+          done();
+        });
+      },
+    };
+  }
 };
 /* eslint-enable no-console */

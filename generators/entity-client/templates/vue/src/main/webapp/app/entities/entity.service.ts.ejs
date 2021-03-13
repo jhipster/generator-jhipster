@@ -60,7 +60,7 @@ export default class <%= entityAngularName %>Service {
 
   public update(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
-      axios.put(`${baseApiUrl}`, entity).then(res => {
+      axios.put(`${baseApiUrl}/${entity.<%= primaryKey.name %>}`, entity).then(res => {
         resolve(res.data);
       }).catch(err => { reject(err); });
     });

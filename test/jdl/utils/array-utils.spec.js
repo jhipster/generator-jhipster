@@ -21,23 +21,23 @@ const { expect } = require('chai');
 const { deduplicate } = require('../../../jdl/utils/array-utils');
 
 describe('ArrayUtils', () => {
-    describe('deduplicate', () => {
-        context('when not passing an array', () => {
-            it('should return an empty array', () => {
-                expect(deduplicate()).to.deep.equal([]);
-            });
-        });
-        context('when passing an array', () => {
-            context('without duplicates', () => {
-                it('should not change it', () => {
-                    expect(deduplicate([1, 2, 3, 4])).to.deep.equal([1, 2, 3, 4]);
-                });
-            });
-            context('with duplicates', () => {
-                it('should remove the duplicates from it', () => {
-                    expect(deduplicate([1, 2, 2, 1, 3])).to.deep.equal([1, 2, 3]);
-                });
-            });
-        });
+  describe('deduplicate', () => {
+    context('when not passing an array', () => {
+      it('should return an empty array', () => {
+        expect(deduplicate()).to.deep.equal([]);
+      });
     });
+    context('when passing an array', () => {
+      context('without duplicates', () => {
+        it('should not change it', () => {
+          expect(deduplicate([1, 2, 3, 4])).to.deep.equal([1, 2, 3, 4]);
+        });
+      });
+      context('with duplicates', () => {
+        it('should remove the duplicates from it', () => {
+          expect(deduplicate([1, 2, 2, 1, 3])).to.deep.equal([1, 2, 3]);
+        });
+      });
+    });
+  });
 });

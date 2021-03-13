@@ -28,43 +28,43 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 server:
-    port: ${PORT}
+  port: ${PORT}
 <%_ if (applicationType === 'microservice') { _%>
-    servlet:
-        context-path: /services/<%= baseName %>
+  servlet:
+    context-path: /services/<%= baseName %>
 <%_ } _%>
 management:
-    health:
-        diskspace:
-            enabled: false
+  health:
+    diskspace:
+      enabled: false
 <%_ if (gaeCloudSQLInstanceNeeded === 'Y') { _%>
 spring:
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: "jdbc:mysql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false"
-        username: "<%= gcpCloudSqlUserName %>"
-        password: "<%= gcpCloudSqlPassword %>"
-        hikari:
-            maximumPoolSize: 8
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: "jdbc:postgresql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
-        username: "<%= gcpCloudSqlUserName %>"
-        password: "<%= gcpCloudSqlPassword %>"
-        hikari:
-            maximumPoolSize: 8
-    <%_ } _%>
+  <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: "jdbc:mysql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false"
+    username: "<%= gcpCloudSqlUserName %>"
+    password: "<%= gcpCloudSqlPassword %>"
+    hikari:
+      maximumPoolSize: 8
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'postgresql') { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: "jdbc:postgresql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
+    username: "<%= gcpCloudSqlUserName %>"
+    password: "<%= gcpCloudSqlPassword %>"
+    hikari:
+      maximumPoolSize: 8
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
 jhipster:
-    security:
-        authentication:
-            jwt:
-                # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-                # As this is the PRODUCTION configuration, you MUST change the default key
-                # For microservice deployment in GCP this base64-secret must be the same for the Gateway application and all the microservices
-                base64-secret: NjA2MzdlMDA2ZjM5NDUwMTc1YmQyZTEzMmY4ZGE3ZmZmYTNlM2M4MmJkMWNhYWY1ZGU0ZDc5NDk3MzBhOGI3ZDVlNWUzZjRkYzhiMjRhMzVlZTYwNWM2ZWNmODYxMjAyNDk5M2U4MWUwNjU5YWU0N2VjNzBmODAxYzRlYmQzODI=
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        # As this is the PRODUCTION configuration, you MUST change the default key
+        # For microservice deployment in GCP this base64-secret must be the same for the Gateway application and all the microservices
+        base64-secret: NjA2MzdlMDA2ZjM5NDUwMTc1YmQyZTEzMmY4ZGE3ZmZmYTNlM2M4MmJkMWNhYWY1ZGU0ZDc5NDk3MzBhOGI3ZDVlNWUzZjRkYzhiMjRhMzVlZTYwNWM2ZWNmODYxMjAyNDk5M2U4MWUwNjU5YWU0N2VjNzBmODAxYzRlYmQzODI=
 <%_ } _%>

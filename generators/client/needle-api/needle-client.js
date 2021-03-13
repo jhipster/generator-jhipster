@@ -19,47 +19,47 @@
 const needleBase = require('../../needle-base');
 
 module.exports = class extends needleBase {
-    constructor(generator) {
-        super(generator);
+  constructor(generator) {
+    super(generator);
 
-        this.CLIENT_MAIN_SRC_DIR = generator.CLIENT_MAIN_SRC_DIR;
-        this.clientFramework = generator.clientFramework;
+    this.CLIENT_MAIN_SRC_DIR = generator.CLIENT_MAIN_SRC_DIR;
+    this.clientFramework = generator.clientFramework;
 
-        if (!this.CLIENT_MAIN_SRC_DIR) {
-            generator.error('Client destination folder is missing');
-        }
+    if (!this.CLIENT_MAIN_SRC_DIR) {
+      generator.error('Client destination folder is missing');
     }
+  }
 
-    addStyle(style, comment, filePath, needle) {
-        const styleBlock = this._mergeStyleAndComment(style, comment);
-        const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
+  addStyle(style, comment, filePath, needle) {
+    const styleBlock = this._mergeStyleAndComment(style, comment);
+    const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
 
-        this.addBlockContentToFile(rewriteFileModel, 'Style not added to JHipster app.\n');
+    this.addBlockContentToFile(rewriteFileModel, 'Style not added to JHipster app.\n');
+  }
+
+  _mergeStyleAndComment(style, comment) {
+    let styleBlock = '';
+
+    if (comment) {
+      styleBlock += '/* ==========================================================================\n';
+      styleBlock += `${comment}\n`;
+      styleBlock += '========================================================================== */\n';
     }
+    styleBlock += `${style}\n`;
 
-    _mergeStyleAndComment(style, comment) {
-        let styleBlock = '';
+    return styleBlock;
+  }
 
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
-        }
-        styleBlock += `${style}\n`;
-
-        return styleBlock;
+  addExternalResourcesToRoot(resources, comment) {
+    const errorMessage = 'Resources are not added to JHipster app.';
+    const indexFilePath = `${this.CLIENT_MAIN_SRC_DIR}index.html`;
+    let resourcesBlock = '';
+    if (comment) {
+      resourcesBlock += `<!-- ${comment} -->\n`;
     }
+    resourcesBlock += `${resources}\n`;
+    const rewriteFileModel = this.generateFileModel(indexFilePath, 'jhipster-needle-add-resources-to-root', resourcesBlock);
 
-    addExternalResourcesToRoot(resources, comment) {
-        const errorMessage = 'Resources are not added to JHipster app.';
-        const indexFilePath = `${this.CLIENT_MAIN_SRC_DIR}index.html`;
-        let resourcesBlock = '';
-        if (comment) {
-            resourcesBlock += `<!-- ${comment} -->\n`;
-        }
-        resourcesBlock += `${resources}\n`;
-        const rewriteFileModel = this.generateFileModel(indexFilePath, 'jhipster-needle-add-resources-to-root', resourcesBlock);
-
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 };

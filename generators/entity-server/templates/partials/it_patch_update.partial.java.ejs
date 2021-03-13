@@ -18,42 +18,42 @@
 -%>
 // Initialize the database
 <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-    <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
+    <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
 <%_ } _%>
-<%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
+<%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
 int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
 // Update the <%= entityInstance %> using partial update
-<%= asEntity(entityClass) %> partialUpdated<%= asEntity(entityClass) %> = new <%= asEntity(entityClass) %>();
-partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>());
+<%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
+partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>());
 <%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
-    partialUpdated<%= asEntity(entityClass) %><% for (field of fieldsToUpdate) { %>
+    partialUpdated<%= persistClass %><% for (field of fieldsToUpdate) { %>
         .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
             .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
 <%_ } else { _%>
 <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { %>
-    partialUpdated<%= asEntity(entityClass) %>.set<%= field.fieldInJavaBeanMethod %>(<%= field.updateWithValue %>);
+    partialUpdated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= field.updateWithValue %>);
         <%_ if (field.fieldWithContentType) { _%>
-        partialUpdated<%= asEntity(entityClass) %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= field.updateWithValue %>_CONTENT_TYPE);
+        partialUpdated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= field.updateWithValue %>_CONTENT_TYPE);
         <%_ } _%>
     <%_ } _%>
 <%_ } _%>
 <%_ } _%>
 
 <%_ if (!reactive) { _%>
-rest<%= entityClass %>MockMvc.perform(patch("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
-.content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>)))
+.content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
 .andExpect(status().isOk());
 <%_ } else { _%>
 webTestClient
 .patch()
-.uri("/api/<%= entityApiUrl %>")
+.uri(ENTITY_API_URL)
 .contentType(MediaType.valueOf("application/merge-patch+json"))
-.bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + asEntity(entityClass) %>))
+.bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>))
 .exchange()
 .expectStatus()
 .isOk();
@@ -63,9 +63,9 @@ webTestClient
 <%_ if (databaseType === 'couchbase') { _%>
 SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 <%_ } _%>
-List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
 assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
-<%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
+<%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
 <%_ for (field of fields) { if (field.fieldType === 'ZonedDateTime') { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
 <%_ } else if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>

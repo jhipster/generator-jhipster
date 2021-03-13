@@ -22,36 +22,36 @@ const JDLDeployment = require('../../../../jdl/models/jdl-deployment');
 const { convertDeployments } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter');
 
 describe('DeploymentConverter', () => {
-    describe('convertDeployments', () => {
-        context('when not passing deployments', () => {
-            it('should fail', () => {
-                expect(() => convertDeployments()).to.throw(/^Deployments have to be passed so as to be converted\.$/);
-            });
-        });
-        context('when passing deployments', () => {
-            let convertedDeployments;
-            let expectedDeployments;
-
-            before(() => {
-                convertedDeployments = convertDeployments([
-                    {
-                        deploymentType: 'openshift',
-                        appsFolders: ['tata', 'titi'],
-                        dockerRepositoryName: 'test',
-                    },
-                ]);
-                expectedDeployments = [
-                    new JDLDeployment({
-                        deploymentType: 'openshift',
-                        appsFolders: ['tata', 'titi'],
-                        dockerRepositoryName: 'test',
-                    }),
-                ];
-            });
-
-            it('should convert them', () => {
-                expect(convertedDeployments).to.deep.equal(expectedDeployments);
-            });
-        });
+  describe('convertDeployments', () => {
+    context('when not passing deployments', () => {
+      it('should fail', () => {
+        expect(() => convertDeployments()).to.throw(/^Deployments have to be passed so as to be converted\.$/);
+      });
     });
+    context('when passing deployments', () => {
+      let convertedDeployments;
+      let expectedDeployments;
+
+      before(() => {
+        convertedDeployments = convertDeployments([
+          {
+            deploymentType: 'openshift',
+            appsFolders: ['tata', 'titi'],
+            dockerRepositoryName: 'test',
+          },
+        ]);
+        expectedDeployments = [
+          new JDLDeployment({
+            deploymentType: 'openshift',
+            appsFolders: ['tata', 'titi'],
+            dockerRepositoryName: 'test',
+          }),
+        ];
+      });
+
+      it('should convert them', () => {
+        expect(convertedDeployments).to.deep.equal(expectedDeployments);
+      });
+    });
+  });
 });

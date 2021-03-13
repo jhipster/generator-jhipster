@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 source $(dirname $0)/00-init-env.sh
@@ -37,14 +37,6 @@ if [ -f "mvnw" ]; then
     ./mvnw -ntp checkstyle:check --batch-mode
 elif [ -f "gradlew" ]; then
     ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
-fi
-
-#-------------------------------------------------------------------------------
-# Launch UAA tests
-#-------------------------------------------------------------------------------
-if [[ "$JHI_APP" == *"uaa"* ]]; then
-    cd "$JHI_FOLDER_UAA"
-    ./mvnw -ntp verify --batch-mode
 fi
 
 #-------------------------------------------------------------------------------

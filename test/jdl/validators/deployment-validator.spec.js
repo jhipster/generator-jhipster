@@ -21,37 +21,37 @@ const { expect } = require('chai');
 const DeploymentValidator = require('../../../jdl/validators/deployment-validator');
 
 describe('DeploymentValidator', () => {
-    let validator;
+  let validator;
 
-    before(() => {
-        validator = new DeploymentValidator();
-    });
+  before(() => {
+    validator = new DeploymentValidator();
+  });
 
-    describe('validate', () => {
-        context('when no deployment is passed', () => {
-            it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No deployment\.$/);
-            });
-        });
-        context('when a deployment is passed', () => {
-            context('when not missing any attribute', () => {
-                it('should not fail', () => {
-                    expect(() => {
-                        validator.validate({
-                            deploymentType: 'kubernetes',
-                            appsFolders: ['invoices'],
-                            dockerRepositoryName: 'test',
-                        });
-                    }).not.to.throw();
-                });
-            });
-            context('when missing attributes', () => {
-                it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(
-                        /^The deployment attributes deploymentType, appsFolders, dockerRepositoryName were not found.$/
-                    );
-                });
-            });
-        });
+  describe('validate', () => {
+    context('when no deployment is passed', () => {
+      it('should fail', () => {
+        expect(() => validator.validate()).to.throw(/^No deployment\.$/);
+      });
     });
+    context('when a deployment is passed', () => {
+      context('when not missing any attribute', () => {
+        it('should not fail', () => {
+          expect(() => {
+            validator.validate({
+              deploymentType: 'kubernetes',
+              appsFolders: ['invoices'],
+              dockerRepositoryName: 'test',
+            });
+          }).not.to.throw();
+        });
+      });
+      context('when missing attributes', () => {
+        it('should fail', () => {
+          expect(() => validator.validate({})).to.throw(
+            /^The deployment attributes deploymentType, appsFolders, dockerRepositoryName were not found.$/
+          );
+        });
+      });
+    });
+  });
 });

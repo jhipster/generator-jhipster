@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
-const writeVueFiles = require('./files-vue').writeFiles;
+const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const constants = require('../generator-constants');
 
 const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
@@ -28,142 +28,160 @@ const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        // This makes it possible to pass `pageName` by argument
-        this.argument('pageName', {
-            type: String,
-            required: false,
-            description: 'Page name',
-        });
+    // This makes it possible to pass `pageName` by argument
+    this.argument('pageName', {
+      type: String,
+      required: false,
+      description: 'Page name',
+    });
 
-        this.option('skip-prompts', {
-            desc: 'Skip prompts',
-            type: Boolean,
-            hide: true,
-            defaults: false,
-        });
-        this.option('recreate', {
-            type: Boolean,
-            required: false,
-            description: 'Recreate the page',
-        });
+    this.option('skip-prompts', {
+      desc: 'Skip prompts',
+      type: Boolean,
+      hide: true,
+      defaults: false,
+    });
+    this.option('recreate', {
+      type: Boolean,
+      required: false,
+      description: 'Recreate the page',
+    });
 
-        if (this.options.help) {
-            return;
+    if (this.options.help) {
+      return;
+    }
+    this.pageName = this.options.pageName;
+    this.page = this.options.page || {};
+
+    this.loadRuntimeOptions();
+
+    this.rootGenerator = this.env.rootGenerator() === this;
+
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('page');
+  }
+
+  _initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+      loadConfig() {
+        this.skipClient = this.jhipsterConfig.skipClient;
+        this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
+        this.enableTranslation = this.jhipsterConfig.enableTranslation;
+        this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes('protractor');
+        this.clientFramework = this.jhipsterConfig.clientFramework;
+      },
+    };
+  }
+
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
+    return {
+      askForPage: prompts.askForPage,
+    };
+  }
+
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
+    return {
+      save() {
+        const pages = this.jhipsterConfig.pages || [];
+        const page = pages.find(page => page.name === this.pageName);
+        if (page) {
+          return;
         }
-        this.pageName = this.options.pageName;
-        this.page = this.options.page || {};
+        this.jhipsterConfig.pages = pages.concat({ name: this.pageName });
+      },
+    };
+  }
 
-        this.loadRuntimeOptions();
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
 
-        this.rootGenerator = this.env.rootGenerator() === this;
+  _default() {
+    return {
+      prepareForTemplates() {
+        this.jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('page');
-    }
+        this.pageNameDashed = this._.kebabCase(this.pageName);
+        this.pageInstance = this._.lowerFirst(this.pageName);
+        this.jhiPrefixDashed = this._.kebabCase(this.jhiPrefix);
 
-    _initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-            loadConfig() {
-                this.skipClient = this.jhipsterConfig.skipClient;
-                this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
-                this.enableTranslation = this.jhipsterConfig.enableTranslation;
-                this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes('protractor');
-                this.clientFramework = this.jhipsterConfig.clientFramework;
-            },
-        };
-    }
+        this.pageFileName = this.page.pageFileName || this.pageNameDashed;
+        this.pageFolderName = this.page.pageFileName || this.pageFileName;
+      },
+    };
+  }
 
-    get initializing() {
-        if (useBlueprints) return;
-        return this._initializing();
-    }
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
 
-    _prompting() {
-        return {
-            askForPage: prompts.askForPage,
-        };
-    }
+  _writing() {
+    return {
+      writeClientPageFiles() {
+        if (this.skipClient) return;
+        if (![VUE].includes(this.clientFramework)) {
+          throw new Error(`The page sub-generator is not supported for client ${this.clientFramework}`);
+        }
+        writeVueFiles.call(this);
+      },
+    };
+  }
 
-    get prompting() {
-        if (useBlueprints) return;
-        return this._prompting();
-    }
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
 
-    _configuring() {
-        return {
-            save() {
-                const pages = this.jhipsterConfig.pages || [];
-                const page = pages.find(page => page.name === this.pageName);
-                if (page) {
-                    return;
-                }
-                this.jhipsterConfig.pages = pages.concat({ name: this.pageName });
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      customizeFiles() {
+        if (this.skipClient) return;
+        if (this.clientFramework === VUE) {
+          return customizeVueFiles.call(this);
+        }
+        return undefined;
+      },
+    };
+  }
 
-    get configuring() {
-        if (useBlueprints) return;
-        return this._configuring();
-    }
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
+  }
 
-    _default() {
-        return {
-            prepareForTemplates() {
-                this.jhiPrefix = this.page.jhiPrefix || this.jhipsterConfig.jhiPrefix;
+  _end() {
+    return {
+      end() {
+        if (!this.rootGenerator || this.options.skipInstall || this.skipClient) return;
+        this.rebuildClient();
+      },
+      success() {
+        if (!this.rootGenerator) return;
+        this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
+      },
+    };
+  }
 
-                this.pageNameDashed = this._.kebabCase(this.pageName);
-                this.pageInstance = this._.lowerFirst(this.pageName);
-                this.jhiPrefixDashed = this._.kebabCase(this.jhiPrefix);
-
-                this.pageFileName = this.page.pageFileName || this.pageNameDashed;
-                this.pageFolderName = this.page.pageFileName || this.pageFileName;
-            },
-        };
-    }
-
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
-
-    _writing() {
-        return {
-            writeClientPageFiles() {
-                if (this.skipClient) return;
-                if (![VUE].includes(this.clientFramework)) {
-                    throw new Error(`The page sub-generator is not supported for client ${this.clientFramework}`);
-                }
-                writeVueFiles.call(this);
-            },
-        };
-    }
-
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
-
-    _end() {
-        return {
-            end() {
-                if (!this.rootGenerator || this.options.skipInstall || this.skipClient) return;
-                this.rebuildClient();
-            },
-            success() {
-                if (!this.rootGenerator) return;
-                this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
-            },
-        };
-    }
-
-    get end() {
-        if (useBlueprints) return;
-        return this._end();
-    }
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
+  }
 };

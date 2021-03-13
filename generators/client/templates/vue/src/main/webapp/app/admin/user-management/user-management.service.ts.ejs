@@ -28,7 +28,7 @@ export default class UserManagementService {
 
   public retrieveAuthorities(): Promise<any> {
     <%_ if (databaseType !== 'cassandra') { _%>
-    return axios.get('<%- apiUaaPath %>api/authorities');
+    return axios.get('api/authorities');
     <%_ } else { _%>
     return Promise.resolve([Authority.USER, Authority.ADMIN]);
     <%_ } _%>

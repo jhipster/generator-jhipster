@@ -18,7 +18,8 @@
     "clientFramework": "angularX",
     "clientPackageManager": "npm",
     "testFrameworks": [
-      "gatling"
+      "gatling",
+      "cypress"
     ],
     "languages": [
       "en"

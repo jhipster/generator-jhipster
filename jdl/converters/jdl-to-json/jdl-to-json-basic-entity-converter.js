@@ -27,7 +27,7 @@ const AUTHORITY = 'authority';
 const builtInEntities = new Set([USER, AUTHORITY]);
 
 module.exports = {
-    convert,
+  convert,
 };
 
 /**
@@ -36,36 +36,36 @@ module.exports = {
  * @return {Map<String, JSONEntity>} a map having for keys entity names and for values the corresponding JSON entities.
  */
 function convert(jdlEntities) {
-    if (!jdlEntities) {
-        throw new Error('JDL entities must be passed to get the basic entity information.');
-    }
-    return createJSONEntities(jdlEntities);
+  if (!jdlEntities) {
+    throw new Error('JDL entities must be passed to get the basic entity information.');
+  }
+  return createJSONEntities(jdlEntities);
 }
 
 function createJSONEntities(jdlEntities) {
-    const convertedEntities = new Map();
-    jdlEntities.forEach((jdlEntity, index) => {
-        const entityName = jdlEntity.name;
-        /*
-         * If the user adds a 'User' entity we consider it as the already
-         * created JHipster User entity and none of its fields and owner-side
-         * relationships will be considered.
-         */
-        if (builtInEntities.has(entityName.toLowerCase())) {
-            logger.warn(
-                `An Entity name '${entityName}' was used: '${entityName}' is an entity created by default by JHipster.` +
-                    ' All relationships toward it will be kept but any attributes and relationships from it will be disregarded.'
-            );
-            return;
-        }
-        convertedEntities.set(
-            entityName,
-            new JSONEntity({
-                entityName,
-                entityTableName: getTableNameFromEntityName(jdlEntity.tableName),
-                javadoc: formatComment(jdlEntity.comment),
-            })
-        );
-    });
-    return convertedEntities;
+  const convertedEntities = new Map();
+  jdlEntities.forEach((jdlEntity, index) => {
+    const entityName = jdlEntity.name;
+    /*
+     * If the user adds a 'User' entity we consider it as the already
+     * created JHipster User entity and none of its fields and owner-side
+     * relationships will be considered.
+     */
+    if (builtInEntities.has(entityName.toLowerCase())) {
+      logger.warn(
+        `An Entity name '${entityName}' was used: '${entityName}' is an entity created by default by JHipster.` +
+          ' All relationships toward it will be kept but any attributes and relationships from it will be disregarded.'
+      );
+      return;
+    }
+    convertedEntities.set(
+      entityName,
+      new JSONEntity({
+        entityName,
+        entityTableName: getTableNameFromEntityName(jdlEntity.tableName),
+        javadoc: formatComment(jdlEntity.comment),
+      })
+    );
+  });
+  return convertedEntities;
 }

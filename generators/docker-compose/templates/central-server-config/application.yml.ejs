@@ -18,40 +18,26 @@
 -%>
 #common configuration shared between all applications
 configserver:
-    name: Docker JHipster Registry
-    status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
+  name: Docker JHipster Registry
+  status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
 
 jhipster:
-    security:
-        authentication:
-            jwt:
-                base64-secret: <%= jwtSecretKey %>
+  security:
+    authentication:
+      jwt:
+        base64-secret: <%= jwtSecretKey %>
 <%_ if (monitoring === 'prometheus') { _%>
 management:
-    metrics:
-        export:
-            prometheus:
-                enabled: true
-<%_ } _%>
-<%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
-spring:
-    <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
-    cloud:
-        consul:
-            discovery:
-                tags:
-                    - traefik.enable=true
-                    - traefik.frontend.login.rule=PathPrefix:/login
-                    - traefik.frontend.login.priority=1001
-                    - traefik.frontend.oauth.rule=PathPrefix:/oauth2
-                    - traefik.frontend.oauth.priority=1001
-    <%_ } _%>
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
-    client:
-        service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
+  client:
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
 <%_ } _%>
 
 

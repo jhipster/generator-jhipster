@@ -67,7 +67,7 @@ describe('account', () => {
     await signInPage.loginWithOAuth(username, 'foo');
 
     // Keycloak
-    const alert = element(by.css('.alert-error'));
+    const alert = element(by.css('#input-error'));
     if (await alert.isPresent()) {
       expect(await alert.getText()).to.eq('Invalid username or password.');
     } else {

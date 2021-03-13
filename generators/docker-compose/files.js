@@ -17,49 +17,44 @@
  * limitations under the License.
  */
 module.exports = {
-    writeFiles,
+  writeFiles,
 };
 
 function writeFiles() {
-    return {
-        writeDockerCompose() {
-            this.template('docker-compose.yml.ejs', 'docker-compose.yml');
-            this.template('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
-        },
+  return {
+    writeDockerCompose() {
+      this.template('docker-compose.yml.ejs', 'docker-compose.yml');
+      this.template('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
+    },
 
-        writeRegistryFiles() {
-            if (this.serviceDiscoveryType) {
-                this.template('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
-            }
-        },
+    writeRegistryFiles() {
+      if (this.serviceDiscoveryType) {
+        this.template('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
+      }
+    },
 
-        writeTraefikFiles() {
-            if (this.gatewayType !== 'traefik') return;
-            this.template('traefik/traefik.toml.ejs', 'traefik/traefik.toml');
-        },
+    writeKeycloakFiles() {
+      if (this.authenticationType === 'oauth2' && this.applicationType !== 'microservice') {
+        this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
+        this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
+      }
+    },
 
-        writeKeycloakFiles() {
-            if (this.authenticationType === 'oauth2' && this.applicationType !== 'microservice') {
-                this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
-                this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
-            }
-        },
+    writePrometheusFiles() {
+      if (this.monitoring !== 'prometheus') return;
 
-        writePrometheusFiles() {
-            if (this.monitoring !== 'prometheus') return;
+      // Generate a list of target apps to monitor for the prometheus config
+      const appsToMonitor = [];
+      for (let i = 0; i < this.appConfigs.length; i++) {
+        appsToMonitor.push(`        - ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
+      }
 
-            // Generate a list of target apps to monitor for the prometheus config
-            const appsToMonitor = [];
-            for (let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
-            }
+      // Format the application target list as a YAML array
+      this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
 
-            // Format the application target list as a YAML array
-            this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
-
-            this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
-            this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
-            this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
-        },
-    };
+      this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
+      this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
+      this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
+    },
+  };
 }

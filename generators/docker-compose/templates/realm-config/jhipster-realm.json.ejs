@@ -371,6 +371,15 @@
           "attributes": {}
         },
         {
+          "id": "5ebf404b-7805-4da2-abb4-9db7d3b36120",
+          "name": "delete-account",
+          "description": "${role_delete-account}",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6cc5a716-0880-47dc-b714-9a4967246b2f",
+          "attributes": {}
+        },
+        {
           "id": "a7f45fab-19c3-4c48-aca3-85f828ca0fed",
           "name": "manage-account-links",
           "description": "${role_manage-account-links}",
@@ -1637,6 +1646,8 @@
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
+  "identityProviders": [],
+  "identityProviderMappers": [],
   "components": {
     "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
       {
@@ -2383,6 +2394,15 @@
       "config": {}
     },
     {
+      "alias": "delete_account",
+      "name": "Delete Account",
+      "providerId": "delete_account",
+      "enabled": false,
+      "defaultAction": false,
+      "priority": 60,
+      "config": {}
+    },
+    {
       "alias": "update_user_locale",
       "name": "Update User Locale",
       "providerId": "update_user_locale",
@@ -2404,6 +2424,6 @@
     "clientSessionMaxLifespan": "0",
     "clientOfflineSessionIdleTimeout": "0"
   },
-  "keycloakVersion": "11.0.1",
+  "keycloakVersion": "12.0.4",
   "userManagedAccessAllowed": false
 }

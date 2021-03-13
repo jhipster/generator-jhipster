@@ -17,44 +17,64 @@
  limitations under the License.
 -%>
 <div>
-    <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8 col-sm-10">
-            <h1 <%= jhiPrefix %>Translate="login.title" data-cy="loginTitle">Sign in</h1>
-            <div class="alert alert-danger" *ngIf="authenticationError" <%= jhiPrefix %>Translate="login.messages.error.authentication" data-cy="loginError">
-                <strong>Failed to sign in!</strong> Please check your credentials and try again.
-            </div>
-            <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
-                <div class="form-group">
-                    <label class="username-label" for="username" <%= jhiPrefix %>Translate="global.form.username.label">Login</label>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="{{ 'global.form.username.placeholder' | translate }}"
-                           formControlName="username" #username data-cy="username">
-                </div>
-
-                <div class="form-group">
-                    <label for="password" <%= jhiPrefix %>Translate="login.form.password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="{{ 'login.form.password.placeholder' | translate }}"
-                           formControlName="password" data-cy="password">
-                </div>
-
-                <div class="form-check"<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
-                    <label class="form-check-label" for="rememberMe">
-                        <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe">
-                        <span <%= jhiPrefix %>Translate="login.form.rememberme">Remember me</span>
-                    </label>
-                </div>
-
-                <button type="submit" class="btn btn-primary" <%= jhiPrefix %>Translate="login.form.button" data-cy="submit">Sign in</button>
-            </form>
-            <%_ if (!skipUserManagement) { _%>
-            <div class="mt-3 alert alert-warning">
-                <a class="alert-link" routerLink="/account/reset/request" <%= jhiPrefix %>Translate="login.password.forgot" data-cy="forgetYourPasswordSelector">Did you forget your password?</a>
-            </div>
-
-            <div class="alert alert-warning">
-                <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">You don't have an account yet?</span>
-                <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">Register a new account</a>
-            </div>
-            <%_ } _%>
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <h1 <%= jhiPrefix %>Translate="login.title" data-cy="loginTitle">Sign in</h1>
+      <div
+        class="alert alert-danger"
+        *ngIf="authenticationError"
+        <%= jhiPrefix %>Translate="login.messages.error.authentication"
+        data-cy="loginError"
+      >
+        <strong>Failed to sign in!</strong> Please check your credentials and try again.
+      </div>
+      <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+        <div class="form-group">
+          <label class="username-label" for="username" <%= jhiPrefix %>Translate="global.form.username.label">Login</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            id="username"
+            placeholder="{{ 'global.form.username.placeholder' | translate }}"
+            formControlName="username"
+            #username
+            data-cy="username"
+          />
         </div>
+
+        <div class="form-group">
+          <label for="password" <%= jhiPrefix %>Translate="login.form.password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+            placeholder="{{ 'login.form.password.placeholder' | translate }}"
+            formControlName="password"
+            data-cy="password"
+          />
+        </div>
+
+        <div class="form-check"<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
+          <label class="form-check-label" for="rememberMe">
+            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
+            <span <%= jhiPrefix %>Translate="login.form.rememberme">Remember me</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" <%= jhiPrefix %>Translate="login.form.button" data-cy="submit">Sign in</button>
+      </form>
+      <%_ if (!skipUserManagement) { _%>
+      <div class="mt-3 alert alert-warning">
+        <a class="alert-link" routerLink="/account/reset/request" <%= jhiPrefix %>Translate="login.password.forgot" data-cy="forgetYourPasswordSelector">Did you forget your password?</a>
+      </div>
+
+      <div class="alert alert-warning">
+        <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">You don't have an account yet?</span>
+        <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">Register a new account</a>
+      </div>
+      <%_ } _%>
     </div>
+  </div>
 </div>

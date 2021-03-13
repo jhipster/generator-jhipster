@@ -21,15 +21,15 @@ const JDLApplicationConfigurationOption = require('./jdl-application-configurati
 const { join } = require('../utils/set-utils');
 
 module.exports = class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
-    constructor(name, value) {
-        super(name, new Set(value));
-    }
+  constructor(name, value) {
+    super(name, new Set(value));
+  }
 
-    getValue() {
-        return Array.from(this.value);
-    }
+  getValue() {
+    return Array.from(this.value);
+  }
 
-    toString() {
-        return `${this.name} [${join(this.value, ', ')}]`;
-    }
+  toString() {
+    return `${this.name} [${join(this.value, ', ')}]`;
+  }
 };

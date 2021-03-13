@@ -50,7 +50,7 @@ if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
 }
 for (let relationship of relationships) {
-    if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+    if (relationship.relationshipRequired || relationship.id) {
         openBlockComment = `/*`;
         closeBlockComment = `*/`;
         break;

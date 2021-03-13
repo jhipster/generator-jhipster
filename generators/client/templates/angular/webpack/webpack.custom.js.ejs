@@ -36,7 +36,7 @@ module.exports = (config, options) => {
   if (config.mode === 'development') {
     config.plugins.push(
       new ESLintPlugin({
-        extensions: ['js', 'ts']
+        extensions: ['js', 'ts'],
       }),
       new FriendlyErrorsWebpackPlugin(),
       new WebpackNotifierPlugin({
@@ -73,8 +73,8 @@ module.exports = (config, options) => {
         },
         {
           reload: false,
-        },
-      ),
+        }
+      )
     );
 
     if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
@@ -130,7 +130,7 @@ module.exports = (config, options) => {
         // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
         ],
       },
-    }),
+    })
     <%_ } _%>
   );
 

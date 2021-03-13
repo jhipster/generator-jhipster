@@ -20,29 +20,29 @@ const AWS = require('aws-sdk');
 const _ = require('lodash');
 
 module.exports = class ECR {
-    constructor(region) {
-        this.ecr = new AWS.ECR({ region });
-    }
+  constructor(region) {
+    this.ecr = new AWS.ECR({ region });
+  }
 
-    /**
-     * Returns the instance of the ECR class from the SDK
-     * @returns {AWS.ECR|ECR}
-     */
-    get sdk() {
-        return this.ecr;
-    }
+  /**
+   * Returns the instance of the ECR class from the SDK
+   * @returns {AWS.ECR|ECR}
+   */
+  get sdk() {
+    return this.ecr;
+  }
 
-    /**
-     * Fetch the URI of the ECR repository off.
-     * @param respositoryName
-     * @returns {Promise.<string>}
-     */
-    getEcrRepositoryURI(respositoryName) {
-        return this.ecr
-            .describeRepositories({
-                repositoryNames: [respositoryName],
-            })
-            .promise()
-            .then(result => _(result.repositories).first().repositoryUri);
-    }
+  /**
+   * Fetch the URI of the ECR repository off.
+   * @param respositoryName
+   * @returns {Promise.<string>}
+   */
+  getEcrRepositoryURI(respositoryName) {
+    return this.ecr
+      .describeRepositories({
+        repositoryNames: [respositoryName],
+      })
+      .promise()
+      .then(result => _(result.repositories).first().repositoryUri);
+  }
 };

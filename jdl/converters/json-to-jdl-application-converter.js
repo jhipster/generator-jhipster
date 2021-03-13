@@ -23,20 +23,20 @@ const { createJDLApplication } = require('../models/jdl-application-factory');
 const GENERATOR_NAME = 'generator-jhipster';
 
 module.exports = {
-    convertApplicationToJDL,
-    convertApplicationsToJDL,
+  convertApplicationToJDL,
+  convertApplicationsToJDL,
 };
 
 function convertApplicationsToJDL({ applications, jdl } = {}) {
-    const jsonApplications = applications || [];
-    const jdlObject = jdl || new JDLObject();
-    jsonApplications.forEach(application => {
-        const convertedApplication = convertApplicationToJDL({ application });
-        jdlObject.addApplication(convertedApplication);
-    });
-    return jdlObject;
+  const jsonApplications = applications || [];
+  const jdlObject = jdl || new JDLObject();
+  jsonApplications.forEach(application => {
+    const convertedApplication = convertApplicationToJDL({ application });
+    jdlObject.addApplication(convertedApplication);
+  });
+  return jdlObject;
 }
 
 function convertApplicationToJDL({ application } = {}) {
-    return createJDLApplication(application[GENERATOR_NAME]);
+  return createJDLApplication(application[GENERATOR_NAME]);
 }

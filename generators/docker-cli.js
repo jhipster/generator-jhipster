@@ -24,19 +24,19 @@ const exec = require('child_process').exec;
  * NB: It is vital that these functions are bound to the generator context.
  */
 module.exports = {
-    setOutputs,
-    command,
-    getImageID,
-    tagImage,
-    loginToAws,
-    pushImage,
+  setOutputs,
+  command,
+  getImageID,
+  tagImage,
+  loginToAws,
+  pushImage,
 };
 
 let stdOut = data => console.log(data.toString().trim()); // eslint-disable-line
 let stdErr = data => console.error(data.toString().trim()); // eslint-disable-line
 function setOutputs(stdout, stderr) {
-    stdOut = stdout;
-    stdErr = stderr;
+  stdOut = stdout;
+  stdErr = stderr;
 }
 
 /**
@@ -49,17 +49,17 @@ function setOutputs(stdout, stderr) {
  * @attr maxBuffer value of the buffer to store the live outputs. Default to 10240000
  */
 function command(cmd, cb, opts = {}) {
-    const options = {
-        silent: false,
-        maxBuffer: 10240000,
-        ...opts,
-    };
-    const command = exec(`${cmd}`, { maxBuffer: options.maxBuffer }, cb);
+  const options = {
+    silent: false,
+    maxBuffer: 10240000,
+    ...opts,
+  };
+  const command = exec(`${cmd}`, { maxBuffer: options.maxBuffer }, cb);
 
-    if (!options.silent) {
-        command.stdout.on('data', stdOut);
-        command.stderr.on('data', stdErr);
-    }
+  if (!options.silent) {
+    command.stdout.on('data', stdOut);
+    command.stderr.on('data', stdErr);
+  }
 }
 
 /**
@@ -69,43 +69,43 @@ function command(cmd, cb, opts = {}) {
  * @returns {Promise} returns the image ID on success, an error message on failure (exception or noId).
  */
 function getImageID(imageName, tag) {
-    const dockerNameTag = `${imageName}${_.isNil(tag) ? '' : `:${tag}`}`;
-    const commandLine = `docker image ls --quiet ${dockerNameTag}`;
+  const dockerNameTag = `${imageName}${_.isNil(tag) ? '' : `:${tag}`}`;
+  const commandLine = `docker image ls --quiet ${dockerNameTag}`;
 
-    return new Promise((resolve, reject) =>
-        command(
-            commandLine,
-            (err, stdout) => {
-                if (err) {
-                    reject(err);
-                }
-                const dockerID = _.trim(stdout);
-                if (_.isEmpty(dockerID)) {
-                    reject(new Error(`No Docker ID found for ${dockerNameTag}`));
-                } else {
-                    resolve(dockerID);
-                }
-            },
-            { silent: true }
-        )
-    );
+  return new Promise((resolve, reject) =>
+    command(
+      commandLine,
+      (err, stdout) => {
+        if (err) {
+          reject(err);
+        }
+        const dockerID = _.trim(stdout);
+        if (_.isEmpty(dockerID)) {
+          reject(new Error(`No Docker ID found for ${dockerNameTag}`));
+        } else {
+          resolve(dockerID);
+        }
+      },
+      { silent: true }
+    )
+  );
 }
 
 function tagImage(from, to) {
-    const commandLine = `docker tag ${from} ${to}`;
+  const commandLine = `docker tag ${from} ${to}`;
 
-    return new Promise((resolve, reject) =>
-        command(
-            commandLine,
-            (err, stdout) => {
-                if (err) {
-                    reject(err);
-                }
-                resolve(stdout);
-            },
-            { silent: true }
-        )
-    );
+  return new Promise((resolve, reject) =>
+    command(
+      commandLine,
+      (err, stdout) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(stdout);
+      },
+      { silent: true }
+    )
+  );
 }
 
 /**
@@ -117,17 +117,17 @@ function tagImage(from, to) {
  * @returns {Promise}
  */
 function loginToAws(region, accountId, username, password) {
-    const commandLine = `docker login --username AWS --password ${password} https://${accountId}.dkr.ecr.${region}.amazonaws.com`;
-    return new Promise(
-        (resolve, reject) =>
-            command(commandLine, (err, stdout) => {
-                if (err) {
-                    reject(err);
-                }
-                resolve(stdout);
-            }),
-        { silent: true }
-    );
+  const commandLine = `docker login --username AWS --password ${password} https://${accountId}.dkr.ecr.${region}.amazonaws.com`;
+  return new Promise(
+    (resolve, reject) =>
+      command(commandLine, (err, stdout) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(stdout);
+      }),
+    { silent: true }
+  );
 }
 
 /**
@@ -136,13 +136,13 @@ function loginToAws(region, accountId, username, password) {
  * @returns {Promise<any>}
  */
 function pushImage(repository) {
-    const commandLine = `docker push ${repository}`;
-    return new Promise((resolve, reject) =>
-        command(commandLine, (err, stdout) => {
-            if (err) {
-                reject(err);
-            }
-            resolve(stdout);
-        })
-    );
+  const commandLine = `docker push ${repository}`;
+  return new Promise((resolve, reject) =>
+    command(commandLine, (err, stdout) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(stdout);
+    })
+  );
 }

@@ -28,7 +28,7 @@
             <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
             <dl class="row-md jh-entity-details">
-                <%_ for (const field of fields) {
+                <%_ for (const field of fields.filter(field => !field.hidden)) {
                     const fieldName = field.fieldName;
                     const fieldType = field.fieldType;
                     const fieldTypeBlobContent = field.fieldTypeBlobContent;

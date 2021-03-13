@@ -33,16 +33,18 @@
         <%_ });
     } _%>
     <%_ if (!skipCommitHook) { _%>
-    "husky": "<%= HUSKY_VERSION %>",
-    "lint-staged": "<%= LINT_STAGED_VERSION %>",
+    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
+    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
     <%_ } _%>
-    "prettier": "<%= PRETTIER_VERSION %>",
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>"
+    "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
+    "prettier-plugin-java": "<%= dependabotPackageJson.devDependencies['prettier-plugin-java'] %>",
+    "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
   },
   "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/}*.{<%= getPrettierExtensions() %>}\"",
     "prettier:format": "prettier --write \"{,src/**/}*.{<%= getPrettierExtensions() %>}\""
   }
 }

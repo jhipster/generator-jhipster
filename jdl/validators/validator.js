@@ -18,34 +18,32 @@
  */
 
 class Validator {
-    constructor(objectType, fieldsToCheck) {
-        this.objectType = objectType;
-        this.fieldsToCheck = fieldsToCheck;
-    }
+  constructor(objectType, fieldsToCheck) {
+    this.objectType = objectType;
+    this.fieldsToCheck = fieldsToCheck;
+  }
 
-    validate(object) {
-        if (!object) {
-            throw new Error(`No ${this.objectType}.`);
-        }
-        checkForAbsentAttributes(this, object);
+  validate(object) {
+    if (!object) {
+      throw new Error(`No ${this.objectType}.`);
     }
+    checkForAbsentAttributes(this, object);
+  }
 }
 
 module.exports = Validator;
 
 function checkForAbsentAttributes(validator, object) {
-    const absentAttributes = [];
-    validator.fieldsToCheck.forEach(attribute => {
-        if (!object[attribute]) {
-            absentAttributes.push(attribute);
-        }
-    });
-    if (absentAttributes.length !== 0) {
-        const plural = absentAttributes.length > 1;
-        throw new Error(
-            `The ${validator.objectType} attribute${plural ? 's' : ''} ${absentAttributes.join(', ')} ${
-                plural ? 'were not' : 'was not'
-            } found.`
-        );
+  const absentAttributes = [];
+  validator.fieldsToCheck.forEach(attribute => {
+    if (!object[attribute]) {
+      absentAttributes.push(attribute);
     }
+  });
+  if (absentAttributes.length !== 0) {
+    const plural = absentAttributes.length > 1;
+    throw new Error(
+      `The ${validator.objectType} attribute${plural ? 's' : ''} ${absentAttributes.join(', ')} ${plural ? 'were not' : 'was not'} found.`
+    );
+  }
 }

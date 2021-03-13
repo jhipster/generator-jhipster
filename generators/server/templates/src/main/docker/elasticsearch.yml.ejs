@@ -19,15 +19,15 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%= baseName.toLowerCase() %>-elasticsearch:
-        image: <%= DOCKER_ELASTICSEARCH %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:9200:9200
-            - 127.0.0.1:9300:9300
-        environment:
-            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
-            - "discovery.type=single-node"
+  <%= baseName.toLowerCase() %>-elasticsearch:
+    image: <%= DOCKER_ELASTICSEARCH %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
+    environment:
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "discovery.type=single-node"

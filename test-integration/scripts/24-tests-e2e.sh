@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source $(dirname $0)/00-init-env.sh
 
@@ -71,18 +71,6 @@ launchCurlTests() {
 # Run the application
 #-------------------------------------------------------------------------------
 if [ "$JHI_RUN_APP" == 1 ]; then
-    if [[ "$JHI_APP" == *"uaa"* ]]; then
-        cd "$JHI_FOLDER_UAA"
-        java \
-            -jar app.jar \
-            --spring.profiles.active=dev \
-            --logging.level.ROOT=OFF \
-            --logging.level.org.zalando=OFF \
-            --logging.level.tech.jhipster=OFF \
-            --logging.level.tech.jhipster.sample=OFF &
-        sleep 80
-    fi
-
     cd "$JHI_FOLDER_APP"
     # Run the app packaged as war/jar
     if [[ "$JHI_WAR" == 1 ]]; then

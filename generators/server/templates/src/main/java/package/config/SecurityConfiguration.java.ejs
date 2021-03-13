@@ -38,12 +38,12 @@ import org.springframework.context.annotation.Import;
     <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.core.convert.converter.Converter;
     <%_ } _%>
-    <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
+    <%_ if (applicationType !== 'microservice' || authenticationType !== 'oauth2') { _%>
 import org.springframework.http.HttpMethod;
     <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-    <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
+    <%_ if (applicationType !== 'microservice' || authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
     <%_ } else { _%>
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
@@ -67,10 +67,6 @@ import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-        <%_ if (applicationType === 'gateway') { _%>
-import <%= packageName %>.security.oauth2.AuthorizationHeaderFilter;
-import <%= packageName %>.security.oauth2.AuthorizationHeaderUtil;
-        <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
         <%_ if (applicationType !== 'microservice') { _%>
@@ -174,7 +170,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
     <%_ } _%>
-    <%_ if (authenticationType !== 'uaa' && applicationType !== 'microservice') { _%>
+    <%_ if (applicationType !== 'microservice') { _%>
 
     @Override
     public void configure(WebSecurity web) {
@@ -188,7 +184,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
             .antMatchers("/h2-console/**")
         <%_ } _%>
-            .antMatchers("/swagger-ui/index.html")
+            .antMatchers("/swagger-ui/**")
             .antMatchers("/test/**");
     }
     <%_ } else { _%>
@@ -280,6 +276,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (websocket === 'spring-websocket') { _%>
             .antMatchers("/websocket/**").authenticated()
     <%_ } _%>
+    <%_ if (applicationType === 'gateway') { _%>
+            .antMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+    <%_ } _%>
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
@@ -360,12 +359,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         return jwtDecoder;
     }
-        <%_ if (applicationType === 'gateway') { _%>
-
-    @Bean
-    public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
-        return new AuthorizationHeaderFilter(headerUtil);
-    }
-        <%_ } _%>
     <%_ } _%>
 }

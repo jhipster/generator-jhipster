@@ -22,6 +22,7 @@ error.subtitle=Tyvärr, det blev fel
 error.status=Status:
 error.message=Meddelande:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> aktivering
 email.activation.greeting=Käre {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> återställning av lösenord
 email.reset.greeting=Käre {0}
 email.reset.text1=Du har begärt att få återställa ditt lösenord för ditt <%= baseName %> konto, klicka på länken nedanför för att återställa det:
 email.reset.text2=Vänliga hälsningar,
+<%_ } _%>

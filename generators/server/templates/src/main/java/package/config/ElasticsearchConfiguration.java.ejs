@@ -128,7 +128,7 @@ public class ElasticsearchConfiguration extends ElasticsearchConfigurationSuppor
 
     @Bean
     @Override
-    public SimpleElasticsearchMappingContext elasticsearchMappingContext() {
+    public SimpleElasticsearchMappingContext elasticsearchMappingContext(ElasticsearchCustomConversions elasticsearchCustomConversions) {
         CustomElasticsearchMappingContext mappingContext = new CustomElasticsearchMappingContext();
         mappingContext.setInitialEntitySet(this.getInitialEntitySet());
         mappingContext.setSimpleTypeHolder(this.elasticsearchCustomConversions().getSimpleTypeHolder());

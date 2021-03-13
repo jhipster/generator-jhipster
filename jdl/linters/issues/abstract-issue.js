@@ -18,12 +18,12 @@
  */
 
 class AbstractIssue {
-    constructor(args) {
-        if (!args || !args.ruleName) {
-            throw new Error('An issue must at least have a rule name.');
-        }
-        this.ruleName = args.ruleName;
+  constructor(args) {
+    if (!args || !args.ruleName) {
+      throw new Error('An issue must at least have a rule name.');
     }
+    this.ruleName = args.ruleName;
+  }
 }
 
 module.exports = AbstractIssue;

@@ -2,6 +2,7 @@ import axios from 'axios';
 import VueI18n from 'vue-i18n';
 import { Store } from 'vuex';
 import { BUILD_TIMESTAMP } from '@/constants';
+import dayjs from 'dayjs';
 
 export default class TranslationService {
   private store: Store<unknown>;
@@ -19,12 +20,14 @@ export default class TranslationService {
       this.i18n.setLocaleMessage(currentLanguage, {});
       axios.get(`i18n/${currentLanguage}.json?buildTimestamp=${BUILD_TIMESTAMP}`).then((res) => {
         if (res.data) {
+          dayjs.locale(currentLanguage);
           this.i18n.setLocaleMessage(currentLanguage, res.data);
           this.i18n.locale = currentLanguage;
           this.store.commit('currentLanguage', currentLanguage);
         }
       });
     } else if (this.i18n) {
+      dayjs.locale(currentLanguage);
       this.i18n.locale = currentLanguage;
       this.store.commit('currentLanguage', currentLanguage);
     }

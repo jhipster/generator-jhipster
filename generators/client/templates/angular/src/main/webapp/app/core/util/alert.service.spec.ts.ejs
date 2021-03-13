@@ -18,7 +18,7 @@
 -%>
 import { inject, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService, MissingTranslationHandler  } from '@ngx-translate/core';
+import { TranslateModule, TranslateService, MissingTranslationHandler } from '@ngx-translate/core';
 import { missingTranslationHandler } from '../../config/translation.config';
 <%_ } _%>
 
@@ -31,11 +31,14 @@ describe('Alert service test', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         <%_ if (enableTranslation) { _%>
-        imports: [TranslateModule.forRoot({
+        imports: [
+          TranslateModule.forRoot({
             missingTranslationHandler: {
-            provide: MissingTranslationHandler,
-            useFactory: missingTranslationHandler
-          }})],
+              provide: MissingTranslationHandler,
+              useFactory: missingTranslationHandler,
+            },
+          }),
+        ],
         <%_ } _%>
       });
       <%_ if (enableTranslation) { _%>
@@ -263,37 +266,48 @@ describe('Alert service test', () => {
         } as Alert)
       );
     }));
+
     <%_ if (enableTranslation) { _%>
-    
-    it('should produce a info message with translated message if key exists', inject([AlertService, TranslateService], (service: AlertService, translateService: TranslateService) => {
-      translateService.setTranslation('en', {
-          'hello.jhipster': 'Translated message'
-      })
-      expect(service.addAlert({ type: 'info', message: 'Hello Jhipster', translationKey: 'hello.jhipster' })).toEqual(
-        jasmine.objectContaining({
-          type: 'info',
-          message: 'Translated message',
-        } as Alert)
-      );
-    }));
 
-    it('should produce a info message with provided message if key does not exists', inject([AlertService, TranslateService], (service: AlertService) => {
-      expect(service.addAlert({ type: 'info', message: 'Hello Jhipster', translationKey: 'hello.jhipster' })).toEqual(
-        jasmine.objectContaining({
-          type: 'info',
-          message: 'Hello Jhipster',
-        } as Alert)
-      );
-    }));
+    it('should produce a info message with translated message if key exists', inject(
+      [AlertService, TranslateService],
+      (service: AlertService, translateService: TranslateService) => {
+        translateService.setTranslation('en', {
+          'hello.jhipster': 'Translated message',
+        });
+        expect(service.addAlert({ type: 'info', message: 'Hello Jhipster', translationKey: 'hello.jhipster' })).toEqual(
+          jasmine.objectContaining({
+            type: 'info',
+            message: 'Translated message',
+          } as Alert)
+        );
+      }
+    ));
 
-    it('should produce a info message with provided key if transltion key does not exist in translations and message is not provided', inject([AlertService, TranslateService], (service: AlertService) => {
-      expect(service.addAlert({ type: 'info', translationKey: 'hello.jhipster' })).toEqual(
-        jasmine.objectContaining({
-          type: 'info',
-          message: 'hello.jhipster',
-        } as Alert)
-      );
-    }));
+    it('should produce a info message with provided message if key does not exists', inject(
+      [AlertService, TranslateService],
+      (service: AlertService) => {
+        expect(service.addAlert({ type: 'info', message: 'Hello Jhipster', translationKey: 'hello.jhipster' })).toEqual(
+          jasmine.objectContaining({
+            type: 'info',
+            message: 'Hello Jhipster',
+          } as Alert)
+        );
+      }
+    ));
+
+    it('should produce a info message with provided key if transltion key does not exist in translations and message is not provided', inject(
+      [AlertService, TranslateService],
+      (service: AlertService) => {
+        expect(service.addAlert({ type: 'info', translationKey: 'hello.jhipster' })).toEqual(
+          jasmine.objectContaining({
+            type: 'info',
+            message: 'hello.jhipster',
+          } as Alert)
+        );
+      }
+    ));
+
     <%_ } _%>
   });
 });

@@ -20,11 +20,11 @@
 <%
 let result = '';
 if (relationship.relationshipValidate === true) {
-    const validators = [];
-    if (relationship.relationshipRequired) {
-        validators.push('@NotNull');
-    }
-    result =  validators.join('\n    ');
-    result += '\n';
+  const validators = [];
+  if (relationship.relationshipRequired) {
+    validators.push('@NotNull');
+  }
+  result =  validators.join('\n    ');
+  result += '\n';
 } -%>
 <%- result -%>

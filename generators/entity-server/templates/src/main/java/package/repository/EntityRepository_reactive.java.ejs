@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository;
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 <%_ } _%>
@@ -30,8 +30,8 @@ import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
-import org.neo4j.springframework.data.repository.query.Query;
+import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
+import org.springframework.data.neo4j.repository.query.Query;
 <%_ } _%>
 <%_ if (pagination !== 'no' || relationshipsContainEagerLoad || databaseType ==='sql') { _%>
 import org.springframework.data.domain.Pageable;
@@ -60,50 +60,50 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <%= officialDatabaseType %> reactive repository for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <%= officialDatabaseType %> reactive repository for the <%= persistClass %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseType === 'sql') { %>R2dbc<% } if (databaseType === 'mongodb') { %>ReactiveMongo<% } if (databaseType === 'couchbase') { %>ReactiveN1qlCouchbase<% } if (databaseType === 'neo4j') { %>ReactiveNeo4j<% } if (databaseType === 'cassandra') { %>ReactiveCassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% } %><% if (databaseType === 'sql') { %>, <%= entityClass %>RepositoryInternal<% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseType === 'sql') { %>R2dbc<% } if (databaseType === 'mongodb') { %>ReactiveMongo<% } if (databaseType === 'couchbase') { %>ReactiveN1qlCouchbase<% } if (databaseType === 'neo4j') { %>ReactiveNeo4j<% } if (databaseType === 'cassandra') { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %><% if (databaseType === 'sql') { %>, <%= entityClass %>RepositoryInternal<% } %> {
 
     <%_ if (pagination !== 'no') { _%>
 
-    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
+    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
     <%_ } _%>
     <%_ if (relationshipsContainEagerLoad) { _%>
         <%_ if (['couchbase', 'mongodb'].includes(databaseType)) { _%>
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
+    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+    Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
-    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
         <%_ } _%>
         <%_ if (databaseType === 'neo4j') { _%>
-    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
+    @Query("MATCH (n:<%= persistClass %>)<-[]-(m) RETURN n,m")
+    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+    @Query("MATCH (n:<%= persistClass %>)<-[]-(m) RETURN n,m")
+    Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
-    @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
-    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    @Query("MATCH (e:<%= persistClass %> {id: $id}) RETURN e")
+    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
         <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') {
             if (fieldsContainOwnerManyToMany) { _%>
 
     @Override
-    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
 
     @Override
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+    Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
     @Override
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
 
     @Override
     Mono<Void> deleteById(Long id);
@@ -117,56 +117,56 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
                   if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id = :id")
-    Flux<<%= asEntity(entityClass) %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
+    Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
-    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
+    Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
               <%_ } else if (relationship.shouldWriteJoinTable) {
                   _%>
 
     @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
-    Flux<<%= asEntity(entityClass) %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
+    Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
               <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
                   let otherEntityRelationshipName = relationship.otherEntityRelationshipName;
                   let otherEntityTableName = relationship.otherEntityTableName;
                   _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
-    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
+    Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
               <%_ } _%>
         <%_ } _%>
 
     // just to avoid having unambigous methods
     @Override
-    Flux<<%= asEntity(entityClass) %>> findAll();
+    Flux<<%= persistClass %>> findAll();
 
     @Override
-    Mono<<%= asEntity(entityClass) %>> findById(Long id);
+    Mono<<%= persistClass %>> findById(Long id);
 
     @Override
-    <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity);
+    <S extends <%= persistClass %>> Mono<S> save(S entity);
 
     <%_ } _%>
 
 }
 <%_ if (databaseType === 'sql') { _%>
 interface <%= entityClass %>RepositoryInternal {
-    <S extends <%= asEntity(entityClass) %>> Mono<S> insert(S entity);
-    <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity);
-    Mono<Integer> update(<%= asEntity(entityClass) %> entity);
+    <S extends <%= persistClass %>> Mono<S> insert(S entity);
+    <S extends <%= persistClass %>> Mono<S> save(S entity);
+    Mono<Integer> update(<%= persistClass %> entity);
 
-    Flux<<%= asEntity(entityClass) %>> findAll();
-    Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKey.type %> id);
-    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
-    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria);
+    Flux<<%= persistClass %>> findAll();
+    Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
+    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
+    Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
 
     <%_ if (fieldsContainOwnerManyToMany) { _%>
 
-    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
 
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+    Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
-    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
 
     Mono<Void> deleteById(Long id);
     <%_ } _%>

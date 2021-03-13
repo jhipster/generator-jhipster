@@ -27,8 +27,8 @@ module.exports = { convertDeployments };
  * @return {Array<JDLDeployment>} the converted JDLDeployment objects.
  */
 function convertDeployments(parsedDeployments) {
-    if (!parsedDeployments) {
-        throw new Error('Deployments have to be passed so as to be converted.');
-    }
-    return parsedDeployments.map(parsedDeployment => new JDLDeployment(parsedDeployment));
+  if (!parsedDeployments) {
+    throw new Error('Deployments have to be passed so as to be converted.');
+  }
+  return parsedDeployments.map(parsedDeployment => new JDLDeployment(parsedDeployment));
 }

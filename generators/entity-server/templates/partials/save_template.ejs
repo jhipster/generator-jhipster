@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+<%_ const instanceType = restClass;
+const instanceName = restInstance;
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
@@ -40,20 +40,20 @@ if (isUsingMapsId === true) {
 <%_ }
     if (!viaService) {
         if (dto === 'mapstruct') {
-            resultEntity = asEntity(entityInstance); _%>
-        <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = <%= dtoToEntity %>(<%= instanceName %>);
+            resultEntity = persistInstance; _%>
+        <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%_ if (isUsingMapsId === true) { _%>
-        <%= mapsIdAssoc.otherEntityPrimaryKeyType %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= asEntity(entityInstance) %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
         <%_ } _%>
-        <%= asEntity(entityInstance) %> = <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
-        <%= returnPrefix %> <%= entityToDto %>(<%= asEntity(entityInstance) %>);
+        <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
+        <%= returnPrefix %> <%= entityToDto %>(<%= persistInstance %>);
     <%_ } else { resultEntity = 'result'; _%>
         <%_ if (isUsingMapsId === true) { _%>
-        <%= mapsIdAssoc.otherEntityPrimaryKeyType %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
         <%_ } _%>
-        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
+        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
     <%_ }
         if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
@@ -63,7 +63,7 @@ if (isUsingMapsId === true) {
         }
     } else { _%>
         <%_ if (isUsingMapsId === true && isController === false) { _%>
-        <%= mapsIdAssoc.otherEntityPrimaryKeyType %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);

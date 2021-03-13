@@ -12,196 +12,196 @@ const constants = require('../../generators/generator-constants');
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 const createMockBlueprint = function (parent, spy) {
-    return class extends parent {
-        constructor(args, opts) {
-            super(args, { ...opts });
-        }
+  return class extends parent {
+    constructor(args, opts) {
+      super(args, { ...opts });
+    }
 
-        spy() {
-            spy();
-        }
-    };
+    spy() {
+      spy();
+    }
+  };
 };
 
 const mockAppBlueprintSubGen = class extends AppGenerator {
-    constructor(args, opts) {
-        super(args, { ...opts });
-    }
+  constructor(args, opts) {
+    super(args, { ...opts });
+  }
 
-    get initializing() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
-    }
+  get initializing() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._initializing();
+  }
 
-    get writing() {
-        return super._writing();
-    }
+  get writing() {
+    return super._writing();
+  }
 
-    get prompting() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._prompting();
-    }
+  get prompting() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._prompting();
+  }
 
-    get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._configuring();
-    }
+  get configuring() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._configuring();
+  }
 
-    get default() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._default();
-    }
+  get default() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._default();
+  }
 
-    get install() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._install();
-    }
+  get install() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._install();
+  }
 
-    get end() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._end();
-    }
+  get end() {
+    // Here we are not overriding this phase and hence its being handled by JHipster
+    return super._end();
+  }
 };
 
 const options = {
-    fromCli: true,
-    skipInstall: true,
-    skipChecks: true,
-    blueprints: 'my-blueprint',
+  fromCli: true,
+  skipInstall: true,
+  skipChecks: true,
+  blueprints: 'my-blueprint',
 };
 
 const prompts = {
-    baseName: 'jhipster',
-    clientFramework: ANGULAR,
-    packageName: 'com.mycompany.myapp',
-    packageFolder: 'com/mycompany/myapp',
-    serviceDiscoveryType: false,
-    authenticationType: 'jwt',
-    cacheProvider: 'ehcache',
-    enableHibernateCache: true,
-    databaseType: 'sql',
-    devDatabaseType: 'h2Memory',
-    prodDatabaseType: 'mysql',
-    enableTranslation: true,
-    nativeLanguage: 'en',
-    languages: ['fr'],
+  baseName: 'jhipster',
+  clientFramework: ANGULAR,
+  packageName: 'com.mycompany.myapp',
+  packageFolder: 'com/mycompany/myapp',
+  serviceDiscoveryType: false,
+  authenticationType: 'jwt',
+  cacheProvider: 'ehcache',
+  enableHibernateCache: true,
+  databaseType: 'sql',
+  devDatabaseType: 'h2Memory',
+  prodDatabaseType: 'mysql',
+  enableTranslation: true,
+  nativeLanguage: 'en',
+  languages: ['fr'],
 };
 
 describe('JHipster with app blueprints', () => {
-    describe('1 app blueprint', () => {
-        before(done => {
-            this.spyClient1 = sinon.spy();
-            this.spyServer1 = sinon.spy();
-            this.spyLanguages1 = sinon.spy();
-            this.spyCommon1 = sinon.spy();
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
-                .withOptions(options)
-                .withGenerators([
-                    [createMockBlueprint(ClientGenerator, this.spyClient1), 'jhipster-my-blueprint:client'],
-                    [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
-                    [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
-                    [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
-                ])
-                .withPrompts(prompts)
-                .on('end', done);
-        });
-
-        it('every sub-generator must be called once', () => {
-            sinon.assert.calledOnce(this.spyClient1);
-            sinon.assert.calledOnce(this.spyServer1);
-            sinon.assert.calledOnce(this.spyCommon1);
-            sinon.assert.calledOnce(this.spyLanguages1);
-        });
+  describe('1 app blueprint', () => {
+    before(done => {
+      this.spyClient1 = sinon.spy();
+      this.spyServer1 = sinon.spy();
+      this.spyLanguages1 = sinon.spy();
+      this.spyCommon1 = sinon.spy();
+      helpers
+        .run(path.join(__dirname, '../../generators/app'))
+        .withOptions(options)
+        .withGenerators([
+          [createMockBlueprint(ClientGenerator, this.spyClient1), 'jhipster-my-blueprint:client'],
+          [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
+          [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
+          [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
+          [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
+        ])
+        .withPrompts(prompts)
+        .on('end', done);
     });
 
-    describe('2 app blueprint', () => {
-        before(done => {
-            this.spyClient1 = sinon.spy();
-            this.spyServer1 = sinon.spy();
-            this.spyLanguages1 = sinon.spy();
-            this.spyCommon1 = sinon.spy();
+    it('every sub-generator must be called once', () => {
+      sinon.assert.calledOnce(this.spyClient1);
+      sinon.assert.calledOnce(this.spyServer1);
+      sinon.assert.calledOnce(this.spyCommon1);
+      sinon.assert.calledOnce(this.spyLanguages1);
+    });
+  });
 
-            this.spyClient2 = sinon.spy();
-            this.spyServer2 = sinon.spy();
-            this.spyLanguages2 = sinon.spy();
-            this.spyCommon2 = sinon.spy();
+  describe('2 app blueprint', () => {
+    before(done => {
+      this.spyClient1 = sinon.spy();
+      this.spyServer1 = sinon.spy();
+      this.spyLanguages1 = sinon.spy();
+      this.spyCommon1 = sinon.spy();
 
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
-                .withOptions({ ...options, blueprints: 'my-blueprint,my-blueprint-2' })
-                .withGenerators([
-                    [createMockBlueprint(ClientGenerator, this.spyClient1), 'jhipster-my-blueprint:client'],
-                    [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
-                    [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
-                    [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
-                    [createMockBlueprint(ClientGenerator, this.spyClient2), 'jhipster-my-blueprint-2:client'],
-                    [createMockBlueprint(ServerGenerator, this.spyServer2), 'jhipster-my-blueprint-2:server'],
-                    [createMockBlueprint(LanguagesGenerator, this.spyLanguages2), 'jhipster-my-blueprint-2:languages'],
-                    [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
-                ])
-                .withPrompts(prompts)
-                .on('end', done);
-        });
+      this.spyClient2 = sinon.spy();
+      this.spyServer2 = sinon.spy();
+      this.spyLanguages2 = sinon.spy();
+      this.spyCommon2 = sinon.spy();
 
-        it('every sub-generator must be called once', () => {
-            sinon.assert.calledOnce(this.spyClient1);
-            sinon.assert.calledOnce(this.spyServer1);
-            sinon.assert.calledOnce(this.spyCommon1);
-            sinon.assert.calledOnce(this.spyLanguages1);
-
-            sinon.assert.calledOnce(this.spyClient2);
-            sinon.assert.calledOnce(this.spyServer2);
-            sinon.assert.calledOnce(this.spyCommon2);
-            sinon.assert.calledOnce(this.spyLanguages2);
-        });
+      helpers
+        .run(path.join(__dirname, '../../generators/app'))
+        .withOptions({ ...options, blueprints: 'my-blueprint,my-blueprint-2' })
+        .withGenerators([
+          [createMockBlueprint(ClientGenerator, this.spyClient1), 'jhipster-my-blueprint:client'],
+          [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
+          [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
+          [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
+          [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
+          [createMockBlueprint(ClientGenerator, this.spyClient2), 'jhipster-my-blueprint-2:client'],
+          [createMockBlueprint(ServerGenerator, this.spyServer2), 'jhipster-my-blueprint-2:server'],
+          [createMockBlueprint(LanguagesGenerator, this.spyLanguages2), 'jhipster-my-blueprint-2:languages'],
+          [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
+          [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
+        ])
+        .withPrompts(prompts)
+        .on('end', done);
     });
 
-    describe('3 app blueprint', () => {
-        before(done => {
-            this.spyClient1 = sinon.spy();
-            this.spyServer1 = sinon.spy();
-            this.spyLanguages1 = sinon.spy();
-            this.spyCommon1 = sinon.spy();
+    it('every sub-generator must be called once', () => {
+      sinon.assert.calledOnce(this.spyClient1);
+      sinon.assert.calledOnce(this.spyServer1);
+      sinon.assert.calledOnce(this.spyCommon1);
+      sinon.assert.calledOnce(this.spyLanguages1);
 
-            this.spyClient2 = sinon.spy();
-            this.spyServer2 = sinon.spy();
-            this.spyLanguages2 = sinon.spy();
-            this.spyCommon2 = sinon.spy();
-
-            helpers
-                .run(path.join(__dirname, '../../generators/app'))
-                .withOptions({ ...options, blueprints: 'my-blueprint,my-blueprint-2,my-blueprint-3' })
-                .withGenerators([
-                    [createMockBlueprint(ClientGenerator, this.spyClient1), 'jhipster-my-blueprint:client'],
-                    [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
-                    [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
-                    [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
-                    [createMockBlueprint(ClientGenerator, this.spyClient2), 'jhipster-my-blueprint-2:client'],
-                    [createMockBlueprint(ServerGenerator, this.spyServer2), 'jhipster-my-blueprint-2:server'],
-                    [createMockBlueprint(LanguagesGenerator, this.spyLanguages2), 'jhipster-my-blueprint-2:languages'],
-                    [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
-                    [mockAppBlueprintSubGen, 'jhipster-my-blueprint-3:app'],
-                ])
-                .withPrompts(prompts)
-                .on('end', done);
-        });
-
-        it('every sub-generator must be called once', () => {
-            sinon.assert.calledOnce(this.spyClient1);
-            sinon.assert.calledOnce(this.spyServer1);
-            sinon.assert.calledOnce(this.spyCommon1);
-            sinon.assert.calledOnce(this.spyLanguages1);
-
-            sinon.assert.calledOnce(this.spyClient2);
-            sinon.assert.calledOnce(this.spyServer2);
-            sinon.assert.calledOnce(this.spyCommon2);
-            sinon.assert.calledOnce(this.spyLanguages2);
-        });
+      sinon.assert.calledOnce(this.spyClient2);
+      sinon.assert.calledOnce(this.spyServer2);
+      sinon.assert.calledOnce(this.spyCommon2);
+      sinon.assert.calledOnce(this.spyLanguages2);
     });
+  });
+
+  describe('3 app blueprint', () => {
+    before(done => {
+      this.spyClient1 = sinon.spy();
+      this.spyServer1 = sinon.spy();
+      this.spyLanguages1 = sinon.spy();
+      this.spyCommon1 = sinon.spy();
+
+      this.spyClient2 = sinon.spy();
+      this.spyServer2 = sinon.spy();
+      this.spyLanguages2 = sinon.spy();
+      this.spyCommon2 = sinon.spy();
+
+      helpers
+        .run(path.join(__dirname, '../../generators/app'))
+        .withOptions({ ...options, blueprints: 'my-blueprint,my-blueprint-2,my-blueprint-3' })
+        .withGenerators([
+          [createMockBlueprint(ClientGenerator, this.spyClient1), 'jhipster-my-blueprint:client'],
+          [createMockBlueprint(ServerGenerator, this.spyServer1), 'jhipster-my-blueprint:server'],
+          [createMockBlueprint(LanguagesGenerator, this.spyLanguages1), 'jhipster-my-blueprint:languages'],
+          [createMockBlueprint(CommonGenerator, this.spyCommon1), 'jhipster-my-blueprint:common'],
+          [mockAppBlueprintSubGen, 'jhipster-my-blueprint:app'],
+          [createMockBlueprint(ClientGenerator, this.spyClient2), 'jhipster-my-blueprint-2:client'],
+          [createMockBlueprint(ServerGenerator, this.spyServer2), 'jhipster-my-blueprint-2:server'],
+          [createMockBlueprint(LanguagesGenerator, this.spyLanguages2), 'jhipster-my-blueprint-2:languages'],
+          [createMockBlueprint(CommonGenerator, this.spyCommon2), 'jhipster-my-blueprint-2:common'],
+          [mockAppBlueprintSubGen, 'jhipster-my-blueprint-2:app'],
+          [mockAppBlueprintSubGen, 'jhipster-my-blueprint-3:app'],
+        ])
+        .withPrompts(prompts)
+        .on('end', done);
+    });
+
+    it('every sub-generator must be called once', () => {
+      sinon.assert.calledOnce(this.spyClient1);
+      sinon.assert.calledOnce(this.spyServer1);
+      sinon.assert.calledOnce(this.spyCommon1);
+      sinon.assert.calledOnce(this.spyLanguages1);
+
+      sinon.assert.calledOnce(this.spyClient2);
+      sinon.assert.calledOnce(this.spyServer2);
+      sinon.assert.calledOnce(this.spyCommon2);
+      sinon.assert.calledOnce(this.spyLanguages2);
+    });
+  });
 });

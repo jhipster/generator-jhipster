@@ -29,17 +29,17 @@ module.exports = { convertEntities };
  * @returns {Array<JDLEntity>} converted JDLEntity objects.
  */
 function convertEntities(parsedEntities, jdlFieldGetterFunction) {
-    if (!parsedEntities) {
-        throw new Error('Entities have to be passed so as to be converted.');
-    }
-    return parsedEntities.map(parsedEntity => {
-        const jdlEntity = new JDLEntity({
-            name: parsedEntity.name,
-            tableName: parsedEntity.tableName || parsedEntity.name,
-            comment: formatComment(parsedEntity.javadoc),
-        });
-        const jdlFields = jdlFieldGetterFunction.call(undefined, parsedEntity);
-        jdlEntity.addFields(jdlFields);
-        return jdlEntity;
+  if (!parsedEntities) {
+    throw new Error('Entities have to be passed so as to be converted.');
+  }
+  return parsedEntities.map(parsedEntity => {
+    const jdlEntity = new JDLEntity({
+      name: parsedEntity.name,
+      tableName: parsedEntity.tableName || parsedEntity.name,
+      comment: formatComment(parsedEntity.javadoc),
     });
+    const jdlFields = jdlFieldGetterFunction.call(undefined, parsedEntity);
+    jdlEntity.addFields(jdlFields);
+    return jdlEntity;
+  });
 }

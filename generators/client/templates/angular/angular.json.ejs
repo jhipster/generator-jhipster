@@ -42,7 +42,13 @@
               "<%= MAIN_SRC_DIR %>content",
               "<%= MAIN_SRC_DIR %>favicon.ico",
               "<%= MAIN_SRC_DIR %>manifest.webapp",
-              { "glob": "*.{js,css,html,png}", "input": "./node_modules/swagger-ui-dist", "output": "swagger-ui", "ignore": ["**/index.html"]  },
+              "<%= MAIN_SRC_DIR %>robots.txt",
+              {
+                "glob": "*.{js,css,html,png}",
+                "input": "./node_modules/swagger-ui-dist",
+                "output": "swagger-ui",
+                "ignore": ["**/index.html"]
+              },
               { "glob": "axios.min.js", "input": "./node_modules/axios/dist", "output": "swagger-ui" },
               { "glob": "**/*", "input": "<%= MAIN_SRC_DIR %>swagger-ui/", "output": "swagger-ui" }
             ],

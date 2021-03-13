@@ -26,34 +26,34 @@ const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
 const { SKIP_CLIENT } = require('../../../jdl/jhipster/unary-options');
 
 describe('JSONToJDLOptionConverter', () => {
-    describe('convertToServerOptions', () => {
-        context('when not passing any argument', () => {
-            let jdlObject;
+  describe('convertToServerOptions', () => {
+    context('when not passing any argument', () => {
+      let jdlObject;
 
-            before(() => {
-                jdlObject = convertServerOptionsToJDL();
-            });
+      before(() => {
+        jdlObject = convertServerOptionsToJDL();
+      });
 
-            it('should return an empty jdl object', () => {
-                expect(jdlObject.getOptionQuantity()).to.equal(0);
-            });
-        });
-        context('when passing a jdl object', () => {
-            let jdlObject;
-
-            before(() => {
-                const previousJDLObject = new JDLObject();
-                previousJDLObject.addOption(
-                    new JDLUnaryOption({
-                        name: SKIP_CLIENT,
-                    })
-                );
-                jdlObject = convertServerOptionsToJDL({ 'generator-jhipster': {} }, previousJDLObject);
-            });
-
-            it('should add the converted options', () => {
-                expect(jdlObject.getOptionsForName(SKIP_CLIENT)).not.to.be.undefined;
-            });
-        });
+      it('should return an empty jdl object', () => {
+        expect(jdlObject.getOptionQuantity()).to.equal(0);
+      });
     });
+    context('when passing a jdl object', () => {
+      let jdlObject;
+
+      before(() => {
+        const previousJDLObject = new JDLObject();
+        previousJDLObject.addOption(
+          new JDLUnaryOption({
+            name: SKIP_CLIENT,
+          })
+        );
+        jdlObject = convertServerOptionsToJDL({ 'generator-jhipster': {} }, previousJDLObject);
+      });
+
+      it('should add the converted options', () => {
+        expect(jdlObject.getOptionsForName(SKIP_CLIENT)).not.to.be.undefined;
+      });
+    });
+  });
 });

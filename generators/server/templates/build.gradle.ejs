@@ -18,10 +18,7 @@
 -%>
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
         gradlePluginPortal()
-        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -32,6 +29,7 @@ plugins {
     id "java"
     id "maven-publish"
     id "idea"
+    id "eclipse"
     id "jacoco"
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
@@ -42,9 +40,6 @@ plugins {
     <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
     <%_ } _%>
-    id "net.ltgt.apt-eclipse"
-    id "net.ltgt.apt-idea"
-    id "net.ltgt.apt"
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     id "org.liquibase.gradle"
     <%_ } _%>
@@ -92,7 +87,7 @@ if (project.hasProperty("gae")) {
     appengineStage.dependsOn thinResolve
 }
 
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
 if (project.hasProperty("zipkin")) {
     apply from: "gradle/zipkin.gradle"
 }
@@ -263,11 +258,10 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
-    <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     maven { url 'https://repo.spring.io/milestone' }
     <%_ } _%>
-    <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
+    <%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
         mavenContent {
@@ -290,7 +284,7 @@ dependencies {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
     <%_ // This is useful for major Spring Boot migration
-    if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     runtime "org.springframework.boot:spring-boot-properties-migrator"
     <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
@@ -309,9 +303,6 @@ dependencies {
     <%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-    <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
-    implementation "org.apache.httpcomponents:httpclient"
-    <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     implementation "com.hazelcast:hazelcast"
     <%_ } _%>
@@ -405,7 +396,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
-    implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     // This is done here explicitly as dependency resolution seems to have changed recently such that the validation starter
     // and therefore hibernate validators is not included anymore
@@ -455,19 +446,17 @@ dependencies {
     implementation "com.datastax.oss:java-driver-mapper-runtime"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
-        <%_ if (!reactive) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
-        <%_ } else { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
-        <%_ } _%>
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
     implementation "org.springframework.retry:spring-retry"
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
@@ -477,14 +466,16 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
     <%_ } _%>
-    <%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
+    <%_ if (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-security"
     <%_ } _%>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
+    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
     implementation "org.springframework.security:spring-security-data"
+    <%_ } _%>
     implementation "org.springframework.security:spring-security-web"
     <%_ if (websocket === 'spring-websocket') { _%>
     implementation "org.springframework.security:spring-security-messaging"
@@ -502,11 +493,6 @@ dependencies {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
     }
-    <%_ } _%>
-    <%_ if (authenticationType === 'uaa') { _%>
-    implementation "org.springframework.security.oauth:spring-security-oauth2"
-    implementation "org.springframework.security:spring-security-jwt"
-    <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %> "org.glassfish.jaxb:jaxb-runtime:${jaxbRuntimeVersion}"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
@@ -541,7 +527,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
         <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb:${r2dbcMariadbVersion}"
+        implementation "org.mariadb:r2dbc-mariadb"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
@@ -575,11 +561,7 @@ dependencies {
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
-    testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-        <%_ if (cucumberTests === false) { _%>
-        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-        <%_ } _%>
-    }
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
@@ -644,8 +626,8 @@ wrapper {
 
 if (project.hasProperty("nodeInstall")) {
     node {
-        version = "${nodeVersion}"
-        npmVersion = "${npmVersion}"
+        version = "<%= NODE_VERSION %>"
+        npmVersion = "<%= NPM_VERSION %>"
         download = true
     }
 }

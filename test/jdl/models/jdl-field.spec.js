@@ -26,185 +26,185 @@ const JDLValidation = require('../../../jdl/models/jdl-validation');
 const Validations = require('../../../jdl/jhipster/validations');
 
 describe('JDLField', () => {
-    describe('new', () => {
-        context('when not passing any argument', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLField();
-                }).to.throw('The field name and type are mandatory to create a field.');
-            });
-        });
-        context('when not passing the name', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLField({ name: null, type: 'String' });
-                }).to.throw('The field name and type are mandatory to create a field.');
-            });
-        });
-        context('when not passing the type', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JDLField({ name: 'abc', type: null });
-                }).to.throw('The field name and type are mandatory to create a field.');
-            });
-        });
-        context('when passing arguments', () => {
-            let args = {};
-            let field;
-
-            before(() => {
-                args = {
-                    name: 'abc',
-                    type: 'String',
-                    comment: 'comment',
-                    validations: [new JDLValidation()],
-                };
-                field = new JDLField(args);
-            });
-
-            it('should create a new instance', () => {
-                expect(field).to.satisfy(matchField);
-            });
-        });
+  describe('new', () => {
+    context('when not passing any argument', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JDLField();
+        }).to.throw('The field name and type are mandatory to create a field.');
+      });
     });
-    describe('addValidation', () => {
-        let field;
-
-        before(() => {
-            field = new JDLField({
-                name: 'abc',
-                type: 'String',
-                comment: 'comment',
-            });
-        });
-
-        context('when adding an invalid validation', () => {
-            context('because it is null', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        field.addValidation(null);
-                    }).to.throw(/^Can't add a nil JDL validation to the JDL field\.$/);
-                });
-            });
-        });
-        context('when adding a valid validation', () => {
-            let validation;
-
-            before(() => {
-                validation = { name: Validations.MIN, value: 42 };
-                field.addValidation(validation);
-            });
-
-            it('should add it', () => {
-                field.forEachValidation(validation => {
-                    expect(validation.name).to.equal(Validations.MIN);
-                    expect(validation.value).to.equal(42);
-                });
-            });
-        });
+    context('when not passing the name', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JDLField({ name: null, type: 'String' });
+        }).to.throw('The field name and type are mandatory to create a field.');
+      });
     });
-    describe('forEachValidation', () => {
-        context('when not passing a function', () => {
-            let field;
-
-            before(() => {
-                field = new JDLField({
-                    name: 'toto',
-                    type: 'String',
-                });
-            });
-
-            it('should fail', () => {
-                expect(() => field.forEachValidation()).to.throw();
-            });
-        });
-        context('when passing a function', () => {
-            let result;
-
-            before(() => {
-                const field = new JDLField({
-                    name: 'toto',
-                    type: 'String',
-                });
-                field.addValidation({
-                    name: 'required',
-                });
-                field.addValidation({
-                    name: 'min',
-                    value: 0,
-                });
-                result = '';
-                field.forEachValidation(validation => {
-                    result += `${validation.name}`;
-                });
-            });
-
-            it('should iterate over the fields', () => {
-                expect(result).to.equal('requiredmin');
-            });
-        });
+    context('when not passing the type', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JDLField({ name: 'abc', type: null });
+        }).to.throw('The field name and type are mandatory to create a field.');
+      });
     });
-    describe('toString', () => {
-        context('without comment', () => {
-            let args = {};
-            let field;
+    context('when passing arguments', () => {
+      let args = {};
+      let field;
 
-            before(() => {
-                args = {
-                    name: 'abc',
-                    type: 'String',
-                };
-                field = new JDLField(args);
-            });
+      before(() => {
+        args = {
+          name: 'abc',
+          type: 'String',
+          comment: 'comment',
+          validations: [new JDLValidation()],
+        };
+        field = new JDLField(args);
+      });
 
-            it('should stringifiy the fields', () => {
-                expect(field.toString()).to.equal(`${args.name} ${args.type}`);
-            });
-        });
-        context('without any validation', () => {
-            let args = {};
-            let field;
-
-            before(() => {
-                args = {
-                    name: 'abc',
-                    type: 'String',
-                    comment: 'comment',
-                };
-                field = new JDLField(args);
-            });
-
-            it('should stringifiy the fields', () => {
-                expect(field.toString()).to.equal(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
-            });
-        });
-        context('with everything', () => {
-            let args = {};
-            let field;
-
-            before(() => {
-                args = {
-                    name: 'abc',
-                    type: 'String',
-                    comment: 'comment',
-                    validations: [
-                        new JDLValidation(),
-                        new JDLValidation({
-                            name: 'minlength',
-                            value: 42,
-                        }),
-                    ],
-                };
-                field = new JDLField(args);
-            });
-
-            it('should stringifiy the field', () => {
-                expect(field.toString()).to.equal(
-                    `/**\n * ${args.comment}\n */\n` +
-                        `${args.name} ${args.type} ${args.validations[0].name} ` +
-                        `${args.validations[1].name}(${args.validations[1].value})`
-                );
-            });
-        });
+      it('should create a new instance', () => {
+        expect(field).to.satisfy(matchField);
+      });
     });
+  });
+  describe('addValidation', () => {
+    let field;
+
+    before(() => {
+      field = new JDLField({
+        name: 'abc',
+        type: 'String',
+        comment: 'comment',
+      });
+    });
+
+    context('when adding an invalid validation', () => {
+      context('because it is null', () => {
+        it('should fail', () => {
+          expect(() => {
+            field.addValidation(null);
+          }).to.throw(/^Can't add a nil JDL validation to the JDL field\.$/);
+        });
+      });
+    });
+    context('when adding a valid validation', () => {
+      let validation;
+
+      before(() => {
+        validation = { name: Validations.MIN, value: 42 };
+        field.addValidation(validation);
+      });
+
+      it('should add it', () => {
+        field.forEachValidation(validation => {
+          expect(validation.name).to.equal(Validations.MIN);
+          expect(validation.value).to.equal(42);
+        });
+      });
+    });
+  });
+  describe('forEachValidation', () => {
+    context('when not passing a function', () => {
+      let field;
+
+      before(() => {
+        field = new JDLField({
+          name: 'toto',
+          type: 'String',
+        });
+      });
+
+      it('should fail', () => {
+        expect(() => field.forEachValidation()).to.throw();
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        const field = new JDLField({
+          name: 'toto',
+          type: 'String',
+        });
+        field.addValidation({
+          name: 'required',
+        });
+        field.addValidation({
+          name: 'min',
+          value: 0,
+        });
+        result = '';
+        field.forEachValidation(validation => {
+          result += `${validation.name}`;
+        });
+      });
+
+      it('should iterate over the fields', () => {
+        expect(result).to.equal('requiredmin');
+      });
+    });
+  });
+  describe('toString', () => {
+    context('without comment', () => {
+      let args = {};
+      let field;
+
+      before(() => {
+        args = {
+          name: 'abc',
+          type: 'String',
+        };
+        field = new JDLField(args);
+      });
+
+      it('should stringifiy the fields', () => {
+        expect(field.toString()).to.equal(`${args.name} ${args.type}`);
+      });
+    });
+    context('without any validation', () => {
+      let args = {};
+      let field;
+
+      before(() => {
+        args = {
+          name: 'abc',
+          type: 'String',
+          comment: 'comment',
+        };
+        field = new JDLField(args);
+      });
+
+      it('should stringifiy the fields', () => {
+        expect(field.toString()).to.equal(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
+      });
+    });
+    context('with everything', () => {
+      let args = {};
+      let field;
+
+      before(() => {
+        args = {
+          name: 'abc',
+          type: 'String',
+          comment: 'comment',
+          validations: [
+            new JDLValidation(),
+            new JDLValidation({
+              name: 'minlength',
+              value: 42,
+            }),
+          ],
+        };
+        field = new JDLField(args);
+      });
+
+      it('should stringifiy the field', () => {
+        expect(field.toString()).to.equal(
+          `/**\n * ${args.comment}\n */\n` +
+            `${args.name} ${args.type} ${args.validations[0].name} ` +
+            `${args.validations[1].name}(${args.validations[1].value})`
+        );
+      });
+    });
+  });
 });

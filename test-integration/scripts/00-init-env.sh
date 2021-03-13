@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 JHI_DETECTED_DIR="$( cd "$( dirname $( dirname $( dirname "${BASH_SOURCE[0]}" ) ) )" >/dev/null 2>&1 && pwd )"
 
@@ -40,11 +40,6 @@ fi
 # folder for app
 if [[ "$JHI_FOLDER_APP" == "" ]]; then
     JHI_FOLDER_APP="$HOME"/app
-fi
-
-# folder for uaa app
-if [[ "$JHI_FOLDER_UAA" == "" ]]; then
-    JHI_FOLDER_UAA="$HOME"/uaa
 fi
 
 # set correct OpenJDK version

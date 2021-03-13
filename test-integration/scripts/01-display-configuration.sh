@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source $(dirname $0)/00-init-env.sh
 
@@ -24,5 +24,4 @@ echo JHI_INTEG="$JHI_INTEG"
 echo JHI_SAMPLES="$JHI_SAMPLES"
 echo JHI_SCRIPTS="$JHI_SCRIPTS"
 echo JHI_FOLDER_APP="$JHI_FOLDER_APP"
-echo JHI_FOLDER_UAA="$JHI_FOLDER_UAA"
 echo JAVA_HOME="$JAVA_HOME"

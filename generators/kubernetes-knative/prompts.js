@@ -19,32 +19,32 @@
 const k8sPrompts = require('../kubernetes/prompts');
 
 module.exports = {
-    askForGeneratorType,
-    ...k8sPrompts,
+  askForGeneratorType,
+  ...k8sPrompts,
 };
 
 async function askForGeneratorType() {
-    if (this.regenerate) return;
+  if (this.regenerate) return;
 
-    const prompts = [
+  const prompts = [
+    {
+      type: 'list',
+      name: 'generatorType',
+      message: 'Which *type* of generator would you like to base this on?',
+      choices: [
         {
-            type: 'list',
-            name: 'generatorType',
-            message: 'Which *type* of generator would you like to base this on?',
-            choices: [
-                {
-                    value: 'k8s',
-                    name: 'Kubernetes generator',
-                },
-                {
-                    value: 'helm',
-                    name: 'Helm Kubernetes generator',
-                },
-            ],
-            default: this.generatorType ? this.generatorType : 'k8s',
+          value: 'k8s',
+          name: 'Kubernetes generator',
         },
-    ];
+        {
+          value: 'helm',
+          name: 'Helm Kubernetes generator',
+        },
+      ],
+      default: this.generatorType ? this.generatorType : 'k8s',
+    },
+  ];
 
-    const props = await this.prompt(prompts);
-    this.generatorType = props.generatorType;
+  const props = await this.prompt(prompts);
+  this.generatorType = props.generatorType;
 }

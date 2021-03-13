@@ -35,7 +35,7 @@ const { convertRelationships } = require('./relationship-converter');
 const { convertDeployments } = require('./deployment-converter');
 
 module.exports = {
-    parseFromConfigurationObject,
+  parseFromConfigurationObject,
 };
 
 const USER = 'User';
@@ -59,200 +59,200 @@ let applicationsPerEntityName;
  * @return {JDLObject} the built JDL object.
  */
 function parseFromConfigurationObject(configurationObject) {
-    parsedContent = configurationObject.parsedContent || configurationObject.document;
-    if (!parsedContent) {
-        throw new Error('The parsed JDL content must be passed.');
-    }
-    init(configurationObject);
-    fillApplications();
-    fillDeployments();
-    fillEnums();
-    fillClassesAndFields();
-    fillAssociations();
-    fillOptions();
-    return jdlObject;
+  parsedContent = configurationObject.parsedContent || configurationObject.document;
+  if (!parsedContent) {
+    throw new Error('The parsed JDL content must be passed.');
+  }
+  init(configurationObject);
+  fillApplications();
+  fillDeployments();
+  fillEnums();
+  fillClassesAndFields();
+  fillAssociations();
+  fillOptions();
+  return jdlObject;
 }
 
 function init(passedConfiguration) {
-    configuration = passedConfiguration;
-    jdlObject = new JDLObject();
-    entityNames = parsedContent.entities.map(entity => entity.name);
-    applicationsPerEntityName = {};
+  configuration = passedConfiguration;
+  jdlObject = new JDLObject();
+  entityNames = parsedContent.entities.map(entity => entity.name);
+  applicationsPerEntityName = {};
 }
 
 function fillApplications() {
-    const jdlApplications = convertApplications(parsedContent.applications, configuration, entityNames);
-    jdlApplications.forEach(jdlApplication => {
-        jdlObject.addApplication(jdlApplication);
-        fillApplicationsPerEntityName(jdlApplication);
-    });
+  const jdlApplications = convertApplications(parsedContent.applications, configuration, entityNames);
+  jdlApplications.forEach(jdlApplication => {
+    jdlObject.addApplication(jdlApplication);
+    fillApplicationsPerEntityName(jdlApplication);
+  });
 }
 
 function fillApplicationsPerEntityName(application) {
-    application.forEachEntityName(entityName => {
-        applicationsPerEntityName[entityName] = applicationsPerEntityName[entityName] || [];
-        applicationsPerEntityName[entityName].push(application);
-    });
+  application.forEachEntityName(entityName => {
+    applicationsPerEntityName[entityName] = applicationsPerEntityName[entityName] || [];
+    applicationsPerEntityName[entityName].push(application);
+  });
 }
 
 function fillDeployments() {
-    const jdlDeployments = convertDeployments(parsedContent.deployments);
-    jdlDeployments.forEach(jdlDeployment => {
-        jdlObject.addDeployment(jdlDeployment);
-    });
+  const jdlDeployments = convertDeployments(parsedContent.deployments);
+  jdlDeployments.forEach(jdlDeployment => {
+    jdlObject.addDeployment(jdlDeployment);
+  });
 }
 
 function fillEnums() {
-    const jdlEnums = convertEnums(parsedContent.enums);
-    jdlEnums.forEach(jdlEnum => {
-        jdlObject.addEnum(jdlEnum);
-    });
+  const jdlEnums = convertEnums(parsedContent.enums);
+  jdlEnums.forEach(jdlEnum => {
+    jdlObject.addEnum(jdlEnum);
+  });
 }
 
 function fillClassesAndFields() {
-    const jdlEntities = convertEntities(parsedContent.entities, getJDLFieldsFromParsedEntity);
-    jdlEntities.forEach(jdlEntity => {
-        jdlObject.addEntity(jdlEntity);
-    });
-    addUserEntityIfNeedBe();
-    addOptionsFromEntityAnnotations();
+  const jdlEntities = convertEntities(parsedContent.entities, getJDLFieldsFromParsedEntity);
+  jdlEntities.forEach(jdlEntity => {
+    jdlObject.addEntity(jdlEntity);
+  });
+  addUserEntityIfNeedBe();
+  addOptionsFromEntityAnnotations();
 }
 
 function getJDLFieldsFromParsedEntity(entity) {
-    const fields = [];
-    for (let i = 0; i < entity.body.length; i++) {
-        const field = entity.body[i];
-        const jdlField = convertField(field);
-        jdlField.validations = getValidations(field);
-        jdlField.options = convertAnnotationsToOptions(field.annotations);
-        fields.push(jdlField);
-    }
-    return fields;
+  const fields = [];
+  for (let i = 0; i < entity.body.length; i++) {
+    const field = entity.body[i];
+    const jdlField = convertField(field);
+    jdlField.validations = getValidations(field);
+    jdlField.options = convertAnnotationsToOptions(field.annotations);
+    fields.push(jdlField);
+  }
+  return fields;
 }
 
 function addOptionsFromEntityAnnotations() {
-    parsedContent.entities.forEach(entity => {
-        const entityName = entity.name;
-        const annotations = entity.annotations;
-        annotations.forEach(annotation => {
-            let annotationName = _.lowerFirst(annotation.optionName);
-            if (annotation.type === 'UNARY') {
-                jdlObject.addOption(
-                    new JDLUnaryOption({
-                        name: annotationName,
-                        entityNames: [entityName],
-                    })
-                );
-            } else if (annotation.type === 'BINARY') {
-                if (annotationName === 'paginate') {
-                    annotationName = BinaryOptions.Options.PAGINATION;
-                }
-                jdlObject.addOption(
-                    new JDLBinaryOption({
-                        name: annotationName,
-                        value: annotation.optionValue,
-                        entityNames: [entityName],
-                    })
-                );
-            }
-        });
+  parsedContent.entities.forEach(entity => {
+    const entityName = entity.name;
+    const annotations = entity.annotations;
+    annotations.forEach(annotation => {
+      let annotationName = _.lowerFirst(annotation.optionName);
+      if (annotation.type === 'UNARY') {
+        jdlObject.addOption(
+          new JDLUnaryOption({
+            name: annotationName,
+            entityNames: [entityName],
+          })
+        );
+      } else if (annotation.type === 'BINARY') {
+        if (annotationName === 'paginate') {
+          annotationName = BinaryOptions.Options.PAGINATION;
+        }
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: annotationName,
+            value: annotation.optionValue,
+            entityNames: [entityName],
+          })
+        );
+      }
     });
+  });
 }
 
 function addUserEntityIfNeedBe() {
-    const relationshipsToTheUserEntity = getRelationshipsToTheUserEntity();
-    if (relationshipsToTheUserEntity && relationshipsToTheUserEntity.length && !jdlObject.getEntity(USER)) {
-        addUserEntity();
-    }
+  const relationshipsToTheUserEntity = getRelationshipsToTheUserEntity();
+  if (relationshipsToTheUserEntity && relationshipsToTheUserEntity.length && !jdlObject.getEntity(USER)) {
+    addUserEntity();
+  }
 }
 
 function getRelationshipsToTheUserEntity() {
-    return parsedContent.relationships.filter(relationship => relationship.to.name.toLowerCase() === USER.toLowerCase());
+  return parsedContent.relationships.filter(relationship => relationship.to.name.toLowerCase() === USER.toLowerCase());
 }
 
 function addUserEntity() {
-    jdlObject.addEntity(
-        new JDLEntity({
-            name: USER,
-            tableName: 'jhi_user',
-            fields: {},
-        })
-    );
+  jdlObject.addEntity(
+    new JDLEntity({
+      name: USER,
+      tableName: 'jhi_user',
+      fields: {},
+    })
+  );
 }
 
 function getValidations(field) {
-    return convertValidations(field.validations, getConstantValueFromConstantName).reduce((jdlValidations, jdlValidation) => {
-        jdlValidations[jdlValidation.name] = jdlValidation;
-        return jdlValidations;
-    }, {});
+  return convertValidations(field.validations, getConstantValueFromConstantName).reduce((jdlValidations, jdlValidation) => {
+    jdlValidations[jdlValidation.name] = jdlValidation;
+    return jdlValidations;
+  }, {});
 }
 
 function getConstantValueFromConstantName(constantName) {
-    return parsedContent.constants[constantName];
+  return parsedContent.constants[constantName];
 }
 
 function fillAssociations() {
-    const conversionOptions = {
-        generateBidirectionalOneToMany: configuration.databaseType !== DatabaseTypes.NEO4J,
-    };
-    const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, conversionOptions);
-    jdlRelationships.forEach(jdlRelationship => {
-        jdlObject.addRelationship(jdlRelationship, configuration.skippedUserManagement);
-    });
+  const conversionOptions = {
+    generateBidirectionalOneToMany: configuration.databaseType !== DatabaseTypes.NEO4J,
+  };
+  const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, conversionOptions);
+  jdlRelationships.forEach(jdlRelationship => {
+    jdlObject.addRelationship(jdlRelationship, configuration.skippedUserManagement);
+  });
 }
 
 function convertAnnotationsToOptions(annotations) {
-    const result = {};
-    annotations.forEach(annotation => {
-        const annotationName = _.lowerFirst(annotation.optionName);
-        const value = annotation.optionValue ? annotation.optionValue : true;
-        if (annotationName in result) {
-            const previousValue = result[annotationName];
-            if (Array.isArray(previousValue)) {
-                if (!previousValue.includes(value)) {
-                    previousValue.push(value);
-                }
-            } else if (value !== previousValue) {
-                result[annotationName] = [previousValue, value];
-            }
-        } else {
-            result[annotationName] = value;
+  const result = {};
+  annotations.forEach(annotation => {
+    const annotationName = _.lowerFirst(annotation.optionName);
+    const value = annotation.optionValue ? annotation.optionValue : true;
+    if (annotationName in result) {
+      const previousValue = result[annotationName];
+      if (Array.isArray(previousValue)) {
+        if (!previousValue.includes(value)) {
+          previousValue.push(value);
         }
-    });
-    return result;
+      } else if (value !== previousValue) {
+        result[annotationName] = [previousValue, value];
+      }
+    } else {
+      result[annotationName] = value;
+    }
+  });
+  return result;
 }
 
 function fillOptions() {
-    if (configuration.applicationType === ApplicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
-        globallyAddMicroserviceOption(configuration.applicationName);
-    }
-    fillUnaryAndBinaryOptions();
+  if (configuration.applicationType === ApplicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
+    globallyAddMicroserviceOption(configuration.applicationName);
+  }
+  fillUnaryAndBinaryOptions();
 }
 
 // TODO: move it to another file? it may not be the parser's responsibility to do it
 function globallyAddMicroserviceOption(applicationName) {
-    jdlObject.addOption(
-        new JDLBinaryOption({
-            name: BinaryOptions.Options.MICROSERVICE,
-            value: applicationName,
-            entityNames,
-        })
-    );
+  jdlObject.addOption(
+    new JDLBinaryOption({
+      name: BinaryOptions.Options.MICROSERVICE,
+      value: applicationName,
+      entityNames,
+    })
+  );
 }
 
 function fillUnaryAndBinaryOptions() {
-    // TODO: move it to another file? it may not be the parser's responsibility to do it
-    if (configuration.applicationType === ApplicationTypes.MICROSERVICE) {
-        jdlObject.addOption(
-            new JDLBinaryOption({
-                name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
-                value: configuration.applicationName,
-                entityNames,
-            })
-        );
-    }
-    const convertedOptions = convertOptions(parsedContent.options, parsedContent.useOptions);
-    convertedOptions.forEach(convertedOption => {
-        jdlObject.addOption(convertedOption);
-    });
+  // TODO: move it to another file? it may not be the parser's responsibility to do it
+  if (configuration.applicationType === ApplicationTypes.MICROSERVICE) {
+    jdlObject.addOption(
+      new JDLBinaryOption({
+        name: BinaryOptions.Options.CLIENT_ROOT_FOLDER,
+        value: configuration.applicationName,
+        entityNames,
+      })
+    );
+  }
+  const convertedOptions = convertOptions(parsedContent.options, parsedContent.useOptions);
+  convertedOptions.forEach(convertedOption => {
+    jdlObject.addOption(convertedOption);
+  });
 }

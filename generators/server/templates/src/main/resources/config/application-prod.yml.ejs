@@ -57,11 +57,6 @@ org:
     driver:
       pool:
         metrics-enabled: true
-      uri: bolt://localhost:7687
-      # Uncomment to use an authenticated connection
-      # authentication:
-      #   username: neo4j
-      #   password: secret
     migrations:
       locations-to-scan:
       packages-to-scan: <%= packageName %>.config.neo4j
@@ -79,6 +74,30 @@ spring:
       enabled: false
     livereload:
       enabled: false
+  <%_ if (databaseType === 'neo4j') { _%>
+  neo4j:
+    pool:
+      metrics-enabled: true
+    uri: bolt://localhost:7687
+    # Uncomment to use an authenticated connection
+    # authentication:
+    #   username: neo4j
+    #   password: secret
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  cloud:
+    config:
+      retry:
+        initial-interval: 1000
+        max-interval: 2000
+        max-attempts: 100
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: <%= baseName %>
+      profile: prod
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+  <%_ } _%>
   <%_ if (serviceDiscoveryType === 'consul') { _%>
   cloud:
     consul:
@@ -168,11 +187,13 @@ spring:
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
   mail:
     host: localhost
     port: 25
     username:
     password:
+  <%_ } _%>
   <%_ if (databaseType === 'sql' && reactive) { _%>
   r2dbc:
     <%_ if (prodDatabaseType === 'mysql') { _%>
@@ -199,7 +220,7 @@ spring:
   <%_ } _%>
   thymeleaf:
     cache: true
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
   sleuth:
     sampler:
       probability: 1 # report 100% of traces
@@ -308,6 +329,10 @@ jhipster:
       # cluster: true
     <%_ } _%>
   <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  registry:
+    password: admin
+  <%_ } _%>
   <%_ if (authenticationType === 'jwt') { _%>
   security:
     authentication:
@@ -322,32 +347,16 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   <%_ } _%>
-  <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-  security:
-    client-authorization:
-      <%_ if (applicationType !== 'uaa') { _%>
-      access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-      token-service-id: <%= uaaBaseName.toLowerCase() %>
-      <%_ } _%>
-      client-id: internal
-      client-secret: internal
-  <%_ } _%>
-  <%_ if (applicationType == 'uaa') { _%>
-    authentication:
-      jwt:
-        # Access Token is valid for 5 mins
-        token-validity-in-seconds: 300
-        # Refresh Token is valid for 7 days
-        token-validity-in-seconds-for-remember-me: 252000
-  <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://my-server-url-to-change # Modify according to your server's URL
+<%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -355,40 +364,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-<%_ if (applicationType === 'uaa') { _%>
-uaa:
-  #be sure to to change to a different keystore in production!
-  #create one using: keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
-  key-store:
-    name: config/tls/keystore.p12
-    password: password
-    alias: selfsigned
-  web-client-configuration:
-    # Access Token is valid for 5 mins
-    access-token-validity-in-seconds: 300
-    # Refresh Token is valid for 7 days
-    refresh-token-validity-in-seconds-for-remember-me: 604800
-    #change client secret in production, keep in sync with gateway configuration
-    client-id: web_app
-    secret: changeit
-<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-oauth2:
-  signature-verification:
-    public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
-    #ttl for public keys to verify JWT tokens (in ms)
-    ttl: 3600000
-    #max. rate at which public keys will be fetched (in ms)
-    public-key-refresh-rate-limit: 10000
-  web-client-configuration:
-    #change client secret in production, keep in sync with UAA configuration
-    client-id: web_app
-    secret: changeit
-  <%_ if (applicationType === 'gateway') { _%>
-    # Controls session expiration due to inactivity (ignored for remember-me).
-    # Negative values disable session inactivity expiration.
-    session-timeout-in-seconds: 1800
-  <%_ } _%>
-<%_ } _%>
 
 # ===================================================================
 # Application specific properties

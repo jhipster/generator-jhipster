@@ -42,8 +42,8 @@ scrape_configs:
     #basic_auth:
     # username: admin
     # password: admin
-    metrics_path: <% if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
+    metrics_path: <% if (applicationType === 'microservice' && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
     static_configs:
       - targets:
-          # On MacOS, replace localhost by host.docker.internal
-          - localhost:<%= serverPort %>
+        # On MacOS, replace localhost by host.docker.internal
+        - localhost:<%= serverPort %>

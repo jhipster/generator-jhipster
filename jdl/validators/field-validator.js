@@ -20,13 +20,13 @@
 const Validator = require('./validator');
 
 class FieldValidator extends Validator {
-    constructor() {
-        super('field', ['name', 'type']);
-    }
+  constructor() {
+    super('field', ['name', 'type']);
+  }
 
-    validate(jdlField) {
-        super.validate(jdlField);
-    }
+  validate(jdlField) {
+    super.validate(jdlField);
+  }
 }
 
 module.exports = FieldValidator;

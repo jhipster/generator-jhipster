@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 route:
-    receiver: 'webhook'
-    group_by: ['alertname']
-    group_wait:      10s
-    group_interval:  1m
-    repeat_interval: 2h
+  receiver: 'webhook'
+  group_by: ['alertname']
+  group_wait:      10s
+  group_interval:  1m
+  repeat_interval: 2h
 
 receivers:
 - name: 'webhook'

@@ -133,3 +133,39 @@ relationship ManyToMany {
 }
 
 dto EntityCustomIdDTO, EntityCustomIdDTOMapsId, EntityCustomIdDTORel with mapstruct
+
+/*
+ * UUID Custom named id with filtering
+ */
+@ChangelogDate(20200804035500)
+entity UuidIdFiltering {
+  @Id customId UUID
+}
+
+@ChangelogDate(20200804035501)
+entity UuidIdFilteringMapsId {
+}
+
+@ChangelogDate(20200804035502)
+entity UuidIdFilteringRelationship {
+  @Id relatedId UUID
+}
+
+relationship OneToOne {
+  UuidIdFilteringMapsId to @Id UuidIdFiltering
+  UuidIdFilteringRelationship{oneToOne} to UuidIdFiltering{oneToOneBack}
+  UuidIdFilteringRelationship{oneToOneMapsId} to UuidIdFilteringMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  UuidIdFilteringRelationship{manyToOne} to UuidIdFiltering{manyToOneBack}
+  UuidIdFilteringRelationship{manyToOneMapsId} to UuidIdFilteringMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  UuidIdFilteringRelationship{manyToMany} to UuidIdFiltering{manyToManyBack}
+  UuidIdFilteringRelationship{manyToManyMapsId} to UuidIdFilteringMapsId{manyToManyMapsIdBack}
+}
+
+filter UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship
+service UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship with serviceClass

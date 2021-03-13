@@ -21,149 +21,147 @@ const BaseGenerator = require('../generator-base');
 const { parseBluePrints } = require('../../utils/blueprint');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        if (this.options.help) {
-            return;
-        }
-
-        this.force = this.options.force;
-
-        this.skipInstall = this.options.skipInstall;
-        this.silent = this.options.silent;
-        this.skipChecks = this.options.skipChecks;
-
-        // Verify 6.6.0 app blueprint bug
-        if (!this.config.existed && !this.options.blueprints && !this.options.help) {
-            this.error(
-                'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
-            );
-        }
-
-        // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
-        this.jhipsterOldVersion = this.config.get('jhipsterVersion');
+    if (this.options.help) {
+      return;
     }
 
-    get initializing() {
-        return {
-            validateFromCli: this.checkInvocationFromCLI,
+    this.force = this.options.force;
 
-            parseBlueprints() {
-                this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
-            },
+    this.skipInstall = this.options.skipInstall;
+    this.silent = this.options.silent;
+    this.skipChecks = this.options.skipChecks;
 
-            async unifyConfig() {
-                this._migrateAllBlueprints();
-            },
-        };
+    // Verify 6.6.0 app blueprint bug
+    if (!this.config.existed && !this.options.blueprints && !this.options.help) {
+      this.error(
+        'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
+      );
     }
 
-    /* ======================================================================== */
-    /* private methods use within generator */
-    /* ======================================================================== */
+    // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
+    this.jhipsterOldVersion = this.config.get('jhipsterVersion');
+  }
 
-    /**
-     * Look for every blueprint config and move them to 'generator-jhipster' namespace.
-     */
-    async _migrateAllBlueprints() {
-        if (!this.isJhipsterVersionLessThan('6.6.1')) {
-            const msg = `Skipping config upgrade, config generated with jhipster version: ${this.jhipsterOldVersion}`;
-            if (this._debug && this._debug.enabled) {
-                this._debug(msg);
-            }
-            this.info(msg);
-            return;
-        }
-        if (this._debug) {
-            this._debug('Running config upgrade');
-        }
-        const blueprintConfigs = this.blueprints.map(bp => bp.name).map(name => this._getStorage(name));
-        await this._migrateConfigs(blueprintConfigs);
+  get initializing() {
+    return {
+      validateFromCli: this.checkInvocationFromCLI,
+
+      parseBlueprints() {
+        this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
+      },
+
+      async unifyConfig() {
+        this._migrateAllBlueprints();
+      },
+    };
+  }
+
+  /* ======================================================================== */
+  /* private methods use within generator */
+  /* ======================================================================== */
+
+  /**
+   * Look for every blueprint config and move them to 'generator-jhipster' namespace.
+   */
+  async _migrateAllBlueprints() {
+    if (!this.isJhipsterVersionLessThan('6.6.1')) {
+      const msg = `Skipping config upgrade, config generated with jhipster version: ${this.jhipsterOldVersion}`;
+      if (this._debug && this._debug.enabled) {
+        this._debug(msg);
+      }
+      this.info(msg);
+      return;
     }
-
-    /**
-     * Move configs to 'generator-jhipster' namespace.
-     */
-    async _migrateConfigs(blueprintConfigs) {
-        if (!Array.isArray(blueprintConfigs)) {
-            blueprintConfigs = [blueprintConfigs];
-        }
-        blueprintConfigs.forEach(bc => {
-            Object.keys(bc.getAll()).forEach(key => {
-                const blueprintValue = bc.get(key);
-                const jhipsterValue = this.config.get(key);
-                // Remove duplicated value
-                if (jhipsterValue === blueprintValue || blueprintValue === undefined) {
-                    bc.delete(key);
-                }
-            });
-        });
-
-        // Get every config from blueprint configs and ask for conflict resolution.
-        let keys = [];
-        blueprintConfigs.forEach(bc => {
-            keys = keys.concat(Object.keys(bc.getAll()));
-        });
-        keys = this._.uniq(keys);
-        keys.forEach(key => {
-            this.queueMethod(this._askConfigConflict.bind(this, key, blueprintConfigs), `${key}Prompt`, 'initializing');
-            // this._askConfigConflict(key, blueprintConfigs);
-        });
+    if (this._debug) {
+      this._debug('Running config upgrade');
     }
+    const blueprintConfigs = this.blueprints.map(bp => bp.name).map(name => this._getStorage(name));
+    await this._migrateConfigs(blueprintConfigs);
+  }
 
-    /**
-     * Resolve configuration conflicts.
-     */
-    _askConfigConflict(key, blueprintConfigs) {
-        const toChoice = function (config) {
-            const value = config.get(key);
-            return { name: `${config.name}: ${JSON.stringify(value)}`, value };
-        };
+  /**
+   * Move configs to 'generator-jhipster' namespace.
+   */
+  async _migrateConfigs(blueprintConfigs) {
+    if (!Array.isArray(blueprintConfigs)) {
+      blueprintConfigs = [blueprintConfigs];
+    }
+    blueprintConfigs.forEach(bc => {
+      Object.keys(bc.getAll()).forEach(key => {
+        const blueprintValue = bc.get(key);
+        const jhipsterValue = this.config.get(key);
+        // Remove duplicated value
+        if (jhipsterValue === blueprintValue || blueprintValue === undefined) {
+          bc.delete(key);
+        }
+      });
+    });
 
-        let choices = blueprintConfigs.map(bc => {
-            return toChoice(bc);
-        });
-        choices = [toChoice(this.config), ...choices];
-        choices = choices.filter(choice => choice.value !== undefined);
-        choices = this._.uniq(choices, 'value');
+    // Get every config from blueprint configs and ask for conflict resolution.
+    let keys = [];
+    blueprintConfigs.forEach(bc => {
+      keys = keys.concat(Object.keys(bc.getAll()));
+    });
+    keys = this._.uniq(keys);
+    keys.forEach(key => {
+      this.queueMethod(this._askConfigConflict.bind(this, key, blueprintConfigs), `${key}Prompt`, 'initializing');
+      // this._askConfigConflict(key, blueprintConfigs);
+    });
+  }
 
+  /**
+   * Resolve configuration conflicts.
+   */
+  _askConfigConflict(key, blueprintConfigs) {
+    const toChoice = function (config) {
+      const value = config.get(key);
+      return { name: `${config.name}: ${JSON.stringify(value)}`, value };
+    };
+
+    let choices = blueprintConfigs.map(bc => {
+      return toChoice(bc);
+    });
+    choices = [toChoice(this.config), ...choices];
+    choices = choices.filter(choice => choice.value !== undefined);
+    choices = this._.uniq(choices, 'value');
+
+    if (this._debug && this._debug.enabled) {
+      this._debug('%o: %o', key, choices);
+    }
+    // No different value has been found
+    if (choices.length === 0) {
+      blueprintConfigs.forEach(bc => bc.delete(key));
+      return undefined;
+    }
+    const abortChoice = 'abort (I will resolve it myself)';
+    const ignoreChoice = 'ignore (I will take the risk)';
+    const otherChoices = [...choices, ignoreChoice, abortChoice];
+    return this.prompt({
+      type: 'rawlist',
+      name: `#${key}`,
+      choices: otherChoices,
+      message: `What is the config value for ${key}?`,
+    }).then(
+      function (answer) {
+        const value = answer[`#${key}`];
         if (this._debug && this._debug.enabled) {
-            this._debug('%o: %o', key, choices);
+          this._debug('answer: %o', answer);
         }
-        // No different value has been found
-        if (choices.length === 0) {
-            blueprintConfigs.forEach(bc => bc.delete(key));
-            return undefined;
+        if (value === abortChoice) {
+          throw new Error(
+            `There are some configuration conflict, look at your .yo-rc.json at * => ${key}, one of ${JSON.stringify(choices)}`
+          );
         }
-        const abortChoice = 'abort (I will resolve it myself)';
-        const ignoreChoice = 'ignore (I will take the risk)';
-        const otherChoices = [...choices, ignoreChoice, abortChoice];
-        return this.prompt({
-            type: 'rawlist',
-            name: `#${key}`,
-            choices: otherChoices,
-            message: `What is the config value for ${key}?`,
-        }).then(
-            function (answer) {
-                const value = answer[`#${key}`];
-                if (this._debug && this._debug.enabled) {
-                    this._debug('answer: %o', answer);
-                }
-                if (value === abortChoice) {
-                    throw new Error(
-                        `There are some configuration conflict, look at your .yo-rc.json at * => ${key}, one of ${JSON.stringify(choices)}`
-                    );
-                }
-                if (value !== undefined && value !== ignoreChoice) {
-                    this.config.set(key, value);
-                    blueprintConfigs.forEach(bc => bc.delete(key));
-                } else {
-                    this.info(
-                        `There are some configuration conflict, look at your .yo-rc.json at * => ${key}, one of ${JSON.stringify(choices)}`
-                    );
-                }
-            }.bind(this)
-        );
-    }
+        if (value !== undefined && value !== ignoreChoice) {
+          this.config.set(key, value);
+          blueprintConfigs.forEach(bc => bc.delete(key));
+        } else {
+          this.info(`There are some configuration conflict, look at your .yo-rc.json at * => ${key}, one of ${JSON.stringify(choices)}`);
+        }
+      }.bind(this)
+    );
+  }
 };

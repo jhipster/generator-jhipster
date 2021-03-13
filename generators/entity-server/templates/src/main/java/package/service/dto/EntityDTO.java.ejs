@@ -50,7 +50,7 @@ import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
-<%_ if ((!embedded && primaryKey.type === 'UUID') || fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (fieldsContainBlob && databaseType === 'sql') { _%>
@@ -61,12 +61,12 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
 /**
- * A DTO for the {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>} entity.
+ * A DTO for the {@link <%= packageName %>.domain.<%= persistClass %>} entity.
  */
 <%_ if (typeof javadoc !== 'undefined') { _%>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
 <%_ } _%>
-public class <%= asDto(entityClass) %> implements Serializable {
+public class <%= dtoClass %> implements Serializable {
 
 <%_ for (reference of dtoReferences) {
         if (typeof reference.doc !== 'undefined') {
@@ -140,22 +140,22 @@ _%>
     <%_ } _%>
 <%_ } _%>
 
-<%_ const idNames = [...idFields.map(f => f.fieldName)] _%>
+<%_ const idNames = primaryKey ? [...primaryKey.ownFields.map(f => f.fieldName)] : [] _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof <%= asDto(entityClass) %>)) {
+        if (!(o instanceof <%= dtoClass %>)) {
             return false;
         }
 
         <%_ if (!embedded) { _%>
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = (<%= asDto(entityClass) %>) o;
+        <%= dtoClass %> <%= dtoInstance %> = (<%= dtoClass %>) o;
         if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>){
             return false;
         }
-        return <%- idNames.map(n => `Objects.equals(this.${n}, ${asDto(entityInstance)}.${n})`).join(' &&\n            ') %>;
+        return <%- idNames.map(n => `Objects.equals(this.${n}, ${dtoInstance}.${n})`).join(' &&\n            ') %>;
         <%_ } else { _%>
         return false;
         <%_ } _%>
@@ -173,7 +173,7 @@ _%>
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= asDto(entityClass) %>{" +
+        return "<%= dtoClass %>{" +
             <%_ for ([idx, reference] of dtoReferences.entries()) {
                 const isNumeric = reference.type && ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(reference.type.toLowerCase()); _%>
             "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (! isNumeric) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (! isNumeric) { %>+ "'" <% } %>+

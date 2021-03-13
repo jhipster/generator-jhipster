@@ -20,7 +20,7 @@
 const _ = require('lodash');
 
 module.exports = {
-    getTableNameFromEntityName,
+  getTableNameFromEntityName,
 };
 
 /**
@@ -29,8 +29,8 @@ module.exports = {
  * @returns {string} the corresponding table name.
  */
 function getTableNameFromEntityName(entityName) {
-    if (!entityName) {
-        throw new Error('An entity name must be passed to get a table name.');
-    }
-    return _.snakeCase(entityName);
+  if (!entityName) {
+    throw new Error('An entity name must be passed to get a table name.');
+  }
+  return _.snakeCase(entityName);
 }

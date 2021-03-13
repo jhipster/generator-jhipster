@@ -19,341 +19,337 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%= baseName.toLowerCase() %>-app:
-        image: <%= baseName.toLowerCase() %>
-        environment:
-            - _JAVA_OPTIONS=-Xmx512m -Xms256m
-            - SPRING_PROFILES_ACTIVE=prod,api-docs
-            - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-            <%_ if (serviceDiscoveryType === 'consul') { _%>
-            - SPRING_CLOUD_CONSUL_HOST=consul
-            - SPRING_CLOUD_CONSUL_PORT=8500
-            <%_ } _%>
-            <%_ if (serviceDiscoveryType === 'eureka') { _%>
-            - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
-            - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
-            <%_ } _%>
-            <%_ if (databaseType === 'sql') {
-                const databaseName = ['mysql', 'mariadb'].includes(prodDatabaseType) ? baseName.toLowerCase() : baseName;
-            _%>
-                <%_ if (reactive) { _%>
-            - SPRING_R2DBC_URL=<%- getR2DBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
-                <%_ } else { %>
-            - SPRING_DATASOURCE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
-                <%_ } _%>
-            - SPRING_LIQUIBASE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'mongodb') { _%>
-            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
-            - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'neo4j') { _%>
-            - ORG_NEO4J_DRIVER_URI=bolt://<%= baseName.toLowerCase() %>-neo4j:7687
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'couchbase') { _%>
-            - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
-            - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'memcached') { _%>
-            - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
-            <%_ } _%>
-            <%_ if (cacheProvider === 'redis') { _%>
-            - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
-            - JHIPSTER_CACHE_REDIS_CLUSTER=false
-            # - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
-            # - JHIPSTER_CACHE_REDIS_CLUSTER=true
-            <%_ } _%>
-            <%_ if (authenticationType === 'oauth2') { _%>
-            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
-            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-            <%_ } _%>
-            <%_ if (applicationType === 'microservice') { _%>
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-            <%_ } _%>
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'cassandra') { _%>
-            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
-                <%_ if (authenticationType === 'uaa') { _%>
-            - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
-                <%_ } else { _%>
-            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-                <%_ } _%>
-            <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-            - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
-            <%_ } else if (prodDatabaseType === 'mssql') { _%>
-            - JHIPSTER_SLEEP=60 # gives time for mssql server to start
-            <%_ } else { _%>
-            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-            <%_ } _%>
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-            - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
-            <%_ } _%>
-            <%_ if (messageBroker === 'kafka') { _%>
-            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
-            <%_ } _%>
-            <%_ if (cacheProvider === 'infinispan') { _%>
-            - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
-            <%_ } _%>
-        <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
+  <%= baseName.toLowerCase() %>-app:
+    image: <%= baseName.toLowerCase() %>
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      <%_ if (serviceDiscoveryType === 'consul') { _%>
+      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_PORT=8500
+      <%_ } _%>
+      <%_ if (serviceDiscoveryType === 'eureka') { _%>
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+      <%_ } _%>
+      <%_ if (databaseType === 'sql') {
+        const databaseName = ['mysql', 'mariadb'].includes(prodDatabaseType) ? baseName.toLowerCase() : baseName;
+      _%>
+        <%_ if (reactive) { _%>
+      - SPRING_R2DBC_URL=<%- getR2DBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+        <%_ } else { _%>
+      - SPRING_DATASOURCE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
         <%_ } _%>
-    <%_ if (prodDatabaseType === 'mysql') { _%>
-    <%= baseName.toLowerCase() %>-mysql:
-        image: <%= DOCKER_MYSQL %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
-        environment:
-            - MYSQL_USER=root
-            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-            - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:3306:3306
-        command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+      - SPRING_LIQUIBASE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
+      <%_ } _%>
+      <%_ if (prodDatabaseType === 'mongodb') { _%>
+      - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+      - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
+      <%_ } _%>
+      <%_ if (prodDatabaseType === 'neo4j') { _%>
+      - SPRING_NEO4J_URI=bolt://<%= baseName.toLowerCase() %>-neo4j:7687
+      <%_ } _%>
+      <%_ if (prodDatabaseType === 'couchbase') { _%>
+      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
+      - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
+      <%_ } _%>
+      <%_ if (cacheProvider === 'memcached') { _%>
+      - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+      <%_ } _%>
+      <%_ if (cacheProvider === 'redis') { _%>
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+      - JHIPSTER_CACHE_REDIS_CLUSTER=false
+      # - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+      # - JHIPSTER_CACHE_REDIS_CLUSTER=true
+      <%_ } _%>
+      <%_ if (authenticationType === 'oauth2') { _%>
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      <%_ } _%>
+      <%_ if (applicationType === 'microservice') { _%>
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      <%_ } _%>
+      <%_ } _%>
+      <%_ if (prodDatabaseType === 'cassandra') { _%>
+      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+      - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
+      <%_ } else if (prodDatabaseType === 'mssql') { _%>
+      - JHIPSTER_SLEEP=60 # gives time for mssql server to start
+      <%_ } else { _%>
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      <%_ } _%>
+      <%_ if (searchEngine === 'elasticsearch') { _%>
+      - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+      <%_ } _%>
+      <%_ if (messageBroker === 'kafka') { _%>
+      - KAFKA_BOOTSTRAPSERVERS=kafka:9092
+      <%_ } _%>
+      <%_ if (cacheProvider === 'infinispan') { _%>
+      - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
+      <%_ } _%>
+    <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mariadb') { _%>
-    <%= baseName.toLowerCase() %>-mariadb:
-        image: <%= DOCKER_MARIADB %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
-        environment:
-            - MYSQL_USER=root
-            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-            - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:3306:3306
-        command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
-    <%= baseName.toLowerCase() %>-postgresql:
-        image: <%= DOCKER_POSTGRESQL %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
-        environment:
-            - POSTGRES_USER=<%= baseName %>
-            - POSTGRES_PASSWORD=
-            - POSTGRES_HOST_AUTH_METHOD=trust
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:5432:5432
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mongodb') { _%>
-    <%= baseName.toLowerCase() %>-mongodb:
-        image: <%= DOCKER_MONGODB %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:27017:27017
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'couchbase') { _%>
-    <%= baseName.toLowerCase() %>-couchbase:
-        build:
-            context: .
-            dockerfile: couchbase/Couchbase.Dockerfile
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:8091:8091
-            - 127.0.0.1:8092:8092
-            - 127.0.0.1:8093:8093
-            - 127.0.0.1:8094:8094
-            - 127.0.0.1:11210:11210
-        environment:
-            - BUCKET=<%= baseName %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
-    <%= baseName.toLowerCase() %>-mssql:
-        image: <%= DOCKER_MSSQL %>
-        # volumes are not supported on macOS
-        # volumes:
-        #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
-        environment:
-            - ACCEPT_EULA=Y
-            - MSSQL_PID=Express
-            - SA_PASSWORD=yourStrong(!)Password
-            - MSSQL_DATABASE=<%= baseName %>
-            - MSSQL_SLEEP=60
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:1433:1433
-        command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'neo4j') { _%>
-    <%= baseName.toLowerCase() %>-neo4j:
-        image: <%= DOCKER_NEO4J %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/neo4j/:/data
-        environment:
-            - NEO4J_AUTH=none
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - "127.0.0.1:7474:7474"
-            - "127.0.0.1:7687:7687"
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'cassandra') { _%>
-    <%= baseName.toLowerCase() %>-cassandra:
-        image: <%= DOCKER_CASSANDRA %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:7000:7000
-            - 127.0.0.1:7001:7001
-            - 127.0.0.1:7199:7199
-            - 127.0.0.1:9042:9042
-            - 127.0.0.1:9160:9160
-    <%= baseName.toLowerCase() %>-cassandra-node:
-        image: <%= DOCKER_CASSANDRA %>
-        environment:
-            - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
-    <%= baseName.toLowerCase() %>-cassandra-migration:
-        environment:
-            - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
-            - USER=docker-cassandra-migration
-            # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
-            - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra-Migration.Dockerfile
-        volumes:
-            - ../resources/config/cql:/cql:ro
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
-    <%= baseName.toLowerCase() %>-memcached:
-        image: <%= DOCKER_MEMCACHED %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:11211:11211
-    <%_ } _%>
-    <%_ if (cacheProvider === 'redis') { _%>
-    <%= baseName.toLowerCase() %>-redis:
-        image: <%= DOCKER_REDIS %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:6379:6379
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-    <%= baseName.toLowerCase() %>-elasticsearch:
-        image: <%= DOCKER_ELASTICSEARCH %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:9200:9200
-            - 127.0.0.1:9300:9300
-        environment:
-            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
-            - "discovery.type=single-node"
-    <%_ } _%>
-    <%_ if (messageBroker === 'kafka') { _%>
-    kafka:
-        image: <%= DOCKER_KAFKA %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:9092:9092
-        environment:
-            KAFKA_BROKER_ID: 1
-            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-            KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-            KAFKA_ADVERTISED_HOST_NAME: kafka
-    zookeeper:
-        image: <%= DOCKER_ZOOKEEPER %>
-        environment:
-            ZOOKEEPER_CLIENT_PORT: 2181
-            ZOOKEEPER_TICK_TIME: 2000
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    jhipster-registry:
-        image: <%= DOCKER_JHIPSTER_REGISTRY %>
-        volumes:
-            - ./central-server-config:/central-config
-        # When run with the "dev" Spring profile, the JHipster Registry will
-        # read the config from the local filesystem (central-server-config directory)
-        # When run with the "prod" Spring profile, it will read the configuration from a Git repository
-        # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
-        environment:
-            - _JAVA_OPTIONS=-Xmx512m -Xms256m
-            - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
-            - SPRING_SECURITY_USER_PASSWORD=admin
-            - JHIPSTER_REGISTRY_PASSWORD=admin
-            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/localhost-config/
-            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-            <%_ if (authenticationType === 'oauth2') { _%>
-            # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
-            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-            <%_ } _%>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:8761:8761
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
-    consul:
-        image: <%= DOCKER_CONSUL %>
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:8300:8300
-            - 127.0.0.1:8500:8500
-            - 127.0.0.1:8600:8600
-        command: consul agent -dev -ui -client 0.0.0.0
+  <%_ if (prodDatabaseType === 'mysql') { _%>
+  <%= baseName.toLowerCase() %>-mysql:
+    image: <%= DOCKER_MYSQL %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'mariadb') { _%>
+  <%= baseName.toLowerCase() %>-mariadb:
+    image: <%= DOCKER_MARIADB %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'postgresql') { _%>
+  <%= baseName.toLowerCase() %>-postgresql:
+    image: <%= DOCKER_POSTGRESQL %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=<%= baseName %>
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:5432:5432
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'mongodb') { _%>
+  <%= baseName.toLowerCase() %>-mongodb:
+    image: <%= DOCKER_MONGODB %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:27017:27017
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'couchbase') { _%>
+  <%= baseName.toLowerCase() %>-couchbase:
+    build:
+      context: .
+      dockerfile: couchbase/Couchbase.Dockerfile
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:8091:8091
+      - 127.0.0.1:8092:8092
+      - 127.0.0.1:8093:8093
+      - 127.0.0.1:8094:8094
+      - 127.0.0.1:11210:11210
+    environment:
+      - BUCKET=<%= baseName %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'mssql') { _%>
+  <%= baseName.toLowerCase() %>-mssql:
+    image: <%= DOCKER_MSSQL %>
+    # volumes are not supported on macOS
+    # volumes:
+    #   - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=yourStrong(!)Password
+      - MSSQL_DATABASE=<%= baseName %>
+      - MSSQL_SLEEP=60
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:1433:1433
+    command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'neo4j') { _%>
+  <%= baseName.toLowerCase() %>-neo4j:
+    image: <%= DOCKER_NEO4J %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/neo4j/:/data
+    environment:
+      - NEO4J_AUTH=none
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+  <%_ } _%>
+  <%_ if (prodDatabaseType === 'cassandra') { _%>
+  <%= baseName.toLowerCase() %>-cassandra:
+    image: <%= DOCKER_CASSANDRA %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:7000:7000
+      - 127.0.0.1:7001:7001
+      - 127.0.0.1:7199:7199
+      - 127.0.0.1:9042:9042
+      - 127.0.0.1:9160:9160
+  <%= baseName.toLowerCase() %>-cassandra-node:
+    image: <%= DOCKER_CASSANDRA %>
+    environment:
+      - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
+  <%= baseName.toLowerCase() %>-cassandra-migration:
+    environment:
+      - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
+      - USER=docker-cassandra-migration
+      # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+    build:
+      context: .
+      dockerfile: cassandra/Cassandra-Migration.Dockerfile
+    volumes:
+      - ../resources/config/cql:/cql:ro
+  <%_ } _%>
+  <%_ if (cacheProvider === 'memcached') { _%>
+  <%= baseName.toLowerCase() %>-memcached:
+    image: <%= DOCKER_MEMCACHED %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:11211:11211
+  <%_ } _%>
+  <%_ if (cacheProvider === 'redis') { _%>
+  <%= baseName.toLowerCase() %>-redis:
+    image: <%= DOCKER_REDIS %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:6379:6379
+  <%_ } _%>
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%= baseName.toLowerCase() %>-elasticsearch:
+    image: <%= DOCKER_ELASTICSEARCH %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
+    environment:
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "discovery.type=single-node"
+  <%_ } _%>
+  <%_ if (messageBroker === 'kafka') { _%>
+  kafka:
+    image: <%= DOCKER_KAFKA %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+  zookeeper:
+    image: <%= DOCKER_ZOOKEEPER %>
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  jhipster-registry:
+    image: <%= DOCKER_JHIPSTER_REGISTRY %>
+    volumes:
+      - ./central-server-config:/central-config
+    # When run with the "dev" Spring profile, the JHipster Registry will
+    # read the config from the local filesystem (central-server-config directory)
+    # When run with the "prod" Spring profile, it will read the configuration from a Git repository
+    # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/localhost-config/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+      <%_ if (authenticationType === 'oauth2') { _%>
+      # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
+      <%_ } _%>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:8761:8761
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'consul') { _%>
+  consul:
+    image: <%= DOCKER_CONSUL %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:8300:8300
+      - 127.0.0.1:8500:8500
+      - 127.0.0.1:8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
 
-    consul-config-loader:
-        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
-        volumes:
-            - ./central-server-config:/config
-        environment:
-            - INIT_SLEEP_SECONDS=5
-            - CONSUL_URL=consul
-            - CONSUL_PORT=8500
-            # Uncomment to load configuration into Consul from a Git repository
-            # as configured in central-server-config/git2consul.json
-            # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
-            # - CONFIG_MODE=git
-    <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
-    keycloak:
-        image: <%= DOCKER_KEYCLOAK %>
-        command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
-        volumes:
-            - ./realm-config:/opt/jboss/keycloak/realm-config
-        environment:
-            - KEYCLOAK_USER=admin
-            - KEYCLOAK_PASSWORD=admin
-            - DB_VENDOR=h2
-        # If you want to expose these ports outside your dev PC,
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:9080:9080
-            - 127.0.0.1:9443:9443
-            - 127.0.0.1:10990:10990
-    <%_ } _%>
+  consul-config-loader:
+    image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
+      # Uncomment to load configuration into Consul from a Git repository
+      # as configured in central-server-config/git2consul.json
+      # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
+      # - CONFIG_MODE=git
+  <%_ } _%>
+  <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
+  keycloak:
+    image: <%= DOCKER_KEYCLOAK %>
+    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    volumes:
+      - ./realm-config:/opt/jboss/keycloak/realm-config
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9080:9080
+      - 127.0.0.1:9443:9443
+      - 127.0.0.1:10990:10990
+  <%_ } _%>

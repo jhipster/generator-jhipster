@@ -24,49 +24,50 @@ const { defaultConfig, entityDefaultConfig } = require('../generators/generator-
 const BaseGenerator = require('../generators/generator-base');
 
 describe('entity utilities', () => {
-    const defaultGenerator = { jhipsterConfig: defaultConfig };
-    Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
+  const defaultGenerator = { jhipsterConfig: defaultConfig };
+  Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 
-    describe('prepareEntityForTemplates', () => {
-        describe('with field with id name', () => {
-            describe('without @Id', () => {
-                let entity = {
-                    ...entityDefaultConfig,
-                    name: 'Entity',
-                    changelogDate: formatDateForChangelog(new Date()),
-                    fields: [{ fieldName: 'id', fieldType: 'CustomType' }],
-                };
-                beforeEach(() => {
-                    entity = prepareEntityForTemplates(entity, defaultGenerator);
-                });
-                it('should adopt id field as @Id', () => {
-                    expect(entity.fields[0]).to.eql({
-                        fieldName: 'id',
-                        fieldType: 'CustomType',
-                        id: true,
-                    });
-                });
-            });
-            describe('with @Id', () => {
-                let entity = {
-                    ...entityDefaultConfig,
-                    name: 'Entity',
-                    changelogDate: formatDateForChangelog(new Date()),
-                    fields: [
-                        { fieldName: 'id', fieldType: 'CustomType' },
-                        { fieldName: 'uuid', fieldType: 'UUID', id: true },
-                    ],
-                };
-                beforeEach(() => {
-                    entity = prepareEntityForTemplates(entity, defaultGenerator);
-                });
-                it('should not adopt id field as @Id', () => {
-                    expect(entity.fields[0]).to.eql({
-                        fieldName: 'id',
-                        fieldType: 'CustomType',
-                    });
-                });
-            });
+  describe('prepareEntityForTemplates', () => {
+    describe('with field with id name', () => {
+      describe('without @Id', () => {
+        let entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType' }],
+        };
+        beforeEach(() => {
+          entity = prepareEntityForTemplates(entity, defaultGenerator);
         });
+        it('should adopt id field as @Id', () => {
+          expect(entity.fields[0]).to.eql({
+            dynamic: false,
+            fieldName: 'id',
+            fieldType: 'CustomType',
+            id: true,
+          });
+        });
+      });
+      describe('with @Id', () => {
+        let entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [
+            { fieldName: 'id', fieldType: 'CustomType' },
+            { fieldName: 'uuid', fieldType: 'UUID', id: true },
+          ],
+        };
+        beforeEach(() => {
+          entity = prepareEntityForTemplates(entity, defaultGenerator);
+        });
+        it('should not adopt id field as @Id', () => {
+          expect(entity.fields[0]).to.eql({
+            fieldName: 'id',
+            fieldType: 'CustomType',
+          });
+        });
+      });
     });
+  });
 });

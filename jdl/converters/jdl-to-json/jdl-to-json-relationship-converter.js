@@ -30,7 +30,7 @@ const builtInEntities = new Set([USER, AUTHORITY]);
 let convertedRelationships;
 
 module.exports = {
-    convert,
+  convert,
 };
 
 /**
@@ -40,158 +40,158 @@ module.exports = {
  * @return {Map<String, Array<Object>>} a map having for keys entity names and for values arrays of JSON relationships.
  */
 function convert(jdlRelationships = [], entityNames = []) {
-    if (jdlRelationships.length === 0 || entityNames.length === 0) {
-        return new Map();
-    }
-    convertedRelationships = new Map(entityNames.map(entityName => [entityName, []]));
-    const relatedRelationships = getRelatedRelationships(jdlRelationships, entityNames);
-    relatedRelationships.forEach((relatedRelationship, currentEntityName) => {
-        setRelationshipsFromEntity(relatedRelationship, currentEntityName);
-        setRelationshipsToEntity(relatedRelationship, currentEntityName);
-    });
-    return convertedRelationships;
+  if (jdlRelationships.length === 0 || entityNames.length === 0) {
+    return new Map();
+  }
+  convertedRelationships = new Map(entityNames.map(entityName => [entityName, []]));
+  const relatedRelationships = getRelatedRelationships(jdlRelationships, entityNames);
+  relatedRelationships.forEach((relatedRelationship, currentEntityName) => {
+    setRelationshipsFromEntity(relatedRelationship, currentEntityName);
+    setRelationshipsToEntity(relatedRelationship, currentEntityName);
+  });
+  return convertedRelationships;
 }
 
 function getRelatedRelationships(relationships, entityNames) {
-    const relatedRelationships = new Map();
-    entityNames.forEach(entityName => {
-        const relationshipsRelatedToEntity = {
-            from: [],
-            to: [],
-        };
-        relationships.forEach(jdlRelationship => {
-            if (jdlRelationship.from === entityName) {
-                relationshipsRelatedToEntity.from.push(jdlRelationship);
-            }
-            if (
-                jdlRelationship.to === entityName &&
-                (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.destination).length !== 0)
-            ) {
-                relationshipsRelatedToEntity.to.push(jdlRelationship);
-            }
-        });
-        relatedRelationships.set(entityName, relationshipsRelatedToEntity);
+  const relatedRelationships = new Map();
+  entityNames.forEach(entityName => {
+    const relationshipsRelatedToEntity = {
+      from: [],
+      to: [],
+    };
+    relationships.forEach(jdlRelationship => {
+      if (jdlRelationship.from === entityName) {
+        relationshipsRelatedToEntity.from.push(jdlRelationship);
+      }
+      if (
+        jdlRelationship.to === entityName &&
+        (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.destination).length !== 0)
+      ) {
+        relationshipsRelatedToEntity.to.push(jdlRelationship);
+      }
     });
-    return relatedRelationships;
+    relatedRelationships.set(entityName, relationshipsRelatedToEntity);
+  });
+  return relatedRelationships;
 }
 
 function setRelationshipsFromEntity(relatedRelationships, entityName) {
-    relatedRelationships.from.forEach(relationshipToConvert => {
-        const otherSplitField = extractField(relationshipToConvert.injectedFieldInTo);
-        const convertedRelationship = {
-            relationshipType: _.kebabCase(relationshipToConvert.type),
-            otherEntityName: camelCase(relationshipToConvert.to),
-            otherEntityRelationshipName: lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.from),
-        };
-        if (relationshipToConvert.isInjectedFieldInFromRequired) {
-            convertedRelationship.relationshipValidateRules = REQUIRED;
+  relatedRelationships.from.forEach(relationshipToConvert => {
+    const otherSplitField = extractField(relationshipToConvert.injectedFieldInTo);
+    const convertedRelationship = {
+      relationshipType: _.kebabCase(relationshipToConvert.type),
+      otherEntityName: camelCase(relationshipToConvert.to),
+      otherEntityRelationshipName: lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.from),
+    };
+    if (relationshipToConvert.isInjectedFieldInFromRequired) {
+      convertedRelationship.relationshipValidateRules = REQUIRED;
+    }
+    if (relationshipToConvert.commentInFrom) {
+      convertedRelationship.javadoc = relationshipToConvert.commentInFrom;
+    }
+    const splitField = extractField(relationshipToConvert.injectedFieldInFrom);
+    convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
+    if (splitField.otherEntityField) {
+      convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+    }
+    if (relationshipToConvert.type === ONE_TO_ONE) {
+      convertedRelationship.ownerSide = true;
+    } else if (relationshipToConvert.type === MANY_TO_MANY) {
+      if (!relationshipToConvert.injectedFieldInTo) {
+        convertedRelationship.otherEntityRelationshipName = lowerFirst(relationshipToConvert.from);
+        relationshipToConvert.type = MANY_TO_MANY;
+        if (!builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
+          const convertedOtherEntityRelationships = convertedRelationships.get(relationshipToConvert.to);
+          const otherSideRelationship = {
+            relationshipName: camelCase(relationshipToConvert.from),
+            otherEntityName: camelCase(relationshipToConvert.from),
+            relationshipType: _.kebabCase(MANY_TO_MANY),
+            otherEntityRelationshipName: lowerFirst(relationshipToConvert.to),
+            ownerSide: false,
+          };
+          if (otherSplitField.otherEntityField) {
+            otherSideRelationship.otherEntityField = lowerFirst(otherSplitField.otherEntityField);
+          }
+          convertedOtherEntityRelationships.push(otherSideRelationship);
         }
-        if (relationshipToConvert.commentInFrom) {
-            convertedRelationship.javadoc = relationshipToConvert.commentInFrom;
-        }
-        const splitField = extractField(relationshipToConvert.injectedFieldInFrom);
-        convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
-        if (splitField.otherEntityField) {
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
-        }
-        if (relationshipToConvert.type === ONE_TO_ONE) {
-            convertedRelationship.ownerSide = true;
-        } else if (relationshipToConvert.type === MANY_TO_MANY) {
-            if (!relationshipToConvert.injectedFieldInTo) {
-                convertedRelationship.otherEntityRelationshipName = lowerFirst(relationshipToConvert.from);
-                relationshipToConvert.type = MANY_TO_MANY;
-                if (!builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
-                    const convertedOtherEntityRelationships = convertedRelationships.get(relationshipToConvert.to);
-                    const otherSideRelationship = {
-                        relationshipName: camelCase(relationshipToConvert.from),
-                        otherEntityName: camelCase(relationshipToConvert.from),
-                        relationshipType: _.kebabCase(MANY_TO_MANY),
-                        otherEntityRelationshipName: lowerFirst(relationshipToConvert.to),
-                        ownerSide: false,
-                    };
-                    if (otherSplitField.otherEntityField) {
-                        otherSideRelationship.otherEntityField = lowerFirst(otherSplitField.otherEntityField);
-                    }
-                    convertedOtherEntityRelationships.push(otherSideRelationship);
-                }
-            }
-            convertedRelationship.ownerSide = true;
-        }
-        setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship);
-        const convertedEntityRelationships = convertedRelationships.get(entityName);
-        convertedEntityRelationships.push(convertedRelationship);
-    });
+      }
+      convertedRelationship.ownerSide = true;
+    }
+    setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship);
+    const convertedEntityRelationships = convertedRelationships.get(entityName);
+    convertedEntityRelationships.push(convertedRelationship);
+  });
 }
 
 function setRelationshipsToEntity(relatedRelationships, entityName) {
-    relatedRelationships.to.forEach(relationshipToConvert => {
-        const relationshipType = relationshipToConvert.type === ONE_TO_MANY ? MANY_TO_ONE : relationshipToConvert.type;
-        const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
-        const convertedRelationship = {
-            relationshipType: _.kebabCase(relationshipType),
-            otherEntityName: camelCase(relationshipToConvert.from),
-            otherEntityRelationshipName: lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.to),
-        };
-        if (relationshipToConvert.isInjectedFieldInToRequired) {
-            convertedRelationship.relationshipValidateRules = REQUIRED;
-        }
-        if (relationshipToConvert.commentInTo) {
-            convertedRelationship.javadoc = relationshipToConvert.commentInTo;
-        }
-        const splitField = extractField(relationshipToConvert.injectedFieldInTo);
-        convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);
-        if (splitField.otherEntityField) {
-            convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
-        }
-        if (relationshipToConvert.type === ONE_TO_ONE || relationshipToConvert.type === MANY_TO_MANY) {
-            convertedRelationship.ownerSide = false;
-        } else if (relationshipToConvert.type === ONE_TO_MANY) {
-            relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
-        } else if (relationshipToConvert.type === MANY_TO_ONE && relationshipToConvert.injectedFieldInTo) {
-            convertedRelationship.relationshipType = 'one-to-many';
-        }
-        setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
-        const convertedEntityRelationships = convertedRelationships.get(entityName);
-        convertedEntityRelationships.push(convertedRelationship);
-    });
+  relatedRelationships.to.forEach(relationshipToConvert => {
+    const relationshipType = relationshipToConvert.type === ONE_TO_MANY ? MANY_TO_ONE : relationshipToConvert.type;
+    const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
+    const convertedRelationship = {
+      relationshipType: _.kebabCase(relationshipType),
+      otherEntityName: camelCase(relationshipToConvert.from),
+      otherEntityRelationshipName: lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.to),
+    };
+    if (relationshipToConvert.isInjectedFieldInToRequired) {
+      convertedRelationship.relationshipValidateRules = REQUIRED;
+    }
+    if (relationshipToConvert.commentInTo) {
+      convertedRelationship.javadoc = relationshipToConvert.commentInTo;
+    }
+    const splitField = extractField(relationshipToConvert.injectedFieldInTo);
+    convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);
+    if (splitField.otherEntityField) {
+      convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
+    }
+    if (relationshipToConvert.type === ONE_TO_ONE || relationshipToConvert.type === MANY_TO_MANY) {
+      convertedRelationship.ownerSide = false;
+    } else if (relationshipToConvert.type === ONE_TO_MANY) {
+      relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo || lowerFirst(relationshipToConvert.from);
+    } else if (relationshipToConvert.type === MANY_TO_ONE) {
+      convertedRelationship.relationshipType = 'one-to-many';
+    }
+    setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
+    const convertedEntityRelationships = convertedRelationships.get(entityName);
+    convertedEntityRelationships.push(convertedRelationship);
+  });
 }
 
 function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship) {
-    convertedRelationship.options = convertedRelationship.options || {};
-    relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-        if (optionName === JPA_DERIVED_IDENTIFIER) {
-            if (convertedRelationship.ownerSide) {
-                convertedRelationship.useJPADerivedIdentifier = optionValue;
-            }
-        } else {
-            convertedRelationship.options[optionName] = optionValue;
-        }
-    });
-    relationshipToConvert.forEachDestinationOption((optionName, optionValue) => {
-        convertedRelationship.options[optionName] = optionValue;
-    });
-    if (Object.keys(convertedRelationship.options).length === 0) {
-        delete convertedRelationship.options;
+  convertedRelationship.options = convertedRelationship.options || {};
+  relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
+    if (optionName === JPA_DERIVED_IDENTIFIER) {
+      if (convertedRelationship.ownerSide) {
+        convertedRelationship.useJPADerivedIdentifier = optionValue;
+      }
+    } else {
+      convertedRelationship.options[optionName] = optionValue;
     }
+  });
+  relationshipToConvert.forEachDestinationOption((optionName, optionValue) => {
+    convertedRelationship.options[optionName] = optionValue;
+  });
+  if (Object.keys(convertedRelationship.options).length === 0) {
+    delete convertedRelationship.options;
+  }
 }
 
 function setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship) {
-    convertedRelationship.options = convertedRelationship.options || {};
-    relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-        if (optionName === JPA_DERIVED_IDENTIFIER) {
-            if (convertedRelationship.ownerSide) {
-                convertedRelationship.useJPADerivedIdentifier = optionValue;
-            }
-        } else {
-            convertedRelationship.options[optionName] = optionValue;
-        }
-    });
-    relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
-        convertedRelationship.options[optionName] = optionValue;
-    });
-    if (Object.keys(convertedRelationship.options).length === 0) {
-        delete convertedRelationship.options;
+  convertedRelationship.options = convertedRelationship.options || {};
+  relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
+    if (optionName === JPA_DERIVED_IDENTIFIER) {
+      if (convertedRelationship.ownerSide) {
+        convertedRelationship.useJPADerivedIdentifier = optionValue;
+      }
+    } else {
+      convertedRelationship.options[optionName] = optionValue;
     }
+  });
+  relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
+    convertedRelationship.options[optionName] = optionValue;
+  });
+  if (Object.keys(convertedRelationship.options).length === 0) {
+    delete convertedRelationship.options;
+  }
 }
 
 /**
@@ -201,15 +201,15 @@ function setOptionsForRelationshipDestinationSide(relationshipToConvert, convert
  *                'otherEntityField' is the other entity field name
  */
 function extractField(field) {
-    const splitField = {
-        relationshipName: '',
-    };
-    if (field) {
-        const chunks = field.replace('(', '/').replace(')', '').split('/');
-        splitField.relationshipName = chunks[0];
-        if (chunks.length > 1) {
-            splitField.otherEntityField = chunks[1];
-        }
+  const splitField = {
+    relationshipName: '',
+  };
+  if (field) {
+    const chunks = field.replace('(', '/').replace(')', '').split('/');
+    splitField.relationshipName = chunks[0];
+    if (chunks.length > 1) {
+      splitField.otherEntityField = chunks[1];
     }
-    return splitField;
+  }
+  return splitField;
 }

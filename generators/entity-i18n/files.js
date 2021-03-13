@@ -24,41 +24,41 @@ const utils = require('../utils');
  */
 
 module.exports = {
-    writeFiles,
+  writeFiles,
 };
 
 function writeFiles() {
-    return {
-        writeEnumFiles() {
-            this.fields.forEach(field => {
-                if (field.fieldIsEnum === true) {
-                    const enumInfo = {
-                        ...utils.getEnumInfo(field, this.clientRootFolder),
-                        frontendAppName: this.frontendAppName,
-                        packageName: this.packageName,
-                    };
+  return {
+    writeEnumFiles() {
+      this.fields.forEach(field => {
+        if (field.fieldIsEnum === true) {
+          const enumInfo = {
+            ...utils.getEnumInfo(field, this.clientRootFolder),
+            frontendAppName: this.frontendAppName,
+            packageName: this.packageName,
+          };
 
-                    // Copy for each
-                    if (!this.skipClient && this.enableTranslation) {
-                        const languages = this.languages || this.getAllInstalledLanguages();
-                        languages.forEach(language => {
-                            this.copyEnumI18n(language, enumInfo, this.fetchFromInstalledJHipster('entity-i18n/templates'));
-                        });
-                    }
-                }
+          // Copy for each
+          if (!this.skipClient && this.enableTranslation) {
+            const languages = this.languages || this.getAllInstalledLanguages();
+            languages.forEach(language => {
+              this.copyEnumI18n(language, enumInfo, this.fetchFromInstalledJHipster('entity-i18n/templates'));
             });
-        },
+          }
+        }
+      });
+    },
 
-        writeClientFiles() {
-            if (this.skipClient) return;
+    writeClientFiles() {
+      if (this.skipClient) return;
 
-            // Copy for each
-            if (this.enableTranslation) {
-                const languages = this.languages || this.getAllInstalledLanguages();
-                languages.forEach(language => {
-                    this.copyI18n(language, this.fetchFromInstalledJHipster('entity-i18n/templates'));
-                });
-            }
-        },
-    };
+      // Copy for each
+      if (this.enableTranslation) {
+        const languages = this.languages || this.getAllInstalledLanguages();
+        languages.forEach(language => {
+          this.copyI18n(language, this.fetchFromInstalledJHipster('entity-i18n/templates'));
+        });
+      }
+    },
+  };
 }

@@ -21,11 +21,11 @@ const { createTokenFromConfig } = require('./token-creator');
 const MinMaxTokens = require('./minmax-tokens');
 
 const validationTokens = [
-    { name: 'REQUIRED', pattern: 'required' },
-    { name: 'UNIQUE', pattern: 'unique' },
-    { name: 'PATTERN', pattern: 'pattern' },
+  { name: 'REQUIRED', pattern: 'required' },
+  { name: 'UNIQUE', pattern: 'unique' },
+  { name: 'PATTERN', pattern: 'pattern' },
 ].map(createTokenFromConfig);
 
 module.exports = {
-    tokens: [...validationTokens, ...MinMaxTokens.tokens],
+  tokens: [...validationTokens, ...MinMaxTokens.tokens],
 };

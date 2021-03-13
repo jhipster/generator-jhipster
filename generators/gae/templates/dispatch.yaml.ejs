@@ -23,8 +23,8 @@
 # ================================================================================
 
 dispatch:
-    # Default service serves the typical web resources and all static resources.
-    <% for (appConfig of appConfigs) { %>
-    - url: "*/services/<%= appConfig.baseName %>/*"
-      service: <%= appConfig.gaeServiceName %>
-    <% } %>
+  # Default service serves the typical web resources and all static resources.
+  <% for (appConfig of appConfigs) { %>
+  - url: "*/services/<%= appConfig.baseName %>/*"
+    service: <%= appConfig.gaeServiceName %>
+  <% } %>

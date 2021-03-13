@@ -22,57 +22,57 @@
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const prettierConfigFiles = {
-    global: [
-        {
-            templates: ['.prettierrc', '.prettierignore'],
-        },
-    ],
+  global: [
+    {
+      templates: ['.prettierrc', '.prettierignore'],
+    },
+  ],
 };
 
 const commonFiles = {
-    global: [
+  global: [
+    {
+      templates: [
+        'README.md',
         {
-            templates: [
-                'README.md',
-                {
-                    file: 'gitignore',
-                    renameTo: () => '.gitignore',
-                },
-                {
-                    file: 'gitattributes',
-                    renameTo: () => '.gitattributes',
-                    method: 'copy',
-                },
-                {
-                    file: 'editorconfig',
-                    renameTo: () => '.editorconfig',
-                    method: 'copy',
-                },
-                {
-                    file: 'sonar-project.properties',
-                    renameTo: () => 'sonar-project.properties',
-                },
-            ],
+          file: 'gitignore',
+          renameTo: () => '.gitignore',
         },
-    ],
-    commitHooks: [
         {
-            condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc', '.lintstagedrc.js'],
+          file: 'gitattributes',
+          renameTo: () => '.gitattributes',
+          method: 'copy',
         },
-    ],
+        {
+          file: 'editorconfig',
+          renameTo: () => '.editorconfig',
+          method: 'copy',
+        },
+        {
+          file: 'sonar-project.properties',
+          renameTo: () => 'sonar-project.properties',
+        },
+      ],
+    },
+  ],
+  commitHooks: [
+    {
+      condition: generator => !generator.skipCommitHook,
+      templates: ['.huskyrc', '.lintstagedrc.js'],
+    },
+  ],
 };
 
 function writeFiles() {
-    return {
-        writeFiles() {
-            this.writeFilesToDisk(commonFiles);
-        },
-    };
+  return {
+    writeFiles() {
+      return this.writeFilesToDisk(commonFiles);
+    },
+  };
 }
 
 module.exports = {
-    writeFiles,
-    prettierConfigFiles,
-    commonFiles,
+  writeFiles,
+  prettierConfigFiles,
+  commonFiles,
 };

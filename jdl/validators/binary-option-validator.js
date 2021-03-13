@@ -21,20 +21,20 @@ const BinaryOptions = require('../jhipster/binary-options');
 const OptionValidator = require('./option-validator');
 
 class BinaryOptionValidator extends OptionValidator {
-    constructor() {
-        super('binary', 'value');
-    }
+  constructor() {
+    super('binary', 'value');
+  }
 
-    validate(jdlOption) {
-        super.validate(jdlOption);
-        checkForInvalidValue(jdlOption);
-    }
+  validate(jdlOption) {
+    super.validate(jdlOption);
+    checkForInvalidValue(jdlOption);
+  }
 }
 
 module.exports = BinaryOptionValidator;
 
 function checkForInvalidValue(jdlOption) {
-    if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
-        throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
-    }
+  if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
+    throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
+  }
 }

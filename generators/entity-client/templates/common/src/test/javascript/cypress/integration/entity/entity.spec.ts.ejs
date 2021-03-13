@@ -16,7 +16,7 @@ let openBlockComment = ``;
 let closeBlockComment = ``;
 
 for (let relationship of relationships) {
-  if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+  if (relationship.relationshipRequired || relationship.id) {
     openBlockComment = `/* this test is commented because it contains required relationships`;
     closeBlockComment = `*/`;
     break;
@@ -41,7 +41,7 @@ describe('<%= entityClass %> e2e test', () => {
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
-      cy.keycloackLogin(oauth2Data, 'user');
+      cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
     });
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('');
@@ -53,7 +53,7 @@ describe('<%= entityClass %> e2e test', () => {
 
   afterEach(() => {
     cy.get('@oauth2Data').then(oauth2Data => {
-      cy.keycloackLogout(oauth2Data);
+      cy.oauthLogout(oauth2Data);
     });
     cy.clearCache();
   });
@@ -131,10 +131,11 @@ describe('<%= entityClass %> e2e test', () => {
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>*').as('entitiesRequest');
     cy.visit('/');
     cy.clickOnEntityMenuItem('<%= entityStateName %>');
-    cy.wait('@entitiesRequest');
+    cy.wait('@entitiesRequest')
+      .then(({ request, response }) => startingEntitiesCount = response.body.length);
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-    <%_ fields.filter(field => !field.id).forEach((field) => {
+    <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
       const fieldName = field.fieldName;
       const fieldNameCapitalized = field.fieldNameCapitalized;
       const fieldType = field.fieldType;

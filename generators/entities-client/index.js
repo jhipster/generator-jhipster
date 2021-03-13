@@ -21,69 +21,69 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts);
 
-        if (this.options.help) return;
+    if (this.options.help) return;
 
-        this.clientEntities = this.options.clientEntities;
+    this.clientEntities = this.options.clientEntities;
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entities-client');
-    }
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entities-client');
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+    };
+  }
 
-    get initializing() {
-        return useBlueprints ? undefined : this._initializing();
-    }
+  get initializing() {
+    return useBlueprints ? undefined : this._initializing();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _loading() {
-        return {
-            loadSharedConfig() {
-                this.loadClientConfig();
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadClientConfig();
+      },
+    };
+  }
 
-    get loading() {
-        return useBlueprints ? undefined : this._loading();
-    }
+  get loading() {
+    return useBlueprints ? undefined : this._loading();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return {
-            loadUserManagementEntities() {
-                if (!this.configOptions.sharedEntities) return;
-                // Make user entity available to templates.
-                this.user = this.configOptions.sharedEntities.User;
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return {
+      loadUserManagementEntities() {
+        if (!this.configOptions.sharedEntities) return;
+        // Make user entity available to templates.
+        this.user = this.configOptions.sharedEntities.User;
+      },
+    };
+  }
 
-    get default() {
-        return useBlueprints ? undefined : this._default();
-    }
+  get default() {
+    return useBlueprints ? undefined : this._default();
+  }
 
-    // Public API method used by the getter and also by Blueprints
-    _end() {
-        return {
-            end() {
-                if (!this.options.skipInstall) {
-                    this.rebuildClient();
-                }
-            },
-        };
-    }
+  // Public API method used by the getter and also by Blueprints
+  _end() {
+    return {
+      end() {
+        if (!this.options.skipInstall) {
+          this.rebuildClient();
+        }
+      },
+    };
+  }
 
-    get end() {
-        return useBlueprints ? undefined : this._end();
-    }
+  get end() {
+    return useBlueprints ? undefined : this._end();
+  }
 };

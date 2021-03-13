@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%
-const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const instanceType = restClass;
+const instanceName = restInstance;
 const returnType = reactive ? 'Mono' : 'Optional'
 const mapOrFlatMap = reactive ? 'flatMap' : 'map'
 const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + '> result =';
@@ -35,12 +35,12 @@ _%>
    .map(existing<%= entityClass %> -> {
 <%_ if(dto === 'mapstruct') { %><%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);<%_ } else { %>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
-   if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>() != null) {
-      existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>(<%= instanceName %>.get<%= field.fieldNameCapitalized %>());
+   if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>() != null) {
+      existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
    }
    <%_ if (field.fieldWithContentType) { _%>
-   if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType() != null) {
-      existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>ContentType(<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType());
+   if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType() != null) {
+      existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType());
    }
    <%_ } _%>
 <%_ } %>

@@ -21,11 +21,11 @@ package <%= packageName %>.config;
 <%_ if (reactive) { _%>
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
-<%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
+<%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType)) { _%>
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
+<%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType)) { _%>
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
@@ -53,7 +53,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ if (!reactive || (['h2Disk', 'h2Memory'].includes(devDatabaseType) && reactive)) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 <%_ } _%>
@@ -104,12 +104,19 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     <%_ } _%>
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(<% if (!reactive) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(<% if (!reactive || (['h2Disk', 'h2Memory'].includes(devDatabaseType) && reactive)) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
         <%_ if (!reactive) { _%>
         this.env = env;
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
+        <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && reactive) { _%>
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+            H2ConfigurationHelper.initH2Console();
+        }
+        <%_ } _%>  
     }
+
+
     <%_ if (!reactive) { _%>
 
     @Override
@@ -182,16 +189,11 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/v2/api-docs", config);
             source.registerCorsConfiguration("/v3/api-docs", config);
             source.registerCorsConfiguration("/swagger-resources", config);
-            <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
-            source.registerCorsConfiguration("/auth/**", config);
-            <%_ } _%>
+            source.registerCorsConfiguration("/swagger-ui/**", config);
             <%_ if (applicationType === 'gateway') { _%>
             source.registerCorsConfiguration("/*/api/**", config);
             source.registerCorsConfiguration("/services/*/api/**", config);
             source.registerCorsConfiguration("/*/management/**", config);
-                <%_ if (authenticationType === 'uaa') { _%>
-            source.registerCorsConfiguration("/*/oauth/**", config);
-                <%_ } _%>
             <%_ } _%>
         }
         return new Cors<% if (reactive) { %>Web<% } %>Filter(source);

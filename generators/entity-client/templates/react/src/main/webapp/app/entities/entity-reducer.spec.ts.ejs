@@ -341,7 +341,7 @@ describe('Entities reducer tests', () => {
         }
         <%_ } _%>
       ];
-      await store.dispatch(createEntity({ id: <% if (primaryKey.type === 'Long') { %>1<% } else { %>'1'<% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(createEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -354,7 +354,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateEntity({ id: <% if (primaryKey.type === 'Long') { %>1<% } else { %>'1'<% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(updateEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {

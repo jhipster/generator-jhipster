@@ -22,24 +22,24 @@ const { expect } = require('chai');
 const Validations = require('../../../jdl/jhipster/validations');
 
 describe('Validations', () => {
-    describe('exists', () => {
-        describe('when checking for a valid validation', () => {
-            it('should return true', () => {
-                expect(Validations.exists(Validations.MAXBYTES)).to.be.true;
-            });
-        });
-        describe('when checking for an invalid validation', () => {
-            it('should return false', () => {
-                expect(Validations.exists('NOTHING')).to.be.false;
-            });
-        });
+  describe('exists', () => {
+    describe('when checking for a valid validation', () => {
+      it('should return true', () => {
+        expect(Validations.exists(Validations.MAXBYTES)).to.be.true;
+      });
     });
-    describe('needsValue', () => {
-        describe('when checking whether a validation needs a value', () => {
-            it('should return so', () => {
-                expect(Validations.needsValue(Validations.MAXLENGTH)).to.be.true;
-                expect(Validations.needsValue(Validations.REQUIRED)).to.be.false;
-            });
-        });
+    describe('when checking for an invalid validation', () => {
+      it('should return false', () => {
+        expect(Validations.exists('NOTHING')).to.be.false;
+      });
     });
+  });
+  describe('needsValue', () => {
+    describe('when checking whether a validation needs a value', () => {
+      it('should return so', () => {
+        expect(Validations.needsValue(Validations.MAXLENGTH)).to.be.true;
+        expect(Validations.needsValue(Validations.REQUIRED)).to.be.false;
+      });
+    });
+  });
 });

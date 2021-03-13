@@ -23,18 +23,18 @@ const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const SUPPORTED_CLIENT_FRAMEWORKS = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 module.exports = class extends needleClient {
-    copyExternalAssets(source, target) {
-        const errorMessage = 'Resource path not added to JHipster app.';
-        const webpackDevPath =
-            this.clientFramework === SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR
-                ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js`
-                : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
-        let assetBlock = '';
-        if (source && target) {
-            assetBlock = `{ from: '${source}', to: '${target}' },`;
-        }
-        const rewriteFileModel = this.generateFileModel(webpackDevPath, 'jhipster-needle-add-assets-to-webpack', assetBlock);
-
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  copyExternalAssets(source, target) {
+    const errorMessage = 'Resource path not added to JHipster app.';
+    const webpackDevPath =
+      this.clientFramework === SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR
+        ? `${CLIENT_WEBPACK_DIR}/webpack.custom.js`
+        : `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
+    let assetBlock = '';
+    if (source && target) {
+      assetBlock = `{ from: '${source}', to: '${target}' },`;
     }
+    const rewriteFileModel = this.generateFileModel(webpackDevPath, 'jhipster-needle-add-assets-to-webpack', assetBlock);
+
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 };

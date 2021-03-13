@@ -18,35 +18,35 @@
  */
 
 const Validations = {
-    REQUIRED: 'required',
-    UNIQUE: 'unique',
-    MIN: 'min',
-    MAX: 'max',
-    MINLENGTH: 'minlength',
-    MAXLENGTH: 'maxlength',
-    PATTERN: 'pattern',
-    MINBYTES: 'minbytes',
-    MAXBYTES: 'maxbytes',
+  REQUIRED: 'required',
+  UNIQUE: 'unique',
+  MIN: 'min',
+  MAX: 'max',
+  MINLENGTH: 'minlength',
+  MAXLENGTH: 'maxlength',
+  PATTERN: 'pattern',
+  MINBYTES: 'minbytes',
+  MAXBYTES: 'maxbytes',
 };
 
 Validations.exists = validation =>
-    Object.keys(Validations)
-        .map(key => Validations[key])
-        .includes(validation);
+  Object.keys(Validations)
+    .map(key => Validations[key])
+    .includes(validation);
 
 Validations.needsValue = validation => {
-    const valuedMap = {
-        required: false,
-        unique: false,
-        min: true,
-        max: true,
-        minlength: true,
-        maxlength: true,
-        pattern: true,
-        minbytes: true,
-        maxbytes: true,
-    };
-    return valuedMap[validation];
+  const valuedMap = {
+    required: false,
+    unique: false,
+    min: true,
+    max: true,
+    minlength: true,
+    maxlength: true,
+    pattern: true,
+    minbytes: true,
+    maxbytes: true,
+  };
+  return valuedMap[validation];
 };
 
 module.exports = Validations;

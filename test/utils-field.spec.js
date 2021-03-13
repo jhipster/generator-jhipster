@@ -25,74 +25,72 @@ const BaseGenerator = require('../generators/generator-base');
 const { prepareFieldForTemplates, getEnumValuesWithCustomValues } = require('../utils/field');
 
 describe('main utilities', () => {
-    const defaultGenerator = { jhipsterConfig: defaultConfig };
-    Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
+  const defaultGenerator = { jhipsterConfig: defaultConfig };
+  Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 
-    const defaultEntity = prepareEntityForTemplates(
-        loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
-        defaultGenerator
-    );
+  const defaultEntity = prepareEntityForTemplates(
+    loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' }, defaultConfig),
+    defaultGenerator
+  );
 
-    describe('prepareFieldForTemplates', () => {
-        describe('with dto != mapstruct and @MapstructExpression', () => {
-            const field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
-            it('should fail', () => {
-                expect(() => prepareFieldForTemplates(defaultEntity, field, defaultGenerator)).to.throw(
-                    /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/
-                );
-            });
-        });
-        describe('with dto == mapstruct and @MapstructExpression', () => {
-            let field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
-            beforeEach(() => {
-                field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator);
-            });
-            it('should set field as transient and readonly', () => {
-                expect(field.transient).to.be.true;
-                expect(field.readonly).to.be.true;
-            });
-        });
+  describe('prepareFieldForTemplates', () => {
+    describe('with dto != mapstruct and @MapstructExpression', () => {
+      const field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
+      it('should fail', () => {
+        expect(() => prepareFieldForTemplates(defaultEntity, field, defaultGenerator)).to.throw(
+          /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/
+        );
+      });
     });
-
-    describe('getEnumValuesWithCustomValues', () => {
-        describe('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => getEnumValuesWithCustomValues()).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
-            });
-        });
-        describe('when passing an empty string', () => {
-            it('should fail', () => {
-                expect(() => getEnumValuesWithCustomValues('')).to.throw(
-                    /^Enumeration values must be passed to get the formatted values\.$/
-                );
-            });
-        });
-        describe('when passing a string without custom enum values', () => {
-            it('should return a formatted list', () => {
-                expect(getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
-                    { name: 'FRANCE', value: 'FRANCE' },
-                    { name: 'ENGLAND', value: 'ENGLAND' },
-                    { name: 'ICELAND', value: 'ICELAND' },
-                ]);
-            });
-        });
-        describe('when passing a string with some custom enum values', () => {
-            it('should return a formatted list', () => {
-                expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
-                    { name: 'FRANCE', value: 'france' },
-                    { name: 'ENGLAND', value: 'ENGLAND' },
-                    { name: 'ICELAND', value: 'viking_country' },
-                ]);
-            });
-        });
-        describe('when passing a string custom enum values for each value', () => {
-            it('should return a formatted list', () => {
-                expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
-                    { name: 'FRANCE', value: 'france' },
-                    { name: 'ENGLAND', value: 'england' },
-                    { name: 'ICELAND', value: 'iceland' },
-                ]);
-            });
-        });
+    describe('with dto == mapstruct and @MapstructExpression', () => {
+      let field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
+      beforeEach(() => {
+        field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator);
+      });
+      it('should set field as transient and readonly', () => {
+        expect(field.transient).to.be.true;
+        expect(field.readonly).to.be.true;
+      });
     });
+  });
+
+  describe('getEnumValuesWithCustomValues', () => {
+    describe('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => getEnumValuesWithCustomValues()).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
+      });
+    });
+    describe('when passing an empty string', () => {
+      it('should fail', () => {
+        expect(() => getEnumValuesWithCustomValues('')).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
+      });
+    });
+    describe('when passing a string without custom enum values', () => {
+      it('should return a formatted list', () => {
+        expect(getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
+          { name: 'FRANCE', value: 'FRANCE' },
+          { name: 'ENGLAND', value: 'ENGLAND' },
+          { name: 'ICELAND', value: 'ICELAND' },
+        ]);
+      });
+    });
+    describe('when passing a string with some custom enum values', () => {
+      it('should return a formatted list', () => {
+        expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
+          { name: 'FRANCE', value: 'france' },
+          { name: 'ENGLAND', value: 'ENGLAND' },
+          { name: 'ICELAND', value: 'viking_country' },
+        ]);
+      });
+    });
+    describe('when passing a string custom enum values for each value', () => {
+      it('should return a formatted list', () => {
+        expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
+          { name: 'FRANCE', value: 'france' },
+          { name: 'ENGLAND', value: 'england' },
+          { name: 'ICELAND', value: 'iceland' },
+        ]);
+      });
+    });
+  });
 });

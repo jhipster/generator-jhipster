@@ -19,21 +19,21 @@
 
 name: Cleanup Labels
 on:
-    issues: { types: closed }
+  issues: { types: closed }
 jobs:
-    remove-labels:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/github-script@v3
-              with:
-                  github-token: ${{secrets.GITHUB_TOKEN}}
-                  script: |
-                      const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
-                      github.issues.listLabelsOnIssue({...issue}).then(response => {
-                        const labels = response.data
-                        for (const label of labels) {
-                            if (label.name == 'area: needs-reproduction' || label.name == 'area: waiting for information' || label.name.includes('status: ')) {
-                                github.issues.removeLabel({...issue, name: label.name})
-                            }
-                        }
-                      })
+  remove-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
+            github.issues.listLabelsOnIssue({...issue}).then(response => {
+              const labels = response.data
+              for (const label of labels) {
+                  if (label.name == 'area: needs-reproduction' || label.name == 'area: waiting for information' || label.name.includes('status: ')) {
+                      github.issues.removeLabel({...issue, name: label.name})
+                  }
+              }
+            })

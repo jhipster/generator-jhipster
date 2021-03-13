@@ -24,94 +24,93 @@ const statistics = require('./statistics');
 const constants = require('./generator-constants');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts, features) {
+    super(args, opts, features);
 
-        // This adds support for a `--skip-checks` flag
-        this.option('skip-checks', {
-            desc: 'Check the status of the required tools',
-            type: Boolean,
-            defaults: false,
-        });
-        // This adds support for a `--skip-prompts` flag
-        this.option('skip-prompts', {
-            desc: 'Generate pre-existing configuration',
-            type: Boolean,
-            defaults: false,
-        });
-        this.regenerate = this.options.skipPrompts;
-        this.skipChecks = this.options.skipChecks;
-    }
+    // This adds support for a `--skip-checks` flag
+    this.option('skip-checks', {
+      desc: 'Check the status of the required tools',
+      type: Boolean,
+      defaults: false,
+    });
+    // This adds support for a `--skip-prompts` flag
+    this.option('skip-prompts', {
+      desc: 'Generate pre-existing configuration',
+      type: Boolean,
+      defaults: false,
+    });
+    this.regenerate = this.options.skipPrompts;
+    this.skipChecks = this.options.skipChecks;
+  }
 
-    get initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
+  get initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
 
-            setupServerConsts() {
-                // Make constants available in templates
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
-                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
+      setupServerConsts() {
+        // Make constants available in templates
+        this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+        this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
+        this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+        this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
+        this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
+        this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+        this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
+        this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+        this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
+        this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+        this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
-                this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-                this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-                this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-                this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
-                this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-                this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
-                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-                this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-                this.DOCKER_REDIS = constants.DOCKER_REDIS;
-                this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-                this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
-                this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
+        this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
+        this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+        this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
+        this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
+        this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+        this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
+        this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
+        this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
+        this.DOCKER_REDIS = constants.DOCKER_REDIS;
+        this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+        this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
+        this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
 
-                this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-            },
+        this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
+        this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+      },
 
-            checkDocker,
+      checkDocker,
 
-            loadConfig() {
-                loadFromYoRc.call(this);
-            },
-        };
-    }
+      loadConfig() {
+        loadFromYoRc.call(this);
+      },
+    };
+  }
 
-    get prompting() {
-        return {
-            askForApplicationType: prompts.askForApplicationType,
-            askForGatewayType: prompts.askForGatewayType,
-            askForPath: prompts.askForPath,
-            askForApps: prompts.askForApps,
-            askForClustersMode: prompts.askForClustersMode,
-            askForMonitoring: prompts.askForMonitoring,
-            askForConsoleOptions: prompts.askForConsoleOptions,
-            askForServiceDiscovery: prompts.askForServiceDiscovery,
-            askForAdminPassword: prompts.askForAdminPassword,
-        };
-    }
+  get prompting() {
+    return {
+      askForApplicationType: prompts.askForApplicationType,
+      askForGatewayType: prompts.askForGatewayType,
+      askForPath: prompts.askForPath,
+      askForApps: prompts.askForApps,
+      askForClustersMode: prompts.askForClustersMode,
+      askForMonitoring: prompts.askForMonitoring,
+      askForConsoleOptions: prompts.askForConsoleOptions,
+      askForServiceDiscovery: prompts.askForServiceDiscovery,
+      askForAdminPassword: prompts.askForAdminPassword,
+    };
+  }
 
-    get configuring() {
-        return {
-            insight() {
-                statistics.sendSubGenEvent('generator', 'docker-compose');
-            },
+  get configuring() {
+    return {
+      insight() {
+        statistics.sendSubGenEvent('generator', 'docker-compose');
+      },
 
-            checkImages,
-            generateJwtSecret,
-            setAppsFolderPaths,
-        };
-    }
+      checkImages,
+      generateJwtSecret,
+      setAppsFolderPaths,
+    };
+  }
 };

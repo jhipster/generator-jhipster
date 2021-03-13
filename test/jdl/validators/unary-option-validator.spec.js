@@ -22,31 +22,31 @@ const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
 const UnaryOptionValidator = require('../../../jdl/validators/unary-option-validator');
 
 describe('UnaryOptionValidator', () => {
-    let validator;
+  let validator;
 
-    before(() => {
-        validator = new UnaryOptionValidator();
-    });
+  before(() => {
+    validator = new UnaryOptionValidator();
+  });
 
-    describe('validate', () => {
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No unary option\.$/);
-            });
-        });
-        context('when passing an unary option', () => {
-            context('with all its required attributes', () => {
-                it('should not fail', () => {
-                    expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
-                });
-            });
-            context('without any of its required attributes', () => {
-                it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(
-                        /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/
-                    );
-                });
-            });
-        });
+  describe('validate', () => {
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => validator.validate()).to.throw(/^No unary option\.$/);
+      });
     });
+    context('when passing an unary option', () => {
+      context('with all its required attributes', () => {
+        it('should not fail', () => {
+          expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
+        });
+      });
+      context('without any of its required attributes', () => {
+        it('should fail', () => {
+          expect(() => validator.validate({})).to.throw(
+            /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/
+          );
+        });
+      });
+    });
+  });
 });

@@ -27,11 +27,10 @@ import java.util.stream.Stream;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.data.r2dbc.core.DatabaseClient.GenericInsertSpec;
-import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.r2dbc.core.StatementMapper;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
-import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
@@ -44,6 +43,7 @@ import org.springframework.data.relational.core.sql.SelectBuilder.SelectOrdered;
 import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
+import org.springframework.r2dbc.core.Parameter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -74,16 +74,16 @@ public class EntityManager {
         }
     }
 
-    private final ReactiveDataAccessStrategy dataAccessStrategy;
     private final SqlRenderer sqlRenderer;
     private final UpdateMapper updateMapper;
-    private final DatabaseClient db;
+    private final R2dbcEntityTemplate r2dbcEntityTemplate;
+    private final StatementMapper statementMapper;
 
-    public EntityManager(ReactiveDataAccessStrategy dataAccessStrategy, SqlRenderer sqlRenderer, UpdateMapper updateMapper, DatabaseClient db) {
-        this.dataAccessStrategy = dataAccessStrategy;
+    public EntityManager(SqlRenderer sqlRenderer, UpdateMapper updateMapper, R2dbcEntityTemplate r2dbcEntityTemplate) {
         this.sqlRenderer = sqlRenderer;
         this.updateMapper = updateMapper;
-        this.db = db;
+        this.r2dbcEntityTemplate = r2dbcEntityTemplate;
+        this.statementMapper = r2dbcEntityTemplate.getDataAccessStrategy().getStatementMapper();
     }
 
     /**
@@ -133,20 +133,18 @@ public class EntityManager {
     }
 
     private String createSelectImpl(SelectOrdered selectFrom, Class<?> entityType, Sort sortParameter) {
-        final Select select;
         if (sortParameter != null && sortParameter.isSorted()) {
             RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
-            Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-            select = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)).build();
-        } else {
-            select = selectFrom.build();
+            if (entity != null) {
+                Sort sort = updateMapper.getMappedObject(sortParameter, entity);
+                selectFrom = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort));
+            }
         }
-        return createSelect(select);
+        return createSelect(selectFrom.build());
     }
 
     private RelationalPersistentEntity<?> getPersistentEntity(Class<?> entityType) {
-        return (RelationalPersistentEntity<?>) dataAccessStrategy.getConverter().getMappingContext()
-                .getPersistentEntity(entityType);
+        return r2dbcEntityTemplate.getConverter().getMappingContext().getPersistentEntity(entityType);
     }
 
     /**
@@ -155,7 +153,7 @@ public class EntityManager {
      * @return the number of deleted entity
      */
     public Mono<Integer> deleteAll(Class<?> entityType) {
-        return db.delete().from(entityType).fetch().rowsUpdated();
+        return r2dbcEntityTemplate.delete(entityType).all();
     }
 
     /**
@@ -164,7 +162,8 @@ public class EntityManager {
      * @return the number of deleted rows.
      */
     public Mono<Integer> deleteAll(String tableName) {
-        return db.delete().from(tableName).fetch().rowsUpdated();
+        StatementMapper.DeleteSpec delete = statementMapper.createDelete(tableName);
+        return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(delete)).fetch().rowsUpdated();
     }
 
     /**
@@ -183,19 +182,7 @@ public class EntityManager {
      * @return the persisted entity.
      */
     public <S> Mono<S> insert(S entity) {
-        OutboundRow row = dataAccessStrategy.getOutboundRow(entity);
-        RelationalPersistentEntity<?> persistentEntity = getPersistentEntity(entity.getClass());
-
-        GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into(persistentEntity.getTableName());
-        SqlIdentifier idColumn = persistentEntity.getIdColumn();
-        for (Entry<SqlIdentifier, SettableValue> column : row.entrySet()) {
-            if (column.getValue().hasValue() || !column.getKey().equals(idColumn)) {
-                insertSpec = insertSpec.value(column.getKey(), column.getValue());
-            }
-        }
-        return insertSpec.map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
-            .first()
-            .defaultIfEmpty(entity);
+        return r2dbcEntityTemplate.insert(entity);
     }
 
     /**
@@ -209,24 +196,30 @@ public class EntityManager {
         return deleteFromLinkTable(table, entityId)
                 .then(
                     Flux.fromStream(referencedIds)
-                        .flatMap((Long referenceId) ->
-                            db.insert()
-                                .into(table.tableName)
-                                .value(table.idColumn, entityId)
-                                .value(table.referenceColumn, referenceId)
+                        .flatMap((Long referenceId) -> {
+                            StatementMapper.InsertSpec insert = r2dbcEntityTemplate
+                                .getDataAccessStrategy()
+                                .getStatementMapper()
+                                .createInsert(table.tableName)
+                                .withColumn(table.idColumn, Parameter.from(entityId))
+                                .withColumn(table.referenceColumn, Parameter.from(referenceId));
+
+                            return r2dbcEntityTemplate
+                                .getDatabaseClient()
+                                .sql(statementMapper.getMappedObject(insert))
                                 .fetch()
-                                .rowsUpdated()
-                                )
+                                .rowsUpdated();
+                            })
                         .collectList()
                         .map((List<Integer> updates) -> updates.stream().reduce(Integer::sum).orElse(0)));
     }
 
     public Mono<Void> deleteFromLinkTable(LinkTable table, Long entityId) {
         Assert.notNull(entityId, "entityId is null");
-        return db.delete()
-                .from(table.tableName)
-                .matching(Criteria.from(Criteria.where(table.idColumn).is(entityId)))
-                .then();
+        StatementMapper.DeleteSpec deleteSpec = r2dbcEntityTemplate.getDataAccessStrategy().getStatementMapper()
+            .createDelete(table.tableName)
+            .withCriteria(Criteria.from(Criteria.where(table.idColumn).is(entityId)));
+        return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(deleteSpec)).then();
     }
 
     private static Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
@@ -238,11 +231,7 @@ public class EntityManager {
             String propertyName = order.getProperty();
             OrderByField orderByField = OrderByField.from(table.column(propertyName).as(EntityManager.ALIAS_PREFIX + propertyName));
 
-            if (order.getDirection() != null) {
-                fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
-            } else {
-                fields.add(orderByField);
-            }
+            fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
         }
 
         return fields;

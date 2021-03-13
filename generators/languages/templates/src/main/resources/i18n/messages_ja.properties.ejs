@@ -22,6 +22,7 @@ error.subtitle=エラーが発生しました。
 error.status=ステータス:
 error.message=メッセージ:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> のアカウントアクティベート
 email.activation.greeting={0} 様
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> password reset
 email.reset.greeting=Dear {0}
 email.reset.text1=For your <%= baseName %> account a password reset was requested, please click on the URL below to reset it:
 email.reset.text2=Regards,
+<%_ } _%>

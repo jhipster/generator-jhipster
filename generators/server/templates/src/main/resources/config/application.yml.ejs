@@ -56,23 +56,7 @@ eureka:
       git-version: ${git.commit.id.describe:}
       git-commit: ${git.commit.id.abbrev:}
       git-branch: ${git.branch:}
-ribbon:
-  eureka:
-    enabled: true
-<%_ } _%>
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
-zuul: # those values must be configured depending on the application specific needs
-  sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
-  host:
-    max-total-connections: 1000
-    max-per-route-connections: 100
-  prefix: /services
-  semaphore:
-    max-semaphores: 500
-  <%_ if (serviceDiscoveryType === 'consul') { _%>
-  ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
-  <%_ } _%>
+      context-path: ${server.servlet.context-path:}
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
 
@@ -114,11 +98,13 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump", "caches", "liquibase"]
+        include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable === true) { %>, "caches"<% } %><% if (databaseType === 'sql') { %>, "liquibase"<% } %>]
   endpoint:
     health:
       show-details: when_authorized
       roles: "ROLE_ADMIN"
+      probes:
+        enabled: true
     jhimetrics:
       enabled: true
   info:
@@ -130,8 +116,6 @@ management:
         include: livenessState
       readiness:
         include: readinessState<% if (databaseType === 'sql') { %>,datasource<% } %>
-    probes:
-      enabled: true
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
@@ -159,6 +143,12 @@ management:
           autotime:
             enabled: true
 
+<%_ if (databaseType === 'mongodb') { _%>
+mongock:
+  change-logs-scan-package:
+    - <%= packageName %>.config.dbmigrations
+
+<%_ } _%>
 spring:
   <%_ if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
   autoconfigure:
@@ -200,13 +190,17 @@ spring:
           max-connections: 1000
     <%_ } _%>
   <%_ } _%>
-  <%_ if (!serviceDiscoveryType) { _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
     # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
     active: #spring.profiles.active#
-  <%_ } _%>
+    group:
+      dev:
+        - dev
+        - api-docs
+        # Uncomment to activate TLS for the dev profile
+        #- tls
   jmx:
     enabled: false
   <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -258,7 +252,7 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
-  <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
+  <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType !== 'oauth2') { _%>
   security:
     user:
       name: admin
@@ -299,18 +293,7 @@ spring:
             client-id: web_app
             client-secret: web_app
           <%_ } _%>
-<%_ } else if (authenticationType === 'uaa') { _%>
-security:
-  oauth2:
-    client:
-      access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
-      user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
-      client-id: web_app
-      client-secret: web_app
-      scope: openid profile email
-    resource:
-      filter-order: 3
-      user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            scope: openid,profile,email
 <%_ } _%>
 
 server:
@@ -348,7 +331,8 @@ jhipster:
   mail:
     from: <%= baseName %>@localhost
   api-docs:
-    default-include-pattern: /api/.*
+    default-include-pattern: ${server.servlet.context-path:}/api/.*
+    management-include-pattern: ${server.servlet.context-path:}/management/.*
     title: <%= baseName %> API
     description: <%= baseName %> API documentation
     version: 0.0.1

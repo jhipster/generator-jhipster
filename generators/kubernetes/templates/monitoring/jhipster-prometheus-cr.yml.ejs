@@ -60,7 +60,7 @@ metadata:
   name: jhipster-prometheus
   namespace: <%= kubernetesNamespace %>
 spec:
-  replica: 1
+  replicas: 1
   serviceAccountName: jhipster-prometheus-sa
   serviceMonitorSelector:
     matchLabels:

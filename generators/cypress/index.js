@@ -24,82 +24,88 @@ const constants = require('../generator-constants');
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, opts) {
+    super(args, opts, { unique: 'namespace' });
 
-        if (this.options.help) {
-            return;
+    if (this.options.help) {
+      return;
+    }
+
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('cypress');
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
+    return {
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+    };
+  }
+
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _preparing() {
+    return {
+      prepareForTemplates() {
+        this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+        this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
+      },
+    };
+  }
+
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _default() {
+    return super._missingPreDefault();
+  }
+
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return {
+      cleanup() {
+        if (this.isJhipsterVersionLessThan('7.0.0-beta.1') && this.jhipsterConfig.cypressTests) {
+          this.removeFile(`${this.TEST_SRC_DIR}/cypress/support/keycloak-oauth2.ts`);
+          this.removeFile(`${this.TEST_SRC_DIR}/cypress/fixtures/users/user.json`);
         }
+      },
+      ...writeFiles(),
+      ...super._missingPostWriting(),
+    };
+  }
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('cypress');
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-        };
-    }
-
-    get initializing() {
-        if (useBlueprints) return;
-        return this._initializing();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _loading() {
-        return {
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
-        };
-    }
-
-    get loading() {
-        if (useBlueprints) return;
-        return this._loading();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _preparing() {
-        return {
-            prepareForTemplates() {
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
-            },
-        };
-    }
-
-    get preparing() {
-        if (useBlueprints) return;
-        return this._preparing();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return super._missingPreDefault();
-    }
-
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return {
-            ...writeFiles(),
-            ...super._missingPostWriting(),
-        };
-    }
-
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
 };

@@ -31,60 +31,60 @@ const { stringHashCode } = require('../utils');
 const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 const cypressFiles = {
-    common: [
-        {
-            condition: generator => generator.cypressTests,
-            templates: ['cypress.json'],
-        },
-    ],
-    clientTestFw: [
-        {
-            condition: generator => generator.cypressTests,
-            path: TEST_SRC_DIR,
-            templates: [
-                'cypress/fixtures/users/user.json',
-                'cypress/fixtures/integration-test.png',
-                'cypress/plugins/index.ts',
-                'cypress/integration/administration/administration.spec.ts',
-                'cypress/support/commands.ts',
-                'cypress/support/navbar.ts',
-                'cypress/support/index.ts',
-                'cypress/support/entity.ts',
-                'cypress/tsconfig.json',
-            ],
-        },
-        {
-            condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2',
-            path: TEST_SRC_DIR,
-            templates: ['cypress/integration/account/login-page.spec.ts'],
-        },
-        {
-            condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2' && generator.databaseType !== 'no',
-            path: TEST_SRC_DIR,
-            templates: [
-                'cypress/integration/account/register-page.spec.ts',
-                'cypress/integration/account/settings-page.spec.ts',
-                'cypress/integration/account/password-page.spec.ts',
-                'cypress/integration/account/reset-password-page.spec.ts',
-            ],
-        },
-        {
-            condition: generator => generator.cypressTests && generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
-            templates: ['cypress/support/keycloak-oauth2.ts'],
-        },
-    ],
+  common: [
+    {
+      condition: generator => generator.cypressTests,
+      templates: ['cypress.json'],
+    },
+  ],
+  clientTestFw: [
+    {
+      condition: generator => generator.cypressTests,
+      path: TEST_SRC_DIR,
+      templates: [
+        'cypress/fixtures/integration-test.png',
+        'cypress/plugins/index.ts',
+        'cypress/integration/administration/administration.spec.ts',
+        'cypress/support/commands.ts',
+        'cypress/support/navbar.ts',
+        'cypress/support/index.ts',
+        'cypress/support/entity.ts',
+        'cypress/support/management.ts',
+        'cypress/tsconfig.json',
+      ],
+    },
+    {
+      condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2',
+      path: TEST_SRC_DIR,
+      templates: ['cypress/integration/account/login-page.spec.ts'],
+    },
+    {
+      condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2' && generator.databaseType !== 'no',
+      path: TEST_SRC_DIR,
+      templates: [
+        'cypress/integration/account/register-page.spec.ts',
+        'cypress/integration/account/settings-page.spec.ts',
+        'cypress/integration/account/password-page.spec.ts',
+        'cypress/integration/account/reset-password-page.spec.ts',
+      ],
+    },
+    {
+      condition: generator => generator.cypressTests && generator.authenticationType === 'oauth2',
+      path: TEST_SRC_DIR,
+      templates: ['cypress/support/oauth2.ts'],
+    },
+  ],
 };
 module.exports = {
-    writeFiles,
+  writeFiles,
 };
 
 function writeFiles() {
-    return {
-        writeFiles() {
-            faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
-            this.faker = faker;
-            this.writeFilesToDisk(cypressFiles);
-        },
-    };
+  return {
+    writeFiles() {
+      faker.seed(stringHashCode(this.jhipsterConfig.baseName || 'jhipsterSample'));
+      this.faker = faker;
+      return this.writeFilesToDisk(cypressFiles);
+    },
+  };
 }

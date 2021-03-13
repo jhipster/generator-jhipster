@@ -18,15 +18,15 @@
  */
 
 const Options = {
-    JPA_DERIVED_IDENTIFIER: 'jpaDerivedIdentifier',
+  JPA_DERIVED_IDENTIFIER: 'jpaDerivedIdentifier',
 };
 
 function exists(option) {
-    return Object.values(Options).includes(option);
+  return Object.values(Options).includes(option);
 }
 
 module.exports = {
-    ...Options,
-    exists,
-    doesRelationshipOptionExist: exists,
+  ...Options,
+  exists,
+  doesRelationshipOptionExist: exists,
 };

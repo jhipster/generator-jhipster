@@ -1,4 +1,4 @@
-import { $, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by, browser, ExpectedConditions as ec<% } %>  } from 'protractor';
+import { $, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by, browser<% } %>  } from 'protractor';
 
 import AlertPage from './alert-page';
 
@@ -29,7 +29,7 @@ export default class SignInPage extends AlertPage {
   }
 <%_ } else { _%>
   async login(username: string, password: string) {
-    await browser.wait(ec.presenceOf(this.username), 5000);
+    await browser.sleep(1000);
     if (await this.username.isPresent()) {
       await this.username.sendKeys(username);
       await this.password.sendKeys(password);

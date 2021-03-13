@@ -25,31 +25,31 @@ let Aws;
 let generator;
 
 const AwsFactory = (module.exports = function AwsFactory(generatorRef, cb) {
-    generator = generatorRef;
-    try {
-        Aws = require('aws-sdk'); // eslint-disable-line
-        cb();
-    } catch (e) {
-        generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
-    }
+  generator = generatorRef;
+  try {
+    Aws = require('aws-sdk'); // eslint-disable-line
+    cb();
+  } catch (e) {
+    generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
+  }
 });
 
 AwsFactory.prototype.init = function initAws(options) {
-    Aws.config.region = options.region;
+  Aws.config.region = options.region;
 };
 
 AwsFactory.prototype.getS3 = function getS3() {
-    return new S3(Aws, generator);
+  return new S3(Aws, generator);
 };
 
 AwsFactory.prototype.getRds = function getRds() {
-    return new Rds(Aws, generator);
+  return new Rds(Aws, generator);
 };
 
 AwsFactory.prototype.getEb = function getEb() {
-    return new Eb(Aws, generator);
+  return new Eb(Aws, generator);
 };
 
 AwsFactory.prototype.getIam = function getIa() {
-    return new Iam(Aws, generator);
+  return new Iam(Aws, generator);
 };

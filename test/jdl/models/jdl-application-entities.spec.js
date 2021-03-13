@@ -21,191 +21,191 @@ const { expect } = require('chai');
 const JDLApplicationEntities = require('../../../jdl/models/jdl-application-entities');
 
 describe('JDLApplicationEntities', () => {
-    describe('addEntityNames', () => {
-        context('when not passing anything', () => {
-            let jdlApplicationEntities;
+  describe('addEntityNames', () => {
+    context('when not passing anything', () => {
+      let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities();
-            });
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities();
+      });
 
-            it('should fail', () => {
-                expect(() => jdlApplicationEntities.add()).to.throw(/^An entity name has to be passed so as to be added\.$/);
-            });
-        });
-        context('when passing an entity name', () => {
-            context('that is already present', () => {
-                let jdlApplicationEntities;
-
-                before(() => {
-                    jdlApplicationEntities = new JDLApplicationEntities(['A']);
-                    jdlApplicationEntities.add('A');
-                });
-
-                it('should not add it', () => {
-                    expect(jdlApplicationEntities.size()).to.equal(1);
-                });
-            });
-            context('that is not already present', () => {
-                let jdlApplicationEntities;
-
-                before(() => {
-                    jdlApplicationEntities = new JDLApplicationEntities(['A']);
-                    jdlApplicationEntities.add('B');
-                });
-
-                it('should add it', () => {
-                    expect(jdlApplicationEntities.size()).to.equal(2);
-                });
-            });
-        });
+      it('should fail', () => {
+        expect(() => jdlApplicationEntities.add()).to.throw(/^An entity name has to be passed so as to be added\.$/);
+      });
     });
-    describe('addEntityNames', () => {
-        context('when not passing anything', () => {
-            let jdlApplicationEntities;
+    context('when passing an entity name', () => {
+      context('that is already present', () => {
+        let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A']);
-                jdlApplicationEntities.addEntityNames();
-            });
-
-            it('should not alter the state', () => {
-                expect(jdlApplicationEntities.size()).to.equal(1);
-            });
+        before(() => {
+          jdlApplicationEntities = new JDLApplicationEntities(['A']);
+          jdlApplicationEntities.add('A');
         });
-        context('when passing a falsy name', () => {
-            let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A']);
-                jdlApplicationEntities.addEntityNames([undefined, null]);
-            });
-
-            it('should not alter the state', () => {
-                expect(jdlApplicationEntities.size()).to.equal(1);
-            });
+        it('should not add it', () => {
+          expect(jdlApplicationEntities.size()).to.equal(1);
         });
-        context('when passing entity names', () => {
-            let jdlApplicationEntities;
+      });
+      context('that is not already present', () => {
+        let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A']);
-                jdlApplicationEntities.addEntityNames(['A', 'B', 'C']);
-            });
-
-            it('should alter the state without duplicates', () => {
-                expect(jdlApplicationEntities.size()).to.equal(3);
-            });
+        before(() => {
+          jdlApplicationEntities = new JDLApplicationEntities(['A']);
+          jdlApplicationEntities.add('B');
         });
+
+        it('should add it', () => {
+          expect(jdlApplicationEntities.size()).to.equal(2);
+        });
+      });
     });
-    describe('forEach', () => {
-        context('when not passing a function', () => {
-            let jdlApplicationEntities;
+  });
+  describe('addEntityNames', () => {
+    context('when not passing anything', () => {
+      let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities();
-            });
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A']);
+        jdlApplicationEntities.addEntityNames();
+      });
 
-            it('should not fail', () => {
-                expect(() => jdlApplicationEntities.forEach()).not.to.throw();
-            });
-        });
-        context('when passing a function', () => {
-            let result;
-
-            before(() => {
-                const jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
-                result = [];
-                jdlApplicationEntities.forEach(entityName => result.push(entityName));
-                result = result.join(', ');
-            });
-
-            it('should iterate over the entities', () => {
-                expect(result).to.equal('A, B');
-            });
-        });
+      it('should not alter the state', () => {
+        expect(jdlApplicationEntities.size()).to.equal(1);
+      });
     });
-    describe('toArray', () => {
-        context('when there is no entity', () => {
-            let jdlApplicationEntities;
+    context('when passing a falsy name', () => {
+      let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities();
-            });
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A']);
+        jdlApplicationEntities.addEntityNames([undefined, null]);
+      });
 
-            it('should return an empty list', () => {
-                expect(jdlApplicationEntities.toArray()).to.deep.equal([]);
-            });
-        });
-        context('when there are entities', () => {
-            let jdlApplicationEntities;
-
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
-            });
-
-            it('should return 2', () => {
-                expect(jdlApplicationEntities.toArray()).to.deep.equal(['A', 'B']);
-            });
-        });
+      it('should not alter the state', () => {
+        expect(jdlApplicationEntities.size()).to.equal(1);
+      });
     });
-    describe('size', () => {
-        context('when there is no entity', () => {
-            let jdlApplicationEntities;
+    context('when passing entity names', () => {
+      let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities();
-            });
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A']);
+        jdlApplicationEntities.addEntityNames(['A', 'B', 'C']);
+      });
 
-            it('should return 0', () => {
-                expect(jdlApplicationEntities.size()).to.equal(0);
-            });
-        });
-        context('when there are entities', () => {
-            let jdlApplicationEntities;
-
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
-            });
-
-            it('should return 2', () => {
-                expect(jdlApplicationEntities.size()).to.equal(2);
-            });
-        });
+      it('should alter the state without duplicates', () => {
+        expect(jdlApplicationEntities.size()).to.equal(3);
+      });
     });
-    describe('toString', () => {
-        context('when there is no entity', () => {
-            let jdlApplicationEntities;
+  });
+  describe('forEach', () => {
+    context('when not passing a function', () => {
+      let jdlApplicationEntities;
 
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities();
-            });
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities();
+      });
 
-            it('should return an empty string', () => {
-                expect(jdlApplicationEntities.toString()).to.equal('');
-            });
-        });
-        context('when there is an entity', () => {
-            let jdlApplicationEntities;
-
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A']);
-            });
-
-            it('should return it', () => {
-                expect(jdlApplicationEntities.toString()).to.equal('entities A');
-            });
-        });
-        context('when there are entities', () => {
-            let jdlApplicationEntities;
-
-            before(() => {
-                jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
-            });
-
-            it('should return them separated', () => {
-                expect(jdlApplicationEntities.toString()).to.equal('entities A, B');
-            });
-        });
+      it('should not fail', () => {
+        expect(() => jdlApplicationEntities.forEach()).not.to.throw();
+      });
     });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        const jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
+        result = [];
+        jdlApplicationEntities.forEach(entityName => result.push(entityName));
+        result = result.join(', ');
+      });
+
+      it('should iterate over the entities', () => {
+        expect(result).to.equal('A, B');
+      });
+    });
+  });
+  describe('toArray', () => {
+    context('when there is no entity', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities();
+      });
+
+      it('should return an empty list', () => {
+        expect(jdlApplicationEntities.toArray()).to.deep.equal([]);
+      });
+    });
+    context('when there are entities', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
+      });
+
+      it('should return 2', () => {
+        expect(jdlApplicationEntities.toArray()).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
+  describe('size', () => {
+    context('when there is no entity', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities();
+      });
+
+      it('should return 0', () => {
+        expect(jdlApplicationEntities.size()).to.equal(0);
+      });
+    });
+    context('when there are entities', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
+      });
+
+      it('should return 2', () => {
+        expect(jdlApplicationEntities.size()).to.equal(2);
+      });
+    });
+  });
+  describe('toString', () => {
+    context('when there is no entity', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities();
+      });
+
+      it('should return an empty string', () => {
+        expect(jdlApplicationEntities.toString()).to.equal('');
+      });
+    });
+    context('when there is an entity', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A']);
+      });
+
+      it('should return it', () => {
+        expect(jdlApplicationEntities.toString()).to.equal('entities A');
+      });
+    });
+    context('when there are entities', () => {
+      let jdlApplicationEntities;
+
+      before(() => {
+        jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
+      });
+
+      it('should return them separated', () => {
+        expect(jdlApplicationEntities.toString()).to.equal('entities A, B');
+      });
+    });
+  });
 });

@@ -34,7 +34,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Property;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

@@ -22,7 +22,7 @@ let helpBlocks = 0; %>
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
-                "refreshListLabel": "Refresh list",
+                "refreshListLabel": "Liste aktualisieren",
                 <%_ if (!readOnly) { _%>
                 "createLabel": "<%= entityClassHumanized %> erstellen",
                 "createOrEditLabel": "<%= entityClassHumanized %> erstellen oder bearbeiten",
@@ -30,7 +30,7 @@ let helpBlocks = 0; %>
                 <%_ if (searchEngine !== false) { _%>
                 "search": "Suche nach <%= entityClassHumanized %>",
                 <%_ } _%>
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "notFound": "Keine <%= entityClassPluralHumanized %> gefunden"
             },
             <%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityClassHumanized %> erstellt mit ID {{ param }}",

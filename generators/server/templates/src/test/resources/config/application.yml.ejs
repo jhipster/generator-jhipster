@@ -42,131 +42,156 @@ org:
 
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
-    client:
-        enabled: false
-    instance:
-        appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+  client:
+    enabled: false
+  instance:
+    appname: <%= baseName %>
+    instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
 <%_ } _%>
 
+<%_ if (databaseType === 'mongodb') { _%>
+mongock:
+  change-logs-scan-package:
+    - <%= packageName %>.config.dbmigrations
+  mongo-db:
+    read-concern: local
+    write-concern:
+      journal: false
+
+<%_ } _%>
 spring:
 <%_ if (databaseType === 'sql') { _%>
-    profiles:
-        # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
-        #active: testcontainers
+  profiles:
+    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+    #active: testcontainers
 <%_ } _%>
-    application:
-        name: <%= baseName %>
-    <%_ if (applicationType === 'gateway' && reactive) { _%>
-    autoconfigure:
-        exclude:
-            - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
+  application:
+    name: <%= baseName %>
+  <%_ if (applicationType === 'gateway' && reactive) { _%>
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  cloud:
+    config:
+      enabled: false
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'consul') { _%>
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+      config:
+        enabled: false
+      enabled: false
+  <%_ } _%>
+  <%_ if (databaseType === 'sql' && !reactive) { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
+    name:
+    username:
+    password:
+    hikari:
+      auto-commit: false
+  <%_ } _%>
+  jackson:
+    serialization:
+      write-durations-as-timestamps: false
+  <%_ if (databaseType === 'sql' && !reactive) { _%>
+  jpa:
+    database-platform: tech.jhipster.domain.util.FixedH2Dialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.hbm2ddl.auto: validate
+      hibernate.jdbc.time_zone: UTC
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+  <%_ } _%>
+  <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+  data:
+  <%_ } _%>
+  <%_ if (databaseType === 'mongodb') { _%>
+    mongodb:
+      host: localhost
+      port: 0
+      database: <%= baseName %>
+  <%_ } _%>
+  <%_ if (databaseType === 'cassandra') { _%>
+    cassandra:
+      contact-points: localhost
+      compression: NONE
+      keyspace-name: cassandra_unit_keyspace
+      local-datacenter: datacenter1
+  <%_ } _%>
+  <%_ if (databaseType === 'couchbase') { _%>
+  couchbase:
+    bucket:
+      name: jhipster
+      password: password
+  <%_ } _%>
+  <%_ if (databaseType === 'sql') { _%>
+  liquibase:
+    contexts: test
+    <%_ if (reactive) { _%>
+    url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
     <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-        name:
-        username:
-        password:
-        hikari:
-            auto-commit: false
-    <%_ } _%>
-    jackson:
-        serialization:
-            write-durations-as-timestamps: false
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    jpa:
-        database-platform: tech.jhipster.domain.util.FixedH2Dialect
-        open-in-view: false
-        hibernate:
-            ddl-auto: none
-            naming:
-                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-        properties:
-            hibernate.id.new_generator_mappings: true
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: false
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
-            hibernate.hbm2ddl.auto: validate
-            hibernate.jdbc.time_zone: UTC
-            hibernate.query.fail_on_pagination_over_collection_fetch: true
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
-    data:
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
-        mongodb:
-            host: localhost
-            port: 0
-            database: <%= baseName %>
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
-        cassandra:
-            contact-points: localhost
-            compression: NONE
-            keyspace-name: cassandra_unit_keyspace
-            local-datacenter: datacenter1
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
-    couchbase:
-        bucket:
-            name: jhipster
-            password: password
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
-    liquibase:
-        contexts: test
-        <%_ if (reactive) { _%>
-        url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-        <%_ } _%>
-    <%_ } _%>
-    mail:
-        host: localhost
-    main:
-        allow-bean-definition-overriding: true
-    messages:
-        basename: i18n/messages
-    <%_ if (databaseType === 'sql' && reactive) { _%>
-    r2dbc:
-        url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-        username: r2dbc
-        password:
-    <%_ } _%>
-    <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
-    security:
-        user:
-            name: test
-            password: test
-    <%_ } _%>
-    task:
-        execution:
-            thread-name-prefix: <%= dasherizedBaseName %>-task-
-            pool:
-                core-size: 1
-                max-size: 50
-                queue-capacity: 10000
-        scheduling:
-            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
-            pool:
-                size: 1
-    thymeleaf:
-        mode: HTML
+  <%_ } _%>
+  mail:
+    host: localhost
+  main:
+    allow-bean-definition-overriding: true
+  messages:
+    basename: i18n/messages
+  <%_ if (databaseType === 'sql' && reactive) { _%>
+  r2dbc:
+    url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
+    username: r2dbc
+    password:
+  <%_ } _%>
+  <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
+  security:
+    user:
+      name: test
+      password: test
+  <%_ } _%>
+  task:
+    execution:
+      thread-name-prefix: <%= dasherizedBaseName %>-task-
+      pool:
+        core-size: 1
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+      pool:
+        size: 1
+  thymeleaf:
+    mode: HTML
 <%_ if (authenticationType === 'oauth2') { _%>
-    # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
-    security:
-        oauth2:
-            client:
-                provider:
-                    oidc:
-                        issuer-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster
+  # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster
 <%_ } _%>
 
 server:
-    port: 10344
-    address: localhost
+  port: 10344
+  address: localhost
 
 # ===================================================================
 # JHipster specific properties
@@ -175,58 +200,49 @@ server:
 # ===================================================================
 
 jhipster:
-    clientApp:
-        name: "<%= frontendAppName %>"
-    logging:
-        # To test json console appender
-        use-json-format: false
-        logstash:
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
+  clientApp:
+    name: "<%= frontendAppName %>"
+  logging:
+    # To test json console appender
+    use-json-format: false
+    logstash:
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-    mail:
-        from: test@localhost
-        base-url: http://127.0.0.1:8080
+  mail:
+    from: test@localhost
+    base-url: http://127.0.0.1:8080
 <%_ } _%>
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    security:
-        authentication:
-    <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-            jwt:
-                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-                base64-secret: <%= jwtSecretKey %>
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
-    <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-        client-authorization:
-            <%_ if (applicationType !== 'uaa') { _%>
-            access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-            token-service-id: <%= uaaBaseName.toLowerCase() %>
-            <%_ } _%>
-            client-id: internal
-            client-secret: internal
-    <%_ } _%>
+<%_ if (authenticationType === 'jwt') { _%>
+  security:
+    authentication:
+  <%_ if (authenticationType === 'jwt') { _%>
+      jwt:
+        # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+        base64-secret: <%= jwtSecretKey %>
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
-    security:
-        remember-me:
-            # security key (this key should be unique for your application, and kept secret)
-            key: <%= rememberMeKey %>
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: <%= rememberMeKey %>
 <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        group.id: <%= dasherizedBaseName %>
-        auto.offset.reset: earliest
-    producer:
-        key.serializer: org.apache.kafka.common.serialization.StringSerializer
-        value.serializer: org.apache.kafka.common.serialization.StringSerializer
+  bootstrap-servers: localhost:9092
+  consumer:
+    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    group.id: <%= dasherizedBaseName %>
+    auto.offset.reset: earliest
+  producer:
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+    value.serializer: org.apache.kafka.common.serialization.StringSerializer
 <%_ } _%>
 
 # ===================================================================

@@ -1,59 +1,73 @@
 version: 2
 updates:
-    - package-ecosystem: 'npm'
-      directory: '/'
-      schedule:
-          interval: 'weekly'
-      open-pull-requests-limit: 10
-      labels:
-          - 'theme: jhipster-internals'
-          - 'theme: dependencies'
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: jhipster-internals'
+      - 'theme: dependencies'
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/angular/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
-      labels:
-          - 'theme: angular'
-          - 'theme: dependencies'
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/angular/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - 'theme: angular'
+      - 'theme: dependencies'
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/common/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
-      labels:
-          - 'theme: front'
-          - 'theme: dependencies'
+  - package-ecosystem: 'npm'
+    directory: '/generators/common/templates/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - 'theme: dependencies'
+    ignore:
+      # Ignore updates to husky due to the license change
+      # See https://github.com/jhipster/generator-jhipster/issues/13940
+      - dependency-name: 'husky'
+        versions: ['5.x']
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/react/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
-      labels:
-          - 'theme: react'
-          - 'theme: dependencies'
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/common/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - 'theme: front'
+      - 'theme: dependencies'
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/vue/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
-      labels:
-          - 'theme: vue'
-          - 'theme: dependencies'
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/react/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - 'theme: react'
+      - 'theme: dependencies'
 
-    - package-ecosystem: 'github-actions'
-      directory: '/'
-      schedule:
-          interval: 'weekly'
-      open-pull-requests-limit: 10
-      labels:
-          - 'theme: github_actions'
-          - 'theme: CI builds'
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/vue/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - 'theme: vue'
+      - 'theme: dependencies'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'

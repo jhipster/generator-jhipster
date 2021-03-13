@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+    const instanceType = restClass;
+    const instanceName = restInstance;
     const listOrFlux = (reactive === true) ? 'Flux' : 'List';
     const mapper = entityInstance + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
@@ -33,7 +33,7 @@ if (pagination === 'no') { %>
         <%_ if (viaService) { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);
         <%_ } else { _%>
-        Page<<%= asEntity(entityClass) %>> page = <%= entityInstance %><% if (searchEngine == 'elasticsearch') { %>Search<% } %>Repository.search(<% if (searchEngine === 'elasticsearch') { %>queryStringQuery(query)<% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable);
+        Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngine == 'elasticsearch') { %>Search<% } %>Repository.search(<% if (searchEngine === 'elasticsearch') { %>queryStringQuery(query)<% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable);
         <%_ } _%>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dto === 'mapstruct') { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dto === 'mapstruct') { %>)<% } %>);

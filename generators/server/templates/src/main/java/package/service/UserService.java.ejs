@@ -601,6 +601,9 @@ public class UserService {
      <%_ if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
      * @param imageUrl  image URL of user.
      <%_ } _%>
+     <%_ if (reactive) { _%>
+     * @return a completed {@link Mono}.
+     <%_ } _%>
      */
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transactional
@@ -647,7 +650,7 @@ public class UserService {
 <%_ if (reactive) { _%>
     <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
     @Transactional
-    Mono<User> saveUser(User user) {
+    public Mono<User> saveUser(User user) {
         return saveUser(user, false);
     }
 
@@ -655,7 +658,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    <% if (databaseType !== 'sql') { %>private <% } %>Mono<<%= asEntity('User') %>> saveUser(<%= asEntity('User') %> user<% if (databaseType === 'sql' && authenticationType === 'oauth2') { %>, boolean forceCreate<% } %>) {
+    <% if (databaseType !== 'sql') { %>private <% } else { %>public <% } %>Mono<<%= asEntity('User') %>> saveUser(<%= asEntity('User') %> user<% if (databaseType === 'sql' && authenticationType === 'oauth2') { %>, boolean forceCreate<% } %>) {
         <%_ if (databaseType === 'cassandra') { _%>
         return userRepository.save(user);
         <%_ } else { _%>
@@ -995,6 +998,7 @@ public class UserService {
 
     private static <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> getUser(Map<String, Object> details) {
         <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> user = new <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %>();
+        Boolean activated = Boolean.TRUE;
         // handle resource server JWT, where sub claim is email and uid is ID
         if (details.get("uid") != null) {
             user.setId((String) details.get("uid"));
@@ -1014,7 +1018,7 @@ public class UserService {
             user.setLastName((String) details.get("family_name"));
         }
         if (details.get("email_verified") != null) {
-            user.setActivated((Boolean) details.get("email_verified"));
+            activated = (Boolean) details.get("email_verified");
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
@@ -1039,7 +1043,7 @@ public class UserService {
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
         }
-        user.setActivated(true);
+        user.setActivated(activated);
         return user;
     }
     <%_ } _%>

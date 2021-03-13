@@ -49,15 +49,15 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 })
 export class <%= entityAngularName %>Component implements OnInit {
     <%_ if (pagination === 'pagination') { _%>
-<%- include('pagination-template', {toArrayString: toArrayString}); -%>
+<%- include('pagination-template'); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
-<%- include('infinite-scroll-template', {toArrayString: toArrayString}); -%>
+<%- include('infinite-scroll-template'); -%>
     <%_ } else if (pagination === 'no') { _%>
-<%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
+<%- include('no-pagination-template'); -%>
     <%_ } _%>
 
     <%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= tsKeyType %> {
+    track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
         return item.<%= primaryKey.name %>!;
     }
 
@@ -95,7 +95,7 @@ export class <%= entityAngularName %>Component implements OnInit {
     <%_ } _%>
 
 <%_ if (pagination !== 'no') { _%>
-    sort(): string[] {
+    protected sort(): string[] {
         const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
         if (this.predicate !== '<%- primaryKey.name %>') {
             result.push('<%- primaryKey.name %>');
@@ -104,6 +104,21 @@ export class <%= entityAngularName %>Component implements OnInit {
     }
 
     <%_ if (pagination === 'pagination') { _%>
+
+    protected handleNavigation(): void {
+        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+            const page = params.get('page');
+            const pageNumber = page !== null ? +page : 1;
+            const sort = (params.get('sort') ?? data['defaultSort']).split(',');
+            const predicate = sort[0];
+            const ascending = sort[1] === 'asc';
+            if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
+                this.predicate = predicate;
+                this.ascending = ascending;
+                this.loadPage(pageNumber, true);
+            }
+        });
+    }
 
     protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
@@ -136,8 +151,8 @@ export class <%= entityAngularName %>Component implements OnInit {
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
         this.links = this.parseLinks.parse(headers.get('link') ?? '');
         if (data) {
-            for (let i = 0; i < data.length; i++) {
-                this.<%= entityInstancePlural %>.push(data[i]);
+            for (const d of data) {
+                this.<%= entityInstancePlural %>.push(d);
             }
         }
     }

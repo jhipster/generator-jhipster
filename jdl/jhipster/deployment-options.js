@@ -19,83 +19,81 @@
 const _ = require('lodash');
 
 const DeploymentTypes = {
-    DOCKERCOMPOSE: 'docker-compose',
-    KUBERNETES: 'kubernetes',
-    OPENSHIFT: 'openshift',
-    exists: deploymentType => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
+  DOCKERCOMPOSE: 'docker-compose',
+  KUBERNETES: 'kubernetes',
+  OPENSHIFT: 'openshift',
+  exists: deploymentType => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
 };
 
 const Options = {
-    deploymentType: {
-        dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
-        rancherCompose: DeploymentTypes.RANCHERCOMPOSE,
-        kubernetes: DeploymentTypes.KUBERNETES,
-        openshift: DeploymentTypes.OPENSHIFT,
-    },
-    gatewayType: {
-        zuul: 'zuul',
-        traefik: 'traefik',
-    },
-    monitoring: {
-        no: 'no',
-        prometheus: 'prometheus',
-    },
-    directoryPath: '../',
-    appsFolders: [],
-    clusteredDbApps: [],
-    // adminPassword: 'admin',
-    serviceDiscoveryType: {
-        eureka: 'eureka',
-        consul: 'consul',
-        no: 'no',
-    },
-    dockerRepositoryName: '',
-    dockerPushCommand: 'docker push',
-    // Kubernetes specific
-    kubernetesNamespace: 'default',
-    kubernetesServiceType: {
-        loadBalancer: 'LoadBalancer',
-        nodePort: 'NodePort',
-        ingress: 'Ingress',
-    },
-    ingressDomain: '',
-    istio: {
-        false: false,
-        true: true,
-    },
-    // openshift specific
-    openshiftNamespace: 'default',
-    storageType: {
-        ephemeral: 'ephemeral',
-        persistent: 'persistent',
-    },
+  deploymentType: {
+    dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
+    rancherCompose: DeploymentTypes.RANCHERCOMPOSE,
+    kubernetes: DeploymentTypes.KUBERNETES,
+    openshift: DeploymentTypes.OPENSHIFT,
+  },
+  gatewayType: {
+    springCloudGateway: 'SpringCloudGateway',
+  },
+  monitoring: {
+    no: 'no',
+    prometheus: 'prometheus',
+  },
+  directoryPath: '../',
+  appsFolders: [],
+  clusteredDbApps: [],
+  // adminPassword: 'admin',
+  serviceDiscoveryType: {
+    eureka: 'eureka',
+    consul: 'consul',
+    no: 'no',
+  },
+  dockerRepositoryName: '',
+  dockerPushCommand: 'docker push',
+  // Kubernetes specific
+  kubernetesNamespace: 'default',
+  kubernetesServiceType: {
+    loadBalancer: 'LoadBalancer',
+    nodePort: 'NodePort',
+    ingress: 'Ingress',
+  },
+  ingressDomain: '',
+  istio: {
+    false: false,
+    true: true,
+  },
+  // openshift specific
+  openshiftNamespace: 'default',
+  storageType: {
+    ephemeral: 'ephemeral',
+    persistent: 'persistent',
+  },
 };
 
 Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) =>
-    _.omitBy(
-        {
-            deploymentType,
-            gatewayType: Options.gatewayType.zuul,
-            monitoring: Options.monitoring.no,
-            directoryPath: Options.directoryPath,
-            appsFolders: new Set(),
-            clusteredDbApps: new Set(),
-            adminPassword: Options.adminPassword,
-            serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-            dockerRepositoryName: Options.dockerRepositoryName,
-            dockerPushCommand: Options.dockerPushCommand,
-            kubernetesNamespace: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesNamespace : undefined,
-            kubernetesServiceType:
-                deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesServiceType.loadBalancer : undefined,
-            ingressDomain: deploymentType === Options.deploymentType.kubernetes ? Options.ingressDomain : undefined,
-            istio: deploymentType === Options.deploymentType.kubernetes ? Options.istio.false : undefined,
-            openshiftNamespace: deploymentType === Options.deploymentType.openshift ? Options.openshiftNamespace : undefined,
-            storageType: deploymentType === Options.deploymentType.openshift ? Options.storageType.ephemeral : undefined,
-        },
-        _.isUndefined
-    );
+  _.omitBy(
+    {
+      deploymentType,
+      gatewayType: Options.gatewayType.springCloudGateway,
+      monitoring: Options.monitoring.no,
+      directoryPath: Options.directoryPath,
+      appsFolders: new Set(),
+      clusteredDbApps: new Set(),
+      adminPassword: Options.adminPassword,
+      serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+      dockerRepositoryName: Options.dockerRepositoryName,
+      dockerPushCommand: Options.dockerPushCommand,
+      kubernetesNamespace: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesNamespace : undefined,
+      kubernetesServiceType: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesServiceType.loadBalancer : undefined,
+      ingressDomain: deploymentType === Options.deploymentType.kubernetes ? Options.ingressDomain : undefined,
+      istio: deploymentType === Options.deploymentType.kubernetes ? Options.istio.false : undefined,
+      openshiftNamespace: deploymentType === Options.deploymentType.openshift ? Options.openshiftNamespace : undefined,
+      storageType: deploymentType === Options.deploymentType.openshift ? Options.storageType.ephemeral : undefined,
+    },
+    _.isUndefined
+  );
 
 module.exports = {
-    Options,
-    DeploymentTypes,
+  Options,
+  DeploymentTypes,
 };

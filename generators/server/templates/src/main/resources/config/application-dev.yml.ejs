@@ -65,26 +65,12 @@ management:
 <%_ if (databaseType === 'neo4j') { _%>
 org:
   neo4j:
-    driver:
-      pool:
-        metrics-enabled: true
-      uri: bolt://localhost:7687
-      # Uncomment to use an authenticated connection
-      # authentication:
-      #   username: neo4j
-      #   password: secret
     migrations:
       locations-to-scan:
       packages-to-scan: <%= packageName %>.config.neo4j
       installed-by: <%= baseName %>
 <%_ } _%>
 spring:
-  profiles:
-    active: dev
-    include:
-      - api-docs
-      # Uncomment to activate TLS for the dev profile
-      #- tls
   devtools:
     restart:
       enabled: true
@@ -94,13 +80,43 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  <%_ if (databaseType === 'neo4j') { _%>
+  neo4j:
+    pool:
+      metrics-enabled: true
+    uri: bolt://localhost:7687
+    # Uncomment to use an authenticated connection
+    # authentication:
+    #   username: neo4j
+    #   password: secret
+  <%_ } _%>
   <%_ if (serviceDiscoveryType === 'consul') { _%>
   cloud:
     consul:
+      config:
+        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+        format: yaml
+        profile-separator: "-"
       discovery:
         prefer-ip-address: true
+        tags:
+          - profile=${spring.profiles.active}
+          - version=#project.version#
+          - git-version=${git.commit.id.describe:}
+          - git-commit=${git.commit.id.abbrev:}
+          - git-branch=${git.branch:}
       host: localhost
       port: 8500
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  cloud:
+    config:
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: <%= baseName %>
+      profile: dev
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
   <%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   datasource:
@@ -191,7 +207,7 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     <%_ } _%>
     contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-    <%_ } _%>
+  <%_ } _%>
     <%_ if (reactive) { _%>
       <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
@@ -203,11 +219,13 @@ spring:
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
       <%_ } _%>
     <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
   mail:
     host: localhost
     port: 25
     username:
     password:
+  <%_ } _%>
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -244,7 +262,7 @@ spring:
   <%_ } _%>
   thymeleaf:
     cache: false
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
   sleuth:
     sampler:
       probability: 1 # report 100% of traces
@@ -327,10 +345,15 @@ jhipster:
       # cluster: true
     <%_ } _%>
   <%_ } _%>
+  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  registry:
+    password: admin
+  <%_ } _%>
   <%_ if (applicationType !== 'microservice') { _%>
-  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  # CORS is only enabled by default with the "dev" profile
   cors:
-    allowed-origins: "*"
+    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
+    allowed-origins: "http://localhost:8100"
     allowed-methods: "*"
     allowed-headers: "*"
     <%_ if (authenticationType === 'session') { _%>
@@ -361,24 +384,16 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   <%_ } _%>
-  <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-  security:
-    client-authorization:
-      <%_ if (applicationType !== 'uaa') { _%>
-      access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-      token-service-id: <%= uaaBaseName.toLowerCase() %>
-      <%_ } _%>
-      client-id: internal
-      client-secret: internal
-  <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 9000 %>
+    base-url: http://127.0.0.1:<%= serverPort %>
+<%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -386,37 +401,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-<%_ if (applicationType === 'uaa') { _%>
-uaa:
-  key-store:
-    name: config/tls/keystore.p12
-    password: password
-    alias: selfsigned
-  web-client-configuration:
-    # Access Token is valid for 5 mins
-    access-token-validity-in-seconds: 300
-    # Refresh Token is valid for 7 days
-    refresh-token-validity-in-seconds-for-remember-me: 604800
-    client-id: web_app
-    secret: changeit
-<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-oauth2:
-  signature-verification:
-    public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
-    #ttl for public keys to verify JWT tokens (in ms)
-    ttl: 3600000
-    #max. rate at which public keys will be fetched (in ms)
-    public-key-refresh-rate-limit: 10000
-  web-client-configuration:
-    #keep in sync with UAA configuration
-    client-id: web_app
-    secret: changeit
-  <%_ if (applicationType === 'gateway') { _%>
-    # Controls session expiration due to inactivity (ignored for remember-me).
-    # Negative values disable session inactivity expiration.
-    session-timeout-in-seconds: 1800
-  <%_ } _%>
-<%_ } _%>
 
 # ===================================================================
 # Application specific properties

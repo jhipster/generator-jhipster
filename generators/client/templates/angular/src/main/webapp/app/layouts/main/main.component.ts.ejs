@@ -21,6 +21,7 @@ import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import * as dayjs from 'dayjs';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -70,7 +71,7 @@ export class MainComponent implements OnInit {
     <%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
       this.updateTitle();
-
+      dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
 
       <%_ if (enableI18nRTL) { _%>

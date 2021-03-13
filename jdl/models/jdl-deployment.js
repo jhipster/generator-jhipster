@@ -24,50 +24,50 @@ const { join } = require('../utils/set-utils');
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 
 module.exports = class JDLDeployment {
-    constructor(args) {
-        if (!args || !args.deploymentType) {
-            throw new Error('The deploymentType is mandatory to create a deployment.');
-        }
-        const merged = mergeObjects(defaults(args.deploymentType), args);
-        Object.entries(merged).forEach(([key, option]) => {
-            if (Array.isArray(option) && arrayTypes.includes(key)) {
-                this[key] = new Set(option);
-            } else if (key === 'serviceDiscoveryType' && option === DeploymentOptions.Options.serviceDiscoveryType.no) {
-                this[key] = false;
-            } else {
-                this[key] = option;
-            }
-        });
+  constructor(args) {
+    if (!args || !args.deploymentType) {
+      throw new Error('The deploymentType is mandatory to create a deployment.');
     }
+    const merged = mergeObjects(defaults(args.deploymentType), args);
+    Object.entries(merged).forEach(([key, option]) => {
+      if (Array.isArray(option) && arrayTypes.includes(key)) {
+        this[key] = new Set(option);
+      } else if (key === 'serviceDiscoveryType' && option === DeploymentOptions.Options.serviceDiscoveryType.no) {
+        this[key] = false;
+      } else {
+        this[key] = option;
+      }
+    });
+  }
 
-    toString() {
-        return stringifyConfig(this);
-    }
+  toString() {
+    return stringifyConfig(this);
+  }
 };
 
 function stringifyConfig(applicationConfig) {
-    let config = 'deployment {';
-    Object.entries(applicationConfig).forEach(([option, value]) => {
-        if (!isEqual(defaults(applicationConfig.deploymentType)[option], value) || option === 'deploymentType') {
-            config = `${config}\n    ${option}${stringifyOptionValue(option, value)}`;
-        }
-    });
-    return `${config}\n  }`;
+  let config = 'deployment {';
+  Object.entries(applicationConfig).forEach(([option, value]) => {
+    if (!isEqual(defaults(applicationConfig.deploymentType)[option], value) || option === 'deploymentType') {
+      config = `${config}\n    ${option}${stringifyOptionValue(option, value)}`;
+    }
+  });
+  return `${config}\n  }`;
 }
 
 function stringifyOptionValue(name, value) {
-    if (arrayTypes.includes(name)) {
-        if (value.size === 0) {
-            return ' []';
-        }
-        return ` [${join(value, ', ')}]`;
+  if (arrayTypes.includes(name)) {
+    if (value.size === 0) {
+      return ' []';
     }
-    if (value === null || value === undefined) {
-        return '';
-    }
-    return ` ${value}`;
+    return ` [${join(value, ', ')}]`;
+  }
+  if (value === null || value === undefined) {
+    return '';
+  }
+  return ` ${value}`;
 }
 
 function defaults(deploymentType) {
-    return DeploymentOptions.Options.defaults(deploymentType);
+  return DeploymentOptions.Options.defaults(deploymentType);
 }

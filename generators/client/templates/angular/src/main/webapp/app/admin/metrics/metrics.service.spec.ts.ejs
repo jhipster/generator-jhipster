@@ -19,8 +19,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { SERVER_API_URL } from 'app/app.constants';
-
 import { MetricsService } from './metrics.service';
 import { ThreadDump, ThreadState } from './metrics.model';
 
@@ -42,14 +40,6 @@ describe('Service Tests', () => {
     });
 
     describe('Service methods', () => {
-      it('should call correct URL', () => {
-        service.getMetrics().subscribe();
-
-        const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + 'management/jhimetrics';
-        expect(req.request.url).toEqual(resourceUrl);
-      });
-
       it('should return Metrics', () => {
         let expectedResult;
         const metrics = {

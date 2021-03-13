@@ -1,0 +1,182 @@
+package <%= packageName %>.service.criteria;
+
+import java.io.Serializable;
+import java.util.Objects;
+import tech.jhipster.service.Criteria;
+<%_ for (const field of fields) { if (field.fieldIsEnum === true) { _%>
+import <%= packageName %>.domain.enumeration.<%= field.fieldType %>;
+<%_ } } _%>
+import tech.jhipster.service.filter.BooleanFilter;
+import tech.jhipster.service.filter.DoubleFilter;
+import tech.jhipster.service.filter.Filter;
+import tech.jhipster.service.filter.FloatFilter;
+import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LongFilter;
+import tech.jhipster.service.filter.StringFilter;
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import tech.jhipster.service.filter.BigDecimalFilter;
+<%_ } _%>
+<%_ if (fieldsContainDuration === true) { _%>
+import tech.jhipster.service.filter.DurationFilter;
+<%_ } _%>
+<%_ if (fieldsContainInstant === true) { _%>
+import tech.jhipster.service.filter.InstantFilter;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate === true) { _%>
+import tech.jhipster.service.filter.LocalDateFilter;
+<%_ } _%>
+<%_ if (fieldsContainUUID === true || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
+import tech.jhipster.service.filter.UUIDFilter;
+<%_ } _%>
+<%_ if (fieldsContainZonedDateTime === true) { _%>
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
+<%_ } _%>
+
+<%_
+var filterVariables = [];
+var extraFilters = {};
+fields.forEach((field) => {
+const fieldType = field.fieldType;
+if (isFilterableType(fieldType)) {
+    var filterType;
+    if (field.fieldIsEnum == true) {
+    filterType = fieldType + 'Filter';
+    extraFilters[fieldType] = {type: filterType, superType: 'Filter<' + fieldType + '>', fieldType: fieldType};
+    } else if (['Duration', 'UUID', 'LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
+    filterType = fieldType + 'Filter';
+    } else {
+    filterType = 'Filter<' + fieldType + '>';
+    }
+    filterVariables.push( { filterType : filterType,
+        name: field.fieldName,
+        type: fieldType,
+        fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
+}
+});
+relationships.forEach((relationship) => {
+const relationshipType = relationship.otherEntity.primaryKey.type;
+const referenceFilterType = '' + relationshipType + 'Filter';
+// user has a String PK when using OAuth, so change relationships accordingly
+let oauthAwareReferenceFilterType = referenceFilterType;
+if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {
+    oauthAwareReferenceFilterType = 'StringFilter';
+}
+filterVariables.push({ filterType : oauthAwareReferenceFilterType,
+    name: relationship.relationshipFieldName + 'Id',
+    type: relationshipType,
+    fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
+});
+_%>
+/**
+ * Criteria class for the {@link <%= packageName %>.domain.<%= persistClass %>} entity. This class is used
+ * in {@link <%= packageName %>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
+ * the Http GET request parameters.
+ * For example the following could be a valid request:
+ * {@code /<%= entityApiUrl %>?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
+ * fix type specific filters.
+ */
+public class <%= entityClass %>Criteria implements Serializable, Criteria {
+<%_ Object.keys(extraFilters).forEach((key) => {
+        extraFilter = extraFilters[key]; _%>
+    /**
+     * Class for filtering <%= key %>
+     */
+    public static class <%= extraFilter.type %> extends <%- extraFilter.superType %> {
+
+        public <%= extraFilter.type %>() {
+        }
+
+        public <%= extraFilter.type %>(<%= extraFilter.type %> filter) {
+            super(filter);
+        }
+
+        @Override
+        public <%= extraFilter.type %> copy() {
+            return new <%= extraFilter.type %>(this);
+        }
+
+    }
+<%_ }); _%>
+
+    private static final long serialVersionUID = 1L;
+<%_ filterVariables.forEach((filterVariable) => { _%>
+
+    private <%- filterVariable.filterType %> <%= filterVariable.name %>;
+<%_ }); _%>
+
+    public <%= entityClass %>Criteria() {
+    }
+
+    public <%= entityClass %>Criteria(<%= entityClass %>Criteria other) {
+<%_ filterVariables.forEach((filterVariable) => { _%>
+        this.<%= filterVariable.name %> = other.<%= filterVariable.name %> == null ? null : other.<%= filterVariable.name %>.copy();
+<%_ }); _%>
+    }
+
+    @Override
+    public <%= entityClass %>Criteria copy() {
+        return new <%= entityClass %>Criteria(this);
+    }
+
+<%_ filterVariables.forEach((filterVariable) => { _%>
+    public <%- filterVariable.filterType %> get<%= filterVariable.fieldInJavaBeanMethod %>() {
+        return <%= filterVariable.name %>;
+    }
+
+    public <%- filterVariable.filterType %> <%= filterVariable.name %>() {
+        if (<%= filterVariable.name %> == null) {
+            <%= filterVariable.name %> = new <%- filterVariable.filterType %>();
+        }
+        return <%= filterVariable.name %>;
+    }
+
+    public void set<%= filterVariable.fieldInJavaBeanMethod %>(<%- filterVariable.filterType %> <%= filterVariable.name %>) {
+        this.<%= filterVariable.name %> = <%= filterVariable.name %>;
+    }
+
+<%_ }); _%>
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final <%= entityClass %>Criteria that = (<%= entityClass %>Criteria) o;
+        return
+<%_ filterVariables.forEach((filterVariable, index) => { _%>
+    <%_ if (filterVariables.length === index + 1) { _%>
+            Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>);
+    <%_ } else { _%>
+            Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>) &&
+    <%_ } _%>
+<%_ }); _%>
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+<%_ filterVariables.forEach((filterVariable, index) => { _%>
+    <%_ if (filterVariables.length === (index + 1)) { _%>
+        <%= filterVariable.name %>
+    <%_ } else { _%>
+        <%= filterVariable.name %>,
+    <%_ } _%>
+<%_ }); _%>
+        );
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "<%= entityClass %>Criteria{" +
+<%_ filterVariables.forEach((field) => { _%>
+            (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
+<%_ }); _%>
+            "}";
+    }
+
+}

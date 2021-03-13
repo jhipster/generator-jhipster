@@ -18,21 +18,21 @@
  */
 
 module.exports = class JDLApplicationConfigurationOption {
-    /**
-     * Creates a new application option.
-     * @param {String} name - the option's name.
-     * @param {any} value - the option's value, can be virtually anything: a String, an Int, a boolean...
-     */
-    constructor(name, value) {
-        this.name = name;
-        this.value = value;
-    }
+  /**
+   * Creates a new application option.
+   * @param {String} name - the option's name.
+   * @param {any} value - the option's value, can be virtually anything: a String, an Int, a boolean...
+   */
+  constructor(name, value) {
+    this.name = name;
+    this.value = value;
+  }
 
-    getValue() {
-        return this.value;
-    }
+  getValue() {
+    return this.value;
+  }
 
-    toString() {
-        return `${this.name} ${this.value}`;
-    }
+  toString() {
+    return `${this.name} ${this.value}`;
+  }
 };

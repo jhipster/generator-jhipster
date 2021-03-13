@@ -21,14 +21,14 @@
 # ===================================================================
 
 spring:
-    application:
-        name: <%= temp.baseName %>
-    cloud:
-        config:
-            fail-fast: true
+  application:
+    name: <%= temp.baseName %>
+  cloud:
+    config:
+      fail-fast: true
 
 cloud:
-    aws:
-        stack:
-            name: <%= temp.baseName %>
-            auto: false
+  aws:
+    stack:
+      name: <%= temp.baseName %>
+      auto: false

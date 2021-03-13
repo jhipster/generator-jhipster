@@ -35,7 +35,7 @@ spec:
   <%_ } _%>
   ports:
   - name: http
-  <%_ if (!app.serviceDiscoveryType  || app.applicationType === 'uaa') { _%>
+  <%_ if (!app.serviceDiscoveryType) { _%>
     port: 80
     targetPort: <%= app.serverPort %>
   <%_ } else { _%>

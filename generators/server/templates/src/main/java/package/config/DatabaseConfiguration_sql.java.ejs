@@ -49,6 +49,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.r2dbc.convert.MappingR2dbcConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
@@ -95,8 +96,8 @@ import java.util.UUID;
 <%_ } _%>
 public class DatabaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private final Environment env;
 
@@ -191,8 +192,8 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public UpdateMapper updateMapper(R2dbcDialect dialect, ReactiveDataAccessStrategy dataAccessStrategy) {
-        return new UpdateMapper(dialect, dataAccessStrategy.getConverter());
+    public UpdateMapper updateMapper(R2dbcDialect dialect, MappingR2dbcConverter mappingR2dbcConverter) {
+        return new UpdateMapper(dialect, mappingR2dbcConverter);
     }
 
     @Bean

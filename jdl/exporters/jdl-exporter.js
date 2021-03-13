@@ -20,7 +20,7 @@
 const fs = require('fs');
 
 module.exports = {
-    exportToJDL,
+  exportToJDL,
 };
 
 /**
@@ -29,8 +29,8 @@ module.exports = {
  * @param path the path where the file will be written.
  */
 function exportToJDL(jdl, path = 'app.jdl') {
-    if (!jdl) {
-        throw new Error('A JDLObject has to be passed to be exported.');
-    }
-    fs.writeFileSync(path, jdl.toString());
+  if (!jdl) {
+    throw new Error('A JDLObject has to be passed to be exported.');
+  }
+  fs.writeFileSync(path, jdl.toString());
 }

@@ -18,10 +18,9 @@
  */
 
 const ApplicationTypes = {
-    MONOLITH: 'monolith',
-    MICROSERVICE: 'microservice',
-    UAA: 'uaa',
-    GATEWAY: 'gateway',
+  MONOLITH: 'monolith',
+  MICROSERVICE: 'microservice',
+  GATEWAY: 'gateway',
 };
 
 ApplicationTypes.exists = applicationType => !!applicationType && !!ApplicationTypes[applicationType.toUpperCase()];

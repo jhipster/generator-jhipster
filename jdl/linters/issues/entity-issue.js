@@ -20,13 +20,13 @@
 const AbstractIssue = require('./abstract-issue');
 
 class EntityIssue extends AbstractIssue {
-    constructor(args) {
-        super(args);
-        if (!args.entityName) {
-            throw new Error('An entity name must be passed.');
-        }
-        this.entityName = args.entityName;
+  constructor(args) {
+    super(args);
+    if (!args.entityName) {
+      throw new Error('An entity name must be passed.');
     }
+    this.entityName = args.entityName;
+  }
 }
 
 module.exports = EntityIssue;

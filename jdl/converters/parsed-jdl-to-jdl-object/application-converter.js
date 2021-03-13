@@ -30,47 +30,47 @@ module.exports = { convertApplications };
  * @return {Array} the converted JDL applications.
  */
 function convertApplications(parsedApplications, configuration = {}) {
-    if (!parsedApplications) {
-        throw new Error('Applications have to be passed so as to be converted.');
-    }
-    return parsedApplications.map(parsedApplication => {
-        const applicationWithCustomValues = addCustomValuesToApplication(parsedApplication, configuration);
-        const formattedApplicationConfiguration = formatApplicationConfigurationOptions(applicationWithCustomValues.config);
-        const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
-        jdlApplication.addEntityNames(parsedApplication.entities);
-        const entityOptions = getEntityOptionsInApplication(parsedApplication);
-        checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue('baseName'), entityOptions, parsedApplication.entities);
-        entityOptions.forEach(option => jdlApplication.addOption(option));
-        return jdlApplication;
-    });
+  if (!parsedApplications) {
+    throw new Error('Applications have to be passed so as to be converted.');
+  }
+  return parsedApplications.map(parsedApplication => {
+    const applicationWithCustomValues = addCustomValuesToApplication(parsedApplication, configuration);
+    const formattedApplicationConfiguration = formatApplicationConfigurationOptions(applicationWithCustomValues.config);
+    const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
+    jdlApplication.addEntityNames(parsedApplication.entities);
+    const entityOptions = getEntityOptionsInApplication(parsedApplication);
+    checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue('baseName'), entityOptions, parsedApplication.entities);
+    entityOptions.forEach(option => jdlApplication.addOption(option));
+    return jdlApplication;
+  });
 }
 
 function addCustomValuesToApplication(parsedApplication, configuration) {
-    const application = { ...parsedApplication };
-    if (configuration.generatorVersion) {
-        application.config.jhipsterVersion = configuration.generatorVersion;
-    }
-    return application;
+  const application = { ...parsedApplication };
+  if (configuration.generatorVersion) {
+    application.config.jhipsterVersion = configuration.generatorVersion;
+  }
+  return application;
 }
 
 function formatApplicationConfigurationOptions(applicationConfiguration) {
-    const formattedOptions = {};
-    if (Array.isArray(applicationConfiguration.blueprints)) {
-        formattedOptions.blueprints = applicationConfiguration.blueprints.map(blueprintName => {
-            if (!/^generator-jhipster-/.test(blueprintName)) {
-                return `generator-jhipster-${blueprintName}`;
-            }
-            return blueprintName;
-        });
-    }
-    return {
-        ...applicationConfiguration,
-        ...formattedOptions,
-    };
+  const formattedOptions = {};
+  if (Array.isArray(applicationConfiguration.blueprints)) {
+    formattedOptions.blueprints = applicationConfiguration.blueprints.map(blueprintName => {
+      if (!/^generator-jhipster-/.test(blueprintName)) {
+        return `generator-jhipster-${blueprintName}`;
+      }
+      return blueprintName;
+    });
+  }
+  return {
+    ...applicationConfiguration,
+    ...formattedOptions,
+  };
 }
 
 function getEntityOptionsInApplication(parsedApplication) {
-    return convertOptions(parsedApplication.options, parsedApplication.useOptions);
+  return convertOptions(parsedApplication.options, parsedApplication.useOptions);
 }
 
 /**
@@ -80,15 +80,15 @@ function getEntityOptionsInApplication(parsedApplication) {
  * @param {Array<String>} entityNamesInApplication - the entity names declared in the application
  */
 function checkEntityNamesInOptions(applicationName, entityOptions, entityNamesInApplication) {
-    const entityNamesInApplicationSet = new Set(entityNamesInApplication);
-    entityOptions.forEach(option => {
-        const entityNamesForTheOption = option.resolveEntityNames(entityNamesInApplication);
-        entityNamesForTheOption.forEach(entityNameForTheOption => {
-            if (!entityNamesInApplicationSet.has(entityNameForTheOption)) {
-                throw new Error(
-                    `The entity ${entityNameForTheOption} in the ${option.name} option isn't declared in ${applicationName}'s entity list.`
-                );
-            }
-        });
+  const entityNamesInApplicationSet = new Set(entityNamesInApplication);
+  entityOptions.forEach(option => {
+    const entityNamesForTheOption = option.resolveEntityNames(entityNamesInApplication);
+    entityNamesForTheOption.forEach(entityNameForTheOption => {
+      if (!entityNamesInApplicationSet.has(entityNameForTheOption)) {
+        throw new Error(
+          `The entity ${entityNameForTheOption} in the ${option.name} option isn't declared in ${applicationName}'s entity list.`
+        );
+      }
     });
+  });
 }
