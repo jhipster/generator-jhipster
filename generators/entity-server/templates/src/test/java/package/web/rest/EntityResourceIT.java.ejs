@@ -1525,28 +1525,6 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 
     @Test<%= transactionalAnnotation %>
-    void partialUpdate<%= entityClass %>ShouldThrown() throws Exception {
-        // Update the <%= entityInstance %> without id should throw
-        <%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
-
-        <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-        .contentType("application/merge-patch+json")
-        .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
-        .andExpect(status().isBadRequest());
-        <%_ } else { _%>
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
-        <%_ } _%>
-    }
-
-    @Test<%= transactionalAnnotation %>
     void patchNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
