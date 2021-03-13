@@ -151,8 +151,8 @@ export class <%= entityAngularName %>Component implements OnInit {
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
         this.links = this.parseLinks.parse(headers.get('link') ?? '');
         if (data) {
-            for (let i = 0; i < data.length; i++) {
-                this.<%= entityInstancePlural %>.push(data[i]);
+            for (const d of data) {
+                this.<%= entityInstancePlural %>.push(d);
             }
         }
     }
