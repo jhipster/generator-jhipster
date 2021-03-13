@@ -95,7 +95,7 @@ jobs:
       #----------------------------------------------------------------------
       - task: NodeTool@0
         inputs:
-          versionSpec: '14.15.0'
+          versionSpec: '14.16.0'
         displayName: 'TOOLS: install Node.js'
       - script: |
           if [[ $JHI_JDK = '11' ]]; then
