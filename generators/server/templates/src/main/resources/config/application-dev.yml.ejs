@@ -357,9 +357,9 @@ jhipster:
     allowed-methods: "*"
     allowed-headers: "*"
     <%_ if (authenticationType === 'session') { _%>
-    exposed-headers: "Link,X-Total-Count"
+    exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
     <%_ } else { _%>
-    exposed-headers: "Authorization,Link,X-Total-Count"
+    exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
     <%_ } _%>
     allow-credentials: true
     max-age: 1800
