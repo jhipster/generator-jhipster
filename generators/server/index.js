@@ -52,6 +52,24 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
+
+    // Not using normal blueprints or this is a normal blueprint.
+    if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
+      this.setFeatures({
+        customInstallTask: function customInstallTask(preferredPm, defaultInstallTask) {
+          if (
+            (preferredPm && preferredPm !== 'npm') ||
+            this.jhipsterConfig.buildTool !== 'maven' ||
+            this.jhipsterConfig.buildTool === 'microservice' ||
+            this.skipClient ||
+            this.jhipsterConfig.skipClient
+          ) {
+            return defaultInstallTask();
+          }
+          return this.spawnCommand('./npmw', ['install']).then(() => true);
+        }.bind(this),
+      });
+    }
   }
 
   // Public API method used by the getter and also by Blueprints

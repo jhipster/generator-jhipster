@@ -1,0 +1,19 @@
+#!/bin/sh
+
+basedir=`dirname "$0"`
+
+if [ -f "$basedir/mvnw" ]; then
+  builddir="target"
+  installCommand="$basedir/mvnw frontend:install-node-and-npm@install-node-and-npm"
+else
+  builddir="build"
+  installCommand="$basedir/mvnw frontend:install-node-and-npm@install-node-and-npm"
+fi
+
+NPM_EXE="$basedir/$builddir/node/npm"
+
+if ! [ -x "$NPM_EXE" ]; then
+  $installCommand
+fi
+
+$NPM_EXE "$@"
