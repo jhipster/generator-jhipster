@@ -26,8 +26,11 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-import org.springframework.data.couchbase.core.query.Query;
-import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.couchbase.repository.Query;
+import org.springframework.data.repository.reactive.ReactiveSortingRepository;
+import org.springframework.data.couchbase.repository.ScanConsistency;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
@@ -64,7 +67,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseType === 'sql') { %>R2dbc<% } if (databaseType === 'mongodb') { %>ReactiveMongo<% } if (databaseType === 'couchbase') { %>ReactiveN1qlCouchbase<% } if (databaseType === 'neo4j') { %>ReactiveNeo4j<% } if (databaseType === 'cassandra') { %>ReactiveCassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% } %><% if (databaseType === 'sql') { %>, <%= entityClass %>RepositoryInternal<% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseType === 'sql') { %>R2dbc<% } if (databaseType === 'mongodb') { %>ReactiveMongo<% } if (databaseType === 'couchbase') { %>ReactiveSorting<% } if (databaseType === 'neo4j') { %>ReactiveNeo4j<% } if (databaseType === 'cassandra') { %>ReactiveCassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKey.type %>><% } %><% if (databaseType === 'sql') { %>, <%= entityClass %>RepositoryInternal<% } %> {
 
     <%_ if (pagination !== 'no') { _%>
 
@@ -74,12 +77,15 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
         <%_ if (['couchbase', 'mongodb'].includes(databaseType)) { _%>
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    <% if (databaseType === 'couchbase') { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    <% if (databaseType === 'couchbase') { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    <% if (databaseType === 'couchbase') { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
         <%_ } _%>
         <%_ if (databaseType === 'neo4j') { _%>
@@ -92,6 +98,17 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
         <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    // Add ScanConsistency to fix issue with Spring Data Couchbase
+    // https://github.com/spring-projects/spring-data-couchbase/issues/897
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Flux<<%= asEntity(entityClass) %>> findAll();
+
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Flux<<%= asEntity(entityClass) %>> findAll(Sort sort);
     <%_ } _%>
     <%_ if (databaseType === 'sql') {
             if (fieldsContainOwnerManyToMany) { _%>
@@ -136,7 +153,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
               <%_ } _%>
         <%_ } _%>
 
-    // just to avoid having unambigous methods
+    // just to avoid having unambiguous methods
     @Override
     Flux<<%= asEntity(entityClass) %>> findAll();
 

@@ -124,7 +124,7 @@ public final class TestUtil {
     <%_ if (databaseType === 'couchbase') { _%>
 
     /**
-     * Mock user authentication for Spring SpEL expression used in {@link <%= packageName %>.repository.N1qlCouchbaseRepository}.
+     * Mock user authentication
      */
     public static void mockAuthentication() {
         TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));

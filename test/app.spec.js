@@ -544,7 +544,7 @@ describe('JHipster generator', () => {
         });
       });
 
-      it('creates expected files with "Couchbbase FTS"', () => {
+      it('creates expected files with "Couchbase FTS"', () => {
         assert.file(expectedFiles.couchbase);
         assert.file(expectedFiles.couchbaseSearch);
       });

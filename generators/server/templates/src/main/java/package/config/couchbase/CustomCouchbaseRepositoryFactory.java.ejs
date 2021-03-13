@@ -1,0 +1,83 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config.couchbase;
+
+import java.lang.reflect.Method;
+import java.util.Optional;
+import org.springframework.data.couchbase.core.CouchbaseOperations;
+import org.springframework.data.couchbase.repository.config.RepositoryOperationsMapping;
+import org.springframework.data.couchbase.repository.query.CouchbaseQueryMethod;
+import org.springframework.data.couchbase.repository.support.CouchbaseRepositoryFactory;
+import org.springframework.data.mapping.context.MappingContext;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.repository.core.NamedQueries;
+import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.data.repository.query.QueryLookupStrategy;
+import org.springframework.data.repository.query.QueryMethodEvaluationContextProvider;
+import org.springframework.data.repository.query.RepositoryQuery;
+
+public class CustomCouchbaseRepositoryFactory extends CouchbaseRepositoryFactory {
+
+    private MappingContext mappingContext;
+    private RepositoryOperationsMapping couchbaseOperationsMapping;
+
+    /**
+     * Create a new factory.
+     *
+     * @param couchbaseOperationsMapping the template for the underlying actions.
+     */
+    public CustomCouchbaseRepositoryFactory(RepositoryOperationsMapping couchbaseOperationsMapping) {
+        super(couchbaseOperationsMapping);
+        this.couchbaseOperationsMapping = couchbaseOperationsMapping;
+        this.mappingContext = this.couchbaseOperationsMapping.getMappingContext();
+    }
+
+    @Override
+    protected Optional<QueryLookupStrategy> getQueryLookupStrategy(
+        QueryLookupStrategy.Key key,
+        QueryMethodEvaluationContextProvider contextProvider
+    ) {
+        return Optional.of(new CustomCouchbaseQueryLookupStrategy(contextProvider));
+    }
+
+    private class CustomCouchbaseQueryLookupStrategy implements QueryLookupStrategy {
+
+        private final QueryMethodEvaluationContextProvider evaluationContextProvider;
+
+        public CustomCouchbaseQueryLookupStrategy(QueryMethodEvaluationContextProvider evaluationContextProvider) {
+            this.evaluationContextProvider = evaluationContextProvider;
+        }
+
+        @Override
+        public RepositoryQuery resolveQuery(
+            final Method method,
+            final RepositoryMetadata metadata,
+            final ProjectionFactory factory,
+            final NamedQueries namedQueries
+        ) {
+            final CouchbaseOperations couchbaseOperations = couchbaseOperationsMapping.resolve(
+                metadata.getRepositoryInterface(),
+                metadata.getDomainType()
+            );
+
+            CouchbaseQueryMethod queryMethod = new CouchbaseQueryMethod(method, metadata, factory, mappingContext);
+            return new CustomCouchbaseRepositoryQuery(couchbaseOperations, queryMethod, namedQueries);
+        }
+    }
+}
