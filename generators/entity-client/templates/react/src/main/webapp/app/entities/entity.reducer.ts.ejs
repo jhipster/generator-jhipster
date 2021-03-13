@@ -261,7 +261,7 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
 export const partialUpdate: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>,
-    payload: axios.patch(apiUrl, cleanEntity(entity))
+    payload: axios.patch(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity))
   });
   return result;
 };

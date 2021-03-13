@@ -68,7 +68,7 @@ export default class <%= entityAngularName %>Service {
 
   public partialUpdate(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
-      axios.patch(`${baseApiUrl}`, entity).then(res => {
+      axios.patch(`${baseApiUrl}/${entity.<%= primaryKey.name %>}`, entity).then(res => {
         resolve(res.data);
       }).catch(err => { reject(err); });
     });

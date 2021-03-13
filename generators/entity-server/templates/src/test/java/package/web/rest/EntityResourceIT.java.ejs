@@ -1530,7 +1530,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
 
         <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
         .contentType("application/merge-patch+json")
         .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
         .andExpect(status().isBadRequest());
@@ -1543,6 +1543,117 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             .exchange()
             .expectStatus()
             .isBadRequest();
+        <%_ } _%>
+    }
+
+    @Test<%= transactionalAnnotation %>
+    void patchNonExisting<%= entityClass %>() throws Exception {
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+
+        <%_ if (dto === 'mapstruct') { _%>
+            // Create the <%= entityClass %>
+            <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
+
+        <%_ } _%>
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        <%_ if (!reactive) { _%>
+            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType("application/merge-patch+json")
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+            webTestClient.patch().uri(ENTITY_API_URL_ID, <%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .exchange()
+            .expectStatus().isBadRequest();
+        <%_ } _%>
+
+        // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+            // Validate the <%= entityClass %> in Elasticsearch
+            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        <%_ } _%>
+    }
+
+    @Test<%= transactionalAnnotation %>
+    void patchWithIdMismatch<%= entityClass %>() throws Exception {
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+
+        <%_ if (dto === 'mapstruct') { _%>
+            // Create the <%= entityClass %>
+            <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
+
+        <%_ } _%>
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        <%_ if (!reactive) { _%>
+            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType("application/merge-patch+json")
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+            webTestClient.patch().uri(ENTITY_API_URL_ID, <%= getJavaValueGeneratorForType(primaryKey.type) %>)
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .exchange()
+            .expectStatus().isBadRequest();
+        <%_ } _%>
+
+        // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+            // Validate the <%= entityClass %> in Elasticsearch
+            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        <%_ } _%>
+    }
+
+    @Test<%= transactionalAnnotation %>
+    void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+
+        <%_ if (dto === 'mapstruct') { _%>
+            // Create the <%= entityClass %>
+            <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
+
+        <%_ } _%>
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        <%_ if (!reactive) { _%>
+            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType("application/merge-patch+json")
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isMethodNotAllowed());
+        <%_ } else { _%>
+            webTestClient.patch().uri(ENTITY_API_URL)
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .exchange()
+            .expectStatus().isEqualTo(405);
+        <%_ } _%>
+
+        // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+            // Validate the <%= entityClass %> in Elasticsearch
+            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 
