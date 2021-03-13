@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%  const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
-    const instanceType = (dto === 'mapstruct') ? `${optionalOrMono}<${asDto(entityClass)}>` : `${optionalOrMono}<${asEntity(entityClass)}>`;
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+    const instanceType = `${optionalOrMono}<${restClass}>`;
+    const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::toDto`;
     const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${instanceName} =`;

@@ -19,16 +19,16 @@
 package <%= packageName %>.service;
 
 <%_
-const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const instanceType = restClass;
+const instanceName = restInstance;
 const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
 const listOrFlux = (reactive === true) ? 'Flux' : 'List';
 const pageOrFlux = (reactive === true) ? 'Flux' : 'Page';
 _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.dto.<%= dtoClass %>;
 <%_ } else { _%>
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || relationshipsContainEagerLoad) { _%>
 
@@ -53,7 +53,7 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= asEntity(entityClass) %>}.
+ * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= persistClass %>}.
  */
 public interface <%= entityClass %>Service {
 
@@ -82,7 +82,7 @@ public interface <%= entityClass %>Service {
     <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
 <% for (const relationship of relationships) { if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide !== true) { -%>
     /**
-     * Get all the <%= asDto(entityClass) %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
+     * Get all the <%= restClass %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
      *
      * @return the {@link <%= listOrFlux %>} of entities.
      */

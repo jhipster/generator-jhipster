@@ -24,7 +24,7 @@ let uuidMapMethod = dtoReferences.some(reference => reference.valueReference && 
 let byteMapMethod = dtoReferences.some(reference => reference.valueReference && reference.valueReference.field && reference.valueReference.field.fieldType === 'byte[]');
 for (reference of dtoReferences) {
   // if the entity is mapped twice, we should implement the mapping once
-  if (reference.relationship && !reference.relationship.otherEntity.embedded && !existingMappings.includes(reference.name) && asEntity(reference.relationship.otherEntityNameCapitalized) !== asEntity(entityClass)) {
+  if (reference.relationship && !reference.relationship.otherEntity.embedded && !existingMappings.includes(reference.name) && asEntity(reference.relationship.otherEntityNameCapitalized) !== persistClass) {
     existingMappings.push(reference.relationship.otherEntity.entityNameCapitalized);
   }
  }
@@ -39,7 +39,7 @@ import java.util.Set;
 <%_ } _%>
 
 import <%= packageName %>.domain.*;
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.dto.<%= dtoClass %>;
 
 import org.mapstruct.*;
 <%_ if (uuidMapMethod) { _%>
@@ -49,10 +49,10 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Mapper for the entity {@link <%= asEntity(entityClass) %>} and its DTO {@link <%= asDto(entityClass) %>}.
+ * Mapper for the entity {@link <%= persistClass %>} and its DTO {@link <%= dtoClass %>}.
  */
 @Mapper(componentModel = "spring", uses = {<%= [...new Set(existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class'))].join(', ') %>})
-public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityClass) %>, <%= asEntity(entityClass) %>> {
+public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, <%= persistClass %>> {
 <%_ /***** Basic dto mapping *****/
     if (!embedded) {
         var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
@@ -72,7 +72,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
     @Mapping( target = "<%= reference.name %>", expression = "<%- reference.field.mapstructExpression %>")
     <%_ } _%>
     <%_ if (renMapAnotEnt === true) { _%>
-    <%= asDto(entityClass) %> toDto(<%= asEntity(entityClass) %> s);
+    <%= dtoClass %> toDto(<%= persistClass %> s);
     <%_ } %>
 <%_ } %>
 <%_ /***** Id mapping *****/
@@ -88,7 +88,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
     @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>")
         <%_ } _%>
         <%_ if (renMapAnotEnt === true) { _%>
-    <%= asDto(entityClass) %> toDtoId(<%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>);
+    <%= dtoClass %> toDtoId(<%= persistClass %> <%= persistInstance %>);
         <%_ } _%>
     <%_ } _%>
     <%_ if (otherIdReferences.some(r => r.collection)) { _%>
@@ -101,7 +101,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
     @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>")
         <%_ } _%>
         <%_ if (renMapAnotEnt === true) { _%>
-    Set<<%= asDto(entityClass) %>> toDtoIdSet(Set<<%= asEntity(entityClass) %>> <%= asEntity(entityInstance) %>);
+    Set<<%= dtoClass %>> toDtoIdSet(Set<<%= persistClass %>> <%= persistInstance %>);
         <%_ } _%>
     <%_ } _%>
 <%_ } _%>
@@ -126,7 +126,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
         <%_ } _%>
     <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
-    <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass) %> <%= asDto(entityInstance) %>);
+    <%= persistClass %> toEntity(<%= dtoClass %> <%= dtoInstance %>);
     <%_ } _%>
     <%_ /***** Add filtered backreference *****/
         const addedMappers = [];
@@ -136,8 +136,8 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
             const mapperName = otherReference.relationship.otherEntityField + (collection ? 'Set' : '');
             if (addedMappers.includes(mapperName)) continue;
             addedMappers.push(mapperName);
-            const backReferenceDtoClass = collection ? `Set<${asDto(entityClass)}>` : asDto(entityClass);
-            const backReferenceEntityClass = collection ? `Set<${asEntity(entityClass)}>` : asEntity(entityClass); _%>
+            const backReferenceDtoClass = collection ? `Set<${dtoClass}>` : dtoClass;
+            const backReferenceEntityClass = collection ? `Set<${persistClass}>` : persistClass; _%>
 
     @Named("<%= mapperName %>")
     @BeanMapping(ignoreByDefault = true)
@@ -147,7 +147,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityC
         <%_ if (otherReference.relationship.relatedField && !otherReference.relationship.relatedField.id) { _%>
     @Mapping(target = "<%= otherReference.relationship.relatedField.reference.name %>", source = "<%= otherReference.relationship.relatedField.reference.name %>")
         <%_ } _%>
-    <%- backReferenceDtoClass %> toDto<%= _.upperFirst(mapperName) %>(<%- backReferenceEntityClass %> <%= asEntity(entityInstance) %>);
+    <%- backReferenceDtoClass %> toDto<%= _.upperFirst(mapperName) %>(<%- backReferenceEntityClass %> <%= persistInstance %>);
     <%_ }; _%>
 
     <%_ if (uuidMapMethod) { _%>

@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+    const instanceType = restClass;
+    const instanceName = restInstance;
     const mapper = entityInstance + 'Mapper';
     const entityListToDtoListReference = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
@@ -55,7 +55,7 @@ _%>
         <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
         <%_ } else if (dto === 'mapstruct') { _%>
-        <%= reactive ? 'Flux' : 'List' %><<%= asEntity(entityClass) %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();
+        <%= reactive ? 'Flux' : 'List' %><<%= persistClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();
             <%_ if (!reactive) { _%>
         return <%= entityListToDtoListReference %>(<%= entityInstancePlural %>);
             <%_ } else { _%>

@@ -30,7 +30,7 @@ for (const relationship of relationships) {
 }
 _%>
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <%_ } _%>
 import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (service !== 'no') { _%>
@@ -48,7 +48,7 @@ import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.errors.BadRequestAlertException;
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.dto.<%= dtoClass %>;
     <%_ if (service === 'no') { _%>
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
     <%_ } _%>
@@ -134,7 +134,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * REST controller for managing {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>}.
+ * REST controller for managing {@link <%= packageName %>.domain.<%= persistClass %>}.
  */
 @RestController
 @RequestMapping("/api")
@@ -156,8 +156,8 @@ public class <%= entityClass %>Resource {
     private String applicationName;
 <%_ } _%>
     <%_
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+    const instanceType = restClass;
+    const instanceName = restInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>

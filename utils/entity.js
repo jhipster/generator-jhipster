@@ -112,6 +112,24 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityNamePlural: pluralize(entityName),
   });
 
+  const dto = entityWithConfig.dto === 'mapstruct';
+  if (dto) {
+    _.defaults(entityWithConfig, {
+      dtoClass: generator.asDto(entityWithConfig.entityClass),
+      dtoInstance: generator.asDto(entityWithConfig.entityInstance),
+    });
+  }
+
+  _.defaults(entityWithConfig, {
+    persistClass: generator.asEntity(entityWithConfig.entityClass),
+    persistInstance: generator.asEntity(entityWithConfig.entityInstance),
+  });
+
+  _.defaults(entityWithConfig, {
+    restClass: dto ? entityWithConfig.dtoClass : entityWithConfig.persistClass,
+    restInstance: dto ? entityWithConfig.dtoInstance : entityWithConfig.persistInstance,
+  });
+
   _.defaults(entityWithConfig, {
     entityNamePluralizedAndSpinalCased: _.kebabCase(entityWithConfig.entityNamePlural),
     entityClassPlural: _.upperFirst(entityWithConfig.entityNamePlural),
