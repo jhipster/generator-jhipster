@@ -183,6 +183,49 @@ describe('Service Tests', () => {
                 req.flush(returnedFromService);
                 expect(expectedResult).toMatchObject(expected);
             });
+
+            <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.random.boolean()); %>
+            it('should partial update a <%= entityAngularName %>', () => {
+                const patchObject = {
+                    <%_ fieldsToIncludeInPartialPatchTest.forEach((field) => {
+                        const fieldType = field.fieldType;
+                    _%>
+                    <%_ if (fieldType === 'Boolean') { _%>
+                        <%= field.fieldName %>: true,
+                    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+                        <%= field.fieldName %>: 1,
+                    <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+                        <%= field.fieldName %>: 'BBBBBB',
+                    <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
+                        <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
+                    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                        <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
+                    <%_ } else { _%>
+                        <%= field.fieldName %>: 'BBBBBB',
+                    <%_ } _%>
+                    <%_ }) _%>
+                }
+
+                const returnedFromService = Object.assign(patchObject, elemDefault);
+
+                const expected = Object.assign({
+                <%_ fields.forEach((field) => {
+                    const fieldType = field.fieldType;
+                _%>
+                    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+                        <%= field.fieldName %>: currentDate,
+                    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                        <%= field.fieldName %>: currentDate,
+                    <%_ } _%>
+                    <%_ }) _%>
+                }, returnedFromService);
+
+                service.partialUpdate(patchObject).subscribe(resp => expectedResult = resp.body);
+
+                const req = httpMock.expectOne({ method: 'PATCH' });
+                req.flush(returnedFromService);
+                expect(expectedResult).toMatchObject(expected);
+            });
         <%_ } _%>
 
             it('should return a list of <%= entityAngularName %>', () => {

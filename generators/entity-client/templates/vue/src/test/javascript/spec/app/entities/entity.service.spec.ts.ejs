@@ -49,6 +49,7 @@ const axiosStub = {
   get: sinon.stub(axios, 'get'),
   post: sinon.stub(axios, 'post'),
   put: sinon.stub(axios, 'put'),
+  patch: sinon.stub(axios, 'patch'),
   delete: sinon.stub(axios, 'delete'),
 };
 
@@ -215,6 +216,57 @@ describe('Service Tests', () => {
           .catch(err => {
             expect(err).toMatchObject(error);
           });
+      });
+
+      <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.random.boolean()); %>
+      it('should partial update a <%= entityAngularName %>', async () => {
+          const patchObject = Object.assign({
+              <%_ fieldsToIncludeInPartialPatchTest.filter(field => !field.id).forEach((field) => {
+                  const fieldType = field.fieldType; _%>
+              <%_ if (fieldType === 'Boolean') { _%>
+                  <%= field.fieldName%>: true,
+              <%_ } else if (fieldType === 'Duration') { _%>
+                  <%= field.fieldName%>: 'PT2S',
+              <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+                  <%= field.fieldName%>: 1,
+              <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+                  <%= field.fieldName%>: 'BBBBBB',
+              <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
+                  <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+              <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                  <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+              <%_ } else { _%>
+                  <%= field.fieldName%>: 'BBBBBB',
+              <%_ } _%>
+              <%_ }) _%>
+          }, new <%= entityAngularName %>())
+          const returnedFromService = Object.assign(patchObject, elemDefault);
+
+          const expected = Object.assign({
+              <%_ fields.filter(field => !field.id).forEach((field) => {
+                  const fieldType = field.fieldType; _%>
+              <%_ if (['LocalDate'].includes(fieldType)) { _%>
+                  <%= field.fieldName%>: currentDate,
+              <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                  <%= field.fieldName%>: currentDate,
+              <%_ } _%>
+              <%_ }) _%>
+          }, returnedFromService);
+          axiosStub.patch.resolves({ data: returnedFromService });
+
+          return service.partialUpdate(patchObject).then((res) => {
+            expect(res).toMatchObject(expected);
+          });
+      });
+
+      it('should not partial update a <%= entityAngularName %>', async () => {
+          axiosStub.patch.rejects(error);
+
+          return service.partialUpdate({})
+            .then()
+            .catch(err => {
+              expect(err).toMatchObject(error);
+            });
       });
 
 <%_ } _%>

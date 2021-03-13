@@ -50,6 +50,7 @@ export const ACTION_TYPES = {
 <%_ if (!readOnly) { _%>
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
+  PARTIAL_UPDATE_<%= entityActionName %>: '<%= entityInstance %>/PARTIAL_UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
   <%_ if (fieldsContainBlob) { _%>
   SET_BLOB: '<%= entityInstance %>/SET_BLOB',
@@ -94,6 +95,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
     case REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>):
+    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
       return {
         ...state,
         errorMessage: null,
@@ -109,6 +111,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
     <%_ if (!readOnly) { _%>
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
+    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>):
     <%_ } _%>
       return {
@@ -156,6 +159,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
     <%_ if (!readOnly) { _%>
     case SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>):
+    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
       return {
         ...state,
         updating: false,
@@ -250,6 +254,14 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
+  });
+  return result;
+};
+
+export const partialUpdate: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>,
+    payload: axios.patch(apiUrl, cleanEntity(entity))
   });
   return result;
 };
