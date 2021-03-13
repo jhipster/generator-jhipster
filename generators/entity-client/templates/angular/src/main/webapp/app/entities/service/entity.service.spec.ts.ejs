@@ -186,7 +186,7 @@ describe('Service Tests', () => {
 
             <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.random.boolean()); %>
             it('should partial update a <%= entityAngularName %>', () => {
-                const patchObject = {
+                const patchObject = Object.assign({
                     <%_ fieldsToIncludeInPartialPatchTest.forEach((field) => {
                         const fieldType = field.fieldType;
                     _%>
@@ -204,7 +204,7 @@ describe('Service Tests', () => {
                         <%= field.fieldName %>: 'BBBBBB',
                     <%_ } _%>
                     <%_ }) _%>
-                }
+                }, new <%= entityAngularName %>())
 
                 const returnedFromService = Object.assign(patchObject, elemDefault);
 
