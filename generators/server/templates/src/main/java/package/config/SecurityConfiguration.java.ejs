@@ -92,7 +92,7 @@ import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && (applicationType === 'monolith' || applicationType === 'microservice' || applicationType === 'gateway')) { _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
@@ -345,7 +345,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
 
     @Bean
-    JwtDecoder jwtDecoder(<%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
+    JwtDecoder jwtDecoder(<%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
         NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
@@ -353,7 +353,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
         jwtDecoder.setJwtValidator(withAudience);
-        <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+        <%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
         jwtDecoder.setClaimSetConverter(new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build()));
         <%_ } _%>
 
