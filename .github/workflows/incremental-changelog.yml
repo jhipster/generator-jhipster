@@ -73,7 +73,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [14.15.0]
+        node_version: [14.16.0]
         os: [ubuntu-20.04]
         app-type:
           - liquibase-jdl-rename-field
