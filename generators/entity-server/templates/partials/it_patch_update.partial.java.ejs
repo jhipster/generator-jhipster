@@ -51,7 +51,7 @@ rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%=
 <%_ } else { _%>
 webTestClient
 .patch()
-.uri(ENTITY_API_URL)
+.uri(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())
 .contentType(MediaType.valueOf("application/merge-patch+json"))
 .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>))
 .exchange()
