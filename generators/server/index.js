@@ -29,6 +29,8 @@ const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
 
+const windowsPlatform = os.platform() === 'win32';
+
 let useBlueprints;
 
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
@@ -52,6 +54,31 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
+
+    // Not using normal blueprints or this is a normal blueprint.
+    if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
+      this.setFeatures({
+        customInstallTask: function customInstallTask(preferredPm, defaultInstallTask) {
+          if ((preferredPm && preferredPm !== 'npm') || this.skipClient || this.jhipsterConfig.skipClient) {
+            return defaultInstallTask();
+          }
+          const gradle = this.jhipsterConfig.buildTool === 'gradle';
+          const commandPrefix = windowsPlatform ? '' : './';
+          const command = `${commandPrefix}${gradle ? 'gradlew' : 'npmw'}`;
+          const args = gradle ? ['npmInstall'] : ['install'];
+
+          const failureCallback = error => {
+            this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
+            return true;
+          };
+
+          return this.spawnCommand(command, args, { preferLocal: true }).then(
+            () => true,
+            error => failureCallback(error)
+          );
+        }.bind(this),
+      });
+    }
   }
 
   // Public API method used by the getter and also by Blueprints

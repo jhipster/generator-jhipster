@@ -1,0 +1,23 @@
+#!/bin/sh
+
+basedir=`dirname "$0"`
+
+if [ -f "$basedir/mvnw" ]; then
+  builddir="target/node"
+  installCommand="$basedir/mvnw frontend:install-node-and-npm@install-node-and-npm"
+else
+  builddir=".gradle/npm"
+  installCommand="$basedir/gradlew npmSetup"
+fi
+
+NPM_EXE="$basedir/$builddir/npm"
+
+if ! [ -x "$NPM_EXE" ]; then
+  $installCommand || true
+fi
+
+if ! [ -x "$NPM_EXE" ]; then
+  npm "$@"
+else
+  $NPM_EXE "$@"
+fi
