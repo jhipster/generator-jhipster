@@ -556,12 +556,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator =>
-        !generator.reactive &&
-        generator.authenticationType === 'oauth2' &&
-        (generator.applicationType === 'monolith' ||
-          generator.applicationType === 'microservice' ||
-          generator.applicationType === 'gateway'),
+      condition: generator => !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith',
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -571,12 +566,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator =>
-        !generator.reactive &&
-        generator.authenticationType === 'oauth2' &&
-        (generator.applicationType === 'monolith' ||
-          generator.applicationType === 'microservice' ||
-          generator.applicationType === 'gateway'),
+      condition: generator => !generator.reactive && generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith',
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
