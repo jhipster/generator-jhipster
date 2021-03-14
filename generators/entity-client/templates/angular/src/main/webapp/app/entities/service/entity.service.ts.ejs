@@ -129,7 +129,7 @@ export class <%= entityAngularName %>Service {
 
 <%_ if (fieldsContainDate) { _%>
     protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
-        const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
+        return Object.assign({}, <%= entityInstance %>, {
     <%_ for (const field of fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime'].includes(field.fieldType) ) { _%>
         <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.toJSON() : undefined,
@@ -139,7 +139,6 @@ export class <%= entityAngularName %>Service {
         <%_ } _%>
     <%_ } _%>
         });
-        return copy;
     }
 
     protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
