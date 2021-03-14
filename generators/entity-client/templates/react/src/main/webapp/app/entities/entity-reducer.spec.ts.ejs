@@ -43,6 +43,7 @@ import reducer, {
   getEntity,
   <%_ if (!readOnly) { _%>
   updateEntity,
+  partialUpdate,
   <%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
@@ -126,6 +127,7 @@ describe('Entities reducer tests', () => {
         [
           REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>),
           REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>),
+          REQUEST(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>),
           REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>)
         ],
         {},
@@ -163,6 +165,7 @@ describe('Entities reducer tests', () => {
           <%_ if (!readOnly) { _%>
           FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
+          FAILURE(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>)
           <%_ } _%>
         ],
@@ -275,6 +278,7 @@ describe('Entities reducer tests', () => {
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.patch = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
@@ -351,6 +355,20 @@ describe('Entities reducer tests', () => {
         }
       ];
       await store.dispatch(updateEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>)).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>),
+          payload: resolvedObject
+
+        }
+      ];
+      await store.dispatch(partialUpdate({ id: <% if (primaryKey.type === 'Long') { %>1<% } else { %>'1'<% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {

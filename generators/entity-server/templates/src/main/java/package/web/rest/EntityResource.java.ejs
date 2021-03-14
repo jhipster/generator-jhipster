@@ -232,7 +232,7 @@ public class <%= entityClass %>Resource {
         if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-        
+
 <%_ if (!reactive) { _%>
         if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
@@ -274,8 +274,9 @@ public class <%= entityClass %>Resource {
 
 
     /**
-     * {@code PATCH  /<%= entityApiUrl %>} : Updates given fields of an existing <%= entityInstance %>.
+     * {@code PATCH  /<%= entityApiUrl %>/:<%= primaryKey.name %>} : Partial updates given fields of an existing <%= entityInstance %>, field will ignore if it is null
      *
+     * @param <%= primaryKey.name %> the id of the <%= instanceName %> to save.
      * @param <%= instanceName %> the <%= instanceName %> to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%= instanceName %>,
      * or with status {@code 400 (Bad Request)} if the <%= instanceName %> is not valid,
@@ -283,40 +284,58 @@ public class <%= entityClass %>Resource {
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/<%= entityApiUrl %>", consumes = "application/merge-patch+json")
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> partialUpdate<%= entityClass %>(<% if (validation) { %>@NotNull <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
-        log.debug("REST request to update <%= entityClass %> partially : {}", <%= instanceName %>);
+    @PatchMapping(value = "/<%= entityApiUrl %>/{<%= primaryKey.name %>}", consumes = "application/merge-patch+json")
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> partialUpdate<%= entityClass %>(
+    @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
+    <% if (validation) { %>@NotNull <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+        log.debug("REST request to partial update <%= entityClass %> partially : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        <%_ if (saveUserSnapshot) { _%>
-            <%_ if (manyToManyWithUser) { _%>
-        if (<%= instanceName %>.getUsers() != null) {
-            // Save users in case they are new and only exists in gateway
-            userRepository.saveAll(<%= instanceName %>.getUsers());
+        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-            <%_ } else { _%>
-        if (<%= instanceName %>.getUser() != null) {
-            // Save user in case it's new and only exists in gateway
-            userRepository.save(<%= instanceName %>.getUser());
-        }
-            <%_ } _%>
-        <%_ } _%>
 
-        <%- include('../../common/patch_template', {asEntity, asDto, isService: false, viaService: viaService}); -%>
-            <%_ if (!reactive) { _%>
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
-        );
-            <%_ } else { _%>
-        return result
-            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-            .map(res -> ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, res.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
-            .body(res)
-        );
+    <%_ if (!reactive) { _%>
+        if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+    <%_ } else { _%>
+        return <%= entityInstance %>Repository.existsById(<%= primaryKey.name %>).flatMap(exists -> {
+            if (!exists) {
+                return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+            }
+    <%_ } _%>
+
+            <%_ if (saveUserSnapshot) { _%>
+                <%_ if (manyToManyWithUser) { _%>
+            if (<%= instanceName %>.getUsers() != null) {
+                // Save users in case they are new and only exists in gateway
+                userRepository.saveAll(<%= instanceName %>.getUsers());
+            }
+                <%_ } else { _%>
+            if (<%= instanceName %>.getUser() != null) {
+                // Save user in case it's new and only exists in gateway
+                userRepository.save(<%= instanceName %>.getUser());
+            }
+                <%_ } _%>
             <%_ } _%>
+
+            <%- include('../../common/patch_template', {asEntity, asDto, isService: false, viaService: viaService}); -%>
+                <%_ if (!reactive) { _%>
+            return ResponseUtil.wrapOrNotFound(
+                result,
+                HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
+            );
+                <%_ } else { _%>
+            return result
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .map(res -> ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, res.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
+                .body(res)
+            );
+        });
+                <%_ } _%>
     }
 <%_ } _%>
 
