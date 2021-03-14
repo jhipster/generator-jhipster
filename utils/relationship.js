@@ -116,8 +116,7 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     if (otherEntityData.primaryKey && otherEntityData.primaryKey.derived) {
       Object.defineProperty(relationship, 'relatedField', {
         get() {
-          const relatedField = otherEntityData.primaryKey.derivedFields.find(field => field.fieldName === relationship.otherEntityField);
-          return relatedField;
+          return otherEntityData.primaryKey.derivedFields.find(field => field.fieldName === relationship.otherEntityField);
         },
       });
     } else if (!ignoreMissingRequiredRelationship) {

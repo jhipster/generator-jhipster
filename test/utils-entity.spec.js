@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const { prepareEntityForTemplates } = require('../utils/entity');
+const { prepareEntityPrimaryKeyForTemplates } = require('../utils/entity');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { defaultConfig, entityDefaultConfig } = require('../generators/generator-defaults');
 const BaseGenerator = require('../generators/generator-base');
@@ -27,7 +27,7 @@ describe('entity utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 
-  describe('prepareEntityForTemplates', () => {
+  describe('prepareEntityPrimaryKeyForTemplates', () => {
     describe('with field with id name', () => {
       describe('without @Id', () => {
         let entity = {
@@ -37,7 +37,7 @@ describe('entity utilities', () => {
           fields: [{ fieldName: 'id', fieldType: 'CustomType' }],
         };
         beforeEach(() => {
-          entity = prepareEntityForTemplates(entity, defaultGenerator);
+          entity = prepareEntityPrimaryKeyForTemplates(entity, defaultGenerator);
         });
         it('should adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({
@@ -59,7 +59,7 @@ describe('entity utilities', () => {
           ],
         };
         beforeEach(() => {
-          entity = prepareEntityForTemplates(entity, defaultGenerator);
+          entity = prepareEntityPrimaryKeyForTemplates(entity, defaultGenerator);
         });
         it('should not adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({

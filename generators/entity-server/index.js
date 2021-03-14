@@ -32,11 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     this.entity = opts.context;
 
-    utils.copyObjectProps(this, this.entity);
     this.jhipsterContext = opts.jhipsterContext || opts.context;
-
-    this.testsNeedCsrf = ['oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
-    this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.jhipsterContext.databaseType];
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-server', { context: opts.context });
   }
@@ -56,8 +52,37 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
-  _preparing() {
+  // Public API method used by the getter and also by Blueprints
+  _preparingFields() {
     return {
+      processDerivedPrimaryKeyFields() {
+        const primaryKey = this.entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derivedFields) {
+          return;
+        }
+        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+        const derivedFields = this.entity.primaryKey.derivedFields;
+        this.entity.fields.unshift(...derivedFields);
+      },
+    };
+  }
+
+  get preparingFields() {
+    if (useBlueprints) return;
+    return this._preparingFields();
+  }
+
+  _default() {
+    return {
+      ...super._missingPreDefault(),
+
+      loadConfigIntoGenerator() {
+        utils.copyObjectProps(this, this.entity);
+
+        this.testsNeedCsrf = ['oauth2', 'session'].includes(this.entity.authenticationType);
+        this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.entity.databaseType];
+      },
+
       /**
        * Process json ignore references to prevent cyclic relationships.
        */
@@ -107,16 +132,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.reactiveUniqueEntityTypes.add(this.entityClass);
       },
     };
-  }
-
-  get preparing() {
-    if (useBlueprints) return;
-    return this._preparing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return super._missingPreDefault();
   }
 
   get default() {

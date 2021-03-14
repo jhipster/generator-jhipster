@@ -32,31 +32,26 @@ module.exports = class extends BaseBlueprintGenerator {
     super(args, opts);
     this.entity = opts.context;
 
-    utils.copyObjectProps(this, this.entity);
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
   }
 
   // Public API method used by the getter and also by Blueprints
-  _preparing() {
+  _default() {
     return {
+      ...super._missingPreDefault(),
+
+      loadConfigIntoGenerator() {
+        utils.copyObjectProps(this, this.entity);
+      },
+
       setup() {
         if (!this.embedded) {
           this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
         }
       },
     };
-  }
-
-  get preparing() {
-    if (useBlueprints) return;
-    return this._preparing();
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  _default() {
-    return super._missingPreDefault();
   }
 
   get default() {

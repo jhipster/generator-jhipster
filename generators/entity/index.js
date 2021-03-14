@@ -27,7 +27,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
+const { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
 const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
@@ -484,8 +484,32 @@ class EntityGenerator extends BaseBlueprintGenerator {
             });
         }
       },
+
       shareEntity() {
         this.configOptions.sharedEntities[this.context.name] = this.context;
+      },
+
+      composing() {
+        if (this.options.skipWriting) return;
+        const context = this.context;
+        if (!context.skipServer) {
+          this.composeWithJHipster('entity-server', this.arguments, {
+            context,
+          });
+        }
+
+        if (!context.skipClient) {
+          this.composeWithJHipster('entity-client', this.arguments, {
+            context,
+            skipInstall: this.options.skipInstall,
+          });
+          if (this.jhipsterConfig.enableTranslation) {
+            this.composeWithJHipster('entity-i18n', this.arguments, {
+              context,
+              skipInstall: this.options.skipInstall,
+            });
+          }
+        }
       },
     };
   }
@@ -514,6 +538,24 @@ class EntityGenerator extends BaseBlueprintGenerator {
       prepareEntityForTemplates() {
         const entity = this.context;
         prepareEntityForTemplates(entity, this);
+      },
+    };
+  }
+
+  get preparingFields() {
+    if (useBlueprints) return;
+    return this._preparingFields();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _preparingFields() {
+    return {
+      // If primaryKey doesn't exist, create it.
+      preparePrimaryKey() {
+        const entity = this.context;
+        if (!entity.embedded && !entity.primaryKey) {
+          prepareEntityPrimaryKeyForTemplates(entity, this);
+        }
       },
 
       prepareFieldsForTemplates() {
@@ -566,14 +608,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           }
           this.context.differentRelationships[entityType].push(relationship);
         });
-      },
-
-      processDerivedPrimaryKey() {
-        if (!this.context.primaryKey) {
-          return;
-        }
-        const derivedFields = this.context.primaryKey.derivedFields;
-        this.context.fields.unshift(...derivedFields);
       },
 
       processEntityFields() {
@@ -714,32 +748,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
         );
         this.context.reactiveRegularEagerRelations = this.context.reactiveEagerRelations.filter(rel => rel.id !== true);
-      },
-
-      /*
-       * Composed generators uses context ready for the templates.
-       */
-      composing() {
-        if (this.options.skipWriting) return;
-        const context = this.context;
-        if (!context.skipServer) {
-          this.composeWithJHipster('entity-server', this.arguments, {
-            context,
-          });
-        }
-
-        if (!context.skipClient) {
-          this.composeWithJHipster('entity-client', this.arguments, {
-            context,
-            skipInstall: this.options.skipInstall,
-          });
-          if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster('entity-i18n', this.arguments, {
-              context,
-              skipInstall: this.options.skipInstall,
-            });
-          }
-        }
       },
 
       insight() {

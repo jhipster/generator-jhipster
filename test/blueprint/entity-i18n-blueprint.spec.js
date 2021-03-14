@@ -17,24 +17,36 @@ const mockBlueprintSubGen = class extends EntityI18NGenerator {
     }
   }
 
+  get default() {
+    return {
+      ...this._default(),
+    };
+  }
+
   get writing() {
     return {
       customPhase() {
         this.name = 'JHipster';
-        this.template(path.join(process.cwd(), 'custom-i18n.json.ejs'), `${CLIENT_MAIN_SRC_DIR}i18n/custom-i18n.json`);
+        this.template(
+          path.join(__dirname, '../templates/ngx-blueprint', 'custom-i18n.json.ejs'),
+          `${CLIENT_MAIN_SRC_DIR}i18n/custom-i18n.json`
+        );
       },
     };
   }
 };
 
-describe('JHipster entity server generator with blueprint', () => {
+describe('JHipster entity i18n generator with blueprint', () => {
   const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
   blueprintNames.forEach(blueprintName => {
-    describe(`generate server entity with blueprint option '${blueprintName}'`, () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../../generators/entity'))
+    describe(`generate i18n entity with blueprint option '${blueprintName}'`, () => {
+      let runContext;
+      let runResult;
+      before(async () => {
+        runContext = helpers.create(path.join(__dirname, '../../generators/entity'));
+
+        runResult = await runContext
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
           })
@@ -53,7 +65,7 @@ describe('JHipster entity server generator with blueprint', () => {
             service: 'no',
             pagination: 'no',
           })
-          .on('end', done);
+          .run();
       });
 
       it('creates expected entity server + client files from jhipster entity generator', () => {
@@ -66,7 +78,7 @@ describe('JHipster entity server generator with blueprint', () => {
       });
 
       it('contains the specific change added by the blueprint', () => {
-        assert.JSONFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/custom-i18n.json`, {
+        runResult.assertJsonFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/custom-i18n.json`, {
           myblueprintApp: { name: 'JHipster' },
         });
       });
