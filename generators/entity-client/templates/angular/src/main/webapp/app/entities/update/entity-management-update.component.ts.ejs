@@ -224,9 +224,9 @@ _%>
 
     getSelected<%= reference.relationship.otherEntity.entityAngularName %>(option: I<%= reference.relationship.otherEntity.entityAngularName %>, selectedVals?: I<%= reference.relationship.otherEntity.entityAngularName %>[]): I<%= reference.relationship.otherEntity.entityAngularName %> {
         if (selectedVals) {
-          for (let i = 0; i < selectedVals.length; i++) {
-              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVals[i].<%= reference.relationship.otherEntity.primaryKey.name %>) {
-                  return selectedVals[i];
+          for (const selectedVal of selectedVals) {
+              if (option.<%= reference.relationship.otherEntity.primaryKey.name %> === selectedVal.<%= reference.relationship.otherEntity.primaryKey.name %>) {
+                  return selectedVal;
               }
           }
         }
