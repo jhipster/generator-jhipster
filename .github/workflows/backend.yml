@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: React
+name: Angular
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -30,11 +30,25 @@ on:
       - '.github/workflows/*'
       - 'test-integration/**'
 
-      # paths not covered by backend tests
-      - 'package*.json'
-      - 'generators/*client/*'
-      - 'generators/*client/needle-api/*'
-      - 'generators/*client/templates/react/**'
+      # common
+      - 'generators/*'
+      - 'generators/app/**'
+      - 'generators/boostrap/**'
+      - 'generators/common/**'
+      - 'generators/entities/**'
+      - 'jdl/jhipster/**'
+      - 'utils/**'
+
+      # e2e
+      - 'generators/cypress/**'
+      - 'generators/entity-client/templates/common/test/java/cypress/**'
+
+      # languages
+      - 'generators/languages/**'
+
+      # backend
+      - 'generators/database-changelog*/**'
+      - 'generators/*server/**'
 
   pull_request:
     branches:
@@ -44,11 +58,25 @@ on:
       - '.github/workflows/*'
       - 'test-integration/**'
 
-      # paths not covered by backend tests
-      - 'package*.json'
-      - 'generators/*client/*'
-      - 'generators/*client/needle-api/*'
-      - 'generators/*client/templates/react/**'
+      # common
+      - 'generators/*'
+      - 'generators/app/**'
+      - 'generators/boostrap/**'
+      - 'generators/common/**'
+      - 'generators/entities/**'
+      - 'jdl/jhipster/**'
+      - 'utils/**'
+
+      # e2e
+      - 'generators/cypress/**'
+      - 'generators/entity-client/templates/common/test/java/cypress/**'
+
+      # languages
+      - 'generators/languages/**'
+
+      # backend
+      - 'generators/database-changelog*/**'
+      - 'generators/*server/**'
 env:
   JHI_RUN_APP: 1
   JHI_JDK: 11
@@ -79,9 +107,9 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     if: >-
-      !contains(github.event.head_commit.message, '[angular]') &&
+      !contains(github.event.head_commit.message, '[react]') &&
       !contains(github.event.head_commit.message, '[vue]') &&
-      !contains(github.event.pull_request.title, '[angular]') &&
+      !contains(github.event.pull_request.title, '[react]') &&
       !contains(github.event.pull_request.title, '[vue]') &&
       !contains(github.event.head_commit.message, '[ci skip]') &&
       !contains(github.event.head_commit.message, '[skip ci]') &&
@@ -92,29 +120,154 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [14.16.0]
+        node_version: [14.15.0]
         os: [ubuntu-20.04]
-        cache: [react]
+        cache: [angular]
         app-type:
-          - react-default
-          - react-gradle-cassandra-session-redis
+          - ngx-default-additional
+          - ngx-mysql-es-noi18n-mapsid
+          - ngx-mongodb-kafka-cucumber
+          - ngx-h2mem-ws-nol2
+          - ngx-gradle-fr
+          - ngx-gradle-mysql-es-noi18n-mapsid
+          - ngx-gradle-mariadb-oauth2-infinispan
+          - ngx-gradle-mongodb-kafka-cucumber
+          - react-maven-mysql-es-noi18n-mapsid
+          - react-maven-h2mem-memcached
+          - react-maven-cassandra-session-redis
+          # - react-maven-couchbase-caffeine
+          - react-gradle-mysql-es-noi18n-mapsid
+          - react-gradle-h2mem-memcached
+          # - react-gradle-couchbase-caffeine
+          - vue-fulli18n-es
+          - vue-gateway
+          # - vue-couchbase
+          - vue-mongodb-kafka-cucumber
+          - vue-session-cassandra-fr
         include:
-          - app-type: react-default
+          - app-type: ngx-default-additional
+            jhi-app-type: ngx-default
+            entity: none
+            jdl-entity: '*'
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-type: ngx-mysql-es-noi18n-mapsid
+            entity: sql
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 0
+          - app-type: ngx-mongodb-kafka-cucumber
+            entity: mongodb
+            environment: dev
+            war: 0
+            e2e: 1
+            testcontainers: 0
+          - app-type: ngx-h2mem-ws-nol2
+            entity: sql
+            environment: dev
+            war: 0 # TODO: need change to 1, when maven+war is fixed
+            e2e: 1
+            testcontainers: 0
+          - app-type: ngx-gradle-fr
+            entity: sql
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 0
+          - app-type: ngx-gradle-mysql-es-noi18n-mapsid
+            entity: sqlfull
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-type: ngx-gradle-mariadb-oauth2-infinispan
+            entity: sql
+            environment: dev
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-type: ngx-gradle-mongodb-kafka-cucumber
+            entity: mongodb
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 0
+          - app-type: react-maven-mysql-es-noi18n-mapsid
+            entity: sql
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-type: react-maven-h2mem-memcached
+            entity: sql
+            environment: prod
+            war: 0 # TODO: need change to 1, when maven+war is fixed
+            e2e: 1
+            testcontainers: 0
+          # - app-type: react-maven-couchbase-caffeine
+          #   entity: couchbase
+          #   environment: prod
+          #   war: 0
+          #   e2e: 0
+          #   testcontainers: 0
+          - app-type: react-gradle-mysql-es-noi18n-mapsid
             entity: sqlfull
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-type: react-maven-cassandra-session-redis
+          - app-type: react-gradle-h2mem-memcached
+            entity: sql
+            environment: prod
+            war: 1
+            e2e: 1
+            testcontainers: 0
+          - app-type: react-gradle-cassandra-session-redis
             entity: cassandra
             environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          # - app-type: react-gradle-couchbase-caffeine
+          #   entity: couchbase
+          #   environment: prod
+          #   war: 0
+          #   e2e: 1
+          #   testcontainers: 0
+          - app-type: vue-fulli18n-es
+            entity: sql
+            environment: prod
+            war: 0
+            e2e: 1
+          - app-type: vue-gateway
+            entity: sql
+            environment: dev
+            war: 0
+            e2e: 1
+          # - app-type: vue-couchbase
+          #   entity: couchbase
+          #   environment: dev
+          #   war: 0
+          #   e2e: 1
+          - app-type: vue-mongodb-kafka-cucumber
+            entity: mongodb
+            environment: dev
+            war: 0
+            e2e: 1
+          - app-type: vue-session-cassandra-fr
+            entity: cassandra
+            environment: dev
             war: 0
             e2e: 1
             testcontainers: 1
     env:
       JHI_GENERATE_SKIP_CONFIG: 1
       JHI_ENTITY: ${{ matrix.entity }}
-      JHI_APP: ${{ matrix.app-type }}
+      JHI_JDL_ENTITY: ${{ matrix.jdl-entity }}
+      JHI_APP: ${{ matrix.jhi-app-type || matrix.app-type }}
       JHI_PROFILE: ${{ matrix.environment }}
       JHI_WAR: ${{ matrix.war }}
       JHI_E2E: ${{ matrix.e2e }}
@@ -291,7 +444,7 @@ jobs:
           name: screenshots-${{ matrix.app-type }}
           path: ${{ github.workspace }}/app/*/cypress/screenshots
       - name: 'ANALYSIS: Sonar analysis'
-        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.sonar-analyse == 1
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

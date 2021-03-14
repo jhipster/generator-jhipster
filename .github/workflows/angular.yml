@@ -25,16 +25,30 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
-    paths-ignore:
-      - 'generators/*client/templates/react/**'
-      - 'generators/*client/templates/vue/**'
+    paths:
+      # ci
+      - '.github/workflows/*'
+      - 'test-integration/**'
+
+      # paths not covered by backend tests
+      - 'package*.json'
+      - 'generators/*client/*'
+      - 'generators/*client/needle-api/*'
+      - 'generators/*client/templates/angular/**'
+
   pull_request:
     branches:
       - '*'
-    paths-ignore:
+    paths:
+      # ci
+      - '.github/workflows/*'
+      - 'test-integration/**'
+
+      # paths not covered by backend tests
       - 'package*.json'
-      - 'generators/*client/templates/react/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/*client/*'
+      - 'generators/*client/needle-api/*'
+      - 'generators/*client/templates/angular/**'
 env:
   JHI_RUN_APP: 1
   JHI_JDK: 11
@@ -84,14 +98,8 @@ jobs:
         app-type:
           - ngx-default
           - ngx-default-additional
-          - ngx-mysql-es-noi18n-mapsid
+          - ngx-session-cassandra-fr
           - ngx-mariadb-oauth2-infinispan
-          - ngx-mongodb-kafka-cucumber
-          - ngx-h2mem-ws-nol2
-          - ngx-gradle-fr
-          - ngx-gradle-mysql-es-noi18n-mapsid
-          - ngx-gradle-mariadb-oauth2-infinispan
-          - ngx-gradle-mongodb-kafka-cucumber
           - ngx-gradle-h2disk-ws-nocache
         include:
           - app-type: ngx-default
@@ -109,54 +117,18 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-type: ngx-mysql-es-noi18n-mapsid
-            entity: sql
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-type: ngx-mariadb-oauth2-infinispan
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-type: ngx-mongodb-kafka-cucumber
-            entity: mongodb
-            environment: dev
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-type: ngx-h2mem-ws-nol2
-            entity: sql
-            environment: dev
-            war: 0 # TODO: need change to 1, when maven+war is fixed
-            e2e: 1
-            testcontainers: 0
-          - app-type: ngx-gradle-fr
-            entity: sql
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-type: ngx-gradle-mysql-es-noi18n-mapsid
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
           - app-type: ngx-gradle-mariadb-oauth2-infinispan
             entity: sql
             environment: dev
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-type: ngx-gradle-mongodb-kafka-cucumber
-            entity: mongodb
+          - app-type: ngx-session-cassandra-fr
+            entity: cassandra
             environment: prod
             war: 0
             e2e: 1
-            testcontainers: 0
+            testcontainers: 1
           - app-type: ngx-gradle-h2disk-ws-nocache
             entity: sql
             environment: dev

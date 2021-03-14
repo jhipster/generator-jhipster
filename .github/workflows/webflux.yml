@@ -25,12 +25,56 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
+    paths:
+      # ci
+      - '.github/workflows/*'
+      - 'test-integration/**'
+
+      # common
+      - 'generators/*'
+      - 'generators/app/**'
+      - 'generators/boostrap/**'
+      - 'generators/common/**'
+      - 'jdl/jhipster/**'
+      - 'utils/**'
+
+      # e2e
+      - 'generators/cypress/**'
+      - 'generators/entity-client/templates/common/test/java/cypress/**'
+
+      # languages
+      - 'generators/languages/**'
+
+      # backend
+      - 'generators/database-changelog*/**'
+      - 'generators/*server/**'
+
   pull_request:
     branches:
       - '*'
-    paths-ignore:
-      - 'package*.json'
-      - 'generators/*client/**'
+    paths:
+      # ci
+      - '.github/workflows/*'
+      - 'test-integration/**'
+
+      # common
+      - 'generators/*'
+      - 'generators/app/**'
+      - 'generators/boostrap/**'
+      - 'generators/common/**'
+      - 'jdl/jhipster/**'
+      - 'utils/**'
+
+      # e2e
+      - 'generators/cypress/**'
+      - 'generators/entity-client/templates/common/test/java/cypress/**'
+
+      # languages
+      - 'generators/languages/**'
+
+      # backend
+      - 'generators/database-changelog*/**'
+      - 'generators/*server/**'
 env:
   JHI_RUN_APP: 1
   JHI_JDK: 11

@@ -25,16 +25,30 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
-    paths-ignore:
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/react/**'
+    paths:
+      # ci
+      - '.github/workflows/*'
+      - 'test-integration/**'
+
+      # paths not covered by backend tests
+      - 'package*.json'
+      - 'generators/*client/*'
+      - 'generators/*client/needle-api/*'
+      - 'generators/*client/templates/vue/**'
+
   pull_request:
     branches:
       - '*'
-    paths-ignore:
+    paths:
+      # ci
+      - '.github/workflows/*'
+      - 'test-integration/**'
+
+      # paths not covered by backend tests
       - 'package*.json'
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/react/**'
+      - 'generators/*client/*'
+      - 'generators/*client/needle-api/*'
+      - 'generators/*client/templates/vue/**'
 env:
   JHI_RUN_APP: 1
   JHI_JDK: 11
@@ -84,14 +98,10 @@ jobs:
         app-type:
           - vue-default
           - vue-noi18n
-          - vue-fulli18n-es
           - vue-gateway
           - vue-gradle-session
           - vue-ws-theme
           - vue-oauth2
-          #                    - vue-couchbase
-          - vue-mongodb-kafka-cucumber
-          - vue-session-cassandra-fr
         include:
           - app-type: vue-default
             entity: sqlfull
@@ -100,11 +110,6 @@ jobs:
             e2e: 1
           - app-type: vue-noi18n
             entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-          - app-type: vue-fulli18n-es
-            entity: sql
             environment: prod
             war: 0
             e2e: 1
@@ -128,22 +133,6 @@ jobs:
             environment: prod
             war: 0
             e2e: 1
-          # - app-type: vue-couchbase
-          #   entity: couchbase
-          #   environment: dev
-          #   war: 0
-          #   e2e: 1
-          - app-type: vue-mongodb-kafka-cucumber
-            entity: mongodb
-            environment: dev
-            war: 0
-            e2e: 1
-          - app-type: vue-session-cassandra-fr
-            entity: cassandra
-            environment: dev
-            war: 0
-            e2e: 1
-            testcontainers: 1
     env:
       JHI_GENERATE_SKIP_CONFIG: 1
       JHI_ENTITY: ${{ matrix.entity }}
