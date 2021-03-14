@@ -29,8 +29,6 @@ const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
 
-const windowsPlatform = os.platform() === 'win32';
-
 let useBlueprints;
 
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
@@ -63,8 +61,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             return defaultInstallTask();
           }
           const gradle = this.jhipsterConfig.buildTool === 'gradle';
-          const commandPrefix = windowsPlatform ? '' : './';
-          const command = `${commandPrefix}${gradle ? 'gradlew' : 'npmw'}`;
+          const command = gradle ? './gradlew' : './npmw';
           const args = gradle ? ['npmInstall'] : ['install'];
 
           const failureCallback = error => {
