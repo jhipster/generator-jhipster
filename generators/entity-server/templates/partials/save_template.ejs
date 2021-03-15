@@ -43,15 +43,15 @@ if (isUsingMapsId === true) {
             resultEntity = persistInstance; _%>
         <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%_ if (isUsingMapsId === true) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
+        <%= primaryKey.type %> <%= primaryKey.name %> = <%= asEntity(entityInstance) %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>();
+        <%= mapsIdRepoInstance %>.findById(<%= primaryKey.name %>).ifPresent(<%= persistInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
         <%_ } _%>
         <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= persistInstance %>);
     <%_ } else { resultEntity = 'result'; _%>
         <%_ if (isUsingMapsId === true) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= primaryKey.name %> = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>();
+        <%= mapsIdRepoInstance %>.findById(<%= primaryKey.name %>).ifPresent(<%= instanceName %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
     <%_ }
@@ -63,8 +63,8 @@ if (isUsingMapsId === true) {
         }
     } else { _%>
         <%_ if (isUsingMapsId === true && isController === false) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
+        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= primaryKey.name %> = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>();
+        <%= mapsIdRepoInstance %>.findById(<%= primaryKey.name %>).ifPresent(<%= entityInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);
 <%_ } _%>

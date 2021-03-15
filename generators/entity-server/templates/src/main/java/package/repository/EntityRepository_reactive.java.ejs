@@ -19,6 +19,9 @@
 package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.<%= persistClass %>;
+<%_ if (primaryKey.composite) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 <%_ } _%>
@@ -106,32 +109,45 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
 
     @Override
-    Mono<Void> deleteById(Long id);
+    Mono<Void> deleteById(<%= primaryKey.type %> id);
 
         <%_ } _%>
 
         <%_ for (const relationship of relationships) {
-                  let relationshipType = relationship.relationshipType;
-                  let relationshipName = relationship.relationshipName;
-                  let ownerSide = relationship.ownerSide;
-                  if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id = :id")
+            let relationshipType = relationship.relationshipType;
+            let relationshipName = relationship.relationshipName;
+            let ownerSide = relationship.ownerSide;
+            if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                let whereClause;
+                if (primaryKey.composite) {
+                    whereClause = relationship.otherEntity.primaryKey.ids.map(pk => `entity.${relationship.columnName}_${pk.columnName} = :id.${pk.name}`).join(' AND ');
+                } else {
+                    whereClause = `entity.${relationship.columnName}_${getColumnName(relationship.otherEntity.primaryKey.name)} = :id`
+                }
+        _%>
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE <%- whereClause %>")
     Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
+                <%_ const whereClauseIsNull = relationship.otherEntity.primaryKey.ids.map(pk => `entity.${relationship.columnName}_${pk.columnName} IS NULL`).join(' AND '); _%>
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE <%- whereClauseIsNull %>")
     Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
-              <%_ } else if (relationship.shouldWriteJoinTable) {
-                  _%>
+            <%_ } else if (relationship.shouldWriteJoinTable) {
+                let joinOn = relationship.otherEntity.primaryKey.ids.map(pk => `entity.${getColumnName(pk.nameCapitalized)} = joinTable.${entity.entityTableName}_${pk.columnName}`).join(' AND ');;
+                let whereClause;
+                if (primaryKey.composite) {
+                    whereClause = relationship.otherEntity.primaryKey.ids.map(pk => `joinTable.${relationship.columnName}_${pk.columnName} = :id.${pk.name}`).join(' AND ');
+                } else {
+                    whereClause = `joinTable.${relationship.columnName}_${getColumnName(relationship.otherEntity.primaryKey.name)} = :id`
+                }_%>
 
-    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
+    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON <%- joinOn %> WHERE <%- whereClause %>")
     Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
               <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
                   let otherEntityRelationshipName = relationship.otherEntityRelationshipName;
                   let otherEntityTableName = relationship.otherEntityTableName;
                   _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= primaryKey.name %> not in (select <%= getColumnName(otherEntityRelationshipName) %>_<%= getColumnName(relationship.otherEntity.primaryKey.name) %> from <%= otherEntityTableName %>)")
     Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
               <%_ } _%>
         <%_ } _%>

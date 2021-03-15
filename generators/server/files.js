@@ -742,6 +742,16 @@ const serverFiles = {
   ],
   serverJavaConfig: [
     {
+      condition: generator => !generator.reactive, // TODO it seems like reactive allows ";" by default in urls so need for config, to confirm with tests
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MatrixVariableConfiguration.java',
+          renameTo: generator => `${generator.packageFolder}/config/MatrixVariableConfiguration.java`,
+        },
+      ],
+    },
+    {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {

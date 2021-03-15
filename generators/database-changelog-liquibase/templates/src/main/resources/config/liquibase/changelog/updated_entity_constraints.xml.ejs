@@ -90,7 +90,7 @@
             relationshipName = relationship.relationshipName;
             if (relationship.shouldWriteRelationship) {
                 const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
-                let baseColumnName = getColumnName(relationshipName) + '_id';
+                let baseColumnName = relationship.columnName + '_id';
                 if (relationship.relationshipType === 'one-to-one' && relationship.id === true) {
                     baseColumnName = 'id';
                 }
@@ -102,7 +102,7 @@
                                  referencedTableName="<%= relationship.otherEntityTableName %>"/>
         <%_ } else if (relationship.shouldWriteJoinTable) {
                 const constraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(entityTableName), prodDatabaseType);
-                const otherEntityConstraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(relationshipName), prodDatabaseType);
+                const otherEntityConstraintName = getFKConstraintName(relationship.joinTable.name, relationship.columnName, prodDatabaseType);
         _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= primaryKey.originalFields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"

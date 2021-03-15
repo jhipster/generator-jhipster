@@ -21,7 +21,7 @@ let table = [];
 
 // Generate CSV header
 let header = [];
-const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)];
+const fieldsToGenerate = fields.filter(f => !(f.derived));
 for (field of fieldsToGenerate) {
   header.push(field.columnName);
   if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
@@ -31,12 +31,12 @@ for (field of fieldsToGenerate) {
 for (relationship of relationships) {
   const relationshipType = relationship.relationshipType
   if (
-    (relationshipType === "many-to-one"
-      || (relationshipType === "one-to-one" && relationship.ownerSide === true
-         && (relationship.id == null || relationship.id === false))
-    ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
+    (relationshipType === "many-to-one" || (relationshipType === "one-to-one" && relationship.ownerSide === true)) &&
+          ((relationship.relationshipValidate === true && relationship.relationshipRequired) || relationship.id)
   ) {
-    header.push(getColumnName(relationship.relationshipName) + "_id");
+    relationship.otherEntity.primaryKey.ids.forEach(pk => {
+      header.push(relationship.columnNamePrefix + pk.columnName);
+    })
   }
 }
 table.push(header);
@@ -67,19 +67,19 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
   for (relationship of relationships) {
     const relationshipType = relationship.relationshipType;
     if (
-      (relationshipType === "many-to-one"
-        || (relationshipType === "one-to-one" && relationship.ownerSide === true
-           && (relationship.id == null || relationship.id === false))
-      ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
+      (relationshipType === "many-to-one" || (relationshipType === "one-to-one" && relationship.ownerSide === true)) &&
+            ((relationship.relationshipValidate === true && relationship.relationshipRequired) || relationship.id)
     ) {
-      const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
-      let relationshipRow = lineNb;
-      if (relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
-        relationshipRow = entity.faker.random.number({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
-      }
-      if (relationshipRow < relationship.otherEntity.fakeDataCount) {
-        line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
-      }
+      relationship.otherEntity.primaryKey.ids.forEach(pk => {
+        const otherLiquibaseFakeData = pk.entity.liquibaseFakeData;
+        let relationshipRow = lineNb;
+        if (pk.entity.builtIn) {
+          relationshipRow = entity.faker.random.number({min: 1, max: otherLiquibaseFakeData.length}) - 1;
+        }
+        if (relationshipRow < otherLiquibaseFakeData.length) {
+            line.push(otherLiquibaseFakeData[relationshipRow][pk.field.fieldName]);
+        }
+      })
     }
   }
   if (line.length === header.length) {

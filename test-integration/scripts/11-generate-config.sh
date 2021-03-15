@@ -172,8 +172,18 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
 
     moveEntity MapsIdUserProfileWithDTO
 
-elif [[ "$3" != "" ]]; then
-    JHI_JDL_ENTITY=$3
+elif [[ "$JHI_ENTITY" == "composite" ]]; then
+    moveEntity WithIdString
+    moveEntity WithIdStringDetails
+    moveEntity WithUUID
+    moveEntity WithUUIDDetails
+    moveEntity Composite
+    moveEntity CompositeWithFieldAndDerived
+    moveEntity CompositeLevel2
+    moveEntity CompositeLevel2WithField
+
+elif [[ "$4" != "" ]]; then
+    JHI_JDL_ENTITY=$4
 fi
 
 #-------------------------------------------------------------------------------

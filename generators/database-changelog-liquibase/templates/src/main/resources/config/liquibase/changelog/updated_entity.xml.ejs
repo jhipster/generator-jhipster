@@ -108,7 +108,7 @@
             <%_ } _%>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= entity.primaryKey.originalFields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.originalFields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
+        <addPrimaryKey columnNames="<%= entity.primaryKey.originalFields.map(field => `${entity.entityTableName}_${field.referencedColumnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.originalFields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
         <%_ } _%>
     </changeSet>
     <%_ }

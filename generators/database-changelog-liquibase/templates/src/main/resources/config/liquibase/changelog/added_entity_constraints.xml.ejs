@@ -31,33 +31,32 @@
             ownerSide = relationship.ownerSide,
             otherEntityTableName = relationship.otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-                const constraintName = getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
-                let baseColumnNames;
-                let referencedColumnNames;
-                if (relationshipType === 'one-to-one' && ownerSide && relationship.id === true) {
-                    baseColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(field.columnName)).join(',');
-                    referencedColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(field.columnName)).join(',');
-                } else if (relationship.otherEntity) {
-                    baseColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(relationshipName + '_' + field.columnName)).join(',');
-                    referencedColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(field.columnName)).join(',');
-                } %>
+                    const constraintName = getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
+                    let referencedColumnNames = relationship.otherEntity.primaryKey.ids.map(pk => pk.columnName).join(',');
+                    let baseColumnNames = relationship.otherEntity.primaryKey.ids.map(pk => relationship.columnNamePrefix + pk.columnName).join(',');
+                    %>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnNames %>"
                                  baseTableName="<%= entity.entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="<%= referencedColumnNames %>"
                                  referencedTableName="<%= otherEntityTableName %>"/>
-        <%_ } else if (relationship.shouldWriteJoinTable) { _%>
+        <%_ } else if (relationship.shouldWriteJoinTable) {
+                ownerSideReferencedColumnsNames = entity.primaryKey.ids.map(pk => pk.columnName).join(',')
+                otherSideReferencedColumnsNames = relationship.otherEntity.primaryKey.ids.map(pk => pk.columnName).join(',');
+                ownerSideBaseColumnNames = entity.primaryKey.ids.map(pk => `${entity.entityTableName}_${pk.columnName}`).join(',');
+                otherSideBaseColumnNames = relationship.otherEntity.primaryKey.ids.map(pk => relationship.columnNamePrefix + pk.columnName).join(',');
+          _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= entity.primaryKey.originalFields.map(field => entity.entityTableName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= ownerSideBaseColumnNames %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= relationship.joinTable.constraintName %>"
-                                 referencedColumnNames="<%= entity.primaryKey.originalFields.map(field => field.columnName).join(', ') %>"
+                                 referencedColumnNames="<%= ownerSideReferencedColumnsNames %>"
                                  referencedTableName="<%= entity.entityTableName %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.originalFields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= otherSideBaseColumnNames %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= relationship.joinTable.otherConstraintName %>"
-                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.originalFields.map(field => field.columnName).join(', ') %>"
+                                 referencedColumnNames="<%= otherSideReferencedColumnsNames %>"
                                  referencedTableName="<%= relationship.otherEntity.entityTableName %>"/>
         <%  } %><% } %>
     </changeSet>

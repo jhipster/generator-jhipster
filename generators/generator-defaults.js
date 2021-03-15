@@ -72,6 +72,7 @@ const serverDefaultConfig = {
   authenticationType: defaultMonolithOptions[optionNames.AUTHENTICATION_TYPE],
   serviceDiscoveryType: defaultMonolithOptions[optionNames.SERVICE_DISCOVERY_TYPE],
   enableHibernateCache: true,
+  backwardCompatibleDerivedName: true,
   reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
 };
 

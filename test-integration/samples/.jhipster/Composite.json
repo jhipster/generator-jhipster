@@ -1,0 +1,41 @@
+{
+  "name": "Composite",
+  "fields": [
+    {
+      "fieldName": "field",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "withIdString",
+      "otherEntityRelationshipName": "composite",
+      "relationshipValidateRules": "required",
+      "relationshipName": "wis",
+      "otherEntityField": "name",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "withUUID",
+      "otherEntityRelationshipName": "composite",
+      "relationshipName": "withUUID",
+      "options": {
+        "id": true
+      }
+    }
+  ],
+  "entityTableName": "composite",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303044753"
+}

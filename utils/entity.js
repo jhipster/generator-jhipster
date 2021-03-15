@@ -219,7 +219,9 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
             if (!entityWithConfig.idField) {
               const otherEntityIdField = relationshipId.otherEntity.primaryKey.originalFields[0];
               entityWithConfig.idField = {
-                fieldName: otherEntityIdField.fieldName,
+                fieldName: generator.jhipsterConfig.backwardCompatibleDerivedName
+                  ? otherEntityIdField.fieldName
+                  : `${relationshipId.relationshipName}${_.upperFirst(otherEntityIdField.fieldName)}`,
                 fieldType: otherEntityIdField.fieldType,
                 id: true,
                 autoGenerate: true,
@@ -245,10 +247,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
           return relationshipId.otherEntity.primaryKey.originalFields;
         },
         get name() {
-          return relationshipId.otherEntity.primaryKey.name;
+          return entityWithConfig.idField.fieldName;
         },
         get nameCapitalized() {
-          return relationshipId.otherEntity.primaryKey.nameCapitalized;
+          return _.upperFirst(this.name);
         },
         get type() {
           return relationshipId.otherEntity.primaryKey.type;
@@ -359,11 +361,14 @@ function fieldToId(field, generator, entity) {
 function relationshipToIds(relationship, generator) {
   const pks = relationship.otherEntity.primaryKey.ids.map(pk => ({
     field: pk.field,
-    name: relationship.relationshipType === 'one-to-one' ? pk.name : `${relationship.relationshipName}${pk.nameCapitalized}`,
+    name:
+      relationship.relationshipType === 'one-to-one' && generator.jhipsterConfig.backwardCompatibleDerivedName
+        ? pk.name
+        : `${relationship.relationshipName}${pk.nameCapitalized}`,
     nameDotted: `${relationship.relationshipName}.${pk.nameDotted}`,
     columnName:
-      relationship.relationshipType === 'one-to-one'
-        ? generator.getColumnName(pk.name)
+      relationship.relationshipType === 'one-to-one' && generator.jhipsterConfig.backwardCompatibleDerivedName
+        ? pk.columnName
         : `${generator.getColumnName(relationship.relationshipName)}_${pk.columnName}`,
     entity: pk.entity,
     usedRelationships: [relationship, ...pk.usedRelationships],

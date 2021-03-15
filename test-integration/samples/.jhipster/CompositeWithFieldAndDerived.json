@@ -1,0 +1,49 @@
+{
+  "name": "CompositeWithFieldAndDerived",
+  "fields": [
+    {
+      "fieldName": "myId",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "field",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "compositeLevel2",
+      "otherEntityRelationshipName": "cwfad",
+      "relationshipName": "compositeLevel2"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "compositeLevel2WithField",
+      "otherEntityRelationshipName": "compositeWithFieldAndDerived",
+      "relationshipName": "compositeLevel2WithField"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "withIdStringDetails",
+      "otherEntityRelationshipName": "compositeWithFieldAndDerived",
+      "relationshipName": "withIdStringDetails",
+      "options": {
+        "id": true
+      }
+    }
+  ],
+  "entityTableName": "composite_with_f_and_d",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303044853"
+}

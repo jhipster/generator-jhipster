@@ -30,6 +30,7 @@ const BaseGenerator = require('../generators/generator-base');
 
 describe('entity utilities', () => {
   const defaultGenerator = { jhipsterConfig: defaultConfig };
+  defaultGenerator.databaseType = 'sql';
   Object.setPrototypeOf(defaultGenerator, BaseGenerator.prototype);
 
   describe('prepareEntityForTemplates', () => {
@@ -221,6 +222,144 @@ describe('entity utilities', () => {
             ],
           });
 
+          expect(entity3.primaryKey.ids).to.have.lengthOf(1);
+          expect(entity3.primaryKey.ids[0].usedRelationships).to.have.lengthOf(1);
+          expect(entity3.fields[0]).to.containSubset({
+            fieldName: 'entity2Uuid',
+            id: true,
+          });
+          expect(entity3.primaryKey).to.containSubset({
+            name: 'entity2Uuid',
+            nameCapitalized: 'Entity2Uuid',
+            type: 'UUID',
+            tsType: 'string',
+            derived: true,
+            composite: false,
+            autoGenerate: true,
+            ids: [
+              {
+                field: entity2.primaryKey.originalFields[0],
+                name: 'entity2Uuid',
+                nameDotted: 'entity2.uuid',
+                nameCapitalized: 'Entity2Uuid',
+                nameDottedAsserted: 'entity2!.uuid!',
+                columnName: 'entity2_uuid',
+                getter: 'getEntity2Uuid',
+                setter: 'setEntity2Uuid',
+                entity: {
+                  name: entity2.name,
+                },
+                autoGenerate: true,
+                usedRelationships: [{ relationshipName: 'entity2', id: true, otherEntity: entity2 }],
+              },
+            ],
+          });
+
+          expect(entity4.primaryKey.ids).to.have.lengthOf(3);
+          expect(entity4.primaryKey.ids[0].usedRelationships).to.have.lengthOf(0);
+          expect(entity4.primaryKey.ids[1].usedRelationships).to.have.lengthOf(1);
+          expect(entity4.primaryKey.ids[2].usedRelationships).to.have.lengthOf(2);
+          expect(entity4.primaryKey).to.containSubset({
+            name: 'id',
+            nameCapitalized: 'Id',
+            type: 'Entity4Id',
+            tsType: 'string',
+            derived: false,
+            composite: true,
+            autoGenerate: false,
+            ids: [
+              {
+                field: entity4.fields[0],
+                name: 'uuid',
+                nameDotted: 'uuid',
+                nameCapitalized: 'Uuid',
+                nameDottedAsserted: 'uuid!',
+                columnName: 'uuid',
+                getter: 'getUuid',
+                setter: 'setUuid',
+                entity: {
+                  name: entity4.name,
+                },
+                autoGenerate: false,
+                usedRelationships: [],
+              },
+              {
+                field: entity1.fields[0],
+                name: 'otherEntity1Id',
+                nameDotted: 'otherEntity1.id',
+                nameCapitalized: 'OtherEntity1Id',
+                nameDottedAsserted: 'otherEntity1!.id!',
+                columnName: 'other_entity1_id',
+                getter: 'getOtherEntity1Id',
+                setter: 'setOtherEntity1Id',
+                entity: {
+                  name: entity1.name,
+                },
+                autoGenerate: false,
+                usedRelationships: [{ relationshipName: 'otherEntity1', id: true, otherEntity: entity1 }],
+              },
+              {
+                field: entity2.fields[0],
+                name: 'otherEntity3Entity2Uuid',
+                nameDotted: 'otherEntity3.entity2.uuid',
+                nameCapitalized: 'OtherEntity3Entity2Uuid',
+                nameDottedAsserted: 'otherEntity3!.entity2!.uuid!',
+                columnName: 'other_entity3_entity2_uuid',
+                getter: 'getOtherEntity3Entity2Uuid',
+                setter: 'setOtherEntity3Entity2Uuid',
+                entity: {
+                  name: entity2.name,
+                },
+                autoGenerate: false,
+                usedRelationships: [
+                  { relationshipName: 'otherEntity3', id: true, otherEntity: entity3 },
+                  { relationshipName: 'entity2', id: true, otherEntity: entity2 },
+                ],
+              },
+            ],
+          });
+        });
+      });
+      describe('with multiple @Id relationships and field backward compatible', () => {
+        let entity1 = {
+          ...entityDefaultConfig,
+          name: 'Entity1',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'String', id: true }],
+        };
+        let entity2 = {
+          ...entityDefaultConfig,
+          name: 'Entity2',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'uuid', fieldType: 'UUID', id: true, autoGenerate: true }],
+        };
+        let entity3 = {
+          ...entityDefaultConfig,
+          name: 'Entity3',
+          changelogDate: formatDateForChangelog(new Date()),
+          relationships: [{ relationshipName: 'entity2', relationshipType: 'one-to-one', id: true, otherEntity: entity2 }],
+        };
+        let entity4 = {
+          ...entityDefaultConfig,
+          name: 'Entity4',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'uuid', fieldType: 'UUID', id: true, autoGenerate: false }],
+          relationships: [
+            { relationshipName: 'otherEntity1', id: true, otherEntity: entity1, relationshipType: 'many-to-one' },
+            { relationshipName: 'otherEntity3', id: true, otherEntity: entity3, relationshipType: 'many-to-one' },
+          ],
+        };
+        beforeEach(() => {
+          const backwardCompatibleGenerator = { jhipsterConfig: defaultConfig };
+          backwardCompatibleGenerator.databaseType = 'sql';
+          backwardCompatibleGenerator.jhipsterConfig.backwardCompatibleDerivedName = true;
+          Object.setPrototypeOf(backwardCompatibleGenerator, BaseGenerator.prototype);
+          entity1 = prepareEntityForTemplates(entity1, backwardCompatibleGenerator);
+          entity2 = prepareEntityForTemplates(entity2, backwardCompatibleGenerator);
+          entity3 = prepareEntityForTemplates(entity3, backwardCompatibleGenerator);
+          entity4 = prepareEntityForTemplates(entity4, backwardCompatibleGenerator);
+        });
+        it('should compute primaryKeys correctly', () => {
           expect(entity3.primaryKey.ids).to.have.lengthOf(1);
           expect(entity3.primaryKey.ids[0].usedRelationships).to.have.lengthOf(1);
           expect(entity3.fields[0]).to.containSubset({

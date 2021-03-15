@@ -59,6 +59,7 @@ const {
   NATIVE_LANGUAGE,
   SKIP_USER_MANAGEMENT,
   ENABLE_SWAGGER_CODEGEN,
+  BACKWARD_COMPATIBLE_DERIVED_NAME,
   REACTIVE,
   ENTITY_SUFFIX,
   DTO_SUFFIX,
@@ -103,6 +104,7 @@ const applicationConfigTokens = [
   { name: 'FRONT_END_BUILDER', pattern: 'frontendBuilder' }, // TODO always valid?
   { name: 'SKIP_USER_MANAGEMENT', pattern: SKIP_USER_MANAGEMENT },
   { name: 'ENABLE_SWAGGER_CODEGEN', pattern: ENABLE_SWAGGER_CODEGEN },
+  { name: 'BACKWARD_COMPATIBLE_DERIVED_NAME', pattern: BACKWARD_COMPATIBLE_DERIVED_NAME },
   { name: 'REACTIVE', pattern: REACTIVE },
   { name: 'ENTITY_SUFFIX', pattern: ENTITY_SUFFIX },
   { name: 'DTO_SUFFIX', pattern: DTO_SUFFIX },

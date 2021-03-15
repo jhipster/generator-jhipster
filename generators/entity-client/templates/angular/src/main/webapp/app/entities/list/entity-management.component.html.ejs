@@ -79,7 +79,7 @@ _%>
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr<% if (pagination !== 'no') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
-                    <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+                    <%_ for (const field of fields) { _%>
                     <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
                     <%_ for (const relationship of relationships) { _%>
@@ -97,8 +97,9 @@ _%>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
                 <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
                 <%_
-                const routerLink = ` [routerLink]="['/${ entityUrl }', ${entityInstance}.${primaryKey.name}, 'view']"`;
-                for (field of fields.filter(field => !field.hidden)) {
+                const keys = primaryKey.ids.length === 1 ? `${entityInstance}!.${primaryKey.name}!` : `{ ${primaryKey.ids.map(pk => `${pk.name}: ${entityInstance}!.${pk.nameDottedAsserted}`).join(', ')} }`;
+                const routerLink = ` [routerLink]="['/${ entityUrl }', ${ keys }, 'view']"`;
+                for ([idx, field] of fields.entries()) {
                     const fieldName = field.fieldName;
                     const fieldNameCapitalized = field.fieldNameCapitalized;
                     const fieldType = field.fieldType;

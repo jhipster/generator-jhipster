@@ -2519,6 +2519,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
 
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
+    dest.backwardCompatibleDerivedName = config.backwardCompatibleDerivedName;
     dest.messageBroker = config.messageBroker;
     dest.websocket = config.websocket;
     dest.serviceDiscoveryType = config.serviceDiscoveryType;

@@ -28,7 +28,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %><% if (primaryKey.composite) { %>, get<%= entityAngularName %>Identifier<% } %> } from '../<%= entityFileName %>.model';
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
@@ -58,7 +58,11 @@ export class <%= entityAngularName %>Component implements OnInit {
 
     <%_ if (primaryKey) { _%>
     track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
+        <%_ if (primaryKey.composite) { _%>
+        return get<%= entityAngularName %>Identifier(item);
+        <%_ } else { _%>
         return item.<%= primaryKey.name %>!;
+        <%_ } _%>
     }
 
     <%_ } _%>

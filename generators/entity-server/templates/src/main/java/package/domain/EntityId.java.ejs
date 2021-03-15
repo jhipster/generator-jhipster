@@ -1,0 +1,101 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.domain;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+<%_ if (validation) { _%>
+import javax.validation.constraints.*;
+<%_ } _%>
+import java.util.Objects;
+<%_ if (primaryKey.ids.some(id => id.field.fieldType === 'UUID')) { _%>
+import java.util.UUID;
+<%_ } _%>
+
+@Embeddable
+public class <%= entityClass %>Id implements java.io.Serializable {
+<%_
+// here we lie to the field_validators code because it was coded to expect fields[idx] to contain the validation info
+const realFields = fields;
+fields = primaryKey.ids.map(pk => pk.field);
+for (let idx=0; idx< primaryKey.ids.length; idx++) { _%>
+
+    <%_ if (primaryKey.ids[idx].isEnum) { _%>
+    @Enumerated(EnumType.STRING)
+    <%_ }
+    if (fields[idx].fieldValidateRules && fields[idx].fieldValidateRules.includes('required')) {
+        required = true;
+    }
+    const fieldValidateRules = fields[idx].fieldValidateRules;
+    _%>
+    <%_ if (fieldValidateRules && fieldValidateRules.length > 0) { _%>
+    <%- include('../common/field_validators'); -%>
+    <%_ } _%>
+    @Column(name = "<%= primaryKey.ids[idx].columnName %>"<% if (primaryKey.ids[idx].fieldValidate === true) { %><% if (primaryKey.ids[idx].fieldValidateRules.includes('maxlength')) { %>, length = <%= primaryKey.ids[idx].fieldValidateRulesMaxlength %><% } %><% if (primaryKey.ids[idx].required) { %>, nullable = false<% } %><% if (primaryKey.ids[idx].unique) { %>, unique = true<% } %><% } %>)
+    private <%= primaryKey.ids[idx].field.fieldType %> <%= primaryKey.ids[idx].name %>;
+<%_ }
+// we put back the real value of fields
+fields = realFields; _%>
+
+    public <%= entityClass %>Id(){}
+
+    public <%= entityClass %>Id(<%= primaryKey.ids.map(pk => pk.field.fieldType + ' ' + pk.name).join(', ') %>){
+<%_ for (let idx=0; idx< primaryKey.ids.length; idx++) { _%>
+        this.<%= primaryKey.ids[idx].name %> = <%= primaryKey.ids[idx].name %>;
+<%_ }_%>
+    }
+<%_ for (let idx=0; idx< primaryKey.ids.length; idx++) { _%>
+
+    public <%= primaryKey.ids[idx].field.fieldType %> <%= primaryKey.ids[idx].getter %>(){
+        return this.<%= primaryKey.ids[idx].name %>;
+    }
+
+    public void <%= primaryKey.ids[idx].setter %>(<%= primaryKey.ids[idx].field.fieldType %> <%= primaryKey.ids[idx].name %>){
+        this.<%= primaryKey.ids[idx].name %> = <%= primaryKey.ids[idx].name %>;
+    }
+<%_ }_%>
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof <%= entityClass %>Id)) {
+            return false;
+        }
+
+        <%= entityClass %>Id <%= entityInstance %>Id = (<%= entityClass %>Id) o;
+        return <%- primaryKey.ids.map(f => `Objects.equals(${f.name}, ${entityInstance}Id.${f.name})`).join('\n            && ') %>;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(<%= primaryKey.ids.map(f => f.name).join(', ')%>);
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "<%= entityClass %>Id{" +
+            <%_ for (let idx=0; idx< primaryKey.ids.length; idx++) {
+                const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(primaryKey.ids[idx].field.fieldType.toLowerCase()); _%>
+            ", <%= primaryKey.ids[idx].name %>=<% if (! isNumeric) {%>'<% } %>" + <%= primaryKey.ids[idx].getter %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            <%_ } _%>
+            "}";
+    }
+}

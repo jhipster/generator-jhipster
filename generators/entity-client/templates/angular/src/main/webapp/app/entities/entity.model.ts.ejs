@@ -54,6 +54,27 @@ export class <%= entityAngularName %> implements I<%= entityAngularName %> {
 <%_ if (primaryKey) { _%>
 
 export function get<%= entityAngularName %>Identifier(<%= entityInstance %>: I<%= entityAngularName %>): <%= primaryKey.tsType %> | undefined {
+<%_ if (primaryKey.ids.length === 1) { _%>
   return <%= entityInstance %>.<%= primaryKey.name %>;
+<%_ } else {
+    // this complicated code ensures that the optional chaining operator '?.' is not called twice in the same relationship casing an error.
+    let usedRelationships = new Set();
+    values = [];
+    primaryKey.ids.forEach(pk => {
+        let value = `!${entityInstance}.`;
+        pk.usedRelationships.forEach(r => {
+            if (usedRelationships.has(r)) {
+                value += `${r.relationshipName}.`;
+            } else {
+                value += `${r.relationshipName}?.`;
+                usedRelationships.add(r);
+            }
+        });
+        value += pk.field.fieldName;
+        values.push(value);
+    });
+_%>
+  return (<%- values.join(' || ') %>) ? undefined : `<%- primaryKey.ids.map(pk => `\${${entityInstance}.${pk.nameDotted}}`).join(';') %>`;
+<%_ } _%>
 }
 <%_ } _%>

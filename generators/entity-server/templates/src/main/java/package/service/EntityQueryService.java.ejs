@@ -32,10 +32,15 @@ const criteria = entityClass + 'Criteria';
 _%>
 import java.util.List;
 
-import javax.persistence.criteria.JoinType;
+<%_ if (relationships.length) { _%>
+import javax.persistence.criteria.Root;
+<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ if (relationships.length) { _%>
+import org.springframework.context.annotation.Lazy;
+<%_ } _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -65,7 +70,7 @@ import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null, isController: false}); -%>
+<%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null, isController: false, relQueryServices: true}); -%>
 
     /**
      * Return a {@link List} of {@link <%= instanceType %>} which matches the criteria from the database.
@@ -118,27 +123,41 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
      */
-    protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
+    public Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= persistClass %>> specification = Specification.where(null);
         if (criteria != null) {
-            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
-                specification = specification.and(<%= getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
-            }
-            <%_
-            fields.forEach((field) => {
-                if (field.id) return;
+            <%_ fields.forEach((field) => {
                 if (isFilterableType(field.fieldType)) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
                 specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>));
             }
             <%_ }
-            });
+            }); _%>
 
-            relationships.forEach((relationship) => {
-                const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
-            if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-                specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-                    root -> root.join(<%= persistClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= asEntity(relationship.otherEntityNameCapitalized) %>_.<%= relationship.otherEntity.primaryKey.name %>)));
+            <%_ relationships
+                    // TRACK-1 remove this filter once all entities have criteria and can convert from criteria to specification without queryService
+                    .filter(r =>r.otherEntity.jpaMetamodelFiltering)
+                    .forEach((relationship) => { _%>
+            if (criteria.get<%= relationship.relationshipNameCapitalized %>() != null) {
+                Specification<<%= asEntity(relationship.otherEntityNameCapitalized) %>> <%= relationship.otherEntityName %>Specification = this.<%= relationship.otherEntityName %>QueryService.createSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>());
+                specification = specification.and((root, query, criteriaBuilder) -> {
+                    Root<<%= asEntity(relationship.otherEntityNameCapitalized) %>> <%= relationship.otherEntityName %>Root = query.from(<%= asEntity(relationship.otherEntityNameCapitalized) %>.class);
+                    return criteriaBuilder.and(
+                <%_ if (['one-to-one'].includes(relationship.relationshipType)) { _%>
+                    <%_ // this should work, without looking through pk and use pkGetter, the same way it does for manyToMany just by comparing entities, for some reason it doesn't _%>
+                    <%_ // issue: https://hibernate.atlassian.net/browse/HHH-14341 _%>
+                    <%_ relationship.otherEntity.primaryKey.ids.forEach(pk => {
+                        const pkGetter = `get(${asEntity(relationship.otherEntity.entityClass)}_.${pk.name})` _%>
+                            criteriaBuilder.equal(<%= relationship.otherEntityName %>Root.<%= pkGetter %>, root.get(<%= asEntity(entityClass) %>_.<%= relationship.relationshipName %>).<%= pkGetter %>),
+                    <%_ }) _%>
+                <%_ } else if (['many-to-one'].includes(relationship.relationshipType)) { _%>
+                            criteriaBuilder.equal(<%= relationship.otherEntityName %>Root, root.get(<%= persistClass %>_.<%= relationship.relationshipName %>)),
+                <%_ } else { _%>
+                            criteriaBuilder.isMember(<%= relationship.otherEntityName %>Root, root.get(<%= asEntity(entityClass) %>_.<%= relationship.relationshipNamePlural %>)),
+                <%_ } _%>
+                            <%= relationship.otherEntityName %>Specification.toPredicate(<%= relationship.otherEntityName %>Root, query, criteriaBuilder)
+                    );
+                });
             }
             <%_ }); // forEach
         _%>

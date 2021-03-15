@@ -51,6 +51,9 @@ import java.util.Optional;
 <%_ if (primaryKey.type === 'UUID') { _%>
 import java.util.UUID;
 <%_ } _%>
+<%_ if (primaryKey.composite) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 
 /**
  * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= persistClass %>}.

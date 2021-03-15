@@ -104,6 +104,9 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 import java.io.Serializable;
+<%_ if (!embedded && !primaryKey.autoGenerate) { _%>
+import java.util.Objects;
+<%_ } _%>
 <%_ if (fieldsContainBigDecimal === true) { _%>
 import java.math.BigDecimal;
 <%_ } if (fieldsContainBlob && databaseType === 'cassandra') { _%>
@@ -134,6 +137,9 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
+<%_ if (primaryKey.ids.length > 1) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 <%_ } _%>
 <%_ if (typeof javadoc == 'undefined') { _%>
 /**
@@ -180,27 +186,12 @@ public class <%= persistClass %> implements Serializable {
     @IdPrefix
     private String prefix = PREFIX;
     <%_ } _%>
+<%_ if (primaryKey && primaryKey.composite) { _%>
 
-<%_ if (!embedded) { _%>
-    @Id
-    <%_ if (databaseType === 'sql' && isUsingMapsId === false && !reactive && !primaryKey.composite) { _%>
-        <%_ if (primaryKey.originalFields[0].jpaGeneratedValue === 'identity') { _%>
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (primaryKey.originalFields[0].jpaGeneratedValue === 'sequence') { _%>
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-        <%_ } else if (primaryKey.originalFields[0].jpaGeneratedValue) { _%>
-    @GeneratedValue
-        <%_ } _%>
-    <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
-    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } else if (databaseType === 'neo4j') { _%>
-    @GeneratedValue(UUIDStringGenerator.class)
-    <%_ } _%>
-    private <%= primaryKey.type %> <%= primaryKey.name %>;
-
+    @EmbeddedId
+    <%= primaryKey.type %> id;
 <%_ } _%>
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
+<%_ for (const field of fields.filter(field => !field.transient)) {
     if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
     <%_ }
@@ -214,6 +205,23 @@ public class <%= persistClass %> implements Serializable {
     const fieldName = field.fieldName;
     const fieldNameUnderscored = field.fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = field.fieldNameAsDatabaseColumn;
+    if (field.id && primaryKey.ids.length === 1) { _%>
+    @Id
+        <%_ if (databaseType === 'sql' && isUsingMapsId === false && !reactive && !primaryKey.composite) { _%>
+            <%_ if (primaryKey.originalFields[0].jpaGeneratedValue === 'identity') { _%>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+            <%_ } else if (primaryKey.originalFields[0].jpaGeneratedValue === 'sequence') { _%>
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+            <%_ } else if (primaryKey.originalFields[0].jpaGeneratedValue) { _%>
+    @GeneratedValue
+            <%_ } _%>
+        <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
+        <%_ } else if (databaseType === 'neo4j') { _%>
+    @GeneratedValue(UUIDStringGenerator.class)
+        <%_ } _%>
+    <%_ }
     if (fieldValidate === true) {
         if (fieldValidateRules.includes('required')) {
             required = true;
@@ -246,11 +254,13 @@ public class <%= persistClass %> implements Serializable {
         <%_ } else if (fieldType === 'UUID' && ['mysql', 'mariadb'].includes(prodDatabaseType)) { _%>
     @Type(type = "uuid-char")
     @Column(name = "<%- fieldNameAsDatabaseColumn %>", length = 36<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
-        <%_ } else { _%>
-    @Column(name = "<%- fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
+        <%_ } else if (!field.autoGenerate){ _%>
+    @Column(name = "<%- fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %><%if (field.id && primaryKey.ids.length > 1) { %>, insertable = false, updatable = false<% } %>)
+        <%_ } else if (databaseType === 'sql' && !reactive && field.id) { _%>
+    @Column(name = "<%- fieldNameAsDatabaseColumn %>")
         <%_ }
     } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !field.id) { _%>
     @Field("<%= fieldNameUnderscored %>")
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
@@ -384,12 +394,19 @@ relationships.forEach((relationship, idx) => {
     <%_ } _%>
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transient
-    <%_ } _%>
+    <%_ }
+    if (relationship.id && !reactive) {
+        if (relationship.otherEntity.primaryKey.ids.length === 1) { _%>
+    @JoinColumn(insertable = false, updatable = false)
+        <%_ } else { _%>
+    @JoinColumns({<%- relationship.otherEntity.primaryKey.ids.map(pk => '@JoinColumn(name = "' + relationship.columnName + '_' + pk.columnName + '", insertable = false, updatable = false)').join(', ') %>})
+        <%_ }
+    } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
     <%_ if (databaseType === 'sql' && reactive) { _%>
-    @Column("<%= getColumnName(relationshipName) %>_id")
-    private <%= relationship.otherEntity.primaryKey.type %> <%= relationshipFieldName %>Id;
+    @Column("<%= getColumnName(relationshipName) %>_<%= relationship.otherEntity.primaryKey.name %>")
+    private <%= relationship.otherEntity.primaryKey.type %> <%= relationshipFieldName %><%= relationship.otherEntity.primaryKey.nameCapitalized %>;
     <%_ } _%>
 
 <%_ } else if (relationshipType === 'many-to-many') {
@@ -402,16 +419,8 @@ relationships.forEach((relationship, idx) => {
     <%- include('relationship_validators', { relationship }); -%>
         <%_ } _%>
     @JoinTable(name = "<%= relationship.joinTable.name %>",
-               joinColumns = <%= entity.primaryKey.ids.length > 1 ? '{' : '' %>
-                   <%_ entity.primaryKey.originalFields.forEach((field, idx) => { _%>
-                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
-                   <%_ }); _%>
-               <%= entity.primaryKey.ids.length > 1 ? '}' : '' %>,
-               inverseJoinColumns = <%= relationship.otherEntity.primaryKey.ids.length > 1 ? '{' : '' %>
-                   <%_ relationship.otherEntity.primaryKey.originalFields.forEach((field, idx) => { _%>
-                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
-                   <%_ }); _%>
-               <%= relationship.otherEntity.primaryKey.ids.length > 1 ? '}' : '' %>
+        joinColumns = {<%- primaryKey.ids.map(pk => '@JoinColumn(name = "' + entityTableName + '_' + pk.columnName + '", referencedColumnName = "' + pk.columnName + '")').join(', ') %>},
+        inverseJoinColumns = {<%- relationship.otherEntity.primaryKey.ids.map(pk => '@JoinColumn(name = "' + relationship.columnName + '_' + pk.columnName + '", referencedColumnName = "' + pk.columnName + '")').join(', ') %>})
         <%_ }
         } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
             if (databaseType === 'mongodb') { _%>
@@ -456,7 +465,6 @@ relationships.forEach((relationship, idx) => {
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
-    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.ids[0].columnName %>")
             <%_ } else { _%>
     @JoinColumn(unique = true)
             <%_ } _%>
@@ -482,28 +490,35 @@ relationships.forEach((relationship, idx) => {
         <%_ } else if (databaseType === 'neo4j') { _%>
     @Relationship("<%= relationshipName %>")
         <%_ } _%>
+    <%_ if (relationship.id && !reactive) { _%>
+        <% if (relationship.otherEntity.primaryKey.composite) { %>@JoinColumns({<% } %>
+            <%- relationship.otherEntity.primaryKey.ids.map(pk => '@JoinColumn(name = "' + relationship.columnNamePrefix + pk.columnName + '", insertable = false, updatable = false)').join(', ') %>
+        <% if (relationship.otherEntity.primaryKey.composite) { %>})<% } %>
+    <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
 <%_ }
 }); _%>
     // jhipster-needle-entity-add-field - JHipster will add fields here
-<%_ if (!embedded) { _%>
-    public <%= primaryKey.type %> get<%= primaryKey.nameCapitalized %>() {
-        return <%= primaryKey.name %>;
+<%_ if (!embedded && primaryKey.ids.length > 1) {
+    const pkName = primaryKey.ids.length > 1 ? 'id' : primaryKey.name;
+    const pkNameCapitalized = _.upperFirst(pkName); _%>
+    public <%= primaryKey.type %> get<%= pkNameCapitalized %>() {
+        return <%= pkName %>;
     }
 
-    public void set<%= primaryKey.nameCapitalized %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
-        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
+    public void set<%= pkNameCapitalized %>(<%= primaryKey.type %> <%= pkName %>) {
+        this.<%= pkName %> = <%= pkName %>;
     }
 
-    <%_ if (fluentMethods) { _%>
-    public <%= persistClass %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
-        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
+<%_ if (fluentMethods) { _%>
+    public <%= persistClass %> <%= pkName %>(<%= primaryKey.type %> <%= pkName %>) {
+        this.<%= pkName %> = <%= pkName %>;
         return this;
     }
     <%_ } _%>
 <%_ } _%>
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
+<%_ for (const field of fields.filter(field => !field.transient)) {
         const fieldType = field.fieldType;
         const fieldTypeBlobContent = field.fieldTypeBlobContent;
         const fieldName = field.fieldName;
@@ -737,23 +752,23 @@ relationships.forEach((relationship, idx) => {
     @Override
     public int hashCode() {
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
+        return <% if (embedded || primaryKey.autoGenerate) { %>getClass().hashCode()<% } else { %>Objects.hashCode(<%= primaryKey.name %>)<% } %>;
     }
 
     // prettier-ignore
     @Override
     public String toString() {
         return "<%= persistClass %>{" +
-        <%_ if (!embedded) { _%>
+        <%_ if (!embedded && primaryKey.composite) { _%>
             "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
         <%_ } _%>
-            <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
+            <%_ for (const field of fields.filter(field => !field.transient)) {
                 const fieldType = field.fieldType;
                 const fieldTypeBlobContent = field.fieldTypeBlobContent;
                 const fieldName = field.fieldName;
                 const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod;
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
-            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            "<% if (fields[0] !== field || (!embedded && primaryKey.composite)) { %>, <% } %><%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
                 <%_ if (field.fieldWithContentType) { _%>
             ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>

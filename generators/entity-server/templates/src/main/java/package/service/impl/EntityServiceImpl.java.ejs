@@ -48,6 +48,9 @@ import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 import <%= packageName %>.service.dto.<%= dtoClass %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
+<%_ if (primaryKey.composite) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +100,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {asEntity, asDto, viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
+<%- include('../../common/inject_template', {asEntity, asDto, viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, relQueryServices: false}); -%>
 
     <%_ if (service !== 'serviceImpl') { _%>
     /**

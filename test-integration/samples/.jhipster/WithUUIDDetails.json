@@ -1,0 +1,31 @@
+{
+  "name": "WithUUIDDetails",
+  "fields": [
+    {
+      "fieldName": "details",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "withUUID",
+      "otherEntityRelationshipName": "withUUIDDetails",
+      "relationshipName": "withUUID",
+      "ownerSide": true,
+      "options": {
+        "id": true
+      }
+    }
+  ],
+  "entityTableName": "with_uuid_details",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303044653"
+}

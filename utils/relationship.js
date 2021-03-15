@@ -154,6 +154,10 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     relationshipNameCapitalized: _.upperFirst(relationshipName),
     relationshipNameHumanized: _.startCase(relationshipName),
     columnName: generator.getColumnName(relationshipName),
+    columnNamePrefix:
+      generator.jhipsterConfig.backwardCompatibleDerivedName && relationship.id && relationship.relationshipType === 'one-to-one'
+        ? ''
+        : `${generator.getColumnName(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: _.upperFirst(otherEntityName),
     otherEntityTableName:

@@ -1,0 +1,36 @@
+{
+  "name": "WithIdStringDetails",
+  "fields": [
+    {
+      "fieldName": "details",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "withIdString",
+      "otherEntityRelationshipName": "withIdStringDetails",
+      "relationshipName": "withIdString",
+      "ownerSide": true,
+      "useJPADerivedIdentifier": true,
+      "id": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "compositeWithFieldAndDerived",
+      "otherEntityRelationshipName": "withIdStringDetails",
+      "relationshipName": "compositeWithFieldAndDerived"
+    }
+  ],
+  "entityTableName": "with_id_string_details",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303044453"
+}

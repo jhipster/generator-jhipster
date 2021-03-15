@@ -66,7 +66,7 @@ import { UserService } from 'app/entities/user/user.service';
 <%_
             } else {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
+import { I<%= uniqueRel.otherEntityAngularName %><% if (uniqueRel.otherEntity.primaryKey.composite) { %>, get<%= uniqueRel.otherEntity.entityAngularName %>Identifier<% } %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
 import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/service/<%= uniqueRel.otherEntityFileName %>.service';
 <%_
             }
@@ -217,7 +217,11 @@ _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
     track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
+        <%_ if (reference.relationship.otherEntity.primaryKey.composite) { _%>
+        return get<%= reference.relationship.otherEntity.entityAngularName %>Identifier(item);
+        <%_ } else { _%>
         return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
+        <%_ } _%>
     }
     <%_ } _%>
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>

@@ -1,0 +1,38 @@
+{
+  "name": "CompositeLevel2WithField",
+  "fields": [
+    {
+      "fieldName": "customId",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "field",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "compositeWithFieldAndDerived",
+      "otherEntityRelationshipName": "compositeLevel2WithField",
+      "relationshipName": "compositeWithFieldAndDerived",
+      "options": {
+        "id": true
+      }
+    }
+  ],
+  "entityTableName": "composite_level_2_with_field",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303045053"
+}

@@ -133,6 +133,7 @@ const configPropsValidations = {
   EMBEDDABLE_LAUNCH_SCRIPT: { type: 'BOOLEAN' },
   ENABLE_HIBERNATE_CACHE: { type: 'BOOLEAN' },
   ENABLE_SWAGGER_CODEGEN: { type: 'BOOLEAN' },
+  BACKWARD_COMPATIBLE_DERIVED_NAME: { type: 'BOOLEAN' },
   ENABLE_TRANSLATION: { type: 'BOOLEAN' },
   FRONT_END_BUILDER: {
     type: 'NAME',

@@ -1,0 +1,47 @@
+{
+  "name": "WithUUID",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "composite",
+      "otherEntityRelationshipName": "withUUID",
+      "relationshipName": "composite"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "compositeLevel2",
+      "otherEntityRelationshipName": "withUUID",
+      "relationshipName": "compositeLevel2"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "withUUIDDetails",
+      "otherEntityRelationshipName": "withUUID",
+      "relationshipName": "withUUIDDetails",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "with_uuid",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303044553"
+}

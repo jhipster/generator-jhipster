@@ -4,7 +4,7 @@ entity JdlFieldTest {
 
   name String
 
-  @MapstructExpression("java(s.getName())")
+  @MapstructExpression("java(jdlFieldTestEntity.getName())")
   value String
 }
 

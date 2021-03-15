@@ -140,7 +140,7 @@ _%>
     <%_ } _%>
 <%_ } _%>
 
-<%_ const idNames = primaryKey ? [...primaryKey.originalFields.map(f => f.fieldName)] : [] _%>
+<%_ const idNames = dtoReferences.filter(ref => ref.relationship ? (ref.relationship.id && !(ref.relationship.relationshipType === 'one-to-one' && !primaryKey.composite)) : ref.field.id).map(ref => ref.name) _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -99,26 +99,17 @@ module.exports = class extends BaseGenerator {
               ? // generate id fields first to improve reproducibility
                 [...this.fields.filter(f => f.id), ...this.fields.filter(f => !f.id)]
               : [...this.allFields.filter(f => f.id), ...this.addedFields.filter(f => !f.id)];
-          fields.forEach((field, idx) => {
-            if (field.derived) {
-              Object.defineProperty(rowData, field.fieldName, {
-                get: () => {
-                  if (!field.derivedEntity.liquibaseFakeData || rowNumber >= field.derivedEntity.liquibaseFakeData.length) {
-                    return undefined;
-                  }
-                  return field.derivedEntity.liquibaseFakeData[rowNumber][field.fieldName];
-                },
-              });
-              return;
-            }
-            let data;
-            if (field.id && field.fieldType === 'Long') {
-              data = rowNumber + 1;
-            } else {
-              data = field.generateFakeData();
-            }
-            rowData[field.fieldName] = data;
-          });
+          fields
+            .filter(f => !f.derived)
+            .forEach(field => {
+              let data;
+              if (field.id && field.fieldType === 'Long') {
+                data = rowNumber + 1;
+              } else {
+                data = field.generateFakeData();
+              }
+              rowData[field.fieldName] = data;
+            });
 
           this.entity.liquibaseFakeData.push(rowData);
         }

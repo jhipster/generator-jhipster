@@ -26,8 +26,16 @@ int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= call
 
 // Update the <%= entityInstance %> using partial update
 <%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
-partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>());
-<%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
+<%_ if (primaryKey.composite) { _%>
+partialUpdated<%= asEntity(entityClass) %>.set<%= primaryKey.nameCapitalized %>(<%= asEntity(entityInstance) %>.get<%= primaryKey.nameCapitalized %>());
+<%_ } _%>
+<%_ fields.filter(f => f.id).forEach(f => { _%>
+partialUpdated<%= asEntity(entityClass) %>.set<%= f.fieldNameCapitalized %>(<%= asEntity(entityInstance) %>.get<%= f.fieldNameCapitalized %>());
+<%_ }) _%>
+<%_ relationships.filter(r => r.id).forEach(r => { _%>
+partialUpdated<%= persistClass %>.set<%= r.relationshipNameCapitalized %>(<%= persistInstance %>.get<%= r.relationshipNameCapitalized %>());
+<%_ }) _%>
+<%_ fieldsToUpdate = patchFields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%= persistClass %><% for (field of fieldsToUpdate) { %>
         .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
@@ -44,14 +52,14 @@ partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persi
 <%_ } _%>
 
 <%_ if (!reactive) { _%>
-rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- urlId(`partialUpdated${asEntity(entityClass)}`) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
 .content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
 .andExpect(status().isOk());
 <%_ } else { _%>
 webTestClient
 .patch()
-.uri(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())
+.uri(ENTITY_API_URL_ID, <%- urlId(`partialUpdated${asEntity(entityClass)}`) %>)
 .contentType(MediaType.valueOf("application/merge-patch+json"))
 .bodyValue(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>))
 .exchange()
@@ -66,7 +74,7 @@ SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
 assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
 <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
-<%_ for (field of fields) { if (field.fieldType === 'ZonedDateTime') { _%>
+<%_ for (field of patchFields) { if (field.fieldType === 'ZonedDateTime') { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
 <%_ } else if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);

@@ -326,6 +326,10 @@ function askForOptionalItems() {
     name: 'API first development using OpenAPI-generator',
     value: 'enableSwaggerCodegen:true',
   });
+  choices.push({
+    name: 'Derived field names do not contain relationship name',
+    value: 'backwardCompatibleDerivedName:true',
+  });
 
   const PROMPTS = {
     type: 'checkbox',
@@ -344,6 +348,10 @@ function askForOptionalItems() {
       this.enableSwaggerCodegen = this.jhipsterConfig.enableSwaggerCodegen = this.getOptionFromArray(
         answers.serverSideOptions,
         'enableSwaggerCodegen'
+      );
+      this.backwardCompatibleDerivedName = this.jhipsterConfig.backwardCompatibleDerivedName = this.getOptionFromArray(
+        answers.backwardCompatibleDerivedName,
+        'backwardCompatibleDerivedName'
       );
       // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
       if (!this.jhipsterConfig.serviceDiscoveryType) {

@@ -504,6 +504,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             devDatabaseType: 'h2Disk',
             enableHibernateCache: true,
             enableSwaggerCodegen: false,
+            backwardCompatibleDerivedName: true,
             enableTranslation: false,
             jhiPrefix: 'jhi',
             messageBroker: false,

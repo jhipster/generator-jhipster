@@ -1,0 +1,41 @@
+{
+  "name": "CompositeLevel2",
+  "fields": [
+    {
+      "fieldName": "field",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "compositeWithFieldAndDerived",
+      "otherEntityRelationshipName": "compositeLevel2",
+      "relationshipName": "cwfad",
+      "otherEntityField": "field",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "withUUID",
+      "otherEntityRelationshipName": "compositeLevel2",
+      "relationshipName": "withUUID",
+      "options": {
+        "id": true
+      }
+    }
+  ],
+  "entityTableName": "composite_level_2",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210303044953"
+}

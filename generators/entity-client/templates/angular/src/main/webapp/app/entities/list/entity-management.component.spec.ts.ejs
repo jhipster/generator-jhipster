@@ -122,7 +122,7 @@ describe('Component Tests', () => {
             comp.ngOnInit();
 
             // THEN
-            expect(service.query).toHaveBeenCalledWith(expect.objectContaining({ sort: ['<%- primaryKey.originalFields.map(field => field.fieldName).join(',') %>,<%= order %>'] }));
+            expect(service.query).toHaveBeenCalledWith(expect.objectContaining({ sort: ['<%- primaryKey.ids.map(id => id.name).join(',') %>,<%= order %>'] }));
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
@@ -136,7 +136,7 @@ describe('Component Tests', () => {
             comp.loadPage(1);
 
             // THEN
-            expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,<%= order %>', '<%- primaryKey.originalFields.map(field => field.fieldName).join(',') %>'] }));
+            expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,<%= order %>', '<%- primaryKey.ids.map(id => id.name).join(',') %>'] }));
         });
 
         <%_ if (pagination === 'infinite-scroll') { _%>
