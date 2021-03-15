@@ -297,8 +297,8 @@ ${chalk.red('az extension add --name spring-cloud')}`
       derivedProperties() {
         this.isPackageNameJhipsterTech = this.packageName !== 'tech.jhipster';
         this.isAuthenticationTypeJwt = this.authenticationType === JWT;
-        this.isBuildToolMaven = this.buildTool === MAVEN;
-        this.isBuildToolGradle = this.buildTool === GRADLE;
+        this.buildToolMaven = this.buildTool === MAVEN;
+        this.buildToolGradle = this.buildTool === GRADLE;
       },
 
       copyAzureSpringCloudFiles() {

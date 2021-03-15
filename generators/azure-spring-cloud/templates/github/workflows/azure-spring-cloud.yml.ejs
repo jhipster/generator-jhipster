@@ -32,4 +32,4 @@ jobs:
     - name: Install Azure Spring Cloud extension
       run: az extension add --name spring-cloud
     - name: Deploy to Azure Spring Cloud
-      run: az spring-cloud app deploy --resource-group <%= azureSpringCloudResourceGroupName %> --service <%= azureSpringCloudServiceName %> --name <%= azureSpringCloudAppName %> --jar-path <% if (isBuildToolMaven) { %>target<% } %><% if (isBuildToolGradle) { %>build/libs<% } %>/*.jar
+      run: az spring-cloud app deploy --resource-group <%= azureSpringCloudResourceGroupName %> --service <%= azureSpringCloudServiceName %> --name <%= azureSpringCloudAppName %> --jar-path <% if (buildToolMaven) { %>target<% } %><% if (buildToolGradle) { %>build/libs<% } %>/*.jar

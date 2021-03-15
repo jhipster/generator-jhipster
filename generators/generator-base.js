@@ -26,7 +26,6 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const normalize = require('normalize-path');
-
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -39,7 +38,6 @@ const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
-const MICROSERVICE = require('../jdl/jhipster/application-types');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -50,13 +48,15 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
-const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J } = databaseTypes;
+const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../jdl/jhipster/cache-types');
+const { EHCACHE, REDIS } = require('../jdl/jhipster/cache-types');
+const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
 
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
+const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -2435,7 +2435,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.applicationType = config.applicationType;
@@ -2457,13 +2457,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.testFrameworks = config.testFrameworks || [];
 
-    dest.gatlingTests = dest.testFrameworks.includes(GATLING);
-    dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
-    dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
-    dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
+    dest.gatlingTests = config.testFrameworks.includes(GATLING);
+    dest.cucumberTests = config.testFrameworks.includes(CUCUMBER);
+    dest.protractorTests = config.testFrameworks.includes(PROTRACTOR);
+    dest.cypressTests = config.testFrameworks.includes(CYPRESS);
 
     dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+    dest.applicationTypeGateway = config.applicationType === GATEWAY;
   }
 
   /**
@@ -2473,11 +2474,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
+    dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
   }
 
   /**
@@ -2487,7 +2489,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
@@ -2500,7 +2502,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
@@ -2524,7 +2526,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
+    dest.buildToolGradle = config.buildTool === GRADLE;
+    dest.buildToolMaven = config.buildTool === MAVEN;
+    dest.cacheProviderRedis = config.cacheProvider === REDIS;
+    dest.databaseTypeNo = config.databaseType === NO_DATABASE;
+    dest.databaseTypeSql = config.databaseType === SQL;
+    dest.databaseTypeCassandra = config.databaseType === CASSANDRA;
+    dest.databaseTypeCouchbase = config.databaseType === COUCHBASE;
+    dest.databaseTypeNeo4j = config.databaseType === NEO4J;
   }
+
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {}
 
   /**
    * Get all the generator configuration from the .yo-rc.json file

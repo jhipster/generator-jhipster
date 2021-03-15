@@ -17,11 +17,13 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
+const { defaultConfig } = require('../generator-defaults');
 
 // Global constants
 const constants = require('../generator-constants');
@@ -449,11 +451,12 @@ which is free for the first 30 days`);
         this.log(`The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`);
         done();
       },
-
-      derivedProperties() {
-        this.isAzureAppInsightsInstrumentationKeyEmpty = this.azureAppInsightsInstrumentationKey === '';
-      },
     };
+  }
+
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig, this), dest = this) {
+    super.loadPlatformConfig(config, dest);
+    dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 
   _writing() {

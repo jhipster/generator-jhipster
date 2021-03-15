@@ -28,7 +28,7 @@ const writeCommonFiles = require('./files-common').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
-const { clientDefaultConfig } = require('../generator-defaults');
+const { clientDefaultConfig, defaultConfig } = require('../generator-defaults');
 const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list');
 
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
@@ -243,6 +243,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         }
       },
     };
+  }
+
+  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig, this), dest = this) {
+    super.loadClientConfig(config, dest);
+    dest.isClientThemeNone = config.clientTheme === 'none';
+  }
+
+  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig, this), dest = this) {
+    super.loadServerConfig(config, dest);
+    dest.isAuthenticationTypeSession = config.authenticationType === 'session';
   }
 
   get preparing() {

@@ -17,20 +17,16 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const _ = require('lodash');
+const chalk = require('chalk');
+const { defaultConfig } = require('../generator-defaults');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
-const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
-const { REDIS } = require('../../jdl/jhipster/cache-types');
-const { NO, SQL, CASSANDRA, COUCHBASE, NEO4J } = require('../../jdl/jhipster/database-types');
-const { GATEWAY } = require('../../jdl/jhipster/application-types');
-const { CYPRESS, PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 
 const {
   BASE_NAME,
@@ -189,32 +185,34 @@ module.exports = class extends BaseBlueprintGenerator {
           this.frontTestCommand = 'test';
         }
       },
-      derivedProperties() {
-        this.isBuildToolGradle = this.buildTool === GRADLE;
-        this.isBuildToolMaven = this.buildTool === MAVEN;
-        this.isClientFrameworkAngular = this.clientFramework === ANGULAR;
-        this.hasCicdIntegrationsSnyk = this.cicdIntegrations.includes('snyk');
-        this.isCacheProviderRedis = this.cacheProvider === REDIS;
-        this.isDatabaseTypeNo = this.databaseType === NO;
-        this.isDatabaseTypeSql = this.databaseType === SQL;
-        this.isDatabaseTypeCassandra = this.databaseType === CASSANDRA;
-        this.isDatabaseTypeCouchbase = this.databaseType === COUCHBASE;
-        this.isDatabaseTypeNeo4j = this.databaseType === NEO4J;
-        this.hasCicdIntegrationsSonar = this.cicdIntegrations.includes('sonar');
-        this.hasCicdIntegrationsHeroku = this.cicdIntegrations.includes('heroku');
-        this.hasCicdIntegrationsDeploy = this.cicdIntegrations.includes('deploy');
-        this.hasCicdIntegrationsPublishDocker = this.cicdIntegrations.includes('publishDocker');
-        this.hasTestFrameworksCypress = this.testFrameworks.includes(CYPRESS);
-        this.hasTestFrameworksProtractor = this.testFrameworks.includes(PROTRACTOR);
-        this.isApplicationTypeGateway = this.applicationType === GATEWAY;
-        this.hasCicdIntegrationsCypressDashboard = this.cicdIntegrations.includes('cypressDashboard');
-      },
     };
   }
 
   get configuring() {
     if (useBlueprints) return;
     return this._configuring();
+  }
+
+  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+    super.loadAppConfig(config, dest);
+  }
+
+  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+    super.loadClientConfig(config, dest);
+  }
+
+  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+    super.loadServerConfig(config, dest);
+  }
+
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+    super.loadPlatformConfig(config, dest);
+    dest.cicdIntegrationsSnyk = config.cicdIntegrations.includes('snyk');
+    dest.cicdIntegrationsSonar = config.cicdIntegrations.includes('sonar');
+    dest.cicdIntegrationsHeroku = config.cicdIntegrations.includes('heroku');
+    dest.cicdIntegrationsDeploy = config.cicdIntegrations.includes('deploy');
+    dest.cicdIntegrationsPublishDocker = config.cicdIntegrations.includes('publishDocker');
+    dest.cicdIntegrationsCypressDashboard = config.cicdIntegrations.includes('cypressDashboard');
   }
 
   // Public API method used by the getter and also by Blueprints
