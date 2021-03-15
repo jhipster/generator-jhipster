@@ -193,26 +193,33 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._configuring();
   }
 
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
-    super.loadAppConfig(config, dest);
-  }
-
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
-    super.loadClientConfig(config, dest);
-  }
-
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
-    super.loadServerConfig(config, dest);
-  }
-
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+  _loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     super.loadPlatformConfig(config, dest);
-    dest.cicdIntegrationsSnyk = config.cicdIntegrations.includes('snyk');
-    dest.cicdIntegrationsSonar = config.cicdIntegrations.includes('sonar');
-    dest.cicdIntegrationsHeroku = config.cicdIntegrations.includes('heroku');
-    dest.cicdIntegrationsDeploy = config.cicdIntegrations.includes('deploy');
-    dest.cicdIntegrationsPublishDocker = config.cicdIntegrations.includes('publishDocker');
-    dest.cicdIntegrationsCypressDashboard = config.cicdIntegrations.includes('cypressDashboard');
+    dest.cicdIntegrationsSnyk = config.cicdIntegrations || [];
+    dest.cicdIntegrationsSnyk = dest.cicdIntegrations.includes('snyk');
+    dest.cicdIntegrationsSonar = dest.cicdIntegrations.includes('sonar');
+    dest.cicdIntegrationsHeroku = dest.cicdIntegrations.includes('heroku');
+    dest.cicdIntegrationsDeploy = dest.cicdIntegrations.includes('deploy');
+    dest.cicdIntegrationsPublishDocker = dest.cicdIntegrations.includes('publishDocker');
+    dest.cicdIntegrationsCypressDashboard = dest.cicdIntegrations.includes('cypressDashboard');
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+        this._loadPlatformConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
   }
 
   // Public API method used by the getter and also by Blueprints

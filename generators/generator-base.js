@@ -51,7 +51,7 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
-const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
+const { OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE, REDIS } = require('../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
 
@@ -2435,7 +2435,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.applicationType = config.applicationType;
@@ -2457,10 +2457,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.testFrameworks = config.testFrameworks || [];
 
-    dest.gatlingTests = config.testFrameworks.includes(GATLING);
-    dest.cucumberTests = config.testFrameworks.includes(CUCUMBER);
-    dest.protractorTests = config.testFrameworks.includes(PROTRACTOR);
-    dest.cypressTests = config.testFrameworks.includes(CYPRESS);
+    dest.gatlingTests = dest.testFrameworks.includes(GATLING);
+    dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
+    dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
+    dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
     dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
@@ -2474,12 +2474,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
     dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
+    dest.clientThemeNone = config.clientTheme === 'none';
   }
 
   /**
@@ -2489,7 +2490,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
@@ -2502,7 +2503,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {
+  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
@@ -2534,9 +2535,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeCassandra = config.databaseType === CASSANDRA;
     dest.databaseTypeCouchbase = config.databaseType === COUCHBASE;
     dest.databaseTypeNeo4j = config.databaseType === NEO4J;
+    dest.authenticationTypeSession = config.authenticationType === SESSION;
   }
 
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this, defaultConfig), dest = this) {}
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
 
   /**
    * Get all the generator configuration from the .yo-rc.json file

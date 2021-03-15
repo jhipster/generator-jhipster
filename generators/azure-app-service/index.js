@@ -454,9 +454,23 @@ which is free for the first 30 days`);
     };
   }
 
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig, this), dest = this) {
+  _loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     super.loadPlatformConfig(config, dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this._loadPlatformConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
   }
 
   _writing() {
