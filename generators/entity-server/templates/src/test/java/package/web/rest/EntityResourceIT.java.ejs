@@ -196,7 +196,7 @@ import java.util.List;
 <%_ if (fieldsContainUUID || primaryKey.type === 'String' || otherEntityPrimaryKeyTypes.includes('UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (!embedded && primaryKey.fields.some(field => field.fieldType === 'Long')) { _%>
+<%_ if (!embedded && primaryKey.originalFields.some(field => field.fieldType === 'Long')) { _%>
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 <%_ } _%>
@@ -424,7 +424,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     <%_ if (searchEngine !== false) { _%>
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/<%= entityApiUrl %>";
     <%_ } _%>
-<%_ if (!embedded && primaryKey.fields.some(field => field.fieldType === 'Long')) { _%>
+<%_ if (!embedded && primaryKey.originalFields.some(field => field.fieldType === 'Long')) { _%>
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));

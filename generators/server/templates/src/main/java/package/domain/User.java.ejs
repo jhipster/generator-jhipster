@@ -134,12 +134,12 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 <%_ if (databaseType === 'sql') { _%>
     @Id
     <%_ if (!reactive) { _%>
-        <%_ if (user.primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
+        <%_ if (user.primaryKey.originalFields[0].jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
+        <%_ } else if (user.primaryKey.originalFields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue) { _%>
+        <%_ } else if (user.primaryKey.originalFields[0].jpaGeneratedValue) { _%>
     @GeneratedValue
         <%_ } _%>
     <%_ } _%>

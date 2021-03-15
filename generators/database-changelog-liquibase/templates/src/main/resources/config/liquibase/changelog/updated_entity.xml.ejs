@@ -96,19 +96,19 @@
         <%_ for (relationship of joinTableRelations) { _%>
 
         <createTable tableName="<%= relationship.joinTable.name %>">
-            <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
+            <%_ for (field of relationship.otherEntity.primaryKey.originalFields) { _%>
             <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
             <%_ } _%>
-            <%_ for (field of entity.primaryKey.fields) { _%>
+            <%_ for (field of entity.primaryKey.originalFields) { _%>
             <column name="<%= entity.entityTableName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
             <%_ } _%>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
+        <addPrimaryKey columnNames="<%= entity.primaryKey.originalFields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.originalFields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
         <%_ } _%>
     </changeSet>
     <%_ }

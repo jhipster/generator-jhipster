@@ -58,12 +58,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, 
         var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
         for (reference of dtoReferences.filter(reference => reference.relationship && !reference.relationship.otherEntity.embedded)) {
             renMapAnotEnt = true;
-            let qualifiedByName;
-            if (reference.relatedReference) {
-                qualifiedByName = reference.relatedReference.name;
-            } else {
-                qualifiedByName = 'id';
-            }
+            let qualifiedByName = reference.relationship.otherEntityField;
             qualifiedByName = qualifiedByName + (reference.collection ? 'Set' : ''); _%>
     @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>", qualifiedByName="<%= qualifiedByName %>")
     <%_ } _%>
@@ -108,12 +103,11 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, 
 <%_ if (!embedded) {
         // DTO -> entity mapping
         var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
-        if(primaryKey.ownFields.length > 1) {
+        if(primaryKey.ids.length > 1) {
             renMapAnotDto = true;
-            primaryKey.ownFields.map(field => field.reference).forEach(reference => { _%>
-
-    @Mapping(target = "id.<%= reference.name %>", source = "<%= buildReferencePath(reference) %>")
-        <%_ })
+            primaryKey.ids.forEach(pk => { _%>
+    @Mapping(target = "id.<%= pk.name %>", source = "<%= pk.nameDotted %>")
+            <%_ })
         }
         for (reference of dtoReferences.filter(reference => reference.relationship)) {
             if (reference.owned === false) {
