@@ -144,7 +144,7 @@ const doneFactory = (successMsg, sponsorMsg) => {
 const printSuccess = () => {
   if (process.exitCode === undefined || process.exitCode === 0) {
     logger.log(chalk.green.bold(SUCCESS_MESSAGE));
-    logger.log(chalk.cyan.bold(SUCCESS_MESSAGE));
+    logger.log(chalk.cyan.bold(SPONSOR_MESSAGE));
   } else {
     logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
   }
