@@ -199,7 +199,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   return entityWithConfig;
 }
 
-function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enableCompositeId = false) {
+function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enableCompositeId = true) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
   const idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
   let idCount = idFields.length + idRelationships.length;
