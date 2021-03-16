@@ -304,9 +304,6 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       get tsType() {
         return relationshipId.otherEntity.primaryKey.tsType;
       },
-      get references() {
-        return this.derivedFields.map(field => field.reference);
-      },
       get composite() {
         return relationshipId.otherEntity.primaryKey.composite;
       },
@@ -337,16 +334,16 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       tsType: generator.getTypescriptKeyType(primaryKeyType),
       composite,
       relationships: idRelationships,
+      // Fields declared in this entity
       ownFields: idFields,
+      // Fields declared and inherited
       get fields() {
         return [...this.ownFields, ...this.derivedFields];
       },
       get autoGenerate() {
         return this.composite ? false : this.fields[0].autoGenerate;
       },
-      get references() {
-        return this.fields.map(field => field.reference);
-      },
+      // Fields inherited from id relationships.
       get derivedFields() {
         return this.relationships.map(rel => rel.derivedPrimaryKey.derivedFields).flat();
       },
