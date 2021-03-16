@@ -67,7 +67,6 @@ describe('entity utilities', () => {
                 nameDotted: 'id',
                 nameCapitalized: 'Id',
                 nameDottedAsserted: 'id!',
-                columnName: 'id',
                 getter: 'getId',
                 setter: 'setId',
                 entity: {
@@ -180,7 +179,6 @@ describe('entity utilities', () => {
                 nameDotted: 'id',
                 nameCapitalized: 'Id',
                 nameDottedAsserted: 'id!',
-                columnName: 'id',
                 getter: 'getId',
                 setter: 'setId',
                 entity: {
@@ -209,7 +207,6 @@ describe('entity utilities', () => {
                 nameDotted: 'uuid',
                 nameCapitalized: 'Uuid',
                 nameDottedAsserted: 'uuid!',
-                columnName: 'uuid',
                 getter: 'getUuid',
                 setter: 'setUuid',
                 entity: {
@@ -242,7 +239,6 @@ describe('entity utilities', () => {
                 nameDotted: 'entity2.uuid',
                 nameCapitalized: 'Uuid',
                 nameDottedAsserted: 'entity2!.uuid!',
-                columnName: 'uuid',
                 getter: 'getUuid',
                 setter: 'setUuid',
                 entity: {
@@ -273,7 +269,6 @@ describe('entity utilities', () => {
                 nameDotted: 'uuid',
                 nameCapitalized: 'Uuid',
                 nameDottedAsserted: 'uuid!',
-                columnName: 'uuid',
                 getter: 'getUuid',
                 setter: 'setUuid',
                 entity: {
@@ -288,7 +283,6 @@ describe('entity utilities', () => {
                 nameDotted: 'otherEntity1.id',
                 nameCapitalized: 'OtherEntity1Id',
                 nameDottedAsserted: 'otherEntity1!.id!',
-                columnName: 'other_entity1_id',
                 getter: 'getOtherEntity1Id',
                 setter: 'setOtherEntity1Id',
                 entity: {
@@ -303,7 +297,6 @@ describe('entity utilities', () => {
                 nameDotted: 'otherEntity3.entity2.uuid',
                 nameCapitalized: 'OtherEntity3Uuid',
                 nameDottedAsserted: 'otherEntity3!.entity2!.uuid!',
-                columnName: 'other_entity3_uuid',
                 getter: 'getOtherEntity3Uuid',
                 setter: 'setOtherEntity3Uuid',
                 entity: {

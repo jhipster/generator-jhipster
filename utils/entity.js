@@ -347,7 +347,9 @@ function fieldToId(field, generator, entity) {
     field,
     name: field.fieldName,
     nameDotted: field.fieldName,
-    columnName: generator.getColumnName(field.fieldName),
+    get columnName() {
+      return this.field.columnName;
+    },
     entity,
     usedRelationships: [],
     autoGenerate: !!field.autoGenerate,
@@ -361,10 +363,9 @@ function relationshipToIds(relationship, generator) {
     field: pk.field,
     name: relationship.relationshipType === 'one-to-one' ? pk.name : `${relationship.relationshipName}${pk.nameCapitalized}`,
     nameDotted: `${relationship.relationshipName}.${pk.nameDotted}`,
-    columnName:
-      relationship.relationshipType === 'one-to-one'
-        ? generator.getColumnName(pk.name)
-        : `${generator.getColumnName(relationship.relationshipName)}_${pk.columnName}`,
+    get columnName() {
+      return relationship.relationshipType === 'one-to-one' ? pk.columnName : `${relationship.columnName}_${pk.columnName}`;
+    },
     entity: pk.entity,
     usedRelationships: [relationship, ...pk.usedRelationships],
     autoGenerate: relationship.relationshipType === 'one-to-one',
