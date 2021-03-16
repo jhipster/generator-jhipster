@@ -207,7 +207,7 @@ describe('entity utilities', () => {
           });
         });
 
-        it('should prepare correct relationship id', () => {
+        it('should prepare correct relationship id field', () => {
           const field = entity4.primaryKey.fields[1];
           expect(field).to.deep.include({
             ...entity1.primaryKey.fields[0],
@@ -222,7 +222,19 @@ describe('entity utilities', () => {
           });
         });
 
-        it('should prepare correct relationship id with derived primaryKey', () => {
+        it('should prepare correct relationship id ids', () => {
+          const field = entity4.primaryKey.ids[1];
+          expect(field).to.deep.include({
+            name: 'otherEntity1Id',
+            nameCapitalized: 'OtherEntity1Id',
+            nameDotted: 'otherEntity1.id',
+            nameDottedAsserted: 'otherEntity1!.id!',
+            setter: 'setOtherEntity1Id',
+            getter: 'getOtherEntity1Id',
+          });
+        });
+
+        it('should prepare correct relationship id with derived primaryKey field', () => {
           const field = entity4.primaryKey.fields[2];
           expect(field).to.deep.include({
             ...entity3.primaryKey.fields[0],
@@ -235,6 +247,18 @@ describe('entity utilities', () => {
 
             derivedEntity: entity3,
             reference: field.reference,
+          });
+        });
+
+        it('should prepare correct relationship id with derived primaryKey field ids', () => {
+          const field = entity4.primaryKey.ids[2];
+          expect(field).to.deep.include({
+            name: 'otherEntity3Uuid',
+            nameCapitalized: 'OtherEntity3Uuid',
+            nameDotted: 'otherEntity3.uuid',
+            nameDottedAsserted: 'otherEntity3!.uuid!',
+            setter: 'setOtherEntity3Uuid',
+            getter: 'getOtherEntity3Uuid',
           });
         });
       });

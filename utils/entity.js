@@ -307,6 +307,9 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       get composite() {
         return relationshipId.otherEntity.primaryKey.composite;
       },
+      get ids() {
+        return this.fields.map(field => fieldToId(field));
+      },
     };
   } else {
     const composite = enableCompositeId ? idCount > 1 : false;
@@ -347,10 +350,40 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       get derivedFields() {
         return this.relationships.map(rel => rel.derivedPrimaryKey.derivedFields).flat();
       },
+      get ids() {
+        return this.fields.map(field => fieldToId(field));
+      },
     };
   }
 
   return entityWithConfig;
+}
+
+function fieldToId(field) {
+  return {
+    field,
+    get name() {
+      return field.fieldName;
+    },
+    get nameCapitalized() {
+      return field.fieldNameCapitalized;
+    },
+    get nameDotted() {
+      return field.derivedPath ? field.derivedPath.join('.') : field.fieldName;
+    },
+    get nameDottedAsserted() {
+      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : field.fieldName;
+    },
+    get setter() {
+      return `set${this.nameCapitalized}`;
+    },
+    get getter() {
+      return (field.fieldType === 'Boolean' ? 'is' : 'get') + this.nameCapitalized;
+    },
+    get autoGenerate() {
+      return !!field.autoGenerate;
+    },
+  };
 }
 
 /**
