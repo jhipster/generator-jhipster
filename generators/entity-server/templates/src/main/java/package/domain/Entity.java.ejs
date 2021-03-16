@@ -475,7 +475,7 @@ relationships.forEach((relationship, idx) => {
         <%_ }
         } else if (databaseType === 'sql' && reactive) { _%>
           <%_ if (ownerSide === true && isUsingMapsId !== true) { _%>
-    private Long <%= relationshipFieldName %>Id;
+    private <%= relationship.otherEntity.primaryKey.type %> <%= relationshipFieldName %>Id;
 
           <%_ } _%>
     @Transient
