@@ -37,7 +37,7 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') {
-        const idField = user.primaryKey.originalFields[0];
+        const idField = user.primaryKey.fields[0];
 _%>
         <createTable tableName="<%= user.entityTableName %>">
             <column name="id" type="<%= idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true"<% } %><% if (reactive && idField.fieldType === 'Long') { %> startWith="1050"<% } %>>

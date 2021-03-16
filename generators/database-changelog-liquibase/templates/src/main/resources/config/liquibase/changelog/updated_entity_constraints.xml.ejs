@@ -63,7 +63,7 @@
         for (idx in addedRelationships) {
             const relationshipData = addedRelationships[idx];
             if (relationshipData.unique) {
-                const idField = relationship.otherEntity.primaryKey.originalFields[0];
+                const idField = relationship.otherEntity.primaryKey.ownFields[0];
                 const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
         _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
@@ -105,16 +105,16 @@
                 const otherEntityConstraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(relationshipName), prodDatabaseType);
         _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= primaryKey.originalFields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= constraintName %>"
-                                 referencedColumnNames="<%= primaryKey.originalFields.map(field => field.columnName).join(', ') %>"
+                                 referencedColumnNames="<%= primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= entityTableName %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.originalFields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= getColumnName(otherEntityConstraintName) %>"
-                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.originalFields.map(field => field.columnName).join(', ') %>"
+                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"/>
     <%_     }
         }

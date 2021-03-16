@@ -226,8 +226,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         <AvForm model={isNew ? {} : <%= entityInstance %>Entity} onSubmit={saveEntity} >
           { !isNew ?
             <AvGroup>
-              <Label for="<%= entityFileName %>-<%= primaryKey.originalFields[0].fieldName %>"><Translate contentKey="<%= primaryKey.originalFields[0].fieldTranslationKey %>"><%= primaryKey.originalFields[0].fieldNameHumanized %></Translate></Label>
-              <AvInput id="<%= entityFileName %>-<%= primaryKey.originalFields[0].fieldName %>" type="text" className="form-control" name="<%= primaryKey.originalFields[0].fieldName %>" required readOnly/>
+              <Label for="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"><Translate contentKey="<%= primaryKey.fields[0].fieldTranslationKey %>"><%= primaryKey.fields[0].fieldNameHumanized %></Translate></Label>
+              <AvInput id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>" type="text" className="form-control" name="<%= primaryKey.fields[0].fieldName %>" required readOnly/>
             </AvGroup>
             : null
           }

@@ -35,11 +35,11 @@
                 let baseColumnNames;
                 let referencedColumnNames;
                 if (relationshipType === 'one-to-one' && ownerSide && relationship.id === true) {
-                    baseColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(field.columnName)).join(',');
-                    referencedColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(field.columnName)).join(',');
+                    baseColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(field.columnName)).join(',');
+                    referencedColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(field.columnName)).join(',');
                 } else if (relationship.otherEntity) {
-                    baseColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(relationshipName + '_' + field.columnName)).join(',');
-                    referencedColumnNames = relationship.otherEntity.primaryKey.originalFields.map(field => getColumnName(field.columnName)).join(',');
+                    baseColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(relationshipName + '_' + field.columnName)).join(',');
+                    referencedColumnNames = relationship.otherEntity.primaryKey.ownFields.map(field => getColumnName(field.columnName)).join(',');
                 } %>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnNames %>"
                                  baseTableName="<%= entity.entityTableName %>"
@@ -48,16 +48,16 @@
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationship.shouldWriteJoinTable) { _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= entity.primaryKey.originalFields.map(field => entity.entityTableName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= entity.primaryKey.fields.map(field => entity.entityTableName + '_' + field.columnName).join(', ') %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= relationship.joinTable.constraintName %>"
-                                 referencedColumnNames="<%= entity.primaryKey.originalFields.map(field => field.columnName).join(', ') %>"
+                                 referencedColumnNames="<%= entity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= entity.entityTableName %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.originalFields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= relationship.joinTable.otherConstraintName %>"
-                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.originalFields.map(field => field.columnName).join(', ') %>"
+                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= relationship.otherEntity.entityTableName %>"/>
         <%  } %><% } %>
     </changeSet>
