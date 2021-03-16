@@ -184,12 +184,12 @@ public class <%= persistClass %> implements Serializable {
 <%_ if (!embedded) { _%>
     @Id
     <%_ if (databaseType === 'sql' && isUsingMapsId === false && !reactive && !primaryKey.composite) { _%>
-        <%_ if (primaryKey.originalFields[0].jpaGeneratedValue === 'identity') { _%>
+        <%_ if (primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (primaryKey.originalFields[0].jpaGeneratedValue === 'sequence') { _%>
+        <%_ } else if (primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-        <%_ } else if (primaryKey.originalFields[0].jpaGeneratedValue) { _%>
+        <%_ } else if (primaryKey.fields[0].jpaGeneratedValue) { _%>
     @GeneratedValue
         <%_ } _%>
     <%_ } else if (databaseType === 'couchbase' && !embedded) { _%>
@@ -403,12 +403,12 @@ relationships.forEach((relationship, idx) => {
         <%_ } _%>
     @JoinTable(name = "<%= relationship.joinTable.name %>",
                joinColumns = <%= entity.primaryKey.ids.length > 1 ? '{' : '' %>
-                   <%_ entity.primaryKey.originalFields.forEach((field, idx) => { _%>
+                   <%_ entity.primaryKey.fields.forEach((field, idx) => { _%>
                    <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
                    <%_ }); _%>
                <%= entity.primaryKey.ids.length > 1 ? '}' : '' %>,
                inverseJoinColumns = <%= relationship.otherEntity.primaryKey.ids.length > 1 ? '{' : '' %>
-                   <%_ relationship.otherEntity.primaryKey.originalFields.forEach((field, idx) => { _%>
+                   <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
                    <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
                    <%_ }); _%>
                <%= relationship.otherEntity.primaryKey.ids.length > 1 ? '}' : '' %>

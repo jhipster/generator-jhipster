@@ -1154,7 +1154,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   generateTestEntityPrimaryKey(primaryKey, index = 'random') {
     const random = index === 'random';
     const entries = primaryKey.ids.map(id => {
-      const value = random ? id.field.generateFakeData('raw') : this.generateTestEntityId(id.field.fieldType, index, false);
+      const value = random && id.field ? id.field.generateFakeData('raw') : this.generateTestEntityId(id.field.type, index, false);
       return [id.name, value];
     });
     return JSON.stringify(Object.fromEntries(entries));

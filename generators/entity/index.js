@@ -568,6 +568,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
         });
       },
 
+      processDerivedPrimaryKey() {
+        if (!this.context.primaryKey) {
+          return;
+        }
+        const derivedFields = this.context.primaryKey.derivedFields;
+        this.context.fields.unshift(...derivedFields);
+      },
+
       processEntityFields() {
         const entity = this.context;
         entity.fields.forEach(field => {
@@ -676,7 +684,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       processPrimaryKeyTypesForRelations() {
         const types = this.context.relationships
           .filter(rel => rel.otherEntity.primaryKey)
-          .map(rel => rel.otherEntity.primaryKey.originalFields.map(f => f.fieldType))
+          .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
           .flat();
         this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
       },
