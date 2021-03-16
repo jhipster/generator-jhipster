@@ -211,8 +211,8 @@ describe('entity utilities', () => {
           const field = entity4.primaryKey.fields[1];
           expect(field).to.deep.include({
             ...entity1.primaryKey.fields[0],
-            fieldName: 'entity1Id',
-            fieldNameCapitalized: 'Entity1Id',
+            fieldName: 'otherEntity1Id',
+            fieldNameCapitalized: 'OtherEntity1Id',
             columnName: 'other_entity1_id',
             derivedPath: ['otherEntity1', 'id'],
             path: ['otherEntity1', 'id'],
@@ -227,8 +227,8 @@ describe('entity utilities', () => {
           expect(field).to.deep.include({
             ...entity3.primaryKey.fields[0],
             derived: true,
-            fieldName: 'entity3Uuid',
-            fieldNameCapitalized: 'Entity3Uuid',
+            fieldName: 'otherEntity3Uuid',
+            fieldNameCapitalized: 'OtherEntity3Uuid',
             columnName: 'other_entity3_uuid',
             derivedPath: ['otherEntity3', 'uuid'],
             path: ['otherEntity3', 'entity2', 'uuid'],

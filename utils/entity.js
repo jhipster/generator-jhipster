@@ -253,10 +253,12 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
               return [relationship.relationshipName, field.fieldName];
             },
             get fieldName() {
-              return idCount === 1 ? field.fieldName : `${relationship.otherEntity.entityInstance}${field.fieldNameCapitalized}`;
+              return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
             },
             get fieldNameCapitalized() {
-              return idCount === 1 ? field.fieldNameCapitalized : `${relationship.otherEntity.entityClass}${field.fieldNameCapitalized}`;
+              return idCount === 1
+                ? field.fieldNameCapitalized
+                : `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`;
             },
             get columnName() {
               return idCount === 1 ? field.columnName : `${generator.getColumnName(relationship.relationshipName)}_${field.columnName}`;
