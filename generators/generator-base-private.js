@@ -890,10 +890,10 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (typeof primaryKey === 'object') {
       primaryKey = primaryKey.type;
     }
-    if (primaryKey === TYPE_STRING || primaryKey === TYPE_UUID) {
-      return 'string';
+    if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(primaryKey)) {
+      return 'number';
     }
-    return 'number';
+    return 'string';
   }
 
   /**
@@ -1153,10 +1153,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    */
   generateTestEntityPrimaryKey(primaryKey, index = 'random') {
     const random = index === 'random';
-    const entries = primaryKey.references.map(reference => {
-      const value =
-        random && reference.field ? reference.field.generateFakeData('raw') : this.generateTestEntityId(reference.type, index, false);
-      return [reference.name, value];
+    const entries = primaryKey.ids.map(id => {
+      const value = random ? id.field.generateFakeData('raw') : this.generateTestEntityId(id.field.fieldType, index, false);
+      return [id.name, value];
     });
     return JSON.stringify(Object.fromEntries(entries));
   }

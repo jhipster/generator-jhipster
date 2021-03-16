@@ -260,7 +260,6 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
       return relationship.otherEntity.primaryKey ? relationship.otherEntity.primaryKey.type : undefined;
     },
     path: [...pathPrefix, name],
-    valueReference: relationship.relatedField && relationship.relatedField.reference,
   };
   return reference;
 }

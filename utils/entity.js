@@ -56,10 +56,6 @@ const BASE_TEMPLATE_DATA = {
     return [];
   },
 
-  get idFields() {
-    return [];
-  },
-
   get enums() {
     return [];
   },
