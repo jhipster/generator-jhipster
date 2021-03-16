@@ -92,6 +92,6 @@
     "webpack-dev-server": "3.11.2",
     "webpack-merge": "5.7.3",
     "webpack-notifier": "1.13.0",
-    "workbox-webpack-plugin": "6.1.1"
+    "workbox-webpack-plugin": "6.1.2"
   }
 }
