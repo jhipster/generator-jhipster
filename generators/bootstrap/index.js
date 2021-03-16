@@ -273,8 +273,8 @@ module.exports = class extends BaseGenerator {
     const liquibaseFakeData = oauth2
       ? []
       : [
-          { id: userIdType === TYPE_LONG ? 1 : user.primaryKey.originalFields[0].generateFakeData() },
-          { id: userIdType === TYPE_LONG ? 2 : user.primaryKey.originalFields[0].generateFakeData() },
+          { id: userIdType === TYPE_LONG ? 1 : user.primaryKey.fields[0].generateFakeData() },
+          { id: userIdType === TYPE_LONG ? 2 : user.primaryKey.fields[0].generateFakeData() },
         ];
     user.liquibaseFakeData = liquibaseFakeData;
     user.fakeDataCount = liquibaseFakeData.length;

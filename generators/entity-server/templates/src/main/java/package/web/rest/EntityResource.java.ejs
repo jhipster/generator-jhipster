@@ -117,7 +117,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-<%_ if (primaryKey.originalFields.some(f => f.fieldType === 'UUID')) { _%>
+<%_ if (primaryKey.fields.some(f => f.fieldType === 'UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if ((searchEngine !== false || fieldsContainNoOwnerOneToOne === true) && !reactive) { _%>

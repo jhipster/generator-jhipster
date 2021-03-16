@@ -140,7 +140,7 @@ _%>
     <%_ } _%>
 <%_ } _%>
 
-<%_ const idNames = primaryKey ? [...primaryKey.originalFields.map(f => f.fieldName)] : [] _%>
+<%_ const idNames = primaryKey ? [...primaryKey.ownFields.map(f => f.fieldName)] : [] _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {
