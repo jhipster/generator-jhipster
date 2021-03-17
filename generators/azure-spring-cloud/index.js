@@ -30,7 +30,9 @@ const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+
+const { JWT } = require('../../jdl/jhipster/authentication-types');
 
 module.exports = class extends BaseGenerator {
   constructor(args, opts) {
@@ -290,6 +292,13 @@ ${chalk.red('az extension add --name spring-cloud')}`
             }
           }
         );
+      },
+
+      derivedProperties() {
+        this.isPackageNameJhipsterTech = this.packageName !== 'tech.jhipster';
+        this.isAuthenticationTypeJwt = this.authenticationType === JWT;
+        this.buildToolMaven = this.buildTool === MAVEN;
+        this.buildToolGradle = this.buildTool === GRADLE;
       },
 
       copyAzureSpringCloudFiles() {

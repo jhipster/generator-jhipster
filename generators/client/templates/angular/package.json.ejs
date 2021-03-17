@@ -43,11 +43,11 @@
     "@ngx-translate/http-loader": "<%= dependabotPackageJson.dependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
     "bootstrap": "<%= dependabotPackageJson.dependencies.bootstrap %>",
-    <%_ if (clientTheme !== 'none') { _%>
+    <%_ if (!clientThemeNone) { _%>
     "bootswatch": "<%= dependabotPackageJson.dependencies.bootstrap %>",
     <%_ } _%>
     "dayjs": "<%= dependabotPackageJson.dependencies['dayjs'] %>",
-    <%_ if (authenticationType === 'session' && websocket === 'spring-websocket') { _%>
+    <%_ if (authenticationTypeSession && websocket === 'spring-websocket') { _%>
     "ngx-cookie-service": "<%= dependabotPackageJson.dependencies['ngx-cookie-service'] %>",
     <%_ } _%>
     "ngx-infinite-scroll": "<%= dependabotPackageJson.dependencies['ngx-infinite-scroll'] %>",

@@ -38,8 +38,8 @@ jobs:
       versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
 <%_ } _%>
-<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
-  const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+<%_ if (cypressTests || protractorTests) {
+  const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%= commented %>- task: Bash@3
   <%= commented %>  inputs:
   <%= commented %>    targetType: 'inline'
@@ -57,7 +57,7 @@ jobs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('snyk')) { _%>
+<%_ if (cicdIntegrationsSnyk) { _%>
   - script: |
       curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
       chmod +x snyk
@@ -72,9 +72,9 @@ jobs:
       SNYK_TOKEN: $(SNYK_TOKEN)
 <%_ } _%>
   <%_ if (!skipServer) { _%>
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
   - script: chmod +x mvnw
-    <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildToolGradle) { _%>
   - script: chmod +x gradlew
     <%_ } _%>
   - task: Npm@1
@@ -97,8 +97,8 @@ jobs:
       customCommand: ' run java:jar:prod'
     displayName: 'TESTS: packaging'
 <%_ } _%>
-<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
-    const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+<%_ if (cypressTests || protractorTests) {
+    const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%= commented %>- task: Npm@1
   <%= commented %>  inputs:
   <%= commented %>    command: 'custom'
@@ -114,9 +114,9 @@ jobs:
   <%= commented %>    command: 'custom'
   <%= commented %>    customCommand: ' run ci:e2e:run'
   <%= commented %>  displayName: 'E2E: Run'
-  <%_ if(testFrameworks.includes('cypress')) { _%>
+  <%_ if(cypressTests) { _%>
   <%= commented %>  env:
-  <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrations.includes('cypressDashboard') %>
+  <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
   <%= commented %>    CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
   <%= commented %>    CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
   <%_ } _%>

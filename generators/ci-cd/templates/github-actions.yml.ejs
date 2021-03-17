@@ -19,7 +19,7 @@
 name: Application CI
 on: [push, pull_request]
 jobs:
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle) { _%>
     validation:
         name: "Gradle Wrapper Validation"
         runs-on: ubuntu-latest
@@ -39,13 +39,13 @@ jobs:
 <%_ if (!skipServer) { _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
 <%_ }
-if (databaseType !== 'no' && !skipServer ) { _%>
+if (!databaseTypeNo && !skipServer ) { _%>
             SPRING_JPA_SHOW_SQL: false
 <%_ } _%>
 <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
 <%_ } _%>
-<%_ if (clientFramework === ANGULAR) { _%>
+<%_ if (clientFrameworkAngular) { _%>
             NG_CLI_ANALYTICS: false
 <%_ } _%>
         steps:
@@ -64,7 +64,7 @@ if (!skipClient) { _%>
             - name: Install node.js packages
               run: <%= clientPackageManager %> install
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('snyk')) { _%>
+<%_ if (cicdIntegrationsSnyk) { _%>
             - name: Install Snyk CLI
               run: |
                   curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -83,9 +83,9 @@ if (!skipClient) { _%>
 <%_ if (!skipServer) { _%>
             - name: Run backend test
               run: |
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
                   chmod +x mvnw
-    <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildToolGradle) { _%>
                   chmod +x gradlew
     <%_ } _%>
                   <%= clientPackageManager %> run ci:backend:test
@@ -94,16 +94,16 @@ if (!skipClient) { _%>
               run: <%= clientPackageManager %> run ci:frontend:test
     <%_ } _%>
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('sonar')) { _%>
+<%_ if (cicdIntegrationsSonar) { _%>
             - name: Analyze code with SonarQube
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               run: |
                   if [ ! -z "$SONAR_TOKEN" ]; then
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
                       ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
-    <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildToolGradle) { _%>
                       ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
     <%_ } _%>
                   else
@@ -116,45 +116,45 @@ if (!skipClient) { _%>
 <%_ } else { _%>
               run: <%= clientPackageManager %> run build
 <%_ }
-if (cicdIntegrations.includes('heroku')) { _%>
+if (cicdIntegrationsHeroku) { _%>
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
               run: |
                   if [ ! -z "$HEROKU_API_KEY" ]; then
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
                       ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
-    <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildToolGradle) { _%>
                       ./gradlew deployHeroku --no-daemon
     <%_ } _%>
                   else
                       echo No HEROKU_API_KEY, skipping...
                   fi
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('publishDocker')) { _%>
+<%_ if (cicdIntegrationsPublishDocker) { _%>
             - name: Build and publish docker image
               if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run: |
                   GIT_TAG=:${GITHUB_REF#refs/tags/}
                   DOCKER_TAG=${GIT_TAG#:refs/heads/main}
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
                   ./mvnw -ntp jib:build -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
-    <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildToolGradle) { _%>
                   ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
     <%_ } _%>
 <%_ } _%>
-<%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
-  const commented = applicationType === 'gateway' ? '# ' : ''; _%>
+<%_ if (cypressTests || protractorTests) {
+  const commented = applicationTypeGateway ? '# ' : ''; _%>
             <%= commented %>- name: 'E2E: Package'
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:package
             <%= commented %>- name: 'E2E: Prepare'
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:prepare
             <%= commented %>- name: 'E2E: Run'
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:run
-    <%_ if(testFrameworks.includes('cypress')) { _%>
+    <%_ if(cypressTests) { _%>
             <%= commented %>  env:
-            <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrations.includes('cypressDashboard') %>
+            <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
             <%= commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
             <%= commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
     <%_ } _%>

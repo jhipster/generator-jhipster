@@ -26,7 +26,6 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const normalize = require('normalize-path');
-
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -39,7 +38,6 @@ const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
-const MICROSERVICE = require('../jdl/jhipster/application-types');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -50,13 +48,15 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
-const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J } = databaseTypes;
+const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
-const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
-const { EHCACHE } = require('../jdl/jhipster/cache-types');
+const { OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
+const { EHCACHE, REDIS } = require('../jdl/jhipster/cache-types');
+const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
 
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
+const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -2469,6 +2469,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+    dest.applicationTypeGateway = config.applicationType === GATEWAY;
   }
 
   /**
@@ -2483,6 +2484,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
+    dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
+    dest.clientThemeNone = config.clientTheme === 'none';
   }
 
   /**
@@ -2529,7 +2532,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
+    dest.buildToolGradle = config.buildTool === GRADLE;
+    dest.buildToolMaven = config.buildTool === MAVEN;
+    dest.cacheProviderRedis = config.cacheProvider === REDIS;
+    dest.databaseTypeNo = config.databaseType === NO_DATABASE;
+    dest.databaseTypeSql = config.databaseType === SQL;
+    dest.databaseTypeCassandra = config.databaseType === CASSANDRA;
+    dest.databaseTypeCouchbase = config.databaseType === COUCHBASE;
+    dest.databaseTypeNeo4j = config.databaseType === NEO4J;
+    dest.authenticationTypeSession = config.authenticationType === SESSION;
   }
+
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
 
   /**
    * Get all the generator configuration from the .yo-rc.json file

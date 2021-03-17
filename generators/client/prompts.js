@@ -19,6 +19,9 @@
 const chalk = require('chalk');
 const constants = require('../generator-constants');
 const { clientDefaultConfig } = require('../generator-defaults');
+const clientFrameworks = require('../../jdl/jhipster/client-framework-types');
+
+const NO_CLIENT_FRAMEWORK = clientFrameworks.NO;
 
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
@@ -70,7 +73,7 @@ async function askForClient() {
   });
 
   this.clientFramework = this.jhipsterConfig.clientFramework = answers.clientFramework;
-  if (this.clientFramework === 'no') {
+  if (this.clientFramework === NO_CLIENT_FRAMEWORK) {
     this.skipClient = this.jhipsterConfig.skipClient = true;
   }
 }

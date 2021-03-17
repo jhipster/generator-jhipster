@@ -18,6 +18,7 @@
  */
 const prompts = require('./docker-prompts');
 const BaseGenerator = require('./generator-base');
+const { GENERATOR_DOCKER_COMPOSE } = require('./generator-list');
 const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base');
 const statistics = require('./statistics');
 
@@ -105,7 +106,7 @@ module.exports = class extends BaseGenerator {
   get configuring() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'docker-compose');
+        statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
       },
 
       checkImages,

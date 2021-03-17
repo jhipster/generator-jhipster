@@ -27,13 +27,13 @@ node {
     gitlabCommitStatus('build') {
 <%_ } _%>
 <%_ if (insideDocker) { _%>
-<%= gitLabIndent %>    docker.image('jhipster/jhipster:v<%= jhipsterVersion %>').inside('-u jhipster<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+<%= gitLabIndent %>    docker.image('jhipster/jhipster:v<%= jhipsterVersion %>').inside('-u jhipster<% if (buildToolMaven) { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildToolGradle) { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ } _%>
 <%= indent %>    stage('check java') {
 <%= indent %>        sh "java -version"
 <%= indent %>    }
 
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x mvnw"
 <%= indent %>        sh "./mvnw -ntp clean -P-webapp"
@@ -51,7 +51,7 @@ node {
 <%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
 <%= indent %>    }
     <%_ } _%>
-    <%_ if (cicdIntegrations.includes('snyk')) { _%>
+    <%_ if (cicdIntegrationsSnyk) { _%>
 <%= indent %>    stage('Install Snyk CLI') {
 <%= indent %>       sh """
 <%= indent %>           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -92,16 +92,16 @@ node {
 <%= indent %>    }
 
     <%_ } _%>
-    <%_ if (cicdIntegrations.includes('heroku')) { _%>
+    <%_ if (cicdIntegrationsHeroku) { _%>
 <%= indent %>    stage('package and deploy') {
 <%= indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./mvnw -ntp verify -P-webapp <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
+<%= indent %>        sh "./mvnw -ntp verify -P-webapp <% if (cicdIntegrationsDeploy) { %>deploy <% } %>-Pprod -DskipTests"
     <%_ } _%>
 <%= indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%= indent %>    }
-<%_ } else if (buildTool === 'gradle') { _%>
+<%_ } else if (buildToolGradle) { _%>
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x gradlew"
 <%= indent %>        sh "./gradlew clean --no-daemon"
@@ -115,7 +115,7 @@ node {
 <%= indent %>        sh "./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon"
 <%= indent %>    }
     <%_ } _%>
-    <%_ if (cicdIntegrations.includes('snyk')) { _%>
+    <%_ if (cicdIntegrationsSnyk) { _%>
 <%= indent %>    stage('Install Snyk CLI') {
 <%= indent %>       sh """
 <%= indent %>           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -156,19 +156,19 @@ node {
 <%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
 <%= indent %>    }
 
-    <%_ if (cicdIntegrations.includes('heroku')) { _%>
+    <%_ if (cicdIntegrationsHeroku) { _%>
 <%= indent %>    stage('deployment') {
 <%= indent %>        sh "./gradlew deployHeroku --no-daemon"
 <%= indent %>    }
 
      <%_ } _%>
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('sonar')) { _%>
+<%_ if (cicdIntegrationsSonar) { _%>
 <%= indent %>    stage('quality analysis') {
 <%= indent %>        withSonarQubeEnv('<%= sonarName %>') {
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
 <%= indent %>            sh "./mvnw -ntp initialize sonar:sonar"
-    <%_ } else if (buildTool === 'gradle' ) { _%>
+    <%_ } else if (buildToolGradle) { _%>
 <%= indent %>            sh "./gradlew sonarqube --no-daemon"
     <%_ } _%>
 <%= indent %>        }
@@ -177,15 +177,15 @@ node {
 <%_ if (insideDocker) { _%>
 <%= gitLabIndent %>    }
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('publishDocker')) { _%>
+<%_ if (cicdIntegrationsPublishDocker) { _%>
 
 <%= gitLabIndent %>    def dockerImage
 <%= gitLabIndent %>    stage('publish docker') {
 <%= gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
 <%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
 <%= gitLabIndent %>        sh "./mvnw -ntp jib:build"
-    <%_ } else if (buildTool === 'gradle' ) { _%>
+    <%_ } else if (buildToolGradle) { _%>
 <%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
 <%= gitLabIndent %>        sh "./gradlew jib"
     <%_ } _%>

@@ -29,11 +29,14 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { clientDefaultConfig } = require('../generator-defaults');
-const { TestGenerators } = require('../generator-list');
+const { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT } = require('../generator-list');
 
-const { GENERATOR_CYPRESS } = TestGenerators;
 const { ANGULAR, REACT, VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
+const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+
+const NO_DATABASE = databaseTypes.NO;
 
 let useBlueprints;
 
@@ -68,7 +71,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
     this.existingProject = !!this.jhipsterConfig.clientFramework;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('client');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLIENT);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -141,7 +144,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   _composing() {
     return {
       composeCommon() {
-        this.composeWithJHipster('common', true);
+        this.composeWithJHipster(GENERATOR_COMMON, true);
       },
       composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
@@ -152,7 +155,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
 
-        this.composeWithJHipster('languages', true);
+        this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
     };
   }
@@ -235,7 +238,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.lowercaseBaseName = this.baseName.toLowerCase();
         this.humanizedBaseName = this.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(this.baseName);
 
-        if (this.authenticationType === 'oauth2' || this.databaseType === 'no') {
+        if (this.authenticationType === OAUTH2 || this.databaseType === NO_DATABASE) {
           this.skipUserManagement = true;
         }
       },
@@ -259,7 +262,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       },
 
       insight() {
-        statistics.sendSubGenEvent('generator', 'client', {
+        statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
           app: {
             clientFramework: this.clientFramework,
             enableTranslation: this.enableTranslation,
