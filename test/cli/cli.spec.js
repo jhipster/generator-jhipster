@@ -431,7 +431,7 @@ describe('jhipster cli', () => {
         });
       });
 
-      describe('using blueprint with generator option', () => {
+      describe('using blueprint with custom generator option', () => {
         let stdout;
         beforeEach(done => {
           const tmpdir = process.cwd();
@@ -450,6 +450,25 @@ describe('jhipster cli', () => {
         it('should print foo option', () => {
           expect(stdout.includes('--foo')).to.be.true;
           expect(stdout.includes('foo description')).to.be.true;
+        });
+      });
+
+      describe('using blueprint with blueprinted generator option', () => {
+        let stdout;
+        beforeEach(done => {
+          const tmpdir = process.cwd();
+          copyFakeBlueprint(tmpdir, 'bar');
+          lnYeoman(tmpdir);
+          const forked = fork(jhipsterCli, ['app', '--blueprints', 'bar', '--help'], { stdio: 'pipe', cwd: tmpdir });
+          forked.on('exit', () => {
+            stdout = forked.stdout.read().toString();
+            done();
+          });
+        });
+
+        it('should print foo-bar option', () => {
+          expect(stdout).to.include('--foo-bar');
+          expect(stdout).to.include('Sample option (blueprint option: bar)');
         });
       });
     });

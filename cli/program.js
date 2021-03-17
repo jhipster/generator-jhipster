@@ -143,7 +143,7 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
                   chalk.yellow(` (blueprint option: ${blueprintName})`)
                 );
               } catch (error) {
-                logger.info(`Error parsing options for generator ${generatorNamespace}, unknown option will lead to error at jhipster 7`);
+                logger.info(`Error parsing options for generator ${generatorNamespace}, error: ${error}`);
               }
             });
           }
