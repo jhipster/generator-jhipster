@@ -39,18 +39,18 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 export class NavbarComponent implements OnInit {
   inProduction?: boolean;
   isNavbarCollapsed = true;
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
-  <%_ } _%>
+<%_ } _%>
   openAPIEnabled?: boolean;
   version = '';
 
   constructor(
     private loginService: LoginService,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
     private sessionStorage: SessionStorageService,
-    <%_ } _%>
+<%_ } _%>
     private accountService: AccountService,
     private profileService: ProfileService,
     private router: Router
@@ -67,12 +67,12 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   changeLanguage(languageKey: string): void {
     this.sessionStorage.store('locale', languageKey);
     this.translateService.use(languageKey);
   }
-  <%_ } _%>
+<%_ } _%>
 
   collapseNavbar(): void {
     this.isNavbarCollapsed = true;
@@ -83,11 +83,11 @@ export class NavbarComponent implements OnInit {
   }
 
   login(): void {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     this.router.navigate(['/login']);
-    <%_ } else { _%>
+<%_ } else { _%>
     this.loginService.login();
-    <%_ } _%>
+<%_ } _%>
   }
 
   logout(): void {

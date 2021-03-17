@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient<% if (authenticationType !== 'oauth2') { %>, HttpHeaders<% } %> } from '@angular/common/http';
+import { HttpClient<% if (!authenticationTypeOauth2) { %>, HttpHeaders<% } %> } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
 
 import { ApplicationConfigService } from '../config/application-config.service';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
 import { Login } from 'app/login/login.model';
@@ -34,7 +34,7 @@ import { Login } from 'app/login/login.model';
 export class AuthServerProvider {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
   login(credentials: Login): Observable<{}> {
     const data =
@@ -58,11 +58,11 @@ export class AuthServerProvider {
     );
   }
 
-  <%_ } else { _%>
+<%_ } else { _%>
 
   logout(): Observable<Logout> {
     return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
   }
 
-  <%_ } _%>
+<%_ } _%>
 }

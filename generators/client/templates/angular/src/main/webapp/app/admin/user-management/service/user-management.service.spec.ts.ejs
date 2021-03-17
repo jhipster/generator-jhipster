@@ -23,7 +23,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
 import { Authority } from 'app/config/authority.constants';
 <%_ } _%>
 import { User } from '../user-management.model';
@@ -61,7 +61,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toEqual('user');
       });
 
-      <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
       it('should return Authorities', () => {
         let expectedResult: string[] = [];
 
@@ -73,7 +73,7 @@ describe('Service Tests', () => {
         req.flush([Authority.USER, Authority.ADMIN]);
         expect(expectedResult).toEqual([Authority.USER, Authority.ADMIN]);
       });
-      <%_ } _%>
+<%_ } _%>
 
       it('should propagate not found response', () => {
         let expectedResult = 0;

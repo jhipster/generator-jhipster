@@ -53,22 +53,22 @@ export class AlertErrorComponent implements OnDestroy {
         case 400: {
           const arr = httpErrorResponse.headers.keys();
           let errorHeader: string | null = null;
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           let entityKey: string | null = null;
-          <%_ } _%>
+<%_ } _%>
           for (const entry of arr) {
             if (entry.toLowerCase().endsWith('app-error')) {
               errorHeader = httpErrorResponse.headers.get(entry);
-            <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             } else if (entry.toLowerCase().endsWith('app-params')) {
               entityKey = httpErrorResponse.headers.get(entry);
-            <%_ } _%>
+<%_ } _%>
             }
           }
           if (errorHeader) {
-            <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             const alertData = entityKey ? { entityName: translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
-            <%_ } _%>
+<%_ } _%>
             this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
             const fieldErrors = httpErrorResponse.error.fieldErrors;
@@ -79,11 +79,11 @@ export class AlertErrorComponent implements OnDestroy {
               // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
               const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
               const fieldName: string =
-                <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
                 translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
-                <%_ } else { _%>
+<%_ } else { _%>
                 convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-                <%_ } _%>
+<%_ } _%>
               this.addErrorAlert(`Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {

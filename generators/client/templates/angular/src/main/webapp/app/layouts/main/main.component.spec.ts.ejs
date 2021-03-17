@@ -38,9 +38,9 @@ describe('Component Tests', () => {
     let comp: MainComponent;
     let fixture: ComponentFixture<MainComponent>;
     let titleService: Title;
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     let translateService: TranslateService;
-    <%_ } _%>
+<%_ } _%>
     let mockAccountService: AccountService;
     const routerEventsSubject = new Subject<RouterEvent>();
     const routerState: any = { snapshot: { root: { data: {} } } };
@@ -52,15 +52,15 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           imports: [TranslateModule.forRoot()],
-          <%_ } _%>
+<%_ } _%>
           declarations: [MainComponent],
           providers: [
             Title,
-            <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
             FindLanguageFromKeyPipe,
-            <%_ } _%>
+<%_ } _%>
             AccountService,
             {
               provide: Router,
@@ -77,9 +77,9 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(MainComponent);
       comp = fixture.componentInstance;
       titleService = TestBed.inject(Title);
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       translateService = TestBed.inject(TranslateService);
-      <%_ } _%>
+<%_ } _%>
       mockAccountService = TestBed.inject(AccountService);
       mockAccountService.identity = jest.fn(() => of(null));
       mockAccountService.getAuthenticationState = jest.fn(() => of(null));
@@ -90,16 +90,16 @@ describe('Component Tests', () => {
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: null };
-      <%_ } _%>
+<%_ } _%>
 
       beforeEach(() => {
         routerState.snapshot.root = { data: {} };
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         spyOn(translateService, 'get').and.callFake((key: string) => of(key + ' translated'));
         translateService.currentLang = '<%= nativeLanguage %>';
-        <%_ } _%>
+<%_ } _%>
         spyOn(titleService, 'setTitle');
         comp.ngOnInit();
       });
@@ -110,9 +110,9 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(defaultPageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(defaultPageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
 
@@ -124,9 +124,9 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
 
@@ -139,9 +139,9 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(childRoutePageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(childRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
 
@@ -154,14 +154,14 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
       });
 
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       describe('language change', () => {
         it('should set page title to default title if pageTitle is missing on routes', () => {
           // WHEN
@@ -210,7 +210,7 @@ describe('Component Tests', () => {
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
         });
       });
-      <%_ } _%>
+<%_ } _%>
     });
   });
 });

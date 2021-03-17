@@ -23,7 +23,7 @@ import { passwordRoute } from './password/password.route';
 import { passwordResetFinishRoute } from './password-reset/finish/password-reset-finish.route';
 import { passwordResetInitRoute } from './password-reset/init/password-reset-init.route';
 import { registerRoute } from './register/register.route';
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import { sessionsRoute } from './sessions/sessions.route';
 <%_ } _%>
 import { settingsRoute } from './settings/settings.route';
@@ -34,7 +34,7 @@ const ACCOUNT_ROUTES = [
   passwordResetFinishRoute,
   passwordResetInitRoute,
   registerRoute,
-  <%_ if (authenticationType === 'session') { _%>
+  <%_ if (authenticationTypeSession) { _%>
   sessionsRoute,
   <%_ } _%>
   settingsRoute,

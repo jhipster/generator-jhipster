@@ -18,7 +18,7 @@
 -%>
 @import 'bootstrap-variables';
 @import '~bootstrap/scss/functions';
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 @import '~bootstrap/scss/variables';
@@ -35,7 +35,7 @@ h4 {
   font-weight: 300;
 }
 
-<%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
 /* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
   color: #533f03;
@@ -80,7 +80,7 @@ Browser Upgrade Prompt
 Generic styles
 ========================================================================== */
 
-<%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
 /* Error highlight on input fields */
 .ng-valid[required],
 .ng-valid.required {

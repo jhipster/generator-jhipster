@@ -20,7 +20,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import { SessionsComponent } from './sessions/sessions.component';
 <%_ } _%>
 import { PasswordStrengthBarComponent } from './password/password-strength-bar/password-strength-bar.component';
@@ -41,7 +41,7 @@ import { accountState } from './account.route';
     PasswordStrengthBarComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationTypeSession) { _%>
     SessionsComponent,
     <%_ } _%>
     SettingsComponent,

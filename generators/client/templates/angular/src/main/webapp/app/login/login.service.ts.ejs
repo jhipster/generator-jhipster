@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { Location } from '@angular/common';
 
 <%_ } else { _%>
@@ -27,15 +27,15 @@ import { mergeMap } from 'rxjs/operators';
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
-<%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { Logout } from './logout.model';
 <%_ } else { _%>
 import { Login } from './login.model';
@@ -44,10 +44,10 @@ import { Login } from './login.model';
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   constructor(
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
     private applicationConfigService: ApplicationConfigService,
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     private location: Location,
 <%_ } else { _%>
     private accountService: AccountService,
@@ -55,19 +55,19 @@ export class LoginService {
     private authServerProvider: AuthServerProvider
   ) {}
 
-  <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   login(): void {
     // If you have configured multiple OIDC providers, then, you can update this URL to /login.
     // It will show a Spring Security generated login page with links to configured OIDC providers.
     location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
   }
-  <%_ } else { _%>
+<%_ } else { _%>
   login(credentials: Login): Observable<Account | null> {
     return this.authServerProvider.login(credentials).pipe(mergeMap(() => this.accountService.identity(true)));
   }
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
   logoutUrl(): string {
     return this.applicationConfigService.getEndpointFor('api/logout');
   }
@@ -75,10 +75,10 @@ export class LoginService {
   logoutInClient(): void {
     this.accountService.authenticate(null);
   }
-  <%_ } _%>
+<%_ } _%>
 
   logout(): void {
-    <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     this.authServerProvider.logout().subscribe((logout: Logout) => {
       let logoutUrl = logout.logoutUrl;
       const redirectUri = `${location.origin}${this.location.prepareExternalUrl('/')}`;
@@ -92,8 +92,8 @@ export class LoginService {
       }
       window.location.href = logoutUrl;
     });
-    <%_ } else { _%>
+<%_ } else { _%>
     this.authServerProvider.logout().subscribe({ complete: () => this.accountService.authenticate(null) });
-    <%_ } _%>
+<%_ } _%>
   }
 }

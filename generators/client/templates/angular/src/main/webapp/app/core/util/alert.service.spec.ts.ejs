@@ -30,7 +30,7 @@ describe('Alert service test', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         imports: [
           TranslateModule.forRoot({
             missingTranslationHandler: {
@@ -39,12 +39,12 @@ describe('Alert service test', () => {
             },
           }),
         ],
-        <%_ } _%>
+<%_ } _%>
       });
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       const translateService = TestBed.inject(TranslateService);
       translateService.setDefaultLang('en');
-      <%_ } _%>
+<%_ } _%>
       jest.useFakeTimers();
       extAlerts = [];
     });

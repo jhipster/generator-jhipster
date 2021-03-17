@@ -34,25 +34,25 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
   templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit {
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   private renderer: Renderer2;
-  <%_ } _%>
+<%_ } _%>
 
   constructor(
     private accountService: AccountService,
     private titleService: Title,
     private router: Router,
-    <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
     private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
-    <%_ } _%>
-    <%_ if (enableTranslation) { _%>
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
     rootRenderer: RendererFactory2
-    <%_ } _%>
+<%_ } _%>
   ) {
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
-    <%_ } _%>
+<%_ } _%>
   }
 
   ngOnInit(): void {
@@ -68,17 +68,17 @@ export class MainComponent implements OnInit {
       }
     });
 
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
       this.updateTitle();
       dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
 
-      <%_ if (enableI18nRTL) { _%>
+  <%_ if (enableI18nRTL) { _%>
       this.updatePageDirection();
-      <%_ } _%>
+  <%_ } _%>
     });
-    <%_ } _%>
+<%_ } _%>
   }
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
@@ -94,16 +94,16 @@ export class MainComponent implements OnInit {
     if (!pageTitle) {
       pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
     }
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
-    <%_ } else { _%>
+<%_ } else { _%>
     this.titleService.setTitle(pageTitle);
-    <%_ } _%>
+<%_ } _%>
   }
 
-  <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
   private updatePageDirection(): void {
     this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
   }
-  <%_ } _%>
+<%_ } _%>
 }

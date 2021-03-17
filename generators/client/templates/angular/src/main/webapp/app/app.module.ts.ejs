@@ -26,7 +26,7 @@ import locale from '@angular/common/locales/<%= localeId %>';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-<%_ if (authenticationType === 'session' && websocket === 'spring-websocket') { _%>
+<%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
 import { CookieService } from 'ngx-cookie-service';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
@@ -74,7 +74,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
     NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -86,18 +86,18 @@ import { ErrorComponent } from './layouts/error/error.component';
         useFactory: missingTranslationHandler,
       },
     }),
-    <%_ } _%>
+<%_ } _%>
   ],
   providers: [
     Title,
-    <%_ if (authenticationType === 'session' && websocket === 'spring-websocket') { _%>
+<%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
     CookieService,
-    <%_ } _%>
+<%_ } _%>
     { provide: LOCALE_ID, useValue: '<%= skipLanguageForLocale(nativeLanguage) ? 'en' : localeId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
-    <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
     FindLanguageFromKeyPipe,
-    <%_ } _%>
+<%_ } _%>
     httpInterceptorProviders,
   ],
   declarations: [
@@ -105,9 +105,9 @@ import { ErrorComponent } from './layouts/error/error.component';
     NavbarComponent,
     ErrorComponent,
     PageRibbonComponent,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
-    <%_ } _%>
+<%_ } _%>
     FooterComponent,
   ],
   bootstrap: [MainComponent],
@@ -118,9 +118,9 @@ export class AppModule {
     registerLocaleData(locale);
     iconLibrary.addIcons(...fontAwesomeIcons);
     dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     translateService.setDefaultLang('<%= nativeLanguage %>');
     translateService.use('<%= nativeLanguage %>');
-    <%_ } _%>
+<%_ } _%>
   }
 }

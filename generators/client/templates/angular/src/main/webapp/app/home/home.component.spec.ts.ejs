@@ -17,20 +17,20 @@
  limitations under the License.
 -%>
 jest.mock('app/core/auth/account.service');
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 jest.mock('@angular/router');
 <% } else { %>
 jest.mock('app/login/login.service');
 <%_ } _%>
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
 <%_ } _%>
 import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 
@@ -41,17 +41,17 @@ describe('Component Tests', () => {
     let comp: HomeComponent;
     let fixture: ComponentFixture<HomeComponent>;
     let mockAccountService: AccountService;
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     let mockRouter: Router;
-    <%_ } else { _%>
+<%_ } else { _%>
     let mockLoginService: LoginService;
-    <%_ } _%>
+<%_ } _%>
 
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
           declarations: [HomeComponent],
-          providers: [AccountService, <% if (authenticationType !== 'oauth2') { %>Router<% } else { %>LoginService<% } %>],
+          providers: [AccountService, <% if (!authenticationTypeOauth2) { %>Router<% } else { %>LoginService<% } %>],
         })
           .overrideTemplate(HomeComponent, '')
           .compileComponents();
@@ -64,14 +64,14 @@ describe('Component Tests', () => {
       mockAccountService = TestBed.inject(AccountService);
       mockAccountService.identity = jest.fn(() => of(null));
       mockAccountService.getAuthenticationState = jest.fn(() => of(null));
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       mockRouter = TestBed.inject(Router);
-      <%_ } else { _%>
+<%_ } else { _%>
       mockLoginService = TestBed.inject(LoginService);
-      <%_ } _%>
+<%_ } _%>
     });
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     it('Should call accountService.getAuthenticationState on init', () => {
       // WHEN
       comp.ngOnInit();
@@ -79,7 +79,7 @@ describe('Component Tests', () => {
       // THEN
       expect(mockAccountService.getAuthenticationState).toHaveBeenCalled();
     });
-    <%_ } _%>
+<%_ } _%>
 
     it('Should call accountService.isAuthenticated when it checks authentication', () => {
       // WHEN
@@ -89,7 +89,7 @@ describe('Component Tests', () => {
       expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
     });
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     it('Should navigate to /login on login', () => {
       // WHEN
       comp.login();
@@ -97,7 +97,7 @@ describe('Component Tests', () => {
       // THEN
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
     });
-    <%_ } else { _%>
+<%_ } else { _%>
     it('Should call loginService.login on login', () => {
       // WHEN
       comp.login();
@@ -105,6 +105,6 @@ describe('Component Tests', () => {
       // THEN
       expect(mockLoginService.login).toHaveBeenCalled();
     });
-    <%_ } _%>
+<%_ } _%>
   });
 });

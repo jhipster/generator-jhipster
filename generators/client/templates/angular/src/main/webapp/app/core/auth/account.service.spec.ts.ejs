@@ -21,7 +21,7 @@ jest.mock('@angular/router');
 jest.mock('@ngx-translate/core');
 <%_ } _%>
 jest.mock('app/core/auth/state-storage.service');
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 jest.mock('app/core/tracker/tracker.service');
 <%_ } _%>
 
@@ -36,7 +36,7 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import { TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 
@@ -61,20 +61,20 @@ describe('Service Tests', () => {
     let httpMock: HttpTestingController;
     let mockStorageService: StateStorageService;
     let mockRouter: Router;
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     let mockTrackerService: TrackerService;
-    <%_ } _%>
+<%_ } _%>
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
         providers: [
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           TranslateService,
-          <%_ } _%>
-          <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
           TrackerService,
-          <%_ } _%>
+<%_ } _%>
           StateStorageService,
           Router,
         ],
@@ -84,9 +84,9 @@ describe('Service Tests', () => {
       httpMock = TestBed.inject(HttpTestingController);
       mockStorageService = TestBed.inject(StateStorageService);
       mockRouter = TestBed.inject(Router);
-      <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
       mockTrackerService = TestBed.inject(TrackerService);
-      <%_ } _%>
+<%_ } _%>
     });
 
     afterEach(() => {
@@ -105,10 +105,10 @@ describe('Service Tests', () => {
         // THEN
         expect(userIdentity).toBeNull();
         expect(service.isAuthenticated()).toBe(false);
-        <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
         expect(mockTrackerService.disconnect).toHaveBeenCalled();
         expect(mockTrackerService.connect).not.toHaveBeenCalled();
-        <%_ } _%>
+<%_ } _%>
       });
 
       it('authenticationState should emit the same account as was in input parameter', () => {
@@ -123,10 +123,10 @@ describe('Service Tests', () => {
         // THEN
         expect(userIdentity).toEqual(expectedResult);
         expect(service.isAuthenticated()).toBe(true);
-        <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
         expect(mockTrackerService.connect).toHaveBeenCalled();
         expect(mockTrackerService.disconnect).not.toHaveBeenCalled();
-        <%_ } _%>
+<%_ } _%>
       });
     });
 

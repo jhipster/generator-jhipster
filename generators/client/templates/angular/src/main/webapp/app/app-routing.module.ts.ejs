@@ -39,18 +39,18 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
-        <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
         {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },
-        <%_ } _%>
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         {
           path: 'login',
           loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         },
-        <%_ } _%>
+<%_ } _%>
         ...LAYOUT_ROUTES,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
