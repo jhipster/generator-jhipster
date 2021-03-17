@@ -31,6 +31,9 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     throw new Error(`Error at entity ${entityName}: could not find the entity of the relationship ${stringify(relationship)}`);
   }
   const otherEntityData = relationship.otherEntity;
+  if (!relationship.otherEntityField && otherEntityData.primaryKey) {
+    relationship.otherEntityField = otherEntityData.primaryKey.name;
+  }
 
   _.defaults(relationship, {
     // let ownerSide true when type is 'many-to-one' for convenience.
@@ -43,9 +46,6 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
   relationship.otherEntityIsEmbedded = otherEntityData.embedded;
 
-  computeRelationshipOtherEntityFields(relationship);
-
-  relationship.mapperName = relationship.otherEntityField + (relationship.collection ? 'Set' : '');
   // Look for fields at the other other side of the relationship
   if (otherEntityData.relationships) {
     let otherRelationship;
@@ -112,18 +112,11 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
   }
 
   relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
-  if (
-    !relationship.relatedField &&
-    !relationship.otherEntity.embedded &&
-    !(relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.composite)
-  ) {
+  if (!relationship.relatedField && !relationship.otherEntity.embedded) {
     if (otherEntityData.primaryKey && otherEntityData.primaryKey.derived) {
       Object.defineProperty(relationship, 'relatedField', {
         get() {
-          const relatedField = otherEntityData.primaryKey.ids
-            .map(id => id.field)
-            .find(field => field.fieldName === relationship.otherEntityField);
-          return relatedField;
+          return otherEntityData.primaryKey.derivedFields.find(field => field.fieldName === relationship.otherEntityField);
         },
       });
     } else if (!ignoreMissingRequiredRelationship) {
@@ -248,32 +241,6 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
 
   relationship.reference = relationshipToReference(entityWithConfig, relationship);
   return relationship;
-}
-
-function computeRelationshipOtherEntityFields(relationship) {
-  if (!relationship.otherEntityFields) {
-    relationship.otherEntityFields = [];
-    if (!relationship.otherEntityField && relationship.otherEntity.primaryKey) {
-      relationship.otherEntityField = relationship.otherEntity.primaryKey.composite ? 'id' : relationship.otherEntity.primaryKey.name;
-    }
-    if (relationship.otherEntityField) {
-      const field = relationship.otherEntity.fields.find(field => field.fieldName === relationship.otherEntityField);
-      if (field) {
-        relationship.otherEntityFields.push({
-          field,
-          usedRelationships: [relationship],
-        });
-      }
-    }
-    relationship.otherEntity.relationships
-      .filter(r => r.id) // Only many-to-one (no one-to-one) since otherEntityField is enough in that case
-      .forEach(r => {
-        computeRelationshipOtherEntityFields(r);
-        relationship.otherEntityFields.push(
-          ...r.otherEntityFields.map(f => ({ field: f.field, usedRelationships: [r, ...f.usedRelationships] }))
-        );
-      });
-  }
 }
 
 function relationshipToReference(entity, relationship, pathPrefix = []) {

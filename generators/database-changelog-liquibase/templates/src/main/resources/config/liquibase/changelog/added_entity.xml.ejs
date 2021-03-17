@@ -48,7 +48,7 @@
             <%_ for (relationship of relationships) {
                 if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
                             && !relationship.id) {
-                    relationship.otherEntity.primaryKey.originalFields.forEach(idField => {
+                    relationship.otherEntity.primaryKey.fields.forEach(idField => {
                     const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
                      _%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
@@ -73,19 +73,19 @@
         <%_ for (relationship of joinTableRelations) { _%>
 
         <createTable tableName="<%= relationship.joinTable.name %>">
-            <%_ for (field of relationship.otherEntity.primaryKey.originalFields) { _%>
+            <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
             <%_ } _%>
-            <%_ for (field of entity.primaryKey.originalFields) { _%>
+            <%_ for (field of entity.primaryKey.fields) { _%>
             <column name="<%= entity.entityTableName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
             <%_ } _%>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= entity.primaryKey.originalFields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.originalFields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
+        <addPrimaryKey columnNames="<%= entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
         <%_ } _%>
     </changeSet>
     <%_ } _%>
@@ -120,7 +120,7 @@
                                 && (relationship.id == null || relationship.id === false))
                     )) {
                         _%>
-                        <%_ for (field of relationship.otherEntity.primaryKey.originalFields) { _%>
+                        <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
                         <%_ } _%>
                     <%_ } _%>

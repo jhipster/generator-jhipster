@@ -103,6 +103,22 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Public API method used by the getter and also by Blueprints
+   * @returns {Object} tasks
+   */
+  _preparingFields() {
+    return {};
+  }
+
+  /**
+   * Public API method used by the getter and also by Blueprints
+   * @returns {Object} tasks
+   */
+  _preparingRelationships() {
+    return {};
+  }
+
+  /**
    * @private
    * Execute custom priorities if they are not declared
    * Should be used by jhipster official generators only.
@@ -119,6 +135,9 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     }
     if (this._isPriorityMissing('preparing', 'default')) {
       tasks = { ...tasks, ...this._preparing() };
+    }
+    if (this._isPriorityMissing('preparingFields', 'default')) {
+      tasks = { ...tasks, ...this._preparingFields() };
     }
     if (this._isPriorityMissing('preparingRelationships', 'default')) {
       tasks = { ...tasks, ...this._preparingRelationships() };

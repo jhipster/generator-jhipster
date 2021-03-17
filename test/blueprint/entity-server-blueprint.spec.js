@@ -18,6 +18,18 @@ const mockBlueprintSubGen = class extends EntityServerGenerator {
     }
   }
 
+  get preparing() {
+    return {
+      ...this._preparing(),
+    };
+  }
+
+  get default() {
+    return {
+      ...this._default(),
+    };
+  }
+
   get writing() {
     return {
       customPhase() {
@@ -33,7 +45,7 @@ describe('JHipster entity server generator with blueprint', () => {
 
   blueprintNames.forEach(blueprintName => {
     describe(`generate server entity with blueprint option '${blueprintName}'`, () => {
-      before(done => {
+      before(() =>
         helpers
           .run(path.join(__dirname, '../../generators/entity'))
           .inTmpDir(dir => {
@@ -54,8 +66,7 @@ describe('JHipster entity server generator with blueprint', () => {
             service: 'no',
             pagination: 'no',
           })
-          .on('end', done);
-      });
+      );
 
       it('creates expected entity client files from jhipster entity generator', () => {
         assert.file(expectedFiles.clientNg2);

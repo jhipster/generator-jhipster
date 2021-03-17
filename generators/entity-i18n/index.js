@@ -27,7 +27,8 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
-    utils.copyObjectProps(this, opts.context);
+
+    this.entity = opts.context;
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context });
@@ -35,7 +36,13 @@ module.exports = class extends BaseBlueprintGenerator {
 
   // Public API method used by the getter and also by Blueprints
   _default() {
-    return super._missingPreDefault();
+    return {
+      ...super._missingPreDefault(),
+
+      loadEntityIntoGenerator() {
+        utils.copyObjectProps(this, this.entity);
+      },
+    };
   }
 
   get default() {

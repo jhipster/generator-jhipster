@@ -76,9 +76,14 @@ const CUSTOM_PRIORITIES = [
     before: 'default',
   },
   {
+    priorityName: 'preparingFields',
+    queueName: 'jhipster:preparingFields',
+    before: 'preparingRelationships',
+  },
+  {
     priorityName: 'preparing',
     queueName: 'jhipster:preparing',
-    before: 'preparingRelationships',
+    before: 'preparingFields',
   },
   {
     priorityName: 'loading',

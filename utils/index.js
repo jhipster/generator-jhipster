@@ -37,9 +37,6 @@ module.exports = {
         if (key === 'otherRelationship') {
           return `[${value.relationshipName} relationship]`;
         }
-        if (key === 'usedRelationships') {
-          return `[${value.map(r => r.relationshipName)} usedRelationships]`;
-        }
         if (key === 'otherRelationships') {
           return '[otherRelationships]';
         }
