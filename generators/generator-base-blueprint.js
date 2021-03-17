@@ -35,6 +35,10 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 
+    if (this.options.help) {
+      return;
+    }
+
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
 
