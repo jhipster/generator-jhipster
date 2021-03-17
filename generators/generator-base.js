@@ -2488,6 +2488,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
     dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
+    dest.clientFrameworkReact = config.clientFramework === REACT;
     dest.clientThemeNone = config.clientTheme === 'none';
     dest.clientThemePrimary = config.clientThemeVariant === 'primary';
   }

@@ -49,7 +49,7 @@
         };
       };
       window.onload = function () {
-        <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
         function getCSRF() {
           var name = 'XSRF-TOKEN=';
           var ca = document.cookie.split(';');
@@ -60,7 +60,7 @@
           }
           return '';
         }
-        <%_ } _%>
+<%_ } _%>
 
         var urls = [];
         axios.get('/swagger-resources').then(function (response) {
@@ -94,7 +94,7 @@
               SwaggerUIBundle.plugins.DownloadUrl,
               AlwaysEnableTryItOutPlugin
             ],
-            <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
             requestInterceptor: function(req) {
               req.headers['X-XSRF-TOKEN'] = getCSRF();
               // Remove the sample Swagger UI request body if present
@@ -106,8 +106,8 @@
               }
               return req;
             },
-            <%_ } _%>
-            <%_ if (authenticationType === 'jwt') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
             requestInterceptor: function (req) {
               var authToken =
                 localStorage.getItem('<%= jhiPrefixDashed %>-authenticationtoken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
@@ -123,7 +123,7 @@
               }
               return req;
             },
-            <%_ } _%>
+<%_ } _%>
           });
 
           window.ui = ui;
