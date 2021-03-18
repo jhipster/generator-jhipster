@@ -61,7 +61,7 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => this.currentAccount = account);
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (databaseTypeCassandra) { _%>
     this.loadAll();
 <%_ } else { _%>
     this.handleNavigation();
