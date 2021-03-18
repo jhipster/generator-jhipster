@@ -28,10 +28,10 @@ function setupProxy() {
         '/v2/api-docs',
         '/v3/api-docs',
         '/h2-console',
-        <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
         '/oauth2',
         '/login',
-        <%_ } _%>
+<%_ } _%>
         '/auth',
         '/health',
       ],
@@ -39,13 +39,13 @@ function setupProxy() {
       secure: false,
       changeOrigin: tls,
     },
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     {
       context: ['/websocket'],
       target: 'ws://127.0.0.1:<%= serverPort %>',
       ws: true,
     },
-    <%_ } _%>
+<%_ } _%>
   ];
   return conf;
 }

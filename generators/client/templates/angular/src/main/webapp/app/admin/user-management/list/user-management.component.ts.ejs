@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse<%_ if (prodDatabaseType !== 'cassandra') { %>, HttpHeaders <% } %>} from '@angular/common/http';
-<%_ if (prodDatabaseType !== 'cassandra') { _%>
+import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
+<%_ if (!databaseTypeCassandra) { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 <%_ } _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-<%_ if (prodDatabaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
@@ -41,31 +41,31 @@ export class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;
   users: User[] | null = null;
   isLoading = false;
-  <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
   page!: number;
   predicate!: string;
   ascending!: boolean;
-  <%_ } _%>
+<%_ } _%>
 
   constructor(
     private userService: UserManagementService,
     private accountService: AccountService,
-    <%_ if (prodDatabaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    <%_ } _%>
+<%_ } _%>
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => this.currentAccount = account);
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
     this.loadAll();
-    <%_ } else { _%>
+<%_ } else { _%>
     this.handleNavigation();
-    <%_ } _%>
+<%_ } _%>
   }
 
   setActive(user: User, isActivated: boolean): void {
@@ -90,7 +90,7 @@ export class UserManagementComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
     this.userService
-      .query(<% if (databaseType !== 'cassandra') { %>{
+      .query(<% if (!databaseTypeCassandra) { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
@@ -98,13 +98,13 @@ export class UserManagementComponent implements OnInit {
       .subscribe(
         (res: HttpResponse<User[]>) => {
           this.isLoading = false;
-          this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>);
+          this.onSuccess(res.body<% if (!databaseTypeCassandra) { %>, res.headers<% } %>);
         },
         () => this.isLoading = false
       );
   }
 
-  <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
   transition(): void {
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute.parent,
@@ -125,9 +125,9 @@ export class UserManagementComponent implements OnInit {
       this.loadAll();
     });
   }
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
   private sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
     if (this.predicate !== 'id') {
@@ -135,12 +135,12 @@ export class UserManagementComponent implements OnInit {
     }
     return result;
   }
-  <%_ } _%>
+<%_ } _%>
 
-  private onSuccess(users: User[] | null<% if (databaseType !== 'cassandra') { %>, headers: HttpHeaders<% } %>): void {
-    <%_ if (databaseType !== 'cassandra') { _%>
+  private onSuccess(users: User[] | null<% if (!databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
+<%_ if (!databaseTypeCassandra) { _%>
     this.totalItems = Number(headers.get('X-Total-Count'));
-    <%_ } _%>
+<%_ } _%>
     this.users = users;
   }
 }

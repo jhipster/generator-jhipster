@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 @import '~bootstrap/scss/functions';
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 @import '~bootstrap/scss/variables';

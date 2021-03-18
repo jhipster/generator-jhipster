@@ -38,11 +38,11 @@ describe('administration', () => {
     await browser.get('/');
     navBarPage = new NavBarPage(true);
     signInPage = await navBarPage.getSignInPage();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     await signInPage.autoSignInUsing(username, password);
-    <%_ } else { _%>
+<%_ } else { _%>
     await signInPage.loginWithOAuth(username, password);
-    <%_ } _%>
+<%_ } _%>
     await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
   });
 
@@ -50,28 +50,28 @@ describe('administration', () => {
     await navBarPage.clickOnAdminMenu();
   });
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   it('should load user management', async () => {
     await navBarPage.clickOnAdmin('user-management');
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const expect1 = 'userManagement.home.title';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const expect1 = 'Users';
-    <%_ } _%>
+  <%_ } _%>
     const value1 = await element(by.id('user-management-page-heading')).<%- elementGetter %>;
     expect(value1).to.eq(expect1);
   });
-  <%_ } _%>
+<%_ } _%>
 
   it('should load metrics', async () => {
     await navBarPage.clickOnAdmin('metrics');
     const heading = element(by.id('metrics-page-heading'));
     await browser.wait(ec.visibilityOf(heading), 10000);
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const expect1 = 'metrics.title';
-    <%_ } else { _%>
+<%_ } else { _%>
     const expect1 = 'Application Metrics';
-    <%_ } _%>
+<%_ } _%>
     const value1 = await heading.<%- elementGetter %>;
     expect(value1).to.eq(expect1);
   });
@@ -80,11 +80,11 @@ describe('administration', () => {
     await navBarPage.clickOnAdmin('health');
     const heading = element(by.id('health-page-heading'));
     await browser.wait(ec.visibilityOf(heading), 10000);
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const expect1 = 'health.title';
-    <%_ } else { _%>
+<%_ } else { _%>
     const expect1 = 'Health Checks';
-    <%_ } _%>
+<%_ } _%>
     const value1 = await heading.<%- elementGetter %>;
     expect(value1).to.eq(expect1);
   });
@@ -93,11 +93,11 @@ describe('administration', () => {
     await navBarPage.clickOnAdmin('configuration');
     const heading = element(by.id('configuration-page-heading'));
     await browser.wait(ec.visibilityOf(heading), 10000);
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const expect1 = 'configuration.title';
-    <%_ } else { _%>
+<%_ } else { _%>
     const expect1 = 'Configuration';
-    <%_ } _%>
+<%_ } _%>
     const value1 = await heading.<%- elementGetter %>;
     expect(value1).to.eq(expect1);
   });
@@ -106,11 +106,11 @@ describe('administration', () => {
     await navBarPage.clickOnAdmin('logs');
     const heading = element(by.id('logs-page-heading'));
     await browser.wait(ec.visibilityOf(heading), 10000);
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const expect1 = 'logs.title';
-    <%_ } else { _%>
+<%_ } else { _%>
     const expect1 = 'Logs';
-    <%_ } _%>
+<%_ } _%>
     const value1 = await heading.<%- elementGetter %>;
     expect(value1).to.eq(expect1);
   });

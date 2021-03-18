@@ -87,7 +87,7 @@ export class NavBarPage {
     return new SignInPage();
   }
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   async getPasswordPage(): Promise<PasswordPage> {
     await this.clickOnAccountMenu();
     await this.clickOnPasswordMenu();
@@ -99,7 +99,7 @@ export class NavBarPage {
     await this.clickOnSettingsMenu();
     return new SettingsPage();
   }
-  <%_ } _%>
+<%_ } _%>
 
   async goToEntity(entityName: string): Promise<void> {
     await this.clickOnEntityMenu();
@@ -123,15 +123,15 @@ export class NavBarPage {
 }
 
 export class SignInPage {
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   username = element(by.id('username'));
   password = element(by.id('password'));
   loginButton = element(by.css('button[type=submit]'));
-  <%_ } else { _%>
+<%_ } else { _%>
   username = element(by.name('username'));
   password = element(by.name('password'));
   loginButton = element(by.css('input[type=submit]'));
-  <%_ } _%>
+<%_ } _%>
 
   async setUserName(username: string): Promise<void> {
     await this.username.sendKeys(username);
@@ -157,13 +157,13 @@ export class SignInPage {
     await this.password.clear();
   }
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   async autoSignInUsing(username: string, password: string): Promise<void> {
     await this.setUserName(username);
     await this.setPassword(password);
     await this.login();
   }
-  <%_ } else { _%>
+<%_ } else { _%>
   async loginWithOAuth(username: string, password: string): Promise<void> {
     // Entering non angular site, tell webdriver to switch to synchronous mode.
     await browser.waitForAngularEnabled(false);
@@ -180,7 +180,7 @@ export class SignInPage {
       browser.waitForAngularEnabled(true);
     }
   }
-  <%_ } _%>
+<%_ } _%>
 
   async login(): Promise<void> {
     await this.loginButton.click();

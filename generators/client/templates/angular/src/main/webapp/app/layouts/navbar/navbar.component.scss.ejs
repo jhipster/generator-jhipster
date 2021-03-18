@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 @import '~bootstrap/scss/functions';
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 @import '~bootstrap/scss/variables';
@@ -38,13 +38,13 @@ Navbar
 
 .navbar {
   padding: 0.2rem 1rem;
-  <%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
   .dropdown-item.active,
   .dropdown-item.active:focus,
   .dropdown-item.active:hover {
     background-color: $dark;
   }
-  <%_ } _%>
+<%_ } _%>
 
   ul.navbar-nav {
     .nav-item {
@@ -56,13 +56,13 @@ Navbar
     font-weight: 400;
   }
 
-  <%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
   .navbar-toggler {
     &:hover {
       color: $navbar-dark-hover-color;
     }
   }
-  <%_ } _%>
+<%_ } _%>
 }
 
 /* ==========================================================================

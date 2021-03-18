@@ -56,7 +56,7 @@
           />
         </div>
 
-        <div class="form-check"<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
+        <div class="form-check"<% if (authenticationTypeSession && databaseTypeNo) { %> hidden<% } %>>
           <label class="form-check-label" for="rememberMe">
             <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
             <span <%= jhiPrefix %>Translate="login.form.rememberme">Remember me</span>
@@ -65,7 +65,7 @@
 
         <button type="submit" class="btn btn-primary" <%= jhiPrefix %>Translate="login.form.button" data-cy="submit">Sign in</button>
       </form>
-      <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
       <div class="mt-3 alert alert-warning">
         <a class="alert-link" routerLink="/account/reset/request" <%= jhiPrefix %>Translate="login.password.forgot" data-cy="forgetYourPasswordSelector">Did you forget your password?</a>
       </div>
@@ -74,7 +74,7 @@
         <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">You don't have an account yet?</span>
         <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">Register a new account</a>
       </div>
-      <%_ } _%>
+<%_ } _%>
     </div>
   </div>
 </div>

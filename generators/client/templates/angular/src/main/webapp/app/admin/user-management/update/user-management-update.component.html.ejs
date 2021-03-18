@@ -147,7 +147,7 @@
             <span <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
           </label>
         </div>
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
 
         <div class="form-group" *ngIf="languages && languages.length > 0">
           <label <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</label>
@@ -155,7 +155,7 @@
             <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
           </select>
         </div>
-        <%_ } _%>
+<%_ } _%>
 
         <div class="form-group">
           <label <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</label>

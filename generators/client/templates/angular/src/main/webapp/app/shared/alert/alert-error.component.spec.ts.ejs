@@ -40,9 +40,9 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           imports: [TranslateModule.forRoot()],
-          <%_ } _%>
+<%_ } _%>
           declarations: [AlertErrorComponent],
           providers: [EventManager, AlertService],
         })

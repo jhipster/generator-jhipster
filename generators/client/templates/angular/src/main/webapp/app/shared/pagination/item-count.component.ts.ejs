@@ -24,11 +24,11 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: '<%= jhiPrefixDashed %>-item-count',
   template: `
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
-    <%_ } else { _%>
+<%_ } else { _%>
     <div>Showing {{ first }} - {{ second }} of {{ total }} items.</div>
-    <%_ } _%>
+<%_ } _%>
   `
 })
 export class ItemCountComponent {

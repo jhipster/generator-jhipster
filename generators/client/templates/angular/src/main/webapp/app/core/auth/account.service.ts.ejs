@@ -29,7 +29,7 @@ import { shareReplay, tap, catchError } from 'rxjs/operators';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { ApplicationConfigService } from '../config/application-config.service';
 import { Account } from 'app/core/auth/account.model';
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import { TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
 
@@ -40,35 +40,35 @@ export class AccountService {
   private accountCache$?: Observable<Account | null>;
 
   constructor(
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
     private sessionStorage: SessionStorageService,
-    <%_ } _%>
+<%_ } _%>
     private http: HttpClient,
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     private trackerService: TrackerService,
-    <%_ } _%>
+<%_ } _%>
     private stateStorageService: StateStorageService,
     private router: Router,
     private applicationConfigService: ApplicationConfigService
   ) {}
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   save(account: Account): Observable<{}> {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
   }
-  <%_ } _%>
+<%_ } _%>
 
   authenticate(identity: Account | null): void {
     this.userIdentity = identity;
     this.authenticationState.next(this.userIdentity);
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     if (identity) {
       this.trackerService.connect();
     } else {
       this.trackerService.disconnect();
     }
-    <%_ } _%>
+<%_ } _%>
   }
 
   hasAnyAuthority(authorities: string[] | string): boolean {
@@ -88,14 +88,14 @@ export class AccountService {
         tap((account: Account | null) => {
           this.authenticate(account);
 
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
           if (account?.langKey) {
             const langKey = this.sessionStorage.retrieve('locale') ?? account.langKey;
             this.translateService.use(langKey);
           }
-          <%_ } _%>
+<%_ } _%>
 
           if (account) {
             this.navigateToStoredUrl();

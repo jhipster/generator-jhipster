@@ -42,11 +42,11 @@
         You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
       </p>
     <![endif]-->
-    <%_ if (clientFramework === ANGULAR) { _%>
+<%_ if (clientFrameworkAngular) { _%>
     <<%= jhiPrefixDashed %>-main>
-    <%_ } else { _%>
-    <div id="<% if (clientFramework === REACT) { %>root<% } else { %>app<% } %>">
-    <%_ } _%>
+<%_ } else { _%>
+    <div id="<% if (clientFrameworkReact) { %>root<% } else { %>app<% } %>">
+<%_ } _%>
       <div class="app-loading">
         <div class="lds-pacman">
           <div><div></div><div></div><div></div></div>
@@ -64,12 +64,12 @@
             <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
           </ol>
           <h2>Building the client side code again</h2>
-          <p>If you want to go fast, run <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle') { %>./gradlew<% } %></code> to build and run everything.</p>
+          <p>If you want to go fast, run <code style="color:red"><% if (buildToolMaven) { %>./mvnw<% } else if (buildToolGradle) { %>./gradlew<% } %></code> to build and run everything.</p>
           <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
           <ol>
             <li>Install npm dependencies with the command <code style="color:red"><%= clientPackageManager %> install</code></li>
             <li>Build the client with the command <code style="color:red"><%= clientPackageManager %> run webapp:build</code> or <code style="color:red"><%= clientPackageManager %> start</code></li>
-            <li>Start the server with <code style="color:red"><% if (buildTool === 'maven') { %>./mvnw<% } else if (buildTool === 'gradle') { %>./gradlew<% } %></code> or using your IDE</li>
+            <li>Start the server with <code style="color:red"><% if (buildToolMaven) { %>./mvnw<% } else if (buildToolGradle) { %>./gradlew<% } %></code> or using your IDE</li>
           </ol>
 
           <h2>Getting more help</h2>
@@ -94,7 +94,7 @@
           <!-- end of troubleshooting content -->
         </div>
       </div>
-    <%_ if (clientFramework === ANGULAR) { _%>
+    <%_ if (clientFrameworkAngular) { _%>
     </<%= jhiPrefixDashed %>-main>
     <%_ } else { _%>
     </div>
@@ -114,7 +114,7 @@
         }
       }
     </script>
-    <%_ if (clientFramework !== ANGULAR) { _%>
+    <%_ if (!clientFrameworkAngular) { _%>
     <!-- uncomment this for adding service worker
     <script>
       if ('serviceWorker' in navigator) {

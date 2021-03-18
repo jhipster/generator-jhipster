@@ -32,9 +32,9 @@ import { UserManagementService } from '../service/user-management.service';
 })
 export class UserManagementUpdateComponent implements OnInit {
   user!: User;
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
-  <%_ } _%>
+<%_ } _%>
   authorities: string[] = [];
   isSaving = false;
 
@@ -77,9 +77,9 @@ export class UserManagementUpdateComponent implements OnInit {
         () => this.onSaveError()
       );
     } else {
-      <%_ if (!enableTranslation) { _%>
+<%_ if (!enableTranslation) { _%>
       this.user.langKey = 'en';
-      <%_ } _%>
+<%_ } _%>
       this.userService.create(this.user).subscribe(
         () => this.onSaveSuccess(),
         () => this.onSaveError()

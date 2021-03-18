@@ -38,24 +38,24 @@
   <div class="table-responsive" *ngIf="users">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
-        <tr<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="id"<% } %>>
+        <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
             <span <%= jhiPrefix %>Translate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="login"<% } %>>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="login"<% } %>>
             <span <%= jhiPrefix %>Translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="email"<% } %>>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="email"<% } %>>
             <span <%= jhiPrefix %>Translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
           <th scope="col"></th>
-          <%_ if (enableTranslation) { _%>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
+<%_ if (enableTranslation) { _%>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
             <span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>
-          <%_ } _%>
+<%_ } _%>
           <th scope="col"><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></th>
-          <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
           <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
             <span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -65,7 +65,7 @@
           <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
             <span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <%_ } _%>
+<%_ } _%>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -95,19 +95,19 @@
               Activated
             </button>
           </td>
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           <td>{{ user.langKey }}</td>
-          <%_ } _%>
+<%_ } _%>
           <td>
             <div *ngFor="let authority of user.authorities">
               <span class="badge badge-info">{{ authority }}</span>
             </div>
           </td>
-          <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
           <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
           <td>{{ user.lastModifiedBy }}</td>
           <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
-          <%_ } _%>
+<%_ } _%>
           <td class="text-right">
             <div class="btn-group">
               <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
@@ -135,7 +135,7 @@
       </tbody>
     </table>
   </div>
-  <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
 
   <div *ngIf="users">
     <div class="row justify-content-center">
@@ -154,5 +154,5 @@
       ></ngb-pagination>
     </div>
   </div>
-  <%_ } _%>
+<%_ } _%>
 </div>

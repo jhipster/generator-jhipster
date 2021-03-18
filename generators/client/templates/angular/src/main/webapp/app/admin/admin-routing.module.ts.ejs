@@ -55,13 +55,13 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
       },
       <%_ } _%>
-      <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+      <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
       {
         path: 'gateway',
         loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
       },
       <%_ } _%>
-      <%_ if (websocket === 'spring-websocket') { _%>
+      <%_ if (communicationSpringWebsocket) { _%>
       {
         path: 'tracker',
         loadChildren: () => import('./tracker/tracker.module').then(m => m.TrackerModule),

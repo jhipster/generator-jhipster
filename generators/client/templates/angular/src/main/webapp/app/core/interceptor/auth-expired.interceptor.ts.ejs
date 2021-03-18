@@ -40,19 +40,19 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
       tap({
         error: (err: HttpErrorResponse) => {
           if (err.status === 401 && err.url && !err.url.includes('api/account') && this.accountService.isAuthenticated()) {
-            <%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
             if (err.url.includes(this.loginService.logoutUrl())) {
               this.loginService.logoutInClient();
               return;
             }
-            <%_ } _%>
+<%_ } _%>
             this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
-            <%_ if (['session', 'jwt'].includes(authenticationType)) { _%>
+<%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
             this.loginService.logout();
             this.router.navigate(['/login']);
-            <%_ } else { _%>
+<%_ } else { _%>
             this.loginService.login();
-            <%_ } _%>
+<%_ } _%>
           }
         },
       })

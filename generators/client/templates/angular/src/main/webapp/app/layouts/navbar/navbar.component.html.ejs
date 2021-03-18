@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<nav data-cy="navbar" class="navbar navbar-<% if (clientTheme === 'none' || clientThemeVariant === 'primary') { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientTheme === 'none') { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+<nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemePrimary) { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img"></span>
     <span <%= jhiPrefix %>Translate="global.title" class="navbar-title"><%= capitalizedBaseName %></span>
@@ -78,31 +78,31 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
-          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
           <li>
             <a class="dropdown-item" routerLink="admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="road" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.admin.gateway">Gateway</span>
             </a>
           </li>
-          <%_ } _%>
-          <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
           <li>
             <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.admin.userManagement">User management</span>
             </a>
           </li>
-          <%_ } _%>
-          <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
           <li>
             <a class="dropdown-item" routerLink="admin/tracker" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="eye" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.admin.tracker">User tracker</span>
             </a>
           </li>
-          <%_ } _%>
-          <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
           <li>
             <a class="dropdown-item" routerLink="admin/metrics" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="tachometer-alt" [fixedWidth]="true"></fa-icon>
@@ -127,7 +127,7 @@
               <span <%= jhiPrefix %>Translate="global.menu.admin.logs">Logs</span>
             </a>
           </li>
-          <%_ } _%>
+<%_ } _%>
           <li *ngIf="openAPIEnabled">
             <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
@@ -135,17 +135,17 @@
             </a>
           </li>
           <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-          <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory' || devDatabaseType === 'couchbase') { _%>
+<%_ if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory || devDatabaseTypeCouchbase) { _%>
           <li *ngIf="!inProduction">
-            <a class="dropdown-item" href="<% if (devDatabaseType === 'couchbase') { %>http://localhost:8091/<% } else if (reactive) { %> http://localhost:8092/ <% } else { %>./h2-console<% } %>" target="_tab" (click)="collapseNavbar()">
+            <a class="dropdown-item" href="<% if (devDatabaseTypeCouchbase) { %>http://localhost:8091/<% } else if (reactive) { %> http://localhost:8092/ <% } else { %>./h2-console<% } %>" target="_tab" (click)="collapseNavbar()">
               <fa-icon icon="database" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.admin.database">Database</span>
             </a>
           </li>
-          <%_ } _%>
+<%_ } _%>
         </ul>
       </li>
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" *ngIf="languages && languages.length > 1">
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
           <span>
@@ -159,7 +159,7 @@
           </li>
         </ul>
       </li>
-      <%_ } _%>
+<%_ } _%>
       <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
           <span *ngIf="!getImageUrl()">
@@ -171,7 +171,7 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
-          <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
           <li *ngSwitchCase="true">
             <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()" data-cy="settings">
               <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
@@ -184,15 +184,15 @@
               <span <%= jhiPrefix %>Translate="global.menu.account.password">Password</span>
             </a>
           </li>
-          <%_ } _%>
-          <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
           <li *ngSwitchCase="true">
             <a class="dropdown-item" routerLink="account/sessions" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="cloud" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.account.sessions">Sessions</span>
             </a>
           </li>
-          <%_ } _%>
+<%_ } _%>
           <li *ngSwitchCase="true">
             <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
               <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
@@ -205,14 +205,14 @@
               <span <%= jhiPrefix %>Translate="global.menu.account.login">Sign in</span>
             </a>
           </li>
-          <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
           <li *ngSwitchCase="false">
             <a class="dropdown-item" routerLink="account/register" routerLinkActive="active" (click)="collapseNavbar()" data-cy="register">
               <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.account.register">Register</span>
             </a>
           </li>
-          <%_ } _%>
+<%_ } _%>
         </ul>
       </li>
     </ul>

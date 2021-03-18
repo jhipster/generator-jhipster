@@ -35,10 +35,10 @@ import { ItemCountComponent } from './pagination/item-count.component';
 @NgModule({
   imports: [SharedLibsModule],
   declarations: [
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
     TranslateDirective,
-    <%_ } _%>
+<%_ } _%>
     AlertComponent,
     AlertErrorComponent,
     HasAnyAuthorityDirective,
@@ -51,10 +51,10 @@ import { ItemCountComponent } from './pagination/item-count.component';
   ],
   exports: [
     SharedLibsModule,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
     TranslateDirective,
-    <%_ } _%>
+<%_ } _%>
     AlertComponent,
     AlertErrorComponent,
     HasAnyAuthorityDirective,
