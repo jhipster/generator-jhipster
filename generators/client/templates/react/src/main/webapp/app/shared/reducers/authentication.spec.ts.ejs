@@ -21,13 +21,13 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import authentication, { ACTION_TYPES, getSession<% if (authenticationType !== 'oauth2') { %>, login<% } %>, clearAuthentication, logout<% if (authenticationType === 'jwt') { %>, clearAuthToken<% } %> } from 'app/shared/reducers/authentication';
+import authentication, { ACTION_TYPES, getSession<% if (!authenticationTypeOauth2) { %>, login<% } %>, clearAuthentication, logout<% if (authenticationTypeJwt) { %>, clearAuthToken<% } %> } from 'app/shared/reducers/authentication';
 <% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Authentication reducer tests', () => {
@@ -42,18 +42,18 @@ describe('Authentication reducer tests', () => {
         loading: false,
         isAuthenticated: false,
         errorMessage: null, // Errors returned from server side
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         loginSuccess: false,
         loginError: false, // Errors returned from server side
         showModalLogin: false,
-        <%_ } _%>
+<%_ } _%>
         redirectMessage: null
       });
       expect(isAccountEmpty(toTest));
     });
   });
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   describe('Requests', () => {
     it('should detect a request', () => {
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.LOGIN) })).toMatchObject({
@@ -64,22 +64,20 @@ describe('Authentication reducer tests', () => {
       });
     });
   });
-  <%_ } _%>
+<%_ } _%>
 
   describe('Success', () => {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     it('should detect a success on login', () => {
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.LOGIN) });
       expect(toTest).toMatchObject({
         loading: false,
-        <%_ if (authenticationType !== 'oauth2') { _%>
         loginError: false,
         loginSuccess: true,
         showModalLogin: false
-        <%_ } _%>
       });
     });
-    <%_ } _%>
+<%_ } _%>
 
     it('should detect a success on get session and be authenticated', () => {
       const payload = { data: { activated: true } };
@@ -103,7 +101,7 @@ describe('Authentication reducer tests', () => {
   });
 
   describe('Failure', () => {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     it('should detect a failure on login', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.LOGIN), payload });
@@ -115,7 +113,7 @@ describe('Authentication reducer tests', () => {
       });
       expect(isAccountEmpty(toTest));
     });
-    <%_ } _%>
+<%_ } _%>
 
     it('should detect a failure', () => {
       const payload = 'Something happened.';
@@ -124,9 +122,9 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
-        <%_ } _%>
+<%_ } _%>
         errorMessage: payload
       });
       expect(isAccountEmpty(toTest));
@@ -135,16 +133,16 @@ describe('Authentication reducer tests', () => {
 
   describe('Other cases', () => {
     it('should properly reset the current state when a logout is requested', () => {
-      <%_ if (authenticationType === 'oauth2') { _%>const payload = { data: { idToken: 'xyz', logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
-      const toTest = authentication(undefined, { type: <%_ if (authenticationType === 'jwt') { _%> ACTION_TYPES.LOGOUT <%_ } else if (authenticationType === 'oauth2') { _%>SUCCESS(ACTION_TYPES.LOGOUT), payload<%_ } else { _%>SUCCESS(ACTION_TYPES.LOGOUT)<%_ } _%> });
+      <%_ if (authenticationTypeOauth2) { _%>const payload = { data: { idToken: 'xyz', logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
+      const toTest = authentication(undefined, { type: <%_ if (authenticationTypeJwt) { _%> ACTION_TYPES.LOGOUT <%_ } else if (authenticationTypeOauth2) { _%>SUCCESS(ACTION_TYPES.LOGOUT), payload<%_ } else { _%>SUCCESS(ACTION_TYPES.LOGOUT)<%_ } _%> });
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         loginSuccess: false,
         loginError: false,
         showModalLogin: true,
-        <%_ } _%>
+<%_ } _%>
         errorMessage: null,
         redirectMessage: null
       });
@@ -157,11 +155,11 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         loginSuccess: false,
         loginError: false,
         showModalLogin: true,
-        <%_ } _%>
+<%_ } _%>
         errorMessage: null,
         redirectMessage: message
       });
@@ -173,9 +171,9 @@ describe('Authentication reducer tests', () => {
       const toTest = authentication(undefined, { type: ACTION_TYPES.CLEAR_AUTH, message });
       expect(toTest).toMatchObject({
         loading: false,
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
-        <%_ } _%>
+<%_ } _%>
         isAuthenticated: false
       });
     });
@@ -210,15 +208,15 @@ describe('Authentication reducer tests', () => {
     });
 
     it('dispatches LOGOUT actions', async () => {
-      <%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
       axios.post = sinon.stub().returns(Promise.resolve({}));
-      <%_ } _%>
+<%_ } _%>
       const expectedActions = [
-        <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
         {
           type: ACTION_TYPES.LOGOUT
         }
-        <%_ } else { _%>
+<%_ } else { _%>
         {
           type: REQUEST(ACTION_TYPES.LOGOUT)
         },
@@ -233,7 +231,7 @@ describe('Authentication reducer tests', () => {
          "payload": resolvedObject,
          type: SUCCESS(ACTION_TYPES.GET_SESSION),
         }
-        <%_ } _%>
+<%_ } _%>
       ];
       await store.dispatch(logout());
       expect(store.getActions()).toEqual(expectedActions);
@@ -253,13 +251,13 @@ describe('Authentication reducer tests', () => {
       expect(store.getActions()).toEqual(expectedActions);
     });
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
-      <%_ if (authenticationType === 'jwt') { _%>
+  <%_ if (authenticationTypeJwt) { _%>
       const loginResponse = { headers: { authorization: 'auth' } };
-      <%_ } else { _%>
+  <%_ } else { _%>
       const loginResponse = { value: 'any' };
-      <%_ } _%>
+  <%_ } _%>
       axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
       const expectedActions = [
         {
@@ -284,9 +282,9 @@ describe('Authentication reducer tests', () => {
       await store.dispatch(login('test', 'test'));
       expect(store.getActions()).toEqual(expectedActions);
     });
-    <%_ } _%>
+<%_ } _%>
   });
-  <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   describe('clearAuthToken', () => {
     let store;
     beforeEach(() => {
@@ -318,5 +316,5 @@ describe('Authentication reducer tests', () => {
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
   });
-  <%_ } _%>
+<%_ } _%>
 });

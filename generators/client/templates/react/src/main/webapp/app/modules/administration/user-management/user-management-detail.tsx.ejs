@@ -61,10 +61,10 @@ export const UserManagementDetail = (props: IUserManagementDetailProps) => {
           <dd>{user.lastName}</dd>
           <dt><Translate contentKey="userManagement.email">Email</Translate></dt>
           <dd>{user.email}</dd>
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           <dt><Translate contentKey="userManagement.langKey">Lang Key</Translate></dt>
           <dd>{user.langKey ? languages[user.langKey].name : undefined}</dd>
-          <%_ } _%>
+<%_ } _%>
           <dt><Translate contentKey="userManagement.createdBy">Created By</Translate></dt>
           <dd>{user.createdBy}</dd>
           <dt><Translate contentKey="userManagement.createdDate">Created Date</Translate></dt>

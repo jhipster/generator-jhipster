@@ -18,12 +18,12 @@
 -%>
 import React from 'react';
 import MenuItem from 'app/shared/layout/menus/menu-item';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 <%_ } _%>
 import { Translate, translate } from 'react-jhipster';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
 import { NavDropdown } from './menu-components';
@@ -31,27 +31,27 @@ import { NavDropdown } from './menu-components';
 
 const accountMenuItemsAuthenticated = (
   <>
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
     <MenuItem icon="wrench" to="/account/settings" data-cy="settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
     <MenuItem icon="lock" to="/account/password" data-cy="passwordItem"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
-    <%_ if (authenticationType === 'session') { _%>
+  <%_ if (authenticationTypeSession) { _%>
     <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
     <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout"><Translate contentKey="global.menu.account.logout">Sign out</Translate></MenuItem>
   </>
   );
 
 const accountMenuItems = (
   <>
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
-  <%_ } else { _%>
+<%_ } else { _%>
     <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
-  <%_ } _%>
-  <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
     <MenuItem icon="user-plus" to="/account/register" data-cy="register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
-  <%_ } _%>
+<%_ } _%>
   </>
 );
 

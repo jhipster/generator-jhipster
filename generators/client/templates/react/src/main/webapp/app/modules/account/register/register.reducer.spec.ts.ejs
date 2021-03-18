@@ -37,12 +37,12 @@ describe('Creating account tests', () => {
     errorMessage: null
   };
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   beforeAll(() => {
     TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
   });
 
-  <%_ } _%>
+<%_ } _%>
   it('should return the initial state', () => {
     expect(register(undefined, {})).toEqual({
       ...initialState
@@ -102,11 +102,11 @@ describe('Creating account tests', () => {
 
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
       const meta = {
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         successMessage: 'translation-not-found[register.messages.success]'
-        <%_ } else { _%>
+<%_ } else { _%>
         successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
-        <%_ } _%>
+<%_ } _%>
       };
 
       const expectedActions = [

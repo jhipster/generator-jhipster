@@ -58,7 +58,7 @@ const { SPRING_WEBSOCKET } = require('../jdl/jhipster/websocket-types');
 const { KAFKA } = require('../jdl/jhipster/message-broker-types');
 const { CONSUL } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
-const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
+const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 
 // Reverse order.
@@ -2473,6 +2473,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
     dest.applicationTypeGateway = config.applicationType === GATEWAY;
+    dest.applicationTypeMonolith = config.applicationType === MONOLITH;
   }
 
   /**
@@ -2491,6 +2492,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFrameworkReact = config.clientFramework === REACT;
     dest.clientThemeNone = config.clientTheme === 'none';
     dest.clientThemePrimary = config.clientThemeVariant === 'primary';
+    dest.clientThemeLight = config.clientThemeVariant === 'light';
   }
 
   /**
