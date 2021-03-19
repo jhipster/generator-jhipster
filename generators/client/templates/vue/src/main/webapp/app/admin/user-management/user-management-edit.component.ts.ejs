@@ -89,9 +89,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
         });
       });
     } else {
-      <%_ if (!enableTranslation) { _%>
+<%_ if (!enableTranslation) { _%>
       this.userAccount.langKey = 'en';
-      <%_ } _%>
+<%_ } _%>
       this.userManagementService().create(this.userAccount).then(res => {
         this.returnToList();
         this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {

@@ -1,5 +1,5 @@
 <template>
-  <b-navbar data-cy="navbar" toggleable="md" type="<%_ if (clientTheme === 'none' || clientThemeVariant !== 'light') { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+  <b-navbar data-cy="navbar" toggleable="md" type="<%_ if (clientThemeNone || !clientThemeLight) { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
     <b-navbar-brand class="logo" b-link to="/">
         <span class="logo-img"></span>
         <span v-text="$t('global.title')" class="navbar-title"><%= baseName %></span> <span class="navbar-version">{{version}}</span>
@@ -47,25 +47,25 @@
             <font-awesome-icon icon="users-cog" />
             <span class="no-bold" v-text="$t('global.menu.admin.main')">Administration</span>
           </span>
-          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
           <b-dropdown-item to="/admin/gateway" active-class="active">
             <font-awesome-icon icon="road" />
             <span v-text="$t('global.menu.admin.gateway')">Gateway</span>
           </b-dropdown-item>
-          <%_ } _%>
-          <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
           <b-dropdown-item to="/admin/user-management" active-class="active">
             <font-awesome-icon icon="users" />
             <span v-text="$t('global.menu.admin.userManagement')">User management</span>
           </b-dropdown-item>
-          <%_ } _%>
-          <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
           <b-dropdown-item to="/admin/tracker" active-class="active">
             <font-awesome-icon icon="eye" />
             <span v-text="$t('global.menu.admin.tracker')">User tracker</span>
           </b-dropdown-item>
-          <%_ } _%>
-          <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
           <b-dropdown-item  to="/admin/metrics" active-class="active">
             <font-awesome-icon icon="tachometer-alt" />
             <span v-text="$t('global.menu.admin.metrics')">Metrics</span>
@@ -82,19 +82,19 @@
             <font-awesome-icon icon="tasks" />
             <span v-text="$t('global.menu.admin.logs')">Logs</span>
           </b-dropdown-item>
-          <%_ } _%>
+<%_ } _%>
           <b-dropdown-item v-if="openAPIEnabled"  to="/admin/docs" active-class="active">
             <font-awesome-icon icon="book" />
             <span v-text="$t('global.menu.admin.apidocs')">API</span>
           </b-dropdown-item>
-          <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory' || devDatabaseType === 'couchbase') { _%>
-          <b-dropdown-item v-if="!inProduction"  href='<% if (devDatabaseType === 'couchbase') { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console<% } %>' target="_tab">
+<%_ if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory || devDatabaseTypeCouchbase) { _%>
+          <b-dropdown-item v-if="!inProduction"  href='<% if (devDatabaseTypeCouchbase) { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console<% } %>' target="_tab">
             <font-awesome-icon icon="database" />
             <span v-text="$t('global.menu.admin.database')">Database</span>
           </b-dropdown-item>
-          <%_ } _%>
+<%_ } _%>
         </b-nav-item-dropdown>
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
           <span slot="button-content">
             <font-awesome-icon icon="flag" />
@@ -105,7 +105,7 @@
             {{value.name}}
           </b-dropdown-item>
         </b-nav-item-dropdown>
-        <%_ } _%>
+<%_ } _%>
         <b-nav-item-dropdown
           right
           href="javascript:void(0);"
@@ -120,7 +120,7 @@
               Account
             </span>
           </span>
-          <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
           <b-dropdown-item data-cy="settings" to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />
             <span v-text="$t('global.menu.account.settings')">Settings</span>
@@ -129,13 +129,13 @@
             <font-awesome-icon icon="lock" />
             <span v-text="$t('global.menu.account.password')">Password</span>
           </b-dropdown-item>
-          <%_ } _%>
-          <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession && !skipUserManagement) { _%>
           <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="cloud" />
             <span v-text="$t('global.menu.account.sessions')">Sessions</span>
           </b-dropdown-item>
-          <%_ } _%>
+<%_ } _%>
           <b-dropdown-item data-cy="logout" v-if="authenticated"  v-on:click="logout()" id="logout" active-class="active">
             <font-awesome-icon icon="sign-out-alt" />
             <span v-text="$t('global.menu.account.logout')">Sign out</span>
@@ -144,12 +144,12 @@
             <font-awesome-icon icon="sign-in-alt" />
             <span v-text="$t('global.menu.account.login')">Sign in</span>
           </b-dropdown-item>
-          <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
           <b-dropdown-item data-cy="register" to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span v-text="$t('global.menu.account.register')">Register</span>
           </b-dropdown-item>
-          <%_ } _%>
+<%_ } _%>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -166,12 +166,12 @@
     ========================================================================== */
   .navbar-version {
     font-size: 10px;
-    <%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
     color: #ccc;
-    <%_ } _%>
+<%_ } _%>
   }
 
-  <%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
   .jh-navbar {
     background-color: #353d47;
     padding: 0.2em 1em;
@@ -215,7 +215,7 @@
   .jh-navbar .jh-navbar-toggler:hover {
     color: #fff;
   }
-  <%_ } _%>
+<%_ } _%>
 
   @media screen and (min-width: 768px) {
     .jh-navbar-toggler {
@@ -232,9 +232,9 @@
   .navbar-title {
     display: inline-block;
     vertical-align: middle;
-    <%_ if (clientTheme === 'none' && clientThemeVariant !== 'dark') { _%>
+<%_ if (clientThemeNone && !clientThemeDark) { _%>
     color: white;
-    <%_ } _%>
+<%_ } _%>
   }
 
   /* ==========================================================================

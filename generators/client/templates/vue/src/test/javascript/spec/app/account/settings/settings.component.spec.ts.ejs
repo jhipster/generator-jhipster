@@ -37,9 +37,9 @@ describe('Settings Component', () => {
     wrapper = shallowMount<SettingsClass>(Settings,
       {
         store,
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         i18n,
-        <%_ } _%>
+<%_ } _%>
         localVue
       });
     settings = wrapper.vm;

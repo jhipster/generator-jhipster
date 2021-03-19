@@ -1,20 +1,20 @@
 import { browser, $, ElementFinder } from 'protractor';
 
 import SignInPage from './signin-page';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import RegisterPage from './register-page';
 import PasswordPage from './password-page';
 import SettingsPage from './settings-page';
 <%_ } _%>
 import {
   ConfigurationsPage,
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   GatewayPage,
 <%_ } _%>
   HealthPage,
   LogsPage,
   MetricsPage
-<%_ if (authenticationType !== 'oauth2') { _%>,
+<%_ if (!authenticationTypeOauth2) { _%>,
   UserManagementPage
 <%_ } _%>
 } from './administration-page';
@@ -69,7 +69,7 @@ async getRegisterPage() {
     await this.clickOnAccountMenu();
     await this.clickOnTabMenu('#login');
     const signInPage = new SignInPage();
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     await waitUntilDisplayed(signInPage.title);
 <%_ } _%>
     return signInPage;
@@ -103,9 +103,9 @@ async getRegisterPage() {
     if(!alreadyLoggedIn) {
       const signInPage = await this.getSignInPage();
       await signInPage.login(username, password);
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       await waitUntilHidden(signInPage.loginForm);
-  <%_ }_%>
+<%_ }_%>
       await waitUntilDisplayed(this.entityMenu);
     }
   }
@@ -119,7 +119,7 @@ async getRegisterPage() {
     await waitUntilHidden(this.entityMenu);
   }
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   async getUserManagementPage() {
     await this.clickOnAdminMenuItem('user-management');
     const userManagementPage = new UserManagementPage();
@@ -155,7 +155,7 @@ async getRegisterPage() {
     await waitUntilDisplayed(logsPage.title);
     return logsPage;
   }
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
 
   async getGatewayPage() {
     await this.clickOnAdminMenuItem('gateway');

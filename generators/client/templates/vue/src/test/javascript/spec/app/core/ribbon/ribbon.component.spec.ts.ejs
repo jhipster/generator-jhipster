@@ -18,9 +18,9 @@ describe('Ribbon', () => {
 
   const wrap = async (managementInfo?: any) => {
     wrapper = shallowMount<RibbonClass>(Ribbon, {
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       store,
       localVue
     });

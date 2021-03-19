@@ -47,9 +47,9 @@ describe('UserManagement Component', () => {
     store.commit('authenticated', account);
     wrapper = shallowMount<UserManagementClass>(UserManagement, {
       store,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       stubs: {
         bPagination: true,
@@ -70,7 +70,7 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
     });
   });
 
@@ -85,7 +85,7 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(axiosStub.put.calledWith(`api/admin/users`, { id: <%- tsKeyId %>, activated: true })).toBeTruthy();
-      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
     });
   });
 
@@ -106,10 +106,10 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(axiosStub.delete.calledWith('api/admin/users/' + <%- tsKeyId %>)).toBeTruthy();
-      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
+      expect(axiosStub.get.calledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`)).toBeTruthy();
     });
   });
-<%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
 
   describe('change order', () => {
     it('should change order and invert reverse', () => {

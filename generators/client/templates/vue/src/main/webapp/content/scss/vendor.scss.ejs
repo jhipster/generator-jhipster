@@ -25,16 +25,16 @@ eg $input-color: red;
 // Override Boostrap variables
 @import "bootstrap-variables";
 // Import Bootstrap source files from node_modules
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index.scss';
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/bootswatch";
 /* Dirty fix on navbar active link with bootswatch theme */
 nav li.router-link-active .navbar-dropdown-menu {
-  color: $navbar-<%_ if (clientThemeVariant === 'light') { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
+  color: $navbar-<%_ if (clientThemeLight) { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
 }
 <%_ } _%>
 <%_ if (enableI18nRTL) { _%>

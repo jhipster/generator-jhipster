@@ -24,7 +24,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-<%_ } if (buildTool === undefined) { _%>
+<%_ } if (buildToolUndefined) { _%>
 
 const packageJson = require('./../package.json');
 <%_ } _%>

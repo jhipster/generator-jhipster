@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import {browser<%_ if (authenticationType === 'oauth2') { _%>, element, by<%_ } _%>} from 'protractor';
+import {browser<%_ if (authenticationTypeOauth2) { _%>, element, by<%_ } _%>} from 'protractor';
 
 import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
@@ -47,7 +47,7 @@ describe('Account', () => {
 
     it('should fail to login with bad password', async () => {
       signInPage = await navBarPage.getSignInPage();
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await isVisible(signInPage.dangerAlert)).to.be.false;
 
@@ -76,7 +76,7 @@ describe('Account', () => {
     });
 
     it('should login with admin account', async () => {
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       signInPage = await navBarPage.getSignInPage();
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await isVisible(signInPage.dangerAlert)).to.be.false;
@@ -91,7 +91,7 @@ describe('Account', () => {
       await waitUntilDisplayed(navBarPage.entityMenu);
 
       expect(await navBarPage.entityMenu.isDisplayed()).to.be.true;
-  <%_ } else { _%>
+<%_ } else { _%>
       await browser.get('/');
       signInPage = await navBarPage.getSignInPage();
       await signInPage.login(username, password);
@@ -100,7 +100,7 @@ describe('Account', () => {
 
       // Success alert should appear in home page
       expect(await isVisible(success)).to.be.true;
-  <%_ } _%>
+<%_ } _%>
     });
   });
 
