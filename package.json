@@ -34,7 +34,7 @@
     "email": "",
     "url": "https://github.com/jdubois"
   },
-  "main": "cli/index.js",
+  "main": "lib/index.js",
   "bin": {
     "jhipster": "cli/jhipster.js"
   },
@@ -42,6 +42,7 @@
     "cli",
     "generators",
     "jdl",
+    "lib",
     "utils"
   ],
   "scripts": {
