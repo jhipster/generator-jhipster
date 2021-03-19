@@ -235,10 +235,13 @@ maven-test:
         - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseTypeSql) { %>-Dspring.profiles.active=testcontainers<% } %>
     artifacts:
         reports:
-            junit: target/test-results/**/TEST-*.xml
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
         paths:
-            - target/test-results
-            - target/jacoco
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
         expire_in: 1 day
 
     <%_ if (!skipClient) { _%>

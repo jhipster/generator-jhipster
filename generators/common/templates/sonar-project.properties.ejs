@@ -14,12 +14,16 @@ sonar.tests=<%= TEST_DIR %>
 <%_ } _%>
 <%_ if (!skipServer) { _%>
     <%_ if (buildTool === 'maven') { _%>
-sonar.coverage.jacoco.xmlReportPaths=target/jacoco/test/jacoco.xml,target/jacoco/integrationTest/jacoco.xml
+sonar.coverage.jacoco.xmlReportPaths=target/site/**/jacoco*.xml
     <%_ } else { _%>
 sonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
     <%_ } _%>
 sonar.java.codeCoveragePlugin=jacoco
-sonar.junit.reportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ } else { _%> build<%_ } _%>/test-results/test,<%_ if (buildTool === 'maven') { _%>target<%_ } else { _%> build<%_ } _%>/test-results/integrationTest
+    <%_ if (buildTool === 'maven') { _%>
+sonar.junit.reportPaths=target/surefire-reports,target/failsafe-reports
+    <%_ } else { _%>
+sonar.junit.reportPaths=build/test-results/test, build/test-results/integrationTest
+    <%_ } _%>
 <%_ } _%>
 <%_ if (!skipClient) { _%>
 sonar.testExecutionReportPaths=<%_ if (buildTool === 'maven') { _%>target<%_ } else { _%> build<%_ } _%>/test-results/jest/TESTS-results-sonar.xml
