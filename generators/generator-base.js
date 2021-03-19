@@ -28,9 +28,6 @@ const os = require('os');
 const normalize = require('normalize-path');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
-const { CommonDBTypes } = require('../jdl/jhipster/field-types');
-const TYPE_STRING = CommonDBTypes.STRING;
-const TYPE_UUID = CommonDBTypes.UUID;
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
@@ -2567,7 +2564,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.messageBrokerKafka = config.messageBroker === KAFKA;
     dest.serviceDiscoveryConsul = config.serviceDiscoveryType === CONSUL;
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
-
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}

@@ -6,7 +6,7 @@ import {Authority} from '@/shared/security/authority'
 
 export default class UserManagementService {
 
-  public get(userId: <% if (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>): Promise<any> {
+  public get(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): Promise<any> {
     return axios.get(`api/admin/users/${userId}`);
   }
 
@@ -18,7 +18,7 @@ export default class UserManagementService {
     return axios.put('api/admin/users', user);
   }
 
-  public remove(userId: <% if (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>): Promise<any> {
+  public remove(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): Promise<any> {
     return axios.delete(`api/admin/users/${userId}`);
   }
 

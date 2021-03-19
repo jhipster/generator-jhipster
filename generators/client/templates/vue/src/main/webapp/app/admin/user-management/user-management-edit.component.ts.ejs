@@ -65,7 +65,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
       });
   }
 
-  public init(userId: <% if (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>): void {
+  public init(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): void {
     this.userManagementService().get(userId).then(res => {
       this.userAccount = res.data;
     });
