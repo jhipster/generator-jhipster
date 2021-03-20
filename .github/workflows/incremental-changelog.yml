@@ -37,7 +37,7 @@ env:
   JHI_RUN_APP: 1
   JHI_JDK: 11
   JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
-  JHI_LIB_BRANCH: main
+  JHI_LIB_BRANCH: release
   JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
   JHI_GEN_BRANCH: main
   SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
