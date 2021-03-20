@@ -391,11 +391,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   addEntityToMenu(
     routerName,
     enableTranslation,
-    clientFramework,
+    clientFramework = this.clientFramework,
     entityTranslationKeyMenu = _.camelCase(routerName),
     entityTranslationValue = _.startCase(routerName)
   ) {
-    if (this.clientFramework === ANGULAR) {
+    if (clientFramework === ANGULAR) {
       this.needleApi.clientAngular.addEntityToMenu(
         routerName,
         enableTranslation,
@@ -403,9 +403,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         entityTranslationValue,
         this.jhiPrefix
       );
-    } else if (this.clientFramework === REACT) {
+    } else if (clientFramework === REACT) {
       this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    } else if (this.clientFramework === VUE) {
+    } else if (clientFramework === VUE) {
       this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
     }
   }

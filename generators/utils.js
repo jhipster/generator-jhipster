@@ -127,14 +127,36 @@ function normalizeLineEndings(str) {
 }
 
 /**
+ * Change spaces sequences and '>' to allow any number of spaces or new line prefix
+ *
+ * @param {string} str string
+ * @returns {string} string where CRLF is replaced with LF in Windows
+ */
+function convertToPrettierExpressions(str) {
+  return str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
+}
+
+/**
  * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
+ * @param {string[]} args.splicable       - content to be added.
+ * @param {boolean} [args.prettierAware]  - apply prettier aware expressions before looking for applied needles.
+ * @param {string|RegExp} [args.regexp]    - use another content for looking for applied needles.
  * @returns {*} re-written file
  */
 function rewrite(args) {
   // check if splicable is already in the body text
-  const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n'));
+  let re = args.regexp;
+  if (re) {
+    re = re.test ? re : new RegExp(re);
+  } else {
+    let content = args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
+    if (args.prettierAware) {
+      content = convertToPrettierExpressions(content);
+    }
+    re = new RegExp(content);
+  }
 
   if (re.test(normalizeLineEndings(args.haystack))) {
     return args.haystack;
