@@ -45,6 +45,7 @@ import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
@@ -144,8 +145,9 @@ public class SecurityConfiguration {
 
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
+    private final Environment environment;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport, Environment environment) {
         <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
@@ -156,6 +158,7 @@ public class SecurityConfiguration {
         this.jHipsterProperties = jHipsterProperties;
         <%_ } _%>
         this.problemSupport = problemSupport;
+        this.environment = environment;
     }
 
     <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
@@ -233,9 +236,9 @@ public class SecurityConfiguration {
         .and()
             .headers()
             <%_ if (clientTheme !== 'none') { _%>
-                .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com data:")
+                .contentSecurityPolicy(environment.getProperty("security.headers.content-security-policy","default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com data:"))
             <%_ } else { _%>
-                .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' data:")
+                .contentSecurityPolicy(environment.getProperty("security.headers.content-security-policy","default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' data:"))
             <%_ } _%>
             .and()
                 .referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
