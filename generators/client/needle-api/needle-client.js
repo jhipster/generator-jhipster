@@ -33,6 +33,8 @@ module.exports = class extends needleBase {
   addStyle(style, comment, filePath, needle) {
     const styleBlock = this._mergeStyleAndComment(style, comment);
     const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
+    rewriteFileModel.regexp = `\n${style}\n`;
+    rewriteFileModel.prettierAware = true;
 
     this.addBlockContentToFile(rewriteFileModel, 'Style not added to JHipster app.\n');
   }
