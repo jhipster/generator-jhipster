@@ -72,7 +72,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const [search, setSearch] = useState('');
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), props.location.search));
     <%_ } _%>
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
