@@ -147,15 +147,20 @@ function convertToPrettierExpressions(str) {
  */
 function rewrite(args) {
   // check if splicable is already in the body text
-  let re = args.regexp;
-  if (re) {
-    re = re.test ? re : new RegExp(re);
-  } else {
-    let content = args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
-    if (args.prettierAware) {
-      content = convertToPrettierExpressions(content);
+  let re;
+  if (args.regexp) {
+    re = args.regexp;
+    if (!re.test) {
+      re = escapeRegExp(re);
     }
-    re = new RegExp(content);
+  } else {
+    re = args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
+  }
+  if (!re.test) {
+    if (args.prettierAware) {
+      re = convertToPrettierExpressions(re);
+    }
+    re = new RegExp(re);
   }
 
   if (re.test(normalizeLineEndings(args.haystack))) {
