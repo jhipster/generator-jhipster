@@ -17,10 +17,10 @@ import './commands';
 import './navbar';
 import './entity';
 import './management';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import './oauth2';
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 Cypress.Cookies.defaults({
 preserve: ['XSRF-TOKEN','SESSION', 'JSESSIONID']
 })

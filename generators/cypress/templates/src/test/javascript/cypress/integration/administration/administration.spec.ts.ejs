@@ -1,19 +1,19 @@
 import {
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   userManagementPageHeadingSelector,
-  <%_ } _%>
-  <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
   metricsPageHeadingSelector,
   healthPageHeadingSelector,
   logsPageHeadingSelector,
   configurationPageHeadingSelector,
-  <%_ } _%>
+<%_ } _%>
   swaggerPageSelector,
   swaggerFrameSelector,
 } from '../../support/commands';
 
 describe('/admin', () => {
-  <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
@@ -27,28 +27,30 @@ describe('/admin', () => {
     });
     cy.clearCache();
   });
-  <%_ } else { _%>
+<%_ } else { _%>
   before(() => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
-    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
+  <%_ if (authenticationTypeSession) { _%>
+    cy.clearCookie('SESSION');
+  <%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.login('admin', 'admin');
   });
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   describe('/user-management', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('user-management');
       cy.get(userManagementPageHeadingSelector).should('be.visible');
     });
   });
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (withAdminUi) { _%>
+<%_ if (withAdminUi) { _%>
   describe('/metrics', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('metrics');

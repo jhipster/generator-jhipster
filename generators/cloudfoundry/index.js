@@ -23,8 +23,14 @@ const glob = require('glob');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
-
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
+const cacheProviders = require('../../jdl/jhipster/cache-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
 const constants = require('../generator-constants');
+
+const NO_CACHE_PROVIDER = cacheProviders.NO;
+const NO_DATABASE_TYPE = databaseTypes.NO;
 
 const exec = childProcess.exec;
 
@@ -33,15 +39,16 @@ module.exports = class extends BaseGenerator {
     this.log(chalk.bold('CloudFoundry configuration is starting'));
     const configuration = this.config;
     this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-    this.baseName = configuration.get('baseName');
-    this.buildTool = configuration.get('buildTool');
-    this.packageName = configuration.get('packageName');
-    this.packageFolder = configuration.get('packageFolder');
-    this.cacheProvider = configuration.get('cacheProvider') || 'no';
-    this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-    this.databaseType = configuration.get('databaseType');
-    this.devDatabaseType = configuration.get('devDatabaseType');
-    this.prodDatabaseType = configuration.get('prodDatabaseType');
+    this.baseName = configuration.get(OptionNames.BASE_NAME);
+    this.buildTool = configuration.get(OptionNames.BUILD_TOOL);
+    this.packageName = configuration.get(OptionNames.PACKAGE_NAME);
+    this.packageFolder = configuration.get(OptionNames.PACKAGE_FOLDER);
+    this.cacheProvider = configuration.get(OptionNames.CACHE_PROVIDER) || NO_CACHE_PROVIDER;
+    this.enableHibernateCache =
+      configuration.get(OptionNames.ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
+    this.databaseType = configuration.get(OptionNames.DATABASE_TYPE);
+    this.devDatabaseType = configuration.get(OptionNames.DEV_DATABASE_TYPE);
+    this.prodDatabaseType = configuration.get(OptionNames.PROD_DATABASE_TYPE);
     this.frontendAppName = this.getFrontendAppName();
   }
 
@@ -53,6 +60,10 @@ module.exports = class extends BaseGenerator {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', 'cloudfoundry');
+      },
+
+      derivedProperties() {
+        this.databaseTypeNo = this.databaseType === NO_DATABASE_TYPE;
       },
 
       copyCloudFoundryFiles() {

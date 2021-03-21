@@ -28,7 +28,7 @@ export const loginItemSelector = '[data-cy="login"]';
 export const logoutItemSelector = '[data-cy="logout"]';
 export const entityItemSelector = '[data-cy="entity"]';
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 // Login
 export const titleLoginSelector = '[data-cy="loginTitle"]';
 export const errorLoginSelector = '[data-cy="loginError"]';
@@ -78,15 +78,15 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-export const classInvalid = <%_ if (clientFramework === 'angularX') { _%>'ng-invalid';
-<%_ } else if (clientFramework === 'react') { _%>'av-invalid';
+export const classInvalid = <%_ if (clientFrameworkAngular) { _%>'ng-invalid';
+<%_ } else if (clientFrameworkReact) { _%>'av-invalid';
 <%_ } else { _%>'invalid';<%_ } _%>
 
-export const classValid = <%_ if (clientFramework === 'angularX') { _%>'ng-valid';
-<%_ } else if (clientFramework === 'react') { _%>'av-valid';
+export const classValid = <%_ if (clientFrameworkAngular) { _%>'ng-valid';
+<%_ } else if (clientFrameworkReact) { _%>'av-valid';
 <%_ } else { _%>'valid';<%_ } _%>
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.clickOnLoginItem();
   cy.get(usernameLoginSelector).type(username);

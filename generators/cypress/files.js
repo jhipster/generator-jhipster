@@ -54,12 +54,12 @@ const cypressFiles = {
       ],
     },
     {
-      condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2',
+      condition: generator => generator.cypressTests && !generator.authenticationTypeOauth2,
       path: TEST_SRC_DIR,
       templates: ['cypress/integration/account/login-page.spec.ts'],
     },
     {
-      condition: generator => generator.cypressTests && generator.authenticationType !== 'oauth2' && generator.databaseType !== 'no',
+      condition: generator => generator.cypressTests && !generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
       path: TEST_SRC_DIR,
       templates: [
         'cypress/integration/account/register-page.spec.ts',
@@ -69,7 +69,7 @@ const cypressFiles = {
       ],
     },
     {
-      condition: generator => generator.cypressTests && generator.authenticationType === 'oauth2',
+      condition: generator => generator.cypressTests && generator.authenticationTypeOauth2,
       path: TEST_SRC_DIR,
       templates: ['cypress/support/oauth2.ts'],
     },
