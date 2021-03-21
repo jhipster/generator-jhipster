@@ -30,18 +30,18 @@ export default class TrackerService {
     const baseHref = document.querySelector('base').getAttribute('href');
     let url;
     url = '//' + loc.host + baseHref + 'websocket/tracker';
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     const authToken = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
     if (authToken) {
       url += '?access_token=' + authToken;
     }
-    <%_ } _%>
+<%_ } _%>
     const socket = new SockJS(url);
     this.stompClient = Stomp.over(socket, { protocols: ['v12.stomp'] });
     const headers = {};
-    <%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
     headers['X-XSRF-TOKEN'] = (<any>this).$cookie.get('JSESSIONID') || (<any>this).$cookie.get('XSRF-TOKEN');
-    <%_ } _%>
+<%_ } _%>
     this.stompClient.connect(headers, () => this.afterConnect());
   }
 

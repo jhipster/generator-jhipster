@@ -111,11 +111,11 @@ export const UserManagement = (props: IUserManagementProps) => {
             <th className="hand" onClick={sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon icon="sort" /></th>
             <th className="hand" onClick={sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon icon="sort" /></th>
             <th />
-            <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             <th className="hand" onClick={sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon icon="sort" /></th>
-            <%_ } _%>
+<%_ } _%>
             <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
-            <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
             <th className="hand" onClick={sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon icon="sort" /></th>
             <th className="hand" onClick={sort('lastModifiedBy')}>
               <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon icon="sort" />
@@ -124,7 +124,7 @@ export const UserManagement = (props: IUserManagementProps) => {
               <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon icon="sort" />
             </th>
             <th />
-            <%_ } _%>
+<%_ } _%>
           </tr>
         </thead>
         <tbody>
@@ -152,9 +152,9 @@ export const UserManagement = (props: IUserManagementProps) => {
                   </Button>
                 )}
               </td>
-              <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
               <td>{user.langKey}</td>
-              <%_ } _%>
+<%_ } _%>
               <td>
                 {
                   user.authorities ? (
@@ -165,7 +165,7 @@ export const UserManagement = (props: IUserManagementProps) => {
                   ))) : null
                 }
               </td>
-              <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
               <td>
                 {user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}
               </td>
@@ -175,7 +175,7 @@ export const UserManagement = (props: IUserManagementProps) => {
                   <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
                 ) : null}
               </td>
-              <%_ } _%>
+<%_ } _%>
               <td className="text-right">
                 <div className="btn-group flex-btn-group-container">
                   <Button
@@ -203,7 +203,7 @@ export const UserManagement = (props: IUserManagementProps) => {
         }
         </tbody>
       </Table>
-      <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
         { props.totalItems ? (<div className={ users && users.length > 0 ? '' : 'd-none' }>
           <Row className="justify-content-center">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
@@ -218,7 +218,7 @@ export const UserManagement = (props: IUserManagementProps) => {
             />
           </Row>
         </div>) : '' }
-      <%_ } _%>
+<%_ } _%>
     </div>
   );
 };

@@ -27,21 +27,21 @@ import { Translate, translate } from 'react-jhipster';
 
 const adminMenuItems = (
   <>
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
-  <%_ } _%>
-  <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
     <MenuItem icon="users" to="/admin/user-management"><Translate contentKey="global.menu.admin.userManagement">User management</Translate></MenuItem>
-  <%_ } _%>
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     <MenuItem icon="eye" to="/admin/tracker"><Translate contentKey="global.menu.admin.tracker">User tracker</Translate></MenuItem>
-  <%_ } _%>
-  <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>
     <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>
     <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
     <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>
-  <%_ } _%>
+<%_ } _%>
     {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
   </>
   );
@@ -50,7 +50,7 @@ const openAPIItem = (
   <MenuItem icon="book" to="/admin/docs"><Translate contentKey="global.menu.admin.apidocs">API</Translate></MenuItem>
 );
 
-<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+<% if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory) { %>
 const databaseItem = (
   <DropdownItem tag="a" href="<% if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console<% } %>" target="_tab">
     <FontAwesomeIcon icon="database" fixedWidth /> <Translate contentKey="global.menu.admin.database">Database</Translate>
@@ -58,13 +58,13 @@ const databaseItem = (
 );
 <%_ } _%>
 
-export const AdminMenu = ({ showOpenAPI <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, showDatabase <%_ } _%>}) => (
+export const AdminMenu = ({ showOpenAPI <% if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory) { %>, showDatabase <%_ } _%>}) => (
   <NavDropdown icon="users-cog" name={translate('global.menu.admin.main')} id="admin-menu" data-cy="adminMenu">
       {adminMenuItems}
       {showOpenAPI && openAPIItem}
-      <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+<% if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory) { %>
       {showDatabase && databaseItem}
-      <%_ } _%>
+<%_ } _%>
   </NavDropdown>
 );
 

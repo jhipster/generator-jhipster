@@ -18,19 +18,19 @@
       <table class="table table-striped" aria-describedby="Users">
         <thead>
         <tr>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('login')"<% } %>><span v-text="$t('userManagement.login')">Login</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'login'"></jhi-sort-indicator><% } %></th>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('email')"<% } %>><span v-text="$t('userManagement.email')">Email</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'email'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> v-on:click="changeOrder('login')"<% } %>><span v-text="$t('userManagement.login')">Login</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'login'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> v-on:click="changeOrder('email')"<% } %>><span v-text="$t('userManagement.email')">Email</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'email'"></jhi-sort-indicator><% } %></th>
           <th scope="col"></th>
-          <%_ if (enableTranslation) { _%>
-          <th scope="col"<% if (databaseType !== 'cassandra') { %> v-on:click="changeOrder('langKey')"<% } %>> <span v-text="$t('userManagement.langKey')">Lang Key</span><% if (databaseType !== 'cassandra') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'langKey'"></jhi-sort-indicator><% } %></th>
-          <%_ } _%>
+<%_ if (enableTranslation) { _%>
+          <th scope="col"<% if (!databaseTypeCassandra) { %> v-on:click="changeOrder('langKey')"<% } %>> <span v-text="$t('userManagement.langKey')">Lang Key</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'langKey'"></jhi-sort-indicator><% } %></th>
+<%_ } _%>
           <th scope="col"><span v-text="$t('userManagement.profiles')">Profiles</span></th>
-          <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
           <th scope="col" v-on:click="changeOrder('createdDate')"><span v-text="$t('userManagement.createdDate')">Created Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'createdDate'"></jhi-sort-indicator></th>
           <th scope="col" v-on:click="changeOrder('lastModifiedBy')"><span v-text="$t('userManagement.lastModifiedBy')">Last Modified By</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedBy'"></jhi-sort-indicator></th>
           <th scope="col" id="modified-date-sort" v-on:click="changeOrder('lastModifiedDate')"><span v-text="$t('userManagement.lastModifiedDate')">Last Modified Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedDate'"></jhi-sort-indicator></th>
-          <%_ } _%>
+<%_ } _%>
           <th scope="col"></th>
         </tr>
         </thead>
@@ -52,17 +52,17 @@
                   <span class="badge badge-info">{{ authority }}</span>
               </div>
             </td>
-            <%_ if (databaseType !== 'cassandra') { _%>
-            <%_ if (enableTranslation) { _%>
+<%_ if (!databaseTypeCassandra) { _%>
+  <%_ if (enableTranslation) { _%>
             <td v-if="user.createdDate">{{$d(Date.parse(user.createdDate), 'short') }}</td><td v-else>{{user.createdDate | formatDate}}</td>
             <td>{{user.lastModifiedBy}}</td>
             <td v-if="user.lastModifiedDate">{{$d(Date.parse(user.lastModifiedDate), 'short') }}</td><td v-else>{{user.lastModifiedDate | formatDate}}</td>
-            <%_ } else { _%>
+  <%_ } else { _%>
             <td>{{user.createdDate | formatDate}}</td>
             <td>{{user.lastModifiedBy}}</td>
             <td>{{user.lastModifiedDate | formatDate}}</td>
-            <%_ } _%>
-            <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
@@ -99,7 +99,7 @@
           </div>
       </b-modal>
     </div>
-    <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
     <div v-show="users && users.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
@@ -108,7 +108,7 @@
             <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
         </div>
     </div>
-    <%_ } _%>
+<%_ } _%>
   </div>
 </template>
 

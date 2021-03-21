@@ -1,12 +1,12 @@
 import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import {Authority} from '@/shared/security/authority'
 <%_ } _%>
 
 export default class UserManagementService {
 
-  public get(userId: <% if (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>): Promise<any> {
+  public get(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): Promise<any> {
     return axios.get(`api/admin/users/${userId}`);
   }
 
@@ -18,19 +18,19 @@ export default class UserManagementService {
     return axios.put('api/admin/users', user);
   }
 
-  public remove(userId: <% if (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>): Promise<any> {
+  public remove(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): Promise<any> {
     return axios.delete(`api/admin/users/${userId}`);
   }
 
-  public retrieve(<%_ if (databaseType !== 'cassandra') { _%>req?: any <%_ } _%>): Promise<any> {
-    return axios.get(`api/admin/users<%_ if (databaseType !== 'cassandra') { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
+  public retrieve(<%_ if (!databaseTypeCassandra) { _%>req?: any <%_ } _%>): Promise<any> {
+    return axios.get(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
   }
 
   public retrieveAuthorities(): Promise<any> {
-    <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
     return axios.get('api/authorities');
-    <%_ } else { _%>
+<%_ } else { _%>
     return Promise.resolve([Authority.USER, Authority.ADMIN]);
-    <%_ } _%>
+<%_ } _%>
   }
 }

@@ -59,10 +59,10 @@ export const App = (props: IAppProps) => {
           <Header
             isAuthenticated={props.isAuthenticated}
             isAdmin={props.isAdmin}
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             currentLocale={props.currentLocale}
             onLocaleChange={props.setLocale}
-          <%_ } _%>
+<%_ } _%>
             ribbonEnv={props.ribbonEnv}
             isInProduction={props.isInProduction}
             isOpenAPIEnabled={props.isOpenAPIEnabled}
@@ -82,9 +82,9 @@ export const App = (props: IAppProps) => {
 };
 
 const mapStateToProps = ({ authentication, applicationProfile<% if (enableTranslation) { %>, locale<% } %> }: IRootState) => ({
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   currentLocale: locale.currentLocale,
-  <%_ } _%>
+<%_ } _%>
   isAuthenticated: authentication.isAuthenticated,
   isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   ribbonEnv: applicationProfile.ribbonEnv,

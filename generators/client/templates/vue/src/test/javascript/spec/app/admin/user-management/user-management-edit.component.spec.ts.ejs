@@ -37,9 +37,9 @@ describe('UserManagementEdit Component', () => {
     wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, {
       store,
       router,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         userService: () => new UserManagementService()
@@ -62,7 +62,7 @@ describe('UserManagementEdit Component', () => {
     });
   });
 
-<%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
   describe('initAuthorities', () => {
     it('Should load authorities', async () => {
       // GIVEN

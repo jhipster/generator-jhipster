@@ -64,16 +64,18 @@ module.exports = webpackMerge(baseWebpackConfig, {
           '/swagger-resources',
           '/v2/api-docs',
           '/v3/api-docs',
-          '/h2-console',<% if (authenticationType === 'oauth2') { %>
+          '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
           '/oauth2',
-          '/login',<% } %>
+          '/login',
+<%_ } _%>
           '/auth'
         ],
         target: 'http://127.0.0.1:<%= serverPort %>',
         secure: false,
         headers: { host: 'localhost:9000' }
       },
-      <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
       {
         context: [
           '/websocket'
@@ -81,7 +83,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
         target: 'ws://127.0.0.1:<%= serverPort %>',
         ws: true
       }
-      <%_ } _%>
+<%_ } _%>
     ],
     watchOptions: {
       ignored: /node_modules/
@@ -107,9 +109,9 @@ module.exports = webpackMerge(baseWebpackConfig, {
         port: 9000,
         proxy: {
           target: 'http://localhost:9060',
-          <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
           ws: true,
-          <%_ } _%>
+<%_ } _%>
         },
         socket: {
           clients: {

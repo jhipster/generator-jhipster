@@ -32,7 +32,9 @@ describe('Health Component', () => {
     axiosStub.get.resolves({});
     wrapper = shallowMount<HealthClass>(Health, {
       store,
-      <% if (enableTranslation) { %>i18n, <% } %>
+<%_ if (enableTranslation) { _%>
+      i18n,
+<%_ } _%>
       localVue,
       stubs: {
         bModal: true

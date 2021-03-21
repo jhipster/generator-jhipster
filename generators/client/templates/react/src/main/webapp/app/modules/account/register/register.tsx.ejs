@@ -43,11 +43,11 @@ export const RegisterPage = (props: IRegisterProps) => {
   );
 
   const handleValidSubmit = (event, values) => {
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     props.handleRegister(values.username, values.email, values.firstPassword, props.currentLocale);
-    <%_ } else { _%>
+<%_ } else { _%>
     props.handleRegister(values.username, values.email, values.firstPassword);
-    <%_ } _%>
+<%_ } _%>
     event.preventDefault();
   };
 

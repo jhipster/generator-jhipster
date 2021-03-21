@@ -3,26 +3,26 @@ import { SERVER_API_URL } from '@/constants';
 
 describe('Axios interceptor', () => {
   it('should use localStorage to provide bearer', () => {
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'auth');
-    <%_ } _%>
+<%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occured'));
 
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     expect(result.headers.Authorization).toBe('Bearer auth');
-    <%_ } _%>
+<%_ } _%>
     expect(result.url.indexOf(SERVER_API_URL)).toBeGreaterThan(-1);
   });
 
   it('should use sessionStorage to provide bearer', () => {
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'auth');
-    <%_ } _%>
+<%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occured'));
 
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     expect(result.headers.Authorization).toBe('Bearer auth');
-    <%_ } _%>
+<%_ } _%>
     expect(result.url.indexOf(SERVER_API_URL)).toBeGreaterThan(-1);
   });
 });
