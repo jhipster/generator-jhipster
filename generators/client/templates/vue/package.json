@@ -7,7 +7,7 @@
     "bootstrap": "4.6.0",
     "bootstrap-vue": "2.21.2",
     "bootswatch": "4.6.0",
-    "swagger-ui-dist": "3.45.0",
+    "swagger-ui-dist": "3.45.1",
     "vue": "2.6.12",
     "vue-class-component": "7.2.6",
     "vue-cookie": "1.1.4",
