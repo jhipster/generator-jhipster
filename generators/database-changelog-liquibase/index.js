@@ -19,9 +19,13 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files');
+const { SQL } = require('../../jdl/jhipster/database-types');
 const { stringify } = require('../../utils');
+const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+
+const TYPE_LONG = CommonDBTypes.LONG;
 
 const constants = require('../generator-constants');
 
@@ -30,7 +34,9 @@ const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options) {
     super(args, options);
 
@@ -42,6 +48,23 @@ module.exports = class extends BaseGenerator {
 
     // Set number of rows to be generated
     this.numberOfRows = 10;
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('database-changelog-liquibase');
+  }
+
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
   }
 
   _preparing() {
@@ -112,7 +135,7 @@ module.exports = class extends BaseGenerator {
               return;
             }
             let data;
-            if (field.id && field.fieldType === 'Long') {
+            if (field.id && field.fieldType === TYPE_LONG) {
               data = rowNumber + 1;
             } else {
               data = field.generateFakeData();
@@ -195,7 +218,7 @@ module.exports = class extends BaseGenerator {
     return {
       writeLiquibaseFiles() {
         const config = this.jhipsterConfig;
-        if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
+        if (config.skipServer || this.entity.skipServer || config.databaseType !== SQL) {
           return undefined;
         }
 
@@ -241,7 +264,7 @@ module.exports = class extends BaseGenerator {
     return {
       writeLiquibaseFiles() {
         const config = this.jhipsterConfig;
-        if (config.skipServer || this.entity.skipServer || config.databaseType !== 'sql') {
+        if (config.skipServer || this.entity.skipServer || config.databaseType !== SQL) {
           return undefined;
         }
 

@@ -29,69 +29,69 @@
     -->
     <changeSet id="<%= changelogDate %>-1" author="jhipster">
         <createTable tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
-            <%_ for (field of fields) { _%>
+<%_ for (field of fields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- formatAsLiquibaseRemarks(field.javadoc, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" <%_ } %>>
-                <%_ if (field.id) { _%>
+    <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
-                <%_ } else if (field.unique) { _%>
+    <%_ } else if (field.unique) { _%>
                 <constraints nullable="<%= field.nullable %>" unique="true" uniqueConstraintName="<%= field.uniqueConstraintName %>" />
-                <%_ } else { _%>
+    <%_ } else { _%>
                 <constraints nullable="<%= field.nullable %>" />
-                <%_ } _%>
+    <%_ } _%>
             </column>
-                <%_ if (field.shouldCreateContentType) { _%>
+    <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%= field.columnName %>_content_type" type="varchar(255)">
                 <constraints nullable="<%= field.nullable %>" />
             </column>
-                <%_ }
-            } _%>
-            <%_ for (relationship of relationships) {
-                if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
-                            && !relationship.id) {
-                    relationship.otherEntity.primaryKey.fields.forEach(idField => {
-                    const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
-                     _%>
+    <%_ } _%>
+<%_ } _%>
+<%_ for (relationship of relationships) {
+    if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
+                && !relationship.id) {
+        relationship.otherEntity.primaryKey.fields.forEach(idField => {
+        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+         _%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
                 <constraints nullable="<%= relationship.nullable %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />
             </column>
-                    <%_ });
-                }
-            } _%>
+        <%_ });
+    }
+} _%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <%_ for (const field of fields) {
-            if (field.shouldDropDefaultValue) { _%>
+<%_ for (const field of fields) {
+    if (field.shouldDropDefaultValue) { _%>
         <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="${datetimeType}"/>
-        <%_ }
-        } _%>
+<%_ }
+} _%>
     </changeSet>
-    <%_ const joinTableRelations = relationships.filter(rel => rel.shouldWriteJoinTable);
-        if(joinTableRelations.length > 0) {
-    _%>
+<%_ const joinTableRelations = relationships.filter(rel => rel.shouldWriteJoinTable);
+    if(joinTableRelations.length > 0) {
+_%>
 
     <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">
-        <%_ for (relationship of joinTableRelations) { _%>
+    <%_ for (relationship of joinTableRelations) { _%>
 
         <createTable tableName="<%= relationship.joinTable.name %>">
-            <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
+        <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
-            <%_ } _%>
-            <%_ for (field of entity.primaryKey.fields) { _%>
+        <%_ } _%>
+        <%_ for (field of entity.primaryKey.fields) { _%>
             <column name="<%= entity.entityTableName %>_<%= field.columnName %>" type="<%= field.columnType %>">
                 <constraints nullable="false"/>
             </column>
-            <%_ } _%>
+        <%_ } _%>
         </createTable>
 
         <addPrimaryKey columnNames="<%= entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
-        <%_ } _%>
-    </changeSet>
     <%_ } _%>
+    </changeSet>
+<%_ } _%>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
-    <%_ if (!skipFakeData) { _%>
+<%_ if (!skipFakeData) { _%>
 
     <!--
         Load sample data generated with Faker.js
@@ -106,27 +106,26 @@
                   file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
                   separator=";"
                   tableName="<%= entity.entityTableName %>">
-            <%_ for (field of fields) {
-                _%>
+    <%_ for (field of fields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
-                <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
+        <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
             <column name="<%= field.columnName %>_content_type" type="string"/>
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (relationship of relationships) {
+            if (relationship.relationshipValidate === true && relationship.relationshipRequired
+                && (relationship.relationshipType === "many-to-one"
+                    || (relationship.relationshipType === "one-to-one" && relationship.ownerSide === true
+                        && (relationship.id == null || relationship.id === false))
+            )) {
+                _%>
+                <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
+            <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
                 <%_ } _%>
             <%_ } _%>
-            <%_ for (relationship of relationships) {
-                    if (relationship.relationshipValidate === true && relationship.relationshipRequired
-                        && (relationship.relationshipType === "many-to-one"
-                            || (relationship.relationshipType === "one-to-one" && relationship.ownerSide === true
-                                && (relationship.id == null || relationship.id === false))
-                    )) {
-                        _%>
-                        <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
-            <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
-                        <%_ } _%>
-                    <%_ } _%>
-            <%_  } _%>
+    <%_  } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
-    <%_ } _%>
+<%_ } _%>
 </databaseChangeLog>
