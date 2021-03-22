@@ -78,7 +78,7 @@
     "lodash": "4.17.21",
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
-    "ora": "5.3.0",
+    "ora": "5.4.0",
     "os-locale": "5.0.0",
     "parse-gitignore": "1.0.1",
     "pluralize": "8.0.0",
