@@ -124,7 +124,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-
     public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
         this.jHipsterProperties = jHipsterProperties;
