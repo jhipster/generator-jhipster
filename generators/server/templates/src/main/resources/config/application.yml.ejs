@@ -342,8 +342,13 @@ jhipster:
     contact-email:
     license: unlicensed
     license-url:
-  <%_ if (authenticationType === 'oauth2') { _%>
   security:
+    <%_ if (clientTheme !== 'none') { _%>
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
+    <%_ } else { _%>
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
     oauth2:
       audience:
         - account
@@ -361,11 +366,6 @@ kafka:
     key.serializer: org.apache.kafka.common.serialization.StringSerializer
     value.serializer: org.apache.kafka.common.serialization.StringSerializer
 <%_ } _%>
-
-#  Uncomment to override generated content security policy
-#    security:
-#       headers:
-#           content-security-policy:
 
 
 # ===================================================================
