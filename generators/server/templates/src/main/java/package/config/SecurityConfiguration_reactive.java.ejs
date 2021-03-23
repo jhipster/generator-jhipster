@@ -129,6 +129,7 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
+    
     <%_ if (!skipUserManagement) { _%>
     private final ReactiveUserDetailsService userDetailsService;
 
@@ -143,7 +144,6 @@ public class SecurityConfiguration {
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-
     public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
         this.userDetailsService = userDetailsService;
@@ -153,7 +153,6 @@ public class SecurityConfiguration {
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
         this.problemSupport = problemSupport;
-
     }
 
     <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
