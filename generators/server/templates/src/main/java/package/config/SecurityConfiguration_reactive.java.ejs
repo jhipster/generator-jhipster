@@ -35,8 +35,8 @@ import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.beans.factory.annotation.Value;
-import tech.jhipster.config.JHipsterProperties;
 <%_ } _%>
+import tech.jhipster.config.JHipsterProperties;
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 <%_ } _%>
@@ -45,7 +45,6 @@ import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
@@ -129,36 +128,32 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
+    private final JHipsterProperties jHipsterProperties;
     <%_ if (!skipUserManagement) { _%>
     private final ReactiveUserDetailsService userDetailsService;
 
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     private final TokenProvider tokenProvider;
-
     <%_ } _%>
+
     <%_ if (authenticationType === 'oauth2') { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-
-    private final JHipsterProperties jHipsterProperties;
-
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
-    private final Environment environment;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport, Environment environment) {
+
+    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         this.tokenProvider = tokenProvider;
         <%_ } _%>
-        <%_ if (authenticationType === 'oauth2') { _%>
         this.jHipsterProperties = jHipsterProperties;
-        <%_ } _%>
         this.problemSupport = problemSupport;
-        this.environment = environment;
+
     }
 
     <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
@@ -235,11 +230,7 @@ public class SecurityConfiguration {
             <%_ } _%>
         .and()
             .headers()
-            <%_ if (clientTheme !== 'none') { _%>
-                .contentSecurityPolicy(environment.getProperty("security.headers.content-security-policy","default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com data:"))
-            <%_ } else { _%>
-                .contentSecurityPolicy(environment.getProperty("security.headers.content-security-policy","default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' data:"))
-            <%_ } _%>
+            .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
             .and()
                 .referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
             .and()
