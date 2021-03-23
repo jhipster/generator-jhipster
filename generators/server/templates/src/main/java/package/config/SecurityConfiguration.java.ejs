@@ -22,11 +22,11 @@ import <%= packageName %>.security.*;
     <%_ if (authenticationType === 'jwt') { _%>
 import <%= packageName %>.security.jwt.*;
     <%_ } _%>
+import tech.jhipster.config.JHipsterProperties;
     <%_ if (authenticationType === 'session') { _%>
 import tech.jhipster.security.*;
     <%_ } _%>
 
-import tech.jhipster.config.JHipsterProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
