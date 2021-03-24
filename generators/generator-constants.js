@@ -19,13 +19,14 @@
 const validationOptions = require('../jdl/jhipster/validations');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
+const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
 const NODE_VERSION = '14.16.0';
-const NPM_VERSION = '7.7.0';
+const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = '6.8.3';
