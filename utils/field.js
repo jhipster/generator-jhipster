@@ -191,8 +191,10 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
       field.jpaGeneratedValue = false;
       field.readonly = true;
     } else {
-      const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
-      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
+      const defaultGenerationType = ['mysql','mariadb'].includes(entityWithConfig.prodDatabaseType) ? 'identity' : 'sequence';
+      if(!field.jpaGeneratedValue) {
+        field.jpaGeneratedValue = field.fieldType === 'Long' ? defaultGenerationType : true;
+      }
       field.readonly = true;
       if (field.jpaGeneratedValue === 'identity') {
         field.liquibaseAutoIncrement = true;
