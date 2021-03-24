@@ -5,7 +5,7 @@
     "@fortawesome/angular-fontawesome": "0.8.2",
     "@fortawesome/fontawesome-svg-core": "1.2.35",
     "@fortawesome/free-solid-svg-icons": "5.15.3",
-    "@ng-bootstrap/ng-bootstrap": "9.0.2",
+    "@ng-bootstrap/ng-bootstrap": "9.1.0",
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
     "ngx-cookie-service": "11.0.2",
