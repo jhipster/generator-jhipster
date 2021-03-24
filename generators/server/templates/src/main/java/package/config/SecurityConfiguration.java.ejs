@@ -119,14 +119,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-
-    private final JHipsterProperties jHipsterProperties;
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
     public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
-        this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
