@@ -260,7 +260,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       ...super._missingPreDefault(),
 
       loadUserManagementEntities() {
-        if (!this.configOptions.sharedEntities) return;
+        if (!this.configOptions.sharedEntities || !this.configOptions.sharedEntities.User) return;
         // Make user entity available to templates.
         this.user = this.configOptions.sharedEntities.User;
         this.userPrimaryKeyTypeString = this.user.primaryKey.type === TYPE_STRING;
