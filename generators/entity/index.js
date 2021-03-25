@@ -532,6 +532,23 @@ class EntityGenerator extends BaseBlueprintGenerator {
           relationship.otherEntity = otherEntity;
           otherEntity.otherRelationships = otherEntity.otherRelationships || [];
           otherEntity.otherRelationships.push(relationship);
+
+          if (
+            relationship.unidirectional &&
+            (relationship.relationshipType === 'many-to-many' ||
+              // OneToOne is back reference is require due to filtering
+              relationship.relationshipType === 'one-to-one' ||
+              (relationship.relationshipType === 'one-to-many' && !this.context.databaseTypeNeo4j))
+          ) {
+            relationship.otherEntityRelationshipName = _.lowerFirst(this.context.name);
+            otherEntity.relationships.push({
+              otherEntityName: relationship.otherEntityRelationshipName,
+              ownerSide: !relationship.ownerSide,
+              otherEntityRelationshipName: relationship.relationshipName,
+              relationshipName: relationship.otherEntityRelationshipName,
+              relationshipType: relationship.relationshipType.split('-').reverse().join('-'),
+            });
+          }
         });
       },
 
