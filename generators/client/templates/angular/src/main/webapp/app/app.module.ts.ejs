@@ -73,7 +73,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
-    NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
+    NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-', caseSensitive: true }),
 <%_ if (enableTranslation) { _%>
     TranslateModule.forRoot({
       loader: {

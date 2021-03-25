@@ -110,7 +110,7 @@
 <%_ if (authenticationTypeJwt) { _%>
             requestInterceptor: function (req) {
               var authToken =
-                localStorage.getItem('<%= jhiPrefixDashed %>-authenticationtoken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
+                JSON.parse(localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken'));
               if (authToken) {
                 req.headers['Authorization'] = 'Bearer ' + authToken;
               }
