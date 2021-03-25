@@ -3,6 +3,7 @@ application {
     baseName app1,
     applicationType monolith,
     packageName com.my.app1
+    rememberMeKey "abcde"
   }
 }
 application {

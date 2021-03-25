@@ -45,6 +45,7 @@ const PATH_PATTERN = /^"([^\/]+).*"$/;
 // const PASSWORD_PATTERN = /^(.+)$/;
 const REPONAME_PATTERN = /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:\/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
+const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
@@ -181,6 +182,11 @@ const configPropsValidations = {
     msg: 'prodDatabaseType property',
   },
   REACTIVE: { type: 'BOOLEAN' },
+  REMEMBER_ME_KEY: {
+    type: 'STRING',
+    pattern: REMEMBER_ME_KEY_PATTERN,
+    msg: 'rememberMeKey property',
+  },
   SEARCH_ENGINE: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
