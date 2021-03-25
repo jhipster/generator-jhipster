@@ -35,9 +35,9 @@ module.exports = {
 
 /**
  * Converts passed JDL relationships to JSON content.
- * @param {Array<JDLRelationship>} jdlRelationships - the relationships to convert.
- * @param {Array<String>} entityNames - all the entities' names.
- * @param {Object} conversionOptions - Convert options.
+ * @param {Array<JDLRelationship>} jdlRelationships - the relationships to convert
+ * @param {Array<String>} entityNames - all the entities' names
+ * @param {Object} conversionOptions - the conversion options
  * @param {Boolean} [conversionOptions.unilateralRelationships] - Whether to generate unilateral relationships
  * @return {Map<String, Array<Object>>} a map having for keys entity names and for values arrays of JSON relationships.
  */
