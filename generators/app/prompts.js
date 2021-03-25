@@ -28,6 +28,7 @@ module.exports = {
   askForApplicationType,
   askForModuleName,
   askForTestOpts,
+  askForCypressCoverage,
   askForMoreModules,
 };
 
@@ -103,6 +104,20 @@ async function askForTestOpts() {
   const answers = await this.prompt(PROMPT);
   this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
   return answers;
+}
+
+async function askForCypressCoverage() {
+  if (this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
+    return this.prompt({
+      type: 'confirm',
+      name: 'cypressCoverage',
+      message: 'Would you like to generate code coverage for Cypress tests?',
+      default: true,
+    }).then(answers => {
+      this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
+      return undefined;
+    });
+  }
 }
 
 function askForMoreModules() {
