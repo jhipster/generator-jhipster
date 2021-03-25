@@ -1,17 +1,17 @@
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import Vue from 'vue';
 <%_ } _%>
-<%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
 import axios, { AxiosPromise } from 'axios';
 <%_ } _%>
 
 export default class LoginService {
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   public openLogin(instance : Vue) : void {
     instance.$emit('bv::show::modal','login-page');
   }
-  <%_ } else { _%>
+<%_ } else { _%>
   public login(loc = window.location) {
     const port = (loc.port ? ':' + loc.port : '');
     let contextPath = location.pathname;
@@ -28,11 +28,11 @@ export default class LoginService {
     // It will show a Spring Security generated login page with links to configured OIDC providers.
     loc.href = `//${loc.hostname}${port}${contextPath}oauth2/authorization/oidc`;
   }
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
   public logout() : AxiosPromise<any> {
     return axios.post('api/logout');
   }
-  <%_ } _%>
+<%_ } _%>
 }

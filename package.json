@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "7.0.0-beta.1",
+  "version": "7.0.0",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -61,11 +61,11 @@
     "test": "mocha --no-insight --forbid-only --parallel"
   },
   "dependencies": {
-    "aws-sdk": "2.863.0",
+    "aws-sdk": "2.868.0",
     "axios": "0.21.1",
     "chalk": "4.1.0",
-    "chevrotain": "8.0.1",
-    "commander": "7.1.0",
+    "chevrotain": "9.0.0",
+    "commander": "7.2.0",
     "conf": "9.0.2",
     "didyoumean": "1.2.1",
     "ejs": "3.1.6",
@@ -78,10 +78,9 @@
     "lodash": "4.17.21",
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
-    "ora": "5.3.0",
+    "ora": "5.4.0",
     "os-locale": "5.0.0",
     "parse-gitignore": "1.0.1",
-    "pipeline-pipe": "0.1.5",
     "pluralize": "8.0.0",
     "prettier": "2.2.1",
     "prettier-plugin-java": "1.0.2",

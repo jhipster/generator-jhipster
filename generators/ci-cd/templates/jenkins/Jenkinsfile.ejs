@@ -71,7 +71,7 @@ node {
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/target/test-results/**/TEST-*.xml'
+<%= indent %>            junit '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 
@@ -87,7 +87,7 @@ node {
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/target/test-results/**/TEST-*.xml'
+<%= indent %>            junit '**/target/test-results/TESTS-results-jest.xml'
 <%= indent %>        }
 <%= indent %>    }
 

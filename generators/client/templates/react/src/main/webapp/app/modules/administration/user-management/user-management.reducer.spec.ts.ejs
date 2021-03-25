@@ -131,20 +131,20 @@ describe('User management reducer tests', () => {
 
   describe('Success', () => {
     it('should update state according to a successful fetch users request', () => {
-      <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
       const headers = { ['x-total-count']: 42 };
       const payload = { data: 'some handsome users', headers };
-      <%_ } else { _%>
+<%_ } else { _%>
       const payload = { data: 'some handsome users' };
-      <%_ } _%>
+<%_ } _%>
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USERS), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
         users: payload.data,
-        <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
         totalItems: headers['x-total-count']
-        <%_ } _%>
+<%_ } _%>
       });
     });
 

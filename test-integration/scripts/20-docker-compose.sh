@@ -9,6 +9,7 @@ source $(dirname $0)/00-init-env.sh
 cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/keycloak.yml ]; then
     docker-compose -f src/main/docker/keycloak.yml up -d
+    sleep 20
 fi
 if [ -a src/main/docker/elasticsearch.yml ]; then
     docker-compose -f src/main/docker/elasticsearch.yml up -d

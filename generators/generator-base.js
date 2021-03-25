@@ -58,7 +58,7 @@ const { SPRING_WEBSOCKET } = require('../jdl/jhipster/websocket-types');
 const { KAFKA } = require('../jdl/jhipster/message-broker-types');
 const { CONSUL } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
-const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
+const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 
 // Reverse order.
@@ -391,11 +391,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   addEntityToMenu(
     routerName,
     enableTranslation,
-    clientFramework,
+    clientFramework = this.clientFramework,
     entityTranslationKeyMenu = _.camelCase(routerName),
     entityTranslationValue = _.startCase(routerName)
   ) {
-    if (this.clientFramework === ANGULAR) {
+    if (clientFramework === ANGULAR) {
       this.needleApi.clientAngular.addEntityToMenu(
         routerName,
         enableTranslation,
@@ -403,9 +403,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         entityTranslationValue,
         this.jhiPrefix
       );
-    } else if (this.clientFramework === REACT) {
+    } else if (clientFramework === REACT) {
       this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
-    } else if (this.clientFramework === VUE) {
+    } else if (clientFramework === VUE) {
       this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
     }
   }
@@ -2473,6 +2473,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
     dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
     dest.applicationTypeGateway = config.applicationType === GATEWAY;
+    dest.applicationTypeMonolith = config.applicationType === MONOLITH;
   }
 
   /**
@@ -2491,6 +2492,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFrameworkReact = config.clientFramework === REACT;
     dest.clientThemeNone = config.clientTheme === 'none';
     dest.clientThemePrimary = config.clientThemeVariant === 'primary';
+    dest.clientThemeLight = config.clientThemeVariant === 'light';
+    dest.clientThemeDark = config.clientThemeVariant === 'dark';
   }
 
   /**
@@ -2539,6 +2542,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
     dest.buildToolGradle = config.buildTool === GRADLE;
     dest.buildToolMaven = config.buildTool === MAVEN;
+    dest.buildToolUndefined = config.buildTool === undefined;
+
     dest.cacheProviderRedis = config.cacheProvider === REDIS;
 
     dest.databaseTypeNo = config.databaseType === NO_DATABASE;

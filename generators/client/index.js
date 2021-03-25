@@ -37,6 +37,10 @@ const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const NO_DATABASE = databaseTypes.NO;
+const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+
+const TYPE_STRING = CommonDBTypes.STRING;
+const TYPE_UUID = CommonDBTypes.UUID;
 
 let useBlueprints;
 
@@ -256,9 +260,11 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       ...super._missingPreDefault(),
 
       loadUserManagementEntities() {
-        if (!this.configOptions.sharedEntities) return;
+        if (!this.configOptions.sharedEntities || !this.configOptions.sharedEntities.User) return;
         // Make user entity available to templates.
         this.user = this.configOptions.sharedEntities.User;
+        this.userPrimaryKeyTypeString = this.user.primaryKey.type === TYPE_STRING;
+        this.userPrimaryKeyTypeUUID = this.user.primaryKey.type === TYPE_UUID;
       },
 
       insight() {

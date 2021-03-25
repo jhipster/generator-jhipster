@@ -11,36 +11,16 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const mockBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts) {
     super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-    if (!jhContext) {
-      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
-    }
+    this.sbsBlueprint = true;
   }
 
-  get initializing() {
-    return super._initializing();
-  }
-
-  get prompting() {
-    return super._prompting();
-  }
-
-  get configuring() {
-    return super._configuring();
-  }
-
-  get default() {
-    return super._default();
-  }
-
-  get writing() {
-    const phaseFromJHipster = super._writing();
-    const customPhaseSteps = {
+  get postWriting() {
+    return {
       addCssStylesProperty() {
-        this.addMainSCSSStyle('@import style_without_comment');
-        this.addMainSCSSStyle('@import style', 'my comment');
-        this.addVendorSCSSStyle('@import style', 'my comment');
-        this.addVendorSCSSStyle('@import style_without_comment');
+        this.addMainSCSSStyle('@import style_without_comment;');
+        this.addMainSCSSStyle('@import style;', 'my comment');
+        this.addVendorSCSSStyle('@import style;', 'my comment');
+        this.addVendorSCSSStyle('@import style_without_comment;');
       },
       addToMenuStep() {
         this.addElementToMenu('routerName1', 'iconName1', true, ANGULAR);
@@ -65,52 +45,45 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
       },
     };
-    return { ...phaseFromJHipster, ...customPhaseSteps };
-  }
-
-  get install() {
-    return super._install();
-  }
-
-  get end() {
-    return super._end();
   }
 };
 
 describe('needle API Angular: JHipster client generator with blueprint', () => {
-  before(done => {
-    helpers
-      .run(path.join(__dirname, '../../generators/client'))
+  let runContext;
+  let runResult;
+
+  before(async () => {
+    runContext = helpers.create(path.join(__dirname, '../../generators/client'));
+    runResult = await runContext
       .withOptions({
         fromCli: true,
-        build: 'maven',
-        auth: 'jwt',
-        db: 'mysql',
+        defaults: true,
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-      .withPrompts({
-        baseName: 'jhipster',
-        clientFramework: ANGULAR,
-        enableTranslation: true,
-        nativeLanguage: 'en',
-        languages: ['fr'],
-      })
-      .on('end', done);
+      .run();
+  });
+
+  it('should bail on any file change adding same needles again', async () => {
+    await runResult
+      .create('jhipster-myblueprint:client')
+      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+      .withOptions({ fromCli: true, force: false, bail: true, skipChecks: true, skipInstall: true })
+      .run();
   });
 
   it('vendor.scss contains the specific change (without comment) added by needle api', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`, /@import style_without_comment/);
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`, /\n@import style_without_comment;\n/);
   });
 
   it('global.scss contains the specific change (without comment) added by needle api', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`, /@import style_without_comment/);
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`, /\n@import style_without_comment;\n/);
   });
 
   it('vendor.scss contains the specific change added by needle api', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`, /@import style/);
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`, /\n@import style;\n/);
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
       '* ==========================================================================\n' +
@@ -120,7 +93,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
   });
 
   it('global.scss contains the specific change added by needle api', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`, /@import style/);
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`, /\n@import style;\n/);
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
       '* ==========================================================================\n' +

@@ -19,8 +19,12 @@
 const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
-const { pipe } = require('pipeline-pipe');
-const { createConflicterStatusTransform, createYoRcTransform, createYoResolveTransform } = require('yeoman-environment/lib/util/transform');
+const {
+  createEachFileTransform,
+  createConflicterStatusTransform,
+  createYoRcTransform,
+  createYoResolveTransform,
+} = require('yeoman-environment/lib/util/transform');
 
 const BaseGenerator = require('../generator-base');
 const { defaultConfig } = require('../generator-defaults');
@@ -36,7 +40,7 @@ const { STRING: TYPE_STRING, LONG: TYPE_LONG } = CommonDBTypes;
 
 module.exports = class extends BaseGenerator {
   constructor(args, options) {
-    super(args, options, { unique: 'namespace' });
+    super(args, options, { unique: 'namespace', customCommitTask: true });
 
     /*
      * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
@@ -144,7 +148,7 @@ module.exports = class extends BaseGenerator {
       const transformStreams = [
         createYoResolveTransform(this.env.conflicter),
         createYoRcTransform(),
-        pipe(file => {
+        createEachFileTransform(file => {
           if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
             file.conflicter = 'force';
           }
@@ -167,7 +171,7 @@ module.exports = class extends BaseGenerator {
       }
 
       transformStreams.push(
-        pipe(file => this.env.conflicter.checkForCollision(file), { ordered: false, maxParallel: 10 }),
+        createEachFileTransform(file => this.env.conflicter.checkForCollision(file), { ordered: false, maxParallel: 10 }),
         createConflicterStatusTransform()
       );
 

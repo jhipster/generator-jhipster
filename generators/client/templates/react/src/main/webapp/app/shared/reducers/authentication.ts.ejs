@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-<%_ if (authenticationType === 'jwt' || enableTranslation) { _%>
+<%_ if (authenticationTypeJwt || enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
@@ -25,27 +25,27 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 <% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
 export const ACTION_TYPES = {
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   LOGIN: 'authentication/LOGIN',
-  <%_ } _%>
+<%_ } _%>
   GET_SESSION: 'authentication/GET_SESSION',
   LOGOUT: 'authentication/LOGOUT',
   CLEAR_AUTH: 'authentication/CLEAR_AUTH',
   ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
 };
 
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
 <%_ } _%>
 
 const initialState = {
   loading: false,
   isAuthenticated: false,
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   loginSuccess: false,
   loginError: false, // Errors returned from server side
   showModalLogin: false,
-  <%_ } _%>
+<%_ } _%>
   account: {} as any,
   errorMessage: null as unknown as string, // Errors returned from server side
   redirectMessage: null as unknown as string,
@@ -60,15 +60,15 @@ export type AuthenticationState =  Readonly<typeof initialState>;
 
 export default (state: AuthenticationState = initialState, action): AuthenticationState => {
   switch (action.type) {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     case REQUEST(ACTION_TYPES.LOGIN):
-    <%_ } _%>
+<%_ } _%>
     case REQUEST(ACTION_TYPES.GET_SESSION):
       return {
         ...state,
         loading: true
       };
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     case FAILURE(ACTION_TYPES.LOGIN):
       return {
         ...initialState,
@@ -76,19 +76,19 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         showModalLogin: true,
         loginError: true
       };
-    <%_ } _%>
+<%_ } _%>
     case FAILURE(ACTION_TYPES.GET_SESSION):
       return {
         ...state,
         loading: false,
         isAuthenticated: false,
         sessionHasBeenFetched: true,
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
-      <%_ } _%>
+<%_ } _%>
         errorMessage: action.payload
       };
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     case SUCCESS(ACTION_TYPES.LOGIN):
       return {
         ...state,
@@ -97,20 +97,20 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         showModalLogin: false,
         loginSuccess: true
       };
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
     case ACTION_TYPES.LOGOUT:
-    <%_ } else { _%>
+<%_ } else { _%>
     case SUCCESS(ACTION_TYPES.LOGOUT):
-    <%_ } _%>
+<%_ } _%>
       return {
         ...initialState,
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true
-      <%_ } else { _%>
+<%_ } else { _%>
         idToken: action.payload.data.idToken,
         logoutUrl: action.payload.data.logoutUrl
-      <%_ } _%>
+<%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
       {
@@ -126,18 +126,18 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
-      <%_ } _%>
+<%_ } _%>
         redirectMessage: action.message
       };
     case ACTION_TYPES.CLEAR_AUTH:
       return {
         ...state,
         loading: false,
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
-      <%_ } _%>
+<%_ } _%>
         isAuthenticated: false
       };
     default:
@@ -148,7 +148,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
 export const getSession: () => void = () => <%_ if (enableTranslation) { _%>async<%_ } _%> (dispatch, getState) => {
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     await dispatch({
       type: ACTION_TYPES.GET_SESSION,
       payload: axios.get('api/account')
@@ -159,15 +159,15 @@ export const getSession: () => void = () => <%_ if (enableTranslation) { _%>asyn
       const langKey = Storage.session.get('locale', account.langKey);
       await dispatch(setLocale(langKey));
     }
-    <%_ } else { _%>
+<%_ } else { _%>
     dispatch({
       type: ACTION_TYPES.GET_SESSION,
       payload: axios.get('api/account')
     });
-    <%_ } _%>
+<%_ } _%>
 }
 
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const data = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
   await dispatch({
@@ -176,7 +176,7 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
   });
   await dispatch(getSession());
 };
-<%_ } else if (authenticationType === 'jwt') { _%>
+<%_ } else if (authenticationTypeJwt) { _%>
 export const login: (username: string, password: string, rememberMe?: boolean) => void = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
@@ -195,7 +195,7 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
 };
 <%_ } _%>
 
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 export const clearAuthToken = () => {
   if (Storage.local.get(AUTH_TOKEN_KEY)) {
     Storage.local.remove(AUTH_TOKEN_KEY);
@@ -224,9 +224,9 @@ export const logout: () => void = () => async dispatch => {
 <%_ } _%>
 
 export const clearAuthentication = messageKey => (dispatch, getState) => {
-  <%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   clearAuthToken();
-  <%_ } _%>
+<%_ } _%>
   dispatch(displayAuthError(messageKey));
   dispatch({
     type: ACTION_TYPES.CLEAR_AUTH

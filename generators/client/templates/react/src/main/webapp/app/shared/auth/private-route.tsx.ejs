@@ -41,7 +41,7 @@ export const PrivateRouteComponent = ({
         ) : (
           <Redirect
             to={{
-              pathname: '<%_ if (authenticationType === 'oauth2') { _%>/oauth2/authorization/oidc<%_ } else {_%>/login<%_ } _%>',
+              pathname: '<%_ if (authenticationTypeOauth2) { _%>/oauth2/authorization/oidc<%_ } else {_%>/login<%_ } _%>',
               search: props.location.search,
               state: { from: props.location }
             }}
