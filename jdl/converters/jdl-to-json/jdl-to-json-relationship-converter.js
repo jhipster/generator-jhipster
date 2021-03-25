@@ -38,7 +38,7 @@ module.exports = {
  * @param {Array<JDLRelationship>} jdlRelationships - the relationships to convert.
  * @param {Array<String>} entityNames - all the entities' names.
  * @param {Object} convertOptions - Convert options.
- * @param {Boolean} [convertOptions.unidirectionalRelationships] - Whether to generate unidirectional relationships
+ * @param {Boolean} [convertOptions.unilateralRelationships] - Whether to generate unilateral relationships
  * @return {Map<String, Array<Object>>} a map having for keys entity names and for values arrays of JSON relationships.
  */
 function convert(jdlRelationships = [], entityNames = [], convertOptions = {}) {
@@ -78,19 +78,19 @@ function getRelatedRelationships(relationships, entityNames) {
 }
 
 function setRelationshipsFromEntity(relatedRelationships, entityName, convertOptions) {
-  const { unidirectionalRelationships } = convertOptions;
+  const { unilateralRelationships } = convertOptions;
   relatedRelationships.from.forEach(relationshipToConvert => {
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInTo);
     const convertedRelationship = {
       relationshipType: _.kebabCase(relationshipToConvert.type),
       otherEntityName: camelCase(relationshipToConvert.to),
     };
-    if (!unidirectionalRelationships || otherSplitField.relationshipName) {
+    if (!unilateralRelationships || otherSplitField.relationshipName) {
       convertedRelationship.otherEntityRelationshipName =
         lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.from);
     }
-    if (unidirectionalRelationships) {
-      convertedRelationship.unidirectional = !otherSplitField.relationshipName;
+    if (unilateralRelationships) {
+      convertedRelationship.unilateral = !otherSplitField.relationshipName;
     }
     if (relationshipToConvert.isInjectedFieldInFromRequired) {
       convertedRelationship.relationshipValidateRules = REQUIRED;
@@ -107,7 +107,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName, convertOpt
       convertedRelationship.ownerSide = true;
     } else if (relationshipToConvert.type === MANY_TO_MANY) {
       if (!relationshipToConvert.injectedFieldInTo) {
-        if (!convertOptions.unidirectionalRelationships && !builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
+        if (!convertOptions.unilateralRelationships && !builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
           convertedRelationship.otherEntityRelationshipName = lowerFirst(relationshipToConvert.from);
           const convertedOtherEntityRelationships = convertedRelationships.get(relationshipToConvert.to);
           const otherSideRelationship = {
@@ -139,7 +139,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName, convertOptio
       relationshipType: _.kebabCase(relationshipType),
       otherEntityName: camelCase(relationshipToConvert.from),
     };
-    if (!convertOptions.unidirectionalRelationships || otherSplitField.relationshipName) {
+    if (!convertOptions.unilateralRelationships || otherSplitField.relationshipName) {
       convertedRelationship.otherEntityRelationshipName =
         lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.to);
     }

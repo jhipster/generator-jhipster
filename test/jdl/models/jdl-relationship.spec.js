@@ -68,7 +68,7 @@ describe('JDLRelationship', () => {
         expect(relationship.type).to.equal(RelationshipTypes.ONE_TO_ONE);
       });
     });
-    context('when passing an unidirectional one-to-many relationship', () => {
+    context('when passing an unilateral one-to-many relationship', () => {
       context('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
@@ -78,7 +78,7 @@ describe('JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: RelationshipTypes.ONE_TO_MANY,
-            unidirectionalRelationships: true,
+            unilateralRelationships: true,
           });
         });
 
@@ -87,7 +87,7 @@ describe('JDLRelationship', () => {
         });
       });
     });
-    context('when passing an unidirectional many-to-one relationship', () => {
+    context('when passing an unilateral many-to-one relationship', () => {
       context('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
@@ -97,7 +97,7 @@ describe('JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: RelationshipTypes.MANY_TO_ONE,
-            unidirectionalRelationships: true,
+            unilateralRelationships: true,
           });
         });
 
@@ -106,7 +106,7 @@ describe('JDLRelationship', () => {
         });
       });
     });
-    context('when passing an unidirectional many-to-one relationship', () => {
+    context('when passing an unilateral many-to-one relationship', () => {
       context('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
@@ -116,7 +116,7 @@ describe('JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: RelationshipTypes.ONE_TO_ONE,
-            unidirectionalRelationships: true,
+            unilateralRelationships: true,
           });
         });
 
@@ -125,7 +125,7 @@ describe('JDLRelationship', () => {
         });
       });
     });
-    context('when passing an unidirectional many-to-one relationship', () => {
+    context('when passing an unilateral many-to-one relationship', () => {
       context('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
@@ -135,7 +135,7 @@ describe('JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: RelationshipTypes.MANY_TO_MANY,
-            unidirectionalRelationships: true,
+            unilateralRelationships: true,
           });
         });
 

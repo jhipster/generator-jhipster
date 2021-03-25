@@ -534,7 +534,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
           otherEntity.otherRelationships.push(relationship);
 
           if (
-            relationship.unidirectional &&
+            relationship.unilateral &&
             (relationship.relationshipType === 'many-to-many' ||
               // OneToOne is back reference is require due to filtering
               relationship.relationshipType === 'one-to-one' ||

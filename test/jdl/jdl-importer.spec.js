@@ -1872,7 +1872,7 @@ paginate * with infinite-scroll
         expect(fse.existsSync('.jhipster')).to.be.false;
       });
     });
-    context('when passing the unidirectionalRelationships option', () => {
+    context('when passing the unilateralRelationships option', () => {
       const entities = `
 entity A
 entity B
@@ -1899,7 +1899,7 @@ relationship ManyToMany {
 
         before(() => {
           importer = createImporterFromContent(entities, {
-            unidirectionalRelationships: true,
+            unilateralRelationships: true,
             applicationName: 'jhipter',
             databaseType: 'postgresql',
           });
@@ -1927,7 +1927,7 @@ application {
 }
 ${entities}`,
             {
-              unidirectionalRelationships: true,
+              unilateralRelationships: true,
             }
           );
           returned = importer.import();
@@ -1959,7 +1959,7 @@ ${entities}`,
                 ownerSide: true,
                 relationshipName: 'oneToOneB',
                 relationshipType: 'one-to-one',
-                unidirectional: true,
+                unilateral: true,
               },
               {
                 otherEntityName: 'b',
@@ -1967,40 +1967,40 @@ ${entities}`,
                 otherEntityRelationshipName: 'biOneToOneA',
                 relationshipName: 'biOneToOneB',
                 relationshipType: 'one-to-one',
-                unidirectional: false,
+                unilateral: false,
               },
               {
                 otherEntityName: 'b',
                 relationshipName: 'oneToManyB',
                 relationshipType: 'one-to-many',
-                unidirectional: true,
+                unilateral: true,
               },
               {
                 otherEntityName: 'b',
                 otherEntityRelationshipName: 'biOneToManyA',
                 relationshipName: 'biOneToManyB',
                 relationshipType: 'one-to-many',
-                unidirectional: false,
+                unilateral: false,
               },
               {
                 otherEntityName: 'b',
                 relationshipName: 'manyToOneB',
                 relationshipType: 'many-to-one',
-                unidirectional: true,
+                unilateral: true,
               },
               {
                 otherEntityName: 'b',
                 otherEntityRelationshipName: 'biManyToOneA',
                 relationshipName: 'biManyToOneB',
                 relationshipType: 'many-to-one',
-                unidirectional: false,
+                unilateral: false,
               },
               {
                 otherEntityName: 'b',
                 ownerSide: true,
                 relationshipName: 'manyToManyB',
                 relationshipType: 'many-to-many',
-                unidirectional: true,
+                unilateral: true,
               },
               {
                 otherEntityName: 'b',
@@ -2008,7 +2008,7 @@ ${entities}`,
                 otherEntityRelationshipName: 'biManyToManyA',
                 relationshipName: 'biManyToManyB',
                 relationshipType: 'many-to-many',
-                unidirectional: false,
+                unilateral: false,
               },
             ]);
             expect(applicationWithEntities.entities[1].relationships).to.be.eql([
