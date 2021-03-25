@@ -536,7 +536,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
           if (
             relationship.unilateral &&
             (relationship.relationshipType === 'many-to-many' ||
-              // OneToOne is back reference is require due to filtering
+              // OneToOne back reference is required due to filtering
               relationship.relationshipType === 'one-to-one' ||
               (relationship.relationshipType === 'one-to-many' && !this.context.databaseTypeNeo4j))
           ) {
