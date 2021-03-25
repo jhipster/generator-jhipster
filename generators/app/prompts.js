@@ -107,6 +107,9 @@ async function askForTestOpts() {
 }
 
 async function askForCypressCoverage() {
+  if (this.existingProject) {
+    return undefined;
+  }
   if (this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
     return this.prompt({
       type: 'confirm',
