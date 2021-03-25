@@ -105,8 +105,8 @@ function setFields() {
   });
 }
 
-function setRelationships(convertOptions) {
-  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames(), convertOptions);
+function setRelationships(conversionOptions) {
+  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames(), conversionOptions);
   convertedRelationships.forEach((entityRelationships, entityName) => {
     if (builtInEntities.has(entityName.toLowerCase())) {
       return;

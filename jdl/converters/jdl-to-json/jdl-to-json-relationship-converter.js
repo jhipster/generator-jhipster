@@ -37,19 +37,19 @@ module.exports = {
  * Converts passed JDL relationships to JSON content.
  * @param {Array<JDLRelationship>} jdlRelationships - the relationships to convert.
  * @param {Array<String>} entityNames - all the entities' names.
- * @param {Object} convertOptions - Convert options.
- * @param {Boolean} [convertOptions.unilateralRelationships] - Whether to generate unilateral relationships
+ * @param {Object} conversionOptions - Convert options.
+ * @param {Boolean} [conversionOptions.unilateralRelationships] - Whether to generate unilateral relationships
  * @return {Map<String, Array<Object>>} a map having for keys entity names and for values arrays of JSON relationships.
  */
-function convert(jdlRelationships = [], entityNames = [], convertOptions = {}) {
+function convert(jdlRelationships = [], entityNames = [], conversionOptions = {}) {
   if (jdlRelationships.length === 0 || entityNames.length === 0) {
     return new Map();
   }
   convertedRelationships = new Map(entityNames.map(entityName => [entityName, []]));
   const relatedRelationships = getRelatedRelationships(jdlRelationships, entityNames);
   relatedRelationships.forEach((relatedRelationship, currentEntityName) => {
-    setRelationshipsFromEntity(relatedRelationship, currentEntityName, convertOptions);
-    setRelationshipsToEntity(relatedRelationship, currentEntityName, convertOptions);
+    setRelationshipsFromEntity(relatedRelationship, currentEntityName, conversionOptions);
+    setRelationshipsToEntity(relatedRelationship, currentEntityName, conversionOptions);
   });
   return convertedRelationships;
 }
@@ -77,8 +77,8 @@ function getRelatedRelationships(relationships, entityNames) {
   return relatedRelationships;
 }
 
-function setRelationshipsFromEntity(relatedRelationships, entityName, convertOptions) {
-  const { unilateralRelationships } = convertOptions;
+function setRelationshipsFromEntity(relatedRelationships, entityName, conversionOptions) {
+  const { unilateralRelationships } = conversionOptions;
   relatedRelationships.from.forEach(relationshipToConvert => {
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInTo);
     const convertedRelationship = {
@@ -107,7 +107,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName, convertOpt
       convertedRelationship.ownerSide = true;
     } else if (relationshipToConvert.type === MANY_TO_MANY) {
       if (!relationshipToConvert.injectedFieldInTo) {
-        if (!convertOptions.unilateralRelationships && !builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
+        if (!conversionOptions.unilateralRelationships && !builtInEntities.has(relationshipToConvert.to.toLowerCase())) {
           convertedRelationship.otherEntityRelationshipName = lowerFirst(relationshipToConvert.from);
           const convertedOtherEntityRelationships = convertedRelationships.get(relationshipToConvert.to);
           const otherSideRelationship = {
@@ -131,7 +131,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName, convertOpt
   });
 }
 
-function setRelationshipsToEntity(relatedRelationships, entityName, convertOptions) {
+function setRelationshipsToEntity(relatedRelationships, entityName, conversionOptions) {
   relatedRelationships.to.forEach(relationshipToConvert => {
     const relationshipType = relationshipToConvert.type === ONE_TO_MANY ? MANY_TO_ONE : relationshipToConvert.type;
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
@@ -139,7 +139,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName, convertOptio
       relationshipType: _.kebabCase(relationshipType),
       otherEntityName: camelCase(relationshipToConvert.from),
     };
-    if (!convertOptions.unilateralRelationships || otherSplitField.relationshipName) {
+    if (!conversionOptions.unilateralRelationships || otherSplitField.relationshipName) {
       convertedRelationship.otherEntityRelationshipName =
         lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.to);
     }
