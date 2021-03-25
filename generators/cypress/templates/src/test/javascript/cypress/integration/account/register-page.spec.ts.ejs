@@ -15,7 +15,7 @@ describe('/account/register', () => {
     });
 <%_ if (authenticationTypeSession) { _%>
     cy.clearCookie('SESSION');
-<% } %>
+<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.clickOnRegisterItem();
