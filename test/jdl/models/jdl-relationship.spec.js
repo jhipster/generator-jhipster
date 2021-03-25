@@ -78,7 +78,64 @@ describe('JDLRelationship', () => {
             to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: RelationshipTypes.ONE_TO_MANY,
-            generateBidirectionalOneToMany: false,
+            unidirectionalRelationships: true,
+          });
+        });
+
+        it('should not create a bidirectional relationship', () => {
+          expect(relationship.injectedFieldInTo).to.be.null;
+        });
+      });
+    });
+    context('when passing an unidirectional many-to-one relationship', () => {
+      context('and disabling the conversion to a bidirectional relationship', () => {
+        let relationship;
+
+        before(() => {
+          relationship = new JDLRelationship({
+            from: 'Abc',
+            to: 'Abc2',
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.MANY_TO_ONE,
+            unidirectionalRelationships: true,
+          });
+        });
+
+        it('should not create a bidirectional relationship', () => {
+          expect(relationship.injectedFieldInTo).to.be.null;
+        });
+      });
+    });
+    context('when passing an unidirectional many-to-one relationship', () => {
+      context('and disabling the conversion to a bidirectional relationship', () => {
+        let relationship;
+
+        before(() => {
+          relationship = new JDLRelationship({
+            from: 'Abc',
+            to: 'Abc2',
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.ONE_TO_ONE,
+            unidirectionalRelationships: true,
+          });
+        });
+
+        it('should not create a bidirectional relationship', () => {
+          expect(relationship.injectedFieldInTo).to.be.null;
+        });
+      });
+    });
+    context('when passing an unidirectional many-to-one relationship', () => {
+      context('and disabling the conversion to a bidirectional relationship', () => {
+        let relationship;
+
+        before(() => {
+          relationship = new JDLRelationship({
+            from: 'Abc',
+            to: 'Abc2',
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.MANY_TO_MANY,
+            unidirectionalRelationships: true,
           });
         });
 
