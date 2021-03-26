@@ -13,7 +13,9 @@ describe('/account/register', () => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
-    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
+<%_ if (authenticationTypeSession) { _%>
+    cy.clearCookie('SESSION');
+<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.clickOnRegisterItem();
@@ -77,17 +79,17 @@ describe('/account/register', () => {
       .should('have.class', classInvalid)
       .type('test')
       .should('have.class', classValid);
-    <%_ if (clientFramework === 'angularX') { _%>
+<%_ if (clientFrameworkAngular) { _%>
     cy.get(secondPasswordRegisterSelector)
       .should('have.class', classInvalid)
       .type('otherPassword');
     cy.get(submitRegisterSelector).should('be.disabled');
-    <%_ } else { _%>
+<%_ } else { _%>
     cy.get(secondPasswordRegisterSelector)
       .should('have.class', classInvalid)
       .type('otherPassword')
       .should('have.class', classInvalid);
-    <%_ } _%>
+<%_ } _%>
     cy.get(firstPasswordRegisterSelector).clear();
     cy.get(secondPasswordRegisterSelector).clear();
   });

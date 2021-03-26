@@ -24,9 +24,8 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <%_
-    const entityTableName = entity.entityTableName;
-    if (addedFields.length || addedRelationships.length) { _%>
+<%_ const entityTableName = entity.entityTableName;
+if (addedFields.length || addedRelationships.length) { _%>
     <changeSet id="<%= changelogDate %>-columns-faker" author="jhipster" context="faker">
     <!--
         Load sample data generated with Faker.js
@@ -43,23 +42,21 @@
                   primaryKey="id"
                   tableName="<%= entityTableName %>">
             <column name="id" type="numeric"/>
-            <%_ for (field of addedFields) {
-                _%>
+    <%_ for (field of addedFields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
-                <%_ if (field.shouldCreateContentType) { _%>
+        <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%= field.columnName %>_content_type" type="string"/>
-                <%_ } _%>
-            <%_ } _%>
-            <%_ for (relationship of addedRelationships) {
-                _%>
-                <%_ if (relationship.shouldWriteRelationship) { _%>
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (relationship of addedRelationships) { _%>
+        <%_ if (relationship.shouldWriteRelationship) { _%>
             <column name="<%= relationship.columnName %>" type="string"/>
-                <%_ } _%>
-            <%_ } _%>
+        <%_ } _%>
+    <%_ } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadUpdateData>
     </changeSet>
-    <%_ } _%>
+<%_ } _%>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
 </databaseChangeLog>

@@ -7,7 +7,7 @@
   "fixturesFolder": "<%= CLIENT_TEST_SRC_DIR %>cypress/fixtures",
   "pluginsFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index.ts",
   "screenshotsFolder": "<%= BUILD_DIR %>cypress/screenshots",
-  "chromeWebSecurity": <% if(authenticationType === 'oauth2') { %>false<% } else { %>true<% } %>,
+  "chromeWebSecurity": <% if(authenticationTypeOauth2) { %>false<% } else { %>true<% } %>,
   "viewportWidth": 1200,
   "viewportHeight": 720,
   "retries": 2

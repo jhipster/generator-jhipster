@@ -11,14 +11,14 @@ describe('login modal', () => {
     cy.window().then(win => {
       win.sessionStorage.clear();
     });
-    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
+    <%_ if (authenticationTypeSession) { _%>cy.clearCookie('SESSION')<% } %>
     cy.clearCookies();
     cy.visit('');
     cy.clickOnLoginItem();
   });
 
   beforeEach(() => {
-    cy.intercept('POST', '/api/<%_ if (authenticationType === 'session') { _%>authentication<% } else { %>authenticate<% } %>').as('authenticate');
+    cy.intercept('POST', '/api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>').as('authenticate');
   });
 
   it('greets with signin', () => {
@@ -28,7 +28,7 @@ describe('login modal', () => {
   it('requires username', () => {
     cy.get(passwordLoginSelector).type('a-password');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').then(({ request, response }) => expect(response.statusCode).to.equal(<%_ if (authenticationType === 'session') { _%>401<% } else { %>400<% } %>));
+    cy.wait('@authenticate').then(({ request, response }) => expect(response.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
     cy.get(passwordLoginSelector).clear();
@@ -37,7 +37,7 @@ describe('login modal', () => {
   it('requires password', () => {
     cy.get(usernameLoginSelector).type('a-login');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').then(({ request, response }) => expect(response.statusCode).to.equal(<%_ if (authenticationType === 'session') { _%>401<% } else { %>400<% } %>));
+    cy.wait('@authenticate').then(({ request, response }) => expect(response.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
     cy.get(errorLoginSelector).should('be.visible');
     cy.get(usernameLoginSelector).clear();
   });
