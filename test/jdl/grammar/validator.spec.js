@@ -1147,6 +1147,20 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
+    context('and using for rememberMeKey', () => {
+      context('a valid value', () => {
+        it('should not report a syntax error', () => {
+          expect(() =>
+            parse(`
+            application {
+              config {
+                rememberMeKey "1want4b33randap1zz4"
+              }
+            }`)
+          ).not.to.throw();
+        });
+      });
+    });
     context('and using for searchEngine', () => {
       context('a valid value', () => {
         context('with only letters', () => {
