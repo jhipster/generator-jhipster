@@ -87,9 +87,13 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
-<%_ if (authenticationType === 'oauth2') { _%>
-    "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
-<%_ } _%>
+  <%_ if (authenticationType === 'oauth2') { _%>
+      "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
+  <%_ } _%>
+  <%_ if (cypressCoverage) { _%>
+    "istanbul-instrumenter-loader": "<%= dependabotPackageJson.devDependencies['istanbul-instrumenter-loader'] %>",
+    "cross-env": "<%= dependabotPackageJson.devDependencies['cross-env'] %>",
+  <%_ } _%>
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "<%= dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
@@ -169,6 +173,9 @@
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "<%= clientPackageManager %> run webapp:dev",
+    <%_ if (cypressCoverage) { _%>
+      "start-instr": "cross-env INSTRUMENT=true npm run webapp:dev",
+    <%_ } _%>
     "start-hmr": "ng serve --hmr",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     <%_ if (skipServer) { _%>

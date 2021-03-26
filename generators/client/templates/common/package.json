@@ -1,7 +1,9 @@
 {
   "devDependencies": {
     "cypress": "6.6.0",
-    "puppeteer": "8.0.0"
+    "puppeteer": "8.0.0",
+    "istanbul-instrumenter-loader": "3.0.1",
+    "cross-env": "7.0.3"
   },
   "dependencies": {
     "dayjs": "1.10.4"

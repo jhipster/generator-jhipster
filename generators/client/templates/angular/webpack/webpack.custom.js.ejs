@@ -88,6 +88,37 @@ module.exports = (config, options, targetOptions) => {
         }
       )
     );
+
+    <%_ if (cypressCoverage) { _%>
+    if (process.env.INSTRUMENT) {
+      // For cypress coverage, we DO NOT want the browser to automatically synchronize
+      config.plugins.forEach(plugin => {
+        if (plugin.browserSyncOptions) {
+          plugin.browserSyncOptions.ghostMode = {
+            clicks: false,
+            location: false,
+            forms: false,
+            scroll: false,
+          };
+          plugin.browserSyncOptions.open = false;
+        }
+      });
+      // We also add istanbul loader
+      config.module.rules.push({
+        test: /\.(js|ts)$/,
+        use: [
+          {
+            loader: 'istanbul-instrumenter-loader',
+            options: { esModules: true },
+          },
+        ],
+        enforce: 'post',
+        include: path.join(__dirname, '..', 'src', 'main', 'webapp'),
+        exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
+      });
+    }
+    <%_ } _%>
+
   }
 
   if (config.mode === 'production') {
