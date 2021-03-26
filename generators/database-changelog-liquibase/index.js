@@ -152,6 +152,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get preparing() {
+    if (useBlueprints) return;
     return this._preparing();
   }
 
@@ -196,6 +197,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get preparingRelationships() {
+    if (useBlueprints) return;
     return this._preparingRelationships();
   }
 
@@ -210,6 +212,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
+    if (useBlueprints) return;
     return this._default();
   }
 
@@ -253,6 +256,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
+    if (useBlueprints) return;
     if (this.options.skipWriting) {
       return {};
     }
@@ -285,6 +289,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
+    if (useBlueprints) return;
     if (this.options.skipWriting) {
       return {};
     }
