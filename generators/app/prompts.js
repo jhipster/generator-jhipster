@@ -116,8 +116,8 @@ async function askForCypressCoverage() {
     return this.prompt({
       type: 'confirm',
       name: 'cypressCoverage',
-      message: 'Would you like to generate code coverage for Cypress tests?',
-      default: true,
+      message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+      default: false,
     }).then(answers => {
       this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
       return undefined;
