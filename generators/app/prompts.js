@@ -19,6 +19,7 @@
 const chalk = require('chalk');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
+const constants = require('../generator-constants');
 const { appDefaultConfig } = require('../generator-defaults');
 const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
@@ -110,7 +111,8 @@ async function askForCypressCoverage() {
   if (this.existingProject) {
     return undefined;
   }
-  if (this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
+  if (this.jhipsterConfig.clientFramework.includes(constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR)
+        && this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
     return this.prompt({
       type: 'confirm',
       name: 'cypressCoverage',
