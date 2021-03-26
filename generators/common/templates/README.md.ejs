@@ -375,6 +375,28 @@ To use those tests, you must install Gatling from [https://gatling.io/](https://
 
 For more information, refer to the [Running tests page][].
 
+<%_ if (cypressCoverage) { _%>
+
+### Code Coverage
+
+When using Cypress with AngularX, you can generate code coverage report by running your dev server with instrumented code:
+
+Start your backend (option `-P-webapp` to skip compiling the Angular Front):
+
+    ./mvnw -P-webapp
+
+Start your Angular dev server with instrumented code:
+
+    npm run start-instrument
+
+Start your Cypress end to end testing:
+
+    npm run e2e:cypress:coverage
+
+The coverage report is generated under `./coverage/lcov-report/`
+
+<%_ } _%>
+
 ### Code quality
 
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
