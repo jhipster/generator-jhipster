@@ -1,6 +1,7 @@
 const rm = require('rimraf');
 const yargs = require('yargs');
 const cypress = require('cypress');
+const chalk = require('chalk');
 
 const argv = yargs
   .options({
@@ -26,27 +27,32 @@ rm('coverage', (error: any) => {
     process.exit(1);
   }
   console.log('Removed all existing coverage reports successfully!');
-});
-console.log('Starting Cypress..');
-console.log('Make sure you already started the local server using `npm run start-instr`');
-cypress
-  .run({
-    browser: argv.browser,
-    spec: argv.spec,
-    config: {
-      baseUrl: 'http://localhost:9000',
-    },
-  })
-  .then((results: any) => {
-    if (!results || !results.config) {
-      console.error('results null, or no tests run !!!', results);
-      console.error('Please check and fix above errors');
+
+  console.log(`Server expected to be running ON port 9000`);
+  console.log(`Make sure you already started the local server using  ${chalk.cyan('npm run start-instr')}`);
+  console.log(`Starting Cypress..`);
+  cypress
+    .run({
+      browser: argv.browser,
+      spec: argv.spec,
+      config: {
+        baseUrl: 'http://localhost:9000',
+      },
+    })
+    .then((results: any) => {
+      if (!results || !results.config) {
+        console.error('results null, or no tests run !!!', results);
+        console.error('Please check and fix above errors');
+        process.exit(1);
+      }
+      console.log('Finished testing..');
+      console.log(`Please check ${chalk.green('./coverage/lcov-report/index.html')}`);
+    })
+    .catch((error: any) => {
+      console.error('errors: ', error);
       process.exit(1);
-    }
-    console.log('Finished testing..');
-    console.log('Please check ./coverage/lcov-report/index.html');
-  })
-  .catch((error: any) => {
-    console.error('errors: ', error);
-    process.exit(1);
-  });
+    });
+
+
+});
+
