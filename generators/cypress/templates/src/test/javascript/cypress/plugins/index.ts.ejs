@@ -68,4 +68,8 @@ module.exports = (on, config) => {
     }
   });
 <%_ } _%>
+  <%_ if (cypressCoverage) { _%>
+    require('@cypress/code-coverage/task')(on, config);
+    return config;
+  <%_ } _%>
 }

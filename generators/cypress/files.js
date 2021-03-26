@@ -54,6 +54,11 @@ const cypressFiles = {
       ],
     },
     {
+      condition: generator => generator.cypressCoverage,
+      path: TEST_SRC_DIR,
+      templates: ['cypress/cypress_coverage.ts'],
+    },
+    {
       condition: generator => generator.cypressTests && !generator.authenticationTypeOauth2,
       path: TEST_SRC_DIR,
       templates: ['cypress/integration/account/login-page.spec.ts'],

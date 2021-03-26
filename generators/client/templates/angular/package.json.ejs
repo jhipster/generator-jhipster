@@ -93,6 +93,7 @@
   <%_ if (cypressCoverage) { _%>
     "istanbul-instrumenter-loader": "<%= dependabotPackageJson.devDependencies['istanbul-instrumenter-loader'] %>",
     "cross-env": "<%= dependabotPackageJson.devDependencies['cross-env'] %>",
+    "@cypress/code-coverage": "<%= dependabotPackageJson.devDependencies['@cypress/code-coverage'] %>",
   <%_ } _%>
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
@@ -165,6 +166,9 @@
     <%_ if (cypressTests) { _%>
     "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
     "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
+    <%_ if (cypressCoverage) { _%>
+    "e2e:cypress:coverage": "npx ts-node src/test/javascript/cypress/cypress_coverage -b chrome",
+    <%_ } _%>
     "cypress": "cypress open",
     <%_ } _%>
     <%_ if (protractorTests) { _%>

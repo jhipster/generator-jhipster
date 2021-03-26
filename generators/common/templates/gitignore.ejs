@@ -151,3 +151,11 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+
+<%_ if (cypressCoverage) { _%>
+######################
+# Code coverage
+######################
+/coverage/
+/.nyc_output/
+<%_ } _%>
