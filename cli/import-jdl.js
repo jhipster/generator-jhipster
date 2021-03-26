@@ -344,7 +344,7 @@ class JDLProcessor {
       databaseType: this.options.db,
       applicationType: this.options.applicationType,
       skipUserManagement: this.options.skipUserManagement,
-      unilateralRelationships: this.options.unilateralRelationships,
+      unidirectionalRelationships: this.options.unidirectionalRelationships,
       generatorVersion: packagejs.version,
       skipFileGeneration: true,
     };

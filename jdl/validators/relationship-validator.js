@@ -32,14 +32,14 @@ module.exports = class RelationshipValidator extends Validator {
     if (typeof options === 'boolean') {
       options = { skippedUserManagement: options };
     }
-    const { skippedUserManagement, unilateralRelationships } = options;
+    const { skippedUserManagement, unidirectionalRelationships } = options;
     super.validate(jdlRelationship);
     checkType(jdlRelationship);
     checkInjectedFields(jdlRelationship);
     checkForValidUseOfJPaDerivedIdentifier(jdlRelationship);
     checkForRequiredReflexiveRelationship(jdlRelationship);
     checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagement);
-    checkRelationshipType(jdlRelationship, { skippedUserManagement, unilateralRelationships });
+    checkRelationshipType(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
   }
 };
 
@@ -92,7 +92,7 @@ function checkForForbiddenUseOfUserAsSource(jdlRelationship, skippedUserManageme
 }
 
 function checkRelationshipType(jdlRelationship, options) {
-  const { skippedUserManagement, unilateralRelationships } = options;
+  const { skippedUserManagement, unidirectionalRelationships } = options;
   switch (jdlRelationship.type) {
     case ONE_TO_ONE:
       checkOneToOneRelationship(jdlRelationship);
@@ -101,7 +101,7 @@ function checkRelationshipType(jdlRelationship, options) {
       checkManyToOneRelationship(jdlRelationship, skippedUserManagement);
       break;
     case MANY_TO_MANY:
-      checkManyToManyRelationship(jdlRelationship, unilateralRelationships);
+      checkManyToManyRelationship(jdlRelationship, unidirectionalRelationships);
       break;
     case ONE_TO_MANY:
       return;
@@ -121,12 +121,12 @@ function checkOneToOneRelationship(jdlRelationship) {
 }
 
 function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption) {
-  const unilateralRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
+  const unidirectionalRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
   const userIsTheSourceEntity = isUserManagementEntity(jdlRelationship.from);
   const userIsTheDestinationEntity = isUserManagementEntity(jdlRelationship.to);
   const userHasTheInjectedField =
     (userIsTheSourceEntity && jdlRelationship.injectedFieldInFrom) || (userIsTheDestinationEntity && jdlRelationship.injectedFieldInTo);
-  if (unilateralRelationship && userHasTheInjectedField && !skippedUserManagementOption) {
+  if (unidirectionalRelationship && userHasTheInjectedField && !skippedUserManagementOption) {
     throw new Error(
       `In the Many-to-One relationship from ${jdlRelationship.from} to ${jdlRelationship.to}, ` +
         'the User entity has the injected field without its management being skipped. ' +
@@ -135,15 +135,15 @@ function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption
   }
 }
 
-function checkManyToManyRelationship(jdlRelationship, unilateralRelationships) {
+function checkManyToManyRelationship(jdlRelationship, unidirectionalRelationships) {
   const destinationEntityIsTheUser = isUserManagementEntity(jdlRelationship.to);
   if (jdlRelationship.injectedFieldInFrom && !jdlRelationship.injectedFieldInTo && destinationEntityIsTheUser) {
     // This is a valid case: even though bidirectionality is required for MtM relationships, having the destination
     // entity being the User is possible.
     return;
   }
-  const unilateralRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
-  if (unilateralRelationship && !unilateralRelationships) {
+  const unidirectionalRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
+  if (unidirectionalRelationship && !unidirectionalRelationships) {
     const injectedFieldInSourceEntity = !jdlRelationship.injectedFieldInFrom ? 'not set' : `'${jdlRelationship.injectedFieldInFrom}'`;
     const injectedFieldInDestinationEntity = !jdlRelationship.injectedFieldInTo ? 'not set' : `'${jdlRelationship.injectedFieldInTo}'`;
     throw new Error(

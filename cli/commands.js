@@ -109,8 +109,8 @@ const defaultCommands = {
         desc: 'Skip the user management module during app generation',
       },
       {
-        option: '--unilateral-relationships',
-        desc: 'Generate unilateral relationships',
+        option: '--unidirectional-relationships',
+        desc: 'Generate unidirectional relationships',
       },
     ],
     desc: `Create entities from the JDL file/URL/content passed in argument.

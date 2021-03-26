@@ -33,7 +33,7 @@ module.exports = class JDLRelationship {
     if (
       merged.type === RelationshipTypes.ONE_TO_MANY &&
       (!merged.injectedFieldInFrom || !merged.injectedFieldInTo) &&
-      !merged.unilateralRelationships
+      !merged.unidirectionalRelationships
     ) {
       logger.warn(
         `In the One-to-Many relationship from ${merged.from} to ${merged.to}, ` +
@@ -172,7 +172,7 @@ function defaults() {
     },
     commentInFrom: '',
     commentInTo: '',
-    unilateralRelationships: false,
+    unidirectionalRelationships: false,
   };
 }
 

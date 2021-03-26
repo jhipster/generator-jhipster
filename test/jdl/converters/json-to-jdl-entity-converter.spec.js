@@ -140,7 +140,7 @@ describe('JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing JSON entities to JDL', () => {
-        it('should parse unilateral OneToOne relationships', () => {
+        it('should parse unidirectional OneToOne relationships', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.to.be.undefined;
         });
         it('should parse bidirectional OneToOne relationships', () => {
@@ -149,7 +149,7 @@ describe('JSONToJDLEntityConverter', () => {
         it('should parse bidirectional OneToMany relationships', () => {
           expect(jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}')).not.to.be.undefined;
         });
-        it('should parse unilateral ManyToOne relationships', () => {
+        it('should parse unidirectional ManyToOne relationships', () => {
           expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.to.be.undefined;
         });
         it('should parse ManyToMany relationships', () => {

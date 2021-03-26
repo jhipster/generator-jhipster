@@ -48,7 +48,7 @@ function createValidator(jdlObject, logger = console, options = {}) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
-  const { unilateralRelationships } = options;
+  const { unidirectionalRelationships } = options;
 
   return {
     checkForErrors: () => {
@@ -60,7 +60,7 @@ function createValidator(jdlObject, logger = console, options = {}) {
           return;
         }
         checkForEntityErrors(jdlApplication);
-        checkForRelationshipErrors(jdlApplication, { unilateralRelationships });
+        checkForRelationshipErrors(jdlApplication, { unidirectionalRelationships });
         checkForEnumErrors();
         checkDeploymentsErrors();
         checkForOptionErrors(jdlApplication);
@@ -144,11 +144,11 @@ function createValidator(jdlObject, logger = console, options = {}) {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
-    const { unilateralRelationships } = options;
+    const { unidirectionalRelationships } = options;
     const skippedUserManagement = jdlApplication.getConfigurationOptionValue('skipUserManagement');
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
-      validator.validate(jdlRelationship, { skippedUserManagement, unilateralRelationships });
+      validator.validate(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
       checkForAbsentEntities({
         jdlRelationship,
         doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
