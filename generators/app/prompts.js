@@ -108,11 +108,13 @@ async function askForTestOpts() {
 }
 
 async function askForCypressCoverage() {
-  if (this.existingProject) {
+  if (this.existingProject || !this.jhipsterConfig.testFrameworks) {
     return undefined;
   }
-  if (this.jhipsterConfig.clientFramework.includes(constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR)
-        && this.jhipsterConfig.testFrameworks.includes(CYPRESS)) {
+  if (
+    this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
+    this.jhipsterConfig.testFrameworks.includes(CYPRESS)
+  ) {
     return this.prompt({
       type: 'confirm',
       name: 'cypressCoverage',
@@ -123,6 +125,7 @@ async function askForCypressCoverage() {
       return undefined;
     });
   }
+  return undefined;
 }
 
 function askForMoreModules() {
