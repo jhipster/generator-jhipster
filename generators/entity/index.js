@@ -808,17 +808,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             // form the data to be passed to modules
             const context = this.context;
 
-            const done = this.async();
             // run through all post entity creation module hooks
-            this.callHooks(
-              'entity',
-              'post',
-              {
-                entityConfig: context,
-                force: this.options.force,
-              },
-              done
-            );
+            this.callHooks('entity', 'post', {
+              entityConfig: context,
+              force: this.options.force,
+            });
           }
         } catch (err) {
           this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
