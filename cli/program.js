@@ -54,6 +54,8 @@ const createProgram = () => {
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp())
+      .addOption(new Option('--prefer-global', 'Run jhipster installed globally').hideHelp())
+      .addOption(new Option('--prefer-local', 'Run jhipster installed locally').hideHelp())
   );
 };
 

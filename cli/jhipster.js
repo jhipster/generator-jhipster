@@ -35,7 +35,7 @@ let preferLocal = true;
 
 // Don't use commander for parsing command line to avoid polluting it in cli.js
 // --prefer-local: Always resolve node modules locally (useful when using linked module)
-if (process.argv.includes('upgrade') && !process.argv.includes('--prefer-local')) {
+if ((process.argv.includes('upgrade') && !process.argv.includes('--prefer-local')) || process.argv.includes('--prefer-global')) {
   // Prefer global version for `jhipster upgrade` to get most recent code
   preferLocal = false;
 }
