@@ -13,7 +13,6 @@ services:
         # volumes:
         #     - ~/volumes/jhipster/jhgate/mysql/:/var/lib/mysql/
         environment:
-            - MYSQL_USER=root
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=jhgate
         ports:
