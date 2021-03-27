@@ -18,6 +18,8 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { QRCodeModule } from 'angular2-qrcode';
 
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (fieldsContainBlob) { _%>
@@ -27,6 +29,13 @@ import { DataUtils } from 'app/core/util/data-util.service';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
+})
+
+@NgModule({
+    imports: [
+        QRCodeModule,
+        ...
+    ]
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit {
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
