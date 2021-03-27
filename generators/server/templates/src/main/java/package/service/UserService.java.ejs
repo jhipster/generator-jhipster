@@ -742,7 +742,7 @@ public class UserService {
     <%_ } _%>
     <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('AdminUser') %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll<% if (reactive) { %>ByIdNotNull<% } %>(pageable).map(<%= asDto('AdminUser') %>::new);
+        return userRepository.findAll<% if (reactive) { %><% if (databaseType === 'sql') { %>WithAuthorities<% } else { %>ByIdNotNull<% }} %>(pageable).map(<%= asDto('AdminUser') %>::new);
     }
 
     <%_ if (databaseType === 'sql') { _%>
