@@ -64,8 +64,6 @@ spec:
       - name: mysql
         image: <%= DOCKER_MYSQL %>
         env:
-        - name: MYSQL_USER
-          value: root
         - name: MYSQL_ALLOW_EMPTY_PASSWORD
           value: 'yes'
         - name: MYSQL_DATABASE
