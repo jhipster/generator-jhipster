@@ -88,7 +88,7 @@
             <span v-text="$t('global.menu.admin.apidocs')">API</span>
           </b-dropdown-item>
 <%_ if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory || devDatabaseTypeCouchbase) { _%>
-          <b-dropdown-item v-if="!inProduction"  href='<% if (devDatabaseTypeCouchbase) { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console<% } %>' target="_tab">
+          <b-dropdown-item v-if="!inProduction"  href='<% if (devDatabaseTypeCouchbase) { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
             <font-awesome-icon icon="database" />
             <span v-text="$t('global.menu.admin.database')">Database</span>
           </b-dropdown-item>
