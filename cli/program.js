@@ -45,6 +45,7 @@ const createProgram = () => {
         '--blueprints <value>',
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
       )
+      .option('--force-insight', 'Force insight')
       .option('--no-insight', 'Disable insight')
       // Conflicter options
       .option('--force', 'Override every file', false)
