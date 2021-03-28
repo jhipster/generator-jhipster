@@ -161,11 +161,12 @@ spring:
         useServerPrepStmts: true
     <%_ } _%>
   <%_ } _%>
-  <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
   h2:
     console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
-  <%_ } _%>
+<%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   jpa:
     <%_ if (devDatabaseType === 'postgresql') { _%>
