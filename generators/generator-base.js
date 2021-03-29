@@ -928,6 +928,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Add webpack config.
+   *
+   * @param {string} config - webpack config to be merged
+   */
+  addWebpackConfig(config) {
+    this.needleApi.clientWebpack.addWebpackConfig(config);
+  }
+
+  /**
    * Add a Maven dependency Management.
    *
    * @param {string} groupId - dependency groupId

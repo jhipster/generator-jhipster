@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
+const { merge } = require('webpack-merge');
 const path = require('path');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
@@ -132,6 +133,11 @@ module.exports = (config, options) => {
       },
     })
     <%_ } _%>
+  );
+
+  config = merge(
+    // jhipster-needle-add-webpack-config - JHipster will add custom config
+    config
   );
 
   return config;
