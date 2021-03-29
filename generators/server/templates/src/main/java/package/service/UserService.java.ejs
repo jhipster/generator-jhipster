@@ -539,7 +539,13 @@ public class UserService {
             })
         <%_ } else { // reactive _%>
                 <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
+                    <%_ if (databaseType === 'sql') { _%>
+                return userRepository
+                    .deleteUserAuthorities(user.getId())
+                    .thenMany(Flux.fromIterable(userDTO.getAuthorities()))
+                    <%_ } else { _%>
                 return Flux.fromIterable(userDTO.getAuthorities())
+                    <%_ } _%>
                     .flatMap(authorityRepository::findById)
                     .map(managedAuthorities::add)
                     .then(Mono.just(user));
