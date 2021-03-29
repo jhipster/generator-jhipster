@@ -99,7 +99,7 @@
   "devDependencies": {
     "chai": "4.3.4",
     "ejs-lint": "1.1.0",
-    "eslint": "7.22.0",
+    "eslint": "7.23.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
