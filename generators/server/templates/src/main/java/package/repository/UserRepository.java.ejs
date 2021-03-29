@@ -269,6 +269,10 @@ public interface UserRepository extends R2dbcRepository<User, <% if (authenticat
 
     @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority")
     Mono<Void> deleteAllUserAuthorities();
+
+    @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
+    Mono<Void> deleteUserAuthorities(Long userId);
+        
 }
 
 <%_ if (authenticationType !== 'oauth2') { _%>
