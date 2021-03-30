@@ -110,30 +110,28 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._writing();
   }
 
-  _askForCypressCoverage() {
-    if (this.options.existingProject) {
-      // Existing project
-      return undefined;
-    }
-    if (
-      this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
-      this.jhipsterConfig.testFrameworks.includes(CYPRESS)
-    ) {
-      return this.prompt({
-        type: 'confirm',
-        name: 'cypressCoverage',
-        message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
-        default: false,
-      }).then(answers => {
-        this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
-        return undefined;
-      });
-    }
-  }
-
   get prompting() {
     return {
-      askForCypressCoverage: this._askForCypressCoverage,
+      askForCypressCoverage() {
+        if (this.options.existingProject) {
+          // Existing project
+          return undefined;
+        }
+        if (
+          this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
+          this.jhipsterConfig.testFrameworks.includes(CYPRESS)
+        ) {
+          return this.prompt({
+            type: 'confirm',
+            name: 'cypressCoverage',
+            message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+            default: false,
+          }).then(answers => {
+            this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
+            return undefined;
+          });
+        }
+      },
     };
   }
 
