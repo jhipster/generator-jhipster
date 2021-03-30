@@ -336,8 +336,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   _postWriting() {
     return {
       packageJsonScripts() {
-        const packageJsonStorage = this.createStorage('package.json');
-        const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = this.serverPort;
         packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (process.env.JHI_PROFILE) {
@@ -345,8 +344,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
       },
       packageJsonDockerScripts() {
-        const packageJsonStorage = this.createStorage('package.json');
-        const scriptsStorage = packageJsonStorage.createStorage('scripts');
+        const scriptsStorage = this.packageJson.createStorage('scripts');
         const databaseType = this.jhipsterConfig.databaseType;
         const dockerAwaitScripts = [];
         if (databaseType === 'sql') {
@@ -415,8 +413,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         });
       },
       packageJsonBackendScripts() {
-        const packageJsonStorage = this.createStorage('package.json');
-        const scriptsStorage = packageJsonStorage.createStorage('scripts');
+        const scriptsStorage = this.packageJson.createStorage('scripts');
         const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
@@ -428,6 +425,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
+            'backend:start': './mvnw -P-webapp',
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
@@ -440,6 +438,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
+            'backend:start': './gradlew',
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar jibDockerBuild',

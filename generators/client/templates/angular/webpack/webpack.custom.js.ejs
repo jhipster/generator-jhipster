@@ -31,7 +31,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const tls = process.env.TLS;
 
-module.exports = (config, options) => {
+module.exports = (config, options, targetOptions) => {
   // PLUGINS
   if (config.mode === 'development') {
     config.plugins.push(
@@ -42,14 +42,25 @@ module.exports = (config, options) => {
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
-      }),
+      })
+    );
+    if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
+      config.plugins.push(
+        new SimpleProgressWebpackPlugin({
+          format: 'compact',
+        })
+      );
+    }
+  }
+  if (targetOptions.target === 'serve' || config.watch) {
+    config.plugins.push(
       new BrowserSyncPlugin(
         {
           host: 'localhost',
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:4200`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '<%= serverPort %>'}`,
             <%_ if (websocket === 'spring-websocket') { _%>
             ws: true,
             <%_ } _%>
@@ -72,18 +83,10 @@ module.exports = (config, options) => {
           */
         },
         {
-          reload: false,
+          reload: targetOptions.target === 'build', // enabled for build --watch
         }
       )
     );
-
-    if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
-      config.plugins.push(
-        new SimpleProgressWebpackPlugin({
-          format: 'compact',
-        })
-      );
-    }
   }
 
   if (config.mode === 'production') {
