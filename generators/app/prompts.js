@@ -19,7 +19,6 @@
 const chalk = require('chalk');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
-const constants = require('../generator-constants');
 const { appDefaultConfig } = require('../generator-defaults');
 const { GATEWAY, MONOLITH, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../../jdl/jhipster/test-framework-types');
@@ -29,7 +28,6 @@ module.exports = {
   askForApplicationType,
   askForModuleName,
   askForTestOpts,
-  askForCypressCoverage,
   askForMoreModules,
 };
 
@@ -105,27 +103,6 @@ async function askForTestOpts() {
   const answers = await this.prompt(PROMPT);
   this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
   return answers;
-}
-
-async function askForCypressCoverage() {
-  if (this.existingProject || !this.jhipsterConfig.testFrameworks) {
-    return undefined;
-  }
-  if (
-    this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
-    this.jhipsterConfig.testFrameworks.includes(CYPRESS)
-  ) {
-    return this.prompt({
-      type: 'confirm',
-      name: 'cypressCoverage',
-      message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
-      default: false,
-    }).then(answers => {
-      this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
-      return undefined;
-    });
-  }
-  return undefined;
 }
 
 function askForMoreModules() {

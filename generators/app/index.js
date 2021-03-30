@@ -406,8 +406,6 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       },
       askForTestOpts: prompts.askForTestOpts,
 
-      askForCypressCoverage: prompts.askForCypressCoverage,
-
       askForMoreModules: prompts.askForMoreModules,
 
       /**
