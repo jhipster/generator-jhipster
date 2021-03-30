@@ -29,7 +29,7 @@ rm('coverage', (error: any) => {
   console.log('Removed all existing coverage reports successfully!');
 
   console.log(`Server expected to be running ON port 9000`);
-  console.log(`Make sure you already started the local server using  ${chalk.cyan('npm run start-instr')}`);
+  console.log(`Make sure you already started the local server using  ${chalk.cyan('npm run webapp:instrumenter')}`);
   console.log(`Starting Cypress..`);
   cypress
     .run({
@@ -45,7 +45,7 @@ rm('coverage', (error: any) => {
         console.error('Please check and fix above errors');
         process.exit(1);
       }
-      console.log('Finished testing..');
+      console.log('Finished testing.');
       console.log(`Please check ${chalk.green('./coverage/lcov-report/index.html')}`);
     })
     .catch((error: any) => {
