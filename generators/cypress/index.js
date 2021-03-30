@@ -111,7 +111,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   _askForCypressCoverage() {
-    if (this.jhipsterConfig.cypressCoverage !== undefined) {
+    if (this.options.existingProject) {
       // Existing project
       return undefined;
     }
