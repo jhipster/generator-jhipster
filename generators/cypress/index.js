@@ -132,4 +132,28 @@ module.exports = class extends BaseBlueprintGenerator {
       askForCypressCoverage: this._askForCypressCoverage,
     };
   }
+
+  _postWriting() {
+    return {
+      configureCoverage() {
+        if (!this.cypressCoverage) return;
+        this.packageJson.merge({
+          devDependencies: {
+            'istanbul-instrumenter-loader': this.configOptions.dependabotPackageJson.devDependencies['istanbul-instrumenter-loader'],
+            'cross-env': this.configOptions.dependabotPackageJson.devDependencies['cross-env'],
+            '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
+          },
+          scripts: {
+            'start-instr': 'cross-env INSTRUMENT=true npm run webapp:dev',
+            'e2e:cypress:coverage': `npx ts-node ${this.CLIENT_TEST_SRC_DIR}cypress/cypress_coverage -b chrome`,
+          },
+        });
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
+  }
 };
