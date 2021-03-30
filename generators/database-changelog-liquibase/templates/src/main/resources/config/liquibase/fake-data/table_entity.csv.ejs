@@ -75,7 +75,7 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
       const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
       let relationshipRow = lineNb;
       if (relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
-        relationshipRow = entity.faker.random.number({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
+        relationshipRow = entity.faker.datatype.number({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
       }
       if (relationshipRow < relationship.otherEntity.fakeDataCount) {
         line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);

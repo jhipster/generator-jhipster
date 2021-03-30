@@ -218,7 +218,7 @@ describe('Service Tests', () => {
           });
       });
 
-      <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.random.boolean()); %>
+      <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.datatype.boolean()); %>
       it('should partial update a <%= entityAngularName %>', async () => {
           const patchObject = Object.assign({
               <%_ fieldsToIncludeInPartialPatchTest.filter(field => !field.id).forEach((field) => {
