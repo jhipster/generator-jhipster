@@ -164,6 +164,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     fieldNameHumanized: _.startCase(field.fieldName),
     fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
     tsType: generator.getTypescriptKeyType(field.fieldType),
+    entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
   if (field.mapstructExpression) {
@@ -298,6 +299,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     }
     return data;
   };
+  field.path = [field.fieldName];
   field.reference = fieldToReference(entityWithConfig, field);
 
   return field;

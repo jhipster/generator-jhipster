@@ -112,16 +112,12 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
   }
 
   relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
-  if (!relationship.relatedField && !relationship.otherEntity.embedded) {
-    if (otherEntityData.primaryKey && otherEntityData.primaryKey.derived) {
-      Object.defineProperty(relationship, 'relatedField', {
-        get() {
-          return otherEntityData.primaryKey.derivedFields.find(field => field.fieldName === relationship.otherEntityField);
-        },
-      });
-    } else if (!ignoreMissingRequiredRelationship) {
-      throw new Error(`Error looking for field ${relationship.otherEntityField} at ${otherEntityData.name}`);
-    }
+  if (!relationship.relatedField && otherEntityData.primaryKey && otherEntityData.primaryKey.derived) {
+    Object.defineProperty(relationship, 'relatedField', {
+      get() {
+        return otherEntityData.primaryKey.derivedFields.find(field => field.fieldName === relationship.otherEntityField);
+      },
+    });
   }
   if (relationship.relatedField) {
     relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
@@ -147,6 +143,8 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     relationshipNameCapitalized: _.upperFirst(relationshipName),
     relationshipNameHumanized: _.startCase(relationshipName),
     columnName: generator.getColumnName(relationshipName),
+    columnNamePrefix:
+      relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${generator.getColumnName(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: _.upperFirst(otherEntityName),
     otherEntityTableName:
