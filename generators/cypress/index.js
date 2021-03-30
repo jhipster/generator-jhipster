@@ -144,6 +144,7 @@ module.exports = class extends BaseBlueprintGenerator {
             '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
           },
           scripts: {
+            'prewebapp:instrumenter': 'rimraf .nyc_output && rimraf coverage',
             'webapp:instrumenter': 'cross-env INSTRUMENT=true npm run webapp:dev',
             'e2e:cypress:coverage': `npx ts-node ${this.CLIENT_TEST_SRC_DIR}cypress/cypress_coverage -b chrome`,
           },
