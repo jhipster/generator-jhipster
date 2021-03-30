@@ -49,6 +49,31 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
+  get prompting() {
+    return {
+      askForCypressCoverage() {
+        if (this.options.existingProject) {
+          // Existing project
+          return undefined;
+        }
+        if (
+          this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
+          this.jhipsterConfig.testFrameworks.includes(CYPRESS)
+        ) {
+          return this.prompt({
+            type: 'confirm',
+            name: 'cypressCoverage',
+            message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+            default: false,
+          }).then(answers => {
+            this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
+            return undefined;
+          });
+        }
+      },
+    };
+  }
+
   // Public API method used by the getter and also by Blueprints
   _loading() {
     return {
@@ -108,31 +133,6 @@ module.exports = class extends BaseBlueprintGenerator {
   get writing() {
     if (useBlueprints) return;
     return this._writing();
-  }
-
-  get prompting() {
-    return {
-      askForCypressCoverage() {
-        if (this.options.existingProject) {
-          // Existing project
-          return undefined;
-        }
-        if (
-          this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
-          this.jhipsterConfig.testFrameworks.includes(CYPRESS)
-        ) {
-          return this.prompt({
-            type: 'confirm',
-            name: 'cypressCoverage',
-            message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
-            default: false,
-          }).then(answers => {
-            this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
-            return undefined;
-          });
-        }
-      },
-    };
   }
 
   _postWriting() {
