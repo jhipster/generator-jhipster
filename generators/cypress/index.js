@@ -72,6 +72,11 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
   // Public API method used by the getter and also by Blueprints
   _loading() {
     return {
