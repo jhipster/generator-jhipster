@@ -266,6 +266,9 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
             get reference() {
               return fieldToReference(entityWithConfig, this);
             },
+            get otherEntityField() {
+              return field.otherEntityField || relationship.otherEntityField;
+            },
           }));
         },
       };
