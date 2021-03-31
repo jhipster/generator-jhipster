@@ -21,6 +21,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
+const _ = require('lodash');
 
 let useBlueprints;
 
@@ -152,7 +153,10 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         if (this.clientFrameworkAngular) {
           // Add 'ng build --configuration instrumenter' support
-          this.createStorage('angular.json').merge({projects: {[this_.kebabCase(this.baseName)]: {architect: {build:{configurations:{instrumenter:{}}}}}]}});
+          console.log('this.kebabCase', _.kebabCase);
+          this.createStorage('angular.json').merge({
+            projects: { [_.kebabCase(this.baseName)]: { architect: { build: { configurations: { instrumenter: {} } } } } },
+          });
         }
       },
     };
