@@ -154,6 +154,28 @@ module.exports = class extends BaseBlueprintGenerator {
             `projects.${_.kebabCase(this.baseName)}.architect.build.configurations.instrumenter`,
             {}
           );
+          this.addWebpackConfig(`targetOptions.configuration === 'instrumenter'
+      ? {
+          module: {
+            rules: [
+              {
+                test: /\.(js|ts)$/,
+                use: [
+                  {
+                    loader: 'babel-loader',
+                    options: {
+                      plugins: ['istanbul'],
+                    },
+                  }
+                ],
+                enforce: 'post',
+                include: path.resolve(__dirname, '../${constants.CLIENT_MAIN_SRC_DIR}'),
+                exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
+              },
+            ],
+          },
+        }
+      : {}`);
         }
       },
     };
