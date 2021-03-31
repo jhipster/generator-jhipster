@@ -52,25 +52,22 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _prompting() {
     return {
-      askForCypressCoverage() {
-        if (this.options.existingProject) {
-          // Existing project
-          return undefined;
-        }
+      async askForCypressCoverage() {
         if (
-          this.jhipsterConfig.clientFramework === constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR &&
-          this.jhipsterConfig.testFrameworks.includes(CYPRESS)
+          this.options.existingProject ||
+          this.jhipsterConfig.clientFramework !== constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR ||
+          !this.jhipsterConfig.testFrameworks.includes(CYPRESS)
         ) {
-          return this.prompt({
-            type: 'confirm',
-            name: 'cypressCoverage',
-            message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
-            default: false,
-          }).then(answers => {
-            this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
-            return undefined;
-          });
+          return;
         }
+        const answers = await this.prompt({
+          type: 'confirm',
+          name: 'cypressCoverage',
+          message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+          default: this.jhipsterConfig.cypressCoverage || false,
+        });
+
+        this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
       },
     };
   }
