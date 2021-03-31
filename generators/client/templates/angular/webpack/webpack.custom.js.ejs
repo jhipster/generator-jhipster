@@ -88,27 +88,6 @@ module.exports = (config, options, targetOptions) => {
         }
       )
     );
-
-    <%_ if (cypressCoverage) { _%>
-    if (targetOptions.configuration === 'instrumenter') {
-      // We also add istanbul loader
-      config.module.rules.push({
-        test: /\.(js|ts)$/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              plugins: ['istanbul'],
-            },
-          },
-        ],
-        enforce: 'post',
-        include: path.join(__dirname, '..', 'src', 'main', 'webapp'),
-        exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
-      });
-    }
-    <%_ } _%>
-
   }
 
   if (config.mode === 'production') {
