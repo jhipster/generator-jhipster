@@ -50,7 +50,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
-  get prompting() {
+  _prompting() {
     return {
       askForCypressCoverage() {
         if (this.options.existingProject) {
