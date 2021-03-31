@@ -377,21 +377,21 @@ For more information, refer to the [Running tests page][].
 
 <%_ if (cypressCoverage) { _%>
 
-### Code Coverage
+### E2E Webapp Code Coverage
 
-When using Cypress with AngularX, you can generate code coverage report by running your dev server with instrumented code:
+When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
 
-Start your backend (option `-P-webapp` to skip compiling the Angular Front):
+Start your backend without compiling frontend:
 
-    ./mvnw -P-webapp
+    npm run backend:start
 
-Start your Angular dev server with instrumented code:
+Build your Angular application with instrumented code:
 
     npm run webapp:instrumenter
 
 Start your Cypress end to end testing:
 
-    npm run e2e:cypress:coverage
+    npm run e2e:cypress
 
 The coverage report is generated under `./coverage/lcov-report/`
 

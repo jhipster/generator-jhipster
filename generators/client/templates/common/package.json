@@ -2,8 +2,8 @@
   "devDependencies": {
     "cypress": "6.6.0",
     "puppeteer": "8.0.0",
-    "istanbul-instrumenter-loader": "3.0.1",
-    "cross-env": "7.0.3",
+    "babel-loader": "8.2.2",
+    "babel-plugin-istanbul": "6.0.0",
     "@cypress/code-coverage": "3.9.2"
   },
   "dependencies": {

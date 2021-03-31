@@ -141,16 +141,19 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!this.cypressCoverage) return;
         this.packageJson.merge({
           devDependencies: {
-            'istanbul-instrumenter-loader': this.configOptions.dependabotPackageJson.devDependencies['istanbul-instrumenter-loader'],
-            'cross-env': this.configOptions.dependabotPackageJson.devDependencies['cross-env'],
+            'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
+            'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
             '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
           },
           scripts: {
             'prewebapp:instrumenter': 'rimraf .nyc_output && rimraf coverage',
-            'webapp:instrumenter': 'cross-env INSTRUMENT=true npm run webapp:dev',
-            'e2e:cypress:coverage': `npx ts-node ${this.CLIENT_TEST_SRC_DIR}cypress/cypress_coverage -b chrome`,
+            'webapp:instrumenter': 'ng build --configuration instrumenter',
           },
         });
+        if (this.clientFrameworkAngular) {
+          // Add 'ng build --configuration instrumenter' support
+          this.createStorage('angular.json').merge({projects: {[this_.kebabCase(this.baseName)]: {architect: {build:{configurations:{instrumenter:{}}}}}]}});
+        }
       },
     };
   }
