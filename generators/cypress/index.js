@@ -164,7 +164,7 @@ module.exports = class extends BaseBlueprintGenerator {
           module: {
             rules: [
               {
-                test: /\.(js|ts)$/,
+                test: /\\.(js|ts)$/,
                 use: [
                   {
                     loader: 'babel-loader',
@@ -175,7 +175,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 ],
                 enforce: 'post',
                 include: path.resolve(__dirname, '../${constants.CLIENT_MAIN_SRC_DIR}'),
-                exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
+                exclude: [/\\.(e2e|spec)\\.ts$/, /node_modules/, /(ngfactory|ngstyle)\\.js/],
               },
             ],
           },
