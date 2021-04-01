@@ -11,8 +11,8 @@
     "ngx-cookie-service": "11.0.2",
     "ngx-infinite-scroll": "10.0.1",
     "ngx-webstorage": "7.0.1",
-    "rxjs": "6.6.6",
-    "swagger-ui-dist": "3.45.1",
+    "rxjs": "6.6.7",
+    "swagger-ui-dist": "3.46.0",
     "tslib": "2.1.0",
     "zone.js": "0.11.3"
   },
@@ -20,13 +20,13 @@
     "@angular/cli": "11.2.6",
     "@angular-builders/custom-webpack": "11.1.1",
     "@angular-eslint/eslint-plugin": "2.0.2",
-    "@types/node": "14.14.36",
+    "@types/node": "14.14.37",
     "@types/jest": "26.0.22",
-    "@typescript-eslint/eslint-plugin": "4.19.0",
+    "@typescript-eslint/eslint-plugin": "4.20.0",
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "6.4.1",
-    "eslint": "7.22.0",
+    "eslint": "7.23.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-webpack-plugin": "2.5.3",
     "friendly-errors-webpack-plugin": "1.7.0",
@@ -40,6 +40,7 @@
     "typescript": "4.1.5",
     "webpack": "4.46.0",
     "webpack-bundle-analyzer": "4.4.0",
+    "webpack-merge": "5.7.3",
     "webpack-notifier": "1.13.0"
   }
 }

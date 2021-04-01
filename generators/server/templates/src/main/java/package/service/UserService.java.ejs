@@ -539,7 +539,13 @@ public class UserService {
             })
         <%_ } else { // reactive _%>
                 <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
+                    <%_ if (databaseType === 'sql') { _%>
+                return userRepository
+                    .deleteUserAuthorities(user.getId())
+                    .thenMany(Flux.fromIterable(userDTO.getAuthorities()))
+                    <%_ } else { _%>
                 return Flux.fromIterable(userDTO.getAuthorities())
+                    <%_ } _%>
                     .flatMap(authorityRepository::findById)
                     .map(managedAuthorities::add)
                     .then(Mono.just(user));
@@ -742,7 +748,7 @@ public class UserService {
     <%_ } _%>
     <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('AdminUser') %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll<% if (reactive) { %>ByIdNotNull<% } %>(pageable).map(<%= asDto('AdminUser') %>::new);
+        return userRepository.findAll<% if (reactive) { %><% if (databaseType === 'sql') { %>WithAuthorities<% } else { %>ByIdNotNull<% }} %>(pageable).map(<%= asDto('AdminUser') %>::new);
     }
 
     <%_ if (databaseType === 'sql') { _%>

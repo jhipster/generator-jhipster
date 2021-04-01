@@ -115,10 +115,9 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       useMapsIdRelation() {
-        const jpaDerivedRelation = this.relationships.find(rel => rel.id === true);
-        if (jpaDerivedRelation) {
+        if (this.primaryKey && this.primaryKey.derived) {
           this.isUsingMapsId = true;
-          this.mapsIdAssoc = jpaDerivedRelation;
+          this.mapsIdAssoc = this.relationships.find(rel => rel.id);
           this.hasOauthUser = this.mapsIdAssoc.otherEntityName === 'user' && this.authenticationType === 'oauth2';
         } else {
           this.isUsingMapsId = false;

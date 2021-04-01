@@ -331,6 +331,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       const fieldName = field.fieldName;
                       const fieldIsEnum = field.fieldIsEnum;
                     _%>
+                    <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
                     <%_ if (fieldType === 'Boolean') { _%>
                       {<%= entityInstance %>.<%= field.fieldName %> ? 'true' : 'false'}
@@ -370,6 +371,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       {<%= entityInstance %>.<%= fieldName %>}
                     <%_ } _%>
                     </td>
+                    <%_ } _%>
                     <%_ } _%>
                     <%_ for (relationship of relationships) {
                       const relationshipType = relationship.relationshipType;

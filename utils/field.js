@@ -86,13 +86,13 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   } else if (field.fieldIsEnum) {
     if (field.fieldValues.length !== 0) {
       const enumValues = field.enumValues;
-      data = enumValues[faker.random.number(enumValues.length - 1)].name;
+      data = enumValues[faker.datatype.number(enumValues.length - 1)].name;
     } else {
       data = undefined;
     }
     // eslint-disable-next-line no-template-curly-in-string
   } else if (['Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal', 'Duration'].includes(field.fieldType)) {
-    data = faker.random.number({
+    data = faker.datatype.number({
       max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : undefined,
       min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : undefined,
     });
@@ -118,9 +118,9 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   } else if (field.fieldType === 'String') {
     data = faker.fake(fakeStringTemplateForFieldName(field.columnName));
   } else if (field.fieldType === 'UUID') {
-    data = faker.random.uuid();
+    data = faker.datatype.uuid();
   } else if (field.fieldType === 'Boolean') {
-    data = faker.random.boolean();
+    data = faker.datatype.boolean();
   }
 
   // Validation rules
@@ -164,6 +164,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     fieldNameHumanized: _.startCase(field.fieldName),
     fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
     tsType: generator.getTypescriptKeyType(field.fieldType),
+    entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
   if (field.mapstructExpression) {
@@ -298,6 +299,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     }
     return data;
   };
+  field.path = [field.fieldName];
   field.reference = fieldToReference(entityWithConfig, field);
 
   return field;
