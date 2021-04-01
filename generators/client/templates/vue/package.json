@@ -54,7 +54,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "portfinder": "1.0.28",
     "postcss": "8.2.9",
-    "postcss-import": "14.0.0",
+    "postcss-import": "14.0.1",
     "postcss-loader": "5.2.0",
     "postcss-url": "10.1.3",
     "rimraf": "3.0.2",
