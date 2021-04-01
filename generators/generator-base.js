@@ -2381,6 +2381,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.testFrameworks) {
       this.jhipsterConfig.testFrameworks = options.testFrameworks;
     }
+    if (options.cypressCoverage) {
+      this.jhipsterConfig.cypressCoverage = options.cypressCoverage;
+    }
     if (options.legacyDbNames !== undefined) {
       this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
     }
