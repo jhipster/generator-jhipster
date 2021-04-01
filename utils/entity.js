@@ -247,10 +247,7 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
               return [relationship.relationshipName, field.fieldName];
             },
             get path() {
-              if (field.path) {
-                return [relationship.relationshipName, ...field.path];
-              }
-              return [relationship.relationshipName, field.fieldName];
+              return [relationship.relationshipName, ...field.path];
             },
             get fieldName() {
               return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
@@ -266,8 +263,8 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
             get reference() {
               return fieldToReference(entityWithConfig, this);
             },
-            get otherEntityField() {
-              return field.otherEntityField || relationship.otherEntityField;
+            get relationshipsPath() {
+              return [relationship, ...field.relationshipsPath];
             },
           }));
         },
@@ -385,6 +382,9 @@ function fieldToId(field) {
     },
     get autoGenerate() {
       return !!field.autoGenerate;
+    },
+    get relationshipsPath() {
+      return field.relationshipsPath;
     },
   };
 }
