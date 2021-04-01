@@ -33,7 +33,7 @@ class RandexpWithFaker extends Randexp {
 
   // In order to have consistent results with RandExp, the RNG is seeded.
   randInt(min, max) {
-    return this.faker.random.number({ min, max });
+    return this.faker.datatype.number({ min, max });
   }
 }
 

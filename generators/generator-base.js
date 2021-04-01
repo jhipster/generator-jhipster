@@ -928,6 +928,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Add webpack config.
+   *
+   * @param {string} config - webpack config to be merged
+   */
+  addWebpackConfig(config) {
+    this.needleApi.clientWebpack.addWebpackConfig(config);
+  }
+
+  /**
    * Add a Maven dependency Management.
    *
    * @param {string} groupId - dependency groupId
@@ -2558,6 +2567,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.devDatabaseTypeH2Disk = config.devDatabaseType === H2_DISK;
     dest.devDatabaseTypeH2Memory = config.devDatabaseType === H2_MEMORY;
+    dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
     dest.devDatabaseTypeCouchbase = config.devDatabaseType === COUCHBASE;
 
     dest.authenticationTypeSession = config.authenticationType === SESSION;

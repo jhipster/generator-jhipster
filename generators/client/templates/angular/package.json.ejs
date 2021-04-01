@@ -131,6 +131,7 @@
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
     "webpack": "<%= dependabotPackageJson.devDependencies['webpack'] %>",
     "webpack-bundle-analyzer": "<%= dependabotPackageJson.devDependencies['webpack-bundle-analyzer'] %>",
+    "webpack-merge": "<%= dependabotPackageJson.devDependencies['webpack-merge'] %>",
     "webpack-notifier": "<%= dependabotPackageJson.devDependencies['webpack-notifier'] %>"
   },
   "engines": {
@@ -178,11 +179,13 @@
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
+    "watch": "concurrently 'npm run webapp:hmr'<% if(!skipServer) { %> 'npm run backend:start'<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "ng build",
     "webapp:build:prod": "ng build --prod",
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
+    "webapp:hmr": "ng serve --hmr",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test"
   },

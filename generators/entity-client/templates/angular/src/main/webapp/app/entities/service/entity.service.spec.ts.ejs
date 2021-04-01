@@ -34,7 +34,7 @@ import { <% if (fieldsContainLocalDate) { %>DATE_FORMAT,<% } if (fieldsContainIn
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %><% if (!readOnly) { %>, <%= entityAngularName %><% } %> } from '../<%= entityFileName %>.model';
 
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
@@ -186,7 +186,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject(expected);
             });
 
-            <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.random.boolean()); %>
+            <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.datatype.boolean()); %>
             it('should partial update a <%= entityAngularName %>', () => {
                 const patchObject = Object.assign({
                     <%_ fieldsToIncludeInPartialPatchTest.forEach((field) => {

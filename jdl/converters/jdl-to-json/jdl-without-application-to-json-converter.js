@@ -39,7 +39,8 @@ module.exports = {
  * @param {JDLObject} args.jdlObject - the JDLObject to convert to JSON
  * @param {String} args.applicationName - the application's name
  * @param {String} args.databaseType - the database type
- * @param {applicationType} args.applicationType - the application's type
+ * @param {string} args.applicationType - the application's type
+ * @param {Boolean} [args.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @returns {Map} entities that can be exported to JSON
  */
 function convert(args = {}) {
@@ -47,10 +48,11 @@ function convert(args = {}) {
     throw new Error("The JDL object, the application's name and its the database type are mandatory.");
   }
   init(args);
+  const { unidirectionalRelationships } = args;
   setBasicEntityInformation();
   setOptions();
   setFields();
-  setRelationships();
+  setRelationships({ unidirectionalRelationships });
   setApplicationToEntities();
   return new Map([[args.applicationName, Object.values(entities)]]);
 }
@@ -92,8 +94,8 @@ function setFields() {
   });
 }
 
-function setRelationships() {
-  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames());
+function setRelationships(conversionOptions) {
+  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames(), conversionOptions);
   convertedRelationships.forEach((entityRelationships, entityName) => {
     if (builtInEntities.has(entityName.toLowerCase())) {
       return;

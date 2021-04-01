@@ -101,7 +101,9 @@ module.exports = class extends BaseGenerator {
           return;
         }
         await this._commitSharedFs();
-        this.env.sharedFs.once('change', () => this._queueCommit());
+        this.env.sharedFs.once('change', () => {
+          this._queueCommit();
+        });
       },
     };
   }
@@ -115,15 +117,18 @@ module.exports = class extends BaseGenerator {
    */
   _queueCommit() {
     this.debug('Queueing conflicts task');
-    this.runLoop.add(
-      'conflicts',
-      (done, stop) =>
-        this._commitSharedFs().then(() => {
-          this.debug('Adding queueCommit event listener');
-          this.sharedFs.once('change', () => this.queueCommit);
-          done();
-        }, stop),
+    this.queueTask(
       {
+        method: async () => {
+          await this._commitSharedFs();
+          this.debug('Adding queueCommit event listener');
+          this.env.sharedFs.once('change', () => {
+            this._queueCommit();
+          });
+        },
+      },
+      {
+        priorityName: 'conflicts',
         once: 'write memory fs to disk',
       }
     );

@@ -44,10 +44,11 @@ module.exports = {
  * @param {JDLObject} jdlObject -  the jdl object to check.
  * @param {Object} logger - the logger to use, default to the console.
  */
-function createValidator(jdlObject, logger = console) {
+function createValidator(jdlObject, logger = console, options = {}) {
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
+  const { unidirectionalRelationships } = options;
 
   return {
     checkForErrors: () => {
@@ -59,7 +60,7 @@ function createValidator(jdlObject, logger = console) {
           return;
         }
         checkForEntityErrors(jdlApplication);
-        checkForRelationshipErrors(jdlApplication);
+        checkForRelationshipErrors(jdlApplication, { unidirectionalRelationships });
         checkForEnumErrors();
         checkDeploymentsErrors();
         checkForOptionErrors(jdlApplication);
@@ -139,14 +140,15 @@ function createValidator(jdlObject, logger = console) {
     });
   }
 
-  function checkForRelationshipErrors(jdlApplication) {
+  function checkForRelationshipErrors(jdlApplication, options = {}) {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
+    const { unidirectionalRelationships } = options;
     const skippedUserManagement = jdlApplication.getConfigurationOptionValue('skipUserManagement');
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
-      validator.validate(jdlRelationship, skippedUserManagement);
+      validator.validate(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
       checkForAbsentEntities({
         jdlRelationship,
         doesEntityExist: entityName => !!jdlObject.getEntity(entityName),

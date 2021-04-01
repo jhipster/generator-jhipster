@@ -28,14 +28,18 @@ module.exports = class RelationshipValidator extends Validator {
     super('relationship', ['from', 'to', 'type']);
   }
 
-  validate(jdlRelationship, skippedUserManagementOption) {
+  validate(jdlRelationship, options = {}) {
+    if (typeof options === 'boolean') {
+      options = { skippedUserManagement: options };
+    }
+    const { skippedUserManagement, unidirectionalRelationships } = options;
     super.validate(jdlRelationship);
     checkType(jdlRelationship);
     checkInjectedFields(jdlRelationship);
     checkForValidUseOfJPaDerivedIdentifier(jdlRelationship);
     checkForRequiredReflexiveRelationship(jdlRelationship);
-    checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagementOption);
-    checkRelationshipType(jdlRelationship, skippedUserManagementOption);
+    checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagement);
+    checkRelationshipType(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
   }
 };
 
@@ -87,16 +91,17 @@ function checkForForbiddenUseOfUserAsSource(jdlRelationship, skippedUserManageme
   }
 }
 
-function checkRelationshipType(jdlRelationship, skippedUserManagementOption) {
+function checkRelationshipType(jdlRelationship, options) {
+  const { skippedUserManagement, unidirectionalRelationships } = options;
   switch (jdlRelationship.type) {
     case ONE_TO_ONE:
       checkOneToOneRelationship(jdlRelationship);
       break;
     case MANY_TO_ONE:
-      checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption);
+      checkManyToOneRelationship(jdlRelationship, skippedUserManagement);
       break;
     case MANY_TO_MANY:
-      checkManyToManyRelationship(jdlRelationship);
+      checkManyToManyRelationship(jdlRelationship, unidirectionalRelationships);
       break;
     case ONE_TO_MANY:
       return;
@@ -130,7 +135,7 @@ function checkManyToOneRelationship(jdlRelationship, skippedUserManagementOption
   }
 }
 
-function checkManyToManyRelationship(jdlRelationship) {
+function checkManyToManyRelationship(jdlRelationship, unidirectionalRelationships) {
   const destinationEntityIsTheUser = isUserManagementEntity(jdlRelationship.to);
   if (jdlRelationship.injectedFieldInFrom && !jdlRelationship.injectedFieldInTo && destinationEntityIsTheUser) {
     // This is a valid case: even though bidirectionality is required for MtM relationships, having the destination
@@ -138,7 +143,7 @@ function checkManyToManyRelationship(jdlRelationship) {
     return;
   }
   const unidirectionalRelationship = !jdlRelationship.injectedFieldInFrom || !jdlRelationship.injectedFieldInTo;
-  if (unidirectionalRelationship) {
+  if (unidirectionalRelationship && !unidirectionalRelationships) {
     const injectedFieldInSourceEntity = !jdlRelationship.injectedFieldInFrom ? 'not set' : `'${jdlRelationship.injectedFieldInFrom}'`;
     const injectedFieldInDestinationEntity = !jdlRelationship.injectedFieldInTo ? 'not set' : `'${jdlRelationship.injectedFieldInTo}'`;
     throw new Error(
