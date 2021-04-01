@@ -149,7 +149,11 @@ module.exports = class extends BaseBlueprintGenerator {
             '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
           },
           scripts: {
-            'prewebapp:instrumenter': 'npm run clean-www && rimraf .nyc_output coverage',
+            'clean-coverage': 'rimraf .nyc_output coverage',
+            'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
+            'e2e:cypress:coverage': 'npm run e2e:cypress',
+            'poste2e:cypress:coverage': 'nyc report',
+            'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',
             'webapp:instrumenter': 'ng build --configuration instrumenter',
           },
         });
