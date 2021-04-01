@@ -1,10 +1,12 @@
 {
   "devDependencies": {
     "cypress": "6.6.0",
-    "puppeteer": "8.0.0",
+    "@cypress/code-coverage": "3.9.2",
     "babel-loader": "8.2.2",
     "babel-plugin-istanbul": "6.0.0",
-    "@cypress/code-coverage": "3.9.2"
+    "cypress": "6.6.0",
+    "nyc": "15.1.0",
+    "puppeteer": "8.0.0"
   },
   "dependencies": {
     "dayjs": "1.10.4"
