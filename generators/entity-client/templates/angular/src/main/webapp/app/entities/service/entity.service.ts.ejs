@@ -46,12 +46,12 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
-    public resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
+    protected resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
     <%_ if (searchEngine !== false) { _%>
-    public resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
+    protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if (applicationType === 'gateway' && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
     <%_ } _%>
 
-    constructor(protected http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+    constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
     <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
