@@ -147,7 +147,7 @@ module.exports = class extends BaseBlueprintGenerator {
             '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
             'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
             'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
-            'nyc': this.configOptions.dependabotPackageJson.devDependencies['nyc'],
+            nyc: this.configOptions.dependabotPackageJson.devDependencies.nyc,
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
