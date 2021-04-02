@@ -128,7 +128,7 @@
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-        <caffeine.version>3.0.0</caffeine.version>
+        <caffeine.version>3.0.1</caffeine.version>
         <typesafe.version>1.4.1</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -143,12 +143,12 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.2</maven-checkstyle.version>
-        <checkstyle.version>8.40</checkstyle.version>
+        <checkstyle.version>8.41.1</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.11.2</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
