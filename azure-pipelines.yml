@@ -29,7 +29,7 @@ jobs:
       JHI_PROFILE: dev,webpack
       JHI_RUN_APP: 1
       JHI_E2E: 0
-      JHI_JDK: 11
+      JHI_JDK: 17-ea
       # if JHI_LIB_BRANCH value is release, use the release from Maven
       JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
       JHI_LIB_BRANCH: main
@@ -98,12 +98,12 @@ jobs:
           versionSpec: '14.16.0'
         displayName: 'TOOLS: install Node.js'
       - script: |
-          if [[ $JHI_JDK = '11' ]]; then
-              echo '*** Using OpenJDK 11'
+          if [[ $JHI_JDK = '17-ea' ]]; then
+              echo '*** Using OpenJDK 17-ea'
               sudo add-apt-repository ppa:openjdk-r/ppa
               sudo apt-get update
-              sudo apt-get install -y openjdk-11-jdk
-              sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+              sudo apt-get install -y openjdk-17-jdk
+              sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
               java -version
           else
               echo '*** Using OpenJDK 8 by default'

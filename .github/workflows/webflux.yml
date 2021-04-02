@@ -33,7 +33,7 @@ on:
       - 'generators/*client/**'
 env:
   JHI_RUN_APP: 1
-  JHI_JDK: 16
+  JHI_JDK: 17-ea
   JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
   JHI_LIB_BRANCH: main
   JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
