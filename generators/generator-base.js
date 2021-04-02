@@ -2381,7 +2381,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.testFrameworks) {
       this.jhipsterConfig.testFrameworks = options.testFrameworks;
     }
-    if (options.cypressCoverage) {
+    if (options.cypressCoverage !== undefined) {
       this.jhipsterConfig.cypressCoverage = options.cypressCoverage;
     }
     if (options.legacyDbNames !== undefined) {
@@ -2476,7 +2476,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.withAdminUi = config.withAdminUi;
 
     dest.testFrameworks = config.testFrameworks || [];
-    dest.cypressCoverage = config.cypressCoverage || false;
+    dest.cypressCoverage = config.cypressCoverage;
 
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
