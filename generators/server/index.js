@@ -438,7 +438,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
-            'backend:start': './gradlew',
+            'backend:start': './gradlew -x webapp',
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar jibDockerBuild',
