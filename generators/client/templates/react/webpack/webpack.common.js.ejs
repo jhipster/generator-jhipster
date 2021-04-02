@@ -34,12 +34,6 @@ const utils = require('./utils.js');
 const getTsLoaderRule = env => {
   const rules = [
     {
-      loader: 'cache-loader',
-      options: {
-        cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
-      }
-    },
-    {
       loader: 'thread-loader',
       options: {
         // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
