@@ -94,14 +94,6 @@ auto-refreshes when files change on your hard drive.
 <%_ } _%>
 <%= clientPackageManager %> start
 ```
-<%_ if (clientFrameworkAngular) { _%>
-
-If you want to use [HMR](https://webpack.js.org/guides/hot-module-replacement) for instant page updates and data + scroll position preservation on file changes then instead of `<%= clientPackageManager %> start` run
-
-```
-<%= clientPackageManager %> run start-hmr
-```
-<%_ } _%>
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
