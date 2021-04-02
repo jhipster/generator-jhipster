@@ -70,8 +70,8 @@ Features and technologies:
 - dto
 - filtering
 - fields/relationships validations
-- custom id.
-- pagination.
+- custom id
+- pagination
 
 #### Notes:
 
