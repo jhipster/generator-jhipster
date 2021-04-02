@@ -16,18 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const Generators = {
-  GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
-  GENERATOR_CLIENT: 'client',
-  GENERATOR_COMMON: 'common',
-  GENERATOR_CYPRESS: 'cypress',
-  GENERATOR_DOCKER_COMPOSE: 'docker-compose',
-  GENERATOR_ENTITIES: 'entities',
-  GENERATOR_ENTITY_CLIENT: 'entity-client',
-  GENERATOR_ENTITY_SERVER: 'entity-server',
-  GENERATOR_LANGUAGES: 'languages',
-  GENERATOR_SERVER: 'server',
+const MapperTypes = {
+  MAPSTRUCT: 'mapstruct',
+  NO: 'no',
 };
 
-module.exports = Generators;
+const ServiceTypes = {
+  SERVICE_CLASS: 'serviceClass',
+  SERVICE_IMPL: 'serviceImpl',
+  NO: 'no',
+};
+
+const PaginationTypes = {
+  PAGINATION: 'pagination',
+  INFINITE_SCROLL: 'infinite-scroll',
+  NO: 'no',
+};
+
+const SearchTypes = {
+  ELASTICSEARCH: 'elasticsearch',
+  COUCHBASE: 'couchbase',
+};
+
+const FilteringTypes = {
+  JPA_METAMODEL: 'jpaMetamodel',
+  NO: 'no',
+};
+
+module.exports = {
+  MapperTypes,
+  ServiceTypes,
+  PaginationTypes,
+  SearchTypes,
+  FilteringTypes,
+};

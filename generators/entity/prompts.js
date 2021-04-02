@@ -21,9 +21,45 @@ const fs = require('fs');
 const _ = require('lodash');
 const constants = require('../generator-constants');
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
+const { CASSANDRA, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { GATEWAY } = require('../../jdl/jhipster/application-types');
+const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
 
+const { JPA_METAMODEL } = FilteringTypes;
+const NO_FILTERING = FilteringTypes.NO;
+const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
+const NO_PAGINATION = PaginationTypes.NO;
+const { SERVICE_IMPL, SERVICE_CLASS } = ServiceTypes;
+const NO_SERVICE = ServiceTypes.NO;
+const { MAPSTRUCT } = MapperTypes;
+const NO_MAPPER = MapperTypes.NO;
+
+const NO_DATABASE = databaseTypes.NO;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
+const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
+
+const {
+  BIG_DECIMAL,
+  BOOLEAN,
+  DOUBLE,
+  DURATION,
+  ENUM,
+  FLOAT,
+  INTEGER,
+  INSTANT,
+  LOCAL_DATE,
+  LONG,
+  STRING,
+  UUID,
+  ZONED_DATE_TIME,
+} = CommonDBTypes;
+const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
+const { ANY, IMAGE, TEXT } = BlobTypes;
+
+const { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE } = require('../../jdl/jhipster/validations');
 
 module.exports = {
   askForMicroserviceJson,
@@ -49,7 +85,7 @@ const getFieldNameUndercored = fields =>
 
 function askForMicroserviceJson() {
   const context = this.context;
-  if (this.jhipsterConfig.applicationType !== 'gateway' || context.configExisted) {
+  if (this.jhipsterConfig.applicationType !== GATEWAY || context.configExisted) {
     return undefined;
   }
 
@@ -57,7 +93,7 @@ function askForMicroserviceJson() {
 
   const prompts = [
     {
-      when: () => databaseType !== 'no',
+      when: () => databaseType !== NO_DATABASE,
       type: 'confirm',
       name: 'useMicroserviceJson',
       message: 'Do you want to generate this entity from an existing microservice?',
@@ -190,7 +226,7 @@ function askForRelationships() {
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
     return undefined;
   }
-  if (context.databaseType === 'cassandra') {
+  if (context.databaseType === CASSANDRA) {
     return undefined;
   }
 
@@ -203,7 +239,7 @@ function askForRelationsToRemove() {
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
     return undefined;
   }
-  if (context.databaseType === 'cassandra') {
+  if (context.databaseType === CASSANDRA) {
     return undefined;
   }
 
@@ -253,7 +289,7 @@ function askForTableName() {
     skipCheckLengthOfIdentifier ||
     !this.entityConfig.relationships ||
     this.entityConfig.relationships.length === 0 ||
-    !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)
+    !((prodDatabaseType === ORACLE && entityTableName.length > 14) || entityTableName.length > 30)
   ) {
     return undefined;
   }
@@ -301,19 +337,19 @@ function askForFiltering() {
       message: 'Do you want to add filtering?',
       choices: [
         {
-          value: 'no',
+          value: NO_FILTERING,
           name: 'Not needed',
         },
         {
           name: 'Dynamic filtering for the entities with JPA Static metamodel',
-          value: 'jpaMetamodel',
+          value: JPA_METAMODEL,
         },
       ],
       default: 0,
     },
   ];
   return this.prompt(prompts).then(props => {
-    this.entityConfig.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
+    this.entityConfig.jpaMetamodelFiltering = props.filtering === JPA_METAMODEL;
   });
 }
 
@@ -349,11 +385,11 @@ function askForDTO() {
       message: 'Do you want to use a Data Transfer Object (DTO)?',
       choices: [
         {
-          value: 'no',
+          value: NO_MAPPER,
           name: 'No, use the entity directly',
         },
         {
-          value: 'mapstruct',
+          value: MAPSTRUCT,
           name: 'Yes, generate a DTO with MapStruct',
         },
       ],
@@ -378,15 +414,15 @@ function askForService() {
       message: 'Do you want to use separate service class for your business logic?',
       choices: [
         {
-          value: 'no',
+          value: NO_SERVICE,
           name: 'No, the REST controller should use the repository directly',
         },
         {
-          value: 'serviceClass',
+          value: SERVICE_CLASS,
           name: 'Yes, generate a separate service class',
         },
         {
-          value: 'serviceImpl',
+          value: SERVICE_IMPL,
           name: 'Yes, generate a separate service interface and implementation',
         },
       ],
@@ -404,7 +440,7 @@ function askForPagination() {
   if (context.useConfigurationFile) {
     return undefined;
   }
-  if (context.databaseType === 'cassandra') {
+  if (context.databaseType === CASSANDRA) {
     return undefined;
   }
   const prompts = [
@@ -414,15 +450,15 @@ function askForPagination() {
       message: 'Do you want pagination and sorting on your entity?',
       choices: [
         {
-          value: 'no',
+          value: NO_PAGINATION,
           name: 'No',
         },
         {
-          value: 'pagination',
+          value: PAGINATION,
           name: 'Yes, with pagination links and sorting headers',
         },
         {
-          value: 'infinite-scroll',
+          value: INFINITE_SCROLL,
           name: 'Yes, with infinite scroll and sorting headers',
         },
       ],
@@ -495,59 +531,59 @@ function askForField() {
       message: 'What is the type of your field?',
       choices: [
         {
-          value: 'String',
+          value: STRING,
           name: 'String',
         },
         {
-          value: 'Integer',
+          value: INTEGER,
           name: 'Integer',
         },
         {
-          value: 'Long',
+          value: LONG,
           name: 'Long',
         },
         {
-          value: 'Float',
+          value: FLOAT,
           name: 'Float',
         },
         {
-          value: 'Double',
+          value: DOUBLE,
           name: 'Double',
         },
         {
-          value: 'BigDecimal',
+          value: BIG_DECIMAL,
           name: 'BigDecimal',
         },
         {
-          value: 'LocalDate',
+          value: LOCAL_DATE,
           name: 'LocalDate',
         },
         {
-          value: 'Instant',
+          value: INSTANT,
           name: 'Instant',
         },
         {
-          value: 'ZonedDateTime',
+          value: ZONED_DATE_TIME,
           name: 'ZonedDateTime',
         },
         {
-          value: 'Duration',
+          value: DURATION,
           name: 'Duration',
         },
         {
-          value: 'Boolean',
+          value: BOOLEAN,
           name: 'Boolean',
         },
         {
-          value: 'enum',
+          value: ENUM,
           name: 'Enumeration (Java enum type)',
         },
         {
-          value: 'UUID',
+          value: UUID,
           name: 'UUID',
         },
         {
-          value: 'byte[]',
+          value: BYTES,
           name: '[BETA] Blob',
         },
       ],
@@ -555,7 +591,7 @@ function askForField() {
     },
     {
       when: response => {
-        if (response.fieldType === 'enum') {
+        if (response.fieldType === ENUM) {
           response.fieldIsEnum = true;
           return true;
         }
@@ -622,86 +658,86 @@ function askForField() {
       },
     },
     {
-      when: response => response.fieldAdd === true && databaseType === 'cassandra',
+      when: response => response.fieldAdd === true && databaseType === CASSANDRA,
       type: 'list',
       name: 'fieldType',
       message: 'What is the type of your field?',
       choices: [
         {
-          value: 'UUID',
+          value: UUID,
           name: 'UUID',
         },
         {
-          value: 'String',
+          value: STRING,
           name: 'String',
         },
         {
-          value: 'Integer',
+          value: INTEGER,
           name: 'Integer',
         },
         {
-          value: 'Long',
+          value: LONG,
           name: 'Long',
         },
         {
-          value: 'Float',
+          value: FLOAT,
           name: 'Float',
         },
         {
-          value: 'Double',
+          value: DOUBLE,
           name: 'Double',
         },
         {
-          value: 'BigDecimal',
+          value: BIG_DECIMAL,
           name: 'BigDecimal',
         },
         {
-          value: 'LocalDate',
+          value: LOCAL_DATE,
           name: 'LocalDate',
         },
         {
-          value: 'Instant',
+          value: INSTANT,
           name: 'Instant',
         },
         {
-          value: 'ZonedDateTime',
+          value: ZONED_DATE_TIME,
           name: 'ZonedDateTime',
         },
         {
-          value: 'Duration',
+          value: DURATION,
           name: 'Duration',
         },
         {
-          value: 'enum',
+          value: ENUM,
           name: 'Enumeration (Java enum type)',
         },
         {
-          value: 'Boolean',
+          value: BOOLEAN,
           name: 'Boolean',
         },
         {
-          value: 'ByteBuffer',
+          value: BYTE_BUFFER,
           name: '[BETA] blob',
         },
       ],
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldType === 'byte[]',
+      when: response => response.fieldAdd === true && response.fieldType === BYTES,
       type: 'list',
       name: 'fieldTypeBlobContent',
       message: 'What is the content of the Blob field?',
       choices: [
         {
-          value: 'image',
+          value: IMAGE,
           name: 'An image',
         },
         {
-          value: 'any',
+          value: ANY,
           name: 'A binary file',
         },
         {
-          value: 'text',
+          value: TEXT,
           name: 'A CLOB (Text field)',
         },
       ],
@@ -714,18 +750,18 @@ function askForField() {
       message: 'What is the content of the Blob field?',
       choices: [
         {
-          value: 'image',
+          value: IMAGE,
           name: 'An image',
         },
         {
-          value: 'any',
+          value: ANY,
           name: 'A binary file',
         },
       ],
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldType !== 'ByteBuffer',
+      when: response => response.fieldAdd === true && response.fieldType !== BYTE_BUFFER,
       type: 'confirm',
       name: 'fieldValidate',
       message: 'Do you want to add validation rules to your field?',
@@ -742,37 +778,37 @@ function askForField() {
         const opts = [
           {
             name: 'Required',
-            value: 'required',
+            value: REQUIRED,
           },
           {
             name: 'Unique',
-            value: 'unique',
+            value: UNIQUE,
           },
         ];
-        if (response.fieldType === 'String' || response.fieldTypeBlobContent === 'text') {
+        if (response.fieldType === STRING || response.fieldTypeBlobContent === TEXT) {
           opts.push(
             {
               name: 'Minimum length',
-              value: 'minlength',
+              value: MINLENGTH,
             },
             {
               name: 'Maximum length',
-              value: 'maxlength',
+              value: MAXLENGTH,
             },
             {
               name: 'Regular expression pattern',
-              value: 'pattern',
+              value: PATTERN,
             }
           );
-        } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(response.fieldType)) {
+        } else if ([INTEGER, LONG, FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
           opts.push(
             {
               name: 'Minimum',
-              value: 'min',
+              value: MIN,
             },
             {
               name: 'Maximum',
-              value: 'max',
+              value: MAX,
             }
           );
         }
@@ -802,7 +838,7 @@ function askForField() {
       name: 'fieldValidateRulesMin',
       message: 'What is the minimum of your field?',
       validate: (input, response) => {
-        if (['Float', 'Double', 'BigDecimal'].includes(response.fieldType)) {
+        if ([FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
           return this.isSignedDecimalNumber(input) ? true : 'Minimum must be a decimal number';
         }
         return this.isSignedNumber(input) ? true : 'Minimum must be a number';
@@ -815,7 +851,7 @@ function askForField() {
       name: 'fieldValidateRulesMax',
       message: 'What is the maximum of your field?',
       validate: (input, response) => {
-        if (['Float', 'Double', 'BigDecimal'].includes(response.fieldType)) {
+        if ([FLOAT, DOUBLE, BIG_DECIMAL].includes(response.fieldType)) {
           return this.isSignedDecimalNumber(input) ? true : 'Maximum must be a decimal number';
         }
         return this.isSignedNumber(input) ? true : 'Maximum must be a number';
@@ -826,9 +862,9 @@ function askForField() {
       when: response =>
         response.fieldAdd === true &&
         response.fieldValidate === true &&
-        response.fieldValidateRules.includes('minbytes') &&
-        response.fieldType === 'byte[]' &&
-        response.fieldTypeBlobContent !== 'text',
+        response.fieldValidateRules.includes(MINBYTES) &&
+        response.fieldType === BYTES &&
+        response.fieldTypeBlobContent !== TEXT,
       type: 'input',
       name: 'fieldValidateRulesMinbytes',
       message: 'What is the minimum byte size of your field?',
@@ -839,9 +875,9 @@ function askForField() {
       when: response =>
         response.fieldAdd === true &&
         response.fieldValidate === true &&
-        response.fieldValidateRules.includes('maxbytes') &&
-        response.fieldType === 'byte[]' &&
-        response.fieldTypeBlobContent !== 'text',
+        response.fieldValidateRules.includes(MAXBYTES) &&
+        response.fieldType === BYTES &&
+        response.fieldTypeBlobContent !== TEXT,
       type: 'input',
       name: 'fieldValidateRulesMaxbytes',
       message: 'What is the maximum byte size of your field?',
@@ -990,7 +1026,7 @@ function askForRelationship() {
     },
     {
       when: response =>
-        context.databaseType === 'sql' &&
+        context.databaseType === SQL &&
         response.relationshipAdd === true &&
         response.relationshipType === 'one-to-one' &&
         (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'),
@@ -1095,32 +1131,32 @@ function logFieldsAndRelationships() {
       const validationDetails = [];
       const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
       if (fieldValidate === true) {
-        if (field.fieldValidateRules.includes('required')) {
-          validationDetails.push('required');
+        if (field.fieldValidateRules.includes(REQUIRED)) {
+          validationDetails.push(REQUIRED);
         }
-        if (field.fieldValidateRules.includes('unique')) {
-          validationDetails.push('unique');
+        if (field.fieldValidateRules.includes(UNIQUE)) {
+          validationDetails.push(UNIQUE);
         }
-        if (field.fieldValidateRules.includes('minlength')) {
-          validationDetails.push(`minlength='${field.fieldValidateRulesMinlength}'`);
+        if (field.fieldValidateRules.includes(MINLENGTH)) {
+          validationDetails.push(`${MINLENGTH}='${field.fieldValidateRulesMinlength}'`);
         }
-        if (field.fieldValidateRules.includes('maxlength')) {
-          validationDetails.push(`maxlength='${field.fieldValidateRulesMaxlength}'`);
+        if (field.fieldValidateRules.includes(MAXLENGTH)) {
+          validationDetails.push(`${MAXLENGTH}='${field.fieldValidateRulesMaxlength}'`);
         }
-        if (field.fieldValidateRules.includes('pattern')) {
-          validationDetails.push(`pattern='${field.fieldValidateRulesPattern}'`);
+        if (field.fieldValidateRules.includes(PATTERN)) {
+          validationDetails.push(`${PATTERN}='${field.fieldValidateRulesPattern}'`);
         }
-        if (field.fieldValidateRules.includes('min')) {
-          validationDetails.push(`min='${field.fieldValidateRulesMin}'`);
+        if (field.fieldValidateRules.includes(MIN)) {
+          validationDetails.push(`${MIN}='${field.fieldValidateRulesMin}'`);
         }
-        if (field.fieldValidateRules.includes('max')) {
-          validationDetails.push(`max='${field.fieldValidateRulesMax}'`);
+        if (field.fieldValidateRules.includes(MAX)) {
+          validationDetails.push(`${MAX}='${field.fieldValidateRulesMax}'`);
         }
-        if (field.fieldValidateRules.includes('minbytes')) {
-          validationDetails.push(`minbytes='${field.fieldValidateRulesMinbytes}'`);
+        if (field.fieldValidateRules.includes(MINBYTES)) {
+          validationDetails.push(`${MINBYTES}='${field.fieldValidateRulesMinbytes}'`);
         }
-        if (field.fieldValidateRules.includes('maxbytes')) {
-          validationDetails.push(`maxbytes='${field.fieldValidateRulesMaxbytes}'`);
+        if (field.fieldValidateRules.includes(MAXBYTES)) {
+          validationDetails.push(`${MAXBYTES}='${field.fieldValidateRulesMaxbytes}'`);
         }
       }
       this.log(
@@ -1135,8 +1171,8 @@ function logFieldsAndRelationships() {
     this.log(chalk.white('Relationships'));
     this.entityConfig.relationships.forEach(relationship => {
       const validationDetails = [];
-      if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
-        validationDetails.push('required');
+      if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
+        validationDetails.push(REQUIRED);
       }
       this.log(
         `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(

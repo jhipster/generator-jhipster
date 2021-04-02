@@ -17,17 +17,10 @@
  * limitations under the License.
  */
 
-const Generators = {
-  GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
-  GENERATOR_CLIENT: 'client',
-  GENERATOR_COMMON: 'common',
-  GENERATOR_CYPRESS: 'cypress',
-  GENERATOR_DOCKER_COMPOSE: 'docker-compose',
-  GENERATOR_ENTITIES: 'entities',
-  GENERATOR_ENTITY_CLIENT: 'entity-client',
-  GENERATOR_ENTITY_SERVER: 'entity-server',
-  GENERATOR_LANGUAGES: 'languages',
-  GENERATOR_SERVER: 'server',
+const MonitoringTypes = {
+  PROMETHEUS: 'prometheus',
+  ELK: 'elk',
+  NO: 'no',
 };
 
-module.exports = Generators;
+module.exports = MonitoringTypes;

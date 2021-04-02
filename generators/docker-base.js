@@ -25,7 +25,7 @@ const { MONOLITH, MICROSERVICE, GATEWAY } = require('../jdl/jhipster/application
 const { EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { OptionNames } = require('../jdl/jhipster/application-options');
 
-const { AUTHENTICATION_TYPE, JWT_SECRET_KEY, SERVICE_DISCOVERY_TYPE, REACTIVE } = OptionNames;
+const { AUTHENTICATION_TYPE, JWT_SECRET_KEY, REACTIVE, SERVICE_DISCOVERY_TYPE } = OptionNames;
 
 module.exports = {
   checkDocker: dockerUtils.checkDocker,

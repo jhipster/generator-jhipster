@@ -47,6 +47,12 @@ const RelationalOnlyDBTypes = {
   BYTE_BUFFER: 'ByteBuffer',
 };
 
+const BlobTypes = {
+  IMAGE: 'image',
+  ANY: 'any',
+  TEXT: 'text',
+};
+
 const CommonDBValidations = {
   String: new Set([REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH, PATTERN]),
   Integer: new Set([REQUIRED, UNIQUE, MIN, MAX]),
@@ -74,6 +80,7 @@ module.exports = {
   hasValidation,
   getIsType,
   isBlobType,
+  BlobTypes,
 };
 
 function isCommonDBType(type) {

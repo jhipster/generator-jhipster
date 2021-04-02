@@ -35,20 +35,20 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 export interface I<%= entityAngularName %> {
-    <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+<%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;
-    <%_ }); _%>
+<%_ }); _%>
 }
 
 export class <%= entityAngularName %> implements I<%= entityAngularName %> {
     constructor(
-        <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+<%_ variablesWithTypes.forEach(variablesWithType => { _%>
         public <%- variablesWithType %>,
-        <%_ }); _%>
+<%_ }); _%>
     ) {
-        <%_ for (idx in defaultVariablesValues) { _%>
+<%_ for (idx in defaultVariablesValues) { _%>
         <%- defaultVariablesValues[idx] %>
-        <%_ } _%>
+<%_ } _%>
     }
 }
 <%_ if (primaryKey) { _%>

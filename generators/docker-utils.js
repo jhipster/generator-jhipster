@@ -19,6 +19,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const dockerCLI = require('./docker-cli');
+const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -83,7 +84,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
   let imagePath = '';
   this.hasWarning = false;
   this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
-  if (opts.appConfig.buildTool === 'maven') {
+  if (opts.appConfig.buildTool === MAVEN) {
     imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
     this.dockerBuildCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
   } else {
@@ -105,7 +106,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
  * @property appConfig Configuration for the current application
  * @returns {Promise.<TResult>|Promise}
  */
-function checkAndBuildImages(opts = { cwd: './', forceBuild: false, appConfig: { buildTool: 'gradle' } }) {
+function checkAndBuildImages(opts = { cwd: './', forceBuild: false, appConfig: { buildTool: GRADLE } }) {
   if (this.abort) return null;
   checkImageExist.call(this, opts);
   const pwd = shelljs.pwd();

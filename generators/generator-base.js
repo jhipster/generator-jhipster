@@ -60,6 +60,7 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
+const { ELK, PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -2032,7 +2033,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   buildApplication(buildTool, profile, buildWar, cb) {
     let buildCmd = 'mvnw -ntp verify -B';
 
-    if (buildTool === 'gradle') {
+    if (buildTool === GRADLE) {
       buildCmd = 'gradlew';
       if (buildWar) {
         buildCmd += ' bootWar';
@@ -2573,13 +2574,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationTypeSession = config.authenticationType === SESSION;
     dest.authenticationTypeJwt = config.authenticationType === JWT;
     dest.authenticationTypeOauth2 = config.authenticationType === OAUTH2;
+
     dest.communicationSpringWebsocket = config.websocket === SPRING_WEBSOCKET;
+
     dest.messageBrokerKafka = config.messageBroker === KAFKA;
 
     dest.serviceDiscoveryConsul = config.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
 
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
+
+    dest.monitoringPrometheus = config.monitoring === PROMETHEUS;
+    dest.monitoringELK = config.monitoring === ELK;
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}

@@ -18,6 +18,7 @@
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
+const { SQL } = require('../../jdl/jhipster/database-types');
 
 let useBlueprints;
 
@@ -135,7 +136,7 @@ module.exports = class extends BaseBlueprintGenerator {
           this.composeWithJHipster('entity', [entityName], {
             skipWriting: !this.options.writeEveryEntity && !selectedEntity,
             regenerate,
-            skipDbChangelog: this.jhipsterConfig.databaseType === 'sql' || this.options.skipDbChangelog,
+            skipDbChangelog: this.jhipsterConfig.databaseType === SQL || this.options.skipDbChangelog,
             skipInstall: true,
             skipPrompts: this.options.skipPrompts,
           });
@@ -143,7 +144,7 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       databaseChangelog() {
-        if (this.jhipsterConfig.skipServer || this.jhipsterConfig.databaseType !== 'sql' || this.options.skipDbChangelog) {
+        if (this.jhipsterConfig.skipServer || this.jhipsterConfig.databaseType !== SQL || this.options.skipDbChangelog) {
           return;
         }
         const existingEntities = this.getExistingEntityNames();
