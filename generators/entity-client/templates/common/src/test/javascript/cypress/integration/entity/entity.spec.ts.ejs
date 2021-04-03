@@ -14,7 +14,7 @@ import {
 } from '../../support/entity';
 <%_
 
-const baseApi = (applicationTypeGateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 
 resetFakerSeed('entity-cypress');
 const entityFakeData = generateFakeData('cypress');
