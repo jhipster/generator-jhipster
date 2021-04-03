@@ -98,7 +98,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest').then(({ response }) => {
       expect(response.statusCode).to.equal(200);
     });
-    cy.url().should('match', /\/<%= entityUrl %>$/);
+    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
   });
 
   it('should load edit <%= entityClass %> page', function() {
