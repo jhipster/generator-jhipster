@@ -217,7 +217,7 @@
                 <%_ } _%>
                 </div>
                 <div>
-                    <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
+                    <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
                         <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
                     </button>
                     <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" :disabled="$v.<%= entityInstance %>.$invalid || isSaving" class="btn btn-primary">
