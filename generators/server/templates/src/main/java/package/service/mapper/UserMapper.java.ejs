@@ -156,7 +156,7 @@ public class UserMapper {
     @Mapping(target = "id", source = "id")
     public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
         if ( users == null ) {
-            return null;
+            return Collections.emptySet();
         }
 
         Set<<%= asDto('User') %>> userSet = new HashSet<>();
