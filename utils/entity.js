@@ -372,7 +372,7 @@ function fieldToId(field) {
       return field.derivedPath ? field.derivedPath.join('.') : field.fieldName;
     },
     get nameDottedAsserted() {
-      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : field.fieldName;
+      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : `${field.fieldName}!`;
     },
     get setter() {
       return `set${this.nameCapitalized}`;
