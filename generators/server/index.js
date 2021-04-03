@@ -430,6 +430,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:build-cache': './mvnw dependency:go-offline',
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
@@ -444,6 +445,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:docker': './gradlew bootJar jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+            'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
           });
         }
 

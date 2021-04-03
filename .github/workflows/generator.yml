@@ -35,11 +35,22 @@ jobs:
       matrix:
         node_version: [14.16.0]
         os: [ubuntu-20.04]
+        cache: [other]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node_version }}
+      - name: 'SETUP: load npm cache'
+        uses: actions/cache@v2.1.4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/Cypress/
+          key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
+            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'install required npm version'
         run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit

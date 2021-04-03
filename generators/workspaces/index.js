@@ -171,7 +171,7 @@ module.exports = class extends BaseBlueprintGenerator {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
             'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
             ...this._getOtherScripts(),
-            ...this._createConcurrentyScript('watch'),
+            ...this._createConcurrentyScript('watch', 'backend:build-cache'),
             ...this._createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
