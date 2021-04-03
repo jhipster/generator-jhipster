@@ -153,7 +153,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
         if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
-        this.composeWithJHipster(GENERATOR_CYPRESS, true);
+        this.composeWithJHipster(GENERATOR_CYPRESS, { existingProject: this.existingProject }, true);
       },
       composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.

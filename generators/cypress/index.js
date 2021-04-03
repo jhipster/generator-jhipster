@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
 const { GENERATOR_CYPRESS } = require('../generator-list');
+const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
 let useBlueprints;
 /* eslint-disable consistent-return */
@@ -46,6 +48,33 @@ module.exports = class extends BaseBlueprintGenerator {
   get initializing() {
     if (useBlueprints) return;
     return this._initializing();
+  }
+
+  _prompting() {
+    return {
+      async askForCypressCoverage() {
+        if (
+          this.options.existingProject ||
+          this.jhipsterConfig.clientFramework !== constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR ||
+          !this.jhipsterConfig.testFrameworks.includes(CYPRESS)
+        ) {
+          return;
+        }
+        const answers = await this.prompt({
+          type: 'confirm',
+          name: 'cypressCoverage',
+          message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+          default: this.jhipsterConfig.cypressCoverage || false,
+        });
+
+        this.cypressCoverage = this.jhipsterConfig.cypressCoverage = answers.cypressCoverage;
+      },
+    };
+  }
+
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -107,5 +136,63 @@ module.exports = class extends BaseBlueprintGenerator {
   get writing() {
     if (useBlueprints) return;
     return this._writing();
+  }
+
+  _postWriting() {
+    return {
+      configureCoverage() {
+        if (!this.cypressCoverage) return;
+        this.packageJson.merge({
+          devDependencies: {
+            '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
+            'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
+            'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
+            nyc: this.configOptions.dependabotPackageJson.devDependencies.nyc,
+          },
+          scripts: {
+            'clean-coverage': 'rimraf .nyc_output coverage',
+            'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
+            'e2e:cypress:coverage': 'npm run e2e:cypress',
+            'poste2e:cypress:coverage': 'nyc report',
+            'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',
+            'webapp:instrumenter': 'ng build --configuration instrumenter',
+          },
+        });
+        if (this.clientFrameworkAngular) {
+          // Add 'ng build --configuration instrumenter' support
+          this.createStorage('angular.json').setPath(
+            `projects.${_.kebabCase(this.baseName)}.architect.build.configurations.instrumenter`,
+            {}
+          );
+          this.addWebpackConfig(`targetOptions.configuration === 'instrumenter'
+      ? {
+          module: {
+            rules: [
+              {
+                test: /\\.(js|ts)$/,
+                use: [
+                  {
+                    loader: 'babel-loader',
+                    options: {
+                      plugins: ['istanbul'],
+                    },
+                  }
+                ],
+                enforce: 'post',
+                include: path.resolve(__dirname, '../${constants.CLIENT_MAIN_SRC_DIR}'),
+                exclude: [/\\.(e2e|spec)\\.ts$/, /node_modules/, /(ngfactory|ngstyle)\\.js/],
+              },
+            ],
+          },
+        }
+      : {}`);
+        }
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
   }
 };

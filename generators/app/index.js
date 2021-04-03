@@ -250,6 +250,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: String,
     });
 
+    this.option('cypress-coverage', {
+      desc: 'Enable Cypress code coverage report generation',
+      type: Boolean,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;

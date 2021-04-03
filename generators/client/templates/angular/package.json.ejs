@@ -168,8 +168,7 @@
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
-    "start": "<%= clientPackageManager %> run webapp:dev",
-    "start-hmr": "ng serve --hmr",
+    "start": "ng serve --hmr",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
@@ -179,13 +178,12 @@
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
-    "watch": "concurrently 'npm run webapp:hmr'<% if(!skipServer) { %> 'npm run backend:start'<% } %>",
+    "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "ng build",
     "webapp:build:prod": "ng build --prod",
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
-    "webapp:hmr": "ng serve --hmr",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test"
   },
