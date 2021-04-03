@@ -51,6 +51,7 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
+const { GENERATOR_BOOTSTRAP } = require('./generator-list');
 const { JWT, OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE, REDIS, HAZELCAST, MEMCACHED } = require('../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -163,7 +164,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         this.env.queueGenerator(generator, true);
       }
       */
-      this.composeWithJHipster('bootstrap', { ...this.options, configOptions: this.configOptions }, true);
+      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions }, true);
     }
   }
 

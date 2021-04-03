@@ -17,20 +17,20 @@
  limitations under the License.
 -%>
 <%_
-const entityArrayOptionalChainSymbol = pagination === 'infinite-scroll' ? '' : '?.';
-const order = pagination === 'infinite-scroll' ? 'asc' : 'desc';
+const entityArrayOptionalChainSymbol = paginationInfiniteScroll ? '' : '?.';
+const order = paginationInfiniteScroll ? 'asc' : 'desc';
 const testEntityPrimaryKey = generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
-<%_ if (pagination === 'pagination' || searchEngine !== false) { _%>
+<%_ if (paginationPagination || searchEngine !== false) { _%>
 jest.mock('@angular/router');
 <%_ } _%>
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-<%_ if (pagination === 'pagination') { _%>
+<%_ if (paginationPagination) { _%>
 import { ActivatedRoute, Router } from '@angular/router';
-<%_ } else if (searchEngine !== false) { _%>
+<%_ } else if (!searchEngineFalse) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { of } from 'rxjs';
@@ -49,7 +49,7 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule],
                 declarations: [<%= entityAngularName %>Component],
-                <%_ if (pagination === 'pagination') { _%>
+<%_ if (paginationPagination) { _%>
                 providers: [
                     Router,
                     {
@@ -65,20 +65,20 @@ describe('Component Tests', () => {
                                     sort: '<%- primaryKey.name %>,desc',
                                 })
                             ),
-                            <%_ if (searchEngine !== false) { _%>
+    <%_ if (!searchEngineFalse) { _%>
                             snapshot: { queryParams: {} },
-                            <%_ } _%>
+    <%_ } _%>
                         }
                     }
                 ]
-                <%_ } else if (searchEngine !== false) { _%>
+<%_ } else if (!searchEngineFalse) { _%>
                 providers: [
                     {
                         provide: ActivatedRoute,
                         useValue: { snapshot: { queryParams: {} } }
                     }
                 ]
-                <%_ } _%>
+<%_ } _%>
             })
             .overrideTemplate(<%= entityAngularName %>Component, '')
             .compileComponents();
@@ -107,7 +107,7 @@ describe('Component Tests', () => {
             expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(jasmine.objectContaining(<%- testEntityPrimaryKey %>));
         });
 
-    <%_ if (pagination !== 'no') { _%>
+<%_ if (!paginationNo) { _%>
         it('should load a page', () => {
             // WHEN
             comp.loadPage(1);
@@ -139,7 +139,7 @@ describe('Component Tests', () => {
             expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,<%= order %>', '<%- primaryKey.fields.map(field => field.fieldName).join(',') %>'] }));
         });
 
-        <%_ if (pagination === 'infinite-scroll') { _%>
+    <%_ if (paginationInfiniteScroll) { _%>
         it('should re-initialize the page', () => {
             // WHEN
             comp.loadPage(1);
@@ -150,7 +150,7 @@ describe('Component Tests', () => {
             expect(service.query).toHaveBeenCalledTimes(2);
             expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining(<%- testEntityPrimaryKey %>));
         });
-        <%_ } _%>
     <%_ } _%>
+<%_ } _%>
     });
 });

@@ -18,15 +18,27 @@
  */
 
 const Generators = {
+  GENERATOR_AWS: 'aws',
+  GENERATOR_BOOTSTRAP: 'bootstrap',
+  GENERATOR_AWS_CONTAINER: 'aws-container',
   GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
+  GENERATOR_AZURE_SPRING_CLOUD: 'azure-spring-cloud',
+  GENERATOR_CICD: 'ci-cd',
   GENERATOR_CLIENT: 'client',
+  GENERATOR_CLOUDFOUNDRY: 'cloudfoundry',
   GENERATOR_COMMON: 'common',
   GENERATOR_CYPRESS: 'cypress',
+  GENERATOR_DATABASE_CHANGELOG: 'database-changelog',
+  GENERATOR_DATABASE_CHANGELOG_LIQUIBASE: 'database-changelog-liquibase',
   GENERATOR_DOCKER_COMPOSE: 'docker-compose',
   GENERATOR_ENTITIES: 'entities',
+  GENERATOR_ENTITIES_CLIENT: 'entities-client',
+  GENERATOR_ENTITY: 'entity',
+  GENERATOR_ENTITY_I18N: 'entity-i18n',
   GENERATOR_ENTITY_CLIENT: 'entity-client',
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_LANGUAGES: 'languages',
+  GENERATOR_PAGE: 'page',
   GENERATOR_SERVER: 'server',
 };
 

@@ -23,22 +23,22 @@
     page: number;
     predicate: string;
     ascending: boolean;
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
     currentSearch: string;
-    <%_ } _%>
+<%_ } _%>
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         protected dataUtils: DataUtils,
-        <%_ } _%>
-        <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
-        <%_ } _%>
+<%_ } _%>
         protected parseLinks: ParseLinks,
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
         protected activatedRoute: ActivatedRoute,
-        <%_ } _%>
+<%_ } _%>
     ) {
         this.<%= entityInstancePlural %> = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -48,14 +48,14 @@
         };
         this.predicate = '<%- primaryKey.name %>';
         this.ascending = true;
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-        <%_ } _%>
+<%_ } _%>
     }
 
     loadAll(): void {
         this.isLoading = true;
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -73,7 +73,7 @@
             );
             return;
         }
-        <%_ } _%>
+<%_ } _%>
 
         this.<%= entityInstance %>Service.query({
             page: this.page,
@@ -101,7 +101,7 @@
         this.loadAll();
     }
 
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
     search(query: string): void {
         this.<%= entityInstancePlural %> = [];
         this.links = {
@@ -118,7 +118,7 @@
         this.currentSearch = query;
         this.loadAll();
     }
-    <%_ } _%>
+<%_ } _%>
 
     ngOnInit(): void {
         this.loadAll();

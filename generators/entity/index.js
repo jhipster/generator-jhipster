@@ -34,7 +34,13 @@ const { stringify } = require('../../utils');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { CUCUMBER, GATLING, PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
-const { GENERATOR_ENTITIES, GENERATOR_ENTITY_CLIENT, GENERATOR_ENTITY_SERVER } = require('../generator-list');
+const {
+  GENERATOR_ENTITIES,
+  GENERATOR_ENTITY,
+  GENERATOR_ENTITY_CLIENT,
+  GENERATOR_ENTITY_I18N,
+  GENERATOR_ENTITY_SERVER,
+} = require('../generator-list');
 const { CommonDBTypes, RelationalOnlyDBTypes } = require('../../jdl/jhipster/field-types');
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
@@ -158,8 +164,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
 
     this._setupEntityOptions(this, this, this.context);
-
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { entityExisted, configExisted, arguments: [name] });
+    useBlueprints =
+      !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY, { entityExisted, configExisted, arguments: [name] });
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -519,7 +525,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             skipInstall: this.options.skipInstall,
           });
           if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
+            this.composeWithJHipster(GENERATOR_ENTITY_I18N, this.arguments, {
               context,
               skipInstall: this.options.skipInstall,
             });
@@ -841,7 +847,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             const context = this.context;
 
             // run through all post entity creation module hooks
-            this.callHooks('entity', 'post', {
+            this.callHooks(GENERATOR_ENTITY, 'post', {
               entityConfig: context,
               force: this.options.force,
             });

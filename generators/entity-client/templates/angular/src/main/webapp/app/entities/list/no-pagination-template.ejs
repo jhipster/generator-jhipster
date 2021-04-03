@@ -18,30 +18,30 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     isLoading = false;
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
     currentSearch: string;
-    <%_ } _%>
+<%_ } _%>
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         protected dataUtils: DataUtils,
-        <%_ } _%>
-        <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
-        <%_ } _%>
-        <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (!searchEngineFalse) { _%>
         protected activatedRoute: ActivatedRoute,
-        <%_ } _%>
+<%_ } _%>
     ) {
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-        <%_ } _%>
+<%_ } _%>
     }
 
     loadAll(): void {
         this.isLoading = true;
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -56,7 +56,7 @@
                 );
             return;
         }
-        <%_ } _%>
+<%_ } _%>
 
         this.<%= entityInstance %>Service.query().subscribe(
             (res: HttpResponse<I<%= entityAngularName %>[]>) => {
@@ -69,12 +69,12 @@
         );
     }
 
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (!searchEngineFalse) { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadAll();
     }
-    <%_ } _%>
+<%_ } _%>
 
     ngOnInit(): void {
         this.loadAll();

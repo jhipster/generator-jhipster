@@ -30,6 +30,7 @@ const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
+const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list');
 
 const NO_DATABASE = databaseTypes.NO;
 
@@ -39,7 +40,7 @@ let useBlueprints;
 module.exports = class extends BaseDockerGenerator {
   constructor(args, options) {
     super(args, options);
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('docker-compose');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DOCKER_COMPOSE);
   }
 
   _initializing() {
@@ -249,22 +250,6 @@ module.exports = class extends BaseDockerGenerator {
         });
       },
     };
-  }
-
-  _loading() {
-    return {
-      loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadClientConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-      },
-    };
-  }
-
-  get loading() {
-    if (useBlueprints) return;
-    return this._loading();
   }
 
   get configuring() {

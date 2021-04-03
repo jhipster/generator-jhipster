@@ -100,7 +100,7 @@ function askForMicroserviceJson() {
       default: true,
     },
     {
-      when: response => response.useMicroserviceJson === true || databaseType === 'no',
+      when: response => response.useMicroserviceJson === true || databaseType === NO_DATABASE,
       type: 'input',
       name: 'microservicePath',
       message: 'Enter the path to the microservice root directory:',
@@ -482,7 +482,7 @@ function askForField() {
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
   const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
-  const possibleFiltering = databaseType === 'sql' && !context.reactive;
+  const possibleFiltering = databaseType === SQL && !context.reactive;
   const prompts = [
     {
       type: 'confirm',
@@ -744,7 +744,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldType === 'ByteBuffer',
+      when: response => response.fieldAdd === true && response.fieldType === BYTE_BUFFER,
       type: 'list',
       name: 'fieldTypeBlobContent',
       message: 'What is the content of the Blob field?',
@@ -1081,7 +1081,7 @@ function askForRelationship() {
       choices: [
         {
           name: 'Required',
-          value: 'required',
+          value: REQUIRED,
         },
       ],
       default: 0,

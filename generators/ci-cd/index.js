@@ -27,6 +27,7 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const { GENERATOR_CICD } = require('../generator-list');
 
 const {
   BASE_NAME,
@@ -93,7 +94,7 @@ module.exports = class extends BaseBlueprintGenerator {
       description: 'Automatically configure CircleCI',
     });
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('ci-cd');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CICD);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -169,7 +170,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       insight() {
         if (this.abort) return;
-        statistics.sendSubGenEvent('generator', 'ci-cd');
+        statistics.sendSubGenEvent('generator', GENERATOR_CICD);
       },
       setTemplateConstants() {
         if (this.abort) return;

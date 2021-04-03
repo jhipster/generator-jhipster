@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
+const { GENERATOR_CYPRESS } = require('../generator-list');
 
 let useBlueprints;
-
+/* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts, { unique: 'namespace' });
@@ -31,7 +31,7 @@ module.exports = class extends BaseBlueprintGenerator {
       return;
     }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('cypress');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CYPRESS);
   }
 
   // Public API method used by the getter and also by Blueprints

@@ -20,7 +20,7 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const { loadConfigs, setClusteredApps } = require('./docker-base');
 const { getBase64Secret } = require('./utils');
-const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
+const { MICROSERVICE, MONOLITH, GATEWAY } = require('../jdl/jhipster/application-types');
 const { COUCHBASE, MONGODB } = require('../jdl/jhipster/database-types');
 const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
 const monitoring = require('../jdl/jhipster/monitoring-types');
@@ -299,7 +299,7 @@ async function askForServiceDiscovery() {
  * Ask For Admin Password
  */
 async function askForAdminPassword() {
-  if (this.regenerate || this.serviceDiscoveryType !== 'eureka') return;
+  if (this.regenerate || this.serviceDiscoveryType !== EUREKA) return;
 
   const prompts = [
     {
@@ -374,7 +374,7 @@ function getAppFolders(input, deploymentApplicationType) {
             fileData['generator-jhipster'].baseName !== undefined &&
             (deploymentApplicationType === undefined ||
               deploymentApplicationType === fileData['generator-jhipster'].applicationType ||
-              (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'gateway'))
+              (deploymentApplicationType === MICROSERVICE && fileData['generator-jhipster'].applicationType === GATEWAY))
           ) {
             appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
           }

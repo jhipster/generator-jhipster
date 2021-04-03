@@ -19,6 +19,7 @@
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 const { SQL } = require('../../jdl/jhipster/database-types');
+const { GENERATOR_ENTITIES, GENERATOR_ENTITIES_CLIENT, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
 
 let useBlueprints;
 
@@ -77,7 +78,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     if (this.options.help) return;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entities');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITIES);
 
     if (this.options.entitiesToImport) {
       const entities = this.jhipsterConfig.entities || [];
@@ -133,7 +134,7 @@ module.exports = class extends BaseBlueprintGenerator {
           if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
           const selectedEntity = this.options.entities.includes(entityName);
           const { regenerate = !selectedEntity } = this.options;
-          this.composeWithJHipster('entity', [entityName], {
+          this.composeWithJHipster(GENERATOR_ENTITY, [entityName], {
             skipWriting: !this.options.writeEveryEntity && !selectedEntity,
             regenerate,
             skipDbChangelog: this.jhipsterConfig.databaseType === SQL || this.options.skipDbChangelog,
@@ -152,7 +153,7 @@ module.exports = class extends BaseBlueprintGenerator {
           return;
         }
 
-        this.composeWithJHipster('database-changelog', this.options.writeEveryEntity ? existingEntities : this.options.entities);
+        this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG, this.options.writeEveryEntity ? existingEntities : this.options.entities);
       },
     };
   }
@@ -176,7 +177,7 @@ module.exports = class extends BaseBlueprintGenerator {
           })
           .filter(entity => !entity.skipClient);
         if (clientEntities.length === 0) return;
-        this.composeWithJHipster('entities-client', clientEntities, {
+        this.composeWithJHipster(GENERATOR_ENTITIES_CLIENT, clientEntities, {
           skipInstall: this.options.skipInstall,
         });
       },

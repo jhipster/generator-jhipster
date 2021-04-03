@@ -22,8 +22,10 @@ const dockerUtils = require('./docker-utils');
 const { getBase64Secret } = require('./utils');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
 const { MONOLITH, MICROSERVICE, GATEWAY } = require('../jdl/jhipster/application-types');
-const { EUREKA } = require('../jdl/jhipster/service-discovery-types');
+const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { OptionNames } = require('../jdl/jhipster/application-options');
+const { PROMETHEUS, ELK } = require('../jdl/jhipster/monitoring-types');
+const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
 
 const { AUTHENTICATION_TYPE, JWT_SECRET_KEY, REACTIVE, SERVICE_DISCOVERY_TYPE } = OptionNames;
 
@@ -154,9 +156,14 @@ function loadFromYoRc() {
   if (this.serviceDiscoveryType === undefined) {
     this.serviceDiscoveryType = EUREKA;
   }
+  this.serviceDiscoveryConsul = this.serviceDiscoveryType === CONSUL;
+  this.serviceDiscoveryEureka = this.serviceDiscoveryType === EUREKA;
   this.adminPassword = this.config.get('adminPassword');
   this.jwtSecretKey = this.config.get(JWT_SECRET_KEY);
 
+  this.monitoringPrometheus = this.monitoring === PROMETHEUS;
+  this.monitoringELK = this.monitoring === ELK;
+  this.authenticationTypeOauth2 = this.authenticationType === OAUTH2;
   if (this.defaultAppsFolders !== undefined) {
     this.log('\nFound .yo-rc.json config file...');
   }
