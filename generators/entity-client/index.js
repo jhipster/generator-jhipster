@@ -25,10 +25,6 @@ const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
-const { PaginationTypes } = require('../../jdl/jhipster/entity-options');
-
-const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
-const NO_PAGINATION = PaginationTypes.NO;
 
 let useBlueprints;
 
@@ -62,31 +58,6 @@ module.exports = class extends BaseBlueprintGenerator {
   get default() {
     if (useBlueprints) return;
     return this._default();
-  }
-
-  _loadEntityConfig() {
-    this.paginationPagination = this.entity.pagination === PAGINATION;
-    this.paginationInfiniteScroll = this.entity.pagination === INFINITE_SCROLL;
-    this.paginationNo = this.entity.pagination === NO_PAGINATION;
-
-    this.searchEngineFalse = this.entity.searchEngine === false;
-  }
-
-  _loading() {
-    return {
-      loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadClientConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this._loadEntityConfig();
-      },
-    };
-  }
-
-  get loading() {
-    if (useBlueprints) return;
-    return this._loading();
   }
 
   // Public API method used by the getter and also by Blueprints

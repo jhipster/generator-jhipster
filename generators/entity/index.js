@@ -46,10 +46,11 @@ const { CommonDBTypes, RelationalOnlyDBTypes } = require('../../jdl/jhipster/fie
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
-const { PaginationTypes } = require('../../jdl/jhipster/entity-options');
+const { PaginationTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 
-const { PAGINATION } = PaginationTypes;
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
+const NO_SERVICE = ServiceTypes.NO;
 
 const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = require('../../jdl/jhipster/validations');
 
@@ -356,7 +357,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         if (
           this.entityConfig.jpaMetamodelFiltering &&
-          (context.databaseType !== SQL || this.entityConfig.service === 'no' || context.reactive === true)
+          (context.databaseType !== SQL || this.entityConfig.service === NO_SERVICE || context.reactive === true)
         ) {
           this.warning('Not compatible with jpaMetamodelFiltering, disabling');
           this.entityConfig.jpaMetamodelFiltering = false;
@@ -479,6 +480,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     return this._composing();
   }
 
+  _loadEntityDerivedConfig(entity) {
+    entity.paginationPagination = entity.pagination === PAGINATION;
+    entity.paginationInfiniteScroll = entity.pagination === INFINITE_SCROLL;
+    entity.paginationNo = entity.pagination === NO_PAGINATION;
+    entity.searchEngineFalse = entity.searchEngine === false;
+  }
+
   // Public API method used by the getter and also by Blueprints
   _loading() {
     return {
@@ -486,6 +494,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
         loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+        this._loadEntityDerivedConfig(this.context);
 
         if (this.context.fields) {
           this.context.fields
