@@ -17,19 +17,15 @@
  limitations under the License.
 -%>
 jest.mock('@angular/router');
-<%_ if (enableTranslation) { _%>
-jest.mock('ngx-webstorage');
-jest.mock('@ngx-translate/core');
-<%_ } _%>
 jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 <%_ if (enableTranslation) { _%>
-import { SessionStorageService } from 'ngx-webstorage';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
@@ -60,9 +56,9 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule],
+          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()<% if (enableTranslation) { %>, TranslateModule.forRoot()<% } %>],
           declarations: [NavbarComponent],
-          providers: [<% if (enableTranslation) { %>SessionStorageService, TranslateService, <% } %>Router, LoginService],
+          providers: [Router, LoginService],
         })
           .overrideTemplate(NavbarComponent, '')
           .compileComponents();
