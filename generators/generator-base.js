@@ -2485,8 +2485,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
-    dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
-    dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+    this.loadDerivedAppConfig(config, dest);
+  }
+
+  loadDerivedMicroserviceAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.jhiPrefixCapitalized = _.upperFirst(config.jhiPrefix);
+    dest.jhiPrefixDashed = _.kebabCase(config.jhiPrefix);
+  }
+
+  loadDerivedAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    this.loadDerivedMicroserviceAppConfig(config, dest);
     dest.applicationTypeGateway = config.applicationType === GATEWAY;
     dest.applicationTypeMonolith = config.applicationType === MONOLITH;
     dest.applicationTypeMicroservice = config.applicationType === MICROSERVICE;
@@ -2504,6 +2512,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
+    this.loadDerivedClientConfig(config, dest);
+  }
+
+  loadDerivedClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
     dest.clientFrameworkReact = config.clientFramework === REACT;
     dest.clientThemeNone = config.clientTheme === 'none';
@@ -2556,6 +2568,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
+
+    this.loadDerivedServerConfig(config, dest);
+  }
+
+  loadDerivedServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.buildToolGradle = config.buildTool === GRADLE;
     dest.buildToolMaven = config.buildTool === MAVEN;
     dest.buildToolUndefined = config.buildTool === undefined;

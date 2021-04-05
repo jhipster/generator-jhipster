@@ -21,7 +21,7 @@ import { <%_ if (!paginationNo) { _%>HttpHeaders, <% } %>HttpResponse } from '@a
 <%_ if (paginationPagination) { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-<%_ } else if (!searchEngineFalse) { _%>
+<%_ } else if (searchEngine) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 <%_ if (!readOnly) { _%>
@@ -123,7 +123,7 @@ _%>
     protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
         this.page = page;
-        <%_ if (!searchEngineFalse) { _%>
+        <%_ if (searchEngine) { _%>
         this.ngbPaginationPage = this.page;
         <%_ } _%>
         if (navigate) {
@@ -131,7 +131,7 @@ _%>
                 queryParams: {
                     page: this.page,
                     size: this.itemsPerPage,
-        <%_ if (!searchEngineFalse) { _%>
+        <%_ if (searchEngine) { _%>
                     search: this.currentSearch,
         <%_ } _%>
                     sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')

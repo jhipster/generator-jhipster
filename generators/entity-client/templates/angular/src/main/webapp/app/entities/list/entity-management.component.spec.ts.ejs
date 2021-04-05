@@ -30,7 +30,7 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 <%_ if (paginationPagination) { _%>
 import { ActivatedRoute, Router } from '@angular/router';
-<%_ } else if (!searchEngineFalse) { _%>
+<%_ } else if (searchEngine) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { of } from 'rxjs';
@@ -65,13 +65,13 @@ describe('Component Tests', () => {
                                     sort: '<%- primaryKey.name %>,desc',
                                 })
                             ),
-    <%_ if (!searchEngineFalse) { _%>
+    <%_ if (searchEngine) { _%>
                             snapshot: { queryParams: {} },
     <%_ } _%>
                         }
                     }
                 ]
-<%_ } else if (!searchEngineFalse) { _%>
+<%_ } else if (searchEngine) { _%>
                 providers: [
                     {
                         provide: ActivatedRoute,

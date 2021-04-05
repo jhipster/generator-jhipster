@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
     currentSearch: string;
 <%_ } _%>
     isLoading = false;
@@ -39,7 +39,7 @@
         protected modalService: NgbModal
 <%_ } _%>
     ) {
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
 <%_ } _%>
     }
@@ -48,7 +48,7 @@
         this.isLoading = true;
         const pageToLoad: number = page ?? this.page ?? 1;
 
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 page: pageToLoad - 1,
@@ -83,7 +83,7 @@
             );
     }
 
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadPage(1);

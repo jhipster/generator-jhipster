@@ -32,7 +32,6 @@ const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
-const { CUCUMBER, GATLING, PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
 const {
   GENERATOR_ENTITIES,
@@ -250,11 +249,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
       setupSharedConfig() {
         const context = this.context;
 
-        context.protractorTests = context.testFrameworks.includes(PROTRACTOR);
-        context.gatlingTests = context.testFrameworks.includes(GATLING);
-        context.cucumberTests = context.testFrameworks.includes(CUCUMBER);
-
-        context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
         context.capitalizedBaseName = _.upperFirst(context.baseName);
 
@@ -480,13 +474,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     return this._composing();
   }
 
-  _loadEntityDerivedConfig(entity) {
-    entity.paginationPagination = entity.pagination === PAGINATION;
-    entity.paginationInfiniteScroll = entity.pagination === INFINITE_SCROLL;
-    entity.paginationNo = entity.pagination === NO_PAGINATION;
-    entity.searchEngineFalse = entity.searchEngine === false;
-  }
-
   // Public API method used by the getter and also by Blueprints
   _loading() {
     return {
@@ -494,8 +481,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
         loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
-        this._loadEntityDerivedConfig(this.context);
-
+        this._loadEntityDerivedProperties(this.context);
         if (this.context.fields) {
           this.context.fields
             .filter(field => field.options)
@@ -542,6 +528,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
       },
     };
+  }
+
+  _loadEntityDerivedProperties(entity) {
+    entity.paginationPagination = entity.pagination === PAGINATION;
+    entity.paginationInfiniteScroll = entity.pagination === INFINITE_SCROLL;
+    entity.paginationNo = entity.pagination === NO_PAGINATION;
   }
 
   get loading() {

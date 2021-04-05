@@ -18,7 +18,7 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     isLoading = false;
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
     currentSearch: string;
 <%_ } _%>
 
@@ -30,18 +30,18 @@
 <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
 <%_ } _%>
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         protected activatedRoute: ActivatedRoute,
 <%_ } _%>
     ) {
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
 <%_ } _%>
     }
 
     loadAll(): void {
         this.isLoading = true;
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -69,7 +69,7 @@
         );
     }
 
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadAll();

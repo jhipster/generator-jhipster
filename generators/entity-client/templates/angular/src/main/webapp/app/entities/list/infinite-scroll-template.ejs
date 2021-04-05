@@ -23,7 +23,7 @@
     page: number;
     predicate: string;
     ascending: boolean;
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
     currentSearch: string;
 <%_ } _%>
 
@@ -36,7 +36,7 @@
         protected modalService: NgbModal,
 <%_ } _%>
         protected parseLinks: ParseLinks,
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         protected activatedRoute: ActivatedRoute,
 <%_ } _%>
     ) {
@@ -48,14 +48,14 @@
         };
         this.predicate = '<%- primaryKey.name %>';
         this.ascending = true;
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
 <%_ } _%>
     }
 
     loadAll(): void {
         this.isLoading = true;
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -101,7 +101,7 @@
         this.loadAll();
     }
 
-<%_ if (!searchEngineFalse) { _%>
+<%_ if (searchEngine) { _%>
     search(query: string): void {
         this.<%= entityInstancePlural %> = [];
         this.links = {
