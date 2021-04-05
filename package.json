@@ -61,7 +61,7 @@
     "test": "mocha --no-insight --forbid-only --parallel"
   },
   "dependencies": {
-    "aws-sdk": "2.876.0",
+    "aws-sdk": "2.879.0",
     "axios": "0.21.1",
     "chalk": "4.1.0",
     "chevrotain": "9.0.1",
