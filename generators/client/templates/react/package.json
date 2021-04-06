@@ -28,7 +28,7 @@
     "redux-promise-middleware": "6.1.2",
     "redux-thunk": "2.3.0",
     "sonar-scanner": "3.1.0",
-    "tslib": "2.1.0",
+    "tslib": "2.2.0",
     "uuid": "8.3.2"
   },
   "devDependencies": {
