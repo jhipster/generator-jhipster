@@ -192,6 +192,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
       - uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: '11.x'
       - name: 'SETUP: Get date'
         id: get-date
