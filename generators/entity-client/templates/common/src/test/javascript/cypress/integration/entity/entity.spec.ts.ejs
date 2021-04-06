@@ -52,9 +52,9 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ } _%>
 
   beforeEach(() => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
-    cy.intercept('POST', '/<%= baseApi + entityApiUrl %>').as('postEntityRequest');
     cy.intercept('DELETE', '/<%= baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
+    cy.intercept('POST', '/<%= baseApi + entityApiUrl %>').as('postEntityRequest');
+    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
   });
 
   it('should load <%= entityClassPlural %>', () => {
