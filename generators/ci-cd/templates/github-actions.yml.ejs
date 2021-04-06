@@ -58,6 +58,7 @@ if (!databaseTypeNo && !skipServer ) { _%>
 if (!skipServer) { _%>
             - uses: actions/setup-java@v2
               with:
+                  distribution: 'adopt'
                   java-version: '11.x'
 <%_ }
 if (!skipClient) { _%>
