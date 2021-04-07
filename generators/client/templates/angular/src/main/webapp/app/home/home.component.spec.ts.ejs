@@ -79,17 +79,7 @@ describe('Component Tests', () => {
       // THEN
       expect(mockAccountService.getAuthenticationState).toHaveBeenCalled();
     });
-<%_ } _%>
 
-    it('Should call accountService.isAuthenticated when it checks authentication', () => {
-      // WHEN
-      comp.isAuthenticated();
-
-      // THEN
-      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
-    });
-
-<%_ if (!authenticationTypeOauth2) { _%>
     it('Should navigate to /login on login', () => {
       // WHEN
       comp.login();

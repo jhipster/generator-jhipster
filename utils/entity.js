@@ -85,6 +85,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
+  entityWithConfig.resetFakerSeed();
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
   if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
@@ -372,7 +373,7 @@ function fieldToId(field) {
       return field.derivedPath ? field.derivedPath.join('.') : field.fieldName;
     },
     get nameDottedAsserted() {
-      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : field.fieldName;
+      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : `${field.fieldName}!`;
     },
     get setter() {
       return `set${this.nameCapitalized}`;

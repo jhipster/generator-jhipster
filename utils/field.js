@@ -116,7 +116,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'text') {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === 'String') {
-    data = faker.fake(fakeStringTemplateForFieldName(field.columnName));
+    data = field.id ? faker.datatype.uuid() : faker.fake(fakeStringTemplateForFieldName(field.columnName));
   } else if (field.fieldType === 'UUID') {
     data = faker.datatype.uuid();
   } else if (field.fieldType === 'Boolean') {

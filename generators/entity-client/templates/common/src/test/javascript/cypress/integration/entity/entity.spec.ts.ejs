@@ -24,6 +24,10 @@ const skipCreateTest = (requiredRelationships.length > 0 || !entityFakeData) ? '
 _%>
 
 describe('<%= entityClass %> e2e test', () => {
+
+  const <%= entityInstance %>PageUrl = '/<%= entityUrl %>';
+  const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityUrl %>(\\?.*)?$');
+
   <%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
     cy.getOauth2Data();
@@ -53,7 +57,7 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ } _%>
 
   beforeEach(() => {
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
+    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/<%= baseApi + entityApiUrl %>').as('postEntityRequest');
     cy.intercept('DELETE', '/<%= baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
   });
@@ -69,11 +73,11 @@ describe('<%= entityClass %> e2e test', () => {
       }
     });;
     cy.getEntityHeading('<%= entityClass %>').should('exist');
-    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+    cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   });
 
   it('should load details <%= entityClass %> page', function() {
-    cy.visit('/<%= entityUrl %>');
+    cy.visit(<%= entityInstance %>PageUrl);
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response.body.length === 0) {
         this.skip();
@@ -85,12 +89,12 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest').then(({ response }) => {
       expect(response.statusCode).to.equal(200);
     });
-    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+    cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   });
 
 <%_ if (!readOnly) { _%>
   it('should load create <%= entityClass %> page', () => {
-    cy.visit('/<%= entityUrl %>');
+    cy.visit(<%= entityInstance %>PageUrl);
     cy.wait('@entitiesRequest');
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
@@ -99,11 +103,11 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest').then(({ response }) => {
       expect(response.statusCode).to.equal(200);
     });
-    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+    cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   });
 
   it('should load edit <%= entityClass %> page', function() {
-    cy.visit('/<%= entityUrl %>');
+    cy.visit(<%= entityInstance %>PageUrl);
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response.body.length === 0) {
         this.skip();
@@ -116,11 +120,11 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest').then(({ response }) => {
       expect(response.statusCode).to.equal(200);
     });
-    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+    cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   });
 
   it<%= skipCreateTest %>('should create an instance of <%= entityClass %>', () => {
-    cy.visit('/<%= entityUrl %>');
+    cy.visit(<%= entityInstance %>PageUrl);
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
   <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
@@ -190,14 +194,14 @@ describe('<%= entityClass %> e2e test', () => {
     cy.wait('@entitiesRequest').then(({ response }) => {
       expect(response.statusCode).to.equal(200);
     });
-    cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+    cy.url().should('match', <%= entityInstance %>PageUrlPattern);
   });
 
   it<%= skipCreateTest %>('should delete last instance of <%= entityClass %>', function() {
     <%_ if (clientFrameworkReact) { _%>
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
     <%_ } _%>
-    cy.visit('/<%= entityUrl %>');
+    cy.visit(<%= entityInstance %>PageUrl);
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response.body.length > 0) {
         cy.get(entityTableSelector).should('have.lengthOf', response.body.length);
@@ -213,7 +217,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
-        cy.url().should('match', /\/<%= entityUrl %>(\?.*)?$/);
+        cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       } else {
         this.skip();
       }

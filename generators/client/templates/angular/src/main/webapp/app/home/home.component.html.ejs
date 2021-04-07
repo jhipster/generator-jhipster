@@ -26,7 +26,7 @@
 
     <p class="lead" <%= jhiPrefix %>Translate="home.subtitle">This is your homepage</p>
 
-    <div [ngSwitch]="isAuthenticated()">
+    <div [ngSwitch]="account !== null">
       <div class="alert alert-success" *ngSwitchCase="true">
         <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
           [translateValues]="{ username: account.login }">You are logged in as user "{{ account.login }}".</span>
