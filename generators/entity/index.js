@@ -23,6 +23,7 @@ const _ = require('lodash');
 const path = require('path');
 
 const prompts = require('./prompts');
+const { defaultConfig } = require('../generator-defaults');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -224,7 +225,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig(undefined, this.context);
         this.loadTranslationConfig(undefined, this.context);
         // Try to load server config from microservice side, falling back to the app config.
-        this.loadServerConfig(_.defaults({}, this.microserviceConfig, this.jhipsterConfig), this.context);
+        this.loadServerConfig(_.defaults({}, this.microserviceConfig, this.jhipsterConfig, defaultConfig), this.context);
       },
 
       loadOptions() {
