@@ -154,7 +154,7 @@ _%>
                             This field should be a number.
                         </small>
         <%_ } _%>
-        <%_ if (field.fieldTypeTemporal) { _%>
+        <%_ if (field.fieldTypeTimed) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.ZonedDateTimelocal" <%= jhiPrefix %>Translate="entity.validation.ZonedDateTimelocal">
                             This field should be a date and time.

@@ -2578,7 +2578,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   loadDerivedServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-
     dest.cacheProviderRedis = config.cacheProvider === REDIS;
     dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
     dest.cacheProviderMemcached = config.cacheProvider === MEMCACHED;
