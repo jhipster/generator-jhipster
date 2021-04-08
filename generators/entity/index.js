@@ -251,6 +251,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       setupSharedConfig() {
         const context = this.context;
 
+        context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
         context.capitalizedBaseName = _.upperFirst(context.baseName);
 
