@@ -102,21 +102,21 @@ for (field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-    <%_ if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeImage) { _%>
+    <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
                             <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-height: 30px;" alt="<%= entityInstance %> image"/>
                         </a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
-    <%_ } else if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeAny) { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
     <%_ } else if (field.fieldIsEnum) { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
-    <%_ } else if (field.fieldTypeInstant || field.fieldTypeZonedDateTime) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
     <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</td>

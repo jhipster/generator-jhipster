@@ -21,7 +21,7 @@ const entityArrayOptionalChainSymbol = paginationInfiniteScroll ? '' : '?.';
 const order = paginationInfiniteScroll ? 'asc' : 'desc';
 const testEntityPrimaryKey = generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
-<%_ if (paginationPagination || searchEngine !== false) { _%>
+<%_ if (paginationPagination || searchEngine) { _%>
 jest.mock('@angular/router');
 <%_ } _%>
 

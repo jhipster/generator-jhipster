@@ -36,21 +36,21 @@ _%>
                 <dd>
     <%_ if (field.fieldIsEnum) { _%>
                     <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
-    <%_ } else if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeImage) { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
                             <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
                         </a>
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
-    <%_ } else if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeAny) { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
     <%_ } else if (field.fieldTypeDuration) { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
-    <%_ } else if (field.fieldTypeInstant || field.fieldTypeZonedDateTime) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</span>
     <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</span>

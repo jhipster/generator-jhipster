@@ -147,7 +147,7 @@ _%>
                     <%= field.fieldName %>: true,
     <%_ } else if (field.fieldTypeNumeric) { _%>
                     <%= field.fieldName %>: 1,
-    <%_ } else if (field.fieldTypeString || field.fieldTypeUUID) { _%>
+    <%_ } else if (field.fieldTypeCharSequence) { _%>
                     <%= field.fieldName %>: 'BBBBBB',
     <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
