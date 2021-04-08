@@ -25,7 +25,7 @@ const JDLEnum = require('../models/jdl-enum');
 const JDLRelationship = require('../models/jdl-relationship');
 const JDLUnaryOption = require('../models/jdl-unary-option');
 const JDLBinaryOption = require('../models/jdl-binary-option');
-const { CommonDBTypes } = require('../jhipster/field-types');
+const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = require('../jhipster/field-types');
 const { OptionNames } = require('../jhipster/application-options');
 const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = require('../jhipster/relationship-types');
 const { JPA_DERIVED_IDENTIFIER } = require('../jhipster/relationship-options');
@@ -40,6 +40,9 @@ const {
   SERVICE,
 } = require('../jhipster/binary-options').Options;
 const { lowerFirst, upperFirst } = require('../utils/string-utils');
+
+const { ANY, IMAGE, TEXT } = BlobTypes;
+const { BYTES } = RelationalOnlyDBTypes;
 
 module.exports = {
   convertEntitiesToJDL,
@@ -112,7 +115,7 @@ function convertJSONToJDLField(field) {
     type: field.fieldType,
     comment: field.javadoc,
   });
-  if (jdlField.type === 'byte[]') {
+  if (jdlField.type === BYTES) {
     jdlField.type = getTypeForBlob(field.fieldTypeBlobContent);
   }
   if (field.fieldValidateRules) {
@@ -122,7 +125,7 @@ function convertJSONToJDLField(field) {
 }
 
 function getTypeForBlob(blobContentType) {
-  if (['image', 'any', 'text'].includes(blobContentType)) {
+  if ([ANY, IMAGE, TEXT].includes(blobContentType)) {
     return CommonDBTypes[`${blobContentType.toUpperCase()}_BLOB`];
   }
   throw new Error(`Unrecognised blob type: '${blobContentType}'`);

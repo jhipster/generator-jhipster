@@ -31,29 +31,28 @@
 <%_ for (const field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
-    const fieldTypeBlobContent = field.fieldTypeBlobContent;
 _%>
                 <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= field.fieldNameHumanized %></span></dt>
                 <dd>
     <%_ if (field.fieldIsEnum) { _%>
                     <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+    <%_ } else if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeImage) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
                             <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
                         </a>
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+    <%_ } else if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeAny) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                         <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
-    <%_ } else if (['Duration'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeInstant || field.fieldTypeZonedDateTime) { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</span>
-    <%_ } else if (fieldType === 'LocalDate') { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</span>
     <%_ } else { _%>
                     <span>{{ <%= entityInstance %>.<%= fieldName %> }}</span>
@@ -62,24 +61,21 @@ _%>
 <%_ } _%>
 <%_
 for (const relationship of relationships) {
-    const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
-    const otherEntityName = relationship.otherEntityName;
     const otherEntityStateName = relationship.otherEntityStateName;
     const otherEntityField = relationship.otherEntityField;
-    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
-    if (relationshipType === 'many-to-one'
-        || (relationshipType === 'one-to-one' && ownerSide === true)
-        || (relationshipType === 'many-to-many' && ownerSide === true)) {
+    if (relationship.relationshipManyToOne
+        || (relationship.relationshipOneToOne && ownerSide)
+        || (relationship.relationshipManyToMany && ownerSide)) {
 _%>
                 <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
                 <dd>
-    <%_ if (otherEntityName === 'user') { _%>
-        <%_ if (relationshipType === 'many-to-many') { _%>
+    <%_ if (relationship.otherEntityUser) { _%>
+        <%_ if (relationship.relationshipManyToMany) { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                         {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                     </span>
@@ -87,7 +83,7 @@ _%>
                     <span>{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</span>
         <%_ } _%>
     <%_ } else { _%>
-        <%_ if (relationshipType === 'many-to-many') { _%>
+        <%_ if (relationship.relationshipManyToMany) { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                         <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                     </span>

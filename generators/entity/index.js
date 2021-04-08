@@ -41,14 +41,15 @@ const {
   GENERATOR_ENTITY_I18N,
   GENERATOR_ENTITY_SERVER,
 } = require('../generator-list');
-const { CommonDBTypes, RelationalOnlyDBTypes } = require('../../jdl/jhipster/field-types');
+const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
+const { IMAGE, TEXT } = BlobTypes;
 
 const { PaginationTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 
-const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const { PAGINATION } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_SERVICE = ServiceTypes.NO;
 
@@ -482,7 +483,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
         loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
-        this._loadEntityDerivedProperties(this.context);
         if (this.context.fields) {
           this.context.fields
             .filter(field => field.options)
@@ -529,12 +529,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
       },
     };
-  }
-
-  _loadEntityDerivedProperties(entity) {
-    entity.paginationPagination = entity.pagination === PAGINATION;
-    entity.paginationInfiniteScroll = entity.pagination === INFINITE_SCROLL;
-    entity.paginationNo = entity.pagination === NO_PAGINATION;
   }
 
   get loading() {
@@ -684,10 +678,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
           } else if (fieldType === BYTES || fieldType === BYTE_BUFFER) {
             entity.blobFields.push(field);
             entity.fieldsContainBlob = true;
-            if (field.fieldTypeBlobContent === 'image') {
+            if (field.fieldTypeBlobContent === IMAGE) {
               entity.fieldsContainImageBlob = true;
             }
-            if (field.fieldTypeBlobContent !== 'text') {
+            if (field.fieldTypeBlobContent !== TEXT) {
               entity.fieldsContainBlobOrImage = true;
             } else {
               entity.fieldsContainTextBlob = true;

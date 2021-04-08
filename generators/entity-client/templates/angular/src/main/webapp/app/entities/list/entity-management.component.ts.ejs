@@ -104,7 +104,6 @@ _%>
     }
 
     <%_ if (paginationPagination) { _%>
-
     protected handleNavigation(): void {
         combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
             const page = params.get('page');
@@ -147,7 +146,6 @@ _%>
     }
 
     <%_ } else if (paginationInfiniteScroll) { _%>
-
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
         this.links = this.parseLinks.parse(headers.get('link') ?? '');
         if (data) {

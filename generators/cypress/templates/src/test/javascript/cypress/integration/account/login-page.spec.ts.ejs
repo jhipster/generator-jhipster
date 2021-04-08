@@ -29,7 +29,9 @@ describe('login modal', () => {
     cy.window().then(win => {
       win.sessionStorage.clear();
     });
-    <%_ if (authenticationTypeSession) { _%>cy.clearCookie('SESSION')<% } %>
+<%_ if (authenticationTypeSession) { _%>
+    cy.clearCookie('SESSION');
+<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.clickOnLoginItem();

@@ -83,9 +83,9 @@ _%>
                     <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
-    <%_ if (relationship.relationshipType === 'many-to-one'
-            || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
-            || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true && paginationNo)) {
+    <%_ if (relationship.relationshipManyToOne
+            || (relationship.relationshipOneToOne && relationship.ownerSide)
+            || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
         const fieldName = "." + relationship.otherEntityField;
     _%>
                     <th scope="col" <% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
@@ -100,51 +100,46 @@ _%>
 const routerLink = ` [routerLink]="['/${ entityUrl }', ${entityInstance}.${primaryKey.name}, 'view']"`;
 for (field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
-    const fieldNameCapitalized = field.fieldNameCapitalized;
     const fieldType = field.fieldType;
-    const fieldTypeBlobContent = field.fieldTypeBlobContent;
 _%>
-    <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+    <%_ if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeImage) { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
                             <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-height: 30px;" alt="<%= entityInstance %> image"/>
                         </a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+    <%_ } else if ((field.fieldTypeBytes || field.fieldTypeByteBuffer) && field.blobContentTypeAny) { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
     <%_ } else if (field.fieldIsEnum) { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeInstant || field.fieldTypeZonedDateTime) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
-    <%_ } else if (fieldType === 'LocalDate') { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</td>
-    <%_ } else if (fieldType === 'Duration') { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
                     <td title="{{ <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> | duration }}</td>
     <%_ } else { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
     <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships) {
-    const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-    const otherEntityName = relationship.otherEntityName;
     const otherEntityStateName = relationship.otherEntityStateName;
     const otherEntityField = relationship.otherEntityField;
-    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
 _%>
-    <%_ if (relationshipType === 'many-to-one'
-            || (relationshipType === 'one-to-one' && ownerSide === true)
-            || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) {
+    <%_ if (relationship.relationshipManyToOne
+            || (relationship.relationshipOneToOne && ownerSide)
+            || (relationship.relationshipManyToMany && ownerSide && paginationNo)) {
     _%>
                     <td>
-        <%_ if (otherEntityName === 'user') { _%>
-            <%_ if (relationshipType === 'many-to-many') { _%>
+        <%_ if (relationship.otherEntityUser) { _%>
+            <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                             {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                         </span>
@@ -152,7 +147,7 @@ _%>
                         {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
             <%_ } _%>
         <%_ } else { _%>
-            <%_ if (relationshipType === 'many-to-many') { _%>
+            <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                             <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>

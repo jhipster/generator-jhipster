@@ -67,20 +67,20 @@ describe('Service Tests', () => {
 _%>
     <%_ if (field.fieldIsEnum) { _%>
                 <%= field.fieldName %>: <%= fieldType + '.' + field.enumValues[0].name %>,
-    <%_ } else if (fieldType === 'Boolean') { _%>
+    <%_ } else if (field.fieldTypeBoolean) { _%>
                 <%= field.fieldName %>: false,
-    <%_ } else if (fieldType === 'Duration') { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
                 <%= field.fieldName %>: 'PT1S',
-    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeNumeric) { _%>
                 <%= field.fieldName %>: 0,
-    <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+    <%_ } else if (field.fieldTypeCharSequence) { _%>
                 <%= field.fieldName %>: 'AAAAAAA',
-    <%_ } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTemporal) { _%>
                 <%= field.fieldName %>: currentDate,
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') { _%>
+    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                 <%= field.fieldName %>ContentType: 'image/png',
                 <%= field.fieldName %>: 'AAAAAAA',
-    <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
+    <%_ } else { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
                 <%= field.fieldName %>: 'AAAAAAA',
     <%_ } _%>
 <%_ }) _%>
@@ -90,12 +90,10 @@ _%>
         describe('Service methods', () => {
             it('should find an element', () => {
                 const returnedFromService = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
@@ -116,24 +114,20 @@ _%>
     <%_ } else { _%>
                     id: 0,
     <%_ } _%>
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
                 }, elemDefault);
 
                 const expected = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate,
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate,
     <%_ } _%>
 <%_ }) _%>
@@ -148,18 +142,16 @@ _%>
 
             it('should update a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (fieldType === 'Boolean') { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeBoolean) { _%>
                     <%= field.fieldName %>: true,
-    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeNumeric) { _%>
                     <%= field.fieldName %>: 1,
-    <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+    <%_ } else if (field.fieldTypeString || field.fieldTypeUUID) { _%>
                     <%= field.fieldName %>: 'BBBBBB',
-    <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } else { _%>
                     <%= field.fieldName %>: 'BBBBBB',
@@ -168,12 +160,10 @@ _%>
                 }, elemDefault);
 
                 const expected = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate,
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate,
     <%_ } _%>
 <%_ }) _%>
@@ -189,18 +179,16 @@ _%>
 <%_ const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.datatype.boolean()); _%>
             it('should partial update a <%= entityAngularName %>', () => {
                 const patchObject = Object.assign({
-<%_ fieldsToIncludeInPartialPatchTest.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (fieldType === 'Boolean') { _%>
+<%_ fieldsToIncludeInPartialPatchTest.forEach((field) => { _%>
+    <%_ if (field.fieldTypeBoolean) { _%>
                         <%= field.fieldName %>: true,
-    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeNumeric) { _%>
                         <%= field.fieldName %>: 1,
-    <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+    <%_ } else if (field.fieldTypeCharSequence) { _%>
                         <%= field.fieldName %>: 'BBBBBB',
-    <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
                         <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                         <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } else { _%>
                         <%= field.fieldName %>: 'BBBBBB',
@@ -211,12 +199,10 @@ _%>
                 const returnedFromService = Object.assign(patchObject, elemDefault);
 
                 const expected = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
                         <%= field.fieldName %>: currentDate,
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                         <%= field.fieldName %>: currentDate,
     <%_ } _%>
 <%_ }) _%>
@@ -232,32 +218,28 @@ _%>
 
             it('should return a list of <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (fieldType === 'Boolean') { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeBoolean) { _%>
                     <%= field.fieldName %>: true,
-    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeNumeric) { _%>
                     <%= field.fieldName %>: 1,
-    <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+    <%_ } else if (field.fieldTypeCharSequence) { _%>
                     <%= field.fieldName %>: 'BBBBBB',
-    <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_FORMAT),
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate.format(DATE_TIME_FORMAT),
-    <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
+    <%_ } else { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
                     <%= field.fieldName %>: 'BBBBBB',
     <%_ } _%>
 <%_ }) _%>
                 }, elemDefault);
 
                 const expected = Object.assign({
-<%_ fields.forEach((field) => {
-    const fieldType = field.fieldType;
-_%>
-    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+<%_ fields.forEach((field) => { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
                     <%= field.fieldName %>: currentDate,
-    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <%= field.fieldName %>: currentDate,
     <%_ } _%>
 <%_ }) _%>

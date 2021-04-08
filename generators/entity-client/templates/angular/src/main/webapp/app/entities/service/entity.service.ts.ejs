@@ -131,10 +131,10 @@ export class <%= entityAngularName %>Service {
     protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
         return Object.assign({}, <%= entityInstance %>, {
     <%_ for (const field of fields) { _%>
-        <%_ if ( ['Instant', 'ZonedDateTime'].includes(field.fieldType) ) { _%>
+        <%_ if (field.fieldTypeTimed) { _%>
         <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.toJSON() : undefined,
         <%_ } _%>
-        <%_ if ( field.fieldType === 'LocalDate' ) { _%>
+        <%_ if (field.fieldTypeLocalDate) { _%>
         <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.format(DATE_FORMAT) : undefined,
         <%_ } _%>
     <%_ } _%>
@@ -144,7 +144,7 @@ export class <%= entityAngularName %>Service {
     protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
         if (res.body) {
     <%_ for (const field of fields) { _%>
-        <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType) ) { _%>
+        <%_ if (field.fieldTypeTemporal) { _%>
             res.body.<%= field.fieldName %> = res.body.<%= field.fieldName %> ? dayjs(res.body.<%= field.fieldName %>) : undefined;
         <%_ } _%>
     <%_ } _%>
@@ -156,7 +156,7 @@ export class <%= entityAngularName %>Service {
         if (res.body) {
             res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
     <%_ for (const field of fields) { _%>
-        <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType) ) { _%>
+        <%_ if (field.fieldTypeTemporal) { _%>
                 <%= entityInstance %>.<%= field.fieldName %> = <%= entityInstance %>.<%= field.fieldName %> ? dayjs(<%= entityInstance %>.<%= field.fieldName %>) : undefined;
         <%_ } _%>
     <%_ } _%>
