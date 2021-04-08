@@ -30,6 +30,21 @@ const commonConfig = require('./webpack.common.js');
 const ENV = 'development';
 
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
+  cache: {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, 'webpack.common.js'),
+        path.resolve(__dirname, 'utils.js'),
+        path.resolve(__dirname, '../postcss.config.js'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
+    },
+  },
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
