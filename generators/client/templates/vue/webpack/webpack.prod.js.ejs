@@ -34,6 +34,7 @@ const env = require('../config/prod.env');
 
 const webpackConfig = webpackMerge(baseWebpackConfig, {
   mode: 'production',
+  cache: false,
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,

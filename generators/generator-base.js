@@ -2534,7 +2534,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
+
     dest.buildTool = config.buildTool;
+    dest.buildToolGradle = config.buildTool === GRADLE;
+    dest.buildToolMaven = config.buildTool === MAVEN;
+    dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
+    dest.buildDir = this.getBuildDirectoryForBuildTool(config.buildTool);
 
     dest.authenticationType = config.authenticationType;
     dest.rememberMeKey = config.rememberMeKey;
@@ -2554,9 +2559,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
-    dest.buildToolGradle = config.buildTool === GRADLE;
-    dest.buildToolMaven = config.buildTool === MAVEN;
-    dest.buildToolUndefined = config.buildTool === undefined;
 
     dest.cacheProviderRedis = config.cacheProvider === REDIS;
     dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
