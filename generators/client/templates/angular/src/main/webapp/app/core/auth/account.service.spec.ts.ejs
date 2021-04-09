@@ -39,6 +39,9 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ if (communicationSpringWebsocket) { _%>
 import { TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+<%_ } _%>
 
 import { AccountService } from './account.service';
 
@@ -58,6 +61,9 @@ function accountWithAuthorities(authorities: string[]): Account {
 describe('Service Tests', () => {
   describe('Account Service', () => {
     let service: AccountService;
+<%_ if (!skipUserManagement) { _%>
+    let applicationConfigService: ApplicationConfigService;
+<%_ } _%>
     let httpMock: HttpTestingController;
     let mockStorageService: StateStorageService;
     let mockRouter: Router;
@@ -85,6 +91,9 @@ describe('Service Tests', () => {
       });
 
       service = TestBed.inject(AccountService);
+<%_ if (!skipUserManagement) { _%>
+      applicationConfigService = TestBed.inject(ApplicationConfigService);
+<%_ } _%>
       httpMock = TestBed.inject(HttpTestingController);
       mockStorageService = TestBed.inject(StateStorageService);
       mockRouter = TestBed.inject(Router);
@@ -101,6 +110,23 @@ describe('Service Tests', () => {
       httpMock.verify();
     });
 
+<%_ if (!skipUserManagement) { _%>
+  describe('save', () => {
+    it('should call account saving endpoint with correct values', () => {
+      // GIVEN
+      const account = accountWithAuthorities([]);
+
+      // WHEN
+      service.save(account).subscribe();
+      const testRequest = httpMock.expectOne({ method: 'POST', url: applicationConfigService.getEndpointFor('api/account') });
+      testRequest.flush({});
+
+      // THEN
+      expect(testRequest.request.body).toEqual(account);
+    });
+  });
+
+<%_ } _%>
     describe('authenticate', () => {
       it('authenticationState should emit null if input is null', () => {
         // GIVEN
