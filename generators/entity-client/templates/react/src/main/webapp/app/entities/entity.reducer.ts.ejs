@@ -22,10 +22,10 @@
 _%>
 import axios from 'axios';
 import {
-  <%_ if (searchEngine !== false) { _%>
+  <%_ if (searchEngine) { _%>
   ICrudSearchAction,
   <%_ } _%>
-  <%_ if (pagination === 'infinite-scroll') { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
   parseHeaderForLinks, loadMoreDataWhenScrolled,
   <%_ } _%>
   ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction
@@ -33,16 +33,11 @@ import {
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-<%_ if (!(applicationType === 'gateway' && locals.microserviceName)) { _%>
 
-<%_ } _%>
-<%_ if (fieldsContainDate) { _%>
-
-<%_ } _%>
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
-  <%_ if (searchEngine !== false) { _%>
+  <%_ if (searchEngine) { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
   FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
@@ -64,13 +59,13 @@ const initialState = {
   errorMessage: null,
   entities: [] as ReadonlyArray<I<%= entityReactName %>>,
   entity: defaultValue,
-  <%_ if (pagination === 'infinite-scroll') { _%>
+<%_ if (paginationInfiniteScroll) { _%>
   links: { next: 0 },
-  <%_ } _%>
+<%_ } _%>
   updating: false,
-  <%_ if (pagination !== 'no') { _%>
+<%_ if (!paginationNo) { _%>
   totalItems: 0,
-  <%_ } _%>
+<%_ } _%>
   updateSuccess: false
 };
 
@@ -80,9 +75,9 @@ export type <%= entityReactName %>State =  Readonly<typeof initialState>;
 
 export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
   switch (action.type) {
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-    <%_ } _%>
+<%_ } _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
@@ -91,7 +86,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         loading: true
       };
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     case REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>):
@@ -102,18 +97,18 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         updating: true
       };
-    <%_ } _%>
-    <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-    <%_ } _%>
+<%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>):
-    <%_ } _%>
+<%_ } _%>
       return {
         ...state,
         loading: false,
@@ -121,42 +116,42 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         errorMessage: action.payload
       };
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-    <%_ } _%>
+<%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
-      <%_ if (pagination === 'infinite-scroll') { _%>
+<%_ if (paginationInfiniteScroll) { _%>
       {
       const links = parseHeaderForLinks(action.payload.headers.link);
-      <%_ } _%>
+<%_ } _%>
 
       return {
         ...state,
         loading: false,
-        <%_ if (pagination === 'infinite-scroll') { _%>
-          <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (paginationInfiniteScroll) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
         links,
         entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
-          <%_ } _%>
-        <%_ } else { _%>
+  <%_ } _%>
+<%_ } else { _%>
         entities: action.payload.data,
-        <%_ } _%>
-        <%_ if (pagination !== 'no') { _%>
-          <%_ if (databaseType !== 'cassandra') { _%>
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
-          <%_ } _%>
-        <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
       };
-    <%_ if (pagination === 'infinite-scroll') { _%>
+<%_ if (paginationInfiniteScroll) { _%>
     }
-    <%_ } _%>
+<%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
         loading: false,
         entity: action.payload.data
       };
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     case SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
@@ -173,7 +168,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: true,
         entity: {}
       };
-    <%_ if (fieldsContainBlob) { _%>
+  <%_ if (fieldsContainBlob) { _%>
     case ACTION_TYPES.SET_BLOB: {
       const { name, data, contentType } = action.payload;
       return {
@@ -185,8 +180,8 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         }
       };
     }
-    <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -196,26 +191,26 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
   }
 };
 
-const apiUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
-<%_ if (searchEngine !== false) { _%>
-const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
+const apiUrl = '<% if (applicationTypeGateway && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+<%_ if (searchEngine) { _%>
+const apiSearchUrl = '<% if (applicationTypeGateway && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
 
-<%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
 export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-<%_ if (pagination !== 'no') { _%>
+  <%_ if (!paginationNo) { _%>
   payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
-<%_ } else { _%>
+  <%_ } else { _%>
   payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}`)
-<%_ } _%>
+  <%_ } _%>
 });
 
 <%_ } _%>
 export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, size, sort) =>
-<%_ if (pagination !== 'no') { _%>
+<%_ if (!paginationNo) { _%>
 {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
@@ -244,7 +239,7 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
   dispatch(getEntities());
   <%_ } _%>
   return result;
@@ -272,13 +267,13 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
   dispatch(getEntities());
   <%_ } _%>
   return result;
 };
 
-<%_ if (fieldsContainBlob) { _%>
+  <%_ if (fieldsContainBlob) { _%>
 export const setBlob = (name, data, contentType?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
@@ -287,7 +282,7 @@ export const setBlob = (name, data, contentType?) => ({
     contentType
   }
 });
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 export const reset = () => ({

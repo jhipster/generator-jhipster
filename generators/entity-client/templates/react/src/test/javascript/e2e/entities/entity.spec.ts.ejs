@@ -55,15 +55,15 @@ describe('<%= entityClass %> e2e test', () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         await signInPage.waitUntilDisplayed();
         await signInPage.username.sendKeys(username);
         await signInPage.password.sendKeys(password);
         await signInPage.loginButton.click();
         await signInPage.waitUntilHidden();
-        <%_ } else { _%>
+<%_ } else { _%>
         await signInPage.loginWithOAuth(username, password);
-        <%_ } _%>
+<%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
         await waitUntilDisplayed(navBarPage.adminMenu);
         await waitUntilDisplayed(navBarPage.accountMenu);
@@ -79,9 +79,9 @@ describe('<%= entityClass %> e2e test', () => {
     it('should load <%= entityClassPlural %>', async () => {
         expect(await <%= entityInstance %>ComponentsPage.title.getText())
             .to.match(/<%= entityClassPluralHumanized %>/);
-        <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
-        <%_ } _%>
+<%_ } _%>
     });
 
 <%_ if (!readOnly) { _%>

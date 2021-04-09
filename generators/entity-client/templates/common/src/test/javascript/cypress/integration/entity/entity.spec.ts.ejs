@@ -28,7 +28,7 @@ describe('<%= entityClass %> e2e test', () => {
   const <%= entityInstance %>PageUrl = '/<%= entityUrl %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityUrl %>(\\?.*)?$');
 
-  <%_ if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
@@ -129,8 +129,6 @@ describe('<%= entityClass %> e2e test', () => {
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
   <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
     const fieldName = field.fieldName;
-    const fieldType = field.fieldType;
-    const fieldTypeBlobContent = field.fieldTypeBlobContent;
     const fieldIsEnum = field.fieldIsEnum;
     const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
     if (fieldValue === undefined) {
@@ -142,28 +140,25 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ if (field.fieldTypeTimed) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('equal', '<%= fieldValue %>');
 
-    <%_ } else if (fieldType === 'Duration' && clientFramework === 'react') { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
 
-    <%_ } else if (fieldType === 'Duration' && clientFramework !== 'react') { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
-
-    <%_ } else if (fieldType === 'Boolean') { _%>
+    <%_ } else if (field.fieldTypeBoolean) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
     cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeBinary) { _%>
     cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).select('<%= fieldValue %>');
 
-    <%_ } else if (fieldType === 'UUID'){ _%>
+    <%_ } else if (field.fieldTypeUUID) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
-    <%_ } else if(['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', ].includes(fieldType)) { _%>
+    <%_ } else if(field.fieldTypeNumeric || field.fieldTypeLocalDate) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').should('have.value', '<%= fieldValue %>');
 
     <%_ } else { _%>
@@ -172,13 +167,12 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } _%>
   <%_ }); _%>
   <%_ relationships.forEach((relationship) => {
-    const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
-    const relationshipName = relationship.relationshipName;
-    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    const relationshipName = relationship.relationshipName; _%>
+    <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
 
-    <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+    <%_ } else if ((relationship.relationshipManyToMany && ownerSide)) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
 
     <%_ } _%>

@@ -28,6 +28,7 @@ const ServiceTypes = {
 };
 
 const PaginationTypes = {
+  PAGER: 'pager',
   PAGINATION: 'pagination',
   INFINITE_SCROLL: 'infinite-scroll',
   NO: 'no',
