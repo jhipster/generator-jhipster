@@ -31,7 +31,7 @@ import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageService<% } %> } from 'ngx-webstorage';
 
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
@@ -64,6 +64,10 @@ describe('Service Tests', () => {
 <%_ if (communicationSpringWebsocket) { _%>
     let mockTrackerService: TrackerService;
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
+    let mockTranslateService: TranslateService;
+    let sessionStorageService: SessionStorageService;
+<%_ } _%>
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -86,6 +90,10 @@ describe('Service Tests', () => {
       mockRouter = TestBed.inject(Router);
 <%_ if (communicationSpringWebsocket) { _%>
       mockTrackerService = TestBed.inject(TrackerService);
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      mockTranslateService = TestBed.inject(TranslateService);
+      sessionStorageService = TestBed.inject(SessionStorageService);
 <%_ } _%>
     });
 
@@ -151,6 +159,34 @@ describe('Service Tests', () => {
         httpMock.expectOne({ method: 'GET' });
       });
 
+<%_ if (enableTranslation) { _%>
+      describe('should change the language on authentication if necessary', () => {
+        it('should change language if user has not changed language manually', () => {
+          // GIVEN
+          sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? undefined : 'otherSessionStorageValue'));
+
+          // WHEN
+          service.identity().subscribe();
+          httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+          // THEN
+          expect(mockTranslateService.use).toHaveBeenCalledWith('accountLang');
+        });
+
+        it('should not change language if user has changed language manually', () => {
+          // GIVEN
+          sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? 'sessionLang' : undefined));
+
+          // WHEN
+          service.identity().subscribe();
+          httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+          // THEN
+          expect(mockTranslateService.use).not.toHaveBeenCalled();
+        });
+      });
+
+<%_ } _%>
       describe('navigateToStoredUrl', () => {
         it('should navigate to the previous stored url post successful authentication', () => {
           // GIVEN
