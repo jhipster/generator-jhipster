@@ -20,6 +20,32 @@
 const assert = require('assert');
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
+const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = require('../jdl/jhipster/field-types');
+const { MIN, MINLENGTH, MAX, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../jdl/jhipster/validations');
+const { MYSQL } = require('../jdl/jhipster/database-types');
+const { MapperTypes } = require('../jdl/jhipster/entity-options');
+
+const { MAPSTRUCT } = MapperTypes;
+const { TEXT, IMAGE, ANY } = BlobTypes;
+const {
+  BOOLEAN,
+  BIG_DECIMAL,
+  DOUBLE,
+  DURATION,
+  FLOAT,
+  INSTANT,
+  INTEGER,
+  LOCAL_DATE,
+  LONG,
+  STRING,
+  UUID,
+  ZONED_DATE_TIME,
+  IMAGE_BLOB,
+  ANY_BLOB,
+  TEXT_BLOB,
+  BLOB,
+} = CommonDBTypes;
+const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
 const fakeStringTemplateForFieldName = columnName => {
   let fakeTemplate;
@@ -91,15 +117,15 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
       data = undefined;
     }
     // eslint-disable-next-line no-template-curly-in-string
-  } else if (['Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal', 'Duration'].includes(field.fieldType)) {
+  } else if ([INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL, DURATION].includes(field.fieldType)) {
     data = faker.datatype.number({
       max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : undefined,
       min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : undefined,
     });
-  } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(field.fieldType)) {
+  } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE].includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
     const isoDate = faker.date.recent(1, changelogDate).toISOString();
-    if (field.fieldType === 'LocalDate') {
+    if (field.fieldType === LOCAL_DATE) {
       data = isoDate.split('T')[0];
     } else {
       // Write the date without milliseconds so Java can parse it
@@ -111,35 +137,35 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
         data = data.substr(0, data.length - 3);
       }
     }
-  } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
+  } else if (field.fieldType === BYTES && field.fieldTypeBlobContent !== TEXT) {
     data = '../fake-data/blob/hipster.png';
-  } else if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'text') {
+  } else if (field.fieldType === BYTES && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
-  } else if (field.fieldType === 'String') {
+  } else if (field.fieldType === STRING) {
     data = field.id ? faker.datatype.uuid() : faker.fake(fakeStringTemplateForFieldName(field.columnName));
-  } else if (field.fieldType === 'UUID') {
+  } else if (field.fieldType === UUID) {
     data = faker.datatype.uuid();
-  } else if (field.fieldType === 'Boolean') {
+  } else if (field.fieldType === BOOLEAN) {
     data = faker.datatype.boolean();
   }
 
   // Validation rules
   if (data !== undefined && field.fieldValidate === true) {
     // manage String max length
-    if (field.fieldValidateRules.includes('maxlength')) {
+    if (field.fieldValidateRules.includes(MAXLENGTH)) {
       const maxlength = field.fieldValidateRulesMaxlength;
       data = data.substring(0, maxlength);
     }
 
     // manage String min length
-    if (field.fieldValidateRules.includes('minlength')) {
+    if (field.fieldValidateRules.includes(MINLENGTH)) {
       const minlength = field.fieldValidateRulesMinlength;
       data = data.length > minlength ? data : data + 'X'.repeat(minlength - data.length);
     }
 
     // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
     if (
-      field.fieldValidateRules.includes('pattern') &&
+      field.fieldValidateRules.includes(PATTERN) &&
       !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data.substring(1, data.length - 1))
     ) {
       data = undefined;
@@ -149,13 +175,54 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     data !== undefined &&
     type === 'ts' &&
     // eslint-disable-next-line no-template-curly-in-string
-    !['Boolean', 'Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal'].includes(field.fieldType)
+    ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)
   ) {
     data = `'${data}'`;
   }
 
   return data;
 };
+
+function derivedProperties(field) {
+  const fieldType = field.fieldType;
+  const fieldTypeBlobContent = field.fieldTypeBlobContent;
+  const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
+  _.defaults(field, {
+    blobContentTypeText: fieldTypeBlobContent === TEXT,
+    blobContentTypeImage: fieldTypeBlobContent === IMAGE,
+    blobContentTypeAny: fieldTypeBlobContent === ANY,
+    fieldTypeBoolean: fieldType === BOOLEAN,
+    fieldTypeBigDecimal: fieldType === BIG_DECIMAL,
+    fieldTypeDouble: fieldType === DOUBLE,
+    fieldTypeDuration: fieldType === DURATION,
+    fieldTypeFloat: fieldType === FLOAT,
+    fieldTypeInstant: fieldType === INSTANT,
+    fieldTypeInteger: fieldType === INTEGER,
+    fieldTypeLocalDate: fieldType === LOCAL_DATE,
+    fieldTypeLong: fieldType === LONG,
+    fieldTypeString: fieldType === STRING,
+    fieldTypeUUID: fieldType === UUID,
+    fieldTypeZonedDateTime: fieldType === ZONED_DATE_TIME,
+    fieldTypeImageBlob: fieldType === IMAGE_BLOB,
+    fieldTypeAnyBlob: fieldType === ANY_BLOB,
+    fieldTypeTextBlob: fieldType === TEXT_BLOB,
+    fieldTypeBlob: fieldType === BLOB,
+    fieldTypeBytes: fieldType === BYTES,
+    fieldTypeByteBuffer: fieldType === BYTE_BUFFER,
+    fieldTypeNumeric:
+      fieldType === INTEGER || fieldType === LONG || fieldType === FLOAT || fieldType === DOUBLE || fieldType === BIG_DECIMAL,
+    fieldTypeBinary: fieldType === BYTES || fieldType === BYTE_BUFFER,
+    fieldTypeTimed: fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
+    fieldTypeCharSequence: fieldType === STRING || fieldType === UUID,
+    fieldTypeTemporal: fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
+    fieldValidationRequired: validationRules.includes(REQUIRED),
+    fieldValidationMin: validationRules.includes(MIN),
+    fieldValidationMinLength: validationRules.includes(MINLENGTH),
+    fieldValidationMax: validationRules.includes(MAX),
+    fieldValidationMaxLength: validationRules.includes(MAXLENGTH),
+    fieldValidationPattern: validationRules.includes(PATTERN),
+  });
+}
 
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
   _.defaults(field, {
@@ -170,7 +237,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   if (field.mapstructExpression) {
     assert.equal(
       entityWithConfig.dto,
-      'mapstruct',
+      MAPSTRUCT,
       `@MapstructExpression requires an Entity with mapstruct dto [${entityWithConfig.name}.${field.fieldName}].`
     );
     // Remove from Entity.java and liquibase.
@@ -181,7 +248,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
 
   if (field.id) {
     if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && ['Long', 'UUID'].includes(field.fieldType);
+      field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
     }
     if (!field.autoGenerate) {
       field.liquibaseAutoIncrement = false;
@@ -191,8 +258,8 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
       field.jpaGeneratedValue = false;
       field.readonly = true;
     } else {
-      const defaultGenerationType = entityWithConfig.prodDatabaseType === 'mysql' ? 'identity' : 'sequence';
-      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === 'Long' ? defaultGenerationType : true;
+      const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
+      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
       field.readonly = true;
       if (field.jpaGeneratedValue === 'identity') {
         field.liquibaseAutoIncrement = true;
@@ -201,7 +268,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
-  field.fieldWithContentType = (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text';
+  field.fieldWithContentType = (fieldType === BYTES || fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
 
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = _.snakeCase(field.fieldName);
@@ -260,8 +327,8 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
-  field.nullable = !(field.fieldValidate === true && field.fieldValidateRules.includes('required'));
-  field.unique = field.fieldValidate === true && field.fieldValidateRules.includes('unique');
+  field.nullable = !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED));
+  field.unique = field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE);
   if (field.unique) {
     field.uniqueConstraintName = generator.getUXConstraintName(
       entityWithConfig.entityTableName,
@@ -269,7 +336,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
       entityWithConfig.prodDatabaseType
     );
   }
-  if (field.fieldValidate === true && field.fieldValidateRules.includes('maxlength')) {
+  if (field.fieldValidate === true && field.fieldValidateRules.includes(MAXLENGTH)) {
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
 
@@ -281,7 +348,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   field.generateFakeData = (type = 'csv') => {
     let data = generateFakeDataForField(field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
-    if (field.fieldValidate === true && field.fieldValidateRules.includes('unique')) {
+    if (field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE)) {
       let i = 0;
       while (field.uniqueValue.indexOf(data) !== -1) {
         if (i++ === 5) {
@@ -302,26 +369,26 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   field.path = [field.fieldName];
   field.relationshipsPath = [];
   field.reference = fieldToReference(entityWithConfig, field);
-
+  derivedProperties(field);
   return field;
 }
 
 function fieldIsEnum(fieldType) {
   return ![
-    'String',
-    'Integer',
-    'Long',
-    'Float',
-    'Double',
-    'BigDecimal',
-    'LocalDate',
-    'Instant',
-    'ZonedDateTime',
-    'Duration',
-    'UUID',
-    'Boolean',
-    'byte[]',
-    'ByteBuffer',
+    STRING,
+    INTEGER,
+    LONG,
+    FLOAT,
+    DOUBLE,
+    BIG_DECIMAL,
+    LOCAL_DATE,
+    INSTANT,
+    ZONED_DATE_TIME,
+    DURATION,
+    UUID,
+    BOOLEAN,
+    BYTES,
+    BYTE_BUFFER,
   ].includes(fieldType);
 }
 

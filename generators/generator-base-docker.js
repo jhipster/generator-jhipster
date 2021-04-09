@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 const prompts = require('./docker-prompts');
-const BaseGenerator = require('./generator-base');
+const BlueprintBaseGenerator = require('./generator-base-blueprint');
 const { GENERATOR_DOCKER_COMPOSE } = require('./generator-list');
 const { loadFromYoRc, checkDocker, checkImages, generateJwtSecret, setAppsFolderPaths } = require('./docker-base');
 const statistics = require('./statistics');
 
 const constants = require('./generator-constants');
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BlueprintBaseGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
 

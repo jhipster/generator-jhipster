@@ -20,7 +20,9 @@
 const logger = require('../../utils/objects/logger');
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = require('../../jhipster/unary-options');
 const BinaryOptions = require('../../jhipster/binary-options');
+const { ServiceTypes } = require('../../jhipster/entity-options');
 
+const NO_SERVICE = ServiceTypes.NO;
 const {
   Options: { ANGULAR_SUFFIX, MICROSERVICE, SEARCH, DTO },
 } = BinaryOptions;
@@ -77,7 +79,7 @@ function setOptionsToEachEntityName(jdlOption) {
   });
   jdlOption.entityNames.forEach(entityName => {
     const serviceOptionValue = convertedOptionContent.get(entityName).service;
-    if ((!serviceOptionValue || serviceOptionValue === 'no') && [DTO, FILTER].includes(jdlOption.name)) {
+    if ((!serviceOptionValue || serviceOptionValue === NO_SERVICE) && [DTO, FILTER].includes(jdlOption.name)) {
       logger.info(
         `The ${jdlOption.name} option is set for ${entityName}, the '${serviceClassOptionValue}' value for the ` +
           "'service' is gonna be set for this entity if no other value has been set."

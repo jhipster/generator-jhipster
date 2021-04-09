@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
-<%_ if (pagination === 'pagination') { _%>
+import { <%_ if (!paginationNo) { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
+<%_ if (paginationPagination) { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
-<%_ } else if (searchEngine !== false) { _%>
+<%_ } else if (searchEngine) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 <%_ if (!readOnly) { _%>
@@ -29,7 +29,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
-<%_ if (pagination !== 'no') { %>
+<%_ if (!paginationNo) { %>
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
@@ -39,7 +39,7 @@ import { <%= entityAngularName %>DeleteDialogComponent } from '../delete/<%= ent
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
-<%_ if (pagination === 'infinite-scroll') { _%>
+<%_ if (paginationInfiniteScroll) { _%>
 import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ } _%>
 
@@ -48,21 +48,21 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
     templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularName %>Component implements OnInit {
-    <%_ if (pagination === 'pagination') { _%>
+<%_ if (paginationPagination) { _%>
 <%- include('pagination-template'); -%>
-    <%_ } else if (pagination === 'infinite-scroll') { _%>
+<%_ } else if (paginationInfiniteScroll) { _%>
 <%- include('infinite-scroll-template'); -%>
-    <%_ } else if (pagination === 'no') { _%>
+<%_ } else if (paginationNo) { _%>
 <%- include('no-pagination-template'); -%>
-    <%_ } _%>
+<%_ } _%>
 
-    <%_ if (primaryKey) { _%>
+<%_ if (primaryKey) { _%>
     track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
         return item.<%= primaryKey.name %>!;
     }
 
-    <%_ } _%>
-    <%_ if (fieldsContainBlob) { _%>
+<%_ } _%>
+<%_ if (fieldsContainBlob) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
     }
@@ -70,18 +70,18 @@ export class <%= entityAngularName %>Component implements OnInit {
     openFile(base64String: string, contentType: string | null | undefined): void {
         return this.dataUtils.openFile(base64String, contentType);
     }
-    <%_ } _%>
+<%_ } _%>
 
-    <%_
-    let eventCallBack = 'this.loadAll()';
-    if (pagination === 'pagination') {
-        eventCallBack = 'this.loadPage()';
-    } else if (pagination === 'infinite-scroll') {
-        eventCallBack = 'this.reset()';
-    }
-    _%>
+<%_
+let eventCallBack = 'this.loadAll()';
+if (paginationPagination) {
+    eventCallBack = 'this.loadPage()';
+} else if (paginationInfiniteScroll) {
+    eventCallBack = 'this.reset()';
+}
+_%>
 
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
         const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
@@ -92,9 +92,9 @@ export class <%= entityAngularName %>Component implements OnInit {
             }
         });
     }
-    <%_ } _%>
+<%_ } _%>
 
-<%_ if (pagination !== 'no') { _%>
+<%_ if (!paginationNo) { _%>
     protected sort(): string[] {
         const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
         if (this.predicate !== '<%- primaryKey.name %>') {
@@ -103,8 +103,7 @@ export class <%= entityAngularName %>Component implements OnInit {
         return result;
     }
 
-    <%_ if (pagination === 'pagination') { _%>
-
+    <%_ if (paginationPagination) { _%>
     protected handleNavigation(): void {
         combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
             const page = params.get('page');
@@ -123,7 +122,7 @@ export class <%= entityAngularName %>Component implements OnInit {
     protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
         this.page = page;
-        <%_ if (searchEngine !== false) { _%>
+        <%_ if (searchEngine) { _%>
         this.ngbPaginationPage = this.page;
         <%_ } _%>
         if (navigate) {
@@ -131,9 +130,9 @@ export class <%= entityAngularName %>Component implements OnInit {
                 queryParams: {
                     page: this.page,
                     size: this.itemsPerPage,
-                    <%_ if (searchEngine !== false) { _%>
+        <%_ if (searchEngine) { _%>
                     search: this.currentSearch,
-                    <%_ } _%>
+        <%_ } _%>
                     sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
                 }
             });
@@ -146,8 +145,7 @@ export class <%= entityAngularName %>Component implements OnInit {
         this.ngbPaginationPage = this.page ?? 1;
     }
 
-    <%_ } else if (pagination === 'infinite-scroll') { _%>
-
+    <%_ } else if (paginationInfiniteScroll) { _%>
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
         this.links = this.parseLinks.parse(headers.get('link') ?? '');
         if (data) {

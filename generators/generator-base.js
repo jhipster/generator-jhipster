@@ -51,6 +51,7 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
 
+const { GENERATOR_BOOTSTRAP } = require('./generator-list');
 const { JWT, OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE, REDIS, HAZELCAST, MEMCACHED } = require('../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -60,6 +61,7 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
+const { ELK, PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -162,7 +164,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         this.env.queueGenerator(generator, true);
       }
       */
-      this.composeWithJHipster('bootstrap', { ...this.options, configOptions: this.configOptions }, true);
+      this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions }, true);
     }
   }
 
@@ -2032,7 +2034,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   buildApplication(buildTool, profile, buildWar, cb) {
     let buildCmd = 'mvnw -ntp verify -B';
 
-    if (buildTool === 'gradle') {
+    if (buildTool === GRADLE) {
       buildCmd = 'gradlew';
       if (buildWar) {
         buildCmd += ' bootWar';
@@ -2483,8 +2485,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
 
-    dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
-    dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+    this.loadDerivedAppConfig(config, dest);
+  }
+
+  loadDerivedMicroserviceAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.jhiPrefixCapitalized = _.upperFirst(config.jhiPrefix);
+    dest.jhiPrefixDashed = _.kebabCase(config.jhiPrefix);
+  }
+
+  loadDerivedAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    this.loadDerivedMicroserviceAppConfig(config, dest);
     dest.applicationTypeGateway = config.applicationType === GATEWAY;
     dest.applicationTypeMonolith = config.applicationType === MONOLITH;
     dest.applicationTypeMicroservice = config.applicationType === MICROSERVICE;
@@ -2502,6 +2512,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
+    this.loadDerivedClientConfig(config, dest);
+  }
+
+  loadDerivedClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
     dest.clientFrameworkReact = config.clientFramework === REACT;
     dest.clientThemeNone = config.clientTheme === 'none';
@@ -2560,6 +2574,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
+    this.loadDerivedServerConfig(config, dest);
+  }
+
+  loadDerivedServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.cacheProviderRedis = config.cacheProvider === REDIS;
     dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
     dest.cacheProviderMemcached = config.cacheProvider === MEMCACHED;
@@ -2579,13 +2597,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.authenticationTypeSession = config.authenticationType === SESSION;
     dest.authenticationTypeJwt = config.authenticationType === JWT;
     dest.authenticationTypeOauth2 = config.authenticationType === OAUTH2;
+
     dest.communicationSpringWebsocket = config.websocket === SPRING_WEBSOCKET;
+
     dest.messageBrokerKafka = config.messageBroker === KAFKA;
 
     dest.serviceDiscoveryConsul = config.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
 
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
+
+    dest.monitoringPrometheus = config.monitoring === PROMETHEUS;
+    dest.monitoringELK = config.monitoring === ELK;
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}

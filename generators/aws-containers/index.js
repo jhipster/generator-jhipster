@@ -21,7 +21,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const shelljs = require('shelljs');
 
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const docker = require('../docker-base');
 const dockerCli = require('../docker-cli');
 const dockerUtils = require('../docker-utils');
@@ -30,6 +30,7 @@ const constants = require('../generator-constants');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const fileUtils = require('../../jdl/utils/file-utils');
 const { MONOLITH } = require('../../jdl/jhipster/application-types');
+const { GENERATOR_AWS_CONTAINER } = require('../generator-list');
 
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
@@ -67,7 +68,9 @@ const BOOTSTRAP_FILENAME = 'bootstrap-aws.yml.ejs';
  */
 const ssmPasswordProperty = (stacKName, applicationName) => `/${stacKName}/${applicationName}/spring.datasource.password`;
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
@@ -84,9 +87,10 @@ module.exports = class extends BaseGenerator {
       type: Boolean,
       defaults: false,
     });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_AWS_CONTAINER);
   }
 
-  get initializing() {
+  _initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -168,7 +172,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get prompting() {
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
     return {
       askTypeOfApplication: prompts.askTypeOfApplication,
       askDirectoryPath: dockerPrompts.askForPath,
@@ -278,7 +287,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       bonjour() {
         if (this.abort) return;
@@ -312,7 +326,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get default() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _default() {
     return {
       bonjour() {
         if (this.abort) return;
@@ -386,6 +405,11 @@ module.exports = class extends BaseGenerator {
     };
   }
 
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
   _writeFileErrorHandler(generator) {
     fs.writeFile('awsConstants.json', JSON.stringify(this.aws), function (error) {
       if (error) {
@@ -414,7 +438,7 @@ module.exports = class extends BaseGenerator {
       });
   }
 
-  get end() {
+  _end() {
     return {
       checkAndBuildImages() {
         if (this.abort || !this.deployNow || this.skipBuild) return null;
@@ -702,5 +726,10 @@ module.exports = class extends BaseGenerator {
         this._writeFileErrorHandler(this);
       },
     };
+  }
+
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 };

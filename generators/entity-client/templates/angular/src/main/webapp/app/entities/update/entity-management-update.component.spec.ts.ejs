@@ -83,7 +83,7 @@ describe('Component Tests', () => {
 
         describe('ngOnInit', () => {
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
-    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && !rel.otherEntityUser); _%>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
         <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
@@ -157,7 +157,7 @@ describe('Component Tests', () => {
 
                 expect(comp.editForm.value).toEqual(expect.objectContaining(<%= entityInstance %>));
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
-    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && !rel.otherEntityUser); _%>
     <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
         <%_ const otherEntity = relationship.otherEntity _%>
                 expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationship.relationshipFieldNamePlural %><% } %>Collection).toContain(<%= relationship.reference.name %>);
@@ -236,7 +236,6 @@ _%>
         describe('Tracking relationships identifiers', () => {
     <%_ for (reference of trackedEntities) {
             const otherEntity = reference.relationship.otherEntity;
-            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
     _%>
             describe('track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>', () => {
                 it('Should return tracked <%= otherEntity.entityAngularName %> primary key', () => {
@@ -249,16 +248,13 @@ _%>
     <%_ } _%>
         });
 <%_ } _%>
-<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
+<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipManyToMany && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
     if (selectableEntities.length > 0) {
 _%>
 
         describe('Getting selected relationships', () => {
     <%_ for (reference of selectableEntities) {
             const otherEntity = reference.relationship.otherEntity;
-            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
-            const otherEntityAlternativeTsKeyId = generateTestEntityId(otherEntity.primaryKey.type, 1);
-            const isUserRelation = isBuiltInUser(otherEntity.entityAngularName);
     _%>
             describe('getSelected<%= otherEntity.entityAngularName %>', () => {
                 it('Should return option if no <%= otherEntity.entityAngularName %> is selected', () => {

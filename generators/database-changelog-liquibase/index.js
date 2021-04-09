@@ -24,6 +24,7 @@ const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrate
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { stringify } = require('../../utils');
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE } = require('../generator-list');
 
 const TYPE_LONG = CommonDBTypes.LONG;
 
@@ -48,7 +49,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Set number of rows to be generated
     this.numberOfRows = 10;
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('database-changelog-liquibase');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE);
   }
 
   _loading() {

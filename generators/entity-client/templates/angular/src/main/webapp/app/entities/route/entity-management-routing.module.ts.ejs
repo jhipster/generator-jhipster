@@ -31,11 +31,11 @@ const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-        <%_ if (pagination === 'pagination') { _%>
+<%_ if (paginationPagination) { _%>
         data: {
             defaultSort: 'id,asc',
         },
-        <%_ } _%>
+<%_ } _%>
         canActivate: [UserRouteAccessService]
     },
     {
@@ -46,7 +46,7 @@ const <%= entityInstance %>Route: Routes = [
         },
         canActivate: [UserRouteAccessService]
     },
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     {
         path: 'new',
         component: <%= entityAngularName %>UpdateComponent,
@@ -63,7 +63,7 @@ const <%= entityInstance %>Route: Routes = [
         },
         canActivate: [UserRouteAccessService]
     },
-    <%_ } _%>
+<%_ } _%>
 ];
 
 @NgModule({

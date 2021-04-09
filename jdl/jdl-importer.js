@@ -29,6 +29,9 @@ const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-expo
 const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
 const JDLWithApplicationValidator = require('./validators/jdl-with-application-validator');
 const JDLWithoutApplicationValidator = require('./validators/jdl-without-application-validator');
+const { OptionNames } = require('./jhipster/application-options');
+
+const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 
 module.exports = {
   createImporterFromContent,
@@ -245,7 +248,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   }
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
-  const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
+  const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
   const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
     jdlObject,
     unidirectionalRelationships,
@@ -258,7 +261,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   if (jsonEntities.length !== 0) {
     const exportedJSONEntities = exportJSONEntities(jsonEntities, {
       applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
+      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: false,
       skipFileGeneration,
     });
@@ -291,7 +294,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
     const jdlApplication = jdlObject.getApplication(applicationName);
     const exportedJSONEntities = exportJSONEntities(jsonEntities, {
       applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
+      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: true,
       skipFileGeneration,
     });

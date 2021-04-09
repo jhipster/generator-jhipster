@@ -30,7 +30,14 @@ const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = OptionNames;
-const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_CLIENT, GENERATOR_SERVER } = require('../generator-list');
+const {
+  GENERATOR_COMMON,
+  GENERATOR_ENTITIES,
+  GENERATOR_LANGUAGES,
+  GENERATOR_CLIENT,
+  GENERATOR_PAGE,
+  GENERATOR_SERVER,
+} = require('../generator-list');
 
 let useBlueprints;
 
@@ -431,14 +438,14 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
       composeEntities() {
         if (!this.options.withEntities) return;
-        this.composeWithJHipster('entities', { skipInstall: true }, true);
+        this.composeWithJHipster(GENERATOR_ENTITIES, { skipInstall: true }, true);
       },
 
       composePages() {
         if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
         this.configOptions.skipComposePage = true;
         this.jhipsterConfig.pages.forEach(page => {
-          this.composeWithJHipster(page.generator || 'page', [page.name], {
+          this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
             skipInstall: true,
             page,
           });

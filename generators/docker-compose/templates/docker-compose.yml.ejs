@@ -38,7 +38,7 @@ services:
       #ports:
       # - 9092:9092 # Uncomment to make Kafka available externally
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
   jhipster-registry:
     image: <%= DOCKER_JHIPSTER_REGISTRY %>
     volumes:
@@ -49,10 +49,10 @@ services:
     # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
       - JHIPSTER_SLEEP=20
-      <%_ } _%>
-      - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
+  <%_ } _%>
+      - SPRING_PROFILES_ACTIVE=dev<% if (authenticationTypeOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
       - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
@@ -60,23 +60,23 @@ services:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-      <%_ if (monitoring === 'elk') { _%>
+  <%_ if (monitoringELK) { _%>
       - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
       - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
-      <%_ } _%>
-      <%_ if (monitoring === 'prometheus') { _%>
+  <%_ } _%>
+  <%_ if (monitoringPrometheus) { _%>
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      <%_ } _%>
-      <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ } _%>
+  <%_ if (authenticationTypeOauth2) { _%>
       # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-      <%_ } _%>
+  <%_ } _%>
     ports:
       - 8761:8761
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
   consul:
     image: <%= DOCKER_CONSUL %>
     ports:
@@ -93,7 +93,7 @@ services:
       - CONSUL_URL=consul
       - CONSUL_PORT=8500
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   keycloak:
     image: <%= DOCKER_KEYCLOAK %>
     command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
@@ -108,7 +108,7 @@ services:
       - 9443:9443
       - 10990:10990
 <%_ } _%>
-<%_ if (monitoring === 'prometheus') { _%>
+<%_ if (monitoringPrometheus) { _%>
 
   prometheus:
     image: <%= DOCKER_PROMETHEUS %>
