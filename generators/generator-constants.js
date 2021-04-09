@@ -310,6 +310,7 @@ const LANGUAGES = [
 ];
 
 const constants = {
+  GENERATOR_JHIPSTER: 'generator-jhipster',
   JHIPSTER_CONFIG_DIR: '.jhipster',
   INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
   DOCKER_DIR: `${MAIN_DIR}docker/`,

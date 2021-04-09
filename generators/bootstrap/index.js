@@ -76,7 +76,9 @@ module.exports = class extends BaseGenerator {
       },
 
       loadClientPackageManager() {
-        this.env.options.nodePackageManager = this.jhipsterConfig.clientPackageManager;
+        if (this.jhipsterConfig.clientPackageManager) {
+          this.env.options.nodePackageManager = this.jhipsterConfig.clientPackageManager;
+        }
       },
     };
   }

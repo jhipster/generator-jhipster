@@ -176,6 +176,9 @@ const defaultCommands = {
   'upgrade-config': {
     desc: 'Upgrade the JHipster configuration',
   },
+  workspaces: {
+    desc: 'Add workspaces configuration',
+  },
 };
 
 module.exports = defaultCommands;

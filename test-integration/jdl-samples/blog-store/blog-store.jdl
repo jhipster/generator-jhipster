@@ -1,0 +1,98 @@
+
+/*
+ * This is a microservice blog sample with Gateway and two microservice applications
+ * This uses JHipster registry for service discovery and OIDC authentication
+ */
+ 
+application {
+  config {
+    baseName gateway
+    packageName com.okta.developer.gateway
+    applicationType gateway
+    authenticationType oauth2
+    prodDatabaseType postgresql
+    testFrameworks [cypress]
+    creationTimestamp 1617901618886
+  }
+  entities Blog, Post, Tag, Product
+}
+
+application {
+  config {
+    baseName blog
+    packageName com.okta.developer.blog
+    applicationType microservice
+    authenticationType oauth2
+    prodDatabaseType postgresql
+    searchEngine elasticsearch
+    serverPort 8081
+    creationTimestamp 1617901618887
+    jwtSecretKey "Yjk3ZmQzMDExNTJmYjczZDgxNzg5ODZhMGIyZTdkNGQ4MGFiNGU3OTUzYjI2MTM0NWYwYTRhNjc3NGM1MDFiMWZmMDkyYjk2NWNiNzRjMGVkYzczYjYyZmI1NzY4YzQyNjA3Yjk0ODQ2ODJhMGM5Mjg4NDgyMTEyMjVkN2U4YjU="
+  }
+  entities Blog, Post, Tag
+}
+
+application {
+  config {
+    baseName store,
+    packageName com.okta.developer.store
+    applicationType microservice
+    authenticationType oauth2
+    databaseType mongodb
+    devDatabaseType mongodb
+    prodDatabaseType mongodb
+    enableHibernateCache false
+    serverPort 8082
+    creationTimestamp 1617901618888
+    jwtSecretKey "MmYyZDNhMDA0ZTU1ZjZhOTI2MTc0ZjgyZDFjMzcxNjI5YjAyZTNmMDFlNjYzOTlmYWYwODQwNTUzYzczYzgyM2M1OWFhNTVjNWQzZWVlNmFkMWNlMzg4OGQyMWRmZWY0YjkwMjY2NGYyM2VhYjE5OWViOThlZTUzMDgwZmM2N2U="
+  }
+  entities Product
+}
+
+@ChangelogDate(20210408164810)
+entity Blog {
+  name String required minlength(3)
+  handle String required minlength(2)
+}
+
+@ChangelogDate(20210408164811)
+entity Post {
+  title String required
+  content TextBlob required
+  date Instant required
+}
+
+@ChangelogDate(20210408164812)
+entity Tag {
+  name String required minlength(2)
+}
+
+@ChangelogDate(20210408164813)
+entity Product {
+  title String required
+  price BigDecimal required min(0)
+  image ImageBlob
+}
+
+relationship ManyToOne {
+  Blog{user(login)} to User
+  Post{blog(name)} to Blog
+}
+
+relationship ManyToMany {
+  Post{tag(name)} to Tag{post}
+}
+
+paginate Post, Tag with infinite-scroll
+paginate Product with pagination
+
+microservice Product with store
+microservice Blog, Post, Tag with blog
+
+deployment {
+   deploymentType docker-compose,
+   appsFolders [store, blog, gateway]
+   dockerRepositoryName "hipsterslabs"
+   monitoring no
+   serviceDiscoveryType eureka
+}

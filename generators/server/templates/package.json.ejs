@@ -43,6 +43,9 @@
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
   },
+  "config": {
+    "default_environment": "prod"
+  },
   "scripts": {
     "prettier:check": "prettier --check \"{,src/**/}*.{<%= getPrettierExtensions() %>}\"",
     "prettier:format": "prettier --write \"{,src/**/}*.{<%= getPrettierExtensions() %>}\""
