@@ -129,7 +129,6 @@ describe('<%= entityClass %> e2e test', () => {
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
   <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
     const fieldName = field.fieldName;
-    const fieldNameCapitalized = field.fieldNameCapitalized;
     const fieldType = field.fieldType;
     const fieldTypeBlobContent = field.fieldTypeBlobContent;
     const fieldIsEnum = field.fieldIsEnum;
@@ -140,7 +139,7 @@ describe('<%= entityClass %> e2e test', () => {
     }
   _%>
 
-    <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ if (field.fieldTypeTimed) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('equal', '<%= fieldValue %>');
 
     <%_ } else if (fieldType === 'Duration' && clientFramework === 'react') { _%>
@@ -176,7 +175,6 @@ describe('<%= entityClass %> e2e test', () => {
     const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
-    const relationshipNameCapitalized = relationship.relationshipNameCapitalized;_%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
 
