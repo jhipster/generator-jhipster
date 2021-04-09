@@ -42,7 +42,7 @@ export class AccountService {
   constructor(
 <%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    private sessionStorage: SessionStorageService,
+    private sessionStorageService: SessionStorageService,
 <%_ } _%>
     private http: HttpClient,
 <%_ if (communicationSpringWebsocket) { _%>
@@ -91,9 +91,9 @@ export class AccountService {
 <%_ if (enableTranslation) { _%>
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
-          if (account?.langKey) {
-            const langKey = this.sessionStorage.retrieve('locale') ?? account.langKey;
-            this.translateService.use(langKey);
+          // unless user have choosed other language in the current session
+          if (!this.sessionStorageService.retrieve('locale') && account) {
+            this.translateService.use(account.langKey);
           }
 <%_ } _%>
 
