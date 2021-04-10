@@ -90,9 +90,9 @@ microservice Product with store
 microservice Blog, Post, Tag with blog
 
 deployment {
-   deploymentType docker-compose,
-   appsFolders [store, blog, gateway]
-   dockerRepositoryName "hipsterslabs"
-   monitoring no
-   serviceDiscoveryType eureka
+  deploymentType docker-compose,
+  appsFolders [store, blog, gateway]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType eureka
 }
