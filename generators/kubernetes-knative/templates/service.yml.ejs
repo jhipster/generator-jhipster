@@ -109,7 +109,7 @@ spec:
             - name: SPRING_DATA_MONGODB_DATABASE
               value: <%= app.baseName %>
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
+              value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'couchbase') { _%>
             - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS

@@ -33,9 +33,10 @@ function writeFiles() {
       this.template('README-KUBERNETES-KNATIVE.md.ejs', 'KNATIVE-README.md');
       if (this.generatorType === 'k8s') {
         for (let i = 0; i < this.appConfigs.length; i++) {
-          const appName = this.appConfigs[i].baseName.toLowerCase();
-          const appOut = appName.concat('-', suffix);
           this.app = this.appConfigs[i];
+          const appName = this.app.baseName.toLowerCase();
+          const appOut = appName.concat('-', suffix);
+
           this.template('service.yml.ejs', `${appOut}/${appName}-service.yml`);
           // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
           if (this.app.prodDatabaseType !== 'no') {
@@ -87,9 +88,9 @@ function writeFiles() {
         this.template('kubectl-apply.sh.ejs', 'kubectl-knative-apply.sh');
       } else {
         for (let i = 0; i < this.appConfigs.length; i++) {
-          const appName = this.appConfigs[i].baseName.toLowerCase();
-          const appOut = appName.concat('-', suffix);
           this.app = this.appConfigs[i];
+          const appName = this.app.baseName.toLowerCase();
+          const appOut = appName.concat('-', suffix);
 
           this.template('service.yml.ejs', `${appOut}/templates/${appName}-service.yml`);
           this.template(`${helm}/app/values.yml.ejs`, `${appOut}/values.yml`);
