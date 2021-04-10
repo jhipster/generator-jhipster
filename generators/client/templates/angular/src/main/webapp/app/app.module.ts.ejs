@@ -121,7 +121,7 @@ export class AppModule {
 <%_ if (enableTranslation) { _%>
     translateService.setDefaultLang('<%= nativeLanguage %>');
     // if user have changed language and navigates away from the application and back to the application then use previously choosed language
-    const langKey = sessionStorageService.retrieve('locale') || '<%= nativeLanguage %>';
+    const langKey = sessionStorageService.retrieve('locale') ?? '<%= nativeLanguage %>';
     translateService.use(langKey);
 <%_ } _%>
   }
