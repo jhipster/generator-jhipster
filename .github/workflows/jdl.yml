@@ -115,14 +115,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-
       - name: 'SETUP: load maven cache'
-        if: "!contains(matrix.app-type, 'gradle')"
         uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}${{matrix.gradle}}
           restore-keys: |
-            ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-
+            ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load gradle cache'
+        if: matrix.gradle == 1
         uses: actions/cache@v2.1.4
         with:
           path: |
@@ -130,7 +130,7 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}
       - name: 'ENV: display variables'
         run: $JHI_SCRIPTS/01-display-configuration.sh
       - name: 'TOOLS: configure tools installed by the system'
