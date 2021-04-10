@@ -209,17 +209,16 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'TESTS: prepare keycloak'
         run: echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts
-      - name: 'TESTS: packaging'
-        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-        run: npm run ci:e2e:package
       - name: 'TESTS: backend'
         id: backend
         if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.skip-backend-tests != 1
         run: npm run ci:backend:test
-      - name: 'TESTS: webapp'
+      - name: 'TESTS: frontend'
         if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
-        # Using webapp:test instead of ci:webapp:test so webpack:build from packaging will be reused.
-        run: npm run webapp:test
+        run: npm run ci:frontend:test
+      - name: 'TESTS: packaging'
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        run: npm run ci:e2e:package
       - name: 'TESTS: Start docker-compose containers for e2e tests'
         if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
         run: npm run ci:e2e:prepare
