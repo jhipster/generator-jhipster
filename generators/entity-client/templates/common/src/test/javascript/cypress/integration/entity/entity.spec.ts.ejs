@@ -172,7 +172,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
 
-    <%_ } else if ((relationship.relationshipManyToMany && ownerSide)) { _%>
+    <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
     cy.setFieldSelectToLastOfEntity('<%= relationshipName %>');
 
     <%_ } _%>

@@ -201,7 +201,7 @@ _%>
   const relationshipName = relationship.relationshipName; _%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
         await this.<%= relationshipName %>SelectLastOption();
-  <%_ } else if ((relationship.relationshipManyToMany && ownerSide)) { _%>
+  <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
         // this.<%= relationshipName %>SelectLastOption();
   <%_ } _%>
 <%_ }); _%>

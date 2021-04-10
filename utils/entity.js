@@ -30,9 +30,9 @@ const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 
-const { BOOLEAN, LONG } = CommonDBTypes;
+const { BOOLEAN } = CommonDBTypes;
 const { MAPSTRUCT } = MapperTypes;
-const { PAGER, PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_MAPPER = MapperTypes.NO;
 
@@ -92,7 +92,6 @@ function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
   _.defaults(entityWithConfig, {
     paginationPagination: pagination === PAGINATION,
-    paginationPager: pagination === PAGER,
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
   });
@@ -220,12 +219,6 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   _derivedProperties(entityWithConfig);
 
   return entityWithConfig;
-}
-
-function _pkDerivedProperties(entityWithConfig) {
-  _.defaults(entityWithConfig, {
-    primaryKeyTypeLong: entityWithConfig.primaryKey.type === LONG,
-  });
 }
 
 function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enableCompositeId = true) {
@@ -384,7 +377,6 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       },
     };
   }
-  _pkDerivedProperties(entityWithConfig);
   return entityWithConfig;
 }
 

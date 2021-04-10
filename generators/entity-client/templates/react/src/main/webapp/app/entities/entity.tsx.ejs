@@ -37,7 +37,7 @@ import {
   <% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (!paginationNo) { _%>
   , getSortState, IPaginationBaseState
-  <%_ if (paginationPagination || paginationPager) { _%>
+  <%_ if (paginationPagination) { _%>
   , JhiPagination, JhiItemCount
   <%_ }
   } _%>
