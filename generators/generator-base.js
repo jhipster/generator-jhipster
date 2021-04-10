@@ -61,7 +61,6 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
-const { ELK, PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -2606,9 +2605,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
 
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
-
-    dest.monitoringPrometheus = config.monitoring === PROMETHEUS;
-    dest.monitoringELK = config.monitoring === ELK;
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
@@ -2623,7 +2619,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         this.configRootPath || (this.options && this.options.configRootPath) || (this.configOptions && this.configOptions.configRootPath);
       yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
     }
-    return this.createStorage(yoRcPath, 'generator-jhipster');
+    return this.createStorage(yoRcPath, GENERATOR_JHIPSTER);
   }
 
   /**
