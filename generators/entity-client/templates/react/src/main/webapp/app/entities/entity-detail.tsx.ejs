@@ -117,9 +117,7 @@ _%>
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
     const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
     const otherEntityField = relationship.otherEntityField; _%>
-  <%_ if (relationship.relationshipManyToOne
-    || (relationship.relationshipOneToOne && ownerSide)
-    || (relationship.relationshipManyToMany && ownerSide)) { _%>
+  <%_ if (ownerSide) { _%>
             <dt>
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= relationshipName %>">
                 <%= relationshipNameHumanized %>

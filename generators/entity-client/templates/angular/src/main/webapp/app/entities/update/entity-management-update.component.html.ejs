@@ -166,17 +166,13 @@ _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
     const otherEntity = relationship.otherEntity;
-    const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
     const otherEntityName = relationship.otherEntityName;
-    const otherEntityNamePlural = relationship.otherEntityNamePlural;
-    const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
     const relationshipName = relationship.relationshipName;
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const otherEntityField = relationship.otherEntityField;
-    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
     const relationshipRequired = relationship.relationshipRequired;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>

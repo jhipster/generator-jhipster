@@ -64,7 +64,7 @@ _%>
 <%_ relationships.forEach((relationship) => {
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName; _%>
-  <%_ if (relationship.relationshipManyToOne || (relationship.relationshipManyToMany && ownerSide) || (relationship.relationshipOneToOne && ownerSide)) { _%>
+  <%_ if (ownerSide) { _%>
     <%= relationshipName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
   <%_ } _%>
 <%_ }); _%>
@@ -118,7 +118,7 @@ _%>
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
     const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
-  <%_ if (relationship.relationshipManyToOne || (relationship.relationshipManyToMany && ownerSide) || (relationship.relationshipOneToOne && ownerSide)) { _%>
+  <%_ if (ownerSide) { _%>
     async <%= relationshipName %>SelectLastOption() {
         await this.<%= relationshipName %>Select.all(by.tagName('option')).last().click();
     }
