@@ -122,22 +122,13 @@ module.exports = class extends BaseDockerGenerator {
     return this._configuring();
   }
 
-  _loading() {
+  _preparing() {
     return {
       loadConfig() {
         this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
         this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
       },
-    };
-  }
 
-  get loading() {
-    if (useBlueprints) return;
-    return this._loading();
-  }
-
-  _preparing() {
-    return {
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
