@@ -2549,10 +2549,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serverPort = config.serverPort;
 
     dest.buildTool = config.buildTool;
-    dest.buildToolGradle = config.buildTool === GRADLE;
-    dest.buildToolMaven = config.buildTool === MAVEN;
-    dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
-    dest.buildDir = this.getBuildDirectoryForBuildTool(config.buildTool);
 
     dest.authenticationType = config.authenticationType;
     dest.rememberMeKey = config.rememberMeKey;
@@ -2564,7 +2560,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
-    dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
 
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
@@ -2577,6 +2572,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   loadDerivedServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.buildToolGradle = config.buildTool === GRADLE;
+    dest.buildToolMaven = config.buildTool === MAVEN;
+    dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
+    dest.buildDir = this.getBuildDirectoryForBuildTool(config.buildTool);
+
     dest.cacheProviderRedis = config.cacheProvider === REDIS;
     dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
     dest.cacheProviderMemcached = config.cacheProvider === MEMCACHED;
@@ -2605,6 +2605,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
 
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
+
+    dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}

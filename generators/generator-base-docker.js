@@ -156,6 +156,8 @@ module.exports = class extends BlueprintBaseGenerator {
     if (dest.serviceDiscoveryType === undefined) {
       dest.serviceDiscoveryType = EUREKA;
     }
+
+    this.loadDerivedDeploymentConfig(config, dest);
   }
 
   loadDerivedDeploymentConfig(

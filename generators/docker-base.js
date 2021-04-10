@@ -18,6 +18,9 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
+const _ = require('lodash');
+
+const { defaultConfig } = require('./generator-defaults');
 const dockerUtils = require('./docker-utils');
 const { getBase64Secret } = require('./utils');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -107,9 +110,9 @@ function loadConfigs() {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
+      _.defaults(config, defaultConfig);
 
       this.loadDerivedServerConfig(config, config);
-      this.loadDerivedAppConfig(config, config);
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
