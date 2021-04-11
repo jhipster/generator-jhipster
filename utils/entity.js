@@ -377,7 +377,6 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       },
     };
   }
-
   return entityWithConfig;
 }
 

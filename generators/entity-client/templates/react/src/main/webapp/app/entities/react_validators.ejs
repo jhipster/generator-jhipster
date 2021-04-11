@@ -21,29 +21,26 @@
 let result = '';
 
 if (field.fieldValidate === true) {
-    const rules = field.fieldValidateRules;
     const validators = [];
-
-
-    if (rules.includes('required') && field.fieldType !== 'Boolean') {
+    if (field.fieldValidationRequired && !field.fieldTypeBoolean) {
         validators.push('required: { value: true, errorMessage: translate(\'entity.validation.required\') }');
     }
-    if (rules.includes('minlength')) {
+    if (field.fieldValidationMinLength) {
         validators.push('minLength: { value: ' + field.fieldValidateRulesMinlength + ', errorMessage: translate(\'entity.validation.minlength\', { min: ' + field.fieldValidateRulesMinlength + ' }) }');
     }
-    if (rules.includes('maxlength')) {
+    if (field.fieldValidationMaxLength) {
         validators.push('maxLength: { value: ' + field.fieldValidateRulesMaxlength + ', errorMessage: translate(\'entity.validation.maxlength\', { max: ' + field.fieldValidateRulesMaxlength + ' }) }');
     }
-    if (rules.includes('min')) {
+    if (field.fieldValidationMin) {
         validators.push('min: { value: ' + field.fieldValidateRulesMin + ', errorMessage: translate(\'entity.validation.min\', { min: ' + field.fieldValidateRulesMin + ' }) }');
     }
-    if (rules.includes('max')) {
+    if (field.fieldValidationMax) {
         validators.push('max: { value: ' + field.fieldValidateRulesMax + ', errorMessage: translate(\'entity.validation.max\', { max: ' + field.fieldValidateRulesMax + ' }) }');
     }
-    if (rules.includes('pattern')) {
+    if (field.fieldValidationPattern) {
         validators.push('pattern: { value: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\', errorMessage: translate(\'entity.validation.pattern\', { pattern: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\' }) }');
     }
-    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(field.fieldType)) {
+    if (field.fieldTypeNumeric) {
         validators.push('number: { value: true, errorMessage: translate(\'entity.validation.number\') }');
     }
     // Not supported anymore because the server can't check the size of the blob before downloading it completely.

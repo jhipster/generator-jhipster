@@ -39,6 +39,7 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const dbTypes = require('../jdl/jhipster/field-types');
+const { REQUIRED } = require('../jdl/jhipster/validations');
 
 const {
   STRING: TYPE_STRING,
@@ -944,7 +945,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     relationships.forEach(relationship => {
       let fieldType;
       let fieldName;
-      const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required');
+      const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes(REQUIRED);
       const relationshipType = relationship.relationshipType;
       if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
         fieldType = `I${relationship.otherEntityAngularName}[]`;

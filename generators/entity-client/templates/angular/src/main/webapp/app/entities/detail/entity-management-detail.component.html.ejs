@@ -68,9 +68,7 @@ for (const relationship of relationships) {
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
     const otherEntityStateName = relationship.otherEntityStateName;
     const otherEntityField = relationship.otherEntityField;
-    if (relationship.relationshipManyToOne
-        || (relationship.relationshipOneToOne && ownerSide)
-        || (relationship.relationshipManyToMany && ownerSide)) {
+    if (ownerSide) {
 _%>
                 <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
                 <dd>
