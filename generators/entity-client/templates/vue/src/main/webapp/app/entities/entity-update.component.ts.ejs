@@ -7,32 +7,32 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   let fieldsContainedValidators = [];
   for (field of fields.filter(field => !field.id)) {
     if (field.fieldValidate === true) {
-      if (!fieldsContainedValidators.includes('numeric') && ['Integer', 'Long'].includes(field.fieldType)) {
+      if (!fieldsContainedValidators.includes('numeric') && (field.fieldTypeInteger || field.fieldTypeLong)) {
         fieldsContainedValidators.push('numeric');
       }
-      if (!fieldsContainedValidators.includes('decimal') && ['Float', 'Double', 'BigDecimal'].includes(field.fieldType)) {
+      if (!fieldsContainedValidators.includes('decimal') && (field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal)) {
         fieldsContainedValidators.push('decimal');
       }
-      if (!fieldsContainedValidators.includes('required') && field.fieldValidateRules.includes('required')) {
+      if (!fieldsContainedValidators.includes('required') && field.fieldValidationRequired) {
         fieldsContainedValidators.push('required');
       }
-      if (!fieldsContainedValidators.includes('minLength') && field.fieldValidateRules.includes('minlength')) {
+      if (!fieldsContainedValidators.includes('minLength') && field.fieldValidationMinLength) {
         fieldsContainedValidators.push('minLength');
       }
-      if (!fieldsContainedValidators.includes('maxLength') && field.fieldValidateRules.includes('maxlength')) {
+      if (!fieldsContainedValidators.includes('maxLength') && field.fieldValidationMaxLength) {
         fieldsContainedValidators.push('maxLength');
       }
-      if (!fieldsContainedValidators.includes('minValue') && field.fieldValidateRules.includes('min')) {
+      if (!fieldsContainedValidators.includes('minValue') && field.fieldValidationMin) {
         fieldsContainedValidators.push('minValue');
       }
-      if (!fieldsContainedValidators.includes('maxValue') && field.fieldValidateRules.includes('max')) {
+      if (!fieldsContainedValidators.includes('maxValue') && field.fieldValidationMax) {
         fieldsContainedValidators.push('maxValue');
       }
     }
   }
   for (relationship of relationships) {
     if (relationship.relationshipValidate === true) {
-      if (!fieldsContainedValidators.includes('required')) {
+      if (!fieldsContainedValidators.includes('required') && relationship.relationshipRequired) {
         fieldsContainedValidators.push('required');
       }
     }
@@ -42,85 +42,80 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   _%>import {<%= validators %>} from 'vuelidate/lib/validators';
 <%_ } _%>
 <%_
-    let dayJsIncluded = false;
-    for (field of fields.filter(field => !field.id)) {
-        const fieldName = field.fieldName;
-        const fieldType = field.fieldType;
-        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
-            dayJsIncluded = true;
-_%>
+  let dayJsIncluded = false;
+  for (field of fields.filter(field => !field.id)) { _%>
+  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
+    dayJsIncluded = true; _%>
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-    <%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
 
-<%_
-    const importEntitiesSeen = [entityAngularName];
-    let hasManyToMany = false;
-    for (relationship of relationships) {
-      if (!relationship.otherEntityIsEmbedded) {
-        const otherEntityAngularName = relationship.otherEntityAngularName;
-        const otherEntityFileName = relationship.otherEntityFileName;
-        const otherEntityFolderName = relationship.otherEntityFileName;
-        const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder;
-        const otherEntityModelName = relationship.otherEntityModelName;
-        if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) {
-          hasManyToMany = true;
-        }
-        if (!importEntitiesSeen.includes(otherEntityAngularName)) {
-_%>
-  <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
+<%_ const importEntitiesSeen = [entityAngularName];
+  let hasManyToMany = false;
+  for (relationship of relationships) { _%>
+  <%_ if (!relationship.otherEntityIsEmbedded) {
+    const otherEntityAngularName = relationship.otherEntityAngularName;
+    const otherEntityFileName = relationship.otherEntityFileName;
+    const otherEntityFolderName = relationship.otherEntityFileName;
+    const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder;
+    const otherEntityModelName = relationship.otherEntityModelName;
+    if (relationship.relationshipManyToMany && relationship.ownerSide) {
+      hasManyToMany = true;
+    } _%>
+    <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
+      <% if (relationship.otherEntityUser && !authenticationTypeOauth2) { %>
 import UserService from '@/admin/user-management/user-management.service';
-  <% } else if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { %>
+  <% } else if (relationship.otherEntityUser && authenticationTypeOauth2) { %>
 import UserOAuth2Service from '@/entities/user/user.oauth2.service';
-  <% } else if (otherEntityAngularName !== 'User') { %>
+  <% } else if (!relationship.otherEntityUser) { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
-  <% } } %>
+  <% } %>
+<%_ } _%>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 const validations: any = {
   <%= entityInstance %>: {
-    <%_ for (field of fields.filter(field => !field.id)) {
-      const fieldName = field.fieldName;
-      const fieldType = field.fieldType;
-    _%>
+<%_ for (field of fields.filter(field => !field.id)) {
+  const fieldName = field.fieldName;
+_%>
     <%= fieldName %>:  {
-    <%_ if (field.fieldValidate === true) { _%>
-    <%_ if (field.fieldValidateRules.includes('required')) { _%>
+  <%_ if (field.fieldValidate) { _%>
+    <%_ if (field.fieldValidationRequired) { _%>
     required,
     <%_ } _%>
-    <%_ if (field.fieldValidateRules.includes('minlength')) { _%>
+    <%_ if (field.fieldValidationMinLength) { _%>
       minLength: minLength(<%= field.fieldValidateRulesMinlength %>),
     <%_ } _%>
-    <%_ if (field.fieldValidateRules.includes('maxlength')) { _%>
+    <%_ if (field.fieldValidationMaxLength) { _%>
       maxLength: maxLength(<%= field.fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long'].includes(fieldType)) { _%>
+    <%_ if (field.fieldTypeInteger || field.fieldTypeLong) { _%>
       numeric,
     <%_ } _%>
-    <%_ if (['Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ if (field.fieldTypeBigDecimal || field.fieldTypeDouble || field.fieldTypeFloat) { _%>
       decimal,
     <%_ } _%>
-    <%_ if (field.fieldValidateRules.includes('min')) { _%>
+    <%_ if (field.fieldValidationMin) { _%>
       min: minValue(<%= field.fieldValidateRulesMin %>),
     <%_ } _%>
-    <%_ if (field.fieldValidateRules.includes('max')) { _%>
+    <%_ if (field.fieldValidationMax) { _%>
       max: maxValue(<%= field.fieldValidateRulesMax %>),
     <%_ } _%>
 
-    <%_ } _%>
+  <%_ } _%>
     },
-    <%_ } _%>
-    <%_
-    for (relationship of relationships) {
-      if (relationship.relationshipValidate === true) { _%>
+<%_ } _%>
+<%_ for (relationship of relationships) { _%>
+  <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     <%= relationship.relationshipFieldName %>: {
       required
     },
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   }
 };
 
