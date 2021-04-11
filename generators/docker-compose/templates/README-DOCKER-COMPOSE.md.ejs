@@ -39,6 +39,6 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 - [Prometheus Alertmanager](http://localhost:9093)
 - [Grafana](http://localhost:3000)
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (usesOauth2) { _%>
 - [Keycloak server](http://localhost:9080)
 <%_ } _%>

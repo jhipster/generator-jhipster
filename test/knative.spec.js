@@ -78,7 +78,6 @@ const helmExpectedFiles = {
     './msmongodb-knative/values.yml',
     './msmongodb-knative/templates/_helpers.tpl',
     './msmongodb-knative/templates/msmongodb-service.yml',
-    './msmongodb-knative/templates/msmongodb-service.yml',
   ],
   msmariadb: [
     './msmariadb-knative/Chart.yaml',
@@ -601,9 +600,9 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      beforeEach(async () => {
+        await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
@@ -621,7 +620,7 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);

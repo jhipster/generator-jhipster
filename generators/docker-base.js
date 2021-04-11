@@ -18,16 +18,13 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
+const _ = require('lodash');
+
+const { defaultConfig } = require('./generator-defaults');
 const dockerUtils = require('./docker-utils');
 const { getBase64Secret } = require('./utils');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
 const { MONOLITH, MICROSERVICE, GATEWAY } = require('../jdl/jhipster/application-types');
-const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
-const { OptionNames } = require('../jdl/jhipster/application-options');
-const { PROMETHEUS, ELK } = require('../jdl/jhipster/monitoring-types');
-const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
-
-const { AUTHENTICATION_TYPE, JWT_SECRET_KEY, REACTIVE, SERVICE_DISCOVERY_TYPE } = OptionNames;
 
 module.exports = {
   checkDocker: dockerUtils.checkDocker,
@@ -112,7 +109,10 @@ function loadConfigs() {
   this.appsFolders.forEach(appFolder => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).createProxy();
+      const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
+      _.defaults(config, defaultConfig);
+
+      this.loadDerivedServerConfig(config, config);
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
@@ -140,30 +140,17 @@ function setClusteredApps() {
 }
 
 function loadFromYoRc() {
-  this.authenticationType = this.config.get(AUTHENTICATION_TYPE);
-  this.defaultAppsFolders = this.config.get('appsFolders');
-  this.directoryPath = this.config.get('directoryPath');
-  this.gatewayType = this.config.get('gatewayType');
-  this.clusteredDbApps = this.config.get('clusteredDbApps');
-  this.monitoring = this.config.get('monitoring');
+  this.loadDeploymentConfig();
+  this.loadDerivedDeploymentConfig();
+
   this.useKafka = false;
   this.useMemcached = false;
   this.useRedis = false;
-  this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-  this.dockerPushCommand = this.config.get('dockerPushCommand');
-  this.serviceDiscoveryType = this.config.get(SERVICE_DISCOVERY_TYPE);
-  this.reactive = this.config.get(REACTIVE);
-  if (this.serviceDiscoveryType === undefined) {
-    this.serviceDiscoveryType = EUREKA;
-  }
-  this.serviceDiscoveryConsul = this.serviceDiscoveryType === CONSUL;
-  this.serviceDiscoveryEureka = this.serviceDiscoveryType === EUREKA;
-  this.adminPassword = this.config.get('adminPassword');
-  this.jwtSecretKey = this.config.get(JWT_SECRET_KEY);
 
-  this.monitoringPrometheus = this.monitoring === PROMETHEUS;
-  this.monitoringELK = this.monitoring === ELK;
-  this.authenticationTypeOauth2 = this.authenticationType === OAUTH2;
+  // Current implementation loads appsFolders into defaultAppsFolders
+  this.defaultAppsFolders = this.appsFolders;
+  delete this.appsFolders;
+
   if (this.defaultAppsFolders !== undefined) {
     this.log('\nFound .yo-rc.json config file...');
   }

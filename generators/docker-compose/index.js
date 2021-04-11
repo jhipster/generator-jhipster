@@ -45,7 +45,7 @@ module.exports = class extends BaseDockerGenerator {
 
   _initializing() {
     return {
-      ...super.initializing,
+      ...super._initializing(),
 
       checkDockerCompose() {
         if (this.skipChecks) return;
@@ -86,7 +86,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   _prompting() {
-    return super.prompting;
+    return super._prompting();
   }
 
   get prompting() {
@@ -101,18 +101,43 @@ module.exports = class extends BaseDockerGenerator {
         this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      ...super.configuring,
+      ...super._configuring(),
+
+      saveConfig() {
+        this.config.set({
+          appsFolders: this.appsFolders,
+          directoryPath: this.directoryPath,
+          gatewayType: this.gatewayType,
+          clusteredDbApps: this.clusteredDbApps,
+          monitoring: this.monitoring,
+          serviceDiscoveryType: this.serviceDiscoveryType,
+          jwtSecretKey: this.jwtSecretKey,
+        });
+      },
+    };
+  }
+
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _preparing() {
+    return {
+      loadConfig() {
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
+      },
 
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
         let portIndex = 8080;
         this.serverPort = portIndex;
-        this.appsFolders.forEach((appsFolder, index) => {
-          const appConfig = this.appConfigs[index];
+        this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
-          const path = this.destinationPath(this.directoryPath + appsFolder);
+          const path = this.destinationPath(this.directoryPath + appConfig.appFolder);
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
@@ -196,11 +221,6 @@ module.exports = class extends BaseDockerGenerator {
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
-          // Add message broker support
-          const messageBroker = appConfig.messageBroker;
-          if (messageBroker === KAFKA) {
-            this.useKafka = true;
-          }
           // Add Memcached support
           const cacheProvider = appConfig.cacheProvider;
           if (cacheProvider === MEMCACHED) {
@@ -236,24 +256,12 @@ module.exports = class extends BaseDockerGenerator {
           this.skipClient = appConfig.skipClient;
         });
       },
-
-      saveConfig() {
-        this.config.set({
-          appsFolders: this.appsFolders,
-          directoryPath: this.directoryPath,
-          gatewayType: this.gatewayType,
-          clusteredDbApps: this.clusteredDbApps,
-          monitoring: this.monitoring,
-          serviceDiscoveryType: this.serviceDiscoveryType,
-          jwtSecretKey: this.jwtSecretKey,
-        });
-      },
     };
   }
 
-  get configuring() {
+  get preparing() {
     if (useBlueprints) return;
-    return this._configuring();
+    return this._preparing();
   }
 
   _writing() {

@@ -61,7 +61,6 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
-const { ELK, PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -2550,10 +2549,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serverPort = config.serverPort;
 
     dest.buildTool = config.buildTool;
-    dest.buildToolGradle = config.buildTool === GRADLE;
-    dest.buildToolMaven = config.buildTool === MAVEN;
-    dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
-    dest.buildDir = this.getBuildDirectoryForBuildTool(config.buildTool);
 
     dest.authenticationType = config.authenticationType;
     dest.rememberMeKey = config.rememberMeKey;
@@ -2565,7 +2560,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
-    dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
 
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
@@ -2578,6 +2572,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   loadDerivedServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.buildToolGradle = config.buildTool === GRADLE;
+    dest.buildToolMaven = config.buildTool === MAVEN;
+    dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
+    dest.buildDir = this.getBuildDirectoryForBuildTool(config.buildTool);
+
     dest.cacheProviderRedis = config.cacheProvider === REDIS;
     dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
     dest.cacheProviderMemcached = config.cacheProvider === MEMCACHED;
@@ -2607,8 +2606,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
 
-    dest.monitoringPrometheus = config.monitoring === PROMETHEUS;
-    dest.monitoringELK = config.monitoring === ELK;
+    dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
@@ -2623,7 +2621,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         this.configRootPath || (this.options && this.options.configRootPath) || (this.configOptions && this.configOptions.configRootPath);
       yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
     }
-    return this.createStorage(yoRcPath, 'generator-jhipster');
+    return this.createStorage(yoRcPath, GENERATOR_JHIPSTER);
   }
 
   /**
