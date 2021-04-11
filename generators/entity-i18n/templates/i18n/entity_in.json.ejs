@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Buat <%= entityClassHumanized %> baru",
                 "createOrEditLabel": "Buat atau edit <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Cari <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityClassHumanized %> dengan id {{ param }} telah dibuat",
             "updated": "<%= entityClassHumanized %> dengan id {{ param }} telah diperbaharui",
             "deleted": "<%= entityClassHumanized %> dengan id {{ param }} telah dihapus",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Apakah anda yakin ingin menghapus <%= entityClassHumanized %> {{ id }}?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

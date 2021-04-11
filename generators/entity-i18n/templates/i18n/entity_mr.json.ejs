@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "नवीन <%= entityClassHumanized %> तयार करा",
                 "createOrEditLabel": "<%= entityClassHumanized %> तयार किंवा संपादित करा",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "<%= entityClassHumanized %> शोधा",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityClassHumanized %> [identifier: {{ param }}] तयार आहे",
             "updated": "<%= entityClassHumanized %> [identifier: {{ param }}] सुधारित केले आहे",
             "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटविले आहे",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "<%= entityClassHumanized %> [id: {{ id }}] काढून टाकण्याबाबत पुष्टी?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
