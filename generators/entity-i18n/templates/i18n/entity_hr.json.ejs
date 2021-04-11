@@ -23,21 +23,21 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Kreirati <%= entityClassHumanized %>",
                 "createOrEditLabel": "Kreirati ili urediti <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Tražiti <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "Nije nađeno <%= entityClassPluralHumanized %>"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Kreiran je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
             "updated": "Ažuriran je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
             "deleted": "Obrisan je <%= entityClassHumanized %> sa identifikatorom {{ param }}",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Da li ste sigurni da želite obrisati <%= entityClassHumanized %> {{ id }}?"
             },
