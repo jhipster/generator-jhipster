@@ -24,9 +24,6 @@ const defaultCommands = {
   aws: {
     desc: 'Deploy the current application to Amazon Web Services',
   },
-  'aws-containers': {
-    desc: 'Deploy the current application to Amazon Web Services using ECS',
-  },
   'azure-app-service': {
     desc: 'Deploy the current application to Azure App Service',
   },
