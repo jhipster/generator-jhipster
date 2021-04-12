@@ -79,7 +79,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     <%_ for (const relationship of relationships) {
         if (relationship.relationshipType === 'many-to-one' && relationship.otherEntityName === 'user' && databaseType === 'sql') { _%>
 
-    @Query("select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationType === 'oauth2') { %>preferredUsername<% } else { %>username<% } %>}")
+    @Query("select <%= entityInstanceHql %> from <%= persistClass %> <%= entityInstanceHql %> where <%= entityInstanceHql %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationType === 'oauth2') { %>preferredUsername<% } else { %>username<% } %>}")
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <%_ if (relationshipsContainEagerLoad) {
