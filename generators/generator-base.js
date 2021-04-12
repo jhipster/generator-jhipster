@@ -2586,7 +2586,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeCassandra = config.databaseType === CASSANDRA;
     dest.databaseTypeCouchbase = config.databaseType === COUCHBASE;
     dest.databaseTypeMongodb = config.databaseType === MONGODB;
+    dest.databaseTypeMysql = config.databaseType === MYSQL;
+    dest.databaseTypeMariadb = config.databaseType === MARIADB;
     dest.databaseTypeNeo4j = config.databaseType === NEO4J;
+    dest.databaseTypePostgres = config.databaseType === POSTGRESQL;
 
     dest.devDatabaseTypeH2Disk = config.devDatabaseType === H2_DISK;
     dest.devDatabaseTypeH2Memory = config.devDatabaseType === H2_MEMORY;
@@ -2605,6 +2608,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
 
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
+    dest.searchEngineCouchbase = config.searchEngine === COUCHBASE;
 
     dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
   }

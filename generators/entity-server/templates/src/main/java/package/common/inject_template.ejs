@@ -17,35 +17,35 @@
  limitations under the License.
 -%>
 <%_ const beans = [];
-    if (viaService) {
-        beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
-        beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
-        if (queryService) {
-            beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
-        }
-        if (isUsingMapsId === true && isController === false) {
-            const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-            const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-            const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-            beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
-        }
-    } else {
-        beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
-        if (dto === 'mapstruct') {
-            beans.push({class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper`});
-        }
-        if (searchEngine === 'elasticsearch') {
-            beans.push({class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository`});
-        }
-        if (isUsingMapsId === true) {
-            const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-            const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-            const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-            beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
-        }
+  if (viaService) {
+    beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
+    beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
+    if (queryService) {
+      beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
+    }
+    if (isUsingMapsId === true && isController === false) {
+      const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+      const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+      const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+      beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
+    }
+  } else {
+    beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
+    if (dtoMapstruct) {
+      beans.push({class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper`});
+    }
+    if (searchEngineElasticsearch) {
+      beans.push({class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository`});
+    }
+    if (isUsingMapsId) {
+      const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+      const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+      const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+      beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
+      }
     }
     if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
-        beans.push({class: 'UserRepository', instance: 'userRepository'});
+      beans.push({class: 'UserRepository', instance: 'userRepository'});
     }
 _%>
 

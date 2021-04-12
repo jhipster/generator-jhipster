@@ -22,7 +22,7 @@ const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
 const entityToDtoReference = mapper + '::' + 'toDto';
-const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'return' : instanceType + ' result =';
+const returnPrefix = (returnDirectly && !searchEngine) ? 'return' : instanceType + ' result =';
 let resultEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
@@ -32,39 +32,40 @@ if (isUsingMapsId === true) {
     mapsIdEntityInstance = mapsIdAssoc.otherEntityNameCapitalized.charAt(0).toLowerCase() + mapsIdAssoc.otherEntityNameCapitalized.slice(1);
     mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
     otherEntityName = mapsIdAssoc.otherEntityName;
-    if (isController === true) { _%>
+  if (isController === true) { _%>
         if (Objects.isNull(<%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>())) {
             throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
-    <%_ } _%>
-<%_ }
-    if (!viaService) {
-        if (dto === 'mapstruct') {
+  <%_ } _%>
+<%_ } _%>
+<%_  if (!viaService) { _%>
+  <%_ if (dtoMapstruct) { _%>
             resultEntity = persistInstance; _%>
         <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
-        <%_ if (isUsingMapsId === true) { _%>
+    <%_ if (isUsingMapsId === true) { _%>
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
-        <%_ } _%>
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
+    <%_ } _%>
         <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= persistInstance %>);
-    <%_ } else { resultEntity = 'result'; _%>
-        <%_ if (isUsingMapsId === true) { _%>
+  <%_ } else {
+      resultEntity = 'result'; _%>
+    <%_ if (isUsingMapsId) { _%>
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
-        <%_ } _%>
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
+    <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
-    <%_ }
-        if (searchEngine === 'elasticsearch') { _%>
+  <%_ } _%>
+  <%_ if (searchEngine) { _%>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
-        <%_ if (returnDirectly) { _%>
+    <%_ if (returnDirectly) { _%>
         return result;
-        <%_ }
-        }
-    } else { _%>
-        <%_ if (isUsingMapsId === true && isController === false) { _%>
+    <%_ } _%>
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (isUsingMapsId === true && isController === false) { _%>
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
-        <%_ } _%>
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
+  <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);
 <%_ } _%>

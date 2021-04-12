@@ -30,7 +30,7 @@ const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 
-const { BOOLEAN } = CommonDBTypes;
+const { BOOLEAN, UUID } = CommonDBTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
@@ -90,10 +90,12 @@ const BASE_TEMPLATE_DATA = {
 
 function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
+  const dto = entityWithConfig.dto;
   _.defaults(entityWithConfig, {
     paginationPagination: pagination === PAGINATION,
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
+    dtoMapstruct: dto === MAPSTRUCT,
   });
 }
 
@@ -358,6 +360,7 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       type: primaryKeyType,
       tsType: generator.getTypescriptKeyType(primaryKeyType),
       composite,
+      isUuid: primaryKeyType === UUID,
       relationships: idRelationships,
       // Fields declared in this entity
       ownFields: idFields,
