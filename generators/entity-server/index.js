@@ -52,6 +52,24 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
+  _preparing() {
+    return {
+      processDerivedPrimaryKeyFields() {
+        const entity = this.entity;
+        if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
+          entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
+        } else {
+          entity.entityInstanceDbSafe = entity.entityInstance;
+        }
+      },
+    };
+  }
+
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
+
   // Public API method used by the getter and also by Blueprints
   _preparingFields() {
     return {

@@ -188,11 +188,6 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     const otherEntityTableName = relationship.otherEntityTableName;
     relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
   }
-  if (isReservedTableName(entityWithConfig.entityInstance, entityWithConfig.prodDatabaseType) && jhiTablePrefix) {
-    entityWithConfig.entityInstanceHql = `${jhiTablePrefix}${entityName}`;
-  } else {
-    entityWithConfig.entityInstanceHql = entityWithConfig.entityInstance;
-  }
 
   if (relationship.otherEntityAngularName === undefined) {
     if (generator.isBuiltInUser(otherEntityName)) {
