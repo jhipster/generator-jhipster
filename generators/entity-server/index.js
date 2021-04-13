@@ -54,7 +54,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _preparing() {
     return {
-      processDerivedPrimaryKeyFields() {
+      validateDatabaseSafety() {
         const entity = this.entity;
         if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
           entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
