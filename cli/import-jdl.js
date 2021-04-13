@@ -44,13 +44,17 @@ const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME]
  */
 const baseNameConfigExists = baseName => fs.existsSync(baseName === undefined ? '.yo-rc.json' : path.join(baseName, '.yo-rc.json'));
 
+const multiplesApplications = processor => {
+  return Object.values(processor.importState.exportedApplicationsWithEntities).length > 1;
+};
+
 /**
  * When importing multiples applications, we should import each of them at it's own baseName folder.
  * @param {JDLProcessor} processor
  * @return {boolean}
  */
 const shouldRunInFolder = processor => {
-  return Object.values(processor.importState.exportedApplicationsWithEntities).length > 1;
+  return multiplesApplications(processor);
 };
 
 /**
@@ -150,6 +154,7 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     ignoreDeployments: undefined,
     inline: undefined,
     skipSampleRepository: undefined,
+    workspaces: undefined,
     fromJdl: true,
   };
 
@@ -371,6 +376,15 @@ class JDLProcessor {
     statistics.sendSubGenEvent('generator', 'import-jdl');
   }
 
+  generateWorkspaces(options) {
+    if (!options.workspaces || !multiplesApplications(this)) {
+      return Promise.resolve();
+    }
+    return EnvironmentBuilder.createDefaultBuilder()
+      .getEnvironment()
+      .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState });
+  }
+
   generateApplications() {
     if (this.options.ignoreApplication) {
       logger.debug('Applications not generated');
@@ -464,15 +478,13 @@ module.exports = (jdlFiles, options = {}, env) => {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
     jdlImporter.importJDL();
     jdlImporter.sendInsight();
+    jdlImporter.config();
+
     return jdlImporter
-      .config()
-      .generateApplications()
-      .then(() => {
-        return jdlImporter.generateEntities(env);
-      })
-      .then(() => {
-        return jdlImporter.generateDeployments();
-      })
+      .generateWorkspaces(options)
+      .then(() => jdlImporter.generateApplications())
+      .then(() => jdlImporter.generateEntities(env))
+      .then(() => jdlImporter.generateDeployments())
       .then(() => {
         printSuccess();
         return jdlFiles;
