@@ -30,7 +30,7 @@ const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 
-const { BOOLEAN, UUID } = CommonDBTypes;
+const { BOOLEAN } = CommonDBTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
@@ -360,7 +360,6 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       type: primaryKeyType,
       tsType: generator.getTypescriptKeyType(primaryKeyType),
       composite,
-      isUuid: primaryKeyType === UUID,
       relationships: idRelationships,
       // Fields declared in this entity
       ownFields: idFields,

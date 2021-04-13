@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 // Initialize the database
-<%_ if (primaryKey.isUuid && !databaseTypeSql) { _%>
-    <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
+<%_ if (!primaryKey.autoGenerate && !databaseTypeSql) { _%>
+    <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey.type, databaseType, '1') %>);
 <%_ } _%>
 <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
