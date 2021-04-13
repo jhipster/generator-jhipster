@@ -204,7 +204,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
+      condition: generator => generator.searchEngine === ELASTICSEARCH && !generator.embedded,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {

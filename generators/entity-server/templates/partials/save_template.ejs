@@ -28,11 +28,11 @@ let mapsIdEntityInstance;
 let mapsIdRepoInstance;
 let otherEntityName;
 
-if (isUsingMapsId === true) {
+if (isUsingMapsId) {
     mapsIdEntityInstance = mapsIdAssoc.otherEntityNameCapitalized.charAt(0).toLowerCase() + mapsIdAssoc.otherEntityNameCapitalized.slice(1);
     mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
     otherEntityName = mapsIdAssoc.otherEntityName;
-  if (isController === true) { _%>
+  if (isController) { _%>
         if (Objects.isNull(<%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>())) {
             throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
@@ -40,9 +40,9 @@ if (isUsingMapsId === true) {
 <%_ } _%>
 <%_  if (!viaService) { _%>
   <%_ if (dtoMapstruct) { _%>
-            resultEntity = persistInstance; _%>
+    <%_ resultEntity = persistInstance; _%>
         <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
-    <%_ if (isUsingMapsId === true) { _%>
+    <%_ if (isUsingMapsId) { _%>
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
     <%_ } _%>
@@ -63,7 +63,7 @@ if (isUsingMapsId === true) {
     <%_ } _%>
   <%_ } _%>
 <%_ } else { _%>
-  <%_ if (isUsingMapsId === true && isController === false) { _%>
+  <%_ if (isUsingMapsId && !isController) { _%>
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
   <%_ } _%>

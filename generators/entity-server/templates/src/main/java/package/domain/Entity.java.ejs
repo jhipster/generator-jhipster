@@ -607,7 +607,7 @@ _%>
             <%_ if (!databaseTypeNeo4j) { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
             <%_ } _%>
-          <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && !otherEntityUser && relationship.relationshipManyToMany) {
+          <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && !relationship.otherEntityUser && relationship.relationshipManyToMany) {
                 /* JHipster version < 3.6.0 didn't ask for this relationship name */ _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
           <%_ } _%>
@@ -627,7 +627,7 @@ _%>
             <%_ if (!databaseTypeNeo4j) { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
             <%_ } _%>
-          <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && !otherEntityUser && relationship.relationshipManyToMany) {
+          <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && !relationship.otherEntityUser && relationship.relationshipManyToMany) {
                 /* JHipster version < 3.6.0 didn't ask for this relationship name */ _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
           <%_ } _%>

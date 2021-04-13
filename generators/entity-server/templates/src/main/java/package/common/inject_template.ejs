@@ -23,7 +23,7 @@
     if (queryService) {
       beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
     }
-    if (isUsingMapsId === true && isController === false) {
+    if (isUsingMapsId && !isController) {
       const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
       const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
       const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;

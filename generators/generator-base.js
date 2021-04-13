@@ -2581,20 +2581,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
     dest.cacheProviderMemcached = config.cacheProvider === MEMCACHED;
 
+    dest.devDatabaseTypeH2Disk = config.devDatabaseType === H2_DISK;
+    dest.devDatabaseTypeH2Memory = config.devDatabaseType === H2_MEMORY;
+    dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
+    dest.devDatabaseTypeCouchbase = config.devDatabaseType === COUCHBASE;
+
     dest.databaseTypeNo = config.databaseType === NO_DATABASE;
     dest.databaseTypeSql = config.databaseType === SQL;
     dest.databaseTypeCassandra = config.databaseType === CASSANDRA;
     dest.databaseTypeCouchbase = config.databaseType === COUCHBASE;
     dest.databaseTypeMongodb = config.databaseType === MONGODB;
-    dest.databaseTypeMysql = config.databaseType === MYSQL;
-    dest.databaseTypeMariadb = config.databaseType === MARIADB;
     dest.databaseTypeNeo4j = config.databaseType === NEO4J;
-    dest.databaseTypePostgres = config.databaseType === POSTGRESQL;
-
-    dest.devDatabaseTypeH2Disk = config.devDatabaseType === H2_DISK;
-    dest.devDatabaseTypeH2Memory = config.devDatabaseType === H2_MEMORY;
-    dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
-    dest.devDatabaseTypeCouchbase = config.devDatabaseType === COUCHBASE;
+    dest.databaseTypeMysql = config.databaseType === SQL && (config.devDatabaseType === MYSQL || config.prodDatabaseType === MYSQL);
+    dest.databaseTypeMariadb = config.databaseType === SQL && (config.devDatabaseType === MARIADB || config.prodDatabaseType === MARIADB);
+    dest.databaseTypePostgres =
+      config.databaseType === SQL && (config.devDatabaseType === POSTGRESQL || config.prodDatabaseType === POSTGRESQL);
 
     dest.authenticationTypeSession = config.authenticationType === SESSION;
     dest.authenticationTypeJwt = config.authenticationType === JWT;
@@ -2610,7 +2611,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
     dest.searchEngineCouchbase = config.searchEngine === COUCHBASE;
 
-    dest.reactiveSqlTestContainers = config.reactive && [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType);
+    dest.reactiveSqlTestContainers =
+      config.reactive &&
+      ([MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType) || [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.devDatabaseType));
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
