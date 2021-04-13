@@ -18,7 +18,9 @@
 -%>
 // Initialize the database
 <%_ if (!primaryKey.autoGenerate && !databaseTypeSql) { _%>
-    <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey.type, databaseType, '1') %>);
+  <%_ if (primaryKey.typeUUID) { _%>
+    <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
+  <%_ } _%>
 <%_ } _%>
 <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
