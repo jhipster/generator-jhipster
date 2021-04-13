@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
+<%_
 const instanceType = restClass;
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto';
 const reactiveSql = (databaseTypeSql && reactive);
-for (const relationship of relationships) { if (relationship.relationshipOneToOne && !relationship.ownerSide) { %>
+for (const relationship of relationships) { if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
 
     /**
      *  Get all the <%= entityInstancePlural %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%  const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
+<%  const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
     const instanceType = `${optionalOrMono}<${restClass}>`;
     const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;

@@ -20,7 +20,7 @@
 <%
 let result = '';
 
-if (field.fieldValidate === true) {
+if (field.fieldValidate) {
   const validators = [];
   const MAX_VALUE = 2147483647;
   const isBlob = field.fieldTypeBytes;

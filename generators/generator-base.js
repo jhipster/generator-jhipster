@@ -2483,20 +2483,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
     dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
-
-    this.loadDerivedAppConfig(config, dest);
   }
 
-  loadDerivedMicroserviceAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    dest.jhiPrefixCapitalized = _.upperFirst(config.jhiPrefix);
-    dest.jhiPrefixDashed = _.kebabCase(config.jhiPrefix);
+  loadDerivedMicroserviceAppConfig(dest = this) {
+    dest.jhiPrefixCapitalized = _.upperFirst(dest.jhiPrefix);
+    dest.jhiPrefixDashed = _.kebabCase(dest.jhiPrefix);
   }
 
-  loadDerivedAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    this.loadDerivedMicroserviceAppConfig(config, dest);
-    dest.applicationTypeGateway = config.applicationType === GATEWAY;
-    dest.applicationTypeMonolith = config.applicationType === MONOLITH;
-    dest.applicationTypeMicroservice = config.applicationType === MICROSERVICE;
+  loadDerivedAppConfig(dest = this) {
+    this.loadDerivedMicroserviceAppConfig(dest);
+    dest.applicationTypeGateway = dest.applicationType === GATEWAY;
+    dest.applicationTypeMonolith = dest.applicationType === MONOLITH;
+    dest.applicationTypeMicroservice = dest.applicationType === MICROSERVICE;
   }
 
   /**
@@ -2511,16 +2509,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
-    this.loadDerivedClientConfig(config, dest);
   }
 
-  loadDerivedClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    dest.clientFrameworkAngular = config.clientFramework === ANGULAR;
-    dest.clientFrameworkReact = config.clientFramework === REACT;
-    dest.clientThemeNone = config.clientTheme === 'none';
-    dest.clientThemePrimary = config.clientThemeVariant === 'primary';
-    dest.clientThemeLight = config.clientThemeVariant === 'light';
-    dest.clientThemeDark = config.clientThemeVariant === 'dark';
+  loadDerivedClientConfig(dest = this) {
+    dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
+    dest.clientFrameworkReact = dest.clientFramework === REACT;
+    dest.clientThemeNone = dest.clientTheme === 'none';
+    dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
+    dest.clientThemeLight = dest.clientThemeVariant === 'light';
+    dest.clientThemeDark = dest.clientThemeVariant === 'dark';
   }
 
   /**
@@ -2568,52 +2565,52 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
-    this.loadDerivedServerConfig(config, dest);
+    this.loadDerivedServerConfig(dest);
   }
 
-  loadDerivedServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    dest.buildToolGradle = config.buildTool === GRADLE;
-    dest.buildToolMaven = config.buildTool === MAVEN;
+  loadDerivedServerConfig(dest = this) {
+    dest.buildToolGradle = dest.buildTool === GRADLE;
+    dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
-    dest.buildDir = this.getBuildDirectoryForBuildTool(config.buildTool);
+    dest.buildDir = this.getBuildDirectoryForBuildTool(dest.buildTool);
 
-    dest.cacheProviderRedis = config.cacheProvider === REDIS;
-    dest.cacheProviderHazelcast = config.cacheProvider === HAZELCAST;
-    dest.cacheProviderMemcached = config.cacheProvider === MEMCACHED;
+    dest.cacheProviderRedis = dest.cacheProvider === REDIS;
+    dest.cacheProviderHazelcast = dest.cacheProvider === HAZELCAST;
+    dest.cacheProviderMemcached = dest.cacheProvider === MEMCACHED;
 
-    dest.devDatabaseTypeH2Disk = config.devDatabaseType === H2_DISK;
-    dest.devDatabaseTypeH2Memory = config.devDatabaseType === H2_MEMORY;
+    dest.devDatabaseTypeH2Disk = dest.devDatabaseType === H2_DISK;
+    dest.devDatabaseTypeH2Memory = dest.devDatabaseType === H2_MEMORY;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
-    dest.devDatabaseTypeCouchbase = config.devDatabaseType === COUCHBASE;
+    dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
 
-    dest.databaseTypeNo = config.databaseType === NO_DATABASE;
-    dest.databaseTypeSql = config.databaseType === SQL;
-    dest.databaseTypeCassandra = config.databaseType === CASSANDRA;
-    dest.databaseTypeCouchbase = config.databaseType === COUCHBASE;
-    dest.databaseTypeMongodb = config.databaseType === MONGODB;
-    dest.databaseTypeNeo4j = config.databaseType === NEO4J;
-    dest.databaseTypeMysql = config.databaseType === SQL && (config.devDatabaseType === MYSQL || config.prodDatabaseType === MYSQL);
-    dest.databaseTypeMariadb = config.databaseType === SQL && (config.devDatabaseType === MARIADB || config.prodDatabaseType === MARIADB);
-    dest.databaseTypePostgres =
-      config.databaseType === SQL && (config.devDatabaseType === POSTGRESQL || config.prodDatabaseType === POSTGRESQL);
+    dest.databaseTypeNo = dest.databaseType === NO_DATABASE;
+    dest.databaseTypeSql = dest.databaseType === SQL;
+    dest.databaseTypeCassandra = dest.databaseType === CASSANDRA;
+    dest.databaseTypeCouchbase = dest.databaseType === COUCHBASE;
+    dest.databaseTypeMongodb = dest.databaseType === MONGODB;
+    dest.databaseTypeNeo4j = dest.databaseType === NEO4J;
+    dest.databaseTypeMysql = dest.databaseType === SQL && (dest.devDatabaseType === MYSQL || dest.prodDatabaseType === MYSQL);
+    dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
+    dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
 
-    dest.authenticationTypeSession = config.authenticationType === SESSION;
-    dest.authenticationTypeJwt = config.authenticationType === JWT;
-    dest.authenticationTypeOauth2 = config.authenticationType === OAUTH2;
+    dest.authenticationTypeSession = dest.authenticationType === SESSION;
+    dest.authenticationTypeJwt = dest.authenticationType === JWT;
+    dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
 
-    dest.communicationSpringWebsocket = config.websocket === SPRING_WEBSOCKET;
+    dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
 
-    dest.messageBrokerKafka = config.messageBroker === KAFKA;
+    dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
-    dest.serviceDiscoveryConsul = config.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
 
-    dest.searchEngineElasticsearch = config.searchEngine === ELASTICSEARCH;
-    dest.searchEngineCouchbase = config.searchEngine === COUCHBASE;
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
+    dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
 
     dest.reactiveSqlTestContainers =
-      config.reactive &&
-      ([MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.prodDatabaseType) || [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(config.devDatabaseType));
+      dest.reactive &&
+      ([MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.prodDatabaseType) ||
+        [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.devDatabaseType));
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
