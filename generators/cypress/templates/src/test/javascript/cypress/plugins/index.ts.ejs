@@ -28,6 +28,9 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+const fs = require('fs');
+const { lighthouse, pa11y, prepareAudit } = require('cypress-audit');
+const ReportGenerator = require('lighthouse/lighthouse-core/report/report-generator');
 <%_ if (authenticationTypeOauth2) { _%>
 import puppeteer = require('puppeteer');
 <%_ } _%>
@@ -38,13 +41,20 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   on('before:browser:launch', (browser, launchOptions) => {
+    prepareAudit(launchOptions);
     if (browser.name === 'chrome' && browser.isHeadless) {
       launchOptions.args.push('--disable-gpu');
       return launchOptions
     }
   });
-<%_ if (authenticationTypeOauth2) { _%>
+
   on('task', {
+    lighthouse: lighthouse((lighthouseReport) => {
+      !fs.existsSync('<%= BUILD_DIR %>cypress') && fs.mkdirSync('<%= BUILD_DIR %>cypress', { recursive: true }); 
+      fs.writeFileSync('<%= BUILD_DIR %>cypress/lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html')); 
+    }),
+    pa11y: pa11y(),
+    <%_ if (authenticationTypeOauth2) { _%>
     login({ baseUrl, username, password }) {
       return (async () => {
         const browser = await puppeteer.launch({
@@ -52,40 +62,40 @@ module.exports = (on, config) => {
           devtools: false,
           ignoreHTTPSErrors: true,
           headless: true });
-
+  
         const page = await browser.newPage();
-
+  
         await page.goto(`${baseUrl}oauth2/authorization/oidc`, { // The app redirects to the login-page
           waitUntil: 'networkidle2' // Wait until login-page has been reached
         });
-
+  
         await page.waitForSelector('[name="username"]');
         await page.waitForSelector('[name="password"]');
         await page.waitForSelector('input[type="submit"]');
         await page.type('[name="username"]', username);
         await page.type('[name="password"]', password);
         await page.click('input[type="submit"]');
-
+  
         await page.waitForNavigation({ waitUntil: 'networkidle2' }); // Wait until redirected back to the app
-
+  
         const authCookies = await page.cookies();
-
+  
         browser.close();
         return authCookies;
       })();
     },
     logout(baseUrl) {
       return (async () => {
-      const browser = await puppeteer.launch({ ignoreHTTPSErrors: true });
-      const page = await browser.newPage();
-      await page.goto(`${baseUrl}api/logout`, {
-        waitUntil: 'networkidle2'
-      });
-      return true;
-    })
-    }
+        const browser = await puppeteer.launch({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
+        await page.goto(`${baseUrl}api/logout`, {
+          waitUntil: 'networkidle2'
+        });
+        return true;
+      })
+    } 
+    <%_ } _%>
   });
-<%_ } _%>
 <%_ if (cypressCoverage) { _%>
     require('@cypress/code-coverage/task')(on, config);
     return config;

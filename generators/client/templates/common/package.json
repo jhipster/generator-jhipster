@@ -5,6 +5,8 @@
     "babel-plugin-istanbul": "6.0.0",
     "cypress": "6.6.0",
     "eslint-plugin-cypress": "2.11.3",
+    "cypress-audit": "0.3.0",
+    "lighthouse": "7.3.0",
     "nyc": "15.1.0",
     "puppeteer": "9.1.1"
   },
