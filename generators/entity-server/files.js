@@ -21,6 +21,13 @@ const chalk = require('chalk');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
+const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { MapperTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
+const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = require('../../jdl/jhipster/cache-types');
+
+const { MAPSTRUCT } = MapperTypes;
+const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 
 /* Constants use throughout */
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
@@ -36,7 +43,7 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const serverFiles = {
   dbChangelog: [
     {
-      condition: generator => generator.databaseType === 'cassandra' && !generator.skipDbChangelog,
+      condition: generator => generator.databaseType === CASSANDRA && !generator.skipDbChangelog,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -46,7 +53,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === 'couchbase' && !generator.skipDbChangelog,
+      condition: generator => generator.searchEngine === COUCHBASE && !generator.skipDbChangelog,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -91,7 +98,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
+      condition: generator => generator.searchEngine === ELASTICSEARCH && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -121,7 +128,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && generator.databaseType === 'sql' && !generator.embedded,
+      condition: generator => generator.reactive && generator.databaseType === SQL && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -135,7 +142,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.service === 'serviceImpl' && !generator.embedded,
+      condition: generator => generator.service === SERVICE_IMPL && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -149,7 +156,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.service === 'serviceClass' && !generator.embedded,
+      condition: generator => generator.service === SERVICE_CLASS && !generator.embedded,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -159,7 +166,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.dto === 'mapstruct',
+      condition: generator => generator.dto === MAPSTRUCT,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -197,7 +204,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === 'elasticsearch' && !generator.embedded,
+      condition: generator => generator.searchEngine === ELASTICSEARCH && !generator.embedded,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -228,7 +235,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.dto === 'mapstruct',
+      condition: generator => generator.dto === MAPSTRUCT,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -238,7 +245,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.dto === 'mapstruct' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
+      condition: generator => generator.dto === MAPSTRUCT && [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -305,8 +312,8 @@ function writeFiles() {
 }
 
 function customizeFiles() {
-  if (this.databaseType === 'sql') {
-    if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
+  if (this.databaseType === SQL) {
+    if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(this.cacheProvider) && this.enableHibernateCache) {
       this.addEntityToCache(this.asEntity(this.entityClass), this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
     }
   }

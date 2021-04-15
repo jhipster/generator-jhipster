@@ -221,6 +221,7 @@ function derivedProperties(field) {
     fieldValidationMax: validationRules.includes(MAX),
     fieldValidationMaxLength: validationRules.includes(MAXLENGTH),
     fieldValidationPattern: validationRules.includes(PATTERN),
+    fieldValidationUnique: validationRules.includes(UNIQUE),
   });
 }
 

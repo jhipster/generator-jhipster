@@ -90,10 +90,12 @@ const BASE_TEMPLATE_DATA = {
 
 function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
+  const dto = entityWithConfig.dto;
   _.defaults(entityWithConfig, {
     paginationPagination: pagination === PAGINATION,
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
+    dtoMapstruct: dto === MAPSTRUCT,
   });
 }
 

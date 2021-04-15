@@ -27,14 +27,14 @@ partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persi
         .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
             .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
 <%_ } else { _%>
-<%_ for (field of fieldsToUpdate) { _%>
+  <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { %>
     partialUpdated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= field.updateWithValue %>);
-        <%_ if (field.fieldWithContentType) { _%>
+      <%_ if (field.fieldWithContentType) { _%>
         partialUpdated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= field.updateWithValue %>_CONTENT_TYPE);
-        <%_ } _%>
+      <%_ } _%>
     <%_ } _%>
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 <%_ if (!reactive) { _%>
@@ -54,19 +54,21 @@ webTestClient
 <%_ } _%>
 
 // Validate the <%= entityClass %> in the database
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 <%_ } _%>
 List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
 assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
 <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
-<%_ for (field of fields) { if (field.fieldType === 'ZonedDateTime') { _%>
+<%_ for (field of fields) { _%>
+  <%_ if (field.fieldTypeZonedDateTime) { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-<%_ } else if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
+  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= field.testWithConstant %>_CONTENT_TYPE);
-<%_ } else if (field.fieldType === 'BigDecimal'){ _%>
+  <%_ } else if (field.fieldTypeBigDecimal) { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= field.testWithConstant %>);
-<%_ } else { _%>
+  <%_ } else { _%>
     assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-<%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
