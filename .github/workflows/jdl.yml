@@ -110,16 +110,21 @@ jobs:
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+          path: |
+            ~/.npm
+            ~/.cache/Cypress/
+          key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-${{ matrix.cache }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-
+            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-${{ matrix.cache }}-
+            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
+            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load maven cache'
         uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}${{matrix.gradle}}
+          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
           restore-keys: |
+            ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-
             ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load gradle cache'
         if: matrix.gradle == 1
@@ -130,6 +135,7 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
           restore-keys: |
+            ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}-
             ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}
       - name: 'ENV: display variables'
         run: $JHI_SCRIPTS/01-display-configuration.sh
