@@ -16,12 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// Initialize the database
-<%_ if (!primaryKey.autoGenerate && !databaseTypeSql) { _%>
-    <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey.type, databaseType) -%>);
-<%_ } _%>
-<%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
-
 int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
 // Update the <%= entityInstance %> using partial update
