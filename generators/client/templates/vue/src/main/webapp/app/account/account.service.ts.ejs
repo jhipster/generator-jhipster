@@ -93,8 +93,8 @@ export default class AccountService {
       }
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
+    for (const authority of authorities) {
+      if (this.userAuthorities.includes(authority)) {
         return Promise.resolve(true);
       }
     }
