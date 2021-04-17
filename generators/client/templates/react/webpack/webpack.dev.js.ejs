@@ -19,7 +19,6 @@
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge').merge;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
@@ -31,6 +30,21 @@ const commonConfig = require('./webpack.common.js');
 const ENV = 'development';
 
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
+  cache: {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, 'webpack.common.js'),
+        path.resolve(__dirname, 'utils.js'),
+        path.resolve(__dirname, '../postcss.config.js'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
+    },
+  },
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
@@ -96,7 +110,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       : new SimpleProgressWebpackPlugin({
           format: options.stats === 'minimal' ? 'compact' : 'expanded'
         }),
-    new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin(
       {
         https: options.tls,

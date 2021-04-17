@@ -108,6 +108,10 @@ const defaultCommands = {
         option: '--skip-user-management',
         desc: 'Skip the user management module during app generation',
       },
+      {
+        option: '--unidirectional-relationships',
+        desc: 'Generate unidirectional relationships',
+      },
     ],
     desc: `Create entities from the JDL file/URL/content passed in argument.
     Use the '--fork' or '--interactive' flag to change the process forking behavior when generating multiple applications.`,
@@ -171,6 +175,9 @@ const defaultCommands = {
   },
   'upgrade-config': {
     desc: 'Upgrade the JHipster configuration',
+  },
+  workspaces: {
+    desc: 'Add workspaces configuration',
   },
 };
 

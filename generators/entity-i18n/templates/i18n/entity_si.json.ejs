@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "නව <%= entityClassHumanized %> එකක් සාදන්න",
                 "createOrEditLabel": "<%= entityClassHumanized %> සාදන්න හෝ සංස්කරණය කරන්න",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "<%= entityClassHumanized %> සඳහා සොයන්න",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "<%= entityClassPluralHumanized %> හමු නොවීය"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "{{ param }} හඳුනාගැනීමෙන් නව <%= entityClassHumanized %> සාදනු ලැබේ",
             "updated": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> යාවත්කාලීන වේ",
             "deleted": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> මකා දමනු ලැබේ",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "<%= entityClassHumanized %> {{ id }} මකා දැමීමට ඔබට විශ්වාසද?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

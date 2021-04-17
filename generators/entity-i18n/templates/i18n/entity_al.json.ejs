@@ -23,28 +23,28 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Krijo një të ri <%= entityClassHumanized %>",
                 "createOrEditLabel": "Krijo ose përpuno një <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Kërko për <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Një <%= entityClassHumanized %> i ri u krijua me identifikues {{ param }}",
             "updated": "Një <%= entityClassHumanized %> u përpunua me identifikues {{ param }}",
             "deleted": "Një <%= entityClassHumanized %> u fshi me identifikues {{ param }}",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Jeni i sigurtë që doni të fshini <%= entityClassHumanized %> {{ id }}?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
-            }<% for (idx in fields) {
+            }<%for (idx in fields) {
             if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
             "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,

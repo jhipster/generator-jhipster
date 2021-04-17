@@ -335,6 +335,9 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
+        <%_ if (reactive) { _%>
+    implementation "commons-beanutils:commons-beanutils:1.9.4"
+        <%_ } _%>
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase' || applicationType === 'gateway') { _%>

@@ -39,7 +39,7 @@ const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
 const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 
 let useBlueprints;
-
+/* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
@@ -97,7 +97,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
-  get prompting() {
+  _prompting() {
     return {
       checkBuildTool() {
         if (this.abort) return;
@@ -225,7 +225,12 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       saveConfig() {
         if (this.abort) return;
@@ -239,7 +244,12 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get default() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _default() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', 'azure-app-service');
@@ -454,6 +464,11 @@ which is free for the first 30 days`);
     };
   }
 
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
   _loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     super.loadPlatformConfig(config, dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
@@ -491,7 +506,7 @@ which is free for the first 30 days`);
     return this._writing();
   }
 
-  get end() {
+  _end() {
     return {
       gitHubAction() {
         if (this.abort) return;
@@ -608,5 +623,10 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
         });
       },
     };
+  }
+
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 };

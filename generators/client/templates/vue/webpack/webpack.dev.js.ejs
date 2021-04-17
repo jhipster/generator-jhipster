@@ -18,9 +18,8 @@
 -%>
 'use strict';
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-const portfinder = require('portfinder');
 const path = require('path');
+const portfinder = require('portfinder');
 const webpack = require('webpack');
 const { merge: webpackMerge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -29,9 +28,6 @@ const utils = require('./vue.utils');
 const config = require('../config');
 const baseWebpackConfig = require('./webpack.common');
 const jhiUtils = require('./utils.js');
-
-const HOST = process.env.HOST;
-const PORT = process.env.PORT && Number(process.env.PORT);
 
 module.exports = webpackMerge(baseWebpackConfig, {
   mode: 'development',
@@ -51,6 +47,21 @@ module.exports = webpackMerge(baseWebpackConfig, {
   },
   optimization: {
     moduleIds: 'named',
+  },
+  cache: {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, 'webpack.common.js'),
+        path.resolve(__dirname, 'utils.js'),
+        path.resolve(__dirname, '../postcssrc.js'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
+    },
   },
   devServer: {
     contentBase: './<%= DIST_DIR %>',
@@ -127,7 +138,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
         } */
       },
       {
-        reload: false
+        reload: true
       }
     )
   ]

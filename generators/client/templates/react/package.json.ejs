@@ -29,6 +29,9 @@
     "@fortawesome/fontawesome-svg-core": "<%= dependabotPackageJson.dependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= dependabotPackageJson.dependencies['@fortawesome/free-solid-svg-icons'] %>",
     "@fortawesome/react-fontawesome": "<%= dependabotPackageJson.dependencies['@fortawesome/react-fontawesome'] %>",
+    "@redux-devtools/core": "<%= dependabotPackageJson.dependencies['@redux-devtools/core'] %>",
+    "@redux-devtools/dock-monitor": "<%= dependabotPackageJson.dependencies['@redux-devtools/dock-monitor'] %>",
+    "@redux-devtools/log-monitor": "<%= dependabotPackageJson.dependencies['@redux-devtools/log-monitor'] %>",
     "availity-reactstrap-validation": "<%= dependabotPackageJson.dependencies['availity-reactstrap-validation'] %>",
     "axios": "<%= dependabotPackageJson.dependencies['axios'] %>",
     "bootstrap": "<%= dependabotPackageJson.dependencies['bootstrap'] %>",
@@ -51,9 +54,6 @@
     "react-transition-group": "<%= dependabotPackageJson.dependencies['react-transition-group'] %>",
     "reactstrap": "<%= dependabotPackageJson.dependencies['reactstrap'] %>",
     "redux": "<%= dependabotPackageJson.dependencies['redux'] %>",
-    "redux-devtools": "<%= dependabotPackageJson.dependencies['redux-devtools'] %>",
-    "redux-devtools-dock-monitor": "<%= dependabotPackageJson.dependencies['redux-devtools-dock-monitor'] %>",
-    "redux-devtools-log-monitor": "<%= dependabotPackageJson.dependencies['redux-devtools-log-monitor'] %>",
     "redux-promise-middleware": "<%= dependabotPackageJson.dependencies['redux-promise-middleware'] %>",
     "redux-thunk": "<%= dependabotPackageJson.dependencies['redux-thunk'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
@@ -93,7 +93,6 @@
     "autoprefixer": "<%= dependabotPackageJson.devDependencies['autoprefixer'] %>",
     "browser-sync": "<%= dependabotPackageJson.devDependencies['browser-sync'] %>",
     "browser-sync-webpack-plugin": "<%= dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
-    "cache-loader": "<%= dependabotPackageJson.devDependencies['cache-loader'] %>",
 <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
@@ -102,13 +101,13 @@
     "core-js": "<%= dependabotPackageJson.devDependencies['core-js'] %>",
     "cross-env": "<%= dependabotPackageJson.devDependencies['cross-env'] %>",
     "css-loader": "<%= dependabotPackageJson.devDependencies['css-loader'] %>",
+    "css-minimizer-webpack-plugin": "<%= dependabotPackageJson.devDependencies['css-minimizer-webpack-plugin'] %>",
     "eslint": "<%= dependabotPackageJson.devDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= dependabotPackageJson.devDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-react": "<%= dependabotPackageJson.devDependencies['eslint-plugin-react'] %>",
     "eslint-webpack-plugin": "<%= dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
     "file-loader": "<%= dependabotPackageJson.devDependencies['file-loader'] %>",
     "fork-ts-checker-webpack-plugin": "<%= dependabotPackageJson.devDependencies['fork-ts-checker-webpack-plugin'] %>",
-    "friendly-errors-webpack-plugin": "<%= dependabotPackageJson.devDependencies['friendly-errors-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
   <%_ otherModules.forEach(module => { _%>
@@ -132,7 +131,6 @@
 <%_ if (protractorTests) { _%>
     "mocha": "7.1.2",
 <%_ } _%>
-    "optimize-css-assets-webpack-plugin": "<%= dependabotPackageJson.devDependencies['optimize-css-assets-webpack-plugin'] %>",
     "postcss-loader": "<%= dependabotPackageJson.devDependencies['postcss-loader'] %>",
     "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
 <%_ if (!skipServer) { _%>

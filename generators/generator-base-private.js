@@ -39,6 +39,7 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 const dbTypes = require('../jdl/jhipster/field-types');
+const { REQUIRED } = require('../jdl/jhipster/validations');
 
 const {
   STRING: TYPE_STRING,
@@ -691,6 +692,69 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
+   * Initialize git repository.
+   */
+  initializeGitRepository() {
+    if (this.gitInstalled || this.isGitInstalled()) {
+      const gitDir = this.gitExec('rev-parse --is-inside-work-tree', { trace: false }).stdout;
+      // gitDir has a line break to remove (at least on windows)
+      if (gitDir && gitDir.trim() === 'true') {
+        this.gitInitialized = true;
+      } else {
+        const shellStr = this.gitExec('init', { trace: false });
+        this.gitInitialized = shellStr.code === 0;
+        if (this.gitInitialized) this.log(chalk.green.bold('Git repository initialized.'));
+        else this.warning(`Failed to initialize Git repository.\n ${shellStr.stderr}`);
+      }
+    } else {
+      this.warning('Git repository could not be initialized, as Git is not installed on your system');
+    }
+  }
+
+  /**
+   * Commit pending files to git.
+   */
+  commitFilesToGit(commitMsg, done) {
+    if (this.gitInitialized) {
+      this.debug('Committing files to git');
+      this.gitExec('log --oneline -n 1 -- .', { trace: false }, (code, commits) => {
+        if (code !== 0 || !commits || !commits.trim()) {
+          // if no files in Git from current folder then we assume that this is initial application generation
+          this.gitExec('add .', { trace: false }, code => {
+            if (code === 0) {
+              this.gitExec(`commit -m "${commitMsg}" -- .`, { trace: false }, code => {
+                if (code === 0) {
+                  this.log(chalk.green.bold(`Application successfully committed to Git from ${process.cwd()}.`));
+                } else {
+                  this.log(chalk.red.bold(`Application commit to Git failed from ${process.cwd()}. Try to commit manually.`));
+                }
+                done();
+              });
+            } else {
+              this.warning(`The generated application could not be committed to Git, because ${chalk.bold('git add')} command failed.`);
+              done();
+            }
+          });
+        } else {
+          // if found files in Git from current folder then we assume that this is application regeneration
+          // if there are changes in current folder then inform user about manual commit needed
+          this.gitExec('diff --name-only .', { trace: false }, (code, diffs) => {
+            if (code === 0 && diffs && diffs.trim()) {
+              this.log(
+                `Found commits in Git from ${process.cwd()}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
+              );
+            }
+            done();
+          });
+        }
+      });
+    } else {
+      this.warning('The generated application could not be committed to Git, as a Git repository could not be initialized.');
+      done();
+    }
+  }
+
+  /**
    * Get Option From Array
    *
    * @param {Array} array - array
@@ -944,7 +1008,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     relationships.forEach(relationship => {
       let fieldType;
       let fieldName;
-      const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required');
+      const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes(REQUIRED);
       const relationshipType = relationship.relationshipType;
       if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
         fieldType = `I${relationship.otherEntityAngularName}[]`;

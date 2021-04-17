@@ -22,11 +22,30 @@ const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
+const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, ORACLE } = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
+const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { GENERATOR_DOCKER_COMPOSE } = require('../generator-list');
 
+const NO_DATABASE = databaseTypes.NO;
+
+let useBlueprints;
+
+/* eslint-disable consistent-return */
 module.exports = class extends BaseDockerGenerator {
-  get initializing() {
+  constructor(args, options) {
+    super(args, options);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DOCKER_COMPOSE);
+  }
+
+  _initializing() {
     return {
-      ...super.initializing,
+      ...super._initializing(),
 
       checkDockerCompose() {
         if (this.skipChecks) return;
@@ -61,34 +80,68 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get prompting() {
-    if (this.abort) return undefined;
-    return super.prompting;
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
   }
 
-  get configuring() {
+  _prompting() {
+    return super._prompting();
+  }
+
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       sayHello() {
         this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      ...super.configuring,
+      ...super._configuring(),
+
+      saveConfig() {
+        this.config.set({
+          appsFolders: this.appsFolders,
+          directoryPath: this.directoryPath,
+          gatewayType: this.gatewayType,
+          clusteredDbApps: this.clusteredDbApps,
+          monitoring: this.monitoring,
+          serviceDiscoveryType: this.serviceDiscoveryType,
+          jwtSecretKey: this.jwtSecretKey,
+        });
+      },
+    };
+  }
+
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _preparing() {
+    return {
+      loadConfig() {
+        this.usesOauth2 = this.appConfigs.some(appConfig => appConfig.authenticationTypeOauth2);
+        this.useKafka = this.appConfigs.some(appConfig => appConfig.messageBroker === KAFKA);
+      },
 
       setAppsYaml() {
         this.appsYaml = [];
         this.keycloakRedirectUris = '';
         let portIndex = 8080;
         this.serverPort = portIndex;
-        this.appsFolders.forEach((appsFolder, index) => {
-          const appConfig = this.appConfigs[index];
+        this.appConfigs.forEach(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration = {};
-          const path = this.destinationPath(this.directoryPath + appsFolder);
+          const path = this.destinationPath(this.directoryPath + appConfig.appFolder);
           // Add application configuration
           const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
-          if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+          if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
             this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
             const ports = yamlConfig.ports[0].split(':');
             ports[0] = portIndex;
@@ -96,12 +149,12 @@ module.exports = class extends BaseDockerGenerator {
             portIndex++;
           }
 
-          if (appConfig.applicationType === 'monolith' && this.monitoring === 'prometheus') {
+          if (appConfig.applicationType === MONOLITH && this.monitoring === PROMETHEUS) {
             yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
             yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
           }
 
-          if (this.serviceDiscoveryType === 'eureka') {
+          if (this.serviceDiscoveryType === EUREKA) {
             // Set the JHipster Registry password
             yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
           }
@@ -114,14 +167,14 @@ module.exports = class extends BaseDockerGenerator {
 
           // Add database configuration
           const database = appConfig.prodDatabaseType;
-          if (database !== 'no' && database !== 'oracle') {
+          if (database !== NO_DATABASE && database !== ORACLE) {
             const relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[databaseServiceName];
-            if (database !== 'mariadb') delete databaseYamlConfig.ports;
+            if (database !== MARIADB) delete databaseYamlConfig.ports;
 
-            if (database === 'cassandra') {
+            if (database === CASSANDRA) {
               // node config
               const cassandraClusterYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-cluster.yml`));
               const cassandraNodeConfig = cassandraClusterYaml.services[`${databaseServiceName}-node`];
@@ -139,7 +192,7 @@ module.exports = class extends BaseDockerGenerator {
               parentConfiguration[`${databaseServiceName}-migration`] = cassandraMigrationConfig;
             }
 
-            if (database === 'couchbase') {
+            if (database === COUCHBASE) {
               databaseYamlConfig.build.context = relativePath;
             }
 
@@ -149,11 +202,11 @@ module.exports = class extends BaseDockerGenerator {
               dbNodeConfig.build.context = relativePath;
               databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
               delete databaseYamlConfig.ports;
-              if (database === 'couchbase') {
+              if (database === COUCHBASE) {
                 databaseYamlConfig.build.context = relativePath;
               }
               parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
-              if (database === 'mongodb') {
+              if (database === MONGODB) {
                 parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${databaseServiceName}-config`];
               }
             }
@@ -162,20 +215,15 @@ module.exports = class extends BaseDockerGenerator {
           }
           // Add search engine configuration
           const searchEngine = appConfig.searchEngine;
-          if (searchEngine === 'elasticsearch') {
+          if (searchEngine === ELASTICSEARCH) {
             const searchEngineYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
             const searchEngineConfig = searchEngineYaml.services[`${lowercaseBaseName}-${searchEngine}`];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
-          // Add message broker support
-          const messageBroker = appConfig.messageBroker;
-          if (messageBroker === 'kafka') {
-            this.useKafka = true;
-          }
           // Add Memcached support
           const cacheProvider = appConfig.cacheProvider;
-          if (cacheProvider === 'memcached') {
+          if (cacheProvider === MEMCACHED) {
             this.useMemcached = true;
             const memcachedYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/memcached.yml`));
             const memcachedConfig = memcachedYaml.services[`${lowercaseBaseName}-memcached`];
@@ -184,7 +232,7 @@ module.exports = class extends BaseDockerGenerator {
           }
 
           // Add Redis support
-          if (cacheProvider === 'redis') {
+          if (cacheProvider === REDIS) {
             this.useRedis = true;
             const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
             const redisConfig = redisYaml.services[`${lowercaseBaseName}-redis`];
@@ -208,26 +256,24 @@ module.exports = class extends BaseDockerGenerator {
           this.skipClient = appConfig.skipClient;
         });
       },
-
-      saveConfig() {
-        this.config.set({
-          appsFolders: this.appsFolders,
-          directoryPath: this.directoryPath,
-          gatewayType: this.gatewayType,
-          clusteredDbApps: this.clusteredDbApps,
-          monitoring: this.monitoring,
-          serviceDiscoveryType: this.serviceDiscoveryType,
-          jwtSecretKey: this.jwtSecretKey,
-        });
-      },
     };
   }
 
-  get writing() {
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
+
+  _writing() {
     return writeFiles();
   }
 
-  end() {
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _end() {
     if (this.hasWarning) {
       this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
       this.log('If you forgot to generate the Docker image for this application, please run:');
@@ -240,12 +286,17 @@ module.exports = class extends BaseDockerGenerator {
       this.log('\nYour applications will be accessible on these URLs:');
       let portIndex = 8080;
       this.appConfigs.forEach(appConfig => {
-        if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+        if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
           this.log(`\t- ${appConfig.baseName}: http://localhost:${portIndex}`);
           portIndex++;
         }
       });
       this.log('\n');
     }
+  }
+
+  end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 };

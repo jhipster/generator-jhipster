@@ -5,7 +5,6 @@ services:
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/
         environment:
-            - MYSQL_USER=root
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=msmysql
         ports:

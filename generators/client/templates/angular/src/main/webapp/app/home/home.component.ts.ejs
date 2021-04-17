@@ -56,10 +56,6 @@ export class HomeComponent implements OnInit<% if (!authenticationTypeOauth2) { 
 <%_ } _%>
   }
 
-  isAuthenticated(): boolean {
-    return this.accountService.isAuthenticated();
-  }
-
   login(): void {
 <%_ if (!authenticationTypeOauth2) { _%>
     this.router.navigate(['/login']);

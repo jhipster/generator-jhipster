@@ -1872,6 +1872,177 @@ paginate * with infinite-scroll
         expect(fse.existsSync('.jhipster')).to.be.false;
       });
     });
+    context('when passing the unidirectionalRelationships option', () => {
+      const entities = `
+entity A
+entity B
+
+relationship OneToOne {
+  A{oneToOneB} to B
+  A{biOneToOneB} to B{biOneToOneA}
+}
+relationship ManyToOne {
+  A{manyToOneB} to B
+  A{biManyToOneB} to B{biManyToOneA}
+}
+relationship OneToMany {
+  A{oneToManyB} to B
+  A{biOneToManyB} to B{biOneToManyA}
+}
+relationship ManyToMany {
+  A{manyToManyB} to B
+  A{biManyToManyB} to B{biManyToManyA}
+}
+`;
+      context('when passing without application config', () => {
+        let importer;
+
+        before(() => {
+          importer = createImporterFromContent(entities, {
+            unidirectionalRelationships: true,
+            applicationName: 'jhipter',
+            databaseType: 'postgresql',
+          });
+        });
+
+        after(() => {
+          fse.removeSync('.jhipster');
+        });
+
+        it('should not fail', () => {
+          expect(() => importer.import()).not.to.throw();
+        });
+      });
+      context('when parsing one JDL application and entities', () => {
+        let returned;
+
+        before(() => {
+          const importer = createImporterFromContent(
+            `
+application {
+  config{
+    prodDatabaseType postgresql
+  }
+  entities A, B
+}
+${entities}`,
+            {
+              unidirectionalRelationships: true,
+            }
+          );
+          returned = importer.import();
+        });
+
+        after(() => {
+          fse.unlinkSync('.yo-rc.json');
+          fse.removeSync('.jhipster');
+        });
+
+        it('should return the import state', () => {
+          expect(returned.exportedEntities).to.have.lengthOf(2);
+          expect(returned.exportedApplications).to.have.lengthOf(1);
+          expect(returned.exportedDeployments).to.have.lengthOf(0);
+        });
+        it('should return the corresponding exportedApplicationsWithEntities', () => {
+          returned.exportedApplications.forEach(application => {
+            const applicationConfig = application['generator-jhipster'];
+            const entityNames = application.entities || [];
+            const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
+            expect(applicationConfig).to.be.eql(applicationWithEntities.config);
+            expect(applicationWithEntities.entities.map(entity => entity.name)).to.be.eql(entityNames);
+            expect(returned.exportedEntities.filter(entity => entityNames.includes(entity.name))).to.be.eql(
+              applicationWithEntities.entities
+            );
+            expect(applicationWithEntities.entities[0].relationships).to.be.eql([
+              {
+                otherEntityName: 'b',
+                ownerSide: true,
+                relationshipName: 'oneToOneB',
+                relationshipType: 'one-to-one',
+                unidirectional: true,
+              },
+              {
+                otherEntityName: 'b',
+                ownerSide: true,
+                otherEntityRelationshipName: 'biOneToOneA',
+                relationshipName: 'biOneToOneB',
+                relationshipType: 'one-to-one',
+                unidirectional: false,
+              },
+              {
+                otherEntityName: 'b',
+                relationshipName: 'oneToManyB',
+                relationshipType: 'one-to-many',
+                unidirectional: true,
+              },
+              {
+                otherEntityName: 'b',
+                otherEntityRelationshipName: 'biOneToManyA',
+                relationshipName: 'biOneToManyB',
+                relationshipType: 'one-to-many',
+                unidirectional: false,
+              },
+              {
+                otherEntityName: 'b',
+                relationshipName: 'manyToOneB',
+                relationshipType: 'many-to-one',
+                unidirectional: true,
+              },
+              {
+                otherEntityName: 'b',
+                otherEntityRelationshipName: 'biManyToOneA',
+                relationshipName: 'biManyToOneB',
+                relationshipType: 'many-to-one',
+                unidirectional: false,
+              },
+              {
+                otherEntityName: 'b',
+                ownerSide: true,
+                relationshipName: 'manyToManyB',
+                relationshipType: 'many-to-many',
+                unidirectional: true,
+              },
+              {
+                otherEntityName: 'b',
+                ownerSide: true,
+                otherEntityRelationshipName: 'biManyToManyA',
+                relationshipName: 'biManyToManyB',
+                relationshipType: 'many-to-many',
+                unidirectional: false,
+              },
+            ]);
+            expect(applicationWithEntities.entities[1].relationships).to.be.eql([
+              {
+                otherEntityName: 'a',
+                ownerSide: false,
+                otherEntityRelationshipName: 'biOneToOneB',
+                relationshipName: 'biOneToOneA',
+                relationshipType: 'one-to-one',
+              },
+              {
+                otherEntityName: 'a',
+                otherEntityRelationshipName: 'biOneToManyB',
+                relationshipName: 'biOneToManyA',
+                relationshipType: 'many-to-one',
+              },
+              {
+                otherEntityName: 'a',
+                otherEntityRelationshipName: 'biManyToOneB',
+                relationshipName: 'biManyToOneA',
+                relationshipType: 'one-to-many',
+              },
+              {
+                otherEntityName: 'a',
+                ownerSide: false,
+                otherEntityRelationshipName: 'biManyToManyB',
+                relationshipName: 'biManyToManyA',
+                relationshipType: 'many-to-many',
+              },
+            ]);
+          });
+        });
+      });
+    });
     context('when not exporting entities but only applications', () => {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, 'test-files', 'application.jdl')]);

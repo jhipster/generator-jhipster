@@ -33,10 +33,10 @@ const GRADLE_VERSION = '6.8.3';
 const JIB_VERSION = '2.8.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.0.1-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.0.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.4.4';
-const LIQUIBASE_VERSION = '4.3.1';
+const LIQUIBASE_VERSION = '4.3.2';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.29.Final';
 
@@ -57,19 +57,19 @@ const DOCKER_COUCHBASE = 'couchbase:6.6.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.10';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU9-ubuntu-16.04';
 const DOCKER_NEO4J = 'neo4j:4.2.4';
-const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.2021.03';
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.2021.03-1';
 const DOCKER_MEMCACHED = 'memcached:1.6.9-alpine';
 const DOCKER_REDIS = 'redis:6.2.1';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:12.0.4'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.9.3'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
-const DOCKER_SONAR = 'sonarqube:8.7.1-community';
+const DOCKER_SONAR = 'sonarqube:8.8-community';
 const DOCKER_CONSUL = 'consul:1.9.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.4.1';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.25.2';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.26.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.21.0';
-const DOCKER_GRAFANA = 'grafana/grafana:7.4.5';
+const DOCKER_GRAFANA = 'grafana/grafana:7.5.2';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.42.1';
@@ -310,6 +310,7 @@ const LANGUAGES = [
 ];
 
 const constants = {
+  GENERATOR_JHIPSTER: 'generator-jhipster',
   JHIPSTER_CONFIG_DIR: '.jhipster',
   INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
   DOCKER_DIR: `${MAIN_DIR}docker/`,

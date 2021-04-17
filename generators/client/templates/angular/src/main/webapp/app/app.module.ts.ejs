@@ -32,7 +32,7 @@ import { CookieService } from 'ngx-cookie-service';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 <%_ } _%>
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageService<% } %> } from 'ngx-webstorage';
 import * as dayjs from 'dayjs';
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 
@@ -73,7 +73,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
-    NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
+    NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-', caseSensitive: true }),
 <%_ if (enableTranslation) { _%>
     TranslateModule.forRoot({
       loader: {
@@ -113,14 +113,16 @@ import { ErrorComponent } from './layouts/error/error.component';
   bootstrap: [MainComponent],
 })
 export class AppModule {
-  constructor(applicationConfigService: ApplicationConfigService, iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
+  constructor(applicationConfigService: ApplicationConfigService, iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, translateService: TranslateService, sessionStorageService: SessionStorageService<% } %>) {
     applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);
     iconLibrary.addIcons(...fontAwesomeIcons);
     dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
 <%_ if (enableTranslation) { _%>
     translateService.setDefaultLang('<%= nativeLanguage %>');
-    translateService.use('<%= nativeLanguage %>');
+    // if user have changed language and navigates away from the application and back to the application then use previously choosed language
+    const langKey = sessionStorageService.retrieve('locale') ?? '<%= nativeLanguage %>';
+    translateService.use(langKey);
 <%_ } _%>
   }
 }

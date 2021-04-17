@@ -41,7 +41,6 @@ import administration, {
 } from './administration.reducer';
 
 describe('Administration reducer tests', () => {
-  const username = process.env.E2E_USERNAME ?? 'admin';
 
   function isEmpty(element): boolean {
     if (element instanceof Array) {
@@ -224,6 +223,8 @@ describe('Administration reducer tests', () => {
   });
 <%_ if (communicationSpringWebsocket) { _%>
   describe('Websocket Message Handling', () => {
+    const username = process.env.E2E_USERNAME ?? 'admin';
+
     it('should update state according to a successful websocket message receipt', () => {
       const payload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
       const toTest = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload });

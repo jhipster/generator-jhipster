@@ -18,8 +18,13 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
+const _ = require('lodash');
+
+const { defaultConfig } = require('./generator-defaults');
 const dockerUtils = require('./docker-utils');
 const { getBase64Secret } = require('./utils');
+const { MAVEN } = require('../jdl/jhipster/build-tool-types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../jdl/jhipster/application-types');
 
 module.exports = {
   checkDocker: dockerUtils.checkDocker,
@@ -44,7 +49,7 @@ function checkImages() {
   this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
   this.appsFolders.forEach((appsFolder, index) => {
     const appConfig = this.appConfigs[index];
-    if (appConfig.buildTool === 'maven') {
+    if (appConfig.buildTool === MAVEN) {
       imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
       runCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
     } else {
@@ -104,13 +109,16 @@ function loadConfigs() {
   this.appsFolders.forEach(appFolder => {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
-      const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).createProxy();
+      const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
+      _.defaults(config, defaultConfig);
 
-      if (config.applicationType === 'monolith') {
+      this.loadDerivedServerConfig(config, config);
+
+      if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
-      } else if (config.applicationType === 'gateway') {
+      } else if (config.applicationType === GATEWAY) {
         this.gatewayNb++;
-      } else if (config.applicationType === 'microservice') {
+      } else if (config.applicationType === MICROSERVICE) {
         this.microserviceNb++;
       }
 
@@ -132,24 +140,16 @@ function setClusteredApps() {
 }
 
 function loadFromYoRc() {
-  this.authenticationType = this.config.get('authenticationType');
-  this.defaultAppsFolders = this.config.get('appsFolders');
-  this.directoryPath = this.config.get('directoryPath');
-  this.gatewayType = this.config.get('gatewayType');
-  this.clusteredDbApps = this.config.get('clusteredDbApps');
-  this.monitoring = this.config.get('monitoring');
+  this.loadDeploymentConfig();
+  this.loadDerivedDeploymentConfig();
+
   this.useKafka = false;
   this.useMemcached = false;
   this.useRedis = false;
-  this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-  this.dockerPushCommand = this.config.get('dockerPushCommand');
-  this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-  this.reactive = this.config.get('reactive');
-  if (this.serviceDiscoveryType === undefined) {
-    this.serviceDiscoveryType = 'eureka';
-  }
-  this.adminPassword = this.config.get('adminPassword');
-  this.jwtSecretKey = this.config.get('jwtSecretKey');
+
+  // Current implementation loads appsFolders into defaultAppsFolders
+  this.defaultAppsFolders = this.appsFolders;
+  delete this.appsFolders;
 
   if (this.defaultAppsFolders !== undefined) {
     this.log('\nFound .yo-rc.json config file...');
@@ -159,9 +159,9 @@ function loadFromYoRc() {
     this.appsFolders = this.defaultAppsFolders;
     loadConfigs.call(this);
     if (this.microserviceNb > 0 || this.gatewayNb > 0) {
-      this.deploymentApplicationType = 'microservice';
+      this.deploymentApplicationType = MICROSERVICE;
     } else {
-      this.deploymentApplicationType = 'monolith';
+      this.deploymentApplicationType = MONOLITH;
     }
     setClusteredApps.call(this);
     if (!this.adminPassword) {

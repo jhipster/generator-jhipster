@@ -8,6 +8,10 @@ updates:
     labels:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
+    ignore:
+      # Ignore updates to conf due to dependency resolution problems
+      # See https://github.com/jhipster/generator-jhipster/issues/14492
+      - dependency-name: 'conf'
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'

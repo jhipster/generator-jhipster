@@ -24,6 +24,17 @@ const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 const { fieldToReference } = require('./field');
+const { PaginationTypes } = require('../jdl/jhipster/entity-options');
+const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
+const { MapperTypes } = require('../jdl/jhipster/entity-options');
+const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
+const { CommonDBTypes } = require('../jdl/jhipster/field-types');
+
+const { BOOLEAN } = CommonDBTypes;
+const { MAPSTRUCT } = MapperTypes;
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const NO_PAGINATION = PaginationTypes.NO;
+const NO_MAPPER = MapperTypes.NO;
 
 const BASE_TEMPLATE_DATA = {
   primaryKey: undefined,
@@ -77,6 +88,17 @@ const BASE_TEMPLATE_DATA = {
   },
 };
 
+function _derivedProperties(entityWithConfig) {
+  const pagination = entityWithConfig.pagination;
+  const dto = entityWithConfig.dto;
+  _.defaults(entityWithConfig, {
+    paginationPagination: pagination === PAGINATION,
+    paginationInfiniteScroll: pagination === INFINITE_SCROLL,
+    paginationNo: pagination === NO_PAGINATION,
+    dtoMapstruct: dto === MAPSTRUCT,
+  });
+}
+
 function prepareEntityForTemplates(entityWithConfig, generator) {
   const entityName = entityWithConfig.name;
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
@@ -85,6 +107,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
+  entityWithConfig.resetFakerSeed();
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
   if (entityWithConfig.entityAngularJSSuffix && !entityWithConfig.entityAngularJSSuffix.startsWith('-')) {
@@ -92,7 +115,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   }
 
   entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
-  if (generator.jhipsterConfig.applicationType === 'gateway' && entityWithConfig.useMicroserviceJson) {
+  if (generator.jhipsterConfig.applicationType === GATEWAY && entityWithConfig.useMicroserviceJson) {
     if (!entityWithConfig.microserviceName) {
       throw new Error('Microservice name for the entity is not found. Entity cannot be generated!');
     }
@@ -108,7 +131,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityNamePlural: pluralize(entityName),
   });
 
-  const dto = entityWithConfig.dto === 'mapstruct';
+  const dto = entityWithConfig.dto === MAPSTRUCT;
   if (dto) {
     _.defaults(entityWithConfig, {
       dtoClass: generator.asDto(entityWithConfig.entityClass),
@@ -175,10 +198,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
 
   const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
   entityWithConfig.saveUserSnapshot =
-    entityWithConfig.applicationType === 'microservice' &&
-    entityWithConfig.authenticationType === 'oauth2' &&
+    entityWithConfig.applicationType === MICROSERVICE &&
+    entityWithConfig.authenticationType === OAUTH2 &&
     hasBuiltInUserField &&
-    entityWithConfig.dto === 'no';
+    entityWithConfig.dto === NO_MAPPER;
 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate =
@@ -195,6 +218,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     }
     return Object.fromEntries(fieldEntries);
   };
+  _derivedProperties(entityWithConfig);
 
   return entityWithConfig;
 }
@@ -247,10 +271,7 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
               return [relationship.relationshipName, field.fieldName];
             },
             get path() {
-              if (field.path) {
-                return [relationship.relationshipName, ...field.path];
-              }
-              return [relationship.relationshipName, field.fieldName];
+              return [relationship.relationshipName, ...field.path];
             },
             get fieldName() {
               return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
@@ -265,6 +286,9 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
             },
             get reference() {
               return fieldToReference(entityWithConfig, this);
+            },
+            get relationshipsPath() {
+              return [relationship, ...field.relationshipsPath];
             },
           }));
         },
@@ -355,7 +379,6 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       },
     };
   }
-
   return entityWithConfig;
 }
 
@@ -372,16 +395,19 @@ function fieldToId(field) {
       return field.derivedPath ? field.derivedPath.join('.') : field.fieldName;
     },
     get nameDottedAsserted() {
-      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : field.fieldName;
+      return field.derivedPath ? `${field.derivedPath.join('!.')}!` : `${field.fieldName}!`;
     },
     get setter() {
       return `set${this.nameCapitalized}`;
     },
     get getter() {
-      return (field.fieldType === 'Boolean' ? 'is' : 'get') + this.nameCapitalized;
+      return (field.fieldType === BOOLEAN ? 'is' : 'get') + this.nameCapitalized;
     },
     get autoGenerate() {
       return !!field.autoGenerate;
+    },
+    get relationshipsPath() {
+      return field.relationshipsPath;
     },
   };
 }

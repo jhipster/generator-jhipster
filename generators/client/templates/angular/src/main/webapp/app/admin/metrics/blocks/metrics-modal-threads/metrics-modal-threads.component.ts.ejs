@@ -36,7 +36,7 @@ export class MetricsModalThreadsComponent implements OnInit {
   threadDumpTimedWaiting = 0;
   threadDumpWaiting = 0;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(private activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
     this.threads?.forEach(thread => {
@@ -69,5 +69,9 @@ export class MetricsModalThreadsComponent implements OnInit {
 
   getThreads(): Thread[] {
     return this.threads?.filter(thread => !this.threadStateFilter || thread.threadState === this.threadStateFilter) ?? [];
+  }
+
+  dismiss(): void {
+    this.activeModal.dismiss();
   }
 }

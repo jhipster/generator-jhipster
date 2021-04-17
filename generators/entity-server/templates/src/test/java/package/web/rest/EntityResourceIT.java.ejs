@@ -810,9 +810,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test
     void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
-        <%_ } _%>
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
 
         List<<%= entityClass %>> <%= entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
@@ -850,9 +852,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
-        <%_ } _%>
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List
@@ -941,9 +945,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
-        <%_ } _%>
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get the <%= entityInstance %>
@@ -1326,9 +1332,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
     <%_ } _%>
         // Initialize the database
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
-        <%_ } _%>
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
@@ -1514,12 +1522,28 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     %>
     @Test<%= transactionalAnnotation %>
     void partialUpdate<%= entityClass %>WithPatch() throws Exception {
-<% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient).map(field => prepareFieldForPatchTest(field, () => faker.random.boolean())); %>
+        // Initialize the database
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+
+<% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient).map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); %>
 <%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
 
     @Test<%= transactionalAnnotation %>
     void fullUpdate<%= entityClass %>WithPatch() throws Exception {
+        // Initialize the database
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+
 <% const fieldsToIncludeInFullPatchTest = fields.filter(field => !field.id && !field.transient).map(field => prepareFieldForPatchTest(field, () => true)); %>
 <%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
@@ -1646,9 +1670,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         when(mock<%= entityClass %>SearchRepository.deleteById(any<%= primaryKey.type %>())).thenReturn(Mono.empty());
 <%_ } _%>
         // Initialize the database
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
-        <%_ } _%>
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
@@ -1693,9 +1719,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } _%>
 <%_ } _%>
         // Initialize the database
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
-        <%_ } _%>
+<%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+    <%_ } _%>
+<%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 <%_ if (searchEngine === 'elasticsearch') { _%>
     <%_ if (reactive) { _%>

@@ -27,7 +27,7 @@ openApiGenerate {
     inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
     outputDir = "$buildDir/openapi".toString()
     apiPackage = "<%= packageName %>.web.api"
-    modelPackage = "<%= packageName %>.web.api.model"
+    modelPackage = "<%= packageName %>.service.api.dto"
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]

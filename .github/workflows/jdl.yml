@@ -1,0 +1,246 @@
+#
+# Copyright 2013-2021 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: JDL tests
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+      - 'skip_ci*'
+  pull_request:
+    branches:
+      - '*'
+    paths-ignore:
+      - 'package*.json'
+env:
+  JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
+  JHI_LIB_BRANCH: main
+  JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
+  JHI_GEN_BRANCH: main
+  SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
+  SPRING_JPA_SHOW_SQL: false
+  JHI_DISABLE_WEBPACK_LOGS: true
+  JHI_E2E_HEADLESS: true
+  JHI_HOME: ${{ github.workspace }}/generator-jhipster
+  JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
+  JHI_JDL_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/jdl-samples
+  JHI_FOLDER_APP: ${{ github.workspace }}/app
+  NG_CLI_ANALYTICS: 'false'
+  JHI_GITHUB_CI: true
+  FORCE_COLOR: 1
+  SPRING_PROFILES_ACTIVE: testcontainers
+  # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
+  MAVEN_OPTS: >-
+    -Dhttp.keepAlive=false
+    -Dmaven.wagon.http.pool=false
+    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
+jobs:
+  applications:
+    name: ${{ matrix.jdl }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    if: >-
+      !contains(github.event.head_commit.message, '[ci skip]') &&
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[ci skip]') &&
+      (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: [14.16.0]
+        os: [ubuntu-20.04]
+        cache: [angular]
+        jdl:
+          - blog-store
+        include:
+          - jdl: blog-store
+            environment: prod
+            # Use monorepository for diff
+            extra-args: --workspaces --monorepository
+            # Backend is failing, disable it
+            skip-backend-tests: 1
+    env:
+      JHI_PROFILE: ${{ matrix.environment }}
+    steps:
+      #----------------------------------------------------------------------
+      # Install all tools and check configuration
+      #----------------------------------------------------------------------
+      - name: 'SETUP: Checkout generator-jhipster'
+        uses: actions/checkout@v2
+        with:
+          path: generator-jhipster
+          fetch-depth: 2
+      - name: 'SETUP: Create required structure'
+        run: |
+          mkdir app
+          mkdir -p base/generator-jhipster
+          mkdir -p base/app
+        working-directory: ${{ github.workspace }}
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ matrix.node_version }}
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11.x'
+      - name: 'SETUP: Get date'
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+      - name: 'SETUP: load npm cache'
+        uses: actions/cache@v2.1.4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-
+      - name: 'SETUP: load maven cache'
+        uses: actions/cache@v2.1.4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}${{matrix.gradle}}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
+      - name: 'SETUP: load gradle cache'
+        if: matrix.gradle == 1
+        uses: actions/cache@v2.1.4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}
+      - name: 'ENV: display variables'
+        run: $JHI_SCRIPTS/01-display-configuration.sh
+      - name: 'TOOLS: configure tools installed by the system'
+        run: $JHI_SCRIPTS/03-system.sh
+      - name: 'TOOLS: configure git'
+        run: $JHI_SCRIPTS/04-git-config.sh
+      #----------------------------------------------------------------------
+      # Install JHipster and generate project+entities
+      #----------------------------------------------------------------------
+      - name: 'GENERATION: install JHipster'
+        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - name: 'GENERATION: copy jdl'
+        run: cp $JHI_JDL_SAMPLES/${{ matrix.jdl }}/*.jdl .
+      - name: 'GENERATION: project'
+        run: |
+          jhipster jdl *.jdl --skip-jhipster-dependencies ${{ matrix.extra-args }}
+          git add .
+          git commit -m "Commit workspaces"
+      - name: 'GENERATION: replace version in generated project'
+        run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
+      - name: 'GENERATION: jhipster info'
+        run: $JHI_SCRIPTS/14-jhipster-info.sh
+      #----------------------------------------------------------------------
+      # Detect changes against base commit
+      #----------------------------------------------------------------------
+      - name: 'MERGE: Install base generator-jhipster'
+        continue-on-error: true
+        id: base-checkout
+        if: github.event.pull_request
+        working-directory: ${{ github.workspace }}/base/generator-jhipster
+        run: |
+          git clone ${{ github.workspace }}/generator-jhipster .
+          git checkout @~1
+          git log
+          npm uninstall -g generator-jhipster
+          npm install
+          npm install -g .
+      - name: 'MERGE: copy jdl'
+        if: steps.base-checkout.outcome == 'success'
+        working-directory: ${{ github.workspace }}/base/app
+        run: cp $JHI_JDL_SAMPLES/${{ matrix.jdl }}/*.jdl .
+      - name: 'MERGE: base project'
+        continue-on-error: true
+        id: base-app
+        if: steps.base-checkout.outcome == 'success'
+        working-directory: ${{ github.workspace }}/base/app
+        run: |
+          # docker-compose is not reproducible, so copy old config
+          ls ${{ github.workspace }}/app/docker-compose && mkdir docker-compose && cp ${{ github.workspace }}/app/docker-compose/.yo-rc.json docker-compose || true
+          jhipster jdl *.jdl --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }} --skip-git
+      - name: 'MERGE: merge diff'
+        continue-on-error: true
+        id: merge-is-equal
+        if: steps.base-app.outcome == 'success'
+        working-directory: ${{ github.workspace }}/base/app
+        run: |
+          # Copy git repository (clone without the files)
+          cp -a ${{ github.workspace }}/app/.git .
+          git log
+          # File keystore.p12 always changes
+          # File package-lock.json is not generated
+          # Verify if the generated source has changed
+          git add .
+          echo "Showing config diff changes (won't trigger builds)"
+          git -c color.ui=always diff -R --cached -- '.yo-rc.json' '**/.yo-rc.json' '.jhipster/**' '**/.jhipster/**'
+          echo "Showing source diff changes (will trigger builds)"
+          git -c color.ui=always diff -R --cached --exit-code -- . ':!.yo-rc.json' ':!**/.yo-rc.json' ':!.jhipster/**' ':!**/.jhipster/**' ':!package-lock.json' ':!**/package-lock.json' ':!**/keystore.p12' || echo "::set-output name=has-changes::true"
+      - name: 'MERGE: tests should be skipped'
+        id: tests-should-be-skipped
+        if: >
+          steps.merge-is-equal.outcome == 'success' &&
+          steps.merge-is-equal.outputs.has-changes != 'true'
+        run: echo 'Skipping tests' && echo "::set-output name=skip-tests::true"
+      #----------------------------------------------------------------------
+      # Launch tests
+      #----------------------------------------------------------------------
+      - name: 'TESTS: prepare keycloak'
+        run: echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts
+      - name: 'TESTS: backend'
+        id: backend
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.skip-backend-tests != 1
+        run: npm run ci:backend:test
+      - name: 'TESTS: frontend'
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        run: npm run ci:frontend:test
+      - name: 'TESTS: packaging'
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        run: npm run ci:e2e:package
+      - name: 'TESTS: Start docker-compose containers for e2e tests'
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        run: npm run ci:e2e:prepare
+      - name: 'E2E: Run'
+        id: e2e
+        if: steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        run: npm run ci:e2e:run --if-present
+      - name: 'E2E: Teardown'
+        if: always() && matrix.e2e == 1 && steps.tests-should-be-skipped.outputs.skip-tests != 'true'
+        run: npm run ci:e2e:teardown
+      - name: 'BACKEND: Store failure logs'
+        uses: actions/upload-artifact@v2
+        if: always() && steps.backend.outcome == 'failure'
+        with:
+          name: log-${{ matrix.app-type }}
+          path: ${{ github.workspace }}/app/*/build/test-results/**/*.xml
+      - name: 'E2E: Store failure screenshots'
+        uses: actions/upload-artifact@v2
+        if: always() && steps.e2e.outcome == 'failure'
+        with:
+          name: screenshots-${{ matrix.app-type }}
+          path: ${{ github.workspace }}/app/*/cypress/screenshots
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1

@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "创建新 <%= entityClassHumanized %>",
                 "createOrEditLabel": "创建或编辑 <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "查找 <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityClassHumanized %> {{ param }} 创建成功",
             "updated": "<%= entityClassHumanized %> {{ param }} 更新成功",
             "deleted": "<%= entityClassHumanized %> {{ param }} 删除成功",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "你确定要删除 <%= entityClassHumanized %> {{ id }} 吗？"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

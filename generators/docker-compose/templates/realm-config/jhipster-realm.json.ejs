@@ -297,7 +297,7 @@
       "security-admin-console": [],
       "web_app": [],
       "admin-cli": [],
-      "account-console": [],<% if (serviceDiscoveryType === 'eureka') { %>
+      "account-console": [],<% if (serviceDiscoveryEureka) { %>
       "jhipster-registry": [],<% } %>
       "broker": [
         {
@@ -841,7 +841,7 @@
         "offline_access",
         "microprofile-jwt"
       ]
-    },<% if (serviceDiscoveryType === 'eureka') { %>
+    },<% if (serviceDiscoveryEureka) { %>
     {
       "id": "9057870f-8775-448d-a194-1d4e122f44d5",
       "clientId": "jhipster-registry",

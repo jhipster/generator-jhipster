@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Pridať <%= entityClassHumanized %>",
                 "createOrEditLabel": "Pridať alebo upraviť <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Vyhľadať <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Bol vytvorený potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }}",
             "updated": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol upravený.",
             "deleted": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol vymazaný.",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Ste si istý, že chcete vymazať <%= entityClassHumanized %> {{ id }}?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

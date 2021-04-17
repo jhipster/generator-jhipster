@@ -109,7 +109,7 @@ module.exports = class extends BaseGenerator {
       },
 
       parseBlueprints() {
-        this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint'));
+        this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')) || [];
       },
 
       loadConfig() {
