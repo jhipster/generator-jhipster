@@ -89,17 +89,17 @@ export default class AccountService {
       if (!this.store.getters.account && !this.store.getters.logon && token) {
         return this.retrieveAccount();
       } else {
-        return new Promise(resolve => { resolve(false); });;
+        return Promise.resolve(false);
       }
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return new Promise(resolve => { resolve(true); });;
+    for (const authority of authorities) {
+      if (this.userAuthorities.includes(authority)) {
+        return Promise.resolve(true);
       }
     }
 
-    return new Promise(resolve => { resolve(false); });;
+    return Promise.resolve(false);
   }
 
   public get authenticated(): boolean {
