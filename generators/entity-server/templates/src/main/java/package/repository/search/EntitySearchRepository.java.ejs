@@ -20,9 +20,9 @@ package <%= packageName %>.repository.search;
 
 import <%= packageName %>.domain.<%= persistClass %>;
 <%_ if (reactive) { _%>
-    <%_ if (pagination !== 'no') { _%>
+  <%_ if (!paginationNo) { _%>
 import org.springframework.data.domain.Pageable;
-    <%_ } _%>
+  <%_ } _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -31,7 +31,7 @@ import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Rea
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
-<%_ if (primaryKey.type === 'UUID') { _%>
+<%_ if (primaryKey.hasUUID) { _%>
 
 import java.util.UUID;
 <% } %>
@@ -48,7 +48,7 @@ public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>
 <%_ if (reactive) { _%>
 
 interface <%= entityClass %>SearchRepositoryInternal {
-    Flux<<%= entityClass %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);
+    Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
@@ -60,11 +60,11 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     }
 
     @Override
-    public Flux<<%= entityClass %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
+    public Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        <%_ if (pagination !== 'no') { _%>
+  <%_ if (!paginationNo) { _%>
         nativeSearchQuery.setPageable(pageable);
-        <%_ } _%>
+  <%_ } _%>
         return reactiveElasticsearchTemplate
             .search(nativeSearchQuery, <%= entityClass %>.class)
             .map(SearchHit::getContent);

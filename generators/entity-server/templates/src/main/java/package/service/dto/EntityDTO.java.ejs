@@ -21,7 +21,7 @@ package <%= packageName %>.service.dto;
 import java.util.Objects;
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
-<%_ } if (importApiModelProperty === true) { _%>
+<%_ } if (importApiModelProperty) { _%>
 import io.swagger.annotations.ApiModelProperty;
 <%_ } _%>
 <%_ if (fieldsContainInstant) { _%>
@@ -43,17 +43,17 @@ import java.io.Serializable;
 <%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
 <%_ } _%>
-<%_ if (fieldsContainBlob && databaseType === 'cassandra') { _%>
+<%_ if (fieldsContainBlob && databaseTypeCassandra) { _%>
 import java.nio.ByteBuffer;
 <%_ } _%>
 <%_ if (dtoReferences.some(reference => reference.collection)) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
-<%_ if (fieldsContainUUID === true) { _%>
+<%_ if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fieldsContainBlob && databaseType === 'sql') { _%>
+<%_ if (fieldsContainBlob && databaseTypeSql) { _%>
 import javax.persistence.Lob;
 <%_ } _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -69,66 +69,64 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 public class <%= dtoClass %> implements Serializable {
 
 <%_ for (reference of dtoReferences) {
-        if (typeof reference.doc !== 'undefined') {
+  if (typeof reference.doc !== 'undefined') {
 _%>
 <%- formatAsFieldJavadoc(reference.doc) %>
-    <%_ }
-        const field = reference.field;
-        const required = field && field.fieldValidate && field.fieldValidateRules.includes('required');
-        if (field) {
-            if (field.fieldValidate === true) {
-    _%>
+  <%_ }
+  const field = reference.field;
+  const required = field && field.fieldValidate && field.fieldValidationRequired;
+  if (field) {
+    if (field.fieldValidate ) { _%>
     <%- include('../../common/field_validators', {field, reactive}); -%>
-    <%_     }
-        }
-    _%>
-    <%_ if (reference.doc) { _%>
+    <%_ }
+  } _%>
+  <%_ if (reference.doc) { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(reference.doc) %>"<% if (required) { %>, required = true<% } %>)
-    <%_ } _%>
-    <%_ if (reference.type === 'byte[]' && databaseType === 'sql') { _%>
+  <%_ } _%>
+  <%_ if (field && field.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob
-    <%_ } _%>
-    <%_ if (reference.field && reference.field.fieldTypeBlobContent === 'text') { _%>
+  <%_ } _%>
+  <%_ if (field && field.blobContentTypeText) { _%>
     private String <%= reference.name %>;
-    <%_ } else if (reference.collection && reference.relationship) { _%>
+  <%_ } else if (reference.collection && reference.relationship) { _%>
     private Set<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.name %> = new HashSet<>();
-    <%_ } else if (reference.relationship) { _%>
+  <%_ } else if (reference.relationship) { _%>
     private <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.name %>;
-    <%_ } else { _%>
+  <%_ } else { _%>
     private <%= reference.type %> <%= reference.name %>;
-    <%_ } _%>
+  <%_ } _%>
 
-    <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
+  <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
     private String <%= reference.name %>ContentType;
-<%_     }
-    }
+  <%_ }
+}
 _%>
 
 <%_ for (reference of dtoReferences) { _%>
-    <%_ if (reference.field && reference.field.fieldTypeBlobContent === 'text') { _%>
+  <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
     public <%= buildJavaGetter(reference, 'String') %> {
-    <%_ } else if (reference.collection && reference.relationship) { _%>
+  <%_ } else if (reference.collection && reference.relationship) { _%>
     public <%- buildJavaGetter(reference, `Set<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }>` ) %> {
-    <%_ } else if (reference.relationship) { _%>
+  <%_ } else if (reference.relationship) { _%>
     public <%= buildJavaGetter(reference, asDto(reference.relationship.otherEntity.entityNameCapitalized)) %> {
-    <%_ } else { _%>
+  <%_ } else { _%>
     public <%= buildJavaGetter(reference) %> {
-    <%_ } _%>
+  <%_ } _%>
         return <%= reference.name %>;
     }
 
-    <%_ if (reference.field && reference.field.fieldTypeBlobContent === 'text') { _%>
+  <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
     public void <%= buildJavaSetter(reference, `String ${reference.name}`) %> {
-    <%_ } else if (reference.collection && reference.relationship) { _%>
+  <%_ } else if (reference.collection && reference.relationship) { _%>
     public void <%- buildJavaSetter(reference, `Set<${ asDto(reference.relationship.otherEntity.entityNameCapitalized) }> ${reference.name}`) %> {
-    <%_ } else if (reference.relationship) { _%>
+  <%_ } else if (reference.relationship) { _%>
     public void <%= buildJavaSetter(reference, `${ asDto(reference.relationship.otherEntity.entityNameCapitalized) } ${reference.name}`) %> {
-    <%_ } else { _%>
+  <%_ } else { _%>
     public void <%= buildJavaSetter(reference) %> {
-        <%_ } _%>
+  <%_ } _%>
         this.<%= reference.name %> = <%= reference.name %>;
     }
-        <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
+  <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
 
     public String get<%= javaBeanCase(reference.name) %>ContentType() {
         return <%= reference.name %>ContentType;
@@ -137,7 +135,7 @@ _%>
     public void set<%= javaBeanCase(reference.name) %>ContentType(String <%= reference.name %>ContentType) {
         this.<%= reference.name %>ContentType = <%= reference.name %>ContentType;
     }
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 <%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.fieldName)] : [] _%>
@@ -150,34 +148,34 @@ _%>
             return false;
         }
 
-        <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
         <%= dtoClass %> <%= dtoInstance %> = (<%= dtoClass %>) o;
         if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>){
             return false;
         }
         return <%- idNames.map(n => `Objects.equals(this.${n}, ${dtoInstance}.${n})`).join(' &&\n            ') %>;
-        <%_ } else { _%>
+<%_ } else { _%>
         return false;
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Override
     public int hashCode() {
-    <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
         return Objects.hash(<%- idNames.map(n => `this.${n}`).join(', ') %>);
-    <%_ } else { _%>
+<%_ } else { _%>
         return getClass().hashCode();
-    <%_ } _%>
+<%_ } _%>
     }
 
     // prettier-ignore
     @Override
     public String toString() {
         return "<%= dtoClass %>{" +
-            <%_ for ([idx, reference] of dtoReferences.entries()) {
-                const isNumeric = reference.type && ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(reference.type.toLowerCase()); _%>
-            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (! isNumeric) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (! isNumeric) { %>+ "'" <% } %>+
-            <%_ } _%>
+<%_ for ([idx, reference] of dtoReferences.entries()) {
+  const isNumeric = (reference.field && reference.field.fieldTypeNumeric) ||  (reference.relationship && reference.relationship.relatedField && reference.relationship.relatedField.fieldTypeNumeric)_%>
+            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (!isNumeric) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (! isNumeric) { %>+ "'" <% } %>+
+<%_ } _%>
             "}";
     }
 }

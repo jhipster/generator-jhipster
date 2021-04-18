@@ -718,6 +718,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
     return this._preparingRelationships();
   }
 
+  _derivedCompositePrimaryKeyProperties(types) {
+    this.context.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
+  }
+
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
@@ -759,6 +763,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
           .map(rel => rel.otherEntity.primaryKey.fields.map(f => f.fieldType))
           .flat();
         this.context.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+        this._derivedCompositePrimaryKeyProperties(types);
       },
 
       /**

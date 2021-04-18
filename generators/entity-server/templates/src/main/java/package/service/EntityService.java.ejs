@@ -21,20 +21,20 @@ package <%= packageName %>.service;
 <%_
 const instanceType = restClass;
 const instanceName = restInstance;
-const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
-const listOrFlux = (reactive === true) ? 'Flux' : 'List';
-const pageOrFlux = (reactive === true) ? 'Flux' : 'Page';
+const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
+const listOrFlux = (reactive) ? 'Flux' : 'List';
+const pageOrFlux = (reactive) ? 'Flux' : 'Page';
 _%>
-<%_ if (dto === 'mapstruct') { _%>
+<%_ if (dtoMapstruct) { _%>
 import <%= packageName %>.service.dto.<%= dtoClass %>;
 <%_ } else { _%>
 import <%= packageName %>.domain.<%= persistClass %>;
 <%_ } _%>
-<%_ if (pagination !== 'no' || relationshipsContainEagerLoad) { _%>
+<%_ if (!paginationNo || relationshipsContainEagerLoad) { _%>
 
-    <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-    <%_ } _%>
+  <%_ } _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -42,18 +42,18 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-<%_ if (pagination === 'no' || fieldsContainNoOwnerOneToOne === true) { _%>
+<%_ if (paginationNo || fieldsContainNoOwnerOneToOne) { _%>
 import java.util.List;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (primaryKey.type === 'UUID') { _%>
+<%_ if (primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
 /**
- * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= persistClass %>}.
+ * Service Interface for managing {@link <% if (dtoMapstruct) { %><%= packageName %>.domain.<% } %><%= persistClass %>}.
  */
 public interface <%= entityClass %>Service {
 
@@ -75,12 +75,13 @@ public interface <%= entityClass %>Service {
 
     /**
      * Get all the <%= entityInstancePlural %>.
-     *<% if (pagination !== 'no') { %>
+     *<% if (!paginationNo) { %>
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
-<% for (const relationship of relationships) { if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide !== true) { -%>
+    <% if (!paginationNo) { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
     /**
      * Get all the <%= restClass %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
      *
@@ -89,7 +90,7 @@ public interface <%= entityClass %>Service {
     <%= listOrFlux %><<%= instanceType %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
 <%_ } } _%>
 
-    <%_ if (relationshipsContainEagerLoad) { _%>
+<%_ if (relationshipsContainEagerLoad) { _%>
     /**
      * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *
@@ -98,7 +99,7 @@ public interface <%= entityClass %>Service {
      */
     <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
 
-    <%_ } _%>
+<%_ } _%>
 <%_ if (reactive) { _%>
     /**
     * Returns the number of <%= entityInstancePlural %> available.
@@ -106,14 +107,14 @@ public interface <%= entityClass %>Service {
     *
     */
     Mono<Long> countAll();
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngineElasticsearch) { _%>
 
     /**
     * Returns the number of <%= entityInstancePlural %> available in search repository.
     *
     */
     Mono<Long> searchCount();
-    <%_  } _%>
+  <%_  } _%>
 
 <%_  } _%>
 
@@ -133,15 +134,17 @@ public interface <%= entityClass %>Service {
      * @return a Mono to signal the deletion
 <%_ } _%>
      */
-    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);<% if (searchEngine !== false) { %>
+    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);<% if (searchEngine) { %>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
      * @param query the query of the search.
-     * <% if (pagination !== 'no') { %>
-     * @param pageable the pagination information.<% } %>
+<%_ if (!paginationNo) { _%>
+     *
+     * @param pageable the pagination information.
+<%_ } _%>
      * @return the list of entities.
      */
-    <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
+    <% if (!paginationNo) { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);<% } %>
 }

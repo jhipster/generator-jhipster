@@ -24,15 +24,17 @@ const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
 const { stringHashCode } = require('../generators/utils');
 const { fieldToReference } = require('./field');
-const { PaginationTypes } = require('../jdl/jhipster/entity-options');
+const { PaginationTypes, ServiceTypes } = require('../jdl/jhipster/entity-options');
 const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 
-const { BOOLEAN } = CommonDBTypes;
+const { BOOLEAN, UUID } = CommonDBTypes;
 const { MAPSTRUCT } = MapperTypes;
 const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const { SERVICE_IMPL } = ServiceTypes;
+const NO_SERVICE = ServiceTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_MAPPER = MapperTypes.NO;
 
@@ -91,11 +93,14 @@ const BASE_TEMPLATE_DATA = {
 function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
+  const service = entityWithConfig.service;
   _.defaults(entityWithConfig, {
     paginationPagination: pagination === PAGINATION,
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
     dtoMapstruct: dto === MAPSTRUCT,
+    serviceImpl: service === SERVICE_IMPL,
+    serviceNo: service === NO_SERVICE,
   });
 }
 
@@ -221,6 +226,12 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   _derivedProperties(entityWithConfig);
 
   return entityWithConfig;
+}
+
+function _derivedPrimaryKeyProperties(primaryKey) {
+  _.defaults(primaryKey, {
+    hasUUID: primaryKey.fields.some(field => field.fieldType === UUID),
+  });
 }
 
 function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enableCompositeId = true) {
@@ -379,6 +390,7 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       },
     };
   }
+  _derivedPrimaryKeyProperties(entityWithConfig.primaryKey);
   return entityWithConfig;
 }
 
