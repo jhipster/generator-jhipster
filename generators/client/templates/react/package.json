@@ -83,7 +83,7 @@
     "thread-loader": "3.0.3",
     "to-string-loader": "1.1.6",
     "ts-jest": "26.5.5",
-    "ts-loader": "8.1.0",
+    "ts-loader": "9.0.0",
     "typescript": "4.2.4",
     "webpack": "5.33.2",
     "webpack-cli": "4.6.0",
