@@ -199,7 +199,7 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
@@ -207,7 +207,7 @@ jobs:
             ${{ runner.os }}-node-${{ matrix.cache }}-${{ steps.get-date.outputs.date }}-
       - name: 'SETUP: load maven cache'
         if: "!contains(matrix.app-type, 'gradle')"
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
@@ -215,7 +215,7 @@ jobs:
             ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-
       - name: 'SETUP: load jhipster-bom maven cache'
         if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-jhipster-bom-${{ steps.get-date.outputs.date }}-
@@ -223,7 +223,7 @@ jobs:
             ${{ runner.os }}-maven-jhipster-bom-
       - name: 'SETUP: load gradle cache'
         if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: |
             ~/.gradle/caches
@@ -233,7 +233,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: 'SETUP: load e2e cache'
         if: matrix.e2e == 1
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.cache/Cypress/
           key: ${{ runner.os }}-cypress-${{ hashFiles('generator-jhipster/client/common/package.json') }}
