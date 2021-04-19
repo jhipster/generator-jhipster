@@ -13,7 +13,8 @@ export default class ConfigurationService {
         }
 
         properties.sort((propertyA, propertyB) => {
-          return propertyA.prefix === propertyB.prefix ? 0 : propertyA.prefix < propertyB.prefix ? -1 : 1;
+          const comparePrefix = propertyA.prefix < propertyB.prefix ? -1 : 1;
+          return propertyA.prefix === propertyB.prefix ? 0 : comparePrefix;
         });
         resolve(properties);
       });
