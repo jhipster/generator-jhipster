@@ -189,8 +189,8 @@ public class <%= entityClass %>Resource {
         }
             <%_ } _%>
         <%_ } _%>
-        <%_ if (primaryKey.type === 'UUID' && databaseType !== 'sql') { _%>
-        <%= instanceName %>.set<%= primaryKey.nameCapitalized %>(UUID.randomUUID());
+        <%_ for (field of primaryKey.fields.filter(f => f.autoGenerateByService)) { _%>
+        <%= instanceName %>.set<%= field.fieldNameCapitalized %>(UUID.randomUUID());
         <%_ } _%>
 <%- include('/partials/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         <%_ if (!reactive) { _%>

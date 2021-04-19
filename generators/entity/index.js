@@ -483,6 +483,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
       loadEntity() {
         // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
+        this.loadDerivedAppConfig(this.context);
+        this.loadDerivedClientConfig(this.context);
+        this.loadDerivedServerConfig(this.context);
         loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
         if (this.context.fields) {
           this.context.fields

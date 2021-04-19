@@ -117,7 +117,7 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: |
             ~/.npm
@@ -128,7 +128,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
@@ -137,7 +137,7 @@ jobs:
             ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load gradle cache'
         if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: |
             ~/.gradle/caches

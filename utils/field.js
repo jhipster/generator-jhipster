@@ -22,7 +22,7 @@ const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = require('../jdl/jhipster/field-types');
 const { MIN, MINLENGTH, MAX, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../jdl/jhipster/validations');
-const { MYSQL } = require('../jdl/jhipster/database-types');
+const { MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 
 const { MAPSTRUCT } = MapperTypes;
@@ -221,6 +221,7 @@ function derivedProperties(field) {
     fieldValidationMax: validationRules.includes(MAX),
     fieldValidationMaxLength: validationRules.includes(MAXLENGTH),
     fieldValidationPattern: validationRules.includes(PATTERN),
+    fieldValidationUnique: validationRules.includes(UNIQUE),
   });
 }
 
@@ -250,16 +251,29 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
     if (field.autoGenerate === undefined) {
       field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
     }
+
     if (!field.autoGenerate) {
       field.liquibaseAutoIncrement = false;
       field.jpaGeneratedValue = false;
+      field.autoGenerateByService = false;
+      field.autoGenerateByRepository = false;
+    } else if (entityWithConfig.databaseType !== SQL) {
+      field.liquibaseAutoIncrement = false;
+      field.jpaGeneratedValue = false;
+      field.autoGenerateByService = field.fieldType === UUID;
+      field.autoGenerateByRepository = !field.autoGenerateByService;
+      field.readonly = true;
     } else if (entityWithConfig.reactive) {
       field.liquibaseAutoIncrement = true;
       field.jpaGeneratedValue = false;
+      field.autoGenerateByService = false;
+      field.autoGenerateByRepository = true;
       field.readonly = true;
     } else {
       const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
       field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
+      field.autoGenerateByService = false;
+      field.autoGenerateByRepository = true;
       field.readonly = true;
       if (field.jpaGeneratedValue === 'identity') {
         field.liquibaseAutoIncrement = true;

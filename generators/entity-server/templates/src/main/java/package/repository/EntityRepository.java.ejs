@@ -79,29 +79,29 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     <%_ for (const relationship of relationships) {
         if (relationship.relationshipType === 'many-to-one' && relationship.otherEntityName === 'user' && databaseType === 'sql') { _%>
 
-    @Query("select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationType === 'oauth2') { %>preferredUsername<% } else { %>username<% } %>}")
+    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationType === 'oauth2') { %>preferredUsername<% } else { %>username<% } %>}")
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <%_ if (relationshipsContainEagerLoad) {
         if (databaseType === 'sql') { _%>
 
-    @Query(value = "select distinct <%= entityInstance %> from <%= persistClass %> <%= entityInstance %><%
+    @Query(value = "select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
     for (const relationship of relationships) {
-        if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstance %>.<%= relationship.reference.name %><% }
+        if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
     } %>",
-        countQuery = "select count(distinct <%= entityInstance %>) from <%= persistClass %> <%= entityInstance %>")
+        countQuery = "select count(distinct <%= entityInstanceDbSafe %>) from <%= persistClass %> <%= entityInstanceDbSafe %>")
     Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct <%= entityInstance %> from <%= persistClass %> <%= entityInstance %><%
+    @Query("select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
     for (const relationship of relationships) {
-        if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstance %>.<%= relationship.reference.name %><% }
+        if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
     } %>")
     List<<%= persistClass %>> findAllWithEagerRelationships();
 
-    @Query("select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %><%
+    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
     for (const relationship of relationships) {
-        if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstance %>.<%= relationship.reference.name %><% }
-    } %> where <%= entityInstance %>.id =:id")
+        if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
+    } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(@Param("id") <%= primaryKey.type %> id);
     <%_
         } else if (databaseType === 'mongodb' || databaseType === 'couchbase')  { _%>

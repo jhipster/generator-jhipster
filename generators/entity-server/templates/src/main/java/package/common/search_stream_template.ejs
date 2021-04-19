@@ -20,21 +20,21 @@
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto'; %>
 <%_ if (!viaService) { _%>
-    <%_ if (!reactive) { _%>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (!reactive) { _%>
+    <%_ if (searchEngineElasticsearch) { _%>
         return StreamSupport
             .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        <%_ } else { _%>
-            return <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, query)<% if (dto !== 'mapstruct') { %>;<% } else { %>.stream()<% } %>
-        <%_ } _%>
-        <%_ if (dto === 'mapstruct') { _%>
-            .map(<%= entityToDtoReference %>)
-        <%_ } _%>
-        <%_ if (dto === 'mapstruct' || searchEngine === 'elasticsearch') { _%>
-        .collect(Collectors.toList());
-        <%_ } _%>
     <%_ } else { _%>
-        return <%= entityInstance %><% if (searchEngine === 'elasticsearch') { %>Search<% } %>Repository.search(<% if (searchEngine === 'couchbase') { %><%= entityClass %>.PREFIX, <% } %>query)<%_ if (dto === 'mapstruct') { %>
+            return <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
+    <%_ } _%>
+    <%_ if (dtoMapstruct) { _%>
+            .map(<%= entityToDtoReference %>)
+    <%_ } _%>
+    <%_ if (dtoMapstruct || searchEngineElasticsearch) { _%>
+        .collect(Collectors.toList());
+    <%_ } _%>
+  <%_ } else { _%>
+        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineCouchbase) { %><%= entityClass %>.PREFIX, <% } %>query)<%_ if (dtoMapstruct) { %>
             .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
     <%_ } _%>
 <%_ } else { _%>

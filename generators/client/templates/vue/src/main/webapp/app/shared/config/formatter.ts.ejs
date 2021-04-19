@@ -70,7 +70,8 @@ function parse(format: string): Array<Token> {
       }
       const isClosed = char === '}';
 
-      const _type = RE_TOKEN_LIST_VALUE.test(sub) ? 'list' : isClosed && RE_TOKEN_NAMED_VALUE.test(sub) ? 'named' : 'unknown';
+      const namedOrUnknown = isClosed && RE_TOKEN_NAMED_VALUE.test(sub) ? 'named' : 'unknown';
+      const _type = RE_TOKEN_LIST_VALUE.test(sub) ? 'list' : namedOrUnknown;
       tokens.push({ value: sub, type: _type });
     } else if (char === '%') {
       // when found rails i18n syntax, skip text capture
@@ -93,7 +94,8 @@ function compile(tokens: Array<Token>, values: any) {
   const compiled: Array<any> = [];
   let index = 0;
 
-  const mode: string = Array.isArray(values) ? 'list' : isObject(values) ? 'named' : 'unknown';
+  const namedOrUnknown = isObject(values) ? 'named' : 'unknown';
+  const mode: string = Array.isArray(values) ? 'list' : namedOrUnknown;
   if (mode === 'unknown') {
     return compiled;
   }
