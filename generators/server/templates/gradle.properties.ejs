@@ -28,7 +28,7 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
 mapstructVersion=1.4.2.Final
-archunitJunit5Version=0.17.0
+archunitJunit5Version=0.18.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
@@ -37,12 +37,12 @@ caffeineVersion=3.0.1
 typesafeConfigVersion=1.4.1
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibaseHibernate5Version=4.3.2
+liquibaseHibernate5Version=4.3.3
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
 <%_ if (reactive) { _%>
-blockhoundJunitPlatformVersion=1.0.4.RELEASE
+blockhoundJunitPlatformVersion=1.0.6.RELEASE
 junitPlatformLauncherVersion=1.7.1
 <%_ } _%>
 
@@ -68,7 +68,7 @@ sonarqubePluginVersion=3.1.1
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=4.3.1
 <%_ } _%>
-springNoHttpPluginVersion=0.0.5.RELEASE
+springNoHttpPluginVersion=0.0.6.RELEASE
 checkstyleVersion=8.41.1
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here

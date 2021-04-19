@@ -104,7 +104,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
     <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version>4.3.2</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>4.3.3</liquibase-hibernate5.version>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
@@ -112,7 +112,7 @@
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (reactive) { _%>
-        <blockhound-junit-platform.version>1.0.4.RELEASE</blockhound-junit-platform.version>
+        <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
@@ -122,7 +122,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version>4.9.0</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.17.0</archunit-junit5.version>
+        <archunit-junit5.version>0.18.0</archunit-junit5.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
@@ -144,7 +144,7 @@
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.2</maven-checkstyle.version>
         <checkstyle.version>8.41.1</checkstyle.version>
-        <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
+        <spring-nohttp-checkstyle.version>0.0.6.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
 <%_ } _%>
