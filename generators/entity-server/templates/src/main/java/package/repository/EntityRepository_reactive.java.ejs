@@ -54,7 +54,7 @@ import reactor.core.publisher.Flux;
 <%_ if (relationshipsContainEagerLoad || databaseTypeSql) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
-<%_ if (primaryKey.hasUUID) { _%>
+<%_ if (primaryKey.typeUUID) { _%>
 
 import java.util.UUID;
 <%_ } _%>

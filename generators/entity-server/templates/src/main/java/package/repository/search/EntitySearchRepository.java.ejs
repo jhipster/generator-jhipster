@@ -31,7 +31,7 @@ import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Rea
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
-<%_ if (primaryKey.hasUUID) { _%>
+<%_ if (primaryKey.typeUUID) { _%>
 
 import java.util.UUID;
 <% } %>

@@ -228,9 +228,11 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   return entityWithConfig;
 }
 
-function _derivedPrimaryKeyProperties(primaryKey) {
+function derivedPrimaryKeyProperties(primaryKey) {
   _.defaults(primaryKey, {
-    hasUUID: primaryKey.fields.some(field => field.fieldType === UUID),
+    hasUUID: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === UUID),
+    typeUUID: primaryKey.type === UUID,
+    typeNumeric: !primaryKey.composite && primaryKey.fields[0].fieldTypeNumeric,
   });
 }
 
@@ -390,7 +392,6 @@ function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enable
       },
     };
   }
-  _derivedPrimaryKeyProperties(entityWithConfig.primaryKey);
   return entityWithConfig;
 }
 
@@ -446,4 +447,9 @@ function loadRequiredConfigIntoEntity(entity, config) {
   return entity;
 }
 
-module.exports = { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates, loadRequiredConfigIntoEntity };
+module.exports = {
+  prepareEntityForTemplates,
+  prepareEntityPrimaryKeyForTemplates,
+  loadRequiredConfigIntoEntity,
+  derivedPrimaryKeyProperties,
+};

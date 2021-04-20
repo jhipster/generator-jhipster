@@ -28,7 +28,12 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
+const {
+  prepareEntityForTemplates,
+  prepareEntityPrimaryKeyForTemplates,
+  loadRequiredConfigIntoEntity,
+  derivedPrimaryKeyProperties,
+} = require('../../utils/entity');
 const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
@@ -167,7 +172,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
     this._setupEntityOptions(this, this, this.context);
     useBlueprints =
-      !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY, { entityExisted, configExisted, arguments: [name] });
+      !this.fromBlueprint &&
+      this.instantiateBlueprints(GENERATOR_ENTITY, {
+        entityExisted,
+        configExisted,
+        arguments: [name],
+      });
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -718,10 +728,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     return this._preparingRelationships();
   }
 
-  _derivedCompositePrimaryKeyProperties(types) {
-    this.context.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
-  }
-
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
@@ -755,6 +761,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
             : relationship.relationshipFieldName;
         });
         this.context.entityContainsCollectionField = this.context.relationships.some(relationship => relationship.relationshipCollection);
+      },
+
+      processEntityPrimaryKeysDerivedProperties() {
+        derivedPrimaryKeyProperties(this.context.primaryKey);
       },
 
       processPrimaryKeyTypesForRelations() {
@@ -1050,6 +1060,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
       entityTableName = `${jhiTablePrefix}_${entityTableName}`;
     }
     return entityTableName;
+  }
+
+  _derivedCompositePrimaryKeyProperties(types) {
+    this.context.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
   }
 }
 
