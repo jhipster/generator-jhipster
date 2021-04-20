@@ -18,7 +18,7 @@
 -%>
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "<%= CLIENT_MAIN_SRC_DIR %>",
     "outDir": "./<%= DIST_DIR %>",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -28,9 +28,6 @@
 <%_ if (protractorTests) { // Prevents Jest and Mocha types conflicts. See https://github.com/jhipster/generator-jhipster/pull/13083 _%>
     "skipLibCheck": true,
 <%_ } _%>
-    "paths": {
-      "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
-    },
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
@@ -46,7 +43,4 @@
     "strictTemplates": true,
     "preserveWhitespaces": true
   }
-<%_ if (cypressTests) { _%>
-  ,"exclude": ["<%= CLIENT_TEST_SRC_DIR %>cypress"]
-<%_ } _%>
 }
