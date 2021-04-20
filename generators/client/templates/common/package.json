@@ -4,6 +4,7 @@
     "babel-loader": "8.2.2",
     "babel-plugin-istanbul": "6.0.0",
     "cypress": "6.6.0",
+    "eslint-plugin-cypress": "2.11.2",
     "nyc": "15.1.0",
     "puppeteer": "8.0.0"
   },
