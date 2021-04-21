@@ -283,6 +283,16 @@ function renderContent(source, generator, context, options, cb) {
     context: generator,
     ...options,
   };
+  if (context.entityClass) {
+    const basename = path.basename(source);
+    if (context.configOptions && context.configOptions.sharedEntities) {
+      Object.values(context.configOptions.sharedEntities).forEach(entity => {
+        entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+      });
+    } else if (context.resetFakerSeed) {
+      context.resetFakerSeed(basename);
+    }
+  }
   const promise = ejs.renderFile(generator.templatePath(source), context, options);
   if (cb) {
     return promise

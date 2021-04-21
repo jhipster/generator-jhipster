@@ -16,7 +16,6 @@ import {
 
 const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 
-resetFakerSeed('entity-cypress');
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
 // We cannot generate a required entity with required relationship.
