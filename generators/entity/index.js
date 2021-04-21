@@ -764,6 +764,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       processEntityPrimaryKeysDerivedProperties() {
+        if (!this.context.primaryKey) return;
         derivedPrimaryKeyProperties(this.context.primaryKey);
       },
 
