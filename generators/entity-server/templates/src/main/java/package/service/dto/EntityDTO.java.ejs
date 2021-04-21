@@ -173,8 +173,8 @@ _%>
     public String toString() {
         return "<%= dtoClass %>{" +
 <%_ for ([idx, reference] of dtoReferences.entries()) {
-  const isNumeric = (reference.field && reference.field.fieldTypeNumeric) ||  (reference.relationship && reference.relationship.otherEntity.primaryKey && reference.relationship.otherEntity.primaryKey.typeNumeric)_%>
-            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (!isNumeric) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (! isNumeric) { %>+ "'" <% } %>+
+  const isQuoted = reference.field && !reference.field.fieldTypeNumeric _%>
+            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (isQuoted) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (!isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>
             "}";
     }
