@@ -20,95 +20,79 @@ package <%= packageName %>.web.rest;
 
 <%_
 
-/**
- * Returns a Java generator that randomizes a value.
- *
- * @param {string} type - Java type
- * @returns {string} java primary key value
- */
-function getJavaValueGeneratorForType(type) {
-  if (type === 'String') {
-    return 'UUID.randomUUID().toString()';
-  }
-  if (type === 'UUID') {
-    return 'UUID.randomUUID()';
-  }
-  if (type === 'Long') {
-    return 'count.incrementAndGet()';
-  }
-  throw new Error(`Java type ${type} does not have a random generator implemented`);
-}
-
 let mapsIdEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
 if (isUsingMapsId) {
-    mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-    mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+  mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+  mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+  mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
 }
 
 let callBlock = '';
 let callListBlock = '';
 if (reactive) {
-    callBlock = ".block()";
-    callListBlock = ".collectList().block()";
+  callBlock = ".block()";
+  callListBlock = ".collectList().block()";
 }
 let saveMethod = 'save';
-if (!reactive && databaseType === 'sql') {
-    saveMethod = 'saveAndFlush';
+if (!reactive && databaseTypeSql) {
+  saveMethod = 'saveAndFlush';
 }
 let createEntityPrefix = '';
 let createEntityPostfix = '';
-if (databaseType === 'sql' && reactive) {
-    createEntityPrefix = 'em.insert(';
-    createEntityPostfix = ').block()';
+if (databaseTypeSql && reactive) {
+  createEntityPrefix = 'em.insert(';
+  createEntityPostfix = ').block()';
 }
 let idValue = `${persistInstance}.get${primaryKey.nameCapitalized}()`;
-if (primaryKey.type === 'Long') {
-    idValue = idValue + '.intValue()';
+if (primaryKey.typeLong) {
+  idValue = idValue + '.intValue()';
 } else if (primaryKey.type === 'UUID') {
-    idValue = idValue + '.toString()';
+  idValue = idValue + '.toString()';
 }
 let transactionalAnnotation = '';
-if (databaseType === 'sql' && !reactive) {
-    transactionalAnnotation = '\n    @Transactional';
+if (databaseTypeSql && !reactive) {
+  transactionalAnnotation = '\n    @Transactional';
 }
 
 _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.domain.<%= persistClass %>;
 <%_
-    var imported = [];
-    for (relationship of relationships) { // import entities in required relationships
-        const relationshipValidate = relationship.relationshipValidate;
-        const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-        const isUsingMapsIdL1 = relationship.id;
-        if (imported.indexOf(otherEntityNameCapitalized) === -1) {
-            if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
+var imported = [];
+for (relationship of relationships) { // import entities in required relationships
+  const relationshipValidate = relationship.relationshipValidate;
+  const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+  const isUsingMapsIdL1 = relationship.id;
+  if (imported.indexOf(otherEntityNameCapitalized) === -1) {
+    if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
-<%_         imported.push(otherEntityNameCapitalized);
-        } } } _%>
+<%_
+          imported.push(otherEntityNameCapitalized);
+    }
+  }
+} _%>
 <%_ if (saveUserSnapshot) { _%>
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.repository.<%= entityClass %>Repository;
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.service.EntityManager;
 <%_ } _%>
-<%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
+<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
 import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
-<%_ if (service !== 'no' && fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (!serviceNo && fieldsContainOwnerManyToMany) { _%>
 import <%= packageName %>.service.<%= entityClass %>Service;
 <%_ } _%>
-<%_ if (dto === 'mapstruct') { _%>
+<%_ if (dtoMapstruct) { _%>
 import <%= packageName %>.service.dto.<%= dtoClass %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
@@ -810,11 +794,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test
     void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
-<%_ if (!primaryKey.derived) { _%>
+  <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
-<%_ } _%>
+  <%_ } _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
 
         List<<%= entityClass %>> <%= entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
@@ -854,7 +838,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -947,7 +931,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1334,7 +1318,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1403,7 +1387,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void putNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
 
         <%_ if (dto === 'mapstruct') { _%>
         // Create the <%= entityClass %>
@@ -1440,7 +1424,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void putWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
 
         <%_ if (dto === 'mapstruct') { _%>
         // Create the <%= entityClass %>
@@ -1449,12 +1433,12 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%= getJavaValueGeneratorForType(primaryKey.type) %>)
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
@@ -1477,7 +1461,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
 
         <%_ if (dto === 'mapstruct') { _%>
         // Create the <%= entityClass %>
@@ -1525,7 +1509,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1539,7 +1523,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1551,7 +1535,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void patchNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
 
         <%_ if (dto === 'mapstruct') { _%>
             // Create the <%= entityClass %>
@@ -1588,7 +1572,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void patchWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
 
         <%_ if (dto === 'mapstruct') { _%>
             // Create the <%= entityClass %>
@@ -1597,12 +1581,12 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         <%_ if (!reactive) { _%>
-            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
-            webTestClient.patch().uri(ENTITY_API_URL_ID, <%= getJavaValueGeneratorForType(primaryKey.type) %>)
+            webTestClient.patch().uri(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))
             .exchange()
@@ -1625,7 +1609,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%= getJavaValueGeneratorForType(primaryKey.type) %>);
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
 
         <%_ if (dto === 'mapstruct') { _%>
             // Create the <%= entityClass %>
@@ -1672,7 +1656,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1721,7 +1705,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
     <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;

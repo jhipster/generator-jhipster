@@ -1311,7 +1311,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} defaultValue - default value
    * @returns {string} java primary key value
    */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
+  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1, skipDatabaseCheck = false) {
     if (typeof primaryKey === 'object' && primaryKey.composite) {
       return `new ${primaryKey.type}(${primaryKey.references
         .map(ref => this.getPrimaryKeyValue(ref.type, databaseType, defaultValue))
@@ -1319,7 +1319,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
     if (primaryKeyType === TYPE_STRING) {
-      if (databaseType === SQL && defaultValue === 0) {
+      if (skipDatabaseCheck || (databaseType === SQL && defaultValue === 0)) {
         return 'UUID.randomUUID().toString()';
       }
       return `"id${defaultValue}"`;
@@ -1327,7 +1327,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (primaryKeyType === TYPE_UUID) {
       return 'UUID.randomUUID()';
     }
-    return `${defaultValue}L`;
+    return !skipDatabaseCheck ? `${defaultValue}L` : defaultValue;
   }
 
   /**
