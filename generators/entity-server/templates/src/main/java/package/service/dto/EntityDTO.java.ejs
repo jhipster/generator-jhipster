@@ -174,7 +174,7 @@ _%>
         return "<%= dtoClass %>{" +
 <%_ for ([idx, reference] of dtoReferences.entries()) {
   const isQuoted = reference.field && !reference.field.fieldTypeNumeric _%>
-            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (isQuoted) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (!isQuoted) { %>+ "'" <% } %>+
+            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (isQuoted) { %>'<% } %>" + <%= buildJavaGet(reference) %> <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>
             "}";
     }
