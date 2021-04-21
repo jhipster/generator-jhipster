@@ -19,17 +19,17 @@
 package <%= packageName %>.repository;
 
 import java.util.function.BiFunction;
-<%_ if (fieldsContainBigDecimal === true) { _%>
+<%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_} if (fieldsContainInstant === true) { _%>
+<%_} if (fieldsContainInstant) { _%>
 import java.time.Instant;
-<%_ } if (fieldsContainLocalDate === true) { _%>
+<%_ } if (fieldsContainLocalDate) { _%>
 import java.time.LocalDate;
-<%_ } if (fieldsContainZonedDateTime === true) { _%>
+<%_ } if (fieldsContainZonedDateTime) { _%>
 import java.time.ZonedDateTime;
-<%_ } if (fieldsContainDuration === true) { _%>
+<%_ } if (fieldsContainDuration) { _%>
 import java.time.Duration;
-<%_ } if (fieldsContainUUID === true) { _%>
+<%_ } if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 
@@ -58,10 +58,10 @@ import org.springframework.r2dbc.core.RowsFetchSpec;
 
 import <%= packageName %>.domain.<%= persistClass %>;
 <% relationships.forEach(function(rel) {
-    if (rel.relationshipType === 'many-to-many' && rel.ownerSide) { _%>
+  if (rel.relationshipManyToMany && rel.ownerSide) { _%>
 import <%= packageName %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>;
-    <%_ } _%>
-<%_ } ); _%>
+  <%_ } _%>
+<%_ }); _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 
 import <%= packageName %>.domain.enumeration.<%= element %>;
@@ -97,7 +97,7 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 <%_ }); _%>
 
 <%_ relationships.forEach(function(rel) {
-    if (rel.shouldWriteJoinTable) {
+  if (rel.shouldWriteJoinTable) {
 _%>
     private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
 <%_ }
@@ -133,13 +133,13 @@ _%>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
 
         String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
         String alias = entityTable.getReferenceName().getReference();
         String selectWhere =
             Optional.ofNullable(criteria).map(crit ->
                 new StringBuilder(select).append(" ").append("WHERE").append(" ").append(alias).append(".").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
 <%_ } _%>
-        return db.sql(select<% if (databaseType === 'sql') { %>Where<% } %>).map(this::process);
+        return db.sql(select<% if (databaseTypeSql) { %>Where<% } %>).map(this::process);
     }
 
     @Override
@@ -172,9 +172,9 @@ _%>
 <%_ } _%>
     private <%= persistClass %> process(Row row, RowMetadata metadata) {
         <%= persistClass %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
-        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
         entity.set<%= rel.relationshipNameCapitalized %>(<%= rel.otherEntityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%= rel.relationshipName %>"));
-        <%_ }); _%>
+<%_ }); _%>
         return entity;
     }
 
@@ -222,27 +222,27 @@ _%>
 
     protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
   <%_ relationships.filter(function(rel) {
-          return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
-      }).forEach(function(rel, idx) {
-          if (idx === 0) { _%>
+          return (rel.relationshipManyToMany && rel.ownerSide);
+  }).forEach(function(rel, idx) {
+    if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
-  <%_     } else { _%>
+   <%_ } else { _%>
         result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
-  <%_
-          }
-      }); _%>
+   <%_
+       }
+  }); _%>
         return result.thenReturn(entity);
     }
 
     protected Mono<Void> deleteRelations(Long entityId) {
   <%_ relationships.filter(function(rel) {
-          return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
-      }).forEach(function(rel, idx) {
-          if (idx === 0) { _%>
+          return (rel.relationshipManyToMany && rel.ownerSide);
+  }).forEach(function(rel, idx) {
+    if (idx === 0) { _%>
         return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<%
-                } else { %>
+    } else { %>
                 .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% }
-            }); %>;
+  }); %>;
     }
 
 <%_ } _%>
@@ -255,7 +255,7 @@ class <%= entityClass %>SqlHelper {
     let col = field.fieldNameAsDatabaseColumn;
     _%>
         columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
-   <%_  if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
+   <%_  if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
         columns.add(Column.aliased("<%= col %>_content_type", table, columnPrefix + "_<%= col %>_content_type"));
    <%_  } _%>
 <%_ }); _%>

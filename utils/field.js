@@ -183,7 +183,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   return data;
 };
 
-function derivedProperties(field) {
+function _derivedProperties(field) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
   const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
@@ -383,7 +383,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   field.path = [field.fieldName];
   field.relationshipsPath = [];
   field.reference = fieldToReference(entityWithConfig, field);
-  derivedProperties(field);
+  _derivedProperties(field);
   return field;
 }
 
