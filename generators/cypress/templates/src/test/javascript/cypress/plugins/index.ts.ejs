@@ -29,7 +29,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 <%_ if (authenticationTypeOauth2) { _%>
-const puppeteer = require('puppeteer');
+import puppeteer = require('puppeteer');
 <%_ } _%>
 /**
  * @type {Cypress.PluginConfig}

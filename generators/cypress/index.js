@@ -143,6 +143,15 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _postWriting() {
     return {
+      configure() {
+        if (!this.configOptions.dependabotPackageJson) return;
+        this.packageJson.merge({
+          devDependencies: {
+            'eslint-plugin-cypress': this.configOptions.dependabotPackageJson.devDependencies['eslint-plugin-cypress'],
+          },
+        });
+      },
+
       configureCoverage() {
         if (!this.cypressCoverage) return;
         this.packageJson.merge({
