@@ -282,7 +282,6 @@ module.exports = class extends BaseGenerator {
     });
     this.configOptions.sharedEntities.User = user;
 
-    user.resetFakerSeed();
     const liquibaseFakeData = oauth2
       ? []
       : [

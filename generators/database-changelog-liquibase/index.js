@@ -98,15 +98,6 @@ module.exports = class extends BaseBlueprintGenerator {
         }
       },
 
-      setupReproducibility() {
-        if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
-          return;
-        }
-
-        // In order to have consistent results with Faker, restart seed with current entity name hash.
-        this.entity.resetFakerSeed();
-      },
-
       prepareFakeData() {
         const databaseChangelog = this.databaseChangelog;
         this.entity.liquibaseFakeData = [];

@@ -265,13 +265,6 @@ module.exports = {
 
 function writeFiles() {
   return {
-    setupReproducibility() {
-      if (this.skipServer) return;
-
-      // In order to have consistent results with Faker, restart seed with current entity name hash.
-      this.resetFakerSeed();
-    },
-
     writeServerFiles() {
       if (this.skipServer) return undefined;
 
