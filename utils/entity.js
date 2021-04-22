@@ -231,6 +231,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
 function derivedPrimaryKeyProperties(primaryKey) {
   _.defaults(primaryKey, {
     hasUUID: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === UUID),
+    hasLong: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === LONG),
     typeUUID: primaryKey.type === UUID,
     typeString: primaryKey.type === STRING,
     typeLong: primaryKey.type === LONG,
