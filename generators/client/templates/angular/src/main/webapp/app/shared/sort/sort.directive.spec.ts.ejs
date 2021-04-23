@@ -26,7 +26,8 @@ import { SortDirective } from './sort.directive';
   template: `
     <table>
       <thead>
-        <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"></tr>
+        <tr id="withoutCallback" <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending"></tr>
+        <tr id="withCallback" <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"></tr>
       </thead>
     </table>
   `,
@@ -41,6 +42,7 @@ describe('Directive: SortDirective', () => {
   let component: TestSortDirectiveComponent;
   let fixture: ComponentFixture<TestSortDirectiveComponent>;
   let tableRow: DebugElement;
+  let tableRowWithoutCallback: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,7 +50,8 @@ describe('Directive: SortDirective', () => {
     });
     fixture = TestBed.createComponent(TestSortDirectiveComponent);
     component = fixture.componentInstance;
-    tableRow = fixture.debugElement.query(By.directive(SortDirective));
+    tableRow = fixture.debugElement.query(By.css('#withCallback'));
+    tableRowWithoutCallback = fixture.debugElement.query(By.css('#withoutCallback'));
   });
 
   it('should update predicate, order and invoke callback function', () => {
@@ -98,5 +101,19 @@ describe('Directive: SortDirective', () => {
     expect(component.ascending).toEqual(true);
     expect(component.transition).toHaveBeenCalled();
     expect(component.transition).toHaveBeenCalledTimes(2);
+  });
+
+  it('should work if no callback is declared', () => {
+    // GIVEN
+    const sortDirective = tableRowWithoutCallback.injector.get(SortDirective);
+
+    // WHEN
+    fixture.detectChanges();
+    sortDirective.sort('ID');
+
+    // THEN
+    expect(component.predicate).toEqual('ID');
+    expect(component.ascending).toEqual(true);
+    expect(component.transition).not.toHaveBeenCalled();
   });
 });
