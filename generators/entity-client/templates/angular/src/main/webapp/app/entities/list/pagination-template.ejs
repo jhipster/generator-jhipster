@@ -85,6 +85,12 @@
 
 <%_ if (searchEngine) { _%>
     search(query: string): void {
+    <%_ if (notSortableFieldsAfterSearch) { _%>
+        if (query && [<%- notSortableFieldsAfterSearch %>].includes(this.predicate)) {
+            this.predicate = '<%- primaryKey.name %>';
+            this.ascending = true;
+        }
+    <%_ } _%>
         this.currentSearch = query;
         this.loadPage(1);
     }

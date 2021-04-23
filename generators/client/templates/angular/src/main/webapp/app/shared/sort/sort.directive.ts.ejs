@@ -49,12 +49,10 @@ export class SortDirective<T> {
   private _ascending?: boolean;
 
   sort(field?: T): void {
-    if (String(this.predicate) !== '_score') {
-      this.ascending = field !== this.predicate ? true : !this.ascending;
-      this.predicate = field;
-      this.predicateChange.emit(field);
-      this.ascendingChange.emit(this.ascending);
-      this.callback?.();
-    }
+    this.ascending = field !== this.predicate ? true : !this.ascending;
+    this.predicate = field;
+    this.predicateChange.emit(field);
+    this.ascendingChange.emit(this.ascending);
+    this.callback?.();
   }
 }

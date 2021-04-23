@@ -80,7 +80,7 @@ _%>
             <thead>
                 <tr<% if (!paginationNo) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= !paginationInfiniteScroll ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
     <%_ if (relationship.relationshipManyToOne

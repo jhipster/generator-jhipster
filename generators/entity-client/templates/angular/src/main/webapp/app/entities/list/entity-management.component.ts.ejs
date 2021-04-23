@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+  const notSortableFieldsAfterSearch = !searchEngine ? '' : fields
+      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal)
+      .map(field => `'${field.fieldName}'`)
+      .join(', ');
+_%>
 import { Component, OnInit } from '@angular/core';
 import { <%_ if (!paginationNo) { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (paginationPagination) { _%>
@@ -49,9 +55,9 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 })
 export class <%= entityAngularName %>Component implements OnInit {
 <%_ if (paginationPagination) { _%>
-<%- include('pagination-template'); -%>
+<%- include('pagination-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
 <%_ } else if (paginationInfiniteScroll) { _%>
-<%- include('infinite-scroll-template'); -%>
+<%- include('infinite-scroll-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
 <%_ } else if (paginationNo) { _%>
 <%- include('no-pagination-template'); -%>
 <%_ } _%>
