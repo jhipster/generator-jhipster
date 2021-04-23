@@ -29,7 +29,7 @@
 # ===================================================================
 server:
   port: ${PORT}
-<%_ if (applicationType === 'microservice') { _%>
+<%_ if (applicationTypeMicroservice) { _%>
   servlet:
     context-path: /services/<%= baseName %>
 <%_ } _%>
@@ -39,7 +39,7 @@ management:
       enabled: false
 <%_ if (gaeCloudSQLInstanceNeeded === 'Y') { _%>
 spring:
-  <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: "jdbc:mysql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false"
@@ -48,7 +48,7 @@ spring:
     hikari:
       maximumPoolSize: 8
   <%_ } _%>
-  <%_ if (prodDatabaseType === 'postgresql') { _%>
+  <%_ if (prodDatabaseTypePostgres) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: "jdbc:postgresql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
@@ -58,7 +58,7 @@ spring:
       maximumPoolSize: 8
   <%_ } _%>
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
+<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
 jhipster:
   security:
     authentication:

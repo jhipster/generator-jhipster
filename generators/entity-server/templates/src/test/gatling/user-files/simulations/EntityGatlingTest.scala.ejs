@@ -157,7 +157,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .post("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
-<%_ fields.forEach((field, idx) => { _%>
+<%_ fields.filter(f => !(f.id && f.autoGenerate)).forEach((field, idx) => { _%>
                 <%= idx === 0 ? '' : ', ' %>"<%= field.fieldName %>":<% if (field.fieldTypeString) { %>"SAMPLE_TEXT"<% } else if (field.fieldTypeNumeric) { %>"0"<% } else if (field.fieldTypeTemporal) { %>"2020-01-01T00:00:00.000Z"<% } else if (field.fieldIsEnum) { %>"<%= field.enumValues[0].name %>"<% } else { %>null<% } %>
 <%_ }); _%>
                 }""")).asJson

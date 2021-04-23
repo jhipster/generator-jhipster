@@ -648,7 +648,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void create<%= entityClass %>WithExistingId() throws Exception {
         // Create the <%= entityClass %> with an existing ID
-  <%_ if (primaryKey.fieldTypeUUID && databaseTypeSql) { _%>
+  <%_ if (primaryKey.typeUUID && databaseTypeSql) { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else { _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else { %>"existing_id"<% } %>);
@@ -695,7 +695,6 @@ _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
     <%_ for (relationship of relationships) {
-      const relationshipValidate = relationship.relationshipValidate;
       const otherEntityName = relationship.otherEntityName;
       const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
       const mapsIdUse = relationship.id;
