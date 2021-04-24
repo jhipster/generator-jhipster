@@ -1311,7 +1311,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @param {string} defaultValue - default value
    * @returns {string} java primary key value
    */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1, skipDatabaseCheck = false) {
+  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
     if (typeof primaryKey === 'object' && primaryKey.composite) {
       return `new ${primaryKey.type}(${primaryKey.references
         .map(ref => this.getPrimaryKeyValue(ref.type, databaseType, defaultValue))
@@ -1319,15 +1319,28 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
     if (primaryKeyType === TYPE_STRING) {
-      if (skipDatabaseCheck || (databaseType === SQL && defaultValue === 0)) {
-        return 'UUID.randomUUID().toString()';
+      if (databaseType === SQL && defaultValue === 0) {
+        return this.getJavaValueGeneratorForType(primaryKeyType);
       }
       return `"id${defaultValue}"`;
     }
     if (primaryKeyType === TYPE_UUID) {
+      return this.getJavaValueGeneratorForType(primaryKeyType);
+    }
+    return `${defaultValue}L`;
+  }
+
+  getJavaValueGeneratorForType(type) {
+    if (type === 'String') {
+      return 'UUID.randomUUID().toString()';
+    }
+    if (type === 'UUID') {
       return 'UUID.randomUUID()';
     }
-    return !skipDatabaseCheck ? `${defaultValue}L` : defaultValue;
+    if (type === 'Long') {
+      return 'count.incrementAndGet()';
+    }
+    throw new Error(`Java type ${type} does not have a random generator implemented`);
   }
 
   /**

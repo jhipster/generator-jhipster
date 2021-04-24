@@ -233,7 +233,8 @@ import <%= packageName %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } _%>
 @WithMockUser
 class <%= entityClass %>ResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
-<%_ for (field of fields.filter(field => !field.id && !field.transient)) {
+<%_
+for (field of fields.filter(field => !field.id && !field.transient)) {
 const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
 const updatedValueName = 'UPDATED_' + field.fieldNameUnderscored.toUpperCase();
 const smallerValueName = 'SMALLER_' + field.fieldNameUnderscored.toUpperCase();
@@ -806,7 +807,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
@@ -848,7 +849,7 @@ _%>
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
   <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -940,7 +941,7 @@ _%>
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
   <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1320,7 +1321,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1389,7 +1390,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void putNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1426,7 +1427,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void putWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1435,12 +1436,12 @@ _%>
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } else { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
@@ -1463,7 +1464,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1511,7 +1512,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1525,7 +1526,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1537,7 +1538,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void patchNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1574,7 +1575,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void patchWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1583,12 +1584,12 @@ _%>
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (!reactive) { _%>
-            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
             .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
   <%_ } else { _%>
-            webTestClient.patch().uri(ENTITY_API_URL_ID, <%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>)
+            webTestClient.patch().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
             .exchange()
@@ -1611,7 +1612,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(primaryKey, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1658,7 +1659,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1667,7 +1668,7 @@ _%>
 
         // Delete the <%= entityInstance %>
   <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type === 'UUID' && databaseType === 'sql') { %>.toString()<% } %>)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } else { _%>
@@ -1707,7 +1708,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getPrimaryKeyValue(field.fieldType, databaseType, 'count.incrementAndGet()', true) %>);
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
