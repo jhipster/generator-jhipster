@@ -178,6 +178,7 @@ module.exports = class extends BaseBlueprintGenerator {
       getSharedConfigOptions() {
         this.loadAppConfig();
         this.loadClientConfig();
+        this.loadPlatformConfig();
         this.loadServerConfig();
         this.loadTranslationConfig();
       },

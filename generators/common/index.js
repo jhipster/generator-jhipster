@@ -77,8 +77,8 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
+        this.loadPlatformConfig();
       },
 
       loadPackageJson() {

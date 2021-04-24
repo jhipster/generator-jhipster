@@ -52,6 +52,7 @@ const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4
 const NO_DATABASE = databaseTypes.NO;
 
 const { GENERATOR_BOOTSTRAP } = require('./generator-list');
+const { PROMETHEUS, ELK } = require('../jdl/jhipster/monitoring-types');
 const { JWT, OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE, REDIS, HAZELCAST, MEMCACHED } = require('../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -2556,6 +2557,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
+    dest.reactive = config.reactive;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
@@ -2563,8 +2565,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
     dest.websocket = config.websocket;
-    dest.serviceDiscoveryType = config.serviceDiscoveryType;
-
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
     this.loadDerivedServerConfig(dest);
@@ -2585,8 +2585,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
     dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
 
-    dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
+    dest.prodDatabaseTypeCouchbase = dest.prodDatabaseType === COUCHBASE;
+    dest.prodDatabaseTypeH2Disk = dest.prodDatabaseType === H2_DISK;
     dest.prodDatabaseTypeMariadb = dest.prodDatabaseType === MARIADB;
+    dest.prodDatabaseTypeMongodb = dest.prodDatabaseType === MONGODB;
+    dest.prodDatabaseTypeMssql = dest.prodDatabaseType === MSSQL;
+    dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
+    dest.prodDatabaseTypeNeo4j = dest.prodDatabaseType === NEO4J;
+    dest.prodDatabaseTypeOracle = dest.prodDatabaseType === ORACLE;
     dest.prodDatabaseTypePostgres = dest.prodDatabaseType === POSTGRESQL;
 
     dest.databaseTypeNo = dest.databaseType === NO_DATABASE;
@@ -2607,11 +2613,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
 
     dest.reactiveSqlTestContainers =
       dest.reactive &&
@@ -2619,7 +2622,22 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.devDatabaseType));
   }
 
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.serviceDiscoveryType = config.serviceDiscoveryType;
+    if (dest.serviceDiscoveryType === undefined) {
+      dest.serviceDiscoveryType = EUREKA;
+    }
+
+    dest.monitoring = config.monitoring;
+    this.loadDerivedPlatformConfig(dest);
+  }
+
+  loadDerivedPlatformConfig(dest = this) {
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+    dest.monitoringELK = dest.monitoring === ELK;
+    dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
+  }
 
   /**
    * Get all the generator configuration from the .yo-rc.json file

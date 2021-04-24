@@ -26,12 +26,10 @@ const statistics = require('./statistics');
 
 const constants = require('./generator-constants');
 
-const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { OptionNames } = require('../jdl/jhipster/application-options');
-const { PROMETHEUS, ELK } = require('../jdl/jhipster/monitoring-types');
 const { Options: DeploymentOptions } = require('../jdl/jhipster/deployment-options');
 
-const { JWT_SECRET_KEY, SERVICE_DISCOVERY_TYPE } = OptionNames;
+const { JWT_SECRET_KEY } = OptionNames;
 
 module.exports = class extends BlueprintBaseGenerator {
   constructor(args, opts, features) {
@@ -146,28 +144,11 @@ module.exports = class extends BlueprintBaseGenerator {
     dest.directoryPath = config.directoryPath;
     dest.gatewayType = config.gatewayType;
     dest.clusteredDbApps = config.clusteredDbApps;
-    dest.monitoring = config.monitoring;
     dest.dockerRepositoryName = config.dockerRepositoryName;
     dest.dockerPushCommand = config.dockerPushCommand;
-    dest.serviceDiscoveryType = config[SERVICE_DISCOVERY_TYPE];
     dest.adminPassword = config.adminPassword;
     dest.jwtSecretKey = config[JWT_SECRET_KEY];
 
-    if (dest.serviceDiscoveryType === undefined) {
-      dest.serviceDiscoveryType = EUREKA;
-    }
-
-    this.loadDerivedDeploymentConfig(config, dest);
-  }
-
-  loadDerivedDeploymentConfig(
-    config = _.defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
-    dest = this
-  ) {
-    dest.serviceDiscoveryConsul = config.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = config.serviceDiscoveryType === EUREKA;
-
-    dest.monitoringPrometheus = config.monitoring === PROMETHEUS;
-    dest.monitoringELK = config.monitoring === ELK;
+    this.loadPlatformConfig(dest);
   }
 };

@@ -85,19 +85,22 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.checkInvocationFromCLI();
       },
 
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-
-      setupClientConstants() {
+      setupConstants() {
         // Make constants available in templates
+        this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
+        this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
+        this.packagejs = packagejs;
         this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
         this.ANGULAR = ANGULAR;
         this.REACT = REACT;
         this.VUE = VUE;
         this.NODE_VERSION = constants.NODE_VERSION;
+      },
+
+      displayLogo() {
+        if (this.logo) {
+          this.printJHipsterLogo();
+        }
       },
     };
   }
@@ -126,13 +129,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
-      configureGlobal() {
-        // Make constants available in templates
-        this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
-        this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
-        this.packagejs = packagejs;
-      },
-
       saveConfig() {
         this.setConfigDefaults(clientDefaultConfig);
       },
@@ -179,6 +175,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadDerivedClientConfig();
         this.loadServerConfig();
         this.loadDerivedServerConfig();
+        this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
 

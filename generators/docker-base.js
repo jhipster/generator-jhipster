@@ -112,7 +112,9 @@ function loadConfigs() {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
       _.defaults(config, defaultConfig);
 
-      this.loadDerivedServerConfig(config, config);
+      this.loadDerivedServerConfig(config);
+      this.loadDerivedPlatformConfig(config);
+      this.loadDerivedAppConfig(config);
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
@@ -141,7 +143,6 @@ function setClusteredApps() {
 
 function loadFromYoRc() {
   this.loadDeploymentConfig();
-  this.loadDerivedDeploymentConfig();
 
   this.useKafka = false;
   this.useMemcached = false;

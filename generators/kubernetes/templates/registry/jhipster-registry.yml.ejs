@@ -75,10 +75,10 @@ spec:
       labels:
         app: jhipster-registry
         version: "1.0"
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       terminationGracePeriodSeconds: 10
       containers:

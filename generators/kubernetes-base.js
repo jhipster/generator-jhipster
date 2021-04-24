@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const crypto = require('crypto');
 const { loadFromYoRc } = require('./docker-base');
 const constants = require('./generator-constants');
+const { MICROSERVICE } = require('../jdl/jhipster/application-types');
 
 module.exports = {
   checkKubernetes,
@@ -29,6 +30,7 @@ module.exports = {
   saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
+  derivedDeploymentProperties,
 };
 
 function checkKubernetes() {
@@ -108,6 +110,14 @@ function setupKubernetesConstants() {
   this.KUBERNETES_INGRESS_API_VERSION = constants.KUBERNETES_INGRESS_API_VERSION;
   this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = constants.KUBERNETES_ISTIO_NETWORKING_API_VERSION;
   this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
+}
+
+function derivedDeploymentProperties(dest = this) {
+  dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
+  dest.ingressTypeNginx = dest.ingressType === 'nginx';
+  dest.ingressTypeGke = dest.ingressType === 'gke';
+  dest.kubernetesServiceTypeIngress = dest.kubernetesServiceType === 'Ingress';
+  dest.kubernetesNamespaceDefault = dest.kubernetesNamespace === 'default';
 }
 
 function setupHelmConstants() {

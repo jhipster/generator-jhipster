@@ -32,9 +32,9 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
-    <%_ if (!isPackageNameJhipsterTech) { _%>
+<%_ if (!isPackageNameJhipsterTech) { _%>
     <%= packageName %>: INFO
-    <%_ } _%>
+<%_ } _%>
 
 eureka:
   client:
@@ -55,7 +55,7 @@ spring:
 # ===================================================================
 
 jhipster:
-  <%_ if (isAuthenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt) { _%>
   security:
     authentication:
       jwt:
@@ -68,4 +68,4 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-  <%_ } _%>
+<%_ } _%>

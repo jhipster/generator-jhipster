@@ -54,24 +54,24 @@ spec:
             - |
                 while true
                 do
-                <%_ if (app.prodDatabaseType === 'mysql') { _%>
+<%_ if (app.prodDatabaseTypeMysql) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mysql 3306)
-                <%_ } _%>
-                <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMariadb) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mariadb 3306)
-                <%_ } _%>
-                <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypePostgres) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-postgresql 5432)
-                <%_ } _%>
-                <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMongodb) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mongodb 27017)
-                <%_ } _%>
-                <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeCouchbase) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase 8091)
-                <%_ } _%>
-                <%_ if (app.prodDatabaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeNeo4j) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-neo4j 7474)
-                <%_ } _%>
+<%_ } _%>
                   if [ $? -eq 0 ]; then
                     echo "DB is UP"
                     break
@@ -85,7 +85,7 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
-        <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
+<%_ if (app.serviceDiscoveryEureka) { _%>
         - name: SPRING_CLOUD_CONFIG_URI
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
         - name: JHIPSTER_REGISTRY_PASSWORD
@@ -95,97 +95,97 @@ spec:
               key: registry-admin-password
         - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
-          <%_ if (istio) { _%>
+  <%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
         - name: EUREKA_INSTANCE_HOSTNAME
           value: <%= app.baseName.toLowerCase() %>
-          <%_ } _%>
-        <%_ } _%>
-        <%_ if (app.serviceDiscoveryType === 'consul') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (app.serviceDiscoveryConsul) { _%>
         - name: SPRING_CLOUD_CONSUL_HOST
           value: consul.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-          <%_ if (istio) { _%>
+  <%_ if (istio) { _%>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
           value: <%= app.baseName.toLowerCase() %>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: <%= app.baseName.toLowerCase() %>
-          <%_ } _%>
-        <%_ } _%>
-        <%_ if (!app.serviceDiscoveryType && app.authenticationType === 'jwt') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!app.serviceDiscoveryType && app.authenticationTypeJwt) { _%>
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
           valueFrom:
             secretKeyRef:
               name: jwt-secret
               key: secret
-        <%_ } _%>
-        <%_ if (app.prodDatabaseType === 'mysql' || app.prodDatabaseType === 'mariadb') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb) { _%>
         - name: SPRING_DATASOURCE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
         - name: SPRING_LIQUIBASE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
-            <%_ if (app.reactive) { _%>
+  <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
-            <%_ } _%>
-        <%_ } _%>
-        <%_ if (app.prodDatabaseType === 'mariadb') { _%>
-          <%_ if (app.reactive) { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMariadb) { _%>
+  <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_PASSWORD
-          <%_ } else { _%>
+  <%_ } else { _%>
         - name: SPRING_DATASOURCE_PASSWORD
-          <%_ } _%>
+  <%_ } _%>
           valueFrom:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-mariadb
               key: mariadb-root-password
-        <%_ } _%>
-        <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypePostgres) { _%>
         - name: SPRING_DATASOURCE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName }) %>
         - name: SPRING_DATASOURCE_USERNAME
           value: <%= app.baseName %>
-          <%_ if (app.reactive) { _%>
+  <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_PASSWORD
-          <%_ } else { _%>
+  <%_ } else { _%>
         - name: SPRING_DATASOURCE_PASSWORD
-          <%_ } _%>
+  <%_ } _%>
           valueFrom:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-postgresql
               key: postgresql-password
         - name: SPRING_LIQUIBASE_URL
           value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
-            <%_ if (app.reactive) { _%>
+  <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- getR2DBCUrl(app.prodDatabaseType, { hostname: `${app.baseName.toLowerCase()}-${app.prodDatabaseType}.${kubernetesNamespace}.svc.cluster.local`, databaseName: app.baseName.toLowerCase() }) %>
-            <%_ } _%>
-        <%_ } _%>
-        <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMongodb) { _%>
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
         - name: SPRING_DATA_MONGODB_URI
           value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
-        <%_ } _%>
-        <%_ if (app.prodDatabaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeNeo4j) { _%>
         - name: SPRING_NEO4J_URI
           value: bolt://<%= app.baseName.toLowerCase() %>-neo4j.<%= kubernetesNamespace %>.svc.cluster.local:7687
-        <%_ } _%>
-        <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeCouchbase) { _%>
         - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
           value: "<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-couchbase-<%= i %>.<%= app.baseName.toLowerCase() %>-couchbase<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
         - name: SPRING_COUCHBASE_BUCKET_NAME
           value: <%= app.baseName.toLowerCase() %>
-        <%_ } _%>
-        <%_ if (app.searchEngine === 'elasticsearch') { _%>
+<%_ } _%>
+<%_ if (app.searchEngineElasticsearch) { _%>
         - name: SPRING_ELASTICSEARCH_REST_URIS
           value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
-        <%_ } _%>
-        <%_ if (app.messageBroker === 'kafka') { _%>
+<%_ } _%>
+<%_ if (app.messageBrokerKafka) { _%>
         - name: KAFKA_CONSUMER_KEY_DESERIALIZER
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
         - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
@@ -202,15 +202,15 @@ spec:
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
         - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
-        <%_ } _%>
-        <%_ if (monitoring === 'prometheus') { _%>
+<%_ } _%>
+<%_ if (monitoringPrometheus) { _%>
         - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
           value: 'true'
-        <%_ } _%>
-        <%_ if (deploymentApplicationType === 'microservice') { _%>
+<%_ } _%>
+<%_ if (deploymentApplicationTypeMicroservice) { _%>
         - name: SPRING_SLEUTH_PROPAGATION_KEYS
           value: "x-request-id,x-ot-span-context"
-        <%_ } _%>
+<%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN
