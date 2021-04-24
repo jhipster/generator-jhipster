@@ -37,6 +37,8 @@ const Generators = {
   GENERATOR_ENTITY_I18N: 'entity-i18n',
   GENERATOR_ENTITY_CLIENT: 'entity-client',
   GENERATOR_ENTITY_SERVER: 'entity-server',
+  GENERATOR_EXPORT_JDL: 'export-jdl',
+  GENERATOR_GAE: 'gae',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
   GENERATOR_SERVER: 'server',

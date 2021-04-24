@@ -1320,14 +1320,27 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
     if (primaryKeyType === TYPE_STRING) {
       if (databaseType === SQL && defaultValue === 0) {
-        return 'UUID.randomUUID().toString()';
+        return this.getJavaValueGeneratorForType(primaryKeyType);
       }
       return `"id${defaultValue}"`;
     }
     if (primaryKeyType === TYPE_UUID) {
-      return 'UUID.randomUUID()';
+      return this.getJavaValueGeneratorForType(primaryKeyType);
     }
     return `${defaultValue}L`;
+  }
+
+  getJavaValueGeneratorForType(type) {
+    if (type === 'String') {
+      return 'UUID.randomUUID().toString()';
+    }
+    if (type === 'UUID') {
+      return 'UUID.randomUUID()';
+    }
+    if (type === 'Long') {
+      return 'count.incrementAndGet()';
+    }
+    throw new Error(`Java type ${type} does not have a random generator implemented`);
   }
 
   /**

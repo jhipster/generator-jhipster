@@ -2583,6 +2583,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
     dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
 
+    dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
+    dest.prodDatabaseTypeMariadb = dest.prodDatabaseType === MARIADB;
+    dest.prodDatabaseTypePostgres = dest.prodDatabaseType === POSTGRESQL;
+
     dest.databaseTypeNo = dest.databaseType === NO_DATABASE;
     dest.databaseTypeSql = dest.databaseType === SQL;
     dest.databaseTypeCassandra = dest.databaseType === CASSANDRA;
