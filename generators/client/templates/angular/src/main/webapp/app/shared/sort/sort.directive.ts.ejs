@@ -40,19 +40,18 @@ export class SortDirective<T> {
     this.ascendingChange.emit(ascending);
   }
 
-  @Input() callback?: () => void;
-
   @Output() predicateChange = new EventEmitter<T>();
   @Output() ascendingChange = new EventEmitter<boolean>();
+  @Output() sortChange = new EventEmitter<{ predicate: T; ascending: boolean }>();
 
   private _predicate?: T;
   private _ascending?: boolean;
 
-  sort(field?: T): void {
+  sort(field: T): void {
     this.ascending = field !== this.predicate ? true : !this.ascending;
     this.predicate = field;
     this.predicateChange.emit(field);
     this.ascendingChange.emit(this.ascending);
-    this.callback?.();
+    this.sortChange.emit({ predicate: this.predicate, ascending: this.ascending });
   }
 }

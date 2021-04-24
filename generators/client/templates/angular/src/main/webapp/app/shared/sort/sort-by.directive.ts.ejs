@@ -28,7 +28,7 @@ import { SortDirective } from './sort.directive';
   selector: '[<%= jhiPrefix %>SortBy]',
 })
 export class SortByDirective<T> implements AfterContentInit, OnDestroy {
-  @Input() <%= jhiPrefix %>SortBy?: T;
+  @Input() <%= jhiPrefix %>SortBy!: T;
 
   @ContentChild(FaIconComponent, { static: false })
   iconComponent?: FaIconComponent;

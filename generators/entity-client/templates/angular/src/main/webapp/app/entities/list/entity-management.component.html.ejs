@@ -78,7 +78,7 @@ _%>
     <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr<% if (!paginationNo) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= !paginationInfiniteScroll ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
+                <tr<% if (!paginationNo) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="<%= !paginationInfiniteScroll ? 'loadPage()' : 'reset()'%>"<% } %>>
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
 <%_ } _%>
