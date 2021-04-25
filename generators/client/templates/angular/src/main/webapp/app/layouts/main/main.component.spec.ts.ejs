@@ -19,7 +19,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -90,6 +90,7 @@ describe('Component Tests', () => {
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
+      const navigationStart = new NavigationStart(1, '');
 <%_ if (enableTranslation) { _%>
       const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: null };
 <%_ } _%>
@@ -158,6 +159,16 @@ describe('Component Tests', () => {
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
 <%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
+        });
+      });
+
+      describe('navigation start', () => {
+        it('should not set page title on navigation start', () => {
+          // WHEN
+          routerEventsSubject.next(navigationStart);
+
+          // THEN
+          expect(titleService.setTitle).not.toHaveBeenCalled();
         });
       });
 
