@@ -126,7 +126,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.visit(<%= entityInstance %>PageUrl);
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-  <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
+  <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly).forEach((field) => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
@@ -145,23 +145,21 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } else if (field.fieldTypeBoolean) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
     cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
-    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
-    <%_ } else if (field.fieldTypeBinary) { _%>
+    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
     cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).select('<%= fieldValue %>');
 
-    <%_ } else if (field.fieldTypeUUID) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
-
     <%_ } else if(field.fieldTypeNumeric || field.fieldTypeLocalDate) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').should('have.value', '<%= fieldValue %>');
 
+    <%_ } else if (field.fieldTypeString) { _%>
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('eq', '<%= fieldValue %>');
+
     <%_ } else { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
     <%_ } _%>
   <%_ }); _%>
