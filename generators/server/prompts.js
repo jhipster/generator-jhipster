@@ -254,7 +254,7 @@ function askForServerSideOpts() {
       type: 'confirm',
       name: 'enableGradleEnterprise',
       message: 'Do you want to enable Gradle Enterprise integration?',
-      default: serverDefaultConfig.enableGradleEnterprise
+      default: serverDefaultConfig.enableGradleEnterprise,
     },
     {
       when: answers => answers.enableGradleEnterprise,

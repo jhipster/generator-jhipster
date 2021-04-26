@@ -73,7 +73,7 @@ const serverDefaultConfig = {
   serviceDiscoveryType: defaultMonolithOptions[optionNames.SERVICE_DISCOVERY_TYPE],
   enableHibernateCache: true,
   reactive: defaultNewApplicationOptions[optionNames.REACTIVE],
-  enableGradleEnterprise: false
+  enableGradleEnterprise: false,
 };
 
 /** Required config for prompts to be skipped */
