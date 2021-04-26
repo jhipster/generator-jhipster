@@ -21,7 +21,7 @@
     "react-redux": "7.2.3",
     "react-redux-loading-bar": "5.0.0",
     "react-router-dom": "5.2.0",
-    "react-toastify": "7.0.3",
+    "react-toastify": "7.0.4",
     "react-transition-group": "4.4.1",
     "reactstrap": "8.9.0",
     "redux": "4.0.5",
