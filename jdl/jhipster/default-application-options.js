@@ -74,7 +74,7 @@ const {
   USE_NPM,
   WEBSOCKET,
   ENABLE_GRADLE_ENTERPRISE,
-  GRADLE_ENTERPRISE_HOST
+  GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
 module.exports = {
@@ -209,6 +209,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     [TEST_FRAMEWORKS]: [],
     [WEBSOCKET]: OptionValues[WEBSOCKET].false,
     [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
+    [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
     ...customOptions,
   };
   if (typeof options[SKIP_SERVER] !== 'boolean') {

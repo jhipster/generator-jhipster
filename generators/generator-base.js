@@ -2845,7 +2845,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
     dest.enableGradleEnterprise = config.enableGradleEnterprise;
-    dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
+
+    if (!config.gradleEnterpriseHost.startsWith('https://')) {
+      dest.gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
+    } else {
+      dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
+    }
 
     this.loadDerivedServerConfig(dest);
   }

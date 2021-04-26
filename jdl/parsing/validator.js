@@ -215,9 +215,9 @@ const configPropsValidations = {
   ENABLE_GRADLE_ENTERPRISE: { type: 'BOOLEAN' },
   GRADLE_ENTERPRISE_HOST: {
     type: 'STRING',
-    pattern: REPONAME_PATTERN,
+    pattern: JWT_SECRET_KEY_PATTERN,
     msg: 'gradleEnterpriseHost property',
-  }
+  },
 };
 
 const deploymentConfigPropsValidations = {

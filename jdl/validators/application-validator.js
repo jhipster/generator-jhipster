@@ -82,6 +82,7 @@ function checkForValidValues(jdlApplication) {
     'otherModules',
     'creationTimestamp',
     'blueprints',
+    'gradleEnterpriseHost',
   ];
   jdlApplication.forEachConfigurationOption(option => {
     if (optionsToIgnore.includes(option.name)) {

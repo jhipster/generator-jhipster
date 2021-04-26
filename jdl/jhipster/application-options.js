@@ -121,7 +121,7 @@ const optionNames = {
   WEBSOCKET: 'websocket',
   WITH_ENTITIES: 'withEntities',
   ENABLE_GRADLE_ENTERPRISE: 'enableGradleEnterprise',
-  GRADLE_ENTERPRISE_HOST: 'gradleEnterpriseHost'
+  GRADLE_ENTERPRISE_HOST: 'gradleEnterpriseHost',
 };
 
 const optionValues = {
@@ -238,7 +238,8 @@ const optionValues = {
   },
   [optionNames.WITH_ENTITIES]: false,
   [optionNames.WITH_ADMIN_UI]: true,
-  [optionNames.ENABLE_GRADLE_ENTERPRISE]: false
+  [optionNames.ENABLE_GRADLE_ENTERPRISE]: false,
+  [optionNames.GRADLE_ENTERPRISE_HOST]: '',
 };
 
 const optionTypes = {
@@ -295,7 +296,12 @@ const optionTypes = {
   [optionNames.GRADLE_ENTERPRISE_HOST]: { type: ApplicationOptionTypes.STRING },
 };
 
-const QuotedOptionNames = [optionNames.JHIPSTER_VERSION, optionNames.REMEMBER_ME_KEY, optionNames.JWT_SECRET_KEY];
+const QuotedOptionNames = [
+  optionNames.JHIPSTER_VERSION,
+  optionNames.REMEMBER_ME_KEY,
+  optionNames.JWT_SECRET_KEY,
+  optionNames.GRADLE_ENTERPRISE_HOST,
+];
 
 module.exports = {
   OptionTypes: ApplicationOptionTypes,
