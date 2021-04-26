@@ -373,6 +373,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             serviceDiscoveryType: this.serviceDiscoveryType,
             buildTool: this.buildTool,
             enableSwaggerCodegen: this.enableSwaggerCodegen,
+            enableGradleEnterprise: this.enableGradleEnterprise
           },
         });
       },

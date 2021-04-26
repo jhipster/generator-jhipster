@@ -120,6 +120,8 @@ const optionNames = {
   TEST_FRAMEWORKS: 'testFrameworks',
   WEBSOCKET: 'websocket',
   WITH_ENTITIES: 'withEntities',
+  ENABLE_GRADLE_ENTERPRISE: 'enableGradleEnterprise',
+  GRADLE_ENTERPRISE_HOST: 'gradleEnterpriseHost'
 };
 
 const optionValues = {
@@ -236,6 +238,7 @@ const optionValues = {
   },
   [optionNames.WITH_ENTITIES]: false,
   [optionNames.WITH_ADMIN_UI]: true,
+  [optionNames.ENABLE_GRADLE_ENTERPRISE]: false
 };
 
 const optionTypes = {
@@ -288,6 +291,8 @@ const optionTypes = {
   [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
   [optionNames.WITH_ENTITIES]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
+  [optionNames.ENABLE_GRADLE_ENTERPRISE]: { type: ApplicationOptionTypes.BOOLEAN },
+  [optionNames.GRADLE_ENTERPRISE_HOST]: { type: ApplicationOptionTypes.STRING },
 };
 
 const QuotedOptionNames = [optionNames.JHIPSTER_VERSION, optionNames.REMEMBER_ME_KEY, optionNames.JWT_SECRET_KEY];

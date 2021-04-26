@@ -40,7 +40,26 @@ pluginManagement {
         id 'org.sonarqube' version "${sonarqubePluginVersion}"
         id "io.spring.nohttp" version "${noHttpCheckstyleVersion}"
         id 'com.github.andygoossens.gradle-modernizer-plugin' version "${modernizerPluginVersion}"
+<%_ if (enableGradleEnterprise) { _%>
+        id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
+        id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"
+<%_ } _%>
     }
 }
 
+<%_ if (enableGradleEnterprise) { _%>
+plugins {
+    id 'com.gradle.enterprise'
+    id 'com.gradle.common-custom-user-data-gradle-plugin'
+}
+    
+gradleEnterprise {
+    server = "<%= gradleEnterpriseHost %>"
+    buildScan {
+        captureTaskInputFiles = true
+        uploadInBackground = System.getenv("CI") == null // adjust to your CI provider
+        publishAlways()
+    }
+}
+<%_ } _%>  
 rootProject.name = "<%= dasherizedBaseName %>"

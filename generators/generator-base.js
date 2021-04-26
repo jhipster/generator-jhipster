@@ -2844,6 +2844,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.websocket = config.websocket;
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
+    dest.enableGradleEnterprise = config.enableGradleEnterprise;
+    dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
+
     this.loadDerivedServerConfig(dest);
   }
 

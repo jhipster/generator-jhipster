@@ -212,6 +212,12 @@ const configPropsValidations = {
     pattern: ALPHANUMERIC_DASH,
     msg: 'websocket property',
   },
+  ENABLE_GRADLE_ENTERPRISE: { type: 'BOOLEAN' },
+  GRADLE_ENTERPRISE_HOST: {
+    type: 'STRING',
+    pattern: REPONAME_PATTERN,
+    msg: 'gradleEnterpriseHost property',
+  }
 };
 
 const deploymentConfigPropsValidations = {

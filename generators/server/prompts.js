@@ -312,6 +312,8 @@ function askForServerSideOpts() {
     this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType || databaseType;
     this.searchEngine = this.jhipsterConfig.searchEngine = answers.searchEngine;
     this.buildTool = this.jhipsterConfig.buildTool = answers.buildTool;
+    this.enableGradleEnterprise = this.jhipsterConfig.enableGradleEnterprise = answers.enableGradleEnterprise;
+    this.gradleEnterpriseHost = this.jhipsterConfig.gradleEnterpriseHost = answers.gradleEnterpriseHost;
   });
 }
 
