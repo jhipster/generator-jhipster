@@ -288,14 +288,14 @@ _%>
                     expect(expectedResult).toContain(<%= entityInstance %>);
                 });
 
-                it("should add only unique <%= entityAngularName %> to an array", () => {
+                it('should add only unique <%= entityAngularName %> to an array', () => {
                     const <%= entityInstance %>Array: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey0 %>, <%- testEntityPrimaryKey1 %>, <%- generateTestEntityPrimaryKey(primaryKey) %>];
                     const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey0 %>];
                     expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, ...<%= entityInstance %>Array);
                     expect(expectedResult).toHaveLength(3);
                 });
 
-                it("should accept varargs", () => {
+                it('should accept varargs', () => {
                     const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
                     const <%= entityInstance %>2: I<%= entityAngularName %> = <%- testEntityPrimaryKey1 %>;
                     expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], <%= entityInstance %>, <%= entityInstance %>2);
@@ -304,11 +304,17 @@ _%>
                     expect(expectedResult).toContain(<%= entityInstance %>2);
                 });
 
-                it("should accept null and undefined values", () => {
+                it('should accept null and undefined values', () => {
                     const <%= entityInstance %>: I<%= entityAngularName %> = <%- testEntityPrimaryKey0 %>;
                     expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], null, <%= entityInstance %>, undefined);
                     expect(expectedResult).toHaveLength(1);
                     expect(expectedResult).toContain(<%= entityInstance %>);
+                });
+
+                it('should return initial array if no <%= entityAngularName %> is added', () => {
+                  const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [<%- testEntityPrimaryKey0 %>];
+                  expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, undefined, null);
+                  expect(expectedResult).toEqual(<%= entityInstance %>Collection);
                 });
             });
         });
