@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.23",
-    "@types/node": "14.14.41",
+    "@types/node": "15.0.0",
     "@types/sinon": "10.0.0",
     "@types/vuelidate": "0.7.14",
     "@typescript-eslint/eslint-plugin": "4.22.0",
