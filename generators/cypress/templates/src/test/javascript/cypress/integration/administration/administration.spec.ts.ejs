@@ -31,11 +31,14 @@ import {
 } from '../../support/commands';
 
 describe('/admin', () => {
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
+
 <%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
-      cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
+      cy.oauthLogin(oauth2Data, username, password);
     });
   });
 
@@ -55,7 +58,7 @@ describe('/admin', () => {
   <%_ } _%>
     cy.clearCookies();
     cy.visit('');
-    cy.login('admin', 'admin');
+    cy.login(username, password);
   });
 <%_ } _%>
 
