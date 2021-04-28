@@ -72,7 +72,7 @@
     "rimraf": "3.0.2",
     "sass": "1.32.11",
     "sass-loader": "11.0.1",
-    "simple-progress-webpack-plugin": "1.1.2",
+    "simple-progress-webpack-plugin": "2.0.0",
     "sinon": "10.0.1",
     "source-map-loader": "2.0.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
