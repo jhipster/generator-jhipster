@@ -170,7 +170,7 @@ module.exports = class extends BaseGenerator {
       if (!this.options.skipPrettier) {
         const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+        const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         // docker-compose modifies .yo-rc.json from others folder, match them all.
         const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
