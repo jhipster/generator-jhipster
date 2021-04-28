@@ -27,11 +27,13 @@ const expect = chai.expect;
 describe('<%= pageName %> e2e test', () => {
   let navBarPage: NavBarPage;
   let page: <%= pageName %>ComponentsPage;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    await navBarPage.login('admin', 'admin');
+    await navBarPage.login(username, password);
   });
 
   after(async () => {
