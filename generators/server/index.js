@@ -464,6 +464,19 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
+      packageJsonE2eScripts() {
+        const scriptsStorage = this.packageJson.createStorage('scripts');
+        const buildCmd = this.jhipsterConfig.buildTool === 'gradle' ? 'gradlew' : 'mvnw';
+        if (scriptsStorage.get('e2e')) {
+          scriptsStorage.set({
+            'ci:server:await':
+              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+            'pree2e:headless': 'npm run ci:server:await',
+            'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+            'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
+          });
+        }
+      },
     };
   }
 
