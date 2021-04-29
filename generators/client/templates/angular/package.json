@@ -19,7 +19,7 @@
   "devDependencies": {
     "@angular/cli": "11.2.11",
     "@angular-builders/custom-webpack": "11.1.1",
-    "@angular-eslint/eslint-plugin": "4.0.0",
+    "@angular-eslint/eslint-plugin": "4.2.0",
     "@types/node": "15.0.1",
     "@types/jest": "26.0.23",
     "@typescript-eslint/eslint-plugin": "4.22.0",
