@@ -138,13 +138,7 @@ describe('<%= entityClass %> e2e test', () => {
     }
   _%>
 
-    <%_ if (field.fieldTypeTimed) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('equal', '<%= fieldValue %>');
-
-    <%_ } else if (field.fieldTypeDuration) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
-
-    <%_ } else if (field.fieldTypeBoolean) { _%>
+    <%_ if (field.fieldTypeBoolean) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
     cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
 
@@ -154,11 +148,8 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } else if (fieldIsEnum) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).select('<%= fieldValue %>');
 
-    <%_ } else if(field.fieldTypeNumeric || field.fieldTypeLocalDate) { _%>
+    <%_ } else if (field.fieldTypeString || field.fieldTypeNumeric || field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').should('have.value', '<%= fieldValue %>');
-
-    <%_ } else if (field.fieldTypeString) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('eq', '<%= fieldValue %>');
 
     <%_ } else { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));

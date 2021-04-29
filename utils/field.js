@@ -116,6 +116,9 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     } else {
       data = undefined;
     }
+  } else if (field.fieldType === DURATION && type === 'cypress') {
+    data = `PT${faker.datatype.number({ min: 1, max: 59 })}M`;
+
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL, DURATION].includes(field.fieldType)) {
     data = faker.datatype.number({
