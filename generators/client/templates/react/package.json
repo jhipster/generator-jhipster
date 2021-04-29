@@ -48,7 +48,7 @@
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "8.1.1",
-    "core-js": "3.11.0",
+    "core-js": "3.11.1",
     "cross-env": "7.0.3",
     "css-loader": "5.2.4",
     "css-minimizer-webpack-plugin": "2.0.0",
