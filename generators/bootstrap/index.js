@@ -27,7 +27,7 @@ const {
   createYoResolveTransform,
 } = require('yeoman-environment/lib/util/transform');
 
-const { hasState, setDeletedFileState } = State;
+const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
 const { defaultConfig } = require('../generator-defaults');
@@ -153,7 +153,7 @@ module.exports = class extends BaseGenerator {
             (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
         ) {
           if (!hasState(file)) {
-            setDeletedFileState(file);
+            setModifiedFileState(file);
           }
         }
       });
