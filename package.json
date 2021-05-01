@@ -93,7 +93,7 @@
     "through2": "4.0.2",
     "uuid": "8.3.2",
     "winston": "3.3.3",
-    "yeoman-environment": "3.2.0",
+    "yeoman-environment": "3.3.0",
     "yeoman-generator": "5.2.0"
   },
   "devDependencies": {
@@ -113,7 +113,7 @@
     "sinon": "10.0.0",
     "sinon-chai": "3.6.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "5.1.0"
+    "yeoman-test": "6.0.0"
   },
   "engines": {
     "node": ">=12.12.0",
