@@ -16,15 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { State } = require('mem-fs-editor');
 const path = require('path');
 const through = require('through2');
 const prettier = require('prettier');
 const prettierPluginJava = require('prettier-plugin-java');
 const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
+const { isFileStateDeleted } = State;
+
 const prettierTransform = function (options, generator, ignoreErrors = false) {
   return through.obj((file, encoding, callback) => {
-    if (file.state === 'deleted') {
+    if (isFileStateDeleted(file)) {
       callback(null, file);
       return;
     }
@@ -71,7 +74,7 @@ const generatedAnnotationTransform = generator => {
       !file.path.endsWith('package-info.java') &&
       !file.path.endsWith('MavenWrapperDownloader.java') &&
       path.extname(file.path) === '.java' &&
-      file.state !== 'deleted' &&
+      !isFileStateDeleted(file) &&
       !file.path.endsWith('GeneratedByJHipster.java')
     ) {
       const packageName = generator.jhipsterConfig.packageName;
