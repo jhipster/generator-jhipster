@@ -152,7 +152,7 @@ module.exports = class extends BaseGenerator {
           (path.basename(file.path) === '.yo-rc.json' ||
             (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
         ) {
-          if (!hasState(file)) {
+          if (!hasState(file) && !this.options.reproducibleTests) {
             setModifiedFileState(file);
           }
         }
