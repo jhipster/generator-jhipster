@@ -29,7 +29,7 @@ const prettierTransform = function (options, generator, ignoreErrors = false) {
   return createFileTransform((file, encoding, callback) => {
     if (isFileStateDeleted(file)) {
       callback(null, file);
-      return;
+      return Promise.resolve();
     }
     /* resolve from the projects config */
     let fileContent;
