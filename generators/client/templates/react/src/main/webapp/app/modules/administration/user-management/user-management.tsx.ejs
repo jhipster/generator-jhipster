@@ -30,7 +30,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
@@ -55,7 +55,7 @@ export const UserManagement = (props: IUserManagementProps) => {
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
-    const sortParam = params.get('sort');
+    const sortParam = params.get(SORT);
     if (page && sortParam) {
       const sortSplit = sortParam.split(',');
       setPagination({
@@ -70,7 +70,7 @@ export const UserManagement = (props: IUserManagementProps) => {
   const sort = p => () =>
     setPagination({
       ...pagination,
-      order: pagination.order === 'asc' ? 'desc' : 'asc',
+      order: pagination.order === ASC ? DESC : ASC,
       sort: p
     });
 

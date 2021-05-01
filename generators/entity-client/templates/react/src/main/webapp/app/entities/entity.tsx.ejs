@@ -61,7 +61,7 @@ import {
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (!paginationNo) { _%>
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } _%>
 
@@ -195,7 +195,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
-    const sort = params.get('sort');
+    const sort = params.get(SORT);
     if (page && sort) {
       const sortSplit = sort.split(',');
       setPaginationState({
@@ -214,14 +214,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     setPaginationState({
       ...paginationState,
       activePage: 1,
-      order: paginationState.order === 'asc' ? 'desc' : 'asc',
+      order: paginationState.order === ASC ? DESC : ASC,
       sort: p
     });
     setSorting(true);
   <%_ } else { _%>
     setPaginationState({
       ...paginationState,
-      order: paginationState.order === 'asc' ? 'desc' : 'asc',
+      order: paginationState.order === ASC ? DESC : ASC,
       sort: p
     });
   <%_ } _%>
