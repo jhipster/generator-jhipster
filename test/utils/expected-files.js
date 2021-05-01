@@ -482,6 +482,7 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/login/login.component.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/layouts/main/main.component.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.spec.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/page-ribbon.component.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/shared/pagination/item-count.component.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.component.spec.ts`,

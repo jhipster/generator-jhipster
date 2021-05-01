@@ -429,6 +429,7 @@ const files = {
         'home/home.component.spec.ts',
         'layouts/main/main.component.spec.ts',
         'layouts/navbar/navbar.component.spec.ts',
+        'layouts/profiles/page-ribbon.component.spec.ts',
         'shared/alert/alert.component.spec.ts',
         'shared/alert/alert-error.component.spec.ts',
         'shared/date/format-medium-date.pipe.spec.ts',
