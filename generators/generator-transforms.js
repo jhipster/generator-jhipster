@@ -18,7 +18,7 @@
  */
 const { State } = require('mem-fs-editor');
 const path = require('path');
-const through = require('through2');
+const { createFileTransform } = require('yeoman-environment/lib/util/transform');
 const prettier = require('prettier');
 const prettierPluginJava = require('prettier-plugin-java');
 const prettierPluginPackagejson = require('prettier-plugin-packagejson');
@@ -26,14 +26,14 @@ const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 const { isFileStateDeleted } = State;
 
 const prettierTransform = function (options, generator, ignoreErrors = false) {
-  return through.obj((file, encoding, callback) => {
+  return createFileTransform((file, encoding, callback) => {
     if (isFileStateDeleted(file)) {
       callback(null, file);
       return;
     }
     /* resolve from the projects config */
     let fileContent;
-    prettier
+    return prettier
       .resolveConfig(file.relative)
       .then(function (resolvedDestinationFileOptions) {
         const prettierOptions = {
@@ -69,7 +69,7 @@ At: ${fileContent}`;
 };
 
 const generatedAnnotationTransform = generator => {
-  return through.obj(function (file, encoding, callback) {
+  return createFileTransform(function (file, encoding, callback) {
     if (
       !file.path.endsWith('package-info.java') &&
       !file.path.endsWith('MavenWrapperDownloader.java') &&
@@ -89,8 +89,7 @@ const generatedAnnotationTransform = generator => {
         file.contents = Buffer.from(newContent);
       }
     }
-    this.push(file);
-    callback();
+    callback(null, file);
   });
 };
 

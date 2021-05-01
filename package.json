@@ -91,7 +91,6 @@
     "semver": "7.3.5",
     "shelljs": "0.8.4",
     "then-request": "6.0.2",
-    "through2": "4.0.2",
     "uuid": "8.3.2",
     "winston": "3.3.3",
     "yeoman-environment": "3.3.0",
