@@ -411,6 +411,7 @@ const files = {
       templates: [
         'admin/configuration/configuration.component.spec.ts',
         'admin/configuration/configuration.service.spec.ts',
+        'admin/health/modal/health-modal.component.spec.ts',
         'admin/health/health.component.spec.ts',
         'admin/logs/logs.component.spec.ts',
         'admin/logs/logs.service.spec.ts',
