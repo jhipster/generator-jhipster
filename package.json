@@ -76,6 +76,7 @@
     "insight": "0.10.3",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
+    "mem-fs-editor": "^9.0.0",
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
     "ora": "5.4.0",
@@ -90,10 +91,9 @@
     "semver": "7.3.5",
     "shelljs": "0.8.4",
     "then-request": "6.0.2",
-    "through2": "4.0.2",
     "uuid": "8.3.2",
     "winston": "3.3.3",
-    "yeoman-environment": "3.2.0",
+    "yeoman-environment": "3.3.0",
     "yeoman-generator": "5.2.0"
   },
   "devDependencies": {
@@ -113,7 +113,7 @@
     "sinon": "10.0.0",
     "sinon-chai": "3.6.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "5.1.0"
+    "yeoman-test": "6.0.0"
   },
   "engines": {
     "node": ">=12.12.0",

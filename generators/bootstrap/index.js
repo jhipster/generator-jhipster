@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { State } = require('mem-fs-editor');
 const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
@@ -25,6 +26,8 @@ const {
   createYoRcTransform,
   createYoResolveTransform,
 } = require('yeoman-environment/lib/util/transform');
+
+const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
 const { defaultConfig } = require('../generator-defaults');
@@ -149,7 +152,9 @@ module.exports = class extends BaseGenerator {
           (path.basename(file.path) === '.yo-rc.json' ||
             (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
         ) {
-          file.state = file.state || 'modified';
+          if (!hasState(file)) {
+            setModifiedFileState(file);
+          }
         }
       });
       const transformStreams = [
