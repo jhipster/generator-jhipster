@@ -887,11 +887,17 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       } else {
         const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
         if (
-          !javaVersion.match(new RegExp('12'.replace('.', '\\.'))) &&
-          !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
-          !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
+          !javaVersion.match(new RegExp('16')) &&
+          !javaVersion.match(new RegExp('15')) &&
+          !javaVersion.match(new RegExp('14')) &&
+          !javaVersion.match(new RegExp('13')) &&
+          !javaVersion.match(new RegExp('12')) &&
+          !javaVersion.match(new RegExp('11')) &&
+          !javaVersion.match(new RegExp('1.8'.replace('.', '\\.')))
         ) {
-          this.warning(`Java 8, 11, or 12 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+          this.warning(
+            `Java 8, 11, 12, 13, 14, 15 or 16 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`
+          );
         }
       }
       done();
