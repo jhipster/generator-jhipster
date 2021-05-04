@@ -6,7 +6,7 @@
     "cypress": "6.6.0",
     "eslint-plugin-cypress": "2.11.2",
     "nyc": "15.1.0",
-    "puppeteer": "9.0.0"
+    "puppeteer": "9.1.0"
   },
   "dependencies": {
     "dayjs": "1.10.4"
