@@ -40,7 +40,7 @@
     "css-loader": "5.2.4",
     "css-minimizer-webpack-plugin": "2.0.0",
     "file-loader": "6.2.0",
-    "fork-ts-checker-webpack-plugin": "6.2.5",
+    "fork-ts-checker-webpack-plugin": "6.2.6",
     "html-webpack-plugin": "5.3.1",
     "jest": "26.6.3",
     "jest-junit": "12.0.0",
