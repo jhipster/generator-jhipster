@@ -168,11 +168,10 @@ function askForServerSideOpts() {
             name: 'Cassandra',
           });
         }
-        // Couchbase is broken, see https://github.com/jhipster/generator-jhipster/pull/14184 for more information.
-        /* opts.push({
+        opts.push({
           value: 'couchbase',
           name: 'Couchbase',
-        }); */
+        });
         opts.push({
           value: NEO4J,
           name: '[BETA] Neo4j',
