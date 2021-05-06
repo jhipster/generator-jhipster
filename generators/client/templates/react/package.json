@@ -9,7 +9,7 @@
     "availity-reactstrap-validation": "2.7.1",
     "axios": "0.21.1",
     "bootstrap": "4.6.0",
-    "bootswatch": "4.6.0",
+    "bootswatch": "5.0.0",
     "loaders.css": "0.1.2",
     "lodash": "4.17.21",
     "path-browserify": "1.0.1",
