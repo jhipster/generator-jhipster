@@ -21,7 +21,7 @@ package <%= packageName %>.domain;
 import <%= packageName %>.config.Constants;
 
 <%_ if (databaseTypeCouchbase) { _%>
-import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.couchbase.core.mapping.Field;
 <%_ } _%>
 <%_ if (!reactive && databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.mapper.annotations.CqlName;

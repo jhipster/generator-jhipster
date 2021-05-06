@@ -19,7 +19,7 @@
 package <%= packageName %>.domain;
 
 <%_ if (databaseTypeCouchbase) { _%>
-import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.couchbase.core.mapping.Field;
 <%_ } _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 <%_ if (!reactive) { _%>
