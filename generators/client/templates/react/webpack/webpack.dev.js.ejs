@@ -33,7 +33,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   cache: {
     // 1. Set cache type to filesystem
     type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '<%= buildDir %>webpack'),
+    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
     buildDependencies: {
       // 2. Add your config as buildDependency to get cache invalidation on config change
       config: [
