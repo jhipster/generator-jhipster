@@ -147,6 +147,8 @@
         <spring-nohttp-checkstyle.version>0.0.6.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
+        <checksum-maven-plugin.version>1.9</checksum-maven-plugin.version>
+        <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
@@ -1592,6 +1594,83 @@
     <%_ } _%>
 <%_ } _%>
             </dependencies>
+<%_ if (!skipClient) { _%>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.nicoulaj.maven.plugins</groupId>
+                        <artifactId>checksum-maven-plugin</artifactId>
+                        <version>${checksum-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>files</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include><%= MAIN_DIR %>webapp/**/*.*</include>
+                                        <include>package.json</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/app/**/service-worker.js</exclude>
+                                        <exclude>**/node_modules/**/*.*</exclude>
+                                    </excludes>
+                                </fileSet>
+                            </fileSets>
+                            <failOnError>false</failOnError>
+                            <failIfNoFiles>false</failIfNoFiles>
+                            <individualFiles>false</individualFiles>
+                            <algorithms>
+                                <algorithm>SHA-1</algorithm>
+                            </algorithms>
+                            <includeRelativePath>true</includeRelativePath>
+                            <quiet>true</quiet>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven-antrun-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>eval-frontend-checksum</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <condition property="skip.npm" value="true" else="false" >
+                                            <or>
+                                                <and>
+                                                    <available file="checksums.csv" filepath="${project.build.directory}" />
+                                                    <available file="checksums.csv.old" filepath="${project.build.directory}" />
+                                                    <filesmatch file1="${project.build.directory}/checksums.csv" file2="${project.build.directory}/checksums.csv.old" />
+                                                </and>
+                                                <and>
+                                                    <not>
+                                                        <available file="checksums.csv.old" filepath="${project.build.directory}" />
+                                                    </not>
+                                                    <available file="<%= CLIENT_DIST_DIR %>index.html" filepath="${project.basedir}" />
+                                                </and>
+                                            </or>
+                                        </condition>
+                                        <copy file="${project.build.directory}/checksums.csv" tofile="${project.build.directory}/checksums.csv.old"/>
+                                    </target>
+                                    <exportAntProperties>true</exportAntProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+<%_ } _%>
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
