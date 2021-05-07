@@ -51,14 +51,14 @@ module.exports = webpackMerge(baseWebpackConfig, {
   cache: {
     // 1. Set cache type to filesystem
     type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '<%= buildDir %>webpack'),
+    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
     buildDependencies: {
       // 2. Add your config as buildDependency to get cache invalidation on config change
       config: [
         __filename,
         path.resolve(__dirname, 'webpack.common.js'),
         path.resolve(__dirname, 'utils.js'),
-        path.resolve(__dirname, '../postcssrc.js'),
+        path.resolve(__dirname, '../.postcssrc.js'),
         path.resolve(__dirname, '../tsconfig.json')
       ],
     },
