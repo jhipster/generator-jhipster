@@ -610,10 +610,12 @@ function askForField() {
         if (!/^[A-Za-z0-9_]*$/.test(input)) {
           return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
-        if (context.enums.includes(input)) {
+        if (context.enums && context.enums.includes(input)) {
           context.existingEnum = true;
-        } else {
+        } else if (context.enums) {
           context.enums.push(input);
+        } else {
+          context.enums = [input];
         }
         return true;
       },
