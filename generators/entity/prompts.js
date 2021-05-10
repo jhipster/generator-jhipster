@@ -41,21 +41,8 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
 
-const {
-  BIG_DECIMAL,
-  BOOLEAN,
-  DOUBLE,
-  DURATION,
-  ENUM,
-  FLOAT,
-  INTEGER,
-  INSTANT,
-  LOCAL_DATE,
-  LONG,
-  STRING,
-  UUID,
-  ZONED_DATE_TIME,
-} = CommonDBTypes;
+const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME } =
+  CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { ANY, IMAGE, TEXT } = BlobTypes;
 

@@ -104,8 +104,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
     // This adds support for a `--client-root-folder` flag
     this.option('client-root-folder', {
-      desc:
-        'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
+      desc: 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
       type: String,
     });
 
