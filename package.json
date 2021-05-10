@@ -106,7 +106,7 @@
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-mocha": "8.1.0",
     "eslint-plugin-prettier": "3.4.0",
-    "fs-extra": "9.1.0",
+    "fs-extra": "10.0.0",
     "jsdoc": "3.6.6",
     "mocha": "8.4.0",
     "proxyquire": "2.1.3",
