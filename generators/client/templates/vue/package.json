@@ -28,7 +28,7 @@
     "@typescript-eslint/parser": "4.22.1",
     "@vue/eslint-config-prettier": "6.0.0",
     "@vue/eslint-config-typescript": "7.0.0",
-    "@vue/cli-plugin-eslint": "4.5.12",
+    "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-plugin-typescript": "4.5.13",
     "@vue/cli-service": "4.5.12",
     "@vue/test-utils": "1.2.0",
