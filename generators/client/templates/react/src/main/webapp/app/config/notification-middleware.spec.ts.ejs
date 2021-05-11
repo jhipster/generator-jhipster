@@ -123,6 +123,20 @@ describe('Notification Middleware', () => {
       }
     })
   };
+  const LOGIN_REJECTED_ERROR = {
+    type: ERROR_TYPE,
+    payload: Promise.reject({
+      response: {
+        data: {
+          title: 'Unauthorized',
+          status: 401,
+          path: '/api/authenticate',
+          message: 'error.http.401',
+        },
+        status: 401,
+      },
+    }),
+  };
 
   const makeStore = () => applyMiddleware(notificationMiddleware, promiseMiddleware)(createStore)(() => null);
 
@@ -213,5 +227,13 @@ describe('Notification Middleware', () => {
     });
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('foo.creation');
+  });
+
+  it('should not trigger an error toast message and return promise error for 40 response code', async () => {
+    await store.dispatch(LOGIN_REJECTED_ERROR).catch(err => {
+      expect(err.response.status).toEqual(401);
+    });
+    expect((toastify.toast as any).error.called).toEqual(false);
+    expect((toastify.toast as any).success.called).toEqual(false);
   });
 });
