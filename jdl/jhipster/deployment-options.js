@@ -25,6 +25,29 @@ const DeploymentTypes = {
   exists: deploymentType => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
 };
 
+const kubernetesRelatedOptions = {
+  kubernetesNamespace: 'default',
+  kubernetesServiceType: {
+    loadBalancer: 'LoadBalancer',
+    nodePort: 'NodePort',
+    ingress: 'Ingress',
+  },
+  kubernetesStorageClassName: '',
+  kubernetesUseDynamicStorage: {
+    false: false,
+    true: true,
+  },
+  ingressDomain: '',
+  ingressType: {
+    nginx: 'nginx',
+    gke: 'gke',
+  },
+  istio: {
+    false: false,
+    true: true,
+  },
+};
+
 const Options = {
   deploymentType: {
     dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
@@ -50,17 +73,7 @@ const Options = {
   dockerRepositoryName: '',
   dockerPushCommand: 'docker push',
   // Kubernetes specific
-  kubernetesNamespace: 'default',
-  kubernetesServiceType: {
-    loadBalancer: 'LoadBalancer',
-    nodePort: 'NodePort',
-    ingress: 'Ingress',
-  },
-  ingressDomain: '',
-  istio: {
-    false: false,
-    true: true,
-  },
+  ...kubernetesRelatedOptions,
   // openshift specific
   openshiftNamespace: 'default',
   storageType: {
@@ -84,7 +97,11 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) =>
       dockerPushCommand: Options.dockerPushCommand,
       kubernetesNamespace: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesNamespace : undefined,
       kubernetesServiceType: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesServiceType.loadBalancer : undefined,
+      kubernetesStorageClassName: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesStorageClassName : '',
+      kubernetesUseDynamicStorage:
+        deploymentType === Options.deploymentType.kubernetes ? deploymentType === Options.deploymentType.kubernetes : false,
       ingressDomain: deploymentType === Options.deploymentType.kubernetes ? Options.ingressDomain : undefined,
+      ingressType: deploymentType === Options.deploymentType.kubernetes ? Options.ingressType.nginx : undefined,
       istio: deploymentType === Options.deploymentType.kubernetes ? Options.istio.false : undefined,
       openshiftNamespace: deploymentType === Options.deploymentType.openshift ? Options.openshiftNamespace : undefined,
       storageType: deploymentType === Options.deploymentType.openshift ? Options.storageType.ephemeral : undefined,
