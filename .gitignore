@@ -20,3 +20,5 @@ test/temp/
 .project
 .settings
 test/**/*.png
+/app
+/app2
