@@ -42,7 +42,7 @@
     "@types/react-router-dom": "5.1.7",
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.16.0",
-    "@typescript-eslint/eslint-plugin": "4.22.1",
+    "@typescript-eslint/eslint-plugin": "4.23.0",
     "@typescript-eslint/parser": "4.22.1",
     "autoprefixer": "10.2.5",
     "browser-sync": "2.26.14",
