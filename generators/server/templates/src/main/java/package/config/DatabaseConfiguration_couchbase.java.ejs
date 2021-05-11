@@ -108,7 +108,7 @@ public class DatabaseConfiguration {
     @Bean
     public Couchmove couchmove(Bucket couchbaseBucket, CouchbaseProperties properties) {
         log.debug("Configuring Couchmove");
-        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getBucket().getName(), properties.getBucket().getPassword(), "config/couchmove/changelog");
+        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getUsername(), properties.getPassword(), "config/couchmove/changelog");
         couchmove.migrate();
         return couchmove;
     }

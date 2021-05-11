@@ -31,7 +31,7 @@ import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 import org.springframework.data.couchbase.core.CouchbaseOperations;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
-import <%= packageName %>.repository.N1qlCouchbaseRepository;
+import org.springframework.data.couchbase.repository.support.SimpleCouchbaseRepository;
 <%_ if (searchEngineCouchbase) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 /**
  * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N1qlCouchbaseRepository<T, ID><%if (searchEngineCouchbase) { %> implements SearchCouchbaseRepository<T, ID><% } %> {
+public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends SimpleCouchbaseRepository<T,ID> <%if (searchEngineCouchbase) { %> implements SearchCouchbaseRepository<T, ID><% } %> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
 
@@ -61,7 +61,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
      */
     public CustomN1qlCouchbaseRepository(CouchbaseEntityInformation<T, String> metadata, CouchbaseOperations couchbaseOperations) {
         super(metadata, couchbaseOperations);
-        persistentEntity = getCouchbaseOperations().getConverter().getMappingContext().getPersistentEntity(getEntityInformation().getJavaType());
+        persistentEntity = couchbaseOperations.getConverter().getMappingContext().getPersistentEntity(getEntityInformation().getJavaType());
     }
 
     @Override
@@ -71,18 +71,19 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
 <%_ if (searchEngineCouchbase) { _%>
 
     public Page<T> search(String indexName, String request, Pageable pageable) {
-        SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))
+        SearchQuery searchQuery = SearchQuery.queryString(request);
+        SearchOptions searchOptions = SearchOptions.searchOptions()
             .limit(pageable.getPageSize())
             .skip((int) pageable.getOffset());
-        SearchResult result = getCouchbaseOperations().getCouchbaseBucket().query(searchQuery);
+        SearchResult result = couchbaseOperations.getCouchbaseClientFactory().getCluster().searchQuery(indexName, searchQuery, searchOptions); // change to cluster.searchQuery
         List<T> pageContent = extractResults(result);
-        return new PageImpl<>(pageContent, pageable, result.metrics().totalHits());
+        return new PageImpl<>(pageContent, pageable, result.metaData().metrics().totalRows());
     }
 
     @Override
     public List<T> search(String indexName, String request) {
-        SearchQuery searchQuery = new SearchQuery(indexName, queryString(request));
-        return extractResults(getCouchbaseOperations().getCouchbaseBucket().query(searchQuery));
+        SearchQuery searchQuery = SearchQuery.queryString(request);
+        return extractResults(getCouchbaseOperations().getCouchbaseBucket().searchQuery(indexName, searchQuery));
     }
 
     static SearchQuery queryString(String request) {
@@ -106,7 +107,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
 
     @SuppressWarnings("unchecked")
     private List<T> extractResults(SearchResult result) {
-        return result.hits().stream()
+        return result.rows().stream()
             .map(SearchRow::id)
             .map(id -> (ID) id)
             .map(this::findById)
