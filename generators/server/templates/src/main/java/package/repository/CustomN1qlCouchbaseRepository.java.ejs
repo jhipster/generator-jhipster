@@ -20,17 +20,18 @@ package <%= packageName %>.repository;
 
 <%_ if (searchEngineCouchbase) { _%>
 import com.couchbase.client.java.search.SearchQuery;
-import com.couchbase.client.java.search.queries.AbstractFtsQuery;
 import com.couchbase.client.java.search.queries.DocIdQuery;
 import com.couchbase.client.java.search.queries.QueryStringQuery;
-import com.couchbase.client.java.search.result.SearchQueryResult;
-import com.couchbase.client.java.search.result.SearchQueryRow;
+import com.couchbase.client.java.search.result.SearchResult;
+import com.couchbase.client.java.search.result.SearchRow;
+import com.couchbase.client.java.search.SearchOptions;
+
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 import org.springframework.data.couchbase.core.CouchbaseOperations;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
-import org.springframework.data.couchbase.repository.support.N1qlCouchbaseRepository;
+import <%= packageName %>.repository.N1qlCouchbaseRepository;
 <%_ if (searchEngineCouchbase) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -73,7 +74,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
         SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))
             .limit(pageable.getPageSize())
             .skip((int) pageable.getOffset());
-        SearchQueryResult result = getCouchbaseOperations().getCouchbaseBucket().query(searchQuery);
+        SearchResult result = getCouchbaseOperations().getCouchbaseBucket().query(searchQuery);
         List<T> pageContent = extractResults(result);
         return new PageImpl<>(pageContent, pageable, result.metrics().totalHits());
     }
@@ -84,7 +85,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
         return extractResults(getCouchbaseOperations().getCouchbaseBucket().query(searchQuery));
     }
 
-    static AbstractFtsQuery queryString(String request) {
+    static SearchQuery queryString(String request) {
         List<String> ids = new LinkedList<>();
         for (String r : request.split(" ")) {
             if (r.indexOf("id:") == 0) {
@@ -104,9 +105,9 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
     }
 
     @SuppressWarnings("unchecked")
-    private List<T> extractResults(SearchQueryResult result) {
+    private List<T> extractResults(SearchResult result) {
         return result.hits().stream()
-            .map(SearchQueryRow::id)
+            .map(SearchRow::id)
             .map(id -> (ID) id)
             .map(this::findById)
             .filter(Optional::isPresent)

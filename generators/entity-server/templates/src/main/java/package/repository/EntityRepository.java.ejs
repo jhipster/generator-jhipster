@@ -40,7 +40,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ if (databaseTypeCouchbase) { _%>
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
   <%_ if (relationshipsContainEagerLoad) { _%>
-import org.springframework.data.couchbase.core.query.Query;
+import org.springframework.data.couchbase.repository.Query;
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>

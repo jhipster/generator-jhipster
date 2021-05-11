@@ -26,7 +26,7 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.couchbase.core.query.Query;
+import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
