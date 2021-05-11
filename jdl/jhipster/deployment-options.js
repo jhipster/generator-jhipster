@@ -28,7 +28,6 @@ const DeploymentTypes = {
 const Options = {
   deploymentType: {
     dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
-    rancherCompose: DeploymentTypes.RANCHERCOMPOSE,
     kubernetes: DeploymentTypes.KUBERNETES,
     openshift: DeploymentTypes.OPENSHIFT,
   },
