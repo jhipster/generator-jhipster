@@ -34,7 +34,7 @@ const entityToDtoReference = mapper + '::' + 'toDto'; %>
         .collect(Collectors.toList());
     <%_ } _%>
   <%_ } else { _%>
-        return <%= entityInstance %><% if (searchEngineElasticsearch') { %>Search<% } %>Repository.search(<% if (searchEngineCouchbase) { %><%= entityClass %>.PREFIX, <% } %>query)<%_ if (dtoMapstruct) { %>
+        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineCouchbase) { %><%= entityClass %>.PREFIX, <% } %>query)<%_ if (dtoMapstruct) { %>
             .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
     <%_ } _%>
 <%_ } else { _%>
