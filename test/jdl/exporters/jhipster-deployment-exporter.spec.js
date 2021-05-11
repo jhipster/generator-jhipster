@@ -88,7 +88,6 @@ describe('JHipsterDeploymentExporter', () => {
               appsFolders: ['tata', 'titi'],
               clusteredDbApps: [],
               directoryPath: '../',
-              dockerPushCommand: 'docker push',
               dockerRepositoryName: 'test',
               gatewayType: 'SpringCloudGateway',
               monitoring: 'no',
@@ -128,12 +127,12 @@ describe('JHipsterDeploymentExporter', () => {
               directoryPath: '../',
               dockerPushCommand: 'docker push',
               dockerRepositoryName: 'test',
-              gatewayType: 'SpringCloudGateway',
               ingressDomain: '',
               istio: false,
               kubernetesNamespace: 'default',
               kubernetesServiceType: 'LoadBalancer',
               monitoring: 'no',
+              kubernetesUseDynamicStorage: false,
               serviceDiscoveryType: 'eureka',
             });
           });
