@@ -48,14 +48,10 @@ _%>
    return existing<%= entityClass %>;
    })
    .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)<% if (searchEngine === 'elasticsearch') { %>
-   .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
+   .<%= mapOrFlatMap %>(<%_ if(reactive) { %><%= entityInstance %>SearchRepository::save<% } else { %>saved<%= entityClass %> -> {
          <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
-         <%_ if(!reactive) { %>
          return saved<%= entityClass %>;
-         <%_ } else { %>
-         return Mono.just(saved<%= entityClass %>);
-         <%_ } %>
-      })<% } %><% if (dto !== 'no') { %>
+      }<% } %>)<% } %><% if (dto !== 'no') { %>
    .map(<%= mapper %>::toDto)<% } %><% if (isService && !reactive) { %>
    <% } %>;
 <%_ } %>
