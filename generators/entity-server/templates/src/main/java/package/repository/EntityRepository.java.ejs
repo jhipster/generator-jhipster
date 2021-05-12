@@ -29,19 +29,24 @@ import org.springframework.data.jpa.repository.*;
   <%_ if (relationshipsContainEagerLoad) { _%>
 import org.springframework.data.repository.query.Param;
   <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
+<%_} else if (databaseTypeMongodb) { _%>
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
+<%_} else if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+<%_} else if (databaseTypeCouchbase) { _%>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.data.couchbase.repository.ScanConsistency;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
-  <%_ if (relationshipsContainEagerLoad) { _%>
+<%_ } _%>
+<%_ if (relationshipsContainEagerLoad && databaseTypeCouchbase) { _%>
 import org.springframework.data.couchbase.repository.Query;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
@@ -56,7 +61,7 @@ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) {
     }
   }
 _%>
-  <%_ if (importList) { _%>
+  <%_ if (importList || databaseTypeCouchbase) { _%>
 import java.util.List;
   <%_ } _%>
   <%_ if (relationshipsContainEagerLoad) { _%>
@@ -75,7 +80,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><% if (databaseTypeCouchbase) { %>CouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
   <%_
   for (const relationship of relationships) {
     if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
@@ -118,6 +123,21 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
-    }
-  } _%>
+        }
+    } _%>
+    <%_ if (databaseTypeCouchbase) { _%>
+    @Override
+    // Add ScanConsistency to fix issue with Spring Data Couchbase
+    // https://github.com/spring-projects/spring-data-couchbase/issues/897
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= persistClass %>> findAll();
+
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= persistClass %>> findAll(Sort sort);
+
+    @Override
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Page<<%= persistClass %>> findAll(Pageable pageable);
+    <%_ } _%>
 }

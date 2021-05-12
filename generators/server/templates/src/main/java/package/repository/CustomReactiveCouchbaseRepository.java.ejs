@@ -18,80 +18,80 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_ if (searchEngineCouchbase) { _%>
+<%_ if (searchEngine === 'couchbase') { _%>
 import com.couchbase.client.java.search.SearchQuery;
+import com.couchbase.client.java.search.queries.AbstractFtsQuery;
 import com.couchbase.client.java.search.queries.DocIdQuery;
 import com.couchbase.client.java.search.queries.QueryStringQuery;
-import com.couchbase.client.java.search.result.SearchResult;
-import com.couchbase.client.java.search.result.SearchRow;
-import com.couchbase.client.java.search.SearchOptions;
-
+import com.couchbase.client.java.search.result.AsyncSearchQueryResult;
+import com.couchbase.client.java.search.result.SearchQueryRow;
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
-import org.springframework.data.couchbase.core.CouchbaseTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.couchbase.core.ReactiveCouchbaseOperations;
+import org.springframework.data.couchbase.core.ReactiveCouchbaseTemplate;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
-import org.springframework.data.couchbase.core.mapping.CouchbaseDocument;
-import org.springframework.data.couchbase.core.convert.CouchbaseConverter;
-import org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
-import org.springframework.data.couchbase.repository.support.SimpleCouchbaseRepository;
-<%_ if (searchEngineCouchbase) { _%>
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.couchbase.repository.support.SimpleReactiveCouchbaseRepository;
+<%_ if (searchEngine === 'couchbase') { _%>
 import org.springframework.data.domain.Pageable;
+<%_ } _%>
+import reactor.core.publisher.Mono;
+<%_ if (searchEngine === 'couchbase') { _%>
+import rx.Observable;
+import rx.RxReactiveStreams;
 <%_ } _%>
 
 import java.io.Serializable;
-<%_ if (searchEngineCouchbase) { _%>
+import java.util.Set;
+<%_ if (searchEngine === 'couchbase') { _%>
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 <%_ } _%>
 
 /**
- * A custom implementation of {@code SimpleCouchbaseRepository}.
+ * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends SimpleCouchbaseRepository<T,ID> <%if (searchEngineCouchbase) { %> implements SearchCouchbaseRepository<T, ID><% } %> {
+public class CustomReactiveCouchbaseRepository<T, ID extends Serializable> extends SimpleReactiveCouchbaseRepository<T, ID><%if (searchEngine === 'couchbase') { %> implements SearchCouchbaseRepository<T, ID><% } %> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
-    private final CouchbaseTemplate couchbaseOperations;
+
+    @Autowired
+    private final ReactiveCouchbaseTemplate template;
 
     /**
      * Create a new Repository.
      *
      * @param metadata            the Metadata for the entity.
-     * @param couchbaseOperations the reference to the template used.
+     * @param couchbaseOperations the reference to the operations used.
+     * @param couchbaseTemplate   the reference to the template used.
      */
-    public CustomN1qlCouchbaseRepository(CouchbaseEntityInformation<T, String> metadata, CouchbaseTemplate couchbaseOperations) {
+    public CustomReactiveCouchbaseRepository(CouchbaseEntityInformation<T, String> metadata, ReactiveCouchbaseOperations couchbaseOperations, ReactiveCouchbaseTemplate couchbaseTemplate) {
         super(metadata, couchbaseOperations);
-        this.couchbaseOperations = couchbaseOperations;
         persistentEntity = couchbaseOperations.getConverter().getMappingContext().getPersistentEntity(getEntityInformation().getJavaType());
+        template = couchbaseTemplate;
     }
 
     @Override
-    public <S extends T> S save(S entity) {
+    public <S extends T> Mono<S> save(S entity) {
         return super.save(populateIdIfNecessary(entity));
     }
-<%_ if (searchEngineCouchbase) { _%>
+<%_ if (searchEngine === 'couchbase') { _%>
 
-    public Page<T> search(String indexName, String request, Pageable pageable) {
-        SearchQuery searchQuery = SearchQuery.queryString(request);
-        SearchOptions searchOptions = SearchOptions.searchOptions()
+    public Flux<T> search(String indexName, String request, Pageable pageable) {
+        SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))
             .limit(pageable.getPageSize())
             .skip((int) pageable.getOffset());
-        SearchResult result = couchbaseOperations.getCouchbaseClientFactory().getCluster().searchQuery(indexName, searchQuery, searchOptions); // change to cluster.searchQuery
-        List<T> pageContent = extractResults(result);
-        return new PageImpl<>(pageContent, pageable, result.metaData().metrics().totalRows());
+        return search(searchQuery);
     }
 
     @Override
-    public List<T> search(String indexName, String request) {
-        SearchQuery searchQuery = SearchQuery.queryString(request);
-        return extractResults(couchbaseOperations.getCouchbaseClientFactory().getCluster().searchQuery(indexName, searchQuery));
+    public Flux<T> search(String indexName, String request) {
+        SearchQuery searchQuery = new SearchQuery(indexName, queryString(request));
+        return search(searchQuery);
     }
 
-    static SearchQuery queryString(String request) {
+    static AbstractFtsQuery queryString(String request) {
         List<String> ids = new LinkedList<>();
         for (String r : request.split(" ")) {
             if (r.indexOf("id:") == 0) {
@@ -111,14 +111,13 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends S
     }
 
     @SuppressWarnings("unchecked")
-    private List<T> extractResults(SearchResult result) {
-        return result.rows().stream()
-            .map(SearchRow::id)
+    private Flux<T> search(SearchQuery searchQuery) {
+        Observable<String> resultIdObservable = getCouchbaseOperations().getCouchbaseBucket().async().query(searchQuery)
+            .flatMap(AsyncSearchQueryResult::hits)
+            .map(SearchQueryRow::id);
+        return Flux.from(RxReactiveStreams.toPublisher(resultIdObservable))
             .map(id -> (ID) id)
-            .map(this::findById)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toList());
+            .flatMap(this::findById);
     }
 <%_ } _%>
 
@@ -132,9 +131,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends S
         if (getEntityInformation().getId(entity) != null) {
             return entity;
         }
-        CouchbaseDocument convertedDoc = new CouchbaseDocument();
-        couchbaseOperations.getConverter().write(entity, convertedDoc);
-        setId(entity, convertedDoc.getId());
+        // setId(entity, template.getGeneratedId(entity));
         return entity;
     }
 

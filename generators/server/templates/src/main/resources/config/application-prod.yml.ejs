@@ -170,10 +170,9 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
   couchbase:
-    bootstrap-hosts: localhost
-    bucket:
-      name: <%= baseName %>
-      password: password
+    connection-string: couchbase://localhost
+    username: Administrator
+    password: password
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
@@ -274,6 +273,11 @@ jhipster:
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
+<%_ if (databaseType === 'couchbase') { _%>
+  database:
+    couchbase:
+      bucket-name: <%= baseName %>
+<%_ } _%>
 <%_ if (!cacheProviderNo) { _%>
   cache: # Cache configuration
   <%_ if (cacheProviderHazelcast) { _%>

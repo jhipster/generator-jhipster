@@ -19,6 +19,7 @@
 package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.Authority;
+import org.springframework.stereotype.Repository;
 
 <%_ if (databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
@@ -29,6 +30,13 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
+import org.springframework.data.couchbase.repository.Query;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.ScanConsistency;
+import java.util.List;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
@@ -55,9 +63,17 @@ import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<%
  * Spring Data Couchbase repository for the {@link Authority} entity.
  */
 <%_ } _%>
-public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (reactive) { %>R2dbc<% } else { %>Jpa<% } %>Repository<% } else { %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><% } %><Authority, String> {
+@Repository
+public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (reactive) { %>R2dbc<% } else { %>Jpa<% } %>Repository<% } else { %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>CouchbaseRepository<% } %><% } %><Authority, String> {
 <%_ if (databaseTypeNeo4j) { _%>
     <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<%_ } _%>
     <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('Authority') %>> findAll();
 <%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Override
+    @Query("SELECT META(`<%= baseName %>`).id AS __id, META(`<%= baseName %>`).cas AS __cas FROM `<%= baseName %>` WHERE `_class` = \"<%= packageName %>.domain.Authority\"")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= asEntity('Authority') %>> findAll();
+<%_ } _%>
+
 }

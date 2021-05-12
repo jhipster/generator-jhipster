@@ -18,10 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (searchEngineCouchbase) { _%>
-import com.couchbase.client.core.time.Delay;
-import com.couchbase.client.java.util.retry.Retry;
-<%_ } _%>
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -37,10 +33,6 @@ import org.springframework.format.support.FormattingConversionService;
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.test.context.TestSecurityContextHolder;
-<%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-import rx.Observable;
-import rx.internal.util.UtilityFunctions;
 <%_ } _%>
 
 import java.io.IOException;
@@ -72,7 +64,7 @@ public final class TestUtil {
     private static final ObjectMapper mapper = createObjectMapper();
 <%_ if (searchEngineCouchbase) { _%>
     private static final int MAX_ATTEMPTS = 3;
-    private static final Delay DEFAULT_DELAY = Delay.exponential(TimeUnit.SECONDS);
+    // private static final Delay DEFAULT_DELAY = Delay.exponential(TimeUnit.SECONDS);
 <%_ } _%>
 
     private static ObjectMapper createObjectMapper() {
@@ -111,7 +103,7 @@ public final class TestUtil {
 <%_ if (databaseTypeCouchbase) { _%>
 
     /**
-     * Mock user authentication for Spring SpEL expression used in {@link <%= packageName %>.repository.N1qlCouchbaseRepository}.
+     * Mock user authentication
      */
     public static void mockAuthentication() {
         TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));
@@ -265,15 +257,15 @@ public final class TestUtil {
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
 
-    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
-        Retry.wrapForRetry(
-            Observable.fromCallable(iterableCallable)
-                .flatMapIterable(UtilityFunctions.identity())
-                .switchIfEmpty(Observable.error(new NoSuchElementException())),
-            MAX_ATTEMPTS, DEFAULT_DELAY)
-            .toBlocking()
-            .subscribe();
-    }
+//    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
+//        Retry.wrapForRetry(
+//            Observable.fromCallable(iterableCallable)
+//                .flatMapIterable(UtilityFunctions.identity())
+//                .switchIfEmpty(Observable.error(new NoSuchElementException())),
+//            MAX_ATTEMPTS, DEFAULT_DELAY)
+//            .toBlocking()
+//            .subscribe();
+//    }
 <%_ } _%>
 
     private TestUtil() {}

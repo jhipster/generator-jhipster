@@ -901,16 +901,52 @@ const serverFiles = {
       ],
     },
     {
+      condition: generator => generator.databaseType === COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/couchbase/CustomCouchbaseRepositoryFactory.java',
+          renameTo: generator => `${generator.javaDir}config/couchbase/CustomCouchbaseRepositoryFactory.java`,
+        },
+        {
+          file: 'package/config/couchbase/CustomCouchbaseRepositoryFactoryBean.java',
+          renameTo: generator => `${generator.javaDir}config/couchbase/CustomCouchbaseRepositoryFactoryBean.java`,
+        },
+        {
+          file: 'package/config/couchbase/CustomCouchbaseRepositoryQuery.java',
+          renameTo: generator => `${generator.javaDir}config/couchbase/CustomCouchbaseRepositoryQuery.java`,
+        },
+        {
+          file: 'package/config/couchbase/CustomN1qlQueryCreator.java',
+          renameTo: generator => `${generator.javaDir}config/couchbase/CustomN1qlQueryCreator.java`,
+        },
+        {
+          file: 'package/config/couchbase/CustomN1qlRepositoryQueryExecutor.java',
+          renameTo: generator => `${generator.javaDir}config/couchbase/CustomN1qlRepositoryQueryExecutor.java`,
+        },
+        {
+          file: 'package/config/couchbase/package-info.java',
+          renameTo: generator => `${generator.javaDir}config/couchbase/package-info.java`,
+        },
+      ],
+    },
+    {
       condition: generator => !generator.reactive && generator.databaseType === COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/N1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
+          file: 'package/repository/CustomCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CustomCouchbaseRepository.java`,
         },
+      ],
+    },
+    {
+      condition: generator => generator.reactive && generator.databaseType === COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
         {
-          file: 'package/repository/CustomN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomN1qlCouchbaseRepository.java`,
+          file: 'package/repository/CustomReactiveCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CustomReactiveCouchbaseRepository.java`,
         },
       ],
     },
@@ -929,22 +965,8 @@ const serverFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/CustomN1qlCouchbaseRepositoryTest.java',
-          renameTo: generator => `${generator.testDir}repository/CustomN1qlCouchbaseRepositoryTest.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive && generator.databaseType === COUCHBASE,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/ReactiveN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
-        },
-        {
-          file: 'package/repository/CustomReactiveN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`,
+          file: 'package/repository/CustomCouchbaseRepositoryTest.java',
+          renameTo: generator => `${generator.testDir}repository/CustomCouchbaseRepositoryTest.java`,
         },
       ],
     },
@@ -1220,8 +1242,8 @@ const serverFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/config/DatabaseConfigurationIT.java',
-          renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`,
+          file: 'package/CouchbaseTestContainerExtension.java',
+          renameTo: generator => `${generator.testDir}CouchbaseTestContainerExtension.java`,
         },
       ],
     },

@@ -19,6 +19,9 @@
 package <%= packageName %>;
 
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (databaseTypeCouchbase) { _%>
+import <%= packageName %>.CouchbaseTestContainerExtension;
+<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
@@ -31,7 +34,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
+<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -55,6 +58,8 @@ import java.lang.annotation.Target;
 <%_ if (cacheProviderRedis) { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+@ExtendWith(CouchbaseTestContainerExtension.class)
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
