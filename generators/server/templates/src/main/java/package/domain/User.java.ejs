@@ -212,8 +212,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("first_name")
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
     @Field("first_name")
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' && !reactive) { _%>
     @CqlName("firstname")
@@ -230,8 +233,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("last_name")
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
     @Field("last_name")
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' && !reactive) { _%>
     @CqlName("lastname")
@@ -266,8 +272,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("lang_key")
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
     @Field("lang_key")
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
     @Property("lang_key")
@@ -285,8 +294,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("image_url")
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
     @Field("image_url")
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
     @Property("image_url")
@@ -302,8 +314,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("activation_key")
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
     @Field("activation_key")
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
     @Property("activation_key")
@@ -321,8 +336,11 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Column("reset_key")
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
     @Field("reset_key")
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } _%>
     <%_ if (databaseType === 'neo4j') { _%>
     @Property("reset_key")
@@ -335,8 +353,10 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 
     <%_ if (databaseType === 'sql' || (databaseType === 'cassandra' && reactive)) { _%>
     @Column(<% if (!reactive) { %>name = <% } %>"reset_date")
-    <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ } else if (databaseType === 'mongodb') { _%>
     @Field("reset_date")
+    <%_} else if (databaseType === 'couchbase') { _%>
+    @Field
     <%_ } else if (databaseType === 'neo4j') { _%>
     @Property("reset_date")
     <%_ } _%>

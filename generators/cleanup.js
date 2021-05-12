@@ -483,16 +483,16 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.searchEngine === 'elasticsearch') {
       generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
     }
-  }
-  if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
-    generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
     if (generator.databaseType === 'couchbase') {
       generator.removeFile(`${javaDir}repository/N1qlCouchbaseRepository.java`);
       generator.removeFile(`${testDir}config/DatabaseConfigurationIT.java`);
       if (generator.searchEngine !== 'couchbase') {
-          generator.removeFile(`${javaDir}Frepository/CustomN1qlCouchbaseRepository.java`);
+        generator.removeFile(`${javaDir}Frepository/CustomN1qlCouchbaseRepository.java`);
       }
+    }
   }
+  if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
+    generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
   }
 }
 

@@ -248,9 +248,12 @@ public class <%= persistClass %> implements Serializable {
     @Column(name = "<%- fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
     <%_ } _%>
   <%_ } _%>
-  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+    <%_ if (databaseTypeMongodb) { _%>
     @Field("<%= fieldNameUnderscored %>")
-  <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseTypeCouchbase) { _%>
+    @Field
+    <%_ } _%>
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("<%=fieldNameUnderscored %>")
   <%_ } _%>
@@ -273,10 +276,13 @@ public class <%= persistClass %> implements Serializable {
       @NotNull
       <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+      <%_ if (databaseTypeMongodb) { _%>
     @Field("<%= fieldNameUnderscored %>_content_type")
-    <%_ } _%>
-    <%_ if (databaseTypeNeo4j) { _%>
+      <%_ } _%>
+      <%_ if (databaseTypeCouchbase) { _%>
+    @Field
+      <%_ } _%>
+      <%_ if (databaseTypeNeo4j) { _%>
     @Property("<%=fieldNameUnderscored %>_content_type")
     <%_ } _%>
     private String <%= fieldName %>ContentType;
@@ -322,13 +328,15 @@ public class <%= persistClass %> implements Serializable {
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
       <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-      <%_ } _%>
-    <%_ } else if (databaseTypeMongodb || databaseTypeCouchbase) {
-      if (databaseTypeMongodb && !otherEntityIsEmbedded) { _%>
+        <%_ }
+        } else if (databaseTypeMongodb) {
+            if (!otherEntityIsEmbedded) { _%>
     @DBRef
-      <%_ } _%>
+        <%_ } _%>
     @Field("<%= relationshipFieldName %>")
-      <%_ if (databaseTypeCouchbase && !otherEntityIsEmbedded) { _%>
+        <%_ } else if (databaseTypeCouchbase) { _%>
+    @Field
+        <%_ if (!otherEntityIsEmbedded) { _%>
     private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
@@ -356,9 +364,10 @@ public class <%= persistClass %> implements Serializable {
     <%_ } else if ((databaseTypeMongodb || databaseTypeCouchbase) && !otherEntityIsEmbedded) {
         if (databaseTypeMongodb) { _%>
     @DBRef
-      <%_ } _%>
     @Field("<%= relationshipFieldName %>")
-      <%_ if (databaseTypeCouchbase) { _%>
+    <%_ } _%>
+    <%_ if (databaseTypeCouchbase) { _%>
+    @Field
     private String <%= relationshipFieldName %>Id;
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
@@ -411,9 +420,10 @@ public class <%= persistClass %> implements Serializable {
     <%_ } else if ((databaseTypeMongodb || databaseTypeCouchbase) && !otherEntityIsEmbedded) { _%>
       <%_ if (databaseTypeMongodb) { _%>
     @DBRef
-      <%_ } _%>
     @Field("<%= relationshipFieldNamePlural %>")
-      <%_ if (databaseTypeCouchbase) { _%>
+        <%_ } _%>
+        <%_ if (databaseTypeCouchbase) { _%>
+    @Field
     private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
 
     @N1qlJoin(on = "lks.<%= relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
@@ -461,9 +471,9 @@ public class <%= persistClass %> implements Serializable {
     <%_ } else if ((databaseTypeMongodb || databaseTypeCouchbase) && !otherEntityIsEmbedded) { _%>
       <%_ if (databaseTypeMongodb) { _%>
     @DBRef
-      <%_ } _%>
     @Field("<%= relationshipFieldName %>")
-      <%_ if (databaseTypeCouchbase) { _%>
+        <%_ } if (databaseTypeCouchbase) { _%>
+    @Field
     private String <%= relationshipFieldName %>Id;
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
