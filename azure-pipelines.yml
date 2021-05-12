@@ -110,6 +110,9 @@ jobs:
           fi
         displayName: 'TOOLS: configuring OpenJDK'
       - script: |
+          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+        displayName: 'TOOLS: install compose-cli'
+      - script: |
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: 'TOOLS: install google-chrome-stable'
