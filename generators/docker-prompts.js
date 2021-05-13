@@ -313,7 +313,7 @@ async function askForAdminPassword() {
 
   const props = await this.prompt(prompts);
   this.adminPassword = props.adminPassword;
-  this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
+  this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
 }
 
 /**

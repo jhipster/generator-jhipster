@@ -655,7 +655,10 @@ function getRandomHex(len = 50) {
  * @param {string} value the value used to get base64 secret
  * @param {int} len the length to use for random hex, defaults to 50
  */
-function getBase64Secret(value, len = 50) {
+function getBase64Secret(value = '', len = 50) {
+  if (this && this.options && this.options.reproducibleTests) {
+    return `SECRET-${value}-${len}`;
+  }
   return Buffer.from(value || getRandomHex(len)).toString('base64');
 }
 
