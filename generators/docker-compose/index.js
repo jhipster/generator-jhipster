@@ -143,7 +143,8 @@ module.exports = class extends BaseDockerGenerator {
           const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
           if (appConfig.applicationType === GATEWAY || appConfig.applicationType === MONOLITH) {
             this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
-            const ports = yamlConfig.ports[0].split(':');
+            // Split ports by ":" and take last 2 elements to skip the hostname/IP if present
+            const ports = yamlConfig.ports[0].split(':').slice(-2);
             ports[0] = portIndex;
             yamlConfig.ports[0] = ports.join(':');
             portIndex++;
