@@ -44,10 +44,8 @@ public class GatewayResource {
 
     private final DiscoveryClient discoveryClient;
 
-<%_ if (reactive) { _%>
     @Value("${spring.application.name}")
     private String appName;
-<%_ } _%>
 
     public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
         this.routeLocator = routeLocator;
