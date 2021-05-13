@@ -23,7 +23,6 @@ const path = require('path');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -39,7 +38,6 @@ module.exports = (config, options, targetOptions) => {
       new ESLintPlugin({
         extensions: ['js', 'ts'],
       }),
-      new FriendlyErrorsWebpackPlugin(),
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
