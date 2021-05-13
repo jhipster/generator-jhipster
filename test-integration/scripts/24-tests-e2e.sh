@@ -7,12 +7,12 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/couchbase.yml ]; then
-    docker compose -f src/main/docker/couchbase.yml up -d
+    docker-compose -f src/main/docker/couchbase.yml up -d
     sleep 20
     docker ps -a
 fi
 if [ -a src/main/docker/cassandra.yml ]; then
-    docker compose -f src/main/docker/cassandra.yml up -d
+    docker-compose -f src/main/docker/cassandra.yml up -d
     sleep 30
     docker ps -a
 fi
