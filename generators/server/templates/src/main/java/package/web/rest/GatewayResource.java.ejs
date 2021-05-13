@@ -62,6 +62,17 @@ public class GatewayResource {
     @GetMapping("/routes")
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<RouteVM>> activeRoutes() {
+    <%_ if (!reactive) { _%>
+        List<Route> routes = routeLocator.getRoutes();
+        List<RouteVM> routeVMs = new ArrayList<>();
+        routes.forEach(route -> {
+            RouteVM routeVM = new RouteVM();
+            routeVM.setPath(route.getFullPath());
+            routeVM.setServiceId(route.getId());
+            routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
+            routeVMs.add(routeVM);
+        });
+    <%_ } else { _%>
         Flux<Route> routes = routeLocator.getRoutes();
         List<RouteVM> routeVMs = new ArrayList<>();
         routes.subscribe(route -> {
@@ -78,6 +89,7 @@ public class GatewayResource {
                 routeVMs.add(routeVM);
             }
         });
+    <%_ } _%>
         return ResponseEntity.ok(routeVMs);
     }
 }
