@@ -68,7 +68,7 @@ function checkImages() {
  */
 function generateJwtSecret() {
   if (this.jwtSecretKey === undefined) {
-    this.jwtSecretKey = getBase64Secret();
+    this.jwtSecretKey = getBase64Secret.call(this);
   }
 }
 
@@ -166,7 +166,7 @@ function loadFromYoRc() {
     setClusteredApps.call(this);
     if (!this.adminPassword) {
       this.adminPassword = 'admin'; // TODO find a better way to do this
-      this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
+      this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
     }
   }
 }

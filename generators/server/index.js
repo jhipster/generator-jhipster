@@ -522,7 +522,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
     // Generate JWT secret key if key does not already exist in config
     if ((config.authenticationType === 'jwt' || config.applicationType === 'microservice') && config.jwtSecretKey === undefined) {
-      config.jwtSecretKey = getBase64Secret(null, 64);
+      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === 'session' && !config.rememberMeKey) {

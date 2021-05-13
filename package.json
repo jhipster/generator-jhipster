@@ -58,7 +58,8 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
     "pretest": "npm run lint",
-    "test": "mocha --no-insight --forbid-only --parallel"
+    "test": "mocha --no-insight --forbid-only --parallel",
+    "update-snapshots": "mocha --no-insight --parallel --updateSnapshot"
   },
   "dependencies": {
     "aws-sdk": "2.903.0",
@@ -106,9 +107,11 @@
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-mocha": "8.1.0",
     "eslint-plugin-prettier": "3.4.0",
+    "expect": "26.6.2",
     "fs-extra": "10.0.0",
     "jsdoc": "3.6.6",
     "mocha": "8.4.0",
+    "mocha-expect-snapshot": "1.0.0",
     "proxyquire": "2.1.3",
     "sinon": "10.0.0",
     "sinon-chai": "3.6.0",
