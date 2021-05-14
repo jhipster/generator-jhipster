@@ -31,7 +31,7 @@ _%>
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
+            <button class="btn btn-info me-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
                 <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
             </button>
@@ -58,11 +58,11 @@ _%>
                 <div class="input-group w-100 mt-3">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
 
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                    <button class="input-group-text btn btn-info" (click)="search(currentSearch)">
                         <fa-icon icon="search"></fa-icon>
                     </button>
 
-                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                    <button class="input-group-text btn btn-danger" (click)="search('')" *ngIf="currentSearch">
                         <fa-icon icon="trash-alt"></fa-icon>
                     </button>
                 </div>
@@ -160,7 +160,7 @@ _%>
                     </td>
     <%_ } _%>
 <%_ } _%>
-                    <td class="text-right">
+                    <td class="text-end">
                         <div class="btn-group">
                             <button type="submit"
                                     [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
