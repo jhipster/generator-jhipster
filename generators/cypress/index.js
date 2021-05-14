@@ -143,11 +143,18 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _postWriting() {
     return {
+      loadPackageJson() {
+        // Load common client package.json into dependabotPackageJson
+        _.merge(
+          this.dependabotPackageJson,
+          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
+        );
+      },
+
       configure() {
-        if (!this.configOptions.dependabotPackageJson) return;
         this.packageJson.merge({
           devDependencies: {
-            'eslint-plugin-cypress': this.configOptions.dependabotPackageJson.devDependencies['eslint-plugin-cypress'],
+            'eslint-plugin-cypress': this.dependabotPackageJson.devDependencies['eslint-plugin-cypress'],
           },
         });
       },
@@ -155,8 +162,8 @@ module.exports = class extends BaseBlueprintGenerator {
       configureAudits() {
         this.packageJson.merge({
           devDependencies: {
-            lighthouse: this.configOptions.dependabotPackageJson.devDependencies.lighthouse,
-            'cypress-audit': this.configOptions.dependabotPackageJson.devDependencies['cypress-audit'],
+            lighthouse: this.dependabotPackageJson.devDependencies.lighthouse,
+            'cypress-audit': this.dependabotPackageJson.devDependencies['cypress-audit'],
           },
           scripts: {
             'cypress:audits': 'cypress open --config-file cypress-audits.json',
@@ -170,10 +177,10 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!this.cypressCoverage) return;
         this.packageJson.merge({
           devDependencies: {
-            '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
-            'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
-            'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
-            nyc: this.configOptions.dependabotPackageJson.devDependencies.nyc,
+            '@cypress/code-coverage': this.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
+            'babel-loader': this.dependabotPackageJson.devDependencies['babel-loader'],
+            'babel-plugin-istanbul': this.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
+            nyc: this.dependabotPackageJson.devDependencies.nyc,
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
