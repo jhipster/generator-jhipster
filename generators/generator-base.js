@@ -2466,6 +2466,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.entitySuffix = config.entitySuffix;
     dest.dtoSuffix = config.dtoSuffix;
     dest.skipUserManagement = config.skipUserManagement;
+    dest.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
 
     dest.skipServer = config.skipServer;
     dest.skipCommitHook = config.skipCommitHook;
