@@ -33,6 +33,8 @@ module.exports = class extends BaseBlueprintGenerator {
       return;
     }
 
+    this.loadRuntimeOptions();
+
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CYPRESS);
   }
 
