@@ -28,9 +28,9 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const fs = require('fs');
-const { lighthouse, pa11y, prepareAudit } = require('cypress-audit');
-const ReportGenerator = require('lighthouse/lighthouse-core/report/report-generator');
+import fs = require('fs');;
+import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
+import ReportGenerator = require('lighthouse/lighthouse-core/report/report-generator');
 <%_ if (authenticationTypeOauth2) { _%>
 import puppeteer = require('puppeteer');
 <%_ } _%>

@@ -152,22 +152,30 @@ module.exports = class extends BaseBlueprintGenerator {
         });
       },
 
-      configureCoverage() {
-        if (!this.cypressCoverage) return;
+      configureAudits() {
         this.packageJson.merge({
           devDependencies: {
             lighthouse: this.configOptions.dependabotPackageJson.devDependencies.lighthouse,
             'cypress-audit': this.configOptions.dependabotPackageJson.devDependencies['cypress-audit'],
-            '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
-            'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
-            'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
-            nyc: this.configOptions.dependabotPackageJson.devDependencies.nyc,
           },
           scripts: {
             'cypress:audits': 'cypress open --config-file cypress-audits.json',
             'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --headless --config-file cypress-audits.json',
             // eslint-disable-next-line no-template-curly-in-string
             'e2e:cypress:audits': 'cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.json',
+          },
+        });
+      },
+      configureCoverage() {
+        if (!this.cypressCoverage) return;
+        this.packageJson.merge({
+          devDependencies: {
+            '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
+            'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
+            'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
+            nyc: this.configOptions.dependabotPackageJson.devDependencies.nyc,
+          },
+          scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
             'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
             'e2e:cypress:coverage': 'npm run e2e:cypress',
