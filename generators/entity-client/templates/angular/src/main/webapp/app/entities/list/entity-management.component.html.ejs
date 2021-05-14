@@ -55,6 +55,7 @@ _%>
     <form name="searchForm" class="row row-cols-md-auto align-items-center">
         <div class="col-sm-12">
             <div class="input-group w-100 mt-3">
+                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search">Query</label>
                 <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
 
                 <button class="input-group-text btn btn-info" (click)="search(currentSearch)">
