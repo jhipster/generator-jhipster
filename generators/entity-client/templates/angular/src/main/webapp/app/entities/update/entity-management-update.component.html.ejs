@@ -47,7 +47,7 @@
     }
 _%>
 
-                <div class="form-group"<% if (field.autoGenerate) { %> [hidden]="editForm.get('<%= primaryKey.name %>')!.value == null"<% } %>>
+                <div class="row mb-3"<% if (field.autoGenerate) { %> [hidden]="editForm.get('<%= primaryKey.name %>')!.value == null"<% } %>>
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -174,7 +174,7 @@ _%>
 _%>
     <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide && relationship.otherEntityUser)) { _%>
 
-                <div class="form-group">
+                <div class="row mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipFieldName %>">
             <%_ if (!relationshipRequired) { _%>
@@ -187,7 +187,7 @@ _%>
                 </div>
     <%_ } else if (relationship.relationshipOneToOne && ownerSide) { _%>
 
-                <div class="form-group">
+                <div class="row mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>">
             <%_ if (!relationshipRequired) { _%>
@@ -200,7 +200,7 @@ _%>
                 </div>
     <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
 
-                <div class="form-group">
+                <div class="row mb-3">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
                         <option [ngValue]="getSelected<%= relationship.otherEntity.entityAngularName %>(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection; trackBy: track<%= relationship.otherEntity.entityAngularName %>By<%= relationship.otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
