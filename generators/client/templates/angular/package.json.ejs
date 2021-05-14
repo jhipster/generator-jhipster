@@ -87,8 +87,6 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
-    "cypress-audit": "<%= dependabotPackageJson.devDependencies['cypress-audit'] %>",
-    "lighthouse": "<%= dependabotPackageJson.devDependencies['lighthouse'] %>",
 <%_ if (authenticationType === 'oauth2') { _%>
     "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
 <%_ } _%>
@@ -163,10 +161,7 @@
     <%_ if (cypressTests) { _%>
     "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
     "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
-    "cypress": "cypress open",
-    "cypress:audits": "cypress open --config-file cypress-audits.json",
-    "e2e:cypress:audits:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless --config-file cypress-audits.json",
-    "e2e:cypress:audits": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.json",
+    "cypress": "cypress open"
     <%_ } _%>
     <%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
