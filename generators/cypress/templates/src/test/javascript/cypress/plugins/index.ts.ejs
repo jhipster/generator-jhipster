@@ -63,22 +63,17 @@ module.exports = (on, config) => {
           ignoreHTTPSErrors: true,
           headless: true });
         const page = await browser.newPage();
-  
         await page.goto(`${baseUrl}oauth2/authorization/oidc`, { // The app redirects to the login-page
           waitUntil: 'networkidle2' // Wait until login-page has been reached
         });
-  
         await page.waitForSelector('[name="username"]');
         await page.waitForSelector('[name="password"]');
         await page.waitForSelector('input[type="submit"]');
         await page.type('[name="username"]', username);
         await page.type('[name="password"]', password);
         await page.click('input[type="submit"]');
-  
         await page.waitForNavigation({ waitUntil: 'networkidle2' }); // Wait until redirected back to the app
-  
         const authCookies = await page.cookies();
-  
         browser.close();
         return authCookies;
       })();
@@ -93,7 +88,7 @@ module.exports = (on, config) => {
         return true;
       })
     } 
-    <%_ } _%>
+<%_ } _%>
   });
 <%_ if (cypressCoverage) { _%>
     require('@cypress/code-coverage/task')(on, config);
