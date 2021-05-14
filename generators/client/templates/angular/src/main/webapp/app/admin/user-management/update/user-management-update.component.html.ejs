@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" <%= jhiPrefix %>Translate="userManagement.login">Login</label>
+          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.login">Login</label>
           <input type="text" class="form-control" name="login" formControlName="login" />
 
           <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
@@ -62,7 +62,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" <%= jhiPrefix %>Translate="userManagement.firstName">First Name</label>
+          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.firstName">First Name</label>
           <input type="text" class="form-control" name="firstName" formControlName="firstName" />
 
           <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
@@ -94,7 +94,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" <%= jhiPrefix %>Translate="userManagement.email">Email</label>
+          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.email">Email</label>
           <input type="email" class="form-control" name="email" formControlName="email" />
 
           <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">

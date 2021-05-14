@@ -31,7 +31,7 @@
 
       <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="account" novalidate>
         <div class="form-group">
-          <label class="form-control-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname">First Name</label>
+          <label class="form-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname">First Name</label>
           <input
             type="text"
             class="form-control"
@@ -75,7 +75,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="lastName" <%= jhiPrefix %>Translate="settings.form.lastname">Last Name</label>
+          <label class="form-label" for="lastName" <%= jhiPrefix %>Translate="settings.form.lastname">Last Name</label>
           <input
             type="text"
             class="form-control"
@@ -119,7 +119,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label">Email</label>
+          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label">Email</label>
           <input
             type="email"
             class="form-control"
