@@ -54,7 +54,7 @@ module.exports = (on, config) => {
       fs.writeFileSync('<%= BUILD_DIR %>cypress/lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html')); 
     }),
     pa11y: pa11y(),
-    <%_ if (authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     login({ baseUrl, username, password }) {
       return (async () => {
         const browser = await puppeteer.launch({
