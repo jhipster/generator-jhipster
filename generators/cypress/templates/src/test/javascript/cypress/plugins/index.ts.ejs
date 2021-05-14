@@ -62,7 +62,6 @@ module.exports = (on, config) => {
           devtools: false,
           ignoreHTTPSErrors: true,
           headless: true });
-  
         const page = await browser.newPage();
   
         await page.goto(`${baseUrl}oauth2/authorization/oidc`, { // The app redirects to the login-page
