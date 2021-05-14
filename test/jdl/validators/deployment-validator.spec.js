@@ -18,6 +18,8 @@
  */
 
 const { expect } = require('chai');
+const { Options } = require('../../../jdl/jhipster/deployment-options');
+const { MICROSERVICE } = require('../../../jdl/jhipster/application-types');
 const DeploymentValidator = require('../../../jdl/validators/deployment-validator');
 
 describe('DeploymentValidator', () => {
@@ -34,22 +36,77 @@ describe('DeploymentValidator', () => {
       });
     });
     context('when a deployment is passed', () => {
-      context('when not missing any attribute', () => {
-        it('should not fail', () => {
-          expect(() => {
-            validator.validate({
-              deploymentType: 'kubernetes',
-              appsFolders: ['invoices'],
-              dockerRepositoryName: 'test',
-            });
-          }).not.to.throw();
+      context('when having a docker-compose-related deployment', () => {
+        context('without appFolders', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.dockerCompose,
+                directoryPath: '../',
+                gatewayType: Options.gatewayType.springCloudGateway,
+                monitoring: 'no',
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              })
+            ).to.throw(/^The deployment attribute appsFolders was not found.$/);
+          });
         });
-      });
-      context('when missing attributes', () => {
-        it('should fail', () => {
-          expect(() => validator.validate({})).to.throw(
-            /^The deployment attributes deploymentType, appsFolders, dockerRepositoryName were not found.$/
-          );
+        context('without directoryPath', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.dockerCompose,
+                appsFolders: ['beers', 'burgers'],
+                gatewayType: Options.gatewayType.springCloudGateway,
+                monitoring: 'no',
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              })
+            ).to.throw(/^The deployment attribute directoryPath was not found.$/);
+          });
+        });
+        context('without monitoring', () => {
+          it('should not fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.dockerCompose,
+                appsFolders: ['beers', 'burgers'],
+                directoryPath: '../',
+                gatewayType: Options.gatewayType.springCloudGateway,
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              })
+            ).not.to.throw();
+          });
+        });
+        context('with microservices', () => {
+          context('without gatewayType', () => {
+            it('should fail', () => {
+              expect(() =>
+                validator.validate(
+                  {
+                    deploymentType: Options.deploymentType.dockerCompose,
+                    appsFolders: ['beers', 'burgers'],
+                    directoryPath: '../',
+                    monitoring: 'no',
+                    serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                  },
+                  {
+                    applicationType: MICROSERVICE,
+                  }
+                )
+              ).to.throw(/^A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.$/);
+            });
+          });
+        });
+        context('without serviceDiscoveryType', () => {
+          it('should not fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.dockerCompose,
+                appsFolders: ['beers', 'burgers'],
+                directoryPath: '../',
+                monitoring: 'no',
+              })
+            ).not.to.throw();
+          });
         });
       });
     });

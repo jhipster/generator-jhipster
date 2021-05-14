@@ -65,7 +65,7 @@ const dockerComposeRelatedOptions = {
 
 const baseOptions = {
   appsFolders: [],
-  clusteredDbApps: {},
+  clusteredDbApps: [],
   directoryPath: '../',
   monitoring: {
     no: 'no',
@@ -97,7 +97,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
     return {
       appsFolders: new Set(),
       directoryPath: Options.directoryPath,
-      clusteredDbApps: new Map(),
+      clusteredDbApps: new Set(),
       serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
       dockerRepositoryName: Options.dockerRepositoryName,
       dockerPushCommand: Options.dockerPushCommand,
@@ -115,7 +115,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
       appsFolders: new Set(),
       directoryPath: Options.directoryPath,
       gatewayType: Options.gatewayType.springCloudGateway,
-      clusteredDbApps: new Map(),
+      clusteredDbApps: new Set(),
       monitoring: Options.monitoring.no,
       serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
     };
@@ -124,7 +124,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
   return {
     appsFolders: new Set(),
     directoryPath: Options.directoryPath,
-    clusteredDbApps: new Map(),
+    clusteredDbApps: new Set(),
     serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
     monitoring: Options.monitoring.no,
     dockerRepositoryName: Options.dockerRepositoryName,

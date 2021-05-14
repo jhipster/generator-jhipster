@@ -51,7 +51,7 @@ describe('DeploymentOptions', () => {
         it('should return docker deployment config', () => {
           expect(Options.defaults()).to.eql({
             appsFolders: new Set(),
-            clusteredDbApps: new Map(),
+            clusteredDbApps: new Set(),
             directoryPath: '../',
             gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
@@ -63,7 +63,7 @@ describe('DeploymentOptions', () => {
         it('should return kubernetes deployment config', () => {
           expect(Options.defaults('kubernetes')).to.eql({
             appsFolders: new Set(),
-            clusteredDbApps: new Map(),
+            clusteredDbApps: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
@@ -81,7 +81,7 @@ describe('DeploymentOptions', () => {
         it('should return openshift deployment config', () => {
           expect(Options.defaults('openshift')).to.eql({
             appsFolders: new Set(),
-            clusteredDbApps: new Map(),
+            clusteredDbApps: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',

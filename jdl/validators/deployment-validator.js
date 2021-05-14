@@ -17,16 +17,25 @@
  * limitations under the License.
  */
 
+const { MICROSERVICE } = require('../jhipster/application-types');
+const { Options } = require('../jhipster/deployment-options');
 const Validator = require('./validator');
 
-class DeploymentValidator extends Validator {
+module.exports = class DeploymentValidator extends Validator {
   constructor() {
-    super('deployment', ['deploymentType', 'appsFolders', 'dockerRepositoryName']);
+    super('deployment', ['deploymentType', 'appsFolders', 'directoryPath']);
   }
 
-  validate(jdlDeployment) {
+  validate(jdlDeployment, options = {}) {
     super.validate(jdlDeployment);
+    if (jdlDeployment.deploymentType === Options.deploymentType.dockerCompose) {
+      validateDockerComposeRelatedDeployment(jdlDeployment, options);
+    }
+  }
+};
+
+function validateDockerComposeRelatedDeployment(jdlDeployment, options = {}) {
+  if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === MICROSERVICE) {
+    throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
   }
 }
-
-module.exports = DeploymentValidator;
