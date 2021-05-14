@@ -85,7 +85,7 @@ _%>
         <%_ if (field.fieldTypeLocalDate) { _%>
                     <div class="input-group">
                         <input id="field_<%= fieldName %>" data-cy="<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker #<%= fieldName %>Dp="ngbDatepicker" formControlName="<%= fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
-                        <span class="input-group-append">
+                        <span class="input-group-text">
                             <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
                         </span>
                     </div>

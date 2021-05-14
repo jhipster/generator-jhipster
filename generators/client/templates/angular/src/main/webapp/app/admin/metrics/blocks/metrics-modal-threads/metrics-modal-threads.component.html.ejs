@@ -19,34 +19,34 @@
 <div class="modal-header">
   <h4 class="modal-title" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 
-  <button type="button" class="close" (click)="dismiss()">&times;</button>
+  <button type="button" class="btn-close" (click)="dismiss()">&times;</button>
 </div>
 
 <div class="modal-body">
   <div class="mb-3">
-    <span class="badge badge-primary hand" (click)="threadStateFilter = undefined">
+    <span class="badge bg-primary hand" (click)="threadStateFilter = undefined">
       <fa-icon *ngIf="threadStateFilter === undefined" icon="check"></fa-icon>
-      All&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpAll }}</span>
+      All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
     </span>
 
-    <span class="badge badge-success hand" (click)="threadStateFilter = ThreadState.Runnable">
+    <span class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable">
       <fa-icon *ngIf="threadStateFilter === ThreadState.Runnable" icon="check"></fa-icon>
-      Runnable&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpRunnable }}</span>
+      Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
     </span>
 
-    <span class="badge badge-info hand" (click)="threadStateFilter = ThreadState.Waiting">
+    <span class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting">
       <fa-icon *ngIf="threadStateFilter === ThreadState.Waiting" icon="check"></fa-icon>
-      Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpWaiting }}</span>
+      Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
     </span>
 
-    <span class="badge badge-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
+    <span class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
       <fa-icon *ngIf="threadStateFilter === ThreadState.TimedWaiting" icon="check"></fa-icon>
-      Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpTimedWaiting }}</span>
+      Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
     </span>
 
-    <span class="badge badge-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
+    <span class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
       <fa-icon *ngIf="threadStateFilter === ThreadState.Blocked" icon="check"></fa-icon>
-      Blocked&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpBlocked }}</span>
+      Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
     </span>
   </div>
 
@@ -96,5 +96,5 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary float-left" data-dismiss="modal" (click)="dismiss()">Done</button>
+  <button type="button" class="btn btn-secondary float-start" data-dismiss="modal" (click)="dismiss()">Done</button>
 </div>

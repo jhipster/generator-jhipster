@@ -27,8 +27,8 @@
         <dt><span <%= jhiPrefix %>Translate="userManagement.login">Login</span></dt>
         <dd>
           <span>{{ user.login }}</span>
-          <span *ngIf="user.activated" class="badge badge-success" <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
-          <span *ngIf="!user.activated" class="badge badge-danger" <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</span>
+          <span *ngIf="user.activated" class="badge bg-success" <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
+          <span *ngIf="!user.activated" class="badge bg-danger" <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</span>
         </dd>
 
         <dt><span <%= jhiPrefix %>Translate="userManagement.firstName">First Name</span></dt>
@@ -61,7 +61,7 @@
         <dd>
           <ul class="list-unstyled">
             <li *ngFor="let authority of user.authorities">
-              <span class="badge badge-info">{{ authority }}</span>
+              <span class="badge bg-info">{{ authority }}</span>
             </li>
           </ul>
         </dd>
