@@ -289,7 +289,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
           </Button>
 <%_ if (!readOnly) { _%>
@@ -446,7 +446,7 @@ _%>
                       </td>
   <%_ } _%>
 <%_ } _%>
-                      <td className="text-right">
+                      <td className="text-end">
                         <div className="btn-group flex-btn-group-container">
                           <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="info" size="sm" data-cy="entityDetailsButton">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
