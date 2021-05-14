@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 <nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemePrimary) { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+  <div class="container-fluid">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img"></span>
     <span <%= jhiPrefix %>Translate="global.title" class="navbar-title"><%= capitalizedBaseName %></span>
@@ -238,5 +239,6 @@
         </ul>
       </li>
     </ul>
+  </div>
   </div>
 </nav>
