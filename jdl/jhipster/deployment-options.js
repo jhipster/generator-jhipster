@@ -46,33 +46,7 @@ const kubernetesRelatedOptions = {
   },
 };
 
-const Options = {
-  deploymentType: {
-    dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
-    kubernetes: DeploymentTypes.KUBERNETES,
-    openshift: DeploymentTypes.OPENSHIFT,
-  },
-  gatewayType: {
-    springCloudGateway: 'SpringCloudGateway',
-  },
-  monitoring: {
-    no: 'no',
-    prometheus: 'prometheus',
-  },
-  directoryPath: '../',
-  appsFolders: [],
-  clusteredDbApps: {},
-  // adminPassword: 'admin',
-  serviceDiscoveryType: {
-    eureka: 'eureka',
-    consul: 'consul',
-    no: 'no',
-  },
-  dockerRepositoryName: '',
-  dockerPushCommand: 'docker push',
-  // Kubernetes specific
-  ...kubernetesRelatedOptions,
-  // openshift specific
+const openshiftRelatedOptions = {
   openshiftNamespace: 'default',
   registryReplicas: {
     two: 2,
@@ -81,6 +55,41 @@ const Options = {
     ephemeral: 'ephemeral',
     persistent: 'persistent',
   },
+};
+
+const dockerComposeRelatedOptions = {
+  gatewayType: {
+    springCloudGateway: 'SpringCloudGateway',
+  },
+};
+
+const baseOptions = {
+  appsFolders: [],
+  clusteredDbApps: {},
+  directoryPath: '../',
+  monitoring: {
+    no: 'no',
+    prometheus: 'prometheus',
+  },
+  serviceDiscoveryType: {
+    eureka: 'eureka',
+    consul: 'consul',
+    no: 'no',
+  },
+};
+
+const Options = {
+  ...baseOptions,
+  deploymentType: {
+    dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
+    kubernetes: DeploymentTypes.KUBERNETES,
+    openshift: DeploymentTypes.OPENSHIFT,
+  },
+  dockerPushCommand: 'docker push',
+  dockerRepositoryName: '',
+  ...dockerComposeRelatedOptions,
+  ...kubernetesRelatedOptions,
+  ...openshiftRelatedOptions,
 };
 
 Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
