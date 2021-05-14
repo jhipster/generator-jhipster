@@ -34,7 +34,7 @@ const cypressFiles = {
   common: [
     {
       condition: generator => generator.cypressTests,
-      templates: ['cypress.json'],
+      templates: ['cypress.json', 'cypress-audits.json'],
     },
   ],
   clientTestFw: [
@@ -42,16 +42,17 @@ const cypressFiles = {
       condition: generator => generator.cypressTests,
       path: `${TEST_SRC_DIR}/cypress/`,
       templates: [
-        'cypress/fixtures/integration-test.png',
-        'cypress/plugins/index.ts',
-        'cypress/integration/administration/administration.spec.ts',
-        'cypress/integration/audits.spec.ts',
-        'cypress/support/commands.ts',
-        'cypress/support/navbar.ts',
-        'cypress/support/index.ts',
-        'cypress/support/entity.ts',
-        'cypress/support/management.ts',
-        'cypress/tsconfig.json',
+        '.eslintrc.json',
+        'fixtures/integration-test.png',
+        'plugins/index.ts',
+        'integration/administration/administration.spec.ts',
+        'integration/lighthouse.audits.ts',
+        'support/commands.ts',
+        'support/navbar.ts',
+        'support/index.ts',
+        'support/entity.ts',
+        'support/management.ts',
+        'tsconfig.json',
       ],
     },
     {
