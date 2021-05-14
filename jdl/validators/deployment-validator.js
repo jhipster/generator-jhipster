@@ -28,8 +28,19 @@ module.exports = class DeploymentValidator extends Validator {
 
   validate(jdlDeployment, options = {}) {
     super.validate(jdlDeployment);
-    if (jdlDeployment.deploymentType === Options.deploymentType.dockerCompose) {
-      validateDockerComposeRelatedDeployment(jdlDeployment, options);
+
+    switch (jdlDeployment.deploymentType) {
+      case Options.deploymentType.dockerCompose:
+        validateDockerComposeRelatedDeployment(jdlDeployment, options);
+        break;
+      case Options.deploymentType.kubernetes:
+        validateKubernetesRelatedDeployment(jdlDeployment);
+        break;
+      case Options.deploymentType.openshift:
+        // TODO
+        break;
+      default:
+        throw new Error(`The deployment type ${jdlDeployment.deploymentType} isn't supported.`);
     }
   }
 };
@@ -37,5 +48,19 @@ module.exports = class DeploymentValidator extends Validator {
 function validateDockerComposeRelatedDeployment(jdlDeployment, options = {}) {
   if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === MICROSERVICE) {
     throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
+  }
+}
+
+function validateKubernetesRelatedDeployment(jdlDeployment) {
+  if (!jdlDeployment.kubernetesServiceType) {
+    throw new Error('A kubernetes service type must be provided when dealing with kubernetes-related deployments.');
+  }
+  if (jdlDeployment.istio && !jdlDeployment.ingressDomain) {
+    throw new Error(
+      'An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.'
+    );
+  }
+  if (jdlDeployment.kubernetesServiceType === Options.kubernetesServiceType.ingress && !jdlDeployment.ingressType) {
+    throw new Error('An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.');
   }
 }

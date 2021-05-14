@@ -109,6 +109,108 @@ describe('DeploymentValidator', () => {
           });
         });
       });
+      context('when having a kubernetes-related deployment', () => {
+        context('without appFolders', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.kubernetes,
+                directoryPath: '../',
+                kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                monitoring: 'no',
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              })
+            ).to.throw(/^The deployment attribute appsFolders was not found.$/);
+          });
+        });
+        context('without directoryPath', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.kubernetes,
+                appsFolders: ['beers', 'burgers'],
+                kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                monitoring: 'no',
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              })
+            ).to.throw(/^The deployment attribute directoryPath was not found.$/);
+          });
+        });
+        context(
+          'without monitoring, dockerPushCommand, dockerRepositoryName, kubernetesNamespace, kubernetesUseDynamicStorage, kubernetesStorageClassName or istio and an ingressDomain',
+          () => {
+            it('should not fail', () => {
+              expect(() =>
+                validator.validate({
+                  deploymentType: Options.deploymentType.kubernetes,
+                  appsFolders: ['beers', 'burgers'],
+                  directoryPath: '../',
+                  kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                  serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                })
+              ).not.to.throw();
+            });
+          }
+        );
+        context('without kubernetesServiceType', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.kubernetes,
+                appsFolders: ['beers', 'burgers'],
+                directoryPath: '../',
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              })
+            ).to.throw(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
+          });
+        });
+        context('with istio', () => {
+          context('without an ingressDomain', () => {
+            it('should fail', () => {
+              expect(() =>
+                validator.validate({
+                  deploymentType: Options.deploymentType.kubernetes,
+                  appsFolders: ['beers', 'burgers'],
+                  directoryPath: '../',
+                  serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                  kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                  istio: true,
+                })
+              ).to.throw(
+                /^An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.$/
+              );
+            });
+          });
+        });
+        context('with the kubernetesServiceType being Ingress', () => {
+          context('without an ingressType', () => {
+            it('should fail', () => {
+              expect(() =>
+                validator.validate({
+                  deploymentType: Options.deploymentType.kubernetes,
+                  appsFolders: ['beers', 'burgers'],
+                  directoryPath: '../',
+                  kubernetesServiceType: Options.kubernetesServiceType.ingress,
+                  serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                })
+              ).to.throw(
+                /^An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.$/
+              );
+            });
+          });
+        });
+      });
+    });
+    context('when passing an unknown deployment type', () => {
+      it('should fail', () => {
+        expect(() =>
+          validator.validate({
+            deploymentType: 'whatever',
+            appsFolders: ['beers', 'burgers'],
+            directoryPath: '../',
+          })
+        ).to.throw(/^The deployment type whatever isn't supported.$/);
+      });
     });
   });
 });
