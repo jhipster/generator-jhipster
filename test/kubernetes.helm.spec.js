@@ -2,6 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const expect = require('expect');
 
 const expectedFiles = {
   csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
@@ -73,13 +74,14 @@ const expectedFiles = {
 
 describe('JHipster Kubernetes Helm Sub Generator', () => {
   describe('only gateway', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -92,7 +94,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -108,13 +113,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('gateway and mysql microservice', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -126,7 +132,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -145,13 +154,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('mysql microservice with custom namespace', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -163,7 +173,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -182,13 +195,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('gateway and ingress', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -202,7 +216,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           ingressDomain: 'example.com',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -224,13 +241,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('MySQL and PostgreSQL microservices without gateway', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -242,7 +260,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -266,13 +287,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -284,7 +306,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -316,13 +341,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('monolith application', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -334,7 +360,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
@@ -349,13 +378,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('Kafka application', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -367,7 +397,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.csvcfiles);
@@ -381,13 +414,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -398,7 +432,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           monitoring: 'prometheus',
           kubernetesServiceType: 'LoadBalancer',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -421,13 +458,14 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
   });
 
   describe('gateway with istio', () => {
-    beforeEach(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes-helm'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes-helm'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -439,7 +477,10 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           clusteredDbApps: [],
           istio: true,
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);

@@ -2,6 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const expect = require('expect');
 
 const expectedFiles = {
   eurekaregistry: ['./registry-knative/jhipster-registry.yml', './registry-knative/application-configmap.yml'],
@@ -99,13 +100,14 @@ const helmExpectedFiles = {
 describe('JHipster Knative Sub Generator', () => {
   describe('Using K8s generator type', () => {
     describe('only gateway', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -119,7 +121,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -135,13 +140,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway and mysql microservice', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -154,7 +160,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -171,13 +180,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -190,7 +200,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -207,13 +220,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway and ingress', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -227,7 +241,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -241,13 +258,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -260,7 +278,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -280,13 +301,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -299,7 +321,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -328,13 +353,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -346,7 +372,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -366,13 +395,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway with istio routing files', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -385,7 +415,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'k8s',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(expectedFiles.eurekaregistry);
@@ -404,13 +437,14 @@ describe('JHipster Knative Sub Generator', () => {
 
   describe('Using Helm generator type', () => {
     describe('only gateway', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -424,7 +458,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files and content', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -440,13 +477,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway and mysql microservice', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -459,7 +497,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -478,13 +519,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -497,7 +539,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -516,13 +561,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway and ingress', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -536,7 +582,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -557,13 +606,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -576,7 +626,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -600,13 +653,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-      beforeEach(async () => {
-        await helpers
+      let runResult;
+      before(async () => {
+        runResult = await helpers
           .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -621,6 +675,9 @@ describe('JHipster Knative Sub Generator', () => {
             istio: true,
           })
           .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -652,13 +709,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -670,7 +728,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
@@ -693,13 +754,14 @@ describe('JHipster Knative Sub Generator', () => {
     });
 
     describe('gateway with istio routing files', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/kubernetes-knative'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/kubernetes-knative'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/compose/'), dir);
           })
-          .withOptions({ skipChecks: true })
+          .withOptions({ skipChecks: true, reproducibleTests: true })
           .withPrompts({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -712,7 +774,10 @@ describe('JHipster Knative Sub Generator', () => {
             generatorType: 'helm',
             istio: true,
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected registry files', () => {
         assert.file(helmExpectedFiles.eurekaregistry);
