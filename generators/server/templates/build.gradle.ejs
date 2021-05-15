@@ -55,7 +55,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15"
+assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15" || "16"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -335,6 +335,9 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
+        <%_ if (reactive) { _%>
+    implementation "commons-beanutils:commons-beanutils:1.9.4"
+        <%_ } _%>
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase' || applicationType === 'gateway') { _%>
@@ -473,7 +476,7 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
-    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
+    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
     implementation "org.springframework.security:spring-security-data"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-web"

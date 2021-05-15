@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Värskenda nimekirja",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Lisa uus <%= entityClassHumanized %>",
                 "createOrEditLabel": "Lisa või muuda <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Otsi <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "Ei leitud ühtegi <%= entityClassPluralHumanized %>"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Uus <%= entityClassHumanized %> on loodud identifikaatoriga {{ param }}",
             "updated": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on muudetud",
             "deleted": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on kustutatud",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Kas olete kindel, et soovite kustutada <%= entityClassHumanized %> {{ id }}?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

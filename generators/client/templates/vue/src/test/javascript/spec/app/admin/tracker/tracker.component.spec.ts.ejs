@@ -34,9 +34,9 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
     trackerServiceStub.receive = sinon.stub().callsFake(() => new Observable(observer => listenerObserver = observer));
     wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerClass>(<%=jhiPrefixCapitalized%>Tracker, {
       store,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         trackerService: () => trackerServiceStub

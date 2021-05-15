@@ -19,13 +19,13 @@
             accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
             password="user").</span>
         </div>
-        <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
         <div class="alert alert-warning" v-if="!authenticated">
           <span v-text="$t('global.messages.info.register.noaccount')">You don't have an account yet?</span>&nbsp;
           <router-link class="alert-link" to="/register" v-text="$t('global.messages.info.register.link')">Register a
             new account</router-link>
         </div>
-        <%_ } _%>
+<%_ } _%>
       </div>
 
       <p v-text="$t('home.question')">

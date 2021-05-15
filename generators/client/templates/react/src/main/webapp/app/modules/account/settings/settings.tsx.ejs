@@ -103,7 +103,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
               value={props.account.email}
               data-cy="email"
             />
-            <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             {/* Language key */}
             <AvField
               type="select"
@@ -120,7 +120,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
                 </option>
               ))}
             </AvField>
-            <%_ } _%>
+<%_ } _%>
             <Button color="primary" type="submit" data-cy="submit">
               <Translate contentKey="settings.form.button">Save</Translate>
             </Button>

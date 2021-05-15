@@ -1,7 +1,14 @@
 {
   "devDependencies": {
+    "@cypress/code-coverage": "3.9.5",
+    "babel-loader": "8.2.2",
+    "babel-plugin-istanbul": "6.0.0",
     "cypress": "6.6.0",
-    "puppeteer": "8.0.0"
+    "eslint-plugin-cypress": "2.11.3",
+    "cypress-audit": "0.3.0",
+    "lighthouse": "7.3.0",
+    "nyc": "15.1.0",
+    "puppeteer": "9.1.1"
   },
   "dependencies": {
     "dayjs": "1.10.4"

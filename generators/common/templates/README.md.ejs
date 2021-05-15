@@ -26,12 +26,12 @@ let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
-<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
 
 This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 <%_ } _%>
-<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
-This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryType === 'eureka') { %>the JHipster-Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryType === 'eureka') { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryType === 'consul') { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
+This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
 <%_ } _%>
 
 ## Development
@@ -40,7 +40,7 @@ This application is configured for Service Discovery and Configuration with <% i
 To start your application in the dev profile, run:
 
 ```
-<% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
+<% if (buildToolMaven) { %>./mvnw<% } %><% if (buildToolGradle) { %>./gradlew<% } %>
 ```
 <%_ } _%>
 
@@ -57,17 +57,17 @@ You will only need to run this command when dependencies change in [package.json
 <%= clientPackageManager %> install
 ```
 
-We use <%= clientPackageManager %> scripts and <% if (clientFramework === ANGULAR) { %>[Angular CLI][] with <% } %>[Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and <% if (clientFrameworkAngular) { %>[Angular CLI][] with <% } %>[Webpack][] as our build system.
 
-<%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
+<%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 
 ```
-docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider %>.yml up -d
+docker-compose -f src/main/docker/<%= cacheProviderHazelcast?'hazelcast-management-center':cacheProvider %>.yml up -d
 ```
 
-<%_ if (cacheProvider === 'redis') { _%>
+<%_ if (cacheProviderRedis) { _%>
 
 The cache can also be turned off by adding to the application yaml:
 ```
@@ -86,29 +86,21 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
 ```
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 ./mvnw
 <%_ } _%>
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle) { _%>
 ./gradlew -x webapp
 <%_ } _%>
 <%= clientPackageManager %> start
 ```
-<%_ if (clientFramework === ANGULAR) { _%>
-
-If you want to use [HMR](https://webpack.js.org/guides/hot-module-replacement) for instant page updates and data + scroll position preservation on file changes then instead of `<%= clientPackageManager %> start` run
-
-```
-<%= clientPackageManager %> run start-hmr
-```
-<%_ } _%>
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
 The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 
 ## OAuth 2.0 / OpenID Connect
 
@@ -194,7 +186,7 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
-<%_ if (clientFramework !== ANGULAR) { _%>
+<%_ if (!clientFrameworkAngular) { _%>
 The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>index.html`:
 
 ```html
@@ -209,7 +201,7 @@ The service worker initialization code is commented out by default. To enable it
 
 Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
 <%_ } _%>
-<%_ if (clientFramework === ANGULAR) { _%>
+<%_ if (clientFrameworkAngular) { _%>
 The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts`:
 
 ```typescript
@@ -232,7 +224,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 ```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-<%_ if (clientFramework === ANGULAR) { _%>
+<%_ if (clientFrameworkAngular) { _%>
 Edit [<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts](<%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts) file:
 
 ```
@@ -251,7 +243,7 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework === ANGULAR && applicationType !== 'microservice') { _%>
+<%_ if (clientFrameworkAngular && !applicationTypeMicroservice) { _%>
 ### Using Angular CLI
 
 You can also use [Angular CLI][] to generate some custom client code.
@@ -275,12 +267,12 @@ update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
 ### Doing API-First development using openapi-generator
 
 [OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildToolMaven) { _%>
 ```bash
 ./mvnw generate-sources
 ```
     <%_ } _%>
-    <%_ if (buildTool === 'gradle') { _%>
+    <%_ if (buildToolGradle) { _%>
 ```bash
 ./gradlew openApiGenerate
 ```
@@ -299,10 +291,10 @@ Refer to [Doing API-First development][] for more details.
 To build the final jar and optimize the <%= baseName %> application for production, run:
 
 ```
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 ./mvnw -Pprod clean verify
 <%_ } _%>
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle) { _%>
 ./gradlew -Pprod clean bootJar
 <%_ } _%>
 ```
@@ -313,10 +305,10 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 java -jar target/*.jar
 <%_ } _%>
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle) { _%>
 java -jar build/libs/*.jar
 <%_ } _%>
 ```
@@ -330,10 +322,10 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 ./mvnw -Pprod,war clean verify
 <%_ } _%>
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle) { _%>
 ./gradlew -Pprod -Pwar clean bootWar
 <%_ } _%>
 ```
@@ -343,7 +335,7 @@ To package your application as a war in order to deploy it to an application ser
 To launch your application's tests, run:
 
 ```
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 ./mvnw verify
 <%_ } else { _%>
 ./gradlew test integrationTest jacocoTestReport
@@ -361,7 +353,17 @@ Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](
 
 <%_ if (protractorTests) { _%>
 UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
+and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
+<%_ } _%>
+<%_ if (cypressTests) { _%>
+UI end-to-end tests are powered by [Cypress][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>cypress](<%= CLIENT_TEST_SRC_DIR %>cypress)
+and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
+
+#### Lighthouse audits
+
+You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `<%= clientPackageManager %> run e2e:cypress:audits`. 
+You should only run the audits when your application is packaged with the production profile.
+The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
 <%_ } _%>
 <%_ } _%>
 
@@ -374,6 +376,28 @@ To use those tests, you must install Gatling from [https://gatling.io/](https://
 <%_ } _%>
 
 For more information, refer to the [Running tests page][].
+
+<%_ if (cypressCoverage) { _%>
+
+### E2E Webapp Code Coverage
+
+When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
+
+Build your Angular application with instrumented code:
+
+    npm run webapp:instrumenter
+
+Start your backend without compiling frontend:
+
+    npm run backend:start
+
+Start your Cypress end to end testing:
+
+    npm run e2e:cypress:coverage
+
+The coverage report is generated under `./coverage/lcov-report/`
+
+<%_ } _%>
 
 ### Code quality
 
@@ -389,7 +413,7 @@ You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqu
 
 Then, run a Sonar analysis:
 
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 ```
 ./mvnw -Pprod clean verify sonar:sonar
 ```
@@ -399,7 +423,7 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 ```
 ./mvnw initialize sonar:sonar
 ```
-<%_ } else if (buildTool === 'gradle') { _%>
+<%_ } else if (buildToolGradle) { _%>
 ```
 ./gradlew -Pprod clean check jacocoTestReport sonarqube
 ```
@@ -411,7 +435,7 @@ For more information, refer to the [Code quality page][].
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
-<%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
 For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
 ```
@@ -429,7 +453,7 @@ You can also fully dockerize your application and all the services that it depen
 To achieve this, first build a docker image of your app by running:
 
 ```
-<% if (buildTool === 'maven') { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+<% if (buildToolMaven) { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildToolGradle) { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
 ```
 
 Then run:
@@ -446,14 +470,14 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
-<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
 [Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/
 <%_ } _%>
 [Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 [Service Discovery and Configuration with the JHipster-Registry]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#jhipster-registry
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
 [Service Discovery and Configuration with Consul]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#consul
 <%_ } _%>
 [Using Docker and Docker-Compose]: <%= DOCUMENTATION_ARCHIVE_URL %>/docker-compose
@@ -462,17 +486,22 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Code quality page]: <%= DOCUMENTATION_ARCHIVE_URL %>/code-quality/
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
-<% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
+<% if (gatlingTests) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
 [Webpack]: https://webpack.github.io/
-<%_ if (clientFramework === ANGULAR) { _%>
+<%_ if (clientFrameworkAngular) { _%>
 [Angular CLI]: https://cli.angular.io/
 <%_ } _%>
 [BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
 [Jasmine]: https://jasmine.github.io/2.0/introduction.html
+<%_ if (protractorTests) { _%>
 [Protractor]: https://angular.github.io/protractor/
+<%_ } _%>
+<%_ if (cypressTests) { _%>
+[Cypress]: https://www.cypress.io/
+<%_ } _%>
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/
 <%_ } _%>

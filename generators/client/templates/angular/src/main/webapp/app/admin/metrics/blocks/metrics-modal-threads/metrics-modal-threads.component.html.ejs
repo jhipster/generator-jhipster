@@ -19,7 +19,7 @@
 <div class="modal-header">
   <h4 class="modal-title" <%= jhiPrefix %>Translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 
-  <button type="button" class="close" (click)="activeModal.dismiss()">&times;</button>
+  <button type="button" class="close" (click)="dismiss()">&times;</button>
 </div>
 
 <div class="modal-body">
@@ -96,5 +96,5 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary float-left" data-dismiss="modal" (click)="activeModal.dismiss()">Done</button>
+  <button type="button" class="btn btn-secondary float-left" data-dismiss="modal" (click)="dismiss()">Done</button>
 </div>

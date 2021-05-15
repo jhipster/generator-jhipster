@@ -12,12 +12,12 @@ import { PrivateRouteComponent, hasAnyAuthority } from './private-route';
 const TestComp = () => <div>Test</div>;
 
 describe('private-route component', () => {
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   beforeAll(() => {
     TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
   });
 
-  <%_ } _%>
+<%_ } _%>
   // All tests will go here
   it('Should throw error when no component is provided', () => {
     const originalError = console.error;
@@ -33,15 +33,15 @@ describe('private-route component', () => {
         <PrivateRouteComponent component={TestComp} isAuthenticated sessionHasBeenFetched isAuthorized={false} path="/" />
       </Router>
     );
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     expect(container.innerHTML).toEqual(
       '<div class="insufficient-authority"><div class="alert alert-danger"><span>You are not authorized to access this page.</span></div></div>'
     );
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(container.innerHTML).toEqual(
       '<div class="insufficient-authority"><div class="alert alert-danger">You are not authorized to access this page.</div></div>'
     );
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('Should render a route for the component provided when authenticated', () => {

@@ -80,15 +80,15 @@ export const saveAccountSettings: (account: any) => void = account => async disp
       successMessage: translate('settings.messages.success')
     }
   });
-  <% if (enableTranslation) { %>
+<% if (enableTranslation) { %>
     if (Storage.session.get(`locale`)) {
       Storage.session.remove(`locale`);
     }
-  <% } %>
+<% } %>
   await dispatch(getSession());
-  <% if (enableTranslation && enableI18nRTL) { %>
+<% if (enableTranslation && enableI18nRTL) { %>
     document.querySelector('html').setAttribute('dir', isRTL(account.langKey) ? 'rtl' : 'ltr');
-  <% } %>
+<% } %>
 };
 
 export const reset = () => ({

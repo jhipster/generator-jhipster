@@ -20,14 +20,14 @@ import SockJS from 'sockjs-client';
 
 import Stomp from 'webstomp-client';
 import { Observable } from 'rxjs';
-<%_ if (authenticationType !== 'session') { _%>
+<%_ if (!authenticationTypeSession) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
 import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
 import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
 import { SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
 
@@ -78,7 +78,7 @@ const connect = () => {
   const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
   const headers = {};
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
   const url = '//' + loc.host + baseHref + '/websocket/tracker';
   headers['X-XSRF-TOKEN'] = cookie.read('XSRF-TOKEN');
 <%_ } else { _%>

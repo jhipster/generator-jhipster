@@ -18,11 +18,11 @@
 -%>
 <%_
   let refreshMethod;
-  if (pagination === 'pagination') {
+  if (paginationPagination) {
     refreshMethod = 'loadPage()';
-  } else if (pagination === 'infinite-scroll') {
+  } else if (paginationInfiniteScroll) {
     refreshMethod = 'reset()';
-  } else if (pagination === 'no') {
+  } else if (paginationNo) {
     refreshMethod = 'loadAll()';
   }
 _%>
@@ -50,7 +50,7 @@ _%>
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
 
     <div class="row">
         <div class="col-sm-12">
@@ -69,7 +69,7 @@ _%>
             </form>
         </div>
     </div>
-    <%_ } _%>
+<%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
@@ -78,93 +78,88 @@ _%>
     <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr<% if (pagination !== 'no') { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
-                    <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col"<% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                    <%_ } _%>
-                    <%_ for (const relationship of relationships) { _%>
-                        <%_ if (relationship.relationshipType === 'many-to-one'
-                                || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
-                                || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true && pagination === 'no')) {
-                            const fieldName = "." + relationship.otherEntityField;
-                        _%>
-                    <th scope="col" <% if (pagination !== 'no') { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
-                        <%_ } _%>
-                    <%_ } _%>
+                <tr<% if (!paginationNo) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= !paginationInfiniteScroll ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
+<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+                    <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>
+    <%_ if (relationship.relationshipManyToOne
+            || (relationship.relationshipOneToOne && relationship.ownerSide)
+            || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
+        const fieldName = "." + relationship.otherEntityField;
+    _%>
+                    <th scope="col" <% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+    <%_ } _%>
+<%_ } _%>
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
+            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
                 <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
-                <%_
-                const routerLink = ` [routerLink]="['/${ entityUrl }', ${entityInstance}.${primaryKey.name}, 'view']"`;
-                for (field of fields.filter(field => !field.hidden)) {
-                    const fieldName = field.fieldName;
-                    const fieldNameCapitalized = field.fieldNameCapitalized;
-                    const fieldType = field.fieldType;
-                    const fieldTypeBlobContent = field.fieldTypeBlobContent;
-                _%>
-                    <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+<%_
+const routerLink = ` [routerLink]="['/${ entityUrl }', ${entityInstance}.${primaryKey.name}, 'view']"`;
+for (field of fields.filter(field => !field.hidden)) {
+    const fieldName = field.fieldName;
+    const fieldType = field.fieldType;
+_%>
+    <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
                             <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-height: 30px;" alt="<%= entityInstance %> image"/>
                         </a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
-                    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
                         <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
-                    <%_ } else if (field.fieldIsEnum) { _%>
+    <%_ } else if (field.fieldIsEnum) { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
-                    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
-                    <%_ } else if (fieldType === 'LocalDate') { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDate }}</td>
-                    <%_ } else if (fieldType === 'Duration') { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
                     <td title="{{ <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> | duration }}</td>
-                    <%_ } else { _%>
+    <%_ } else { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
-                    <%_ } _%>
-                <%_ } _%>
-                <%_ for (const relationship of relationships) {
-                    const relationshipType = relationship.relationshipType;
-                    const ownerSide = relationship.ownerSide;
-                    const relationshipFieldName = relationship.relationshipFieldName;
-                    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-                    const otherEntityName = relationship.otherEntityName;
-                    const otherEntityStateName = relationship.otherEntityStateName;
-                    const otherEntityField = relationship.otherEntityField;
-                    const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
-                _%>
-                    <%_ if (relationshipType === 'many-to-one'
-                            || (relationshipType === 'one-to-one' && ownerSide === true)
-                            || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) {
-                    _%>
+    <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships) {
+    const ownerSide = relationship.ownerSide;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const otherEntityStateName = relationship.otherEntityStateName;
+    const otherEntityField = relationship.otherEntityField;
+_%>
+    <%_ if (relationship.relationshipManyToOne
+            || (relationship.relationshipOneToOne && ownerSide)
+            || (relationship.relationshipManyToMany && ownerSide && paginationNo)) {
+    _%>
                     <td>
-                        <%_ if (otherEntityName === 'user') { _%>
-                            <%_ if (relationshipType === 'many-to-many') { _%>
+        <%_ if (relationship.otherEntityUser) { _%>
+            <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                             {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
                         </span>
-                            <%_ } else { _%>
+            <%_ } else { _%>
                         {{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}
-                            <%_ } _%>
-                        <%_ } else { _%>
-                            <%_ if (relationshipType === 'many-to-many') { _%>
+            <%_ } _%>
+        <%_ } else { _%>
+            <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                             <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
-                            <%_ } else { _%>
+            <%_ } else { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
                             <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance %>.<%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
                         </div>
-                            <%_ } _%>
-                        <%_ } _%>
+            <%_ } _%>
+        <%_ } _%>
                     </td>
-                    <%_ } _%>
-                <%_ } _%>
+    <%_ } _%>
+<%_ } _%>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"
@@ -174,7 +169,7 @@ _%>
                                 <fa-icon icon="eye"></fa-icon>
                                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
                             </button>
-                            <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
 
                             <button type="submit"
                                     [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
@@ -190,14 +185,14 @@ _%>
                                 <fa-icon icon="times"></fa-icon>
                                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
                             </button>
-                            <%_ } _%>
+<%_ } _%>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <%_ if (pagination === 'pagination') { _%>
+<%_ if (paginationPagination) { _%>
 
     <div *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <div class="row justify-content-center">
@@ -208,5 +203,5 @@ _%>
             <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
         </div>
     </div>
-    <%_ } _%>
+<%_ } _%>
 </div>

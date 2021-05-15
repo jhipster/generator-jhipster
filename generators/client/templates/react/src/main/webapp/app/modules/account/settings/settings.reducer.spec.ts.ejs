@@ -32,12 +32,12 @@ import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authenticat
 <% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Settings reducer tests', () => {
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   beforeAll(() => {
     TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
   });
 
-  <%_ } _%>
+<%_ } _%>
   describe('Common tests', () => {
     it('should return the initial state', () => {
       const toTest = account(undefined, {});
@@ -99,22 +99,22 @@ describe('Settings reducer tests', () => {
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
       const mockStore = configureStore([thunk, promiseMiddleware]);
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       store = mockStore({ authentication: { account: { langKey: '<%= nativeLanguage %>' } } });
-      <%_ } else { _%>
+<%_ } else { _%>
       store = mockStore({});
-      <%_ } _%>
+<%_ } _%>
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
       const meta = {
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         successMessage: 'translation-not-found[settings.messages.success]'
-        <%_ } else { _%>
+<%_ } else { _%>
         successMessage: '<strong>Settings saved!</strong>'
-        <%_ } _%>
+<%_ } _%>
       };
 
       const expectedActions = [

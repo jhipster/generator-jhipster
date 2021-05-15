@@ -336,8 +336,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   _postWriting() {
     return {
       packageJsonScripts() {
-        const packageJsonStorage = this.createStorage('package.json');
-        const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
+        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = this.serverPort;
         packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
         if (process.env.JHI_PROFILE) {
@@ -345,8 +344,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
       },
       packageJsonDockerScripts() {
-        const packageJsonStorage = this.createStorage('package.json');
-        const scriptsStorage = packageJsonStorage.createStorage('scripts');
+        const scriptsStorage = this.packageJson.createStorage('scripts');
         const databaseType = this.jhipsterConfig.databaseType;
         const dockerAwaitScripts = [];
         if (databaseType === 'sql') {
@@ -415,8 +413,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         });
       },
       packageJsonBackendScripts() {
-        const packageJsonStorage = this.createStorage('package.json');
-        const scriptsStorage = packageJsonStorage.createStorage('scripts');
+        const scriptsStorage = this.packageJson.createStorage('scripts');
         const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
@@ -428,10 +425,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
+            'backend:start': './mvnw -P-webapp',
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:build-cache': './mvnw dependency:go-offline',
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
@@ -440,11 +439,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
+            'backend:start': `./gradlew ${excludeWebapp}`,
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+            'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
           });
         }
 
@@ -462,6 +463,19 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
+      },
+      packageJsonE2eScripts() {
+        const scriptsStorage = this.packageJson.createStorage('scripts');
+        const buildCmd = this.jhipsterConfig.buildTool === 'gradle' ? 'gradlew' : 'mvnw';
+        if (scriptsStorage.get('e2e')) {
+          scriptsStorage.set({
+            'ci:server:await':
+              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+            'pree2e:headless': 'npm run ci:server:await',
+            'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+            'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
+          });
+        }
       },
     };
   }
@@ -508,7 +522,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
     // Generate JWT secret key if key does not already exist in config
     if ((config.authenticationType === 'jwt' || config.applicationType === 'microservice') && config.jwtSecretKey === undefined) {
-      config.jwtSecretKey = getBase64Secret(null, 64);
+      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === 'session' && !config.rememberMeKey) {

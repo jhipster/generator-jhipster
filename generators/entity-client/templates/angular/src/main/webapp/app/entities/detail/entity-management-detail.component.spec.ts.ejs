@@ -34,9 +34,9 @@ describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Detail Component', () => {
         let comp: <%= entityAngularName %>DetailComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         let dataUtils: DataUtils;
-        <%_ } _%>
+<%_ } _%>
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -52,9 +52,9 @@ describe('Component Tests', () => {
             .compileComponents();
             fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
-            <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
             dataUtils = TestBed.inject(DataUtils);
-            <%_ } _%>
+<%_ } _%>
         });
 
         describe('OnInit', () => {
@@ -67,7 +67,7 @@ describe('Component Tests', () => {
             });
         });
 
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         describe('byteSize', () => {
             it('Should call byteSize from DataUtils', () => {
                 // GIVEN
@@ -96,6 +96,6 @@ describe('Component Tests', () => {
                 expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
             });
         });
-        <%_ } _%>
+<%_ } _%>
     });
 });

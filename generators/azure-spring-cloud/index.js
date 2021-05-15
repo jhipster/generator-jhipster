@@ -19,7 +19,7 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
@@ -31,10 +31,12 @@ const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
-
+const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
@@ -52,9 +54,10 @@ module.exports = class extends BaseGenerator {
 
     this.azureSpringCloudSkipBuild = this.options.skipBuild;
     this.azureSpringCloudSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_AZURE_SPRING_CLOUD);
   }
 
-  initializing() {
+  _initializing() {
     if (!this.options.fromCli) {
       this.warning(
         `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
@@ -85,7 +88,12 @@ module.exports = class extends BaseGenerator {
     this.azureSpringCloudDeploymentType = this.config.get('azureSpringCloudDeploymentType');
   }
 
-  get prompting() {
+  initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
     return {
       checkBuildTool() {
         if (this.abort) return;
@@ -246,7 +254,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       saveConfig() {
         if (this.abort) return;
@@ -258,10 +271,15 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get default() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _default() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'azure-spring-cloud');
+        statistics.sendSubGenEvent('generator', GENERATOR_AZURE_SPRING_CLOUD);
       },
 
       azureSpringCloudAppCreate() {
@@ -322,7 +340,12 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get end() {
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  _end() {
     return {
       gitHubAction() {
         if (this.abort) return;
@@ -441,5 +464,10 @@ for more detailed information.`
         );
       },
     };
+  }
+
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 };

@@ -32,15 +32,15 @@
     "axios": "<%= dependabotPackageJson.dependencies['axios'] %>",
     "bootstrap": "<%= dependabotPackageJson.dependencies['bootstrap'] %>",
     "bootstrap-vue": "<%= dependabotPackageJson.dependencies['bootstrap-vue'] %>",
-    <%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
     "bootswatch": "<%= dependabotPackageJson.dependencies['bootswatch'] %>",
-    <%_ } _%>
+<%_ } _%>
     "dayjs": "<%= dependabotPackageJson.dependencies['dayjs'] %>",
     "swagger-ui-dist": "<%= dependabotPackageJson.dependencies['swagger-ui-dist'] %>",
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     "sockjs-client": "1.1.4",
     "webstomp-client": "1.2.0",
-    <%_ } _%>
+<%_ } _%>
     "vue": "<%= dependabotPackageJson.dependencies['vue'] %>",
     "vue-class-component": "<%= dependabotPackageJson.dependencies['vue-class-component'] %>",
     "vue-cookie": "<%= dependabotPackageJson.dependencies['vue-cookie'] %>",
@@ -53,7 +53,7 @@
     "vuex": "<%= dependabotPackageJson.dependencies['vuex'] %>"
   },
   "devDependencies": {
-    <%_ if (protractorTests) { _%>
+<%_ if (protractorTests) { _%>
     "@types/chai": "4.2.11",
     "@types/chai-string": "1.4.2",
     "@types/mocha": "7.0.2",
@@ -65,7 +65,7 @@
     "protractor": "7.0.0",
     "ts-node": "8.10.1",
     "webdriver-manager": "12.1.8",
-    <%_ } _%>
+<%_ } _%>
     "babel-core": "<%= dependabotPackageJson.devDependencies['babel-core'] %>",
     "@types/jest": "<%= dependabotPackageJson.devDependencies['@types/jest'] %>",
     "@types/node": "<%= dependabotPackageJson.devDependencies['@types/node'] %>",
@@ -84,9 +84,9 @@
     "browser-sync-webpack-plugin": "<%= dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
     "copy-webpack-plugin": "<%= dependabotPackageJson.devDependencies['copy-webpack-plugin'] %>",
     "css-loader": "<%= dependabotPackageJson.devDependencies['css-loader'] %>",
+    "css-minimizer-webpack-plugin": "<%= dependabotPackageJson.devDependencies['css-minimizer-webpack-plugin'] %>",
     "file-loader": "<%= dependabotPackageJson.devDependencies['file-loader'] %>",
     "fork-ts-checker-webpack-plugin": "<%= dependabotPackageJson.devDependencies['fork-ts-checker-webpack-plugin'] %>",
-    "friendly-errors-webpack-plugin": "<%= dependabotPackageJson.devDependencies['friendly-errors-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
     <%_ otherModules.forEach(module => { _%>
@@ -94,10 +94,10 @@
     <%_ });
 } _%>
     "html-webpack-plugin": "<%= dependabotPackageJson.devDependencies['html-webpack-plugin'] %>",
-    <%_ if (!skipCommitHook) { _%>
+<%_ if (!skipCommitHook) { _%>
     "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
     "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-    <%_ } _%>
+<%_ } _%>
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-serializer-vue": "<%= dependabotPackageJson.devDependencies['jest-serializer-vue'] %>",
@@ -107,23 +107,22 @@
     "mini-css-extract-plugin": "<%= dependabotPackageJson.devDependencies['mini-css-extract-plugin'] %>",
     "node-notifier": "<%= dependabotPackageJson.devDependencies['node-notifier'] %>",
     "numeral": "<%= dependabotPackageJson.devDependencies['numeral'] %>",
-    "optimize-css-assets-webpack-plugin": "<%= dependabotPackageJson.devDependencies['optimize-css-assets-webpack-plugin'] %>",
     "portfinder": "<%= dependabotPackageJson.devDependencies['portfinder'] %>",
     "postcss": "<%= dependabotPackageJson.devDependencies['postcss'] %>",
     "postcss-import": "<%= dependabotPackageJson.devDependencies['postcss-import'] %>",
     "postcss-loader": "<%= dependabotPackageJson.devDependencies['postcss-loader'] %>",
     "postcss-url": "<%= dependabotPackageJson.devDependencies['postcss-url'] %>",
     "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
-    <%_ if (!skipServer) { _%>
+<%_ if (!skipServer) { _%>
     "prettier-plugin-java": "<%= dependabotPackageJson.devDependencies['prettier-plugin-java'] %>",
-    <%_ } _%>
+<%_ } _%>
     "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
-    <%_ if (cypressTests) { _%>
+<%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
-    <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationTypeOauth2) { _%>
     "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
     <%_ } _%>
-    <%_ } _%>
+<%_ } _%>
     "rimraf": "<%= dependabotPackageJson.devDependencies['rimraf'] %>",
     "sass": "<%= dependabotPackageJson.devDependencies['sass'] %>",
     "sass-loader": "<%= dependabotPackageJson.devDependencies['sass-loader'] %>",
@@ -131,13 +130,9 @@
     "terser-webpack-plugin": "<%= dependabotPackageJson.devDependencies['terser-webpack-plugin'] %>",
     "ts-jest": "<%= dependabotPackageJson.devDependencies['ts-jest'] %>",
     "ts-loader": "<%= dependabotPackageJson.devDependencies['ts-loader'] %>",
-    "tslib": "<%= dependabotPackageJson.devDependencies['tslib'] %>",
     "eslint": "<%= dependabotPackageJson.devDependencies['eslint'] %>",
-    "tslint-config-prettier": "<%= dependabotPackageJson.devDependencies['tslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%= dependabotPackageJson.devDependencies['eslint-plugin-prettier'] %>",
-    "tslint-eslint-rules": "<%= dependabotPackageJson.devDependencies['tslint-eslint-rules'] %>",
     "eslint-plugin-vue": "<%= dependabotPackageJson.devDependencies['eslint-plugin-vue'] %>",
-    "tslint-loader": "<%= dependabotPackageJson.devDependencies['tslint-loader'] %>",
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
     "url-loader": "<%= dependabotPackageJson.devDependencies['url-loader'] %>",
     "vue-jest": "<%= dependabotPackageJson.devDependencies['vue-jest'] %>",
@@ -168,26 +163,26 @@
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webapp:prod",
-    <%_ if (protractorTests && !cypressTests) { _%>
+<%_ if (protractorTests && !cypressTests) { _%>
     "e2e": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
-    <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
+<%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
     "e2e": "<%= clientPackageManager %> run e2e:cypress",
     "e2e:headless": "<%= clientPackageManager %> run e2e:cypress:headless",
-    <%_ } _%>
-    <%_ if (protractorTests) { _%>
+<%_ } _%>
+<%_ if (protractorTests) { _%>
     "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    <%_ } _%>
-    <%_ if (cypressTests) { _%>
+<%_ } _%>
+<%_ if (cypressTests) { _%>
     "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
     "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open",
-    <%_ } _%>
-    <%_ if (protractorTests) { _%>
+<%_ } _%>
+<%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
-    <%_ } _%>
+<%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config <%= CLIENT_TEST_SRC_DIR %>jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "pretest": "<%= clientPackageManager %> run lint",

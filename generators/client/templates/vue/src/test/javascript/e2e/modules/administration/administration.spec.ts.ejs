@@ -30,7 +30,7 @@ describe('Administration', () => {
   });
 <%_ } _%>
 
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   it('should load gateway', async () => {
     const gatewayPage = await navBarPage.getGatewayPage();
     expect(await gatewayPage.title.isDisplayed()).to.be.true;

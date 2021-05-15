@@ -24,34 +24,39 @@ const mapOrFlatMap = reactive ? 'flatMap' : 'map'
 const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + '> result =';
 const mapper = entityInstance  + 'Mapper';
 _%>
-<%_ if(viaService) { %>
-   <%_ if(!reactive) { %>
-   Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
-   <%_ } else { %>
-   Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
-   <%_ } %>
+<%_ if(viaService) { _%>
+<%_ if(!reactive) { _%>
+    Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+<%_ } else { _%>
+    Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+<%_ } _%>
 <%_ } else { %>
-<%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
-   .map(existing<%= entityClass %> -> {
-<%_ if(dto === 'mapstruct') { %><%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);<%_ } else { %>
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
-   if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>() != null) {
-      existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
-   }
-   <%_ if (field.fieldWithContentType) { _%>
-   if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType() != null) {
-      existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType());
-   }
-   <%_ } _%>
-<%_ } %>
-<% } %>
-   return existing<%= entityClass %>;
-   })
-   .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)<% if (searchEngine === 'elasticsearch') { %>
-   .<%= mapOrFlatMap %>(<%_ if(reactive) { %><%= entityInstance %>SearchRepository::save<% } else { %>saved<%= entityClass %> -> {
-         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
-         return saved<%= entityClass %>;
-      }<% } %>)<% } %><% if (dto !== 'no') { %>
-   .map(<%= mapper %>::toDto)<% } %><% if (isService && !reactive) { %>
-   <% } %>;
+    <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
+    .map(existing<%= entityClass %> -> {
+    <%_ if(dtoMapstruct) { _%>
+        <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
+    <%_ } else { _%>
+    <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+        if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>() != null) {
+        existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
+        }
+        <%_ if (field.fieldWithContentType) { _%>
+            if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType() != null) {
+            existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType());
+            }
+        <%_ } _%>
+    <%_ } %>
+    <%_ } _%>
+    return existing<%= entityClass %>;
+    })
+    .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+    <%_ if (searchEngineElasticsearch) { _%>
+        .<%= mapOrFlatMap %>(<% if(reactive) { %><%= entityInstance %>SearchRepository::save<% } else { %>saved<%= entityClass %> -> {
+        <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
+        return saved<%= entityClass %>;
+        }<% } %>)
+    <%_ } _%>
+    <%_ if (dtoMapstruct) { _%>
+        .map(<%= mapper %>::toDto)
+    <%_ } _%>;
 <%_ } %>

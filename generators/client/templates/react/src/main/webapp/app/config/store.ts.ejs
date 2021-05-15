@@ -24,7 +24,7 @@ import DevTools from './devtools';
 import errorMiddleware from './error-middleware';
 import notificationMiddleware from './notification-middleware';
 import loggerMiddleware from './logger-middleware';
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import websocketMiddleware from './websocket-middleware';
 <%_ } _%>
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
@@ -35,9 +35,9 @@ const defaultMiddlewares = [
   notificationMiddleware,
   promiseMiddleware,
   loadingBarMiddleware(),
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
   websocketMiddleware,
-  <%_ } _%>
+<%_ } _%>
   loggerMiddleware
 ];
 const composedMiddlewares = middlewares => process.env.NODE_ENV === 'development' ?

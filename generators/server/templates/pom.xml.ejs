@@ -72,7 +72,6 @@
 <%_ } _%>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -105,7 +104,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
     <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version>4.3.1</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>4.3.3</liquibase-hibernate5.version>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
@@ -113,7 +112,7 @@
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (reactive) { _%>
-        <blockhound-junit-platform.version>1.0.4.RELEASE</blockhound-junit-platform.version>
+        <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
@@ -123,13 +122,13 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version>4.9.0</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.17.0</archunit-junit5.version>
+        <archunit-junit5.version>0.18.0</archunit-junit5.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-        <caffeine.version>3.0.0</caffeine.version>
+        <caffeine.version>3.0.1</caffeine.version>
         <typesafe.version>1.4.1</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -144,12 +143,14 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.2</maven-checkstyle.version>
-        <checkstyle.version>8.40</checkstyle.version>
-        <spring-nohttp-checkstyle.version>0.0.5.RELEASE</spring-nohttp-checkstyle.version>
+        <checkstyle.version>8.41.1</checkstyle.version>
+        <spring-nohttp-checkstyle.version>0.0.6.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.11.2</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
+        <checksum-maven-plugin.version>1.9</checksum-maven-plugin.version>
+        <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
@@ -215,6 +216,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate5</artifactId>
+        </dependency>
+    <%_ } else { _%>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.4</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -1306,8 +1313,8 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK 8 to 15.</message>
-                                <version>[1.8,16)</version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK 8 to 16.</message>
+                                <version>[1.8,17)</version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>
@@ -1418,7 +1425,7 @@
                                 <inputSpec>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
                                 <generatorName>spring</generatorName>
                                 <apiPackage><%= packageName %>.web.api</apiPackage>
-                                <modelPackage><%= packageName %>.web.api.model</modelPackage>
+                                <modelPackage><%= packageName %>.service.api.dto</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <importMappings>Problem=org.zalando.problem.Problem</importMappings>
                                 <skipValidateSpec>false</skipValidateSpec>
@@ -1513,6 +1520,70 @@
             </dependencies>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>net.nicoulaj.maven.plugins</groupId>
+                        <artifactId>checksum-maven-plugin</artifactId>
+                        <version>${checksum-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>files</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include><%= MAIN_DIR %>webapp/**/*.*</include>
+                                        <include>package.json</include>
+                                        <include>webpack/*.*</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/app/**/service-worker.js</exclude>
+                                        <exclude>**/node_modules/**/*.*</exclude>
+                                    </excludes>
+                                </fileSet>
+                            </fileSets>
+                            <failOnError>false</failOnError>
+                            <failIfNoFiles>false</failIfNoFiles>
+                            <individualFiles>false</individualFiles>
+                            <algorithms>
+                                <algorithm>SHA-1</algorithm>
+                            </algorithms>
+                            <includeRelativePath>true</includeRelativePath>
+                            <quiet>true</quiet>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven-antrun-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>eval-frontend-checksum</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <condition property="skip.npm" value="true" else="false" >
+                                            <and>
+                                                <available file="checksums.csv" filepath="${project.build.directory}" />
+                                                <available file="checksums.csv.old" filepath="${project.build.directory}" />
+                                                <filesmatch file1="${project.build.directory}/checksums.csv" file2="${project.build.directory}/checksums.csv.old" />
+                                            </and>
+                                        </condition>
+                                        <copy file="${project.build.directory}/checksums.csv" tofile="${project.build.directory}/checksums.csv.old"/>
+                                    </target>
+                                    <exportAntProperties>true</exportAntProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>

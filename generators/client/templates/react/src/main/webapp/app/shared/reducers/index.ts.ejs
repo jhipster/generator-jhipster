@@ -28,7 +28,7 @@ import applicationProfile, { ApplicationProfileState } from './application-profi
 import administration, { AdministrationState } from 'app/modules/administration/administration.reducer';
 <%_ if (!skipUserManagement) { _%>
 import userManagement, { UserManagementState } from 'app/modules/administration/user-management/user-management.reducer';
-<%_ } else if (authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
 import userManagement, { UserManagementState } from './user-management';
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
@@ -37,7 +37,7 @@ import activate, { ActivateState } from 'app/modules/account/activate/activate.r
 import password, { PasswordState } from 'app/modules/account/password/password.reducer';
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
-  <%_ if (authenticationType === 'session') { _%>
+  <%_ if (authenticationTypeSession) { _%>
 import sessions, { SessionsState } from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
 <%_ } _%>
@@ -45,48 +45,48 @@ import sessions, { SessionsState } from 'app/modules/account/sessions/sessions.r
 
 export interface IRootState {
   readonly authentication: AuthenticationState;
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   readonly locale: LocaleState;
-  <%_ } _%>
+<%_ } _%>
   readonly applicationProfile: ApplicationProfileState;
   readonly administration: AdministrationState;
-  <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
   readonly userManagement: UserManagementState;
-  <%_ } _%>
-  <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   readonly register: RegisterState;
   readonly activate: ActivateState;
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
-    <%_ if (authenticationType === 'session') { _%>
+  <%_ if (authenticationTypeSession) { _%>
   readonly sessions: SessionsState;
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
 
 const rootReducer = combineReducers<IRootState>({
   authentication,
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   locale,
-  <%_ } _%>
+<%_ } _%>
   applicationProfile,
   administration,
-  <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
   userManagement,
-  <%_ } _%>
-  <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   register,
   activate,
   passwordReset,
   password,
   settings,
-    <%_ if (authenticationType === 'session') { _%>
+  <%_ if (authenticationTypeSession) { _%>
   sessions,
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

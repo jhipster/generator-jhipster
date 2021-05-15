@@ -22,7 +22,7 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import Settings from './settings/settings';
 import Password from './password/password';
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import Sessions from './sessions/sessions';
 <%_ } _%>
 
@@ -30,9 +30,9 @@ const Routes = ({ match }) => (
   <div>
     <ErrorBoundaryRoute path={`${match.url}/settings`} component={Settings} />
     <ErrorBoundaryRoute path={`${match.url}/password`} component={Password} />
-    <%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
     <ErrorBoundaryRoute path={`${match.url}/sessions`} component={Sessions} />
-    <%_ } _%>
+<%_ } _%>
   </div>
 );
 

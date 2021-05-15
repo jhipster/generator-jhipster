@@ -43,8 +43,6 @@ class JDLBinaryOption extends AbstractJDLOption {
     let optionName = this.name;
     if (this.name === BinaryOptions.Options.PAGINATION) {
       optionName = 'paginate';
-    } else if (this.name === BinaryOptions.Options.SEARCH) {
-      optionName = 'search';
     }
     const firstPart = `${optionName} ${entityNames} with ${this.value}`;
     if (this.excludedNames.size === 0) {

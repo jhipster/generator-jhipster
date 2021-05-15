@@ -26,9 +26,9 @@ import sinon from 'sinon';
 import { REQUEST, FAILURE, SUCCESS } from 'app/shared/reducers/action-type.util';
 import administration, {
   ACTION_TYPES,
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   gatewayRoutes,
-  <%_ } _%>
+<%_ } _%>
 <%_ if (withAdminUi) { _%>
   systemHealth,
   systemMetrics,
@@ -41,7 +41,6 @@ import administration, {
 } from './administration.reducer';
 
 describe('Administration reducer tests', () => {
-  const username = process.env.E2E_USERNAME ?? 'admin';
 
   function isEmpty(element): boolean {
     if (element instanceof Array) {
@@ -57,16 +56,16 @@ describe('Administration reducer tests', () => {
       errorMessage: null,
       totalItems: 0
     });
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     expect(isEmpty(state.gateway.routes));
-    <%_ } _%>
-    <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     expect(isEmpty(state.logs.loggers));
     expect(isEmpty(state.threadDump));
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     expect(isEmpty(state.tracker.activities));
-    <%_ } _%>
+<%_ } _%>
   }
 
   function testMultipleTypes(types, payload, testFunction) {
@@ -85,17 +84,17 @@ describe('Administration reducer tests', () => {
     it('should set state to loading', () => {
       testMultipleTypes(
         [
-          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
           REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
-          <%_ } _%>
-          <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
           REQUEST(ACTION_TYPES.FETCH_LOGS),
           REQUEST(ACTION_TYPES.FETCH_HEALTH),
           REQUEST(ACTION_TYPES.FETCH_METRICS),
           REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP),
           REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS),
           REQUEST(ACTION_TYPES.FETCH_ENV)
-          <%_ } _%>
+<%_ } _%>
         ],
         {},
         state => {
@@ -112,17 +111,17 @@ describe('Administration reducer tests', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
       testMultipleTypes(
         [
-          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
           FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
-          <%_ } _%>
-        <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
           FAILURE(ACTION_TYPES.FETCH_LOGS),
           FAILURE(ACTION_TYPES.FETCH_HEALTH),
           FAILURE(ACTION_TYPES.FETCH_METRICS),
           FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP),
           FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS),
           FAILURE(ACTION_TYPES.FETCH_ENV)
-        <%_ } _%>
+<%_ } _%>
         ],
         'something happened',
         state => {
@@ -136,7 +135,7 @@ describe('Administration reducer tests', () => {
   });
 
   describe('Success', () => {
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     it('should update state according to a successful fetch gateway routes request', () => {
       const payload = { data: [] };
       const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE), payload });
@@ -146,8 +145,8 @@ describe('Administration reducer tests', () => {
         gateway: { routes: payload.data }
       });
     });
-    <%_ } _%>
-    <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     it('should update state according to a successful fetch logs request', () => {
       const payload = { data: {
           loggers: {
@@ -220,10 +219,12 @@ describe('Administration reducer tests', () => {
         }
       });
     });
-    <%_ } _%>
+<%_ } _%>
   });
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
   describe('Websocket Message Handling', () => {
+    const username = process.env.E2E_USERNAME ?? 'admin';
+
     it('should update state according to a successful websocket message receipt', () => {
       const payload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
       const toTest = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload });
@@ -266,7 +267,7 @@ describe('Administration reducer tests', () => {
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
       const expectedActions = [
         {
@@ -279,8 +280,8 @@ describe('Administration reducer tests', () => {
       ];
       await store.dispatch(gatewayRoutes()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
-    <%_ } _%>
-    <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
       const expectedActions = [
         {
@@ -372,6 +373,6 @@ describe('Administration reducer tests', () => {
       ];
       await store.dispatch(getEnv()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
-  <%_ } _%>
+<%_ } _%>
   });
 });

@@ -33,9 +33,9 @@ describe('Register Component', () => {
 
     wrapper = shallowMount<RegisterClass>(Register, {
       store,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-    <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         registerService: () => new RegisterService(),

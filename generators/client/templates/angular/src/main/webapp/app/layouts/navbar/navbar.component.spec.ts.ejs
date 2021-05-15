@@ -17,23 +17,19 @@
  limitations under the License.
 -%>
 jest.mock('@angular/router');
-<%_ if (enableTranslation) { _%>
-jest.mock('ngx-webstorage');
-jest.mock('@ngx-translate/core');
-<%_ } _%>
-jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 <%_ if (enableTranslation) { _%>
-import { SessionStorageService } from 'ngx-webstorage';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
+import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
@@ -44,15 +40,25 @@ describe('Component Tests', () => {
   describe('Navbar Component', () => {
     let comp: NavbarComponent;
     let fixture: ComponentFixture<NavbarComponent>;
-    let mockAccountService: AccountService;
+    let accountService: AccountService;
     let profileService: ProfileService;
+    const account: Account = {
+      activated: true,
+      authorities: [],
+      email: '',
+      firstName: 'John',
+      langKey: '',
+      lastName: 'Doe',
+      login: 'john.doe',
+      imageUrl: '',
+    };
 
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule],
+          imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()<% if (enableTranslation) { %>, TranslateModule.forRoot()<% } %>],
           declarations: [NavbarComponent],
-          providers: [AccountService, <% if (enableTranslation) { %>SessionStorageService, TranslateService, <% } %>Router, LoginService],
+          providers: [Router, LoginService],
         })
           .overrideTemplate(NavbarComponent, '')
           .compileComponents();
@@ -62,7 +68,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(NavbarComponent);
       comp = fixture.componentInstance;
-      mockAccountService = TestBed.inject(AccountService);
+      accountService = TestBed.inject(AccountService);
       profileService = TestBed.inject(ProfileService);
     });
 
@@ -77,12 +83,41 @@ describe('Component Tests', () => {
       expect(profileService.getProfileInfo).toHaveBeenCalled();
     });
 
-    it('Should call accountService.isAuthenticated on authentication', () => {
+    it('Should hold current authenticated user in variable account', () => {
       // WHEN
-      comp.isAuthenticated();
+      comp.ngOnInit();
 
       // THEN
-      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
+      expect(comp.account).toBeNull();
+
+      // WHEN
+      accountService.authenticate(account);
+
+      // THEN
+      expect(comp.account).toEqual(account);
+
+      // WHEN
+      accountService.authenticate(null);
+
+      // THEN
+      expect(comp.account).toBeNull();
+    });
+
+    it('Should hold current authenticated user in variable account if user is authenticated before page load', () => {
+      // GIVEN
+      accountService.authenticate(account);
+
+      // WHEN
+      comp.ngOnInit();
+
+      // THEN
+      expect(comp.account).toEqual(account);
+
+      // WHEN
+      accountService.authenticate(null);
+
+      // THEN
+      expect(comp.account).toBeNull();
     });
   });
 });

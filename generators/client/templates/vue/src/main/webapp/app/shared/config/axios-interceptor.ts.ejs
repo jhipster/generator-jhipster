@@ -22,7 +22,7 @@ import {SERVER_API_URL} from "@/constants";
 
 const TIMEOUT = 1000000;
 const onRequestSuccess = config => {
-  <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
   if (token) {
     if (!config.headers) {
@@ -30,7 +30,7 @@ const onRequestSuccess = config => {
     }
     config.headers.Authorization = `Bearer ${token}`;
   }
-  <%_ } _%>
+<%_ } _%>
   config.timeout = TIMEOUT;
   config.url = `${SERVER_API_URL}${config.url}`;
   return config;

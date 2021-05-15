@@ -21,9 +21,9 @@ import axios from 'axios';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 export const ACTION_TYPES = {
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   FETCH_GATEWAY_ROUTE: 'administration/FETCH_GATEWAY_ROUTE',
-  <%_ } _%>
+<%_ } _%>
 <%_ if (withAdminUi) { _%>
   FETCH_LOGS: 'administration/FETCH_LOGS',
   FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',
@@ -33,19 +33,19 @@ export const ACTION_TYPES = {
   FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',
   FETCH_ENV: 'administration/FETCH_ENV',
 <%_ } _%>
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
   WEBSOCKET_ACTIVITY_MESSAGE: 'administration/WEBSOCKET_ACTIVITY_MESSAGE'
-  <%_ } _%>
+<%_ } _%>
 };
 
 const initialState = {
   loading: false,
   errorMessage: null,
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   gateway: {
     routes: []
   },
-  <%_ } _%>
+<%_ } _%>
 <%_ if (withAdminUi) { _%>
   logs: {
     loggers: [] as any[]
@@ -58,11 +58,11 @@ const initialState = {
     env: {} as any
   },
 <%_ } _%>
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
   tracker: {
     activities: []
   },
-  <%_ } _%>
+<%_ } _%>
   totalItems: 0
 };
 
@@ -72,43 +72,43 @@ export type AdministrationState =  Readonly<typeof initialState>;
 
 export default (state: AdministrationState = initialState, action): AdministrationState => {
   switch (action.type) {
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     case REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
-    <%_ } _%>
-  <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     case REQUEST(ACTION_TYPES.FETCH_METRICS):
     case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):
     case REQUEST(ACTION_TYPES.FETCH_LOGS):
     case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):
     case REQUEST(ACTION_TYPES.FETCH_ENV):
     case REQUEST(ACTION_TYPES.FETCH_HEALTH):
-  <%_ } _%>
-  <%_ if (withAdminUi || (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
+<%_ } _%>
+<%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       return {
         ...state,
         errorMessage: null,
         loading: true
       };
-  <%_ } _%>
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     case FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
-    <%_ } _%>
-  <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     case FAILURE(ACTION_TYPES.FETCH_METRICS):
     case FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP):
     case FAILURE(ACTION_TYPES.FETCH_LOGS):
     case FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS):
     case FAILURE(ACTION_TYPES.FETCH_ENV):
     case FAILURE(ACTION_TYPES.FETCH_HEALTH):
-  <%_ } _%>
-  <%_ if (withAdminUi || (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
+<%_ } _%>
+<%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       return {
         ...state,
         loading: false,
         errorMessage: action.payload
       };
-  <%_ } _%>
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     case SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
       return {
         ...state,
@@ -117,8 +117,8 @@ export default (state: AdministrationState = initialState, action): Administrati
           routes: action.payload.data
         }
       };
-    <%_ } _%>
-  <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     case SUCCESS(ACTION_TYPES.FETCH_METRICS):
       return {
         ...state,
@@ -163,8 +163,8 @@ export default (state: AdministrationState = initialState, action): Administrati
         loading: false,
         health: action.payload.data
       };
-  <%_ } _%>
-     <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
      case ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE: {
        // filter out activities from the same session
        const uniqueActivities = state.tracker.activities.filter(activity => activity.sessionId !== action.payload.sessionId);
@@ -175,14 +175,14 @@ export default (state: AdministrationState = initialState, action): Administrati
          tracker: { activities }
        };
     }
-     <%_ } _%>
+<%_ } _%>
     default:
       return state;
   }
 };
 
 // Actions
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
 export const gatewayRoutes = () => ({
   type: ACTION_TYPES.FETCH_GATEWAY_ROUTE,
   payload: axios.get('api/gateway/routes')

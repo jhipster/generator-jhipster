@@ -8,7 +8,7 @@ import router from '@/router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import TrackerService from '@/admin/tracker/tracker.service';
 <%_ } _%>
 
@@ -40,9 +40,9 @@ describe('Sessions Component', () => {
 
     wrapper = shallowMount<SessionsClass>(Sessions, {
       store,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue
     });
     sessions = wrapper.vm;

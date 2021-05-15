@@ -19,7 +19,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -40,6 +40,9 @@ describe('Component Tests', () => {
     let titleService: Title;
 <%_ if (enableTranslation) { _%>
     let translateService: TranslateService;
+  <%_ if (enableI18nRTL) { _%>
+    let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
+  <%_ } _%>
 <%_ } _%>
     let mockAccountService: AccountService;
     const routerEventsSubject = new Subject<RouterEvent>();
@@ -79,6 +82,9 @@ describe('Component Tests', () => {
       titleService = TestBed.inject(Title);
 <%_ if (enableTranslation) { _%>
       translateService = TestBed.inject(TranslateService);
+  <%_ if (enableI18nRTL) { _%>
+      findLanguageFromKeyPipe = TestBed.inject(FindLanguageFromKeyPipe);
+  <%_ } _%>
 <%_ } _%>
       mockAccountService = TestBed.inject(AccountService);
       mockAccountService.identity = jest.fn(() => of(null));
@@ -90,6 +96,7 @@ describe('Component Tests', () => {
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
+      const navigationStart = new NavigationStart(1, '');
 <%_ if (enableTranslation) { _%>
       const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: null };
 <%_ } _%>
@@ -161,6 +168,16 @@ describe('Component Tests', () => {
         });
       });
 
+      describe('navigation start', () => {
+        it('should not set page title on navigation start', () => {
+          // WHEN
+          routerEventsSubject.next(navigationStart);
+
+          // THEN
+          expect(titleService.setTitle).not.toHaveBeenCalled();
+        });
+      });
+
 <%_ if (enableTranslation) { _%>
       describe('language change', () => {
         it('should set page title to default title if pageTitle is missing on routes', () => {
@@ -212,5 +229,38 @@ describe('Component Tests', () => {
       });
 <%_ } _%>
     });
+<%_ if (enableTranslation) { _%>
+
+    describe('page language attribute', () => {
+      it('should change page language attribute on language change', () => {
+        // GIVEN
+        comp.ngOnInit();
+
+        // WHEN
+  <%_ if (enableI18nRTL) { _%>
+        findLanguageFromKeyPipe.isRTL = jest.fn(() => false);
+  <%_ } _%>
+        translateService.onLangChange.emit({ lang: 'lang1', translations: null });
+
+        // THEN
+        expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang1');
+  <%_ if (enableI18nRTL) { _%>
+        expect(document.querySelector('html')?.getAttribute('dir')).toEqual('ltr');
+  <%_ } _%>
+
+        // WHEN
+  <%_ if (enableI18nRTL) { _%>
+        findLanguageFromKeyPipe.isRTL = jest.fn(() => true);
+  <%_ } _%>
+        translateService.onLangChange.emit({ lang: 'lang2', translations: null });
+
+        // THEN
+        expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang2');
+  <%_ if (enableI18nRTL) { _%>
+        expect(document.querySelector('html')?.getAttribute('dir')).toEqual('rtl');
+  <%_ } _%>
+      });
+    });
+<%_ } _%>
   });
 });

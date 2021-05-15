@@ -33,7 +33,6 @@ const vueFiles = {
   common: [
     {
       templates: [
-        '.npmrc',
         'package.json',
         'tsconfig.json',
         '.postcssrc.js',

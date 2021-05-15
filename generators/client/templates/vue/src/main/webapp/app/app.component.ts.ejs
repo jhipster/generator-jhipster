@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 import Ribbon from '@/core/ribbon/ribbon.vue';
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import LoginForm from '@/account/login-form/login-form.vue';
 <%_ } %>
 
@@ -13,9 +13,9 @@ import '@/shared/config/dayjs';
   components: {
     'ribbon': Ribbon,
     'jhi-navbar': JhiNavbar,
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     'login-form': LoginForm,
-    <%_ } %>
+<%_ } %>
     'jhi-footer': JhiFooter
   }
 })

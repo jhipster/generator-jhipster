@@ -29,13 +29,13 @@ import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
 import GatewayService from '@/admin/gateway/gateway.service';
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import TrackerService from './admin/tracker/tracker.service';
 <%_ } _%>
-<%_ if (!skipUserManagement || authenticationType === 'oauth2') { %>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { %>
 import UserOAuth2Service from '@/entities/user/user.oauth2.service';
 <%_ } _%>
 /* tslint:disable */
@@ -58,14 +58,14 @@ const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = config.initVueXStore(Vue);
 
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 const trackerService = new TrackerService(router);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
 const loginService = new LoginService();
-const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
+const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>(<any>Vue).cookie, <%_ } _%><%_ if (communicationSpringWebsocket) { _%>trackerService, <%_ } _%>router);
 
 router.beforeEach((to, from, next) => {
 
@@ -96,29 +96,29 @@ new Vue({
   router,
   provide: {
     loginService: () => loginService,
-    <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userService: () => new UserManagementService(),
-    <%_ } _%>
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
     gatewayService: () => new GatewayService(),
-    <%_ } _%>
-    <%_ if (withAdminUi) { _%>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
     healthService: () => new HealthService(),
     configurationService: () => new ConfigurationService(),
     logsService: () => new LogsService(),
     metricsService: () => new MetricsService(),
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     trackerService: () => trackerService,
-    <%_ } %>
-    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { %>
+<%_ } %>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { %>
     userOAuth2Service: () => new UserOAuth2Service(),
-    <%_ } _%>
-    <%_ if (enableTranslation) { _%>
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
     translationService: () => translationService,
-    <%_ } _%>
+<%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService
 

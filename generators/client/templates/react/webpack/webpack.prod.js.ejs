@@ -21,7 +21,7 @@ const webpackMerge = require('webpack-merge').merge;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const sass = require('sass');
 
 const utils = require('./utils.js');
@@ -32,6 +32,7 @@ const ENV = 'production';
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
+  cache: false,
   entry: {
     main: './<%= MAIN_SRC_DIR %>app/index'
   },
@@ -95,7 +96,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           }
         }
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new CssMinimizerPlugin({
+        parallel: true,
+      })
     ]
   },
   plugins: [

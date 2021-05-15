@@ -21,12 +21,12 @@ import { isPromise<% if (enableTranslation) { %>, translate<% } %> } from 'react
 import { toast } from 'react-toastify';
 
 const addErrorAlert = (message, key?, data?) => {
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   key = key ? key : message;
   toast.error(translate(key, data));
-  <%_ } else { _%>
+<%_ } else { _%>
   toast.error(message);
-  <%_ } _%>
+<%_ } _%>
 };
 export default () => next => action => {
   // If not a promise, continue on
@@ -46,9 +46,9 @@ export default () => next => action => {
       } else if (response && response.action && response.action.payload && response.action.payload.headers) {
         const headers = response.action.payload.headers;
         let alert: string | null = null;
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         let alertParams: string | null = null;
-        <%_ } _%>
+<%_ } _%>
         Object.entries<string>(headers).forEach(([k, v]) => {
           if (k.toLowerCase().endsWith('app-alert')) {
             alert = v;
@@ -57,12 +57,12 @@ export default () => next => action => {
           }<% } %>
         });
         if (alert) {
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           const alertParam = alertParams;
           toast.success(translate(alert, { param: alertParam }));
-          <%_ } else { _%>
+<%_ } else { _%>
           toast.success(alert);
-          <%_ } _%>
+<%_ } _%>
         }
       }
       return Promise.resolve(response);
@@ -73,7 +73,12 @@ export default () => next => action => {
       } else if (error && error.response) {
         const response = error.response;
         const data = response.data;
-        if (!(response.status === 401 && (error.message === '' || (data && data.path && data.path.includes('/api/account'))))) {
+        if (
+          !(
+            response.status === 401 &&
+            (error.message === '' || (data && data.path && (data.path.includes('/api/account') || data.path.includes('/api/authenticate'))))
+          )
+        ) {
           let i;
           switch (response.status) {
             // connection refused, server not reachable

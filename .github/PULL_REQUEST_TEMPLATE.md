@@ -8,7 +8,8 @@ Please make sure the below checklist is followed for Pull Requests.
 
 - [ ] [All continuous integration tests](https://github.com/jhipster/generator-jhipster/actions) are green
 - [ ] Tests are added where necessary
-- [ ] [jhipster-online](https://github.com/jhipster/jhipster-online) was updated if necessary
+- [ ] The JDL part is updated if necessary
+- [ ] [jhipster-online](https://github.com/jhipster/jhipster-online) is updated if necessary
 - [ ] Documentation is added/updated where necessary
 - [ ] Coding Rules & Commit Guidelines as per our [CONTRIBUTING.md document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) are followed
 
