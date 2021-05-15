@@ -34,7 +34,7 @@ const cypressFiles = {
   common: [
     {
       condition: generator => generator.cypressTests,
-      templates: ['cypress.json'],
+      templates: ['cypress.json', 'cypress-audits.json'],
     },
   ],
   clientTestFw: [
@@ -46,6 +46,7 @@ const cypressFiles = {
         'fixtures/integration-test.png',
         'plugins/index.ts',
         'integration/administration/administration.spec.ts',
+        'integration/lighthouse.audits.ts',
         'support/commands.ts',
         'support/navbar.ts',
         'support/index.ts',
