@@ -1924,7 +1924,7 @@ stages:
 before_script:
   - export NG_CLI_ANALYTICS=\\"false\\"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v14.16.0 -DnpmVersion=7.12.1 -Dmaven.repo.local=$MAVEN_USER_HOME
+  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
   - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
 
 nohttp:
@@ -2040,7 +2040,7 @@ stages:
 before_script:
   - export NG_CLI_ANALYTICS=\\"false\\"
   - export MAVEN_USER_HOME=\`pwd\`/.maven
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v14.16.0 -DnpmVersion=7.12.1 -Dmaven.repo.local=$MAVEN_USER_HOME
+  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
   - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
 
 nohttp:
@@ -2717,7 +2717,7 @@ node {
         }
 
         stage('install tools') {
-            sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v14.16.0 -DnpmVersion=7.12.1\\"
+            sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm\\"
         }
 
         stage('npm install') {
@@ -3008,7 +3008,7 @@ node {
     }
 
     stage('install tools') {
-        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v14.16.0 -DnpmVersion=7.12.1\\"
+        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm\\"
     }
 
     stage('npm install') {
@@ -3208,7 +3208,7 @@ node {
     }
 
     stage('install tools') {
-        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v14.16.0 -DnpmVersion=7.12.1\\"
+        sh \\"./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm\\"
     }
 
     stage('npm install') {
