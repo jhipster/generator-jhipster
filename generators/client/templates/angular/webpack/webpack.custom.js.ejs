@@ -22,7 +22,6 @@ const path = require('path');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
-const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -59,13 +58,6 @@ module.exports = (config, options, targetOptions) => {
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       })
     );
-    if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
-      config.plugins.push(
-        new SimpleProgressWebpackPlugin({
-          format: 'compact',
-        })
-      );
-    }
   }
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
@@ -111,10 +103,6 @@ module.exports = (config, options, targetOptions) => {
         openAnalyzer: false,
         // Webpack statistics in target folder
         reportFilename: '../stats.html',
-      }),
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug: false,
       })
     );
   }
