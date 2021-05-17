@@ -32,7 +32,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@testing-library/react": "11.2.6",
+    "@testing-library/react": "11.2.7",
     "@types/jest": "26.0.23",
     "@types/lodash": "4.14.169",
     "@types/node": "15.0.3",
