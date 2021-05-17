@@ -2,6 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const expect = require('expect');
 
 const expectedFiles = {
   travis: ['.travis.yml'],
@@ -19,9 +20,10 @@ describe('JHipster CI-CD Sub Generator', () => {
   //--------------------------------------------------
   describe('Jenkins tests', () => {
     describe('Jenkins: Maven Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -31,7 +33,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             insideDocker: false,
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.jenkins);
@@ -44,9 +49,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Jenkins: Gradle Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -56,7 +62,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             insideDocker: false,
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.jenkins);
@@ -69,9 +78,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Jenkins: Maven Angular NPM with full options', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -86,7 +96,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarName: 'sonarName',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.jenkins);
@@ -102,9 +115,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Jenkins: Maven Angular NPM inside Docker', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -119,7 +133,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarName: 'sonarName',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.jenkins);
@@ -139,9 +156,10 @@ describe('JHipster CI-CD Sub Generator', () => {
   //--------------------------------------------------
   describe('GitLab CI tests', () => {
     describe('GitLab CI: Maven Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -151,7 +169,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             insideDocker: false,
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.gitlab);
@@ -164,9 +185,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitLab CI: Gradle Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -175,7 +197,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'gitlab',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.gitlab);
@@ -188,9 +213,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitLab CI: npm skip server', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/npm-skip-server'), dir);
           })
@@ -200,7 +226,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             insideDocker: true,
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.gitlab);
@@ -210,9 +239,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitLab CI: Maven Angular NPM with full options', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -227,7 +257,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://localhost:9000',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.gitlab);
@@ -243,9 +276,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitLab CI: Maven Angular NPM inside Docker', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -260,7 +294,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://localhost:9000',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.gitlab);
@@ -276,14 +313,18 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ autoconfigureGitlab: true })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.gitlab);
@@ -302,9 +343,10 @@ describe('JHipster CI-CD Sub Generator', () => {
   //--------------------------------------------------
   describe('Travis CI tests', () => {
     describe('Travis CI: Maven Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -313,7 +355,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'travis',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.travis);
@@ -324,9 +369,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Travis CI: Gradle Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -335,7 +381,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'travis',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.travis);
@@ -350,9 +399,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Travis CI: Maven Angular NPM with full options', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -366,7 +416,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://localhost:9000',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.travis);
@@ -391,9 +444,10 @@ describe('JHipster CI-CD Sub Generator', () => {
   //--------------------------------------------------
   describe('Azure Pipelines tests', () => {
     describe('Azure Pipelines: Maven Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -402,7 +456,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'azure',
             cicdIntegrations: ['cypressDashboard'],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
@@ -415,9 +472,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -426,7 +484,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'azure',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
@@ -437,9 +498,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -448,7 +510,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'azure',
             cicdIntegrations: ['snyk'],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
@@ -458,9 +523,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -469,7 +535,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'azure',
             cicdIntegrations: ['snyk'],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
@@ -479,14 +548,18 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Azure Pipelines: autoconfigure', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ autoconfigureAzure: true })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.azure);
@@ -499,9 +572,10 @@ describe('JHipster CI-CD Sub Generator', () => {
   //--------------------------------------------------
   describe('GitHub Actions tests', () => {
     describe('GitHub Actions: Maven Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -510,16 +584,20 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'github',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.github);
       });
     });
     describe('GitHub Actions: Gradle Angular NPM', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -528,16 +606,20 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'github',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.github);
       });
     });
     describe('GitHub Actions: Maven Angular NPM with full options', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -552,7 +634,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://sonar.com:9000',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.github);
@@ -574,9 +659,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -587,7 +673,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             dockerImage: 'jhipster-publish-docker',
             sonarUrl: 'http://sonar.com:9000',
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.github);
@@ -606,14 +695,18 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('GitHub Actions: autoconfigure', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
           .withOptions({ autoconfigureGithub: true })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.github);
@@ -626,9 +719,10 @@ describe('JHipster CI-CD Sub Generator', () => {
   //--------------------------------------------------
   describe('Circle CI test', () => {
     describe('Circle CI: Maven Angular NPM', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -637,7 +731,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'circle',
             cicdIntegrations: ['cypressDashboard'],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.circle);
@@ -651,9 +748,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Circle CI: Gradle Angular NPM', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -662,7 +760,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'circle',
             cicdIntegrations: [],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.circle);
@@ -676,9 +777,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Circle CI: Maven with Snyk', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
           })
@@ -687,7 +789,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'circle',
             cicdIntegrations: ['snyk'],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.circle);
@@ -697,9 +802,10 @@ describe('JHipster CI-CD Sub Generator', () => {
       });
     });
     describe('Circle CI: Gradle with Snyk', () => {
-      beforeEach(done => {
-        helpers
-          .run(require.resolve('../generators/ci-cd'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(require.resolve('../generators/ci-cd'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
           })
@@ -708,7 +814,10 @@ describe('JHipster CI-CD Sub Generator', () => {
             pipeline: 'circle',
             cicdIntegrations: ['snyk'],
           })
-          .on('end', done);
+          .run();
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
       it('creates expected files', () => {
         assert.file(expectedFiles.circle);

@@ -44,7 +44,7 @@ node {
 
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm"
 <%= indent %>    }
 
 <%= indent %>    stage('npm install') {
