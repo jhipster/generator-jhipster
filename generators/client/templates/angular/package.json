@@ -22,7 +22,7 @@
     "@angular-eslint/eslint-plugin": "4.3.0",
     "@types/node": "15.3.0",
     "@types/jest": "26.0.23",
-    "@typescript-eslint/eslint-plugin": "4.23.0",
+    "@typescript-eslint/eslint-plugin": "4.24.0",
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "6.4.1",
