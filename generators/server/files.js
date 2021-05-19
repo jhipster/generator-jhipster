@@ -198,6 +198,13 @@ const serverFiles = {
         { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },
       ],
     },
+    {
+      condition: generator => generator.buildTool === 'maven',
+      templates: [
+        { file: 'npmw', method: 'copy', noEjs: true },
+        { file: 'npmw.cmd', method: 'copy', noEjs: true },
+      ],
+    },
   ],
   serverResource: [
     {
