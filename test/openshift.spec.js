@@ -2,6 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const expect = require('expect');
 
 const expectedFiles = {
   sccconfig: ['./ocp/registry/scc-config.yml'],
@@ -22,13 +23,14 @@ const expectedFiles = {
 
 describe('JHipster OpenShift Sub Generator', () => {
   describe('only gateway', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -39,7 +41,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           openshiftNamespace: 'default',
           monitoring: 'no',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -55,13 +60,14 @@ describe('JHipster OpenShift Sub Generator', () => {
   });
 
   describe('gateway and one microservice with mysql', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -71,7 +77,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           openshiftNamespace: 'default',
           monitoring: 'no',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -88,13 +97,14 @@ describe('JHipster OpenShift Sub Generator', () => {
   });
 
   describe('gateway and one microservice with mysql', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -103,7 +113,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -120,13 +133,14 @@ describe('JHipster OpenShift Sub Generator', () => {
   });
 
   describe('two microservices backed by mysql and postgres without gateway', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -136,7 +150,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           openshiftNamespace: 'default',
           monitoring: 'no',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -156,13 +173,14 @@ describe('JHipster OpenShift Sub Generator', () => {
   });
 
   describe('gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -171,7 +189,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -200,13 +221,14 @@ describe('JHipster OpenShift Sub Generator', () => {
   });
 
   describe('monolith application', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -215,7 +237,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected monolith files', () => {
       assert.file(expectedFiles.monolith);
@@ -226,13 +251,14 @@ describe('JHipster OpenShift Sub Generator', () => {
   });
 
   describe('monolith application', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/openshift'))
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/openshift'))
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, './templates/compose/'), dir);
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -241,7 +267,10 @@ describe('JHipster OpenShift Sub Generator', () => {
           dockerPushCommand: 'docker push',
           openshiftNamespace: 'default',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected default files', () => {
       assert.file(expectedFiles.monolith);

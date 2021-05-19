@@ -20,7 +20,6 @@
 const Generators = {
   GENERATOR_AWS: 'aws',
   GENERATOR_BOOTSTRAP: 'bootstrap',
-  GENERATOR_AWS_CONTAINER: 'aws-container',
   GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
   GENERATOR_AZURE_SPRING_CLOUD: 'azure-spring-cloud',
   GENERATOR_CICD: 'ci-cd',

@@ -355,6 +355,16 @@ Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](
 UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
 and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
 <%_ } _%>
+<%_ if (cypressTests) { _%>
+UI end-to-end tests are powered by [Cypress][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>cypress](<%= CLIENT_TEST_SRC_DIR %>cypress)
+and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.
+
+#### Lighthouse audits
+
+You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `<%= clientPackageManager %> run e2e:cypress:audits`. 
+You should only run the audits when your application is packaged with the production profile.
+The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
+<%_ } _%>
 <%_ } _%>
 
 <%_ if (gatlingTests) { _%>
@@ -486,7 +496,12 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
 [Jasmine]: https://jasmine.github.io/2.0/introduction.html
+<%_ if (protractorTests) { _%>
 [Protractor]: https://angular.github.io/protractor/
+<%_ } _%>
+<%_ if (cypressTests) { _%>
+[Cypress]: https://www.cypress.io/
+<%_ } _%>
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/
 <%_ } _%>
