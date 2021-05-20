@@ -178,6 +178,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       { value: 'lux', name: 'Lux' },
       { value: 'materia', name: 'Materia' },
       { value: 'minty', name: 'Minty' },
+      { value: 'morph', name: 'Morph' },
       { value: 'pulse', name: 'Pulse' },
       { value: 'sandstone', name: 'Sandstone' },
       { value: 'simplex', name: 'Simplex' },
