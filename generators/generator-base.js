@@ -2566,6 +2566,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
+    dest.enableGradleEnterprise = config.enableGradleEnterprise;
+
+    if (config.gradleEnterpriseHost && !config.gradleEnterpriseHost.startsWith('https://')) {
+      dest.gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
+    } else {
+      dest.gradleEnterpriseHost = config.gradleEnterpriseHost;
+    }
+
     this.loadDerivedServerConfig(dest);
   }
 

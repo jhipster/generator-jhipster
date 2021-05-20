@@ -42,6 +42,7 @@ const {
   CLIENT_FRAMEWORK,
   TEST_FRAMEWORKS,
   CACHE_PROVIDER,
+  ENABLE_GRADLE_ENTERPRISE,
 } = OptionNames;
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -118,6 +119,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.skipServer = configuration.get(SKIP_SERVER);
         this.clientPackageManager = configuration.get(CLIENT_PACKAGE_MANAGER);
         this.buildTool = configuration.get(BUILD_TOOL);
+        this.enableGradleEnterprise = configuration.get(ENABLE_GRADLE_ENTERPRISE);
         this.reactive = configuration.get(REACTIVE);
         this.herokuAppName = configuration.get('herokuAppName');
         if (this.herokuAppName === undefined) {
