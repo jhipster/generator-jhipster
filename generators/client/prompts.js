@@ -191,6 +191,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       { value: 'united', name: 'United' },
       { value: 'vapor', name: 'Vapor' },
       { value: 'yeti', name: 'Yeti' },
+      { value: 'zephyr', name: 'Zephyr' },
     ];
   }
 
