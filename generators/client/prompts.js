@@ -169,7 +169,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
     return [
       { value: 'cerulean', name: 'Cerulean' },
       { value: 'cosmo', name: 'Cosmo' },
-      { value: 'cerulean', name: 'Cyborg' },
+      { value: 'cyborg', name: 'Cyborg' },
       { value: 'darkly', name: 'Darkly' },
       { value: 'flatly', name: 'Flatly' },
       { value: 'journal', name: 'Journal' },
