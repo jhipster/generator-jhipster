@@ -197,7 +197,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
 
   return new Promise((resolve, reject) => {
     generator.httpsGet(
-      'https://bootswatch.com/api/4.json',
+      'https://bootswatch.com/api/5.json',
 
       body => {
         try {
