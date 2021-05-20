@@ -189,6 +189,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       { value: 'spacelab', name: 'Spacelab' },
       { value: 'superhero', name: 'Superhero' },
       { value: 'united', name: 'United' },
+      { value: 'vapor', name: 'Vapor' },
       { value: 'yeti', name: 'Yeti' },
     ];
   }
