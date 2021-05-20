@@ -17,7 +17,9 @@ if ! [ -x "$NPM_EXE" ]; then
 fi
 
 if ! [ -x "$NPM_EXE" ]; then
+  echo "Using npm installed globally"
   npm "$@"
 else
+  echo "Using npm installed locally $($NPM_EXE --version)"
   $NPM_EXE "$@"
 fi
