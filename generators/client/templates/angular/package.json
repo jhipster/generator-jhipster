@@ -10,7 +10,7 @@
     "@ngx-translate/http-loader": "6.0.0",
     "ngx-cookie-service": "12.0.0",
     "ngx-infinite-scroll": "10.0.1",
-    "ngx-webstorage": "7.0.1",
+    "ngx-webstorage": "8.0.0",
     "rxjs": "6.6.7",
     "swagger-ui-dist": "3.48.0",
     "tslib": "2.2.0",
