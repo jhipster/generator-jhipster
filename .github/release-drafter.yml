@@ -2,3 +2,22 @@ template: |
   ## What’s Changed
 
   $CHANGES
+
+categories:
+  - title: 💎 Features & Enhancements
+    labels:
+      - 'area: enhancement :wrench:'
+      - 'changes: major :star:'
+      - 'changes: minor'
+  - title: 🐞 Bug Fixes
+    label: 'area: bug'
+  - title: 🖥️ Frontend
+    labels:
+      - 'theme: front'
+      - 'theme: vue'
+      - 'theme: angular'
+      - 'theme: react'
+  - title: 📝 Documentation
+    label: 'area: documentation:books:'
+  - title: 📦 Dependency updates
+    label: 'theme: dependencies'
