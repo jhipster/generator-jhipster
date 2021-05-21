@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@angular/cli": "12.0.1",
-    "@angular-builders/custom-webpack": "12.0.0-beta.0",
+    "@angular-builders/custom-webpack": "12.0.0",
     "@angular-builders/jest": "12.0.0-beta.0",
     "@angular-eslint/eslint-plugin": "12.0.0",
     "@types/node": "15.3.0",
