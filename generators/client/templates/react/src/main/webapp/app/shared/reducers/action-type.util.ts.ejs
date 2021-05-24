@@ -20,16 +20,19 @@
  * Appends REQUEST async action type
  */
 
-export const REQUEST = actionType => `${actionType}_PENDING`;
+export const REQUEST = actionType => `${actionType}_PENDING`; // todo remove
+export const PENDING = actionType => `${actionType}/pending`;
 
 /**
  * Appends SUCCESS async action type
  */
 
-export const SUCCESS = actionType => `${actionType}_FULFILLED`;
+export const SUCCESS = actionType => `${actionType}_FULFILLED`; // todo remove
+export const FULFILLED = actionType => `${actionType}/fulfilled`;
 
 /**
  * Appends FAILURE async action type
  */
 
-export const FAILURE = actionType => `${actionType}_REJECTED`;
+export const FAILURE = actionType => `${actionType}_REJECTED`; // todo remove
+export const REJECTED = actionType => `${actionType}/rejected`;
