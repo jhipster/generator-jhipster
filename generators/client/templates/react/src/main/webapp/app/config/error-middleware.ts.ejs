@@ -33,11 +33,11 @@ export default () => next => action => {
    * It need not run in production
    */
   if (process.env.NODE_ENV === 'development') {
-    const { error, payload } = action;
+    const { error } = action;
     if (error) {
       console.error(`${action.type} caught at middleware with reason: ${JSON.stringify(error.message)}.`);
-      if (payload && payload.response && payload.response.data) {
-        const message = getErrorMessage(payload.response.data);
+      if (error && error.response && error.response.data) {
+        const message = getErrorMessage(error.response.data);
         console.error(`Actual cause: ${message}`);
       }
     }

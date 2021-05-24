@@ -31,20 +31,11 @@ describe('Notification Middleware', () => {
 
   const SUCCESS_TYPE = 'SUCCESS';
   const ERROR_TYPE = 'SUCCESS';
-  const DEFAULT_SUCCESS_MESSAGE = 'fooSuccess';
-  const DEFAULT_ERROR_MESSAGE = 'fooError';
 
   // Default action for use in local tests
   const DEFAULT = {
     type: SUCCESS_TYPE,
     payload: 'foo'
-  };
-  const DEFAULT_SUCCESS = {
-    type: SUCCESS_TYPE,
-    meta: {
-      successMessage: DEFAULT_SUCCESS_MESSAGE
-    },
-    payload: 'foo',
   };
   const HEADER_SUCCESS = {
     type: SUCCESS_TYPE,
@@ -54,20 +45,14 @@ describe('Notification Middleware', () => {
         "headers": {"app-alert": "foo.created", "app-params": "foo"}
     },
   };
+
   const DEFAULT_ERROR = {
     type: ERROR_TYPE,
     error: new Error('foo'),
   };
-  const DEFAULT_ERROR_META = {
-    type: ERROR_TYPE,
-    meta: {
-      errorMessage: DEFAULT_ERROR_MESSAGE,
-    },
-    error: new Error('foo'),
-  };
   const VALIDATION_ERROR = {
     type: ERROR_TYPE,
-    payload: {
+    error: {
       isAxiosError: true,
       response: {
         data: {
@@ -83,11 +68,10 @@ describe('Notification Middleware', () => {
         headers: { expires: '0' },
       },
     },
-    error: new Error('foo'),
   };
   const HEADER_ERRORS = {
     type: ERROR_TYPE,
-    payload: {
+    error: {
       isAxiosError: true,
       response: {
         status: 400,
@@ -95,11 +79,10 @@ describe('Notification Middleware', () => {
         headers: { 'app-error': 'foo.creation', 'app-params': 'foo' },
       },
     },
-    error: new Error('foo'),
   };
   const NOT_FOUND_ERROR = {
     type: ERROR_TYPE,
-    payload: {
+    error: {
       isAxiosError: true,
       response: {
         data: {
@@ -109,21 +92,19 @@ describe('Notification Middleware', () => {
         status: 404,
       },
     },
-    error: new Error('foo'),
   };
   const NO_SERVER_ERROR = {
     type: ERROR_TYPE,
-    payload: {
+    error: {
       isAxiosError: true,
       response: {
         status: 0,
       },
     },
-    error: new Error('foo'),
   };
   const GENERIC_ERROR = {
     type: ERROR_TYPE,
-    payload: {
+    error: {
       isAxiosError: true,
       response: {
         data: {
@@ -131,11 +112,10 @@ describe('Notification Middleware', () => {
         },
       },
     },
-    error: new Error('foo'),
   };
   const LOGIN_REJECTED_ERROR = {
     type: ERROR_TYPE,
-    payload: {
+    error: {
       isAxiosError: true,
       response: {
         data: {
@@ -147,7 +127,6 @@ describe('Notification Middleware', () => {
         status: 401,
       },
     },
-    error: new Error('foo'),
   };
 
   const makeStore = () => applyMiddleware(notificationMiddleware)(createStore)(() => null);
@@ -175,12 +154,6 @@ describe('Notification Middleware', () => {
     expect((toastify.toast as any).success.called).toEqual(false);
   });
 
-  it('should trigger a success toast message', () => {
-    expect(store.dispatch(DEFAULT_SUCCESS).payload).toEqual('foo');
-    const toastMsg = (toastify.toast as any).success.getCall(0).args[0];
-    expect(toastMsg).toEqual(DEFAULT_SUCCESS_MESSAGE);
-  });
-
   it('should trigger a success toast message for header alerts', () => {
     expect(store.dispatch(HEADER_SUCCESS).payload.status).toEqual(201);
     const toastMsg = (toastify.toast as any).success.getCall(0).args[0];
@@ -193,44 +166,38 @@ describe('Notification Middleware', () => {
     expect(toastMsg).toEqual('foo');
   });
 
-  it('should trigger an error toast message and return error from meta', () => {
-    expect(store.dispatch(DEFAULT_ERROR_META).error.message).toEqual('foo');
-    const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
-    expect(toastMsg).toEqual(DEFAULT_ERROR_MESSAGE);
-  });
-
   it('should trigger an error toast message and return error for generic message', () => {
-    expect(store.dispatch(GENERIC_ERROR).payload.response.data.message).toEqual('Error');
+    expect(store.dispatch(GENERIC_ERROR).error.response.data.message).toEqual('Error');
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('Error');
   });
 
   it('should trigger an error toast message and return error for 400 response code', () => {
-    expect(store.dispatch(VALIDATION_ERROR).payload.response.data.message).toEqual('error.validation');
+    expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>);
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
-    expect(store.dispatch(NOT_FOUND_ERROR).payload.response.data.message).toEqual('Not found');
+    expect(store.dispatch(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>);
   });
 
   it('should trigger an error toast message and return error for 0 response code', () => {
-    expect(store.dispatch(NO_SERVER_ERROR).payload.response.status).toEqual(0);
+    expect(store.dispatch(NO_SERVER_ERROR).error.response.status).toEqual(0);
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>);
   });
 
   it('should trigger an error toast message and return error for headers containing errors', () => {
-    expect(store.dispatch(HEADER_ERRORS).payload.response.status).toEqual(400);
+    expect(store.dispatch(HEADER_ERRORS).error.response.status).toEqual(400);
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('foo.creation');
   });
 
   it('should not trigger an error toast message and return error for 40 response code', () => {
-    expect(store.dispatch(LOGIN_REJECTED_ERROR).payload.response.status).toEqual(401);
+    expect(store.dispatch(LOGIN_REJECTED_ERROR).error.response.status).toEqual(401);
     expect((toastify.toast as any).error.called).toEqual(false);
     expect((toastify.toast as any).success.called).toEqual(false);
   });

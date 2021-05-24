@@ -32,15 +32,13 @@ const addErrorAlert = (message, key?, data?) => {
 };
 
 export default () => next => action => {
-  const { error, payload, meta } = action;
+  const { error, payload } = action;
 
   /**
    *
    * The notification middleware serves to add success and error notifications
    */
-  if (meta && meta.successMessage) {
-    toast.success(meta.successMessage);
-  } else if (payload && payload.headers) {
+  if (payload && payload.headers) {
     const headers = payload.headers;
     let alert: string | null = null;
 <%_ if (enableTranslation) { _%>
@@ -64,11 +62,9 @@ export default () => next => action => {
   }
 
 
-  if (meta && meta.errorMessage) {
-    toast.error(meta.errorMessage);
-  } else if (error && payload && payload.isAxiosError) {
-    if (payload.response) {
-      const response = payload.response;
+  if (error && error.isAxiosError) {
+    if (error.response) {
+      const response = error.response;
       const data = response.data;
       if (
         !(
@@ -132,11 +128,11 @@ export default () => next => action => {
             }
         }
       }
-    } else if (payload.config && payload.config.url === 'api/account' && payload.config.method === 'get') {
+    } else if (error.config && error.config.url === 'api/account' && error.config.method === 'get') {
       /* eslint-disable no-console */
       console.log('Authentication Error: Trying to access url api/account with GET.');
-    } else if (payload.message) {
-      toast.error(payload.message);
+    } else if (error.message) {
+      toast.error(error.message);
     }
   } else if (error && error.message) {
     toast.error(error.message);

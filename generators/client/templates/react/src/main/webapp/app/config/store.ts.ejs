@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import promiseMiddleware from 'redux-promise-middleware';
-import { configureStore } from '@reduxjs/toolkit';
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import reducer from 'app/shared/reducers';
@@ -35,12 +34,11 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these field paths in all actions
-        ignoredActionPaths: ['payload.config', 'payload.request'],
+        ignoredActionPaths: ['payload.config', 'payload.request', 'error'],
       },
     }).concat(
       errorMiddleware,
       notificationMiddleware,
-      promiseMiddleware, // todo remove
       loadingBarMiddleware(),
     <%_ if (communicationSpringWebsocket) { _%>
       websocketMiddleware,
@@ -58,5 +56,6 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, IRootState, unknown, Action<string>>;
 
 export default getStore;
