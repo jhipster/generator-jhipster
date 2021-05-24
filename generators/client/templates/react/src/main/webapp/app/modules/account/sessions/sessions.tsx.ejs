@@ -16,34 +16,37 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
 import { Alert, Table, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
+
 import { getSession } from 'app/shared/reducers/authentication';
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { findAll, invalidateSession } from './sessions.reducer';
 
-export interface ISessionsProps extends StateProps, DispatchProps {}
+export const SessionsPage = () => {
+  const dispatch = useAppDispatch();
 
-export class SessionsPage extends React.Component<ISessionsProps> {
-  componentDidMount() {
-    this.props.getSession();
-    this.props.findAll();
-  }
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(findAll());
+  }, []);
 
-  doSessionInvalidation = series => () => {
-    this.props.invalidateSession(series);
-    this.props.findAll();
+  const doSessionInvalidation = series => () => {
+    dispatch(invalidateSession(series));
+    dispatch(findAll());
   };
 
   refreshList = () => {
-    this.props.findAll();
+    dispatch(findAll());
   };
 
-  render() {
-    const { account, sessions, updateSuccess, updateFailure } = this.props;
-    return (
+  const account = useAppSelector(state => state.authentication.account);
+  const sessions = useAppSelector(state => state.sessions.sessions);
+  const updateSuccess = useAppSelector(state => state.sessions.updateSuccess);
+  const updateFailure = useAppSelector(state => state.sessions.updateFailure);
+
+  return (
       <div>
         <h2>
           <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
@@ -97,20 +100,8 @@ export class SessionsPage extends React.Component<ISessionsProps> {
           </Table>
         </div>
       </div>
-    );
-  }
-}
+  );
+};
 
-const mapStateToProps = ({ authentication, sessions }: IRootState) => ({
-  account: authentication.account,
-  sessions: sessions.sessions,
-  updateSuccess: sessions.updateSuccess,
-  updateFailure: sessions.updateFailure
-});
+export default SessionsPage;
 
-const mapDispatchToProps = { getSession, findAll, invalidateSession };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(SessionsPage);
