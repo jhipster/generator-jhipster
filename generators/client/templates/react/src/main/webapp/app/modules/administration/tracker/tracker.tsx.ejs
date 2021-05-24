@@ -18,13 +18,12 @@
 -%>
 import React from 'react';
 import { Translate } from 'react-jhipster';
-import { connect } from 'react-redux';
 
-export interface ITrackerPageProps {
-  activities: any[];
-}
+import { useAppSelector } from 'app/config/store';
 
-export const TrackerPage = ({ activities }:ITrackerPageProps) => (
+export const TrackerPage = () => {
+  const activities = useAppSelector(state => state.administration.tracker.activities);
+    return (
       <div>
         <h2>
           <Translate contentKey="tracker.title">Real-time user activities</Translate>
@@ -66,10 +65,7 @@ export const TrackerPage = ({ activities }:ITrackerPageProps) => (
           </tbody>
         </table>
       </div>
-    );
+  );
+};
 
-const mapStateToProps = ({ administration }) => ({
-  activities: administration.tracker.activities
-});
-
-export default connect(mapStateToProps)(TrackerPage);
+export default TrackerPage;

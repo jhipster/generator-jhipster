@@ -24,9 +24,9 @@ import { Observable } from 'rxjs';
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
-import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
-import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
-import { SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
+import { ACTION_TYPES as AUTH_ACTIONS, logoutSession } from 'app/shared/reducers/authentication';
+import { FULFILLED, REJECTED } from 'app/shared/reducers/action-type.util';
 <%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
@@ -40,7 +40,7 @@ let listener: Observable<any>;
 let listenerObserver: any;
 let alreadyConnectedOnce = false;
 
-const createConnection = (): Promise<any> => new Promise((resolve, reject) => (connectedPromise = resolve));
+const createConnection = (): Promise<any> => new Promise((resolve) => (connectedPromise = resolve));
 
 const createListener = (): Observable<any> =>
   new Observable(observer => {
@@ -119,19 +119,16 @@ const unsubscribe = () => {
 };
 
 export default store => next => action => {
-  if (action.type === SUCCESS(AUTH_ACTIONS.GET_SESSION)) {
+  if (action.type === FULFILLED(AUTH_ACTIONS.GET_SESSION)) {
     connect();
     const isAdmin = action.payload.data.authorities.includes('ROLE_ADMIN');
     if (!alreadyConnectedOnce && isAdmin) {
       subscribe();
       receive().subscribe(activity => {
-        return store.dispatch({
-          type: ADMIN_ACTIONS.WEBSOCKET_ACTIVITY_MESSAGE,
-          payload: activity,
-        });
+        return store.dispatch(websocketActivityMessage(activity));
       });
     }
-  } else if (action.type === FAILURE(AUTH_ACTIONS.GET_SESSION) || action.type === AUTH_ACTIONS.LOGOUT) {
+  } else if (action.type === REJECTED(AUTH_ACTIONS.GET_SESSION) || action.type === logoutSession().type) {
     unsubscribe();
     disconnect();
   }
