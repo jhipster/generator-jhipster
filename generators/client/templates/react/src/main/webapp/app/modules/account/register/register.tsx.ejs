@@ -18,40 +18,51 @@
 -%>
 import React, { useState, useEffect } from 'react';
 import { Translate, translate } from 'react-jhipster';
-import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
+import { toast } from 'react-toastify';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { handleRegister, reset } from './register.reducer';
 
-<%_ if (enableTranslation) { _%>
-export interface IRegisterProps extends StateProps, DispatchProps  {}
-<%_ } else { _%>
-export type IRegisterProps = DispatchProps;
-<%_ } _%>
-
-export const RegisterPage = (props: IRegisterProps) => {
+export const RegisterPage = () => {
   const [password, setPassword] = useState('');
+  const dispatch = useAppDispatch();
 
   useEffect(
     () => () => {
-      props.reset();
+      dispatch(reset());
     },
     []
   );
 
+<%_ if (enableTranslation) { _%>
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
+<%_ } _%>
+
   const handleValidSubmit = (event, values) => {
 <%_ if (enableTranslation) { _%>
-    props.handleRegister(values.username, values.email, values.firstPassword, props.currentLocale);
+    dispatch(handleRegister({ login: values.username, email: values.email, password: values.firstPassword, langKey: currentLocale }));
 <%_ } else { _%>
-    props.handleRegister(values.username, values.email, values.firstPassword);
+    dispatch(handleRegister({ login: values.username, email: values.email, password: values.firstPassword }));
 <%_ } _%>
     event.preventDefault();
   };
 
   const updatePassword = event => setPassword(event.target.value);
+
+  const successMessage = useAppSelector(state => state.register.successMessage);
+
+<%_ if (enableTranslation) _%>
+  if (successMessage) {
+    toast.success(translate(successMessage));
+  }
+<%_ } else { _%>
+  if (successMessage) {
+    toast.success(successMessage);
+  }
+<%_ } _%>
 
   return (
     <div>
@@ -140,16 +151,4 @@ export const RegisterPage = (props: IRegisterProps) => {
   );
 }
 
-<%_ if (enableTranslation) { _%>
-const mapStateToProps = ({ locale }: IRootState) => ({
-  currentLocale: locale.currentLocale
-});
-<%_ } _%>
-
-const mapDispatchToProps = { handleRegister, reset };
-<%_ if (enableTranslation) { _%>
-type StateProps = ReturnType<typeof mapStateToProps>;
-<%_ } _%>
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(<% if (enableTranslation) { %>mapStateToProps<% } else { %>null<% } %>, mapDispatchToProps)(RegisterPage);
+export default RegisterPage;
