@@ -24,7 +24,6 @@
     "reactstrap": "8.9.0",
     "redux": "4.1.0",
     "redux-devtools-extension": "2.13.9",
-    "redux-promise-middleware": "6.1.2",
     "redux-thunk": "2.3.0",
     "sonar-scanner": "3.1.0",
     "tslib": "2.2.0",
