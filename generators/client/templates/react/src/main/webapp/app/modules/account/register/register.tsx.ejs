@@ -54,7 +54,7 @@ export const RegisterPage = () => {
 
   const successMessage = useAppSelector(state => state.register.successMessage);
 
-<%_ if (enableTranslation) _%>
+<%_ if (enableTranslation) { _%>
   if (successMessage) {
     toast.success(translate(successMessage));
   }

@@ -51,7 +51,7 @@ export const SettingsPage = () => {
     event.persist();
   };
 
-<%_ if (enableTranslation) _%>
+<%_ if (enableTranslation) { _%>
   if (successMessage) {
     toast.success(translate(successMessage));
   }

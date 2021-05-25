@@ -168,10 +168,10 @@ export const AdministrationSlice = createSlice({
           ...state.configuration,
           env: action.payload.data,
         };
-      });
+      })
       <%_ } _%>
       <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
-      builder.addMatcher(
+      .addMatcher(
         isAnyOf(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
           getGatewayRoutes.pending,
@@ -189,10 +189,10 @@ export const AdministrationSlice = createSlice({
           state.errorMessage = null;
           state.loading = true;
         }
-      );
+      )
       <%_ } _%>
       <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
-      builder.addMatcher(
+      .addMatcher(
         isAnyOf(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
           getGatewayRoutes.rejected,

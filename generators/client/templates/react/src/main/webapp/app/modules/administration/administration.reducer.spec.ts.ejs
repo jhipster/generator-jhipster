@@ -26,12 +26,12 @@ import { PENDING, REJECTED, FULFILLED } from 'app/shared/reducers/action-type.ut
 import administration, {
   ACTION_TYPES,
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-  gatewayRoutes,
+  getGatewayRoutes,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-  systemHealth,
-  systemMetrics,
-  systemThreadDump,
+  getSystemHealth,
+  getSystemMetrics,
+  getSystemThreadDump,
   getLoggers,
   changeLogLevel,
   getConfigurations,
@@ -359,10 +359,6 @@ describe('Administration reducer tests', () => {
         {
           type: PENDING(ACTION_TYPES.FETCH_LOGS)
         },
-        {
-          type: FULFILLED(ACTION_TYPES.FETCH_LOGS),
-          payload: resolvedObject
-        }
       ];
       await store.dispatch(changeLogLevel('ROOT', 'DEBUG'));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);

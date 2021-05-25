@@ -18,14 +18,14 @@
 -%>
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-<% if (enableTranslation) { %>import { translate, Storage } from 'react-jhipster';<% } %>
+<% if (enableTranslation) { %>import { Storage } from 'react-jhipster';<% } %>
 <%_ if (enableTranslation && enableI18nRTL) { _%>import { isRTL } from 'app/config/translation';<%_ } _%>
 import { getSession } from 'app/shared/reducers/authentication';
 import { AppThunk } from 'app/config/store';
 import { serializeAxiosError } from 'app/shared/reducers/move-to-lib';
 
 export const ACTION_TYPES = {
-  UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
+  UPDATE_ACCOUNT: 'settings/UPDATE_ACCOUNT',
 };
 
 const initialState = {

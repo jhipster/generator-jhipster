@@ -36,6 +36,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 export const UserManagement = (props: RouteComponentProps<any>) => {
   const dispatch = useAppDispatch();
+
   const [pagination, setPagination] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, '<%= user.primaryKey.name %>'), props.location.search));
 
   const getUsersFromProps = () => {

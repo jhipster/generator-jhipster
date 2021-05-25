@@ -20,7 +20,7 @@ import axios, { AxiosResponse } from 'axios';
 <%_ if (authenticationTypeJwt || enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { serializeAxiosError } from './move-to-lib';
 
 import { AppThunk } from 'app/config/store';
@@ -145,7 +145,7 @@ export const logout: () => AppThunk = () => async dispatch => {
 };
 <%_ } _%>
 
-export const clearAuthentication = messageKey => (dispatch, getState) => {
+export const clearAuthentication = messageKey => dispatch => {
 <%_ if (authenticationTypeJwt) { _%>
   clearAuthToken();
 <%_ } _%>
@@ -171,7 +171,7 @@ export const AuthenticationSlice = createSlice({
 <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
 <%_ } _%>
-        redirectMessage: action.message
+        redirectMessage: action.payload
       };
     },
     clearAuth(state) {
