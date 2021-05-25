@@ -35,6 +35,7 @@ import { isRTL } from 'app/config/translation';
 
 import { Home, Brand } from './header-components';
 import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
+import { AppThunk } from 'app/config/store';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -44,7 +45,7 @@ export interface IHeaderProps {
   isOpenAPIEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
-  onLocaleChange: (langKey: string) => void;
+  onLocaleChange: (langKey: string) => AppThunk;
 <%_ } _%>
 }
 
