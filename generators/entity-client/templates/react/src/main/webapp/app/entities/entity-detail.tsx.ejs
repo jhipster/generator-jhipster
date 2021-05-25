@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
 import {
@@ -34,21 +33,21 @@ import {
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './<%= entityFileName %>.reducer';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (fieldsContainDuration) { _%>
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface I<%= entityReactName %>DetailProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
+export const <%= entityReactName %>Detail = (props: RouteComponentProps<{id: string}>) => {
+  const dispatch = useAppDispatch();
 
-export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>DetailProps) => {
   useEffect(() => {
-    props.getEntity(props.match.params.id);
+    dispatch(getEntity(props.match.params.id));
   }, []);
 
-  const { <%= entityInstance %>Entity } = props;
+  const <%= entityInstance %>Entity = useAppSelector(state => state.customerDetails.entity);
   return (
     <Row>
       <Col md="8">
@@ -164,13 +163,4 @@ _%>
   );
 };
 
-const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-    <%= entityInstance %>Entity: <%= entityInstance %>.entity
-});
-
-const mapDispatchToProps = { getEntity };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Detail);
+export default <%= entityReactName %>Detail;

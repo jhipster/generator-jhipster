@@ -21,19 +21,10 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import {
-  <%_ if (searchEngine) { _%>
-  ICrudSearchAction,
-  <%_ } _%>
-  <%_ if (paginationInfiniteScroll) { _%>
-  parseHeaderForLinks, loadMoreDataWhenScrolled,
-  <%_ } _%>
-  ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction
-} from 'react-jhipster';
+import { createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/reducer.utils';
-
+import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
@@ -47,17 +38,13 @@ export const ACTION_TYPES = {
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
   PARTIAL_UPDATE_<%= entityActionName %>: '<%= entityInstance %>/PARTIAL_UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
-  <%_ if (fieldsContainBlob) { _%>
-  SET_BLOB: '<%= entityInstance %>/SET_BLOB',
-  <%_ } _%>
 <%_ } _%>
-  RESET: '<%= entityInstance %>/RESET'
 };
 
-const initialState = {
+const initialState: EntityState<I<%= entityReactName %>> = {
   loading: false,
   errorMessage: null,
-  entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+  entities: [],
   entity: defaultValue,
 <%_ if (paginationInfiniteScroll) { _%>
   links: { next: 0 },
@@ -69,128 +56,6 @@ const initialState = {
   updateSuccess: false
 };
 
-export type <%= entityReactName %>State =  Readonly<typeof initialState>;
-
-// Reducer
-
-export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
-  switch (action.type) {
-<%_ if (searchEngine) { _%>
-    case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-<%_ } _%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        loading: true
-      };
-<%_ if (!readOnly) { _%>
-    case REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>):
-    case REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>):
-    case REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>):
-    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        updating: true
-      };
-<%_ } _%>
-<%_ if (searchEngine) { _%>
-    case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-<%_ } _%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
-<%_ if (!readOnly) { _%>
-    case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
-    case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
-    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
-    case FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>):
-<%_ } _%>
-      return {
-        ...state,
-        loading: false,
-        updating: false,
-        updateSuccess: false,
-        errorMessage: action.payload
-      };
-<%_ if (searchEngine) { _%>
-    case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-<%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
-<%_ if (paginationInfiniteScroll) { _%>
-      {
-      const links = parseHeaderForLinks(action.payload.headers.link);
-<%_ } _%>
-
-      return {
-        ...state,
-        loading: false,
-<%_ if (paginationInfiniteScroll) { _%>
-  <%_ if (!databaseTypeCassandra) { _%>
-        links,
-        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
-  <%_ } _%>
-<%_ } else { _%>
-        entities: action.payload.data,
-<%_ } _%>
-<%_ if (!paginationNo) { _%>
-  <%_ if (!databaseTypeCassandra) { _%>
-        totalItems: parseInt(action.payload.headers['x-total-count'], 10)
-  <%_ } _%>
-<%_ } _%>
-      };
-<%_ if (paginationInfiniteScroll) { _%>
-    }
-<%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
-      return {
-        ...state,
-        loading: false,
-        entity: action.payload.data
-      };
-<%_ if (!readOnly) { _%>
-    case SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>):
-    case SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>):
-    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true,
-        entity: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true,
-        entity: {}
-      };
-  <%_ if (fieldsContainBlob) { _%>
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
-  <%_ } _%>
-<%_ } _%>
-    case ACTION_TYPES.RESET:
-      return {
-        ...initialState
-      };
-    default:
-      return state;
-  }
-};
-
 const apiUrl = '<% if (applicationTypeGateway && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
 <%_ if (searchEngine) { _%>
 const apiSearchUrl = '<% if (applicationTypeGateway && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
@@ -199,92 +64,172 @@ const apiSearchUrl = '<% if (applicationTypeGateway && locals.microserviceName) 
 // Actions
 
 <%_ if (searchEngine) { _%>
-export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
-  type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
+export const getSearchEntities = createAsyncThunk(
+  ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
+  async ({ query, page, size, sort }: IQueryParams) => {
   <%_ if (!paginationNo) { _%>
-  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
+    const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
   <%_ } else { _%>
-  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}`)
+    const requestUrl = `${apiSearchUrl}?query=${query}`;
   <%_ } _%>
-});
-
-<%_ } _%>
-export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, size, sort) =>
-<%_ if (!paginationNo) { _%>
-{
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return {
-    type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-    payload: axios.get<I<%= entityReactName %>>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+    return axios.get<I<%= entityReactName %>[]>(requestUrl);
   }
-}
-<%_ } else { _%>
-({
-  type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-  payload: axios.get<I<%= entityReactName %>>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
-<%_ } _%>
+);
 
-export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
-  const requestUrl = `${apiUrl}/${id}`;
-  return {
-    type: ACTION_TYPES.FETCH_<%= entityActionName %>,
-    payload: axios.get<I<%= entityReactName %>>(requestUrl)
-  };
-};
+<%_ } _%>
+export const getEntities = createAsyncThunk(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST, async ({ page, size, sort }: IQueryParams) => {
+  <%_ if (!paginationNo) { _%>
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}cacheBuster=${new Date().getTime()}`;
+  <%_ } else { _%>
+  const requestUrl = `${apiUrl}?cacheBuster=${new Date().getTime()}`;
+  <%_ } _%>
+  return axios.get<I<%= entityReactName %>[]>(requestUrl);
+});
+
+export const getEntity = createAsyncThunk(
+  ACTION_TYPES.FETCH_<%= entityActionName %>,
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    return axios.get<I<%= entityReactName %>>(requestUrl);
+  },
+  { serializeError: serializeAxiosError }
+);
 
 <%_ if (!readOnly) { _%>
-export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    payload: axios.post(apiUrl, cleanEntity(entity))
-  });
-  <%_ if (!paginationInfiniteScroll) { _%>
-  dispatch(getEntities());
-  <%_ } _%>
-  return result;
-};
+export const createEntity = createAsyncThunk(
+  ACTION_TYPES.CREATE_<%= entityActionName %>,
+  async (entity: I<%= entityReactName %>, thunkAPI) => {
+    <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+    <%_ } else { _%>
+    return axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
+    <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    payload: axios.put(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity))
-  });
-  return result;
-};
+export const updateEntity = createAsyncThunk(
+  ACTION_TYPES.UPDATE_<%= entityActionName %>,
+  async (entity: I<%= entityReactName %>, thunkAPI) => {
+    <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+    <%_ } else { _%>
+    return axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const partialUpdate: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>,
-    payload: axios.patch(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity))
-  });
-  return result;
-};
+export const partialUpdate = createAsyncThunk(
+  ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>,
+  async (entity: I<%= entityReactName %>, thunkAPI) => {
+    <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+    <%_ } else { _%>
+    return axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
+    <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => async dispatch => {
-  const requestUrl = `${apiUrl}/${id}`;
-  const result = await dispatch({
-    type: ACTION_TYPES.DELETE_<%= entityActionName %>,
-    payload: axios.delete(requestUrl)
-  });
-  <%_ if (!paginationInfiniteScroll) { _%>
-  dispatch(getEntities());
-  <%_ } _%>
-  return result;
-};
-
-  <%_ if (fieldsContainBlob) { _%>
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-  <%_ } _%>
+export const deleteEntity = createAsyncThunk(
+  ACTION_TYPES.DELETE_<%= entityActionName %>,
+  async (id: string | number, thunkAPI) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    <%_ if (!paginationInfiniteScroll) { _%>
+    const result = await axios.delete<I<%= entityReactName %>>(requestUrl);
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+    <%_ } else { _%>
+    return await axios.delete<I<%= entityReactName %>>(requestUrl);
+    <%_ } _%>
+  },
+  { serializeError: serializeAxiosError }
+);
 <%_ } _%>
 
-export const reset = () => ({
-  type: ACTION_TYPES.RESET
+// slice
+
+export const <%= entityReactName %>Slice = createEntitySlice({
+  name: '<%= entityInstance %>',
+  initialState,
+  extraReducers(builder) {
+    builder
+      .addCase(getEntity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
+      <%_ if (!readOnly) { _%>
+      .addCase(deleteEntity.fulfilled, state => {
+        state.updating = false;
+        state.updateSuccess = true;
+        state.entity = {};
+      })
+      <%_ } _%>
+      .addMatcher(isAnyOf(
+        getEntities.fulfilled,
+        <%_ if (searchEngine) { _%>
+        getSearchEntities.fulfilled,
+        <%_ } _%>
+        ), (state, action) => {
+        <%_ if (paginationInfiniteScroll) { _%>
+          const links = parseHeaderForLinks(action.payload.headers.link);
+        <%_ } _%>
+
+          return {
+            ...state,
+            loading: false,
+        <%_ if (paginationInfiniteScroll) { _%>
+          <%_ if (!databaseTypeCassandra) { _%>
+            links,
+            entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
+          <%_ } _%>
+        <%_ } else { _%>
+            entities: action.payload.data,
+        <%_ } _%>
+        <%_ if (!paginationNo) { _%>
+          <%_ if (!databaseTypeCassandra) { _%>
+            totalItems: parseInt(action.payload.headers['x-total-count'], 10)
+          <%_ } _%>
+        <%_ } _%>
+          };
+      })
+      <%_ if (!readOnly) { _%>
+      .addMatcher(isAnyOf(createEntity.fulfilled, updateEntity.fulfilled, partialUpdate.fulfilled), (state, action) => {
+        state.updating = false;
+        state.loading = false;
+        state.updateSuccess = true;
+        state.entity = action.payload.data;
+      })
+      <%_ } _%>
+      .addMatcher(isAnyOf(
+        getEntities.pending,
+        getEntity.pending,
+        <%_ if (searchEngine) { _%>
+        getSearchEntities.pending,
+        <%_ } _%>
+        ), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
+      })
+      <%_ if (!readOnly) { _%>
+      .addMatcher(isAnyOf(createEntity.pending, updateEntity.pending, partialUpdate.pending, deleteEntity.pending), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.updating = true;
+      })
+      <%_ } _%>
+  },
 });
+
+export const { <% if (fieldsContainBlob) { %>setBlob,<% } %>reset } = <%= entityReactName %>Slice.actions;
+
+// Reducer
+export default <%= entityReactName %>Slice.reducer;

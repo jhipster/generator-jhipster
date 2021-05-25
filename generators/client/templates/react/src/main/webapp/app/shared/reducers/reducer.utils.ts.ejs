@@ -106,8 +106,9 @@ export interface EntityState<T> {
   errorMessage: string | null;
   entities: ReadonlyArray<T>;
   entity: T;
+  links?: any;
   updating: boolean;
-  totalItems: number;
+  totalItems?: number;
   updateSuccess: boolean;
 }
 
