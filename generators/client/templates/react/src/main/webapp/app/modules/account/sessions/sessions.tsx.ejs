@@ -37,7 +37,7 @@ export const SessionsPage = () => {
     dispatch(findAll());
   };
 
-  refreshList = () => {
+  const refreshList = () => {
     dispatch(findAll());
   };
 
@@ -70,7 +70,7 @@ export const SessionsPage = () => {
         </Alert>
         ) : null}
 
-        <Button color="primary" onClick={this.refreshList}>Refresh</Button>
+        <Button color="primary" onClick={refreshList}>Refresh</Button>
 
         <div className="table-responsive">
           <Table className="table-striped">
@@ -90,7 +90,7 @@ export const SessionsPage = () => {
                 <td>{s.userAgent}</td>
                 <td>{s.tokenDate}</td>
                 <td>
-                  <Button color="primary" onClick={this.doSessionInvalidation(s.series)}>
+                  <Button color="primary" onClick={doSessionInvalidation(s.series)}>
                     <Translate contentKey="sessions.table.button">Invalidate</Translate>
                   </Button>
                 </td>
