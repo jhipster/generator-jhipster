@@ -20,9 +20,7 @@
 /**
  * @jest-environment jsdom
  */
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import configureStore from 'redux-mock-store';
-import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
@@ -30,9 +28,9 @@ import sinon from 'sinon';
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 
+import { PENDING, FULFILLED, REJECTED } from 'app/shared/reducers/action-type.util';
 import account, { ACTION_TYPES, saveAccountSettings, reset } from './settings.reducer';
 import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
-<% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>
@@ -43,7 +41,7 @@ describe('Settings reducer tests', () => {
 <%_ } _%>
   describe('Common tests', () => {
     it('should return the initial state', () => {
-      const toTest = account(undefined, {});
+      const toTest = account(undefined, { type: '' });
       expect(toTest).toMatchObject({
         loading: false,
         errorMessage: null,
@@ -55,7 +53,7 @@ describe('Settings reducer tests', () => {
 
   describe('Settings update', () => {
     it('should detect a request', () => {
-      const toTest = account(undefined, { type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT) });
+      const toTest = account(undefined, { type: PENDING(ACTION_TYPES.UPDATE_ACCOUNT) });
       expect(toTest).toMatchObject({
         updateSuccess: false,
         updateFailure: false,
@@ -63,7 +61,7 @@ describe('Settings reducer tests', () => {
       });
     });
     it('should detect a success', () => {
-      const toTest = account(undefined, { type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT) });
+      const toTest = account(undefined, { type: FULFILLED(ACTION_TYPES.UPDATE_ACCOUNT) });
       expect(toTest).toMatchObject({
         updateSuccess: true,
         updateFailure: false,
@@ -71,7 +69,7 @@ describe('Settings reducer tests', () => {
       });
     });
     it('should detect a failure', () => {
-      const toTest = account(undefined, { type: FAILURE(ACTION_TYPES.UPDATE_ACCOUNT) });
+      const toTest = account(undefined, { type: REJECTED(ACTION_TYPES.UPDATE_ACCOUNT) });
       expect(toTest).toMatchObject({
         updateSuccess: false,
         updateFailure: true,
@@ -83,15 +81,12 @@ describe('Settings reducer tests', () => {
       const initialState = {
         loading: false,
         errorMessage: null,
+        successMessage: null,
         updateSuccess: false,
         updateFailure: false
       };
-      expect(
-        account({ ...initialState, loading: true }, {
-          type: ACTION_TYPES.RESET
-        })
-        ).toEqual({
-          ...initialState
+      expect(account({ ...initialState, loading: true }, reset())).toEqual({
+        ...initialState,
       });
     });
   });
@@ -101,7 +96,7 @@ describe('Settings reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware]);
+      const mockStore = configureStore([thunk]);
 <%_ if (enableTranslation) { _%>
       store = mockStore({ authentication: { account: { langKey: '<%= nativeLanguage %>' } } });
 <%_ } else { _%>
@@ -112,46 +107,26 @@ describe('Settings reducer tests', () => {
     });
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
-      const meta = {
-<%_ if (enableTranslation) { _%>
-        successMessage: 'translation-not-found[settings.messages.success]'
-<%_ } else { _%>
-        successMessage: '<strong>Settings saved!</strong>'
-<%_ } _%>
-      };
-
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT),
-          meta
+          type: PENDING(ACTION_TYPES.UPDATE_ACCOUNT),
         },
         {
-          type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT),
+          type: FULFILLED(ACTION_TYPES.UPDATE_ACCOUNT),
           payload: resolvedObject,
-          meta
         },
         {
-          type: REQUEST(authActionTypes.GET_SESSION)
+          type: PENDING(authActionTypes.GET_SESSION)
         },
-        {
-          type: SUCCESS(authActionTypes.GET_SESSION),
-          payload: resolvedObject
-        }<% if (enableTranslation) { %>,
-        {
-          type: localeActionTypes.SET_LOCALE,
-          locale: '<%= nativeLanguage %>'
-        }<% } %>
       ];
-      await store.dispatch(saveAccountSettings({})).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(saveAccountSettings({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
     it('dispatches ACTION_TYPES.RESET actions', async () => {
-      const expectedActions = [
-        {
-          type: ACTION_TYPES.RESET
-        }
-      ];
       await store.dispatch(reset());
-      expect(store.getActions()).toEqual(expectedActions);
+      expect(store.getActions()[0]).toMatchObject(reset());
     });
   });
 });
