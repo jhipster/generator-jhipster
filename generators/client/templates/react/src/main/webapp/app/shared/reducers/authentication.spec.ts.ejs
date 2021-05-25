@@ -34,9 +34,9 @@ import authentication, {
   getSession,
   <% if (!authenticationTypeOauth2) { %>login,<% } %>
   clearAuthentication,
-  logout,
-  <% if (authenticationTypeJwt) { %>clearAuthToken,<% } %>
+  logout,<% if (authenticationTypeJwt) { %>
   logoutSession,
+  clearAuthToken,<% } %>
   authError,
   clearAuth,
   initialState,

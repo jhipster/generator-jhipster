@@ -36,13 +36,13 @@ const initialState = {
 export type SessionsState =  Readonly<typeof initialState>;
 
 // Actions
-const apiURL = '/api/account/sessions/';
+const apiUrl = '/api/account/sessions/';
 
 export const findAll = createAsyncThunk(ACTION_TYPES.FIND_ALL, async () => axios.get<any>(apiUrl), {
   serializeError: serializeAxiosError,
 });
 
-export const invalidateSession = createAsyncThunk(ACTION_TYPES.INVALIDATE, async (series: any) => axios.delete(`${apiURL}${series}`), {
+export const invalidateSession = createAsyncThunk(ACTION_TYPES.INVALIDATE, async (series: any) => axios.delete(`${apiUrl}${series}`), {
   serializeError: serializeAxiosError,
 });
 

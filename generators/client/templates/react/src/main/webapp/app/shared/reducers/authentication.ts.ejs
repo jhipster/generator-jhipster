@@ -244,7 +244,7 @@ export const AuthenticationSlice = createSlice({
   },
 });
 
-export const { logoutSession, authError, clearAuth } = AuthenticationSlice.actions;
+export const { <% if (authenticationTypeJwt) { %>logoutSession,<% } %> authError, clearAuth } = AuthenticationSlice.actions;
 
 // Reducer
 export default AuthenticationSlice.reducer;
