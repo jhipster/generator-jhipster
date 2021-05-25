@@ -26,7 +26,7 @@ import { Storage } from 'react-jhipster';
 
 import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
 import { ACTION_TYPES as AUTH_ACTIONS<% if (authenticationTypeJwt) { %>, logoutSession<% } %> } from 'app/shared/reducers/authentication';
-import { FULFILLED, REJECTED } from 'app/shared/reducers/action-type.util';
+import { FULFILLED, REJECTED } from 'app/shared/reducers/reducer.utils';
 <%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>

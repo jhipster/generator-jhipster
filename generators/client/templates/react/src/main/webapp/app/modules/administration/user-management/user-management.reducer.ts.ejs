@@ -20,8 +20,7 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { IUser, defaultValue } from 'app/shared/model/user.model';
-import { IQueryParams } from 'app/shared/reducers/action-type.util';
-import { serializeAxiosError } from 'app/shared/reducers/move-to-lib';
+import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',

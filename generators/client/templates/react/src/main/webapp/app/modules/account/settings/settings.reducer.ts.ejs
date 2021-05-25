@@ -22,7 +22,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 <%_ if (enableTranslation && enableI18nRTL) { _%>import { isRTL } from 'app/config/translation';<%_ } _%>
 import { getSession } from 'app/shared/reducers/authentication';
 import { AppThunk } from 'app/config/store';
-import { serializeAxiosError } from 'app/shared/reducers/move-to-lib';
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'settings/UPDATE_ACCOUNT',
