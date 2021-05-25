@@ -336,7 +336,7 @@ describe('Entities reducer tests', () => {
         {
           type: PENDING(ACTION_TYPES.CREATE_<%= entityActionName %>)
         },
-        <%_ if (!paginationInfiniteScroll) { _%>,
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
           type: PENDING(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -349,7 +349,7 @@ describe('Entities reducer tests', () => {
       await store.dispatch(createEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>,
+      <%_ if (!paginationInfiniteScroll) { _%>
       expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
       <%_ } _%>
     });
@@ -359,7 +359,7 @@ describe('Entities reducer tests', () => {
         {
           type: PENDING(ACTION_TYPES.UPDATE_<%= entityActionName %>)
         },
-        <%_ if (!paginationInfiniteScroll) { _%>,
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
           type: PENDING(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -372,7 +372,7 @@ describe('Entities reducer tests', () => {
       await store.dispatch(updateEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>,
+      <%_ if (!paginationInfiniteScroll) { _%>
       expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
       <%_ } _%>
     });
@@ -382,7 +382,7 @@ describe('Entities reducer tests', () => {
         {
           type: PENDING(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>)
         },
-        <%_ if (!paginationInfiniteScroll) { _%>,
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
           type: PENDING(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -396,7 +396,7 @@ describe('Entities reducer tests', () => {
       await store.dispatch(partialUpdate({ id: <%- generateTestEntityId(primaryKey.type) %> }));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>,
+      <%_ if (!paginationInfiniteScroll) { _%>
       expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
       <%_ } _%>
     });
@@ -406,7 +406,7 @@ describe('Entities reducer tests', () => {
         {
           type: PENDING(ACTION_TYPES.DELETE_<%= entityActionName %>)
         },
-        <%_ if (!paginationInfiniteScroll) { _%>,
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
           type: PENDING(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -419,7 +419,9 @@ describe('Entities reducer tests', () => {
       await store.dispatch(deleteEntity(42666));
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
       expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
     });
 <%_ } _%>
 

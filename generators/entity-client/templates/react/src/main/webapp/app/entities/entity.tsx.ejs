@@ -277,8 +277,8 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
   const loading = useAppSelector(state => state.<%= entityInstance %>.loading);
   <%_ if (!paginationNo) { _%>
   const totalItems = useAppSelector(state => state.<%= entityInstance %>.totalItems);
-  <% } %>
-  <% if (paginationPagination) { %>
+  <%_ } _%>
+  <%_ if (paginationInfiniteScroll) { _%>
   const links = useAppSelector(state => state.<%= entityInstance %>.links);
   const entity = useAppSelector(state => state.<%= entityInstance %>.entity);
   const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);

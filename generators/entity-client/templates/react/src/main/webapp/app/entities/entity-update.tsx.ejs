@@ -123,10 +123,6 @@ export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: str
   const updating = useAppSelector(state => state.<%= entityInstance %>.updating);
   const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
 
-  const { <%= entityInstance %>Entity,<%
-  uniqueRelationFields.forEach(rel => {
-  %> <%= rel %>,<% }) %> loading, updating } = props;
-
 <%_ for (var i = 0; i < blobFields.length; i++) { _%>
   <%_
     const b = blobFields[i];
