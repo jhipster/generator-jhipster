@@ -20,7 +20,7 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { IUser, defaultValue } from 'app/shared/model/user.model';
-import { ISearchParams } from 'app/shared/reducers/action-type.util';
+import { IQueryParams } from 'app/shared/reducers/action-type.util';
 import { serializeAxiosError } from 'app/shared/reducers/move-to-lib';
 
 export const ACTION_TYPES = {
@@ -50,12 +50,12 @@ const adminUrl = 'api/admin/users';
 
 // Async Actions
 
-export const getUsers = createAsyncThunk(ACTION_TYPES.FETCH_USERS, async ({ page, size, sort }: ISearchParams) => {
+export const getUsers = createAsyncThunk(ACTION_TYPES.FETCH_USERS, async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return axios.get<IUser[]>(requestUrl);
 });
 
-export const getUsersAsAdmin = createAsyncThunk(ACTION_TYPES.FETCH_USERS_AS_ADMIN, async ({ page, size, sort }: ISearchParams) => {
+export const getUsersAsAdmin = createAsyncThunk(ACTION_TYPES.FETCH_USERS_AS_ADMIN, async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${adminUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return axios.get<IUser[]>(requestUrl);
 });

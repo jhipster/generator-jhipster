@@ -35,6 +35,6 @@ export const FULFILLED = actionType => `${actionType}/fulfilled`;
 export const REJECTED = actionType => `${actionType}/rejected`;
 
 /**
- * Model for redux actions with pagination
+ * Model for redux actions with search and/or pagination
  */
-export type ISearchParams = { page?: number; size?: number; sort?: string };
+export type IQueryParams = { query?: string; page?: number; size?: number; sort?: string };
