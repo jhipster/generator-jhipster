@@ -20,6 +20,8 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
 import { IUser, defaultValue } from 'app/shared/model/user.model';
+import { ISearchParams } from 'app/shared/reducers/action-type.util';
+import { serializeAxiosError } from 'app/shared/reducers/move-to-lib';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -62,41 +64,45 @@ export const getRoles = createAsyncThunk(ACTION_TYPES.FETCH_ROLES, async () => {
   return axios.get<any[]>(`api/authorities`);
 });
 
-export const getUser = createAsyncThunk(ACTION_TYPES.FETCH_USER, async (id: string) => {
-  const requestUrl = `${adminUrl}/${id}`;
-  return axios.get<IUser>(requestUrl);
-});
+export const getUser = createAsyncThunk(
+  ACTION_TYPES.FETCH_USER,
+  async (id: string) => {
+    const requestUrl = `${adminUrl}/${id}`;
+    return axios.get<IUser>(requestUrl);
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const createUser = createAsyncThunk(ACTION_TYPES.CREATE_USER, async (user: IUser, thunkAPI) => {
-  try {
+export const createUser = createAsyncThunk(
+  ACTION_TYPES.CREATE_USER,
+  async (user: IUser, thunkAPI) => {
     const result = await axios.post<IUser>(adminUrl, user);
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const updateUser = createAsyncThunk(ACTION_TYPES.UPDATE_USER, async (user: IUser, thunkAPI) => {
-  try {
+export const updateUser = createAsyncThunk(
+  ACTION_TYPES.UPDATE_USER,
+  async (user: IUser, thunkAPI) => {
     const result = await axios.put<IUser>(adminUrl, user);
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const deleteUser = createAsyncThunk(ACTION_TYPES.DELETE_USER, async (id: string, thunkAPI) => {
-  try {
+export const deleteUser = createAsyncThunk(
+  ACTION_TYPES.DELETE_USER,
+  async (id: string, thunkAPI) => {
     const requestUrl = `${adminUrl}/${id}`;
     const result = await axios.delete<IUser>(requestUrl);
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
+  },
+  { serializeError: serializeAxiosError }
+);
 
 export type UserManagementState = Readonly<typeof initialState>;
 
@@ -104,7 +110,7 @@ export const UserManagementSlice = createSlice({
   name: 'userManagement',
   initialState: initialState as UserManagementState,
   reducers: {
-    reset(state) {
+    reset() {
       return initialState;
     },
   },
@@ -159,8 +165,7 @@ export const UserManagementSlice = createSlice({
           state.loading = false;
           state.updating = false;
           state.updateSuccess = false;
-          const error = (action.payload as any)?.message || action.error.message;
-          state.errorMessage = error;
+          state.errorMessage = action.error.message;
         }
       );
   },

@@ -18,7 +18,6 @@
 -%>
 
 import configureStore from 'redux-mock-store';
-import promiseMiddleware from 'redux-promise-middleware';
 import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
@@ -126,7 +125,7 @@ describe('User management reducer tests', () => {
             loading: false,
             updating: false,
             updateSuccess: false,
-            errorMessage: 'something happened',
+            errorMessage: 'error happened',
           });
         },
         { message: 'error happened' }
@@ -223,7 +222,7 @@ describe('User management reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware]);
+      const mockStore = configureStore([thunk]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
@@ -232,11 +231,18 @@ describe('User management reducer tests', () => {
     });
 
     it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions', async () => {
-      await store.dispatch(getUsersAsAdmin({})).then(() => {
-        expect(store.getActions()[0].type).toEqual(PENDING(ACTION_TYPES.FETCH_USERS_AS_ADMIN));
-        expect(store.getActions()[1].type).toEqual(FULFILLED(ACTION_TYPES.FETCH_USERS_AS_ADMIN));
-        expect(store.getActions()[1].payload).toEqual(resolvedObject);
-      });
+      const expectedActions = [
+        {
+          type: PENDING(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
+        },
+        {
+          type: FULFILLED(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
+          payload: resolvedObject,
+        },
+      ];
+      await store.dispatch(getUsersAsAdmin({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions with pagination options', async () => {
@@ -249,10 +255,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsersAsAdmin({ page: 1, size: 20, sort: 'id,desc' })).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      });
+      await store.dispatch(getUsersAsAdmin({ page: 1, size: 20, sort: 'id,desc' }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
@@ -265,10 +270,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsers({})).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      });
+      await store.dispatch(getUsers({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
@@ -281,10 +285,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsers({ page: 1, size: 20, sort: 'id,desc' })).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      });
+      await store.dispatch(getUsers({ page: 1, size: 20, sort: 'id,desc' }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_ROLES_PENDING and FETCH_ROLES_FULFILLED actions', async () => {
@@ -297,10 +300,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getRoles()).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      });
+      await store.dispatch(getRoles());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches FETCH_USER_PENDING and FETCH_USER_FULFILLED actions', async () => {
@@ -313,10 +315,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUser(username)).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      });
+      await store.dispatch(getUser(username));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
     it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
@@ -332,11 +333,10 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(createUser({})).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-        expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      });
+      await store.dispatch(createUser({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
 
     it('dispatches UPDATE_USER_PENDING and UPDATE_USER_FULFILLED actions', async () => {
@@ -352,11 +352,10 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(updateUser({ login: username })).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-        expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      });
+      await store.dispatch(updateUser({ login: username }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
 
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
@@ -372,11 +371,10 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(deleteUser(username)).then(() => {
-        expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-        expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-        expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      });
+      await store.dispatch(deleteUser(username));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
 
     it('dispatches ACTION_TYPES.RESET actions', async () => {
