@@ -143,6 +143,9 @@ jobs:
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
         run: $JHI_SCRIPTS/04-git-config.sh
+      # Update global NPM for workspaces support
+      - name: 'Install required NPM version'
+        run: npm install -g npm@$(node -e "console.log(require('${{ github.workspace }}/generator-jhipster/generators/generator-constants').NPM_VERSION);") || true
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
