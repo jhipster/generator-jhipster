@@ -304,6 +304,13 @@ function cleanupOldFiles(generator) {
       generator.removeFile('.npmrc');
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.0.2') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === VUE) {
+      generator.removeFile('config/index.js');
+      generator.removeFile('config/dev.env.js');
+      generator.removeFile('config/prod.env.js');
+    }
+  }
 }
 
 /**
