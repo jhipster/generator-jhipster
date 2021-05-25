@@ -17,8 +17,12 @@
  limitations under the License.
 -%>
 const tsconfig = require('./tsconfig.json');
+const environment = require('./webpack/environment');
 
 module.exports = {
+  globals: {
+    ...environment,
+  },
   setupFiles: ['jest-date-mock'],
   cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
