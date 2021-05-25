@@ -18,12 +18,11 @@
 -%>
 
 import configureStore from 'redux-mock-store';
-import promiseMiddleware from 'redux-promise-middleware';
 import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import { REQUEST, FAILURE, SUCCESS } from 'app/shared/reducers/action-type.util';
+import { PENDING, REJECTED, FULFILLED } from 'app/shared/reducers/action-type.util';
 import administration, {
   ACTION_TYPES,
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
@@ -36,7 +35,10 @@ import administration, {
   getLoggers,
   changeLogLevel,
   getConfigurations,
-  getEnv
+  getEnv,
+  <%_ if (communicationSpringWebsocket) { _%>
+  websocketActivityMessage,
+  <%_ } _%>
 <%_ } _%>
 } from './administration.reducer';
 
@@ -68,15 +70,15 @@ describe('Administration reducer tests', () => {
 <%_ } _%>
   }
 
-  function testMultipleTypes(types, payload, testFunction) {
+  function testMultipleTypes(types, payload, testFunction, error?) {
     types.forEach(e => {
-      testFunction(administration(undefined, { type: e, payload }));
+      testFunction(administration(undefined, { type: e, payload, error }));
     });
   }
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(administration(undefined, {}));
+      testInitialState(administration(undefined, { type: '' }));
     });
   });
 
@@ -85,15 +87,15 @@ describe('Administration reducer tests', () => {
       testMultipleTypes(
         [
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-          REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          PENDING(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-          REQUEST(ACTION_TYPES.FETCH_LOGS),
-          REQUEST(ACTION_TYPES.FETCH_HEALTH),
-          REQUEST(ACTION_TYPES.FETCH_METRICS),
-          REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP),
-          REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS),
-          REQUEST(ACTION_TYPES.FETCH_ENV)
+          PENDING(ACTION_TYPES.FETCH_LOGS),
+          PENDING(ACTION_TYPES.FETCH_HEALTH),
+          PENDING(ACTION_TYPES.FETCH_METRICS),
+          PENDING(ACTION_TYPES.FETCH_THREAD_DUMP),
+          PENDING(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          PENDING(ACTION_TYPES.FETCH_ENV)
 <%_ } _%>
         ],
         {},
@@ -112,23 +114,26 @@ describe('Administration reducer tests', () => {
       testMultipleTypes(
         [
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-          FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          REJECTED(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-          FAILURE(ACTION_TYPES.FETCH_LOGS),
-          FAILURE(ACTION_TYPES.FETCH_HEALTH),
-          FAILURE(ACTION_TYPES.FETCH_METRICS),
-          FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP),
-          FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS),
-          FAILURE(ACTION_TYPES.FETCH_ENV)
+          REJECTED(ACTION_TYPES.FETCH_LOGS),
+          REJECTED(ACTION_TYPES.FETCH_HEALTH),
+          REJECTED(ACTION_TYPES.FETCH_METRICS),
+          REJECTED(ACTION_TYPES.FETCH_THREAD_DUMP),
+          REJECTED(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          REJECTED(ACTION_TYPES.FETCH_ENV)
 <%_ } _%>
         ],
         'something happened',
         state => {
           expect(state).toMatchObject({
             loading: false,
-            errorMessage: 'something happened'
+            errorMessage: 'error',
           });
+        },
+        {
+          message: 'error',
         }
       );
     });
@@ -138,7 +143,7 @@ describe('Administration reducer tests', () => {
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     it('should update state according to a successful fetch gateway routes request', () => {
       const payload = { data: [] };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_GATEWAY_ROUTE), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -156,7 +161,7 @@ describe('Administration reducer tests', () => {
           }
         }
       };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_LOGS), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_LOGS), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -166,7 +171,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch health request', () => {
       const payload = { data: { status: 'UP' } };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_HEALTH), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_HEALTH), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -176,7 +181,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch metrics request', () => {
       const payload = { data: { version: '3.1.3', gauges: {} } };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_METRICS), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_METRICS), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -186,7 +191,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch thread dump request', () => {
       const payload = { data: [{ threadName: 'hz.gateway.cached.thread-6', threadId: 9266 }] };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_THREAD_DUMP), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_THREAD_DUMP), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -196,7 +201,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch configurations request', () => {
       const payload = { data: { contexts: { jhipster: { beans: {} } } } };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_CONFIGURATIONS), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_CONFIGURATIONS), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -209,7 +214,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch env request', () => {
       const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
-      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ENV), payload });
+      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_ENV), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -227,7 +232,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful websocket message receipt', () => {
       const payload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
-      const toTest = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload });
+      const toTest = administration(undefined, websocketActivityMessage(payload));
 
       expect(toTest).toMatchObject({
         tracker: { activities: [payload] }
@@ -237,8 +242,8 @@ describe('Administration reducer tests', () => {
     it('should update state according to a successful websocket message receipt - only one activity per session', () => {
       const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
       const secondPayload = { id: 1, userLogin: username, page: 'user-management', sessionId: 'abc123' };
-      const firstState = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: firstPayload });
-      const secondState = administration(firstState, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: secondPayload });
+      const firstState = administration(undefined, websocketActivityMessage(firstPayload));
+      const secondState = administration(firstState, websocketActivityMessage(secondPayload));
 
       expect(secondState).toMatchObject({
         tracker: { activities: [secondPayload] }
@@ -248,8 +253,8 @@ describe('Administration reducer tests', () => {
     it('should update state according to a successful websocket message receipt - remove logged out sessions', () => {
       const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
       const secondPayload = { id: 1, userLogin: username, page: 'logout', sessionId: 'abc123' };
-      const firstState = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: firstPayload });
-      const secondState = administration(firstState, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: secondPayload });
+      const firstState = administration(undefined, websocketActivityMessage(firstPayload));
+      const secondState = administration(firstState, websocketActivityMessage(secondPayload));
 
       expect(secondState).toMatchObject({
         tracker: { activities: [] }
@@ -263,7 +268,7 @@ describe('Administration reducer tests', () => {
     const resolvedObject = { value: 'whatever' };
 <%_ if (applicationTypeGateway && serviceDiscoveryType || withAdminUi) { _%>
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware]);
+      const mockStore = configureStore([thunk]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
@@ -273,107 +278,124 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE)
+          type: PENDING(ACTION_TYPES.FETCH_GATEWAY_ROUTE)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          type: FULFILLED(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(gatewayRoutes()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getGatewayRoutes());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_HEALTH)
+          type: PENDING(ACTION_TYPES.FETCH_HEALTH)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_HEALTH),
+          type: FULFILLED(ACTION_TYPES.FETCH_HEALTH),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(systemHealth()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getSystemHealth());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
     it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_METRICS)
+          type: PENDING(ACTION_TYPES.FETCH_METRICS)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_METRICS),
+          type: FULFILLED(ACTION_TYPES.FETCH_METRICS),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(systemMetrics()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getSystemMetrics());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
     it('dispatches FETCH_THREAD_DUMP_PENDING and FETCH_THREAD_DUMP_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP)
+          type: PENDING(ACTION_TYPES.FETCH_THREAD_DUMP)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_THREAD_DUMP),
+          type: FULFILLED(ACTION_TYPES.FETCH_THREAD_DUMP),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(systemThreadDump()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getSystemThreadDump());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
     it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_LOGS)
+          type: PENDING(ACTION_TYPES.FETCH_LOGS)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_LOGS),
+          type: FULFILLED(ACTION_TYPES.FETCH_LOGS),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getLoggers()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getLoggers());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
     it('dispatches FETCH_LOGS_CHANGE_LEVEL_PENDING and FETCH_LOGS_CHANGE_LEVEL_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL)
+          type: PENDING(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL),
+          type: FULFILLED(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL),
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_LOGS)
+          type: PENDING(ACTION_TYPES.FETCH_LOGS)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_LOGS),
+          type: FULFILLED(ACTION_TYPES.FETCH_LOGS),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(changeLogLevel('ROOT', 'DEBUG')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(changeLogLevel('ROOT', 'DEBUG'));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
     it('dispatches FETCH_CONFIGURATIONS_PENDING and FETCH_CONFIGURATIONS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS)
+          type: PENDING(ACTION_TYPES.FETCH_CONFIGURATIONS)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          type: FULFILLED(ACTION_TYPES.FETCH_CONFIGURATIONS),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getConfigurations()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getConfigurations());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
     it('dispatches FETCH_ENV_PENDING and FETCH_ENV_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_ENV)
+          type: PENDING(ACTION_TYPES.FETCH_ENV)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_ENV),
+          type: FULFILLED(ACTION_TYPES.FETCH_ENV),
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEnv()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getEnv());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 <%_ } _%>
   });
