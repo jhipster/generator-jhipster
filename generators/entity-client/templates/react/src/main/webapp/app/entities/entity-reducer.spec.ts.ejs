@@ -47,7 +47,7 @@ import reducer, {
 <%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/reducer.utils';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 describe('Entities reducer tests', () => {
