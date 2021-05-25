@@ -125,7 +125,7 @@ const files = {
       path: REACT_DIR,
       templates: [
         'shared/reducers/index.ts',
-        'shared/reducers/action-type.util.ts',
+        'shared/reducers/reducer.utils.ts',
         'shared/reducers/authentication.ts',
         'shared/reducers/application-profile.ts',
       ],

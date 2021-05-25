@@ -21,7 +21,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { serializeAxiosError } from './move-to-lib';
+import { serializeAxiosError } from './reducer.utils';
 
 import { AppThunk } from 'app/config/store';
 <% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
