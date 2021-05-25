@@ -28,6 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
+const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 let useBlueprints;
 
@@ -60,7 +61,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           if ((preferredPm && preferredPm !== 'npm') || this.skipClient || this.jhipsterConfig.skipClient) {
             return defaultInstallTask();
           }
-          const gradle = this.jhipsterConfig.buildTool === 'gradle';
+          const gradle = this.jhipsterConfig.buildTool === GRADLE;
           const command = gradle ? './gradlew' : './npmw';
           const args = gradle ? ['npm_install'] : ['install', '--no-audit'];
 

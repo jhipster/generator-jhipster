@@ -625,13 +625,13 @@ wrapper {
     gradleVersion = "<%= GRADLE_VERSION %>"
 }
 
+<%_ if (!skipClient) { _%>
+
 // Workaround npm failing with audit
 // https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
 npm_install {
     args = ['--no-audit']
 }
-
-<%_ if (!skipClient) { _%>
 
 if (project.hasProperty("nodeInstall")) {
     // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154
