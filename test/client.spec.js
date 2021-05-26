@@ -372,12 +372,12 @@ describe('JHipster client generator', () => {
 
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+          'getSystemHealth.pending,\n' +
+            '          getSystemMetrics.pending,\n' +
+            '          getSystemThreadDump.pending,\n' +
+            '          getLoggers.pending,\n' +
+            '          getConfigurations.pending,\n' +
+            '          getEnv.pending'
         );
       });
 
@@ -466,12 +466,12 @@ describe('JHipster client generator', () => {
 
         runResult.assertNoFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+          'getSystemHealth.pending,\n' +
+            '          getSystemMetrics.pending,\n' +
+            '          getSystemThreadDump.pending,\n' +
+            '          getLoggers.pending,\n' +
+            '          getConfigurations.pending,\n' +
+            '          getEnv.pending'
         );
       });
 
