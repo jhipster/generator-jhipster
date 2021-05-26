@@ -22,8 +22,7 @@ import axios from 'axios';
 import sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 
-import { FULFILLED, PENDING, REJECTED } from 'app/shared/reducers/reducer.utils';
-import activate, { ACTION_TYPES, activateAction, reset } from './activate.reducer';
+import activate, { activateAction, reset } from './activate.reducer';
 
 describe('Activate reducer tests', () => {
   it('should return the initial state', () => {
@@ -41,21 +40,21 @@ describe('Activate reducer tests', () => {
   });
 
   it('should detect a success', () => {
-    expect(activate(undefined, { type: FULFILLED(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
+    expect(activate(undefined, { type: activateAction.fulfilled.type })).toMatchObject({
       activationSuccess: true,
       activationFailure: false,
     });
   });
 
   it('should return the same state on request', () => {
-    expect(activate(undefined, { type: PENDING(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
+    expect(activate(undefined, { type: activateAction.pending.type })).toMatchObject({
       activationSuccess: false,
       activationFailure: false,
     });
   });
 
   it('should detect a failure', () => {
-    expect(activate(undefined, { type: REJECTED(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
+    expect(activate(undefined, { type: activateAction.rejected.type })).toMatchObject({
       activationSuccess: false,
       activationFailure: true,
     });
@@ -84,10 +83,10 @@ describe('Activate reducer tests', () => {
     it('dispatches ACTIVATE_ACCOUNT_PENDING and ACTIVATE_ACCOUNT_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.ACTIVATE_ACCOUNT),
+          type: activateAction.pending.type,
         },
         {
-          type: FULFILLED(ACTION_TYPES.ACTIVATE_ACCOUNT),
+          type: activateAction.fulfilled.type,
           payload: resolvedObject,
         },
       ];

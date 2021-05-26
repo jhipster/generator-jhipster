@@ -25,8 +25,7 @@ import configureStore from 'redux-mock-store';
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 
-import { REJECTED, PENDING, FULFILLED } from 'app/shared/reducers/reducer.utils';
-import register, { ACTION_TYPES, handleRegister, reset } from './register.reducer';
+import register, { handleRegister, reset } from './register.reducer';
 
 describe('Creating account tests', () => {
   const initialState = {
@@ -50,7 +49,7 @@ describe('Creating account tests', () => {
   });
 
   it('should detect a request', () => {
-    expect(register(undefined, { type: PENDING(ACTION_TYPES.CREATE_ACCOUNT) })).toEqual({
+    expect(register(undefined, { type: handleRegister.pending.type })).toEqual({
       ...initialState,
       loading: true
     });
@@ -67,7 +66,7 @@ describe('Creating account tests', () => {
   it('should handle CREATE_ACCOUNT success', () => {
     expect(
       register(undefined, {
-        type: FULFILLED(ACTION_TYPES.CREATE_ACCOUNT),
+        type: handleRegister.fulfilled.type,
         payload: 'fake payload',
       })
     ).toEqual({
@@ -85,7 +84,7 @@ describe('Creating account tests', () => {
     const error = { message: 'fake error' };
     expect(
       register(undefined, {
-        type: REJECTED(ACTION_TYPES.CREATE_ACCOUNT),
+        type: handleRegister.rejected.type,
         error,
       })
     ).toEqual({
@@ -109,10 +108,10 @@ describe('Creating account tests', () => {
 
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.CREATE_ACCOUNT),
+          type: handleRegister.pending.type,
         },
         {
-          type: FULFILLED(ACTION_TYPES.CREATE_ACCOUNT),
+          type: handleRegister.fulfilled.type,
           payload: resolvedObject,
         }
       ];

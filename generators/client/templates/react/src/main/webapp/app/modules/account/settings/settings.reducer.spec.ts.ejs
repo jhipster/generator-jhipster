@@ -28,8 +28,7 @@ import sinon from 'sinon';
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 
-import { PENDING, FULFILLED, REJECTED } from 'app/shared/reducers/reducer.utils';
-import account, { ACTION_TYPES, saveAccountSettings, reset } from './settings.reducer';
+import account, { updateAccount, saveAccountSettings, reset } from './settings.reducer';
 import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
 
 describe('Settings reducer tests', () => {
@@ -53,7 +52,7 @@ describe('Settings reducer tests', () => {
 
   describe('Settings update', () => {
     it('should detect a request', () => {
-      const toTest = account(undefined, { type: PENDING(ACTION_TYPES.UPDATE_ACCOUNT) });
+      const toTest = account(undefined, { type: updateAccount.pending.type });
       expect(toTest).toMatchObject({
         updateSuccess: false,
         updateFailure: false,
@@ -61,7 +60,7 @@ describe('Settings reducer tests', () => {
       });
     });
     it('should detect a success', () => {
-      const toTest = account(undefined, { type: FULFILLED(ACTION_TYPES.UPDATE_ACCOUNT) });
+      const toTest = account(undefined, { type: updateAccount.fulfilled.type });
       expect(toTest).toMatchObject({
         updateSuccess: true,
         updateFailure: false,
@@ -69,7 +68,7 @@ describe('Settings reducer tests', () => {
       });
     });
     it('should detect a failure', () => {
-      const toTest = account(undefined, { type: REJECTED(ACTION_TYPES.UPDATE_ACCOUNT) });
+      const toTest = account(undefined, { type: updateAccount.rejected.type });
       expect(toTest).toMatchObject({
         updateSuccess: false,
         updateFailure: true,
@@ -109,10 +108,10 @@ describe('Settings reducer tests', () => {
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.UPDATE_ACCOUNT),
+          type: updateAccount.pending.type,
         },
         {
-          type: FULFILLED(ACTION_TYPES.UPDATE_ACCOUNT),
+          type: updateAccount.fulfilled.type,
           payload: resolvedObject,
         },
         {
