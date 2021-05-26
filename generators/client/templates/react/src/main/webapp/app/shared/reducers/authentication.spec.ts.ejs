@@ -214,18 +214,15 @@ describe('Authentication reducer tests', () => {
         {
           type: PENDING(ACTION_TYPES.GET_SESSION)
         },
-        {
-          type: FULFILLED(ACTION_TYPES.GET_SESSION),
-          payload: resolvedObject
-        },
         <% if (enableTranslation) { %>
         updateLocale('en'),
         <% } %>
       ];
       await store.dispatch(getSession());
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      <% if (enableTranslation) { %>
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <% } %>
     });
 
     it('dispatches LOGOUT actions', async () => {

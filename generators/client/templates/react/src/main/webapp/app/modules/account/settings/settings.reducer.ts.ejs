@@ -83,7 +83,11 @@ export const SettingsSlice = createSlice({
         state.loading = false;
         state.updateSuccess = true;
         state.updateFailure = false;
+        <%_ if (enableTranslation) { _%>
         state.successMessage = 'settings.messages.success';
+        <%_ } else { _%>
+        state.successMessage = 'Settings saved!';
+        <%_ } _%>
       });
   },
 });
