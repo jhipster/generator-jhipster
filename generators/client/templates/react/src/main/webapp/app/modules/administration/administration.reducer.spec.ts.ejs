@@ -22,9 +22,7 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import { PENDING, REJECTED, FULFILLED } from 'app/shared/reducers/reducer.utils';
 import administration, {
-  ACTION_TYPES,
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   getGatewayRoutes,
 <%_ } _%>
@@ -36,6 +34,7 @@ import administration, {
   changeLogLevel,
   getConfigurations,
   getEnv,
+  setLoggers,
   <%_ if (communicationSpringWebsocket) { _%>
   websocketActivityMessage,
   <%_ } _%>
@@ -87,15 +86,15 @@ describe('Administration reducer tests', () => {
       testMultipleTypes(
         [
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-          PENDING(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          getGatewayRoutes.pending.type,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-          PENDING(ACTION_TYPES.FETCH_LOGS),
-          PENDING(ACTION_TYPES.FETCH_HEALTH),
-          PENDING(ACTION_TYPES.FETCH_METRICS),
-          PENDING(ACTION_TYPES.FETCH_THREAD_DUMP),
-          PENDING(ACTION_TYPES.FETCH_CONFIGURATIONS),
-          PENDING(ACTION_TYPES.FETCH_ENV)
+          getLoggers.pending.type,
+          getSystemHealth.pending.type,
+          getSystemMetrics.pending.type,
+          getSystemThreadDump.pending.type,
+          getConfigurations.pending.type,
+          getEnv.pending.type
 <%_ } _%>
         ],
         {},
@@ -114,15 +113,15 @@ describe('Administration reducer tests', () => {
       testMultipleTypes(
         [
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-          REJECTED(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          getGatewayRoutes.rejected.type,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-          REJECTED(ACTION_TYPES.FETCH_LOGS),
-          REJECTED(ACTION_TYPES.FETCH_HEALTH),
-          REJECTED(ACTION_TYPES.FETCH_METRICS),
-          REJECTED(ACTION_TYPES.FETCH_THREAD_DUMP),
-          REJECTED(ACTION_TYPES.FETCH_CONFIGURATIONS),
-          REJECTED(ACTION_TYPES.FETCH_ENV)
+          getLoggers.rejected.type,
+          getSystemHealth.rejected.type,
+          getSystemMetrics.rejected.type,
+          getSystemThreadDump.rejected.type,
+          getConfigurations.rejected.type,
+          getEnv.rejected.type,
 <%_ } _%>
         ],
         'something happened',
@@ -143,7 +142,7 @@ describe('Administration reducer tests', () => {
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     it('should update state according to a successful fetch gateway routes request', () => {
       const payload = { data: [] };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_GATEWAY_ROUTE), payload });
+      const toTest = administration(undefined, { type: getGatewayRoutes.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -161,7 +160,7 @@ describe('Administration reducer tests', () => {
           }
         }
       };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_LOGS), payload });
+      const toTest = administration(undefined, { type: getLoggers.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -171,7 +170,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch health request', () => {
       const payload = { data: { status: 'UP' } };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_HEALTH), payload });
+      const toTest = administration(undefined, { type: getSystemHealth.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -181,7 +180,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch metrics request', () => {
       const payload = { data: { version: '3.1.3', gauges: {} } };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_METRICS), payload });
+      const toTest = administration(undefined, { type: getSystemMetrics.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -191,7 +190,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch thread dump request', () => {
       const payload = { data: [{ threadName: 'hz.gateway.cached.thread-6', threadId: 9266 }] };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_THREAD_DUMP), payload });
+      const toTest = administration(undefined, { type: getSystemThreadDump.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -201,7 +200,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch configurations request', () => {
       const payload = { data: { contexts: { jhipster: { beans: {} } } } };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_CONFIGURATIONS), payload });
+      const toTest = administration(undefined, { type: getConfigurations.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -214,7 +213,7 @@ describe('Administration reducer tests', () => {
 
     it('should update state according to a successful fetch env request', () => {
       const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
-      const toTest = administration(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_ENV), payload });
+      const toTest = administration(undefined, { type: getEnv.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -278,10 +277,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_GATEWAY_ROUTE)
+          type: getGatewayRoutes.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          type: getGatewayRoutes.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -294,10 +293,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_HEALTH)
+          type: getSystemHealth.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_HEALTH),
+          type: getSystemHealth.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -308,10 +307,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_METRICS)
+          type: getSystemMetrics.pending.type,
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_METRICS),
+          type: getSystemMetrics.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -322,10 +321,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_THREAD_DUMP_PENDING and FETCH_THREAD_DUMP_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_THREAD_DUMP)
+          type: getSystemThreadDump.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_THREAD_DUMP),
+          type: getSystemThreadDump.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -336,10 +335,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_LOGS)
+          type: getLoggers.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_LOGS),
+          type: getLoggers.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -350,14 +349,14 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_LOGS_CHANGE_LEVEL_PENDING and FETCH_LOGS_CHANGE_LEVEL_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL)
+          type: setLoggers.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL),
+          type: setLoggers.fulfilled.type,
           payload: resolvedObject
         },
         {
-          type: PENDING(ACTION_TYPES.FETCH_LOGS)
+          type: getLoggers.pending.type
         },
       ];
       await store.dispatch(changeLogLevel('ROOT', 'DEBUG'));
@@ -368,10 +367,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_CONFIGURATIONS_PENDING and FETCH_CONFIGURATIONS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_CONFIGURATIONS)
+          type: getConfigurations.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          type: getConfigurations.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -382,10 +381,10 @@ describe('Administration reducer tests', () => {
     it('dispatches FETCH_ENV_PENDING and FETCH_ENV_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_ENV)
+          type: getEnv.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_ENV),
+          type: getEnv.fulfilled.type,
           payload: resolvedObject
         }
       ];
