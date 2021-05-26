@@ -263,7 +263,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
 
   const handleSyncList = () => {
 <%_ if (paginationNo) { _%>
-      dispatch(getEntities({})};
+      dispatch(getEntities({}));
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
       sortEntities();
