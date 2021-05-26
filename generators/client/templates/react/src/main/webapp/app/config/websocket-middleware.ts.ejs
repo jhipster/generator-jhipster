@@ -25,8 +25,7 @@ import { Storage } from 'react-jhipster';
 <%_ } _%>
 
 import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
-import { ACTION_TYPES as AUTH_ACTIONS<% if (authenticationTypeJwt) { %>, logoutSession<% } %> } from 'app/shared/reducers/authentication';
-import { FULFILLED, REJECTED } from 'app/shared/reducers/reducer.utils';
+import { getAccount<% if (authenticationTypeJwt) { %>, logoutSession<% } %> } from 'app/shared/reducers/authentication';
 <%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
@@ -119,7 +118,7 @@ const unsubscribe = () => {
 };
 
 export default store => next => action => {
-  if (action.type === FULFILLED(AUTH_ACTIONS.GET_SESSION)) {
+  if (getAccount.fulfilled.match(action)) {
     connect();
     const isAdmin = action.payload.data.authorities.includes('ROLE_ADMIN');
     if (!alreadyConnectedOnce && isAdmin) {
@@ -128,7 +127,7 @@ export default store => next => action => {
         return store.dispatch(websocketActivityMessage(activity));
       });
     }
-  } else if (action.type === REJECTED(AUTH_ACTIONS.GET_SESSION) || action.type === <% if (authenticationTypeJwt) { %>logoutSession().type<% } else { %>AUTH_ACTIONS.LOGOUT<% } %>) {
+  } else if (getAccount.rejected.match(action) || <% if (authenticationTypeJwt) { %>action.type === logoutSession().type<% } else { %>logoutServer.pending.match(action)<% } %>) {
     unsubscribe();
     disconnect();
   }

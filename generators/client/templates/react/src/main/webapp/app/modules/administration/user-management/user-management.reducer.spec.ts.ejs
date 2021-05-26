@@ -359,7 +359,7 @@ describe('User management reducer tests', () => {
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.DELETE_USER),
+          type: deleteUser.pending.type,
         },
         {
           type: getUsersAsAdmin.pending.type,

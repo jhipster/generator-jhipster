@@ -49,7 +49,7 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 
 import {
 <%_ if (searchEngine) { _%>
-  getSearchEntities,
+  searchEntities,
 <%_ } _%>
   getEntities,
 <%_ if (paginationInfiniteScroll) { _%>
@@ -93,7 +93,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
   <%_ if (searchEngine) { _%>
     if (search) {
       dispatch(
-        getSearchEntities({
+        searchEntities({
           query: search,
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
@@ -154,7 +154,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
         activePage: 1
       });
       dispatch(
-        getSearchEntities({
+        searchEntities({
           query: search,
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
@@ -162,7 +162,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
         })
       );
   <%_ } else { _%>
-      dispatch(getSearchEntities({query: search}));
+      dispatch(searchEntities({query: search}));
   <%_ } _%>
     }
   };

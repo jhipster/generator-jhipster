@@ -67,7 +67,7 @@ const apiSearchUrl = '<% if (applicationTypeGateway && locals.microserviceName) 
 // Actions
 
 <%_ if (searchEngine) { _%>
-export const getSearchEntities = createAsyncThunk(
+export const searchEntities = createAsyncThunk(
   ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
   async ({ query, page, size, sort }: IQueryParams) => {
   <%_ if (!paginationNo) { _%>
@@ -178,7 +178,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
       .addMatcher(isFulfilled(
         getEntities,
         <%_ if (searchEngine) { _%>
-        getSearchEntities,
+        searchEntities,
         <%_ } _%>
         ), (state, action) => {
         <%_ if (paginationInfiniteScroll) { _%>
@@ -215,7 +215,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         getEntities,
         getEntity,
         <%_ if (searchEngine) { _%>
-        getSearchEntities,
+        searchEntities,
         <%_ } _%>
         ), state => {
         state.errorMessage = null;

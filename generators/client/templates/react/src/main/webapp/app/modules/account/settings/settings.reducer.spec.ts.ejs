@@ -29,7 +29,7 @@ import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 
 import account, { updateAccount, saveAccountSettings, reset } from './settings.reducer';
-import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
+import { getAccount } from 'app/shared/reducers/authentication';
 
 describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>
@@ -115,7 +115,7 @@ describe('Settings reducer tests', () => {
           payload: resolvedObject,
         },
         {
-          type: PENDING(authActionTypes.GET_SESSION)
+          type: getAccount.pending.type
         },
       ];
       await store.dispatch(saveAccountSettings({}));
