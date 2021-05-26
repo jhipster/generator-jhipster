@@ -17,14 +17,13 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { ICrudGetAllAction } from 'react-jhipster';
+import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { IUser } from 'app/shared/model/user.model';
+import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 export const ACTION_TYPES = {
   FETCH_USERS: 'userManagement/FETCH_USERS',
-  RESET: 'userManagement/RESET'
 };
 
 const initialState = {
@@ -32,45 +31,38 @@ const initialState = {
   users: [] as ReadonlyArray<IUser>,
 };
 
-export type UserManagementState =  Readonly<typeof initialState>;
+const apiUrl = 'api/users';
+
+// Async Actions
+
+export const getUsers = createAsyncThunk(ACTION_TYPES.FETCH_USERS, async ({ page, size, sort }: IQueryParams) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return axios.get<IUser[]>(requestUrl);
+});
+
+export type UserManagementState = Readonly<typeof initialState>;
+
+export const UserManagementSlice = createSlice({
+  name: 'userManagement',
+  initialState: initialState as UserManagementState,
+  reducers: {
+    reset() {
+      return initialState;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(getUsers.pending, state => state)
+      .addCase(getUsers.rejected, state => {
+          state.errorMessage = action.error.message;
+      })
+      .addCase(getUsers.fulfilled, state => {
+        state.users = action.payload.data;
+      });
+  },
+});
+
+export const { reset } = UserManagementSlice.actions;
 
 // Reducer
-export default (state: UserManagementState = initialState, action): UserManagementState => {
-  switch (action.type) {
-    case REQUEST(ACTION_TYPES.FETCH_USERS):
-      return {
-        ...state,
-      };
-    case FAILURE(ACTION_TYPES.FETCH_USERS):
-      return {
-        ...state,
-        errorMessage: action.payload
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_USERS):
-      return {
-        ...state,
-        users: action.payload.data,
-      };
-    case ACTION_TYPES.RESET:
-      return {
-        ...state,
-        users: []
-      };
-    default:
-      return state;
-  }
-};
-
-const apiUrl = 'api/users';
-// Actions
-export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return {
-    type: ACTION_TYPES.FETCH_USERS,
-    payload: axios.get<IUser>(requestUrl)
-  };
-};
-
-export const reset = () => ({
-  type: ACTION_TYPES.RESET
-});
+export default UserManagementSlice.reducer;
