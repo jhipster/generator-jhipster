@@ -167,7 +167,7 @@ export const AuthenticationSlice = createSlice({
     <%_ } _%>
     authError(state, action) {
       return {
-        ...initialState,
+        ...state,
 <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
 <%_ } _%>
