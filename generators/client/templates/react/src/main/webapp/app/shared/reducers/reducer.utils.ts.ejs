@@ -29,21 +29,6 @@ import {
 import { AxiosError } from 'axios';
 
 /**
- * Appends PENDING async action type
- */
-export const PENDING = actionType => `${actionType}/pending`;
-
-/**
- * Appends FULFILLED async action type
- */
-export const FULFILLED = actionType => `${actionType}/fulfilled`;
-
-/**
- * Appends REJECTED async action type
- */
-export const REJECTED = actionType => `${actionType}/rejected`;
-
-/**
  * Model for redux actions with pagination
  */
 export type IQueryParams = { query?: string; page?: number; size?: number; sort?: string };

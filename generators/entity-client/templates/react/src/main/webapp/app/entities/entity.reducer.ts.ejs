@@ -21,7 +21,7 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
+import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>
 import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
@@ -175,10 +175,10 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         state.entity = {};
       })
       <%_ } _%>
-      .addMatcher(isAnyOf(
-        getEntities.fulfilled,
+      .addMatcher(isFulfilled(
+        getEntities,
         <%_ if (searchEngine) { _%>
-        getSearchEntities.fulfilled,
+        getSearchEntities,
         <%_ } _%>
         ), (state, action) => {
         <%_ if (paginationInfiniteScroll) { _%>
@@ -204,18 +204,18 @@ export const <%= entityReactName %>Slice = createEntitySlice({
           };
       })
       <%_ if (!readOnly) { _%>
-      .addMatcher(isAnyOf(createEntity.fulfilled, updateEntity.fulfilled, partialUpdate.fulfilled), (state, action) => {
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdate), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
         state.entity = action.payload.data;
       })
       <%_ } _%>
-      .addMatcher(isAnyOf(
-        getEntities.pending,
-        getEntity.pending,
+      .addMatcher(isPending(
+        getEntities,
+        getEntity,
         <%_ if (searchEngine) { _%>
-        getSearchEntities.pending,
+        getSearchEntities,
         <%_ } _%>
         ), state => {
         state.errorMessage = null;
@@ -223,7 +223,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         state.loading = true;
       })
       <%_ if (!readOnly) { _%>
-      .addMatcher(isAnyOf(createEntity.pending, updateEntity.pending, partialUpdate.pending, deleteEntity.pending), state => {
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdate, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
