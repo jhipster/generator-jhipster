@@ -223,7 +223,7 @@ export const AuthenticationSlice = createSlice({
         };
       })
       <%_ if (!authenticationTypeJwt) { _%>
-      .addCase(logoutServer.fulfilled, state => ({
+      .addCase(logoutServer.fulfilled, (state<% if (authenticationTypeOauth2) { %>, action<% } %>) => ({
         ...initialState,
         <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true

@@ -43,8 +43,13 @@ describe('User management reducer tests', () => {
 
   describe('Failures', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
-      expect(userManagement(undefined, { type: REJECTED(ACTION_TYPES.FETCH_USERS), payload: 'something happened' }, { message: 'error happened' })).toEqual
-      (
+      expect(
+        userManagement(undefined, {
+          type: REJECTED(ACTION_TYPES.FETCH_USERS),
+          payload: 'something happened',
+          error: { message: 'error happened' },
+        })
+      ).toEqual(
         { ...initialState, errorMessage: 'error happened' }
       )
     });
