@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 
+/**
+ * @jest-environment jsdom
+ */
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
