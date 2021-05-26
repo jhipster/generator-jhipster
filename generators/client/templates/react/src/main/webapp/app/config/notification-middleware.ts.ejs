@@ -21,6 +21,7 @@
 import { translate } from 'react-jhipster';
 <%_ } _%>
 import { toast } from 'react-toastify';
+import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
 
 const addErrorAlert = (message, key?, data?) => {
 <%_ if (enableTranslation) { _%>
@@ -38,7 +39,7 @@ export default () => next => action => {
    *
    * The notification middleware serves to add success and error notifications
    */
-  if (payload && payload.headers) {
+  if (isFulfilledAction(action) && payload && payload.headers) {
     const headers = payload.headers;
     let alert: string | null = null;
 <%_ if (enableTranslation) { _%>
@@ -62,7 +63,7 @@ export default () => next => action => {
   }
 
 
-  if (error && error.isAxiosError) {
+  if (isRejectedAction(action) && error && error.isAxiosError) {
     if (error.response) {
       const response = error.response;
       const data = response.data;

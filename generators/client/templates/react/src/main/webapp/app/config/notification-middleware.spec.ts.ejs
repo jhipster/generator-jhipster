@@ -29,8 +29,8 @@ import notificationMiddleware from './notification-middleware';
 describe('Notification Middleware', () => {
   let store;
 
-  const SUCCESS_TYPE = 'SUCCESS';
-  const ERROR_TYPE = 'SUCCESS';
+  const SUCCESS_TYPE = 'SUCCESS/fulfilled';
+  const ERROR_TYPE = 'ERROR/rejected';
 
   // Default action for use in local tests
   const DEFAULT = {
