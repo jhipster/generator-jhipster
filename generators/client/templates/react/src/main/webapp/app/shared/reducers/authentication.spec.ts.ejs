@@ -28,11 +28,14 @@ import { Storage } from 'react-jhipster';
 <%_ } _%>
 import configureStore from 'redux-mock-store';
 
-import { PENDING, FULFILLED, REJECTED } from 'app/shared/reducers/reducer.utils';
 import authentication, {
-  ACTION_TYPES,
   getSession,
-  <% if (!authenticationTypeOauth2) { %>login,<% } %>
+  getAccount,
+  <%_ if (!authenticationTypeOauth2) { _%>
+  authenticate,
+  login,<% } %>
+  <%_ if (!authenticationTypeJwt) { _%>
+  logoutServer,<% } %>
   clearAuthentication,
   logout,<% if (authenticationTypeJwt) { %>
   logoutSession,
@@ -69,10 +72,10 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
   describe('Requests', () => {
     it('should detect a request', () => {
-      expect(authentication(undefined, { type: PENDING(ACTION_TYPES.LOGIN) })).toMatchObject({
+      expect(authentication(undefined, { type: authenticate.pending.type })).toMatchObject({
         loading: true
       });
-      expect(authentication(undefined, { type: PENDING(ACTION_TYPES.GET_SESSION) })).toMatchObject({
+      expect(authentication(undefined, { type: getAccount.pending.type })).toMatchObject({
         loading: true
       });
     });
@@ -82,7 +85,7 @@ describe('Authentication reducer tests', () => {
   describe('Success', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
     it('should detect a success on login', () => {
-      const toTest = authentication(undefined, { type: FULFILLED(ACTION_TYPES.LOGIN) });
+      const toTest = authentication(undefined, { type: authenticate.fulfilled.type });
       expect(toTest).toMatchObject({
         loading: false,
         loginError: false,
@@ -94,7 +97,7 @@ describe('Authentication reducer tests', () => {
 
     it('should detect a success on get session and be authenticated', () => {
       const payload = { data: { activated: true } };
-      const toTest = authentication(undefined, { type: FULFILLED(ACTION_TYPES.GET_SESSION), payload });
+      const toTest = authentication(undefined, { type: getAccount.fulfilled.type, payload });
       expect(toTest).toMatchObject({
         isAuthenticated: true,
         loading: false,
@@ -104,7 +107,7 @@ describe('Authentication reducer tests', () => {
 
     it('should detect a success on get session and not be authenticated', () => {
       const payload = { data: { activated: false } };
-      const toTest = authentication(undefined, { type: FULFILLED(ACTION_TYPES.GET_SESSION), payload });
+      const toTest = authentication(undefined, { type: getAccount.fulfilled.type, payload });
       expect(toTest).toMatchObject({
         isAuthenticated: false,
         loading: false,
@@ -117,7 +120,7 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
     it('should detect a failure on login', () => {
       const error = { message: 'Something happened.' };
-      const toTest = authentication(undefined, { type: REJECTED(ACTION_TYPES.LOGIN), error });
+      const toTest = authentication(undefined, { type: authenticate.rejected.type, error });
 
       expect(toTest).toMatchObject({
         errorMessage: error.message,
@@ -130,7 +133,7 @@ describe('Authentication reducer tests', () => {
 
     it('should detect a failure', () => {
       const error = { message: 'Something happened.' };
-      const toTest = authentication(undefined, { type: REJECTED(ACTION_TYPES.GET_SESSION), error });
+      const toTest = authentication(undefined, { type: getAccount.rejected.type, error });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -151,9 +154,9 @@ describe('Authentication reducer tests', () => {
       <%_ if (authenticationTypeJwt) { _%>
       logoutSession()
       <%_ } else if (authenticationTypeOauth2) { _%>
-      { type: FULFILLED(ACTION_TYPES.LOGOUT), payload }
+      { type: logoutServer.fulfilled.type, payload }
       <%_ } else { _%>
-      { type: FULFILLED(ACTION_TYPES.LOGOUT) }
+      { type: logoutServer.fulfilled.type }
       <%_ } _%>
       );
       expect(toTest).toMatchObject({
@@ -212,11 +215,11 @@ describe('Authentication reducer tests', () => {
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.GET_SESSION)
+          type: getAccount.pending.type
         },
         <%_ if (enableTranslation) { _%>
         {
-          type: FULFILLED(ACTION_TYPES.GET_SESSION),
+          type: getAccount.fulfilled.type,
           payload: resolvedObject
         },
         updateLocale('en'),
@@ -239,14 +242,14 @@ describe('Authentication reducer tests', () => {
         logoutSession(),
 <%_ } else { _%>
         {
-          type: PENDING(ACTION_TYPES.LOGOUT)
+          type: logoutServer.pending.type
         },
         {
-         type: FULFILLED(ACTION_TYPES.LOGOUT),
+         type: logoutServer.fulfilled.type,
          payload: {},
         },
         {
-         type: PENDING(ACTION_TYPES.GET_SESSION),
+         type: getAccount.pending.type,
         },
 <%_ } _%>
       ];
@@ -276,14 +279,14 @@ describe('Authentication reducer tests', () => {
       axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.LOGIN)
+          type: authenticate.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.LOGIN),
+          type: authenticate.fulfilled.type,
           payload: loginResponse
         },
         {
-          type: PENDING(ACTION_TYPES.GET_SESSION)
+          type: getAccount.pending.type
         },
       ];
       await store.dispatch(login('test', 'test'));

@@ -22,8 +22,7 @@ import axios from 'axios';
 import sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 
-import { PENDING, FULFILLED } from 'app/shared/reducers/reducer.utils';
-import profile, { ACTION_TYPES, getProfile } from './application-profile';
+import profile, { getProfile } from './application-profile';
 
 describe('Profile reducer tests', () => {
   const initialState = {
@@ -45,7 +44,7 @@ describe('Profile reducer tests', () => {
         }
       };
 
-      expect(profile(undefined, { type: FULFILLED(ACTION_TYPES.GET_PROFILE), payload })).toEqual({
+      expect(profile(undefined, { type: getProfile.fulfilled.type, payload })).toEqual({
         ribbonEnv: 'awesome ribbon stuff',
         inProduction: true,
         isOpenAPIEnabled: false
@@ -60,7 +59,7 @@ describe('Profile reducer tests', () => {
         }
       };
 
-      expect(profile(undefined, { type: FULFILLED(ACTION_TYPES.GET_PROFILE), payload })).toEqual({
+      expect(profile(undefined, { type: getProfile.fulfilled.type, payload })).toEqual({
         ribbonEnv: 'awesome ribbon stuff',
         inProduction: false,
         isOpenAPIEnabled: true
@@ -81,10 +80,10 @@ describe('Profile reducer tests', () => {
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.GET_PROFILE)
+          type: getProfile.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.GET_PROFILE),
+          type: getProfile.fulfilled.type,
           payload: resolvedObject
         }
       ];

@@ -22,9 +22,7 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import { PENDING, FULFILLED, REJECTED } from 'app/shared/reducers/reducer.utils';
 import userManagement, {
-  ACTION_TYPES,
   getUsers,
   reset,
 } from 'app/shared/reducers/user-management';
@@ -45,7 +43,7 @@ describe('User management reducer tests', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
       expect(
         userManagement(undefined, {
-          type: REJECTED(ACTION_TYPES.FETCH_USERS),
+          type: getUsers.rejected.type,
           payload: 'something happened',
           error: { message: 'error happened' },
         })
@@ -58,7 +56,7 @@ describe('User management reducer tests', () => {
   describe('Success', () => {
     it('should update state according to a successful fetch users request', () => {
       const payload = { data: 'some handsome users' };
-      const toTest = userManagement(undefined, { type: FULFILLED(ACTION_TYPES.FETCH_USERS), payload });
+      const toTest = userManagement(undefined, { type: getUsers.fulfilled.type, payload });
       expect(toTest).toMatchObject({
         users: payload.data
       });
@@ -78,10 +76,10 @@ describe('User management reducer tests', () => {
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_USERS)
+          type: getUsers.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_USERS),
+          type: getUsers.fulfilled.type,
           payload: resolvedObject
         }
       ];
@@ -93,10 +91,10 @@ describe('User management reducer tests', () => {
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
       const expectedActions = [
         {
-          type: PENDING(ACTION_TYPES.FETCH_USERS)
+          type: getUsers.pending.type
         },
         {
-          type: FULFILLED(ACTION_TYPES.FETCH_USERS),
+          type: getUsers.fulfilled.type,
           payload: resolvedObject
         }
       ];
