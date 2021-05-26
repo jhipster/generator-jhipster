@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isPending, isRejected } from '@reduxjs/toolkit';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { AppThunk } from 'app/config/store';
@@ -172,17 +172,17 @@ export const AdministrationSlice = createSlice({
       <%_ } _%>
       <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       .addMatcher(
-        isAnyOf(
+        isPending(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-          getGatewayRoutes.pending,
+          getGatewayRoutes,
           <%_ } _%>
           <%_ if (withAdminUi) { _%>
-          getSystemHealth.pending,
-          getSystemMetrics.pending,
-          getSystemThreadDump.pending,
-          getLoggers.pending,
-          getConfigurations.pending,
-          getEnv.pending
+          getSystemHealth,
+          getSystemMetrics,
+          getSystemThreadDump,
+          getLoggers,
+          getConfigurations,
+          getEnv
           <%_ } _%>
         ),
         state => {
@@ -193,17 +193,17 @@ export const AdministrationSlice = createSlice({
       <%_ } _%>
       <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
       .addMatcher(
-        isAnyOf(
+        isRejected(
           <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-          getGatewayRoutes.rejected,
+          getGatewayRoutes,
           <%_ } _%>
           <%_ if (withAdminUi) { _%>
-          getSystemHealth.rejected,
-          getSystemMetrics.rejected,
-          getSystemThreadDump.rejected,
-          getLoggers.rejected,
-          getConfigurations.rejected,
-          getEnv.rejected
+          getSystemHealth,
+          getSystemMetrics,
+          getSystemThreadDump,
+          getLoggers,
+          getConfigurations,
+          getEnv
           <%_ } _%>
         ),
         (state, action) => {

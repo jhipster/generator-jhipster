@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 
 import { IUser, defaultValue } from 'app/shared/model/user.model';
 import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
@@ -127,38 +127,38 @@ export const UserManagementSlice = createSlice({
         state.updateSuccess = true;
         state.user = defaultValue;
       })
-      .addMatcher(isAnyOf(getUsers.fulfilled, getUsersAsAdmin.fulfilled), (state, action) => {
+      .addMatcher(isFulfilled(getUsers, getUsersAsAdmin), (state, action) => {
         state.loading = false;
         state.users = action.payload.data;
       <%_ if (!databaseTypeCassandra) { _%>
         state.totalItems = parseInt(action.payload.headers['x-total-count'], 10);
       <%_ } _%>
       })
-      .addMatcher(isAnyOf(createUser.fulfilled, updateUser.fulfilled), (state, action) => {
+      .addMatcher(isFulfilled(createUser, updateUser), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
         state.user = action.payload.data;
       })
-      .addMatcher(isAnyOf(getUsers.pending, getUsersAsAdmin.pending, getUser.pending), state => {
+      .addMatcher(isPending(getUsers, getUsersAsAdmin, getUser), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
       })
-      .addMatcher(isAnyOf(createUser.pending, updateUser.pending, deleteUser.pending), state => {
+      .addMatcher(isPending(createUser, updateUser, deleteUser), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
       })
       .addMatcher(
-        isAnyOf(
-          getUsers.rejected,
-          getUsersAsAdmin.rejected,
-          getUser.rejected,
-          getRoles.rejected,
-          createUser.rejected,
-          updateUser.rejected,
-          deleteUser.rejected
+        isRejected(
+          getUsers,
+          getUsersAsAdmin,
+          getUser,
+          getRoles,
+          createUser,
+          updateUser,
+          deleteUser
         ),
         (state, action) => {
           state.loading = false;

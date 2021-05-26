@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isPending } from '@reduxjs/toolkit';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
@@ -68,9 +68,9 @@ export const SessionsSlice = createSlice({
         state.updateSuccess= true;
       })
       .addMatcher(
-        isAnyOf(
-          findAll.pending,
-          invalidateSession.pending,
+        isPending(
+          findAll,
+          invalidateSession,
         ),
         (state) => {
           state.loading = true;
