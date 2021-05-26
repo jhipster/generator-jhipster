@@ -162,7 +162,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
         })
       );
   <%_ } else { _%>
-      dispatch(getSearchEntities(search));
+      dispatch(getSearchEntities({query: search}));
   <%_ } _%>
     }
   };
