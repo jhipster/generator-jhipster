@@ -22,6 +22,9 @@
 _%>
 import axios from 'axios';
 import { createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
+<%_ if (paginationInfiniteScroll) { _%>
+import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
+<%_ } _%>
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';

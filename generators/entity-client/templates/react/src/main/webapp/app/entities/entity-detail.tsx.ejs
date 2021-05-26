@@ -47,7 +47,7 @@ export const <%= entityReactName %>Detail = (props: RouteComponentProps<{id: str
     dispatch(getEntity(props.match.params.id));
   }, []);
 
-  const <%= entityInstance %>Entity = useAppSelector(state => state.customerDetails.entity);
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
   return (
     <Row>
       <Col md="8">
