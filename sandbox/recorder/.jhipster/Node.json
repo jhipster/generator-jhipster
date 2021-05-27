@@ -1,0 +1,54 @@
+{
+  "name": "Node",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "timeToLive",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "node",
+      "otherEntityRelationshipName": "node",
+      "relationshipName": "parent",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "channel",
+      "otherEntityRelationshipName": "nodes",
+      "relationshipName": "channels",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "assignedNodes",
+      "relationshipName": "userProfiles",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "node",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["frontend", "admin", "recorder"],
+  "microserviceName": "recorder",
+  "clientRootFolder": "recorder",
+  "databaseType": "sql",
+  "changelogDate": "20210527073553"
+}
