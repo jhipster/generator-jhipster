@@ -1,0 +1,63 @@
+{
+  "name": "recorder",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Description for recorder",
+  "license": "UNLICENSED",
+  "scripts": {
+    "prettier:check": "prettier --check \"{,src/**/}*.{md,json,yml,html,java}\"",
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,yml,html,java}\"",
+    "docker:db:up": "docker-compose -f src/main/docker/postgresql.yml up -d",
+    "docker:db:down": "docker-compose -f src/main/docker/postgresql.yml down -v --remove-orphans",
+    "docker:jhipster-registry:up": "docker-compose -f src/main/docker/jhipster-registry.yml up -d",
+    "docker:jhipster-registry:down": "docker-compose -f src/main/docker/jhipster-registry.yml down -v --remove-orphans",
+    "docker:others:await": "echo \"Waiting for jhipster-registry to start\" && wait-on http-get://localhost:8761/management/health && echo \"jhipster-registry started\"",
+    "predocker:others:up": "",
+    "docker:others:up": "npm run docker:jhipster-registry:up",
+    "docker:others:down": "npm run docker:jhipster-registry:down",
+    "ci:e2e:prepare:docker": "npm run docker:db:up && npm run docker:others:up && docker ps -a",
+    "ci:e2e:prepare": "npm run ci:e2e:prepare:docker",
+    "ci:e2e:teardown:docker": "npm run docker:db:down --if-present && npm run docker:others:down && docker ps -a",
+    "ci:e2e:teardown": "npm run ci:e2e:teardown:docker",
+    "backend:info": "./gradlew -v",
+    "backend:doc:test": "./gradlew javadoc ",
+    "backend:nohttp:test": "./gradlew checkstyleNohttp ",
+    "backend:start": "./gradlew ",
+    "java:jar": "./gradlew bootJar -x test -x integrationTest",
+    "java:war": "./gradlew bootWar -Pwar -x test -x integrationTest",
+    "java:docker": "./gradlew bootJar jibDockerBuild",
+    "backend:unit:test": "./gradlew test integrationTest  -Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.de.vc.recorder=OFF -Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF",
+    "ci:e2e:package": "npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true",
+    "postci:e2e:package": "cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging",
+    "backend:build-cache": "npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package",
+    "java:jar:dev": "npm run java:jar -- -Pdev,webapp",
+    "java:jar:prod": "npm run java:jar -- -Pprod",
+    "java:war:dev": "npm run java:war -- -Pdev,webapp",
+    "java:war:prod": "npm run java:war -- -Pprod",
+    "java:docker:dev": "npm run java:docker -- -Pdev,webapp",
+    "java:docker:prod": "npm run java:docker -- -Pprod",
+    "ci:backend:test": "npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test",
+    "ci:server:package": "npm run java:$npm_package_config_packaging:$npm_package_config_default_environment",
+    "preci:e2e:server:start": "npm run docker:db:await --if-present && npm run docker:others:await --if-present",
+    "ci:e2e:server:start": "java -jar e2e.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment -Dlogging.level.ROOT=OFF -Dlogging.level.org.zalando=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.de.vc.recorder=OFF -Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF --logging.level.org.springframework.web=ERROR"
+  },
+  "config": {
+    "backend_port": "8081",
+    "default_environment": "prod",
+    "packaging": "jar"
+  },
+  "devDependencies": {
+    "generator-jhipster": "7.0.1",
+    "husky": "4.3.8",
+    "lint-staged": "11.0.0",
+    "prettier": "2.3.0",
+    "prettier-plugin-java": "1.1.0",
+    "prettier-plugin-packagejson": "2.2.11"
+  },
+  "engines": {
+    "node": ">=14.16.0"
+  },
+  "cacheDirectories": [
+    "node_modules"
+  ]
+}

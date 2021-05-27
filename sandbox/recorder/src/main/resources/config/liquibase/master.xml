@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
+    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073153_added_entity_SearchLabel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073253_added_entity_UserGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073353_added_entity_MachineLabel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073453_added_entity_Channel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073553_added_entity_Node.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073653_added_entity_Record.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073753_added_entity_CategoryLabel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073853_added_entity_UserProfile.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20210527073153_added_entity_constraints_SearchLabel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073253_added_entity_constraints_UserGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073353_added_entity_constraints_MachineLabel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073453_added_entity_constraints_Channel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073553_added_entity_constraints_Node.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073653_added_entity_constraints_Record.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073753_added_entity_constraints_CategoryLabel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527073853_added_entity_constraints_UserProfile.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

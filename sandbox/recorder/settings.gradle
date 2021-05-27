@@ -1,0 +1,18 @@
+
+pluginManagement {
+    repositories {
+        maven { url 'https://repo.spring.io/milestone' }
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
+        id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
+        id "org.openapi.generator" version "${openapiPluginVersion}"
+        id 'org.liquibase.gradle' version "${liquibasePluginVersion}"
+        id 'org.sonarqube' version "${sonarqubePluginVersion}"
+        id "io.spring.nohttp" version "${noHttpPluginVersion}"
+    }
+}
+
+rootProject.name = "recorder"

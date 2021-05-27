@@ -1,0 +1,67 @@
+{
+  "name": "Record",
+  "fields": [
+    {
+      "fieldName": "date",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "length",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "throwAway",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "threat",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "channel",
+      "otherEntityRelationshipName": "record",
+      "relationshipValidateRules": "required",
+      "relationshipName": "channel",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "categoryLabel",
+      "otherEntityRelationshipName": "record",
+      "relationshipName": "categoryLabel",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "searchLabel",
+      "otherEntityRelationshipName": "records",
+      "relationshipName": "searchLabels",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "machineLabel",
+      "otherEntityRelationshipName": "records",
+      "relationshipName": "machineLabels",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "record",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["frontend", "admin", "recorder"],
+  "microserviceName": "recorder",
+  "clientRootFolder": "recorder",
+  "databaseType": "sql",
+  "changelogDate": "20210527073653"
+}
