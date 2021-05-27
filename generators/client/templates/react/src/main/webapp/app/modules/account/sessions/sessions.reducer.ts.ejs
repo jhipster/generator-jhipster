@@ -21,11 +21,6 @@ import { createAsyncThunk, createSlice, isPending } from '@reduxjs/toolkit';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
-export const ACTION_TYPES = {
-  FIND_ALL: 'sessions/FIND_ALL',
-  INVALIDATE: 'sessions/INVALIDATE'
-};
-
 const initialState = {
   loading: false,
   sessions: [],
@@ -38,11 +33,11 @@ export type SessionsState =  Readonly<typeof initialState>;
 // Actions
 const apiUrl = '/api/account/sessions/';
 
-export const findAll = createAsyncThunk(ACTION_TYPES.FIND_ALL, async () => axios.get<any>(apiUrl), {
+export const findAll = createAsyncThunk('sessions/find_all', async () => axios.get<any>(apiUrl), {
   serializeError: serializeAxiosError,
 });
 
-export const invalidateSession = createAsyncThunk(ACTION_TYPES.INVALIDATE, async (series: any) => axios.delete(`${apiUrl}${series}`), {
+export const invalidateSession = createAsyncThunk('sessions/invalidate', async (series: any) => axios.delete(`${apiUrl}${series}`), {
   serializeError: serializeAxiosError,
 });
 

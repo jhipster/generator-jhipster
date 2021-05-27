@@ -123,7 +123,7 @@ describe('Settings reducer tests', () => {
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
       expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
-    it('dispatches ACTION_TYPES.RESET actions', async () => {
+    it('dispatches RESET actions', async () => {
       await store.dispatch(reset());
       expect(store.getActions()[0]).toMatchObject(reset());
     });

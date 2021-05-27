@@ -30,20 +30,6 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
-export const ACTION_TYPES = {
-  <%_ if (searchEngine) { _%>
-  SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
-  <%_ } _%>
-  FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
-  FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
-<%_ if (!readOnly) { _%>
-  CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
-  UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
-  PARTIAL_UPDATE_<%= entityActionName %>: '<%= entityInstance %>/PARTIAL_UPDATE_<%= entityActionName %>',
-  DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
-<%_ } _%>
-};
-
 const initialState: EntityState<I<%= entityReactName %>> = {
   loading: false,
   errorMessage: null,
@@ -68,7 +54,7 @@ const apiSearchUrl = '<% if (applicationTypeGateway && locals.microserviceName) 
 
 <%_ if (searchEngine) { _%>
 export const searchEntities = createAsyncThunk(
-  ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
+  '<%= entityInstance %>/search_entity',
   async ({ query, page, size, sort }: IQueryParams) => {
   <%_ if (!paginationNo) { _%>
     const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
@@ -80,7 +66,7 @@ export const searchEntities = createAsyncThunk(
 );
 
 <%_ } _%>
-export const getEntities = createAsyncThunk(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST, async ({ page, size, sort }: IQueryParams) => {
+export const getEntities = createAsyncThunk('<%= entityInstance %>/fetch_entity_list', async ({ page, size, sort }: IQueryParams) => {
   <%_ if (!paginationNo) { _%>
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}cacheBuster=${new Date().getTime()}`;
   <%_ } else { _%>
@@ -90,7 +76,7 @@ export const getEntities = createAsyncThunk(ACTION_TYPES.FETCH_<%= entityActionN
 });
 
 export const getEntity = createAsyncThunk(
-  ACTION_TYPES.FETCH_<%= entityActionName %>,
+  '<%= entityInstance %>/fetch_entity',
   async (id: string | number) => {
     const requestUrl = `${apiUrl}/${id}`;
     return axios.get<I<%= entityReactName %>>(requestUrl);
@@ -100,7 +86,7 @@ export const getEntity = createAsyncThunk(
 
 <%_ if (!readOnly) { _%>
 export const createEntity = createAsyncThunk(
-  ACTION_TYPES.CREATE_<%= entityActionName %>,
+  '<%= entityInstance %>/create_entity',
   async (entity: I<%= entityReactName %>, thunkAPI) => {
     <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.post<I<%= entityReactName %>>(apiUrl, cleanEntity(entity));
@@ -114,7 +100,7 @@ export const createEntity = createAsyncThunk(
 );
 
 export const updateEntity = createAsyncThunk(
-  ACTION_TYPES.UPDATE_<%= entityActionName %>,
+  '<%= entityInstance %>/update_entity',
   async (entity: I<%= entityReactName %>, thunkAPI) => {
     <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.put<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
@@ -127,8 +113,8 @@ export const updateEntity = createAsyncThunk(
   { serializeError: serializeAxiosError }
 );
 
-export const partialUpdate = createAsyncThunk(
-  ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>,
+export const partialUpdateEntity = createAsyncThunk(
+  '<%= entityInstance %>/partial_update_entity',
   async (entity: I<%= entityReactName %>, thunkAPI) => {
     <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.patch<I<%= entityReactName %>>(`${apiUrl}/${entity.<%= primaryKey.name %>}`, cleanEntity(entity));
@@ -142,7 +128,7 @@ export const partialUpdate = createAsyncThunk(
 );
 
 export const deleteEntity = createAsyncThunk(
-  ACTION_TYPES.DELETE_<%= entityActionName %>,
+  '<%= entityInstance %>/delete_entity',
   async (id: string | number, thunkAPI) => {
     const requestUrl = `${apiUrl}/${id}`;
     <%_ if (!paginationInfiniteScroll) { _%>
@@ -204,7 +190,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
           };
       })
       <%_ if (!readOnly) { _%>
-      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdate), (state, action) => {
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
         state.updating = false;
         state.loading = false;
         state.updateSuccess = true;
@@ -223,7 +209,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         state.loading = true;
       })
       <%_ if (!readOnly) { _%>
-      .addMatcher(isPending(createEntity, updateEntity, partialUpdate, deleteEntity), state => {
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;

@@ -21,10 +21,6 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { serializeAxiosError } from './reducer.utils';
 
-export const ACTION_TYPES = {
-  GET_PROFILE: 'applicationProfile/GET_PROFILE'
-};
-
 const initialState = {
   ribbonEnv: '',
   inProduction: true,
@@ -33,7 +29,7 @@ const initialState = {
 
 export type ApplicationProfileState =  Readonly<typeof initialState>;
 
-export const getProfile = createAsyncThunk(ACTION_TYPES.GET_PROFILE, async () => axios.get<any>('management/info'), {
+export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get<any>('management/info'), {
   serializeError: serializeAxiosError,
 });
 

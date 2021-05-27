@@ -22,16 +22,6 @@ import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } fro
 import { IUser, defaultValue } from 'app/shared/model/user.model';
 import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
-export const ACTION_TYPES = {
-  FETCH_ROLES: 'userManagement/FETCH_ROLES',
-  FETCH_USERS: 'userManagement/FETCH_USERS',
-  FETCH_USERS_AS_ADMIN: 'userManagement/FETCH_USERS_AS_ADMIN',
-  FETCH_USER:  'userManagement/FETCH_USER',
-  CREATE_USER: 'userManagement/CREATE_USER',
-  UPDATE_USER: 'userManagement/UPDATE_USER',
-  DELETE_USER: 'userManagement/DELETE_USER',
-};
-
 const initialState = {
   loading: false,
   errorMessage: null,
@@ -49,22 +39,22 @@ const adminUrl = 'api/admin/users';
 
 // Async Actions
 
-export const getUsers = createAsyncThunk(ACTION_TYPES.FETCH_USERS, async ({ page, size, sort }: IQueryParams) => {
+export const getUsers = createAsyncThunk('userManagement/fetch_users', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return axios.get<IUser[]>(requestUrl);
 });
 
-export const getUsersAsAdmin = createAsyncThunk(ACTION_TYPES.FETCH_USERS_AS_ADMIN, async ({ page, size, sort }: IQueryParams) => {
+export const getUsersAsAdmin = createAsyncThunk('userManagement/fetch_users_as_admin', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${adminUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return axios.get<IUser[]>(requestUrl);
 });
 
-export const getRoles = createAsyncThunk(ACTION_TYPES.FETCH_ROLES, async () => {
+export const getRoles = createAsyncThunk('userManagement/fetch_roles', async () => {
   return axios.get<any[]>(`api/authorities`);
 });
 
 export const getUser = createAsyncThunk(
-  ACTION_TYPES.FETCH_USER,
+  'userManagement/fetch_user',
   async (id: string) => {
     const requestUrl = `${adminUrl}/${id}`;
     return axios.get<IUser>(requestUrl);
@@ -73,7 +63,7 @@ export const getUser = createAsyncThunk(
 );
 
 export const createUser = createAsyncThunk(
-  ACTION_TYPES.CREATE_USER,
+  'userManagement/create_user',
   async (user: IUser, thunkAPI) => {
     const result = await axios.post<IUser>(adminUrl, user);
     thunkAPI.dispatch(getUsersAsAdmin({}));
@@ -83,7 +73,7 @@ export const createUser = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  ACTION_TYPES.UPDATE_USER,
+  'userManagement/update_user',
   async (user: IUser, thunkAPI) => {
     const result = await axios.put<IUser>(adminUrl, user);
     thunkAPI.dispatch(getUsersAsAdmin({}));
@@ -93,7 +83,7 @@ export const updateUser = createAsyncThunk(
 );
 
 export const deleteUser = createAsyncThunk(
-  ACTION_TYPES.DELETE_USER,
+  'userManagement/delete_user',
   async (id: string, thunkAPI) => {
     const requestUrl = `${adminUrl}/${id}`;
     const result = await axios.delete<IUser>(requestUrl);

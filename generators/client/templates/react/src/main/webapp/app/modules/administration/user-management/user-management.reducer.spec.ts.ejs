@@ -375,7 +375,7 @@ describe('User management reducer tests', () => {
       expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
 
-    it('dispatches ACTION_TYPES.RESET actions', async () => {
+    it('dispatches RESET actions', async () => {
       const expectedActions = [
         reset(),
       ];

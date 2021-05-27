@@ -26,16 +26,6 @@ import { serializeAxiosError } from './reducer.utils';
 import { AppThunk } from 'app/config/store';
 <% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
-export const ACTION_TYPES = {
-<%_ if (!authenticationTypeOauth2) { _%>
-  LOGIN: 'authentication/LOGIN',
-<%_ } _%>
-  GET_SESSION: 'authentication/GET_SESSION',
-<%_ if (!authenticationTypeJwt) { _%>
-  LOGOUT: 'authentication/LOGOUT',
-<%_ } _%>
-};
-
 <%_ if (authenticationTypeJwt) { _%>
 const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
 <%_ } _%>
@@ -74,12 +64,12 @@ export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% 
 <%_ } _%>
 };
 
-export const getAccount = createAsyncThunk(ACTION_TYPES.GET_SESSION, async () => axios.get<any>('api/account'), {
+export const getAccount = createAsyncThunk('authentication/get_account', async () => axios.get<any>('api/account'), {
   serializeError: serializeAxiosError,
 });
 
 <%_ if (authenticationTypeSession) { _%>
-export const authenticate = createAsyncThunk(ACTION_TYPES.LOGIN, async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
+export const authenticate = createAsyncThunk('authentication/login', async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
   serializeError: serializeAxiosError,
 });
 
@@ -97,7 +87,7 @@ interface IAuthParams {
   rememberMe?: boolean;
 }
 
-export const authenticate = createAsyncThunk(ACTION_TYPES.LOGIN, async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth), {
+export const authenticate = createAsyncThunk('authentication/login', async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth), {
   serializeError: serializeAxiosError,
 });
 
@@ -134,7 +124,7 @@ export const logout: () => AppThunk = () => dispatch => {
   dispatch(logoutSession());
 };
 <%_ } else { _%>
-export const logoutServer = createAsyncThunk(ACTION_TYPES.LOGOUT, async () => axios.post<any>('api/logout', {}), {
+export const logoutServer = createAsyncThunk('authentication/logout', async () => axios.post<any>('api/logout', {}), {
   serializeError: serializeAxiosError,
 });
 

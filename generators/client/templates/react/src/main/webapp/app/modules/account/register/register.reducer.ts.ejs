@@ -21,10 +21,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
-export const ACTION_TYPES = {
-  CREATE_ACCOUNT: 'register/CREATE_ACCOUNT',
-};
-
 const initialState = {
   loading: false,
   registrationSuccess: false,
@@ -38,7 +34,7 @@ export type RegisterState = Readonly<typeof initialState>;
 // Actions
 
 export const handleRegister = createAsyncThunk(
-  ACTION_TYPES.CREATE_ACCOUNT,
+  'register/create_account',
   async (data: { login: string; email: string; password: string; langKey?: string }) => axios.post<any>('api/register', data),
   { serializeError: serializeAxiosError }
 );

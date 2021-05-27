@@ -22,21 +22,6 @@ import { createAsyncThunk, createSlice, isPending, isRejected } from '@reduxjs/t
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { AppThunk } from 'app/config/store';
 
-export const ACTION_TYPES = {
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-  FETCH_GATEWAY_ROUTE: 'administration/FETCH_GATEWAY_ROUTE',
-<%_ } _%>
-<%_ if (withAdminUi) { _%>
-  FETCH_LOGS: 'administration/FETCH_LOGS',
-  FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',
-  FETCH_HEALTH: 'administration/FETCH_HEALTH',
-  FETCH_METRICS: 'administration/FETCH_METRICS',
-  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',
-  FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',
-  FETCH_ENV: 'administration/FETCH_ENV',
-<%_ } _%>
-};
-
 const initialState = {
   loading: false,
   errorMessage: null,
@@ -69,30 +54,30 @@ export type AdministrationState =  Readonly<typeof initialState>;
 
 // Actions
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-export const getGatewayRoutes = createAsyncThunk(ACTION_TYPES.FETCH_GATEWAY_ROUTE, async () => axios.get<any>('api/gateway/routes'), {
+export const getGatewayRoutes = createAsyncThunk('administration/fetch_gateway_route', async () => axios.get<any>('api/gateway/routes'), {
   serializeError: serializeAxiosError,
 });
 <%_ } _%>
 
 <%_ if (withAdminUi) { _%>
-export const getSystemHealth = createAsyncThunk(ACTION_TYPES.FETCH_HEALTH, async () => axios.get<any>('management/health'), {
+export const getSystemHealth = createAsyncThunk('administration/fetch_health', async () => axios.get<any>('management/health'), {
   serializeError: serializeAxiosError,
 });
 
-export const getSystemMetrics = createAsyncThunk(ACTION_TYPES.FETCH_METRICS, async () => axios.get<any>('management/jhimetrics'), {
+export const getSystemMetrics = createAsyncThunk('administration/fetch_metrics', async () => axios.get<any>('management/jhimetrics'), {
   serializeError: serializeAxiosError,
 });
 
-export const getSystemThreadDump = createAsyncThunk(ACTION_TYPES.FETCH_THREAD_DUMP, async () => axios.get<any>('management/threaddump'), {
+export const getSystemThreadDump = createAsyncThunk('administration/fetch_thread_dump', async () => axios.get<any>('management/threaddump'), {
   serializeError: serializeAxiosError,
 });
 
-export const getLoggers = createAsyncThunk(ACTION_TYPES.FETCH_LOGS, async () => axios.get<any>('management/loggers'), {
+export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<any>('management/loggers'), {
   serializeError: serializeAxiosError,
 });
 
 export const setLoggers = createAsyncThunk(
-  ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL,
+  'administration/fetch_logs_change_level',
   async ({ name, configuredLevel }: any) => axios.post(`management/loggers/${name}`, { configuredLevel }),
   {
     serializeError: serializeAxiosError,
@@ -104,11 +89,11 @@ export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, config
   dispatch(getLoggers());
 };
 
-export const getConfigurations = createAsyncThunk(ACTION_TYPES.FETCH_CONFIGURATIONS, async () => axios.get<any>('management/configprops'), {
+export const getConfigurations = createAsyncThunk('administration/fetch_configurations', async () => axios.get<any>('management/configprops'), {
   serializeError: serializeAxiosError,
 });
 
-export const getEnv = createAsyncThunk(ACTION_TYPES.FETCH_ENV, async () => axios.get<any>('management/env'), {
+export const getEnv = createAsyncThunk('administration/fetch_env', async () => axios.get<any>('management/env'), {
   serializeError: serializeAxiosError,
 });
 <%_ } _%>

@@ -22,10 +22,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IUser } from 'app/shared/model/user.model';
 import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
-export const ACTION_TYPES = {
-  FETCH_USERS: 'userManagement/FETCH_USERS',
-};
-
 const initialState = {
   errorMessage: null,
   users: [] as ReadonlyArray<IUser>,
@@ -35,7 +31,7 @@ const apiUrl = 'api/users';
 
 // Async Actions
 
-export const getUsers = createAsyncThunk(ACTION_TYPES.FETCH_USERS, async ({ page, size, sort }: IQueryParams) => {
+export const getUsers = createAsyncThunk('userManagement/fetch_users', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return axios.get<IUser[]>(requestUrl);
 });

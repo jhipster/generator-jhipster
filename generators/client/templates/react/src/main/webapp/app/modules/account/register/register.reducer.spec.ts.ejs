@@ -119,7 +119,7 @@ describe('Creating account tests', () => {
       expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
       expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
-    it('dispatches ACTION_TYPES.RESET actions', async () => {
+    it('dispatches RESET actions', async () => {
       await store.dispatch(reset());
       expect(store.getActions()[0]).toMatchObject(reset());
     });
