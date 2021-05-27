@@ -1,0 +1,32 @@
+{
+  "adminApp": {
+    "recorderMachineLabel": {
+      "home": {
+        "title": "MachineLabels",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Machine Label",
+        "createOrEditLabel": "Créer ou éditer un Machine Label",
+        "notFound": "Aucun Machine Label trouvé"
+      },
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Machine Label {{ id }} ?"
+      },
+      "detail": {
+        "title": "Machine Label"
+      },
+      "id": "ID",
+      "name": "Name",
+      "value": "Value",
+      "records": "Records",
+      "userGroups": "User Groups",
+      "userProfiles": "User Profiles"
+    }
+  },
+  "recorderApp": {
+    "recorderMachineLabel": {
+      "created": "Un nouveau Machine Label a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Machine Label avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Machine Label avec l'identifiant {{ param }} a été supprimé"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "MachineLabel",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "value",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "record",
+      "otherEntityRelationshipName": "machineLabels",
+      "relationshipName": "records",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userGroup",
+      "otherEntityRelationshipName": "machineLabel",
+      "relationshipName": "userGroups",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "machineLabel",
+      "relationshipName": "userProfiles",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "machine_label",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["frontend", "admin", "recorder"],
+  "microserviceName": "recorder",
+  "clientRootFolder": "recorder",
+  "databaseType": "sql",
+  "changelogDate": "20210527073353"
+}
