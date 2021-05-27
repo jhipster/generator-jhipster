@@ -18,14 +18,11 @@
 -%>
 
 import configureStore from 'redux-mock-store';
-import promiseMiddleware from 'redux-promise-middleware';
 import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import userManagement, {
-  ACTION_TYPES,
   getUsers,
   getUsersAsAdmin,
   getRoles,
@@ -62,42 +59,46 @@ describe('User management reducer tests', () => {
     expect(isEmpty(state.user));
   }
 
-  function testMultipleTypes(types, payload, testFunction) {
+  function testMultipleTypes(types, payload, testFunction, error?) {
     types.forEach(e => {
-      testFunction(userManagement(undefined, { type: e, payload }));
+      testFunction(userManagement(undefined, { type: e, payload, error }));
     });
   }
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(userManagement(undefined, {}));
+      testInitialState(userManagement(undefined, { type: 'unknown' }));
     });
   });
 
   describe('Requests', () => {
     it('should not modify the current state', () => {
-      testInitialState(userManagement(undefined, { type: REQUEST(ACTION_TYPES.FETCH_ROLES) }));
+      testInitialState(userManagement(undefined, { type: getRoles.pending.type }));
     });
 
     it('should set state to loading', () => {
-      testMultipleTypes([REQUEST(ACTION_TYPES.FETCH_USERS), REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN), REQUEST(ACTION_TYPES.FETCH_USER)], {}, state => {
-        expect(state).toMatchObject({
-          errorMessage: null,
-          updateSuccess: false,
-          loading: true
-        });
-      });
-    });
-
-    it('should set state to updating', () => {
       testMultipleTypes(
-        [REQUEST(ACTION_TYPES.CREATE_USER), REQUEST(ACTION_TYPES.UPDATE_USER), REQUEST(ACTION_TYPES.DELETE_USER)],
+        [getUsers.pending.type, getUsersAsAdmin.pending.type, getUser.pending.type],
         {},
         state => {
           expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
-            updating: true
+            loading: true,
+          });
+        }
+      );
+    });
+
+    it('should set state to updating', () => {
+      testMultipleTypes(
+        [createUser.pending.type, updateUser.pending.type, deleteUser.pending.type],
+        {},
+        state => {
+          expect(state).toMatchObject({
+            errorMessage: null,
+            updateSuccess: false,
+            updating: true,
           });
         }
       );
@@ -108,23 +109,24 @@ describe('User management reducer tests', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
       testMultipleTypes(
         [
-          FAILURE(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
-          FAILURE(ACTION_TYPES.FETCH_USERS),
-          FAILURE(ACTION_TYPES.FETCH_USER),
-          FAILURE(ACTION_TYPES.FETCH_ROLES),
-          FAILURE(ACTION_TYPES.CREATE_USER),
-          FAILURE(ACTION_TYPES.UPDATE_USER),
-          FAILURE(ACTION_TYPES.DELETE_USER)
+          getUsersAsAdmin.rejected.type,
+          getUsers.rejected.type,
+          getUser.rejected.type,
+          getRoles.rejected.type,
+          createUser.rejected.type,
+          updateUser.rejected.type,
+          deleteUser.rejected.type,
         ],
-        'something happened',
+        { message: 'something happened' },
         state => {
           expect(state).toMatchObject({
             loading: false,
             updating: false,
             updateSuccess: false,
-            errorMessage: 'something happened'
+            errorMessage: 'error happened',
           });
-        }
+        },
+        { message: 'error happened' }
       );
     });
   });
@@ -137,7 +139,7 @@ describe('User management reducer tests', () => {
 <%_ } else { _%>
       const payload = { data: 'some handsome users' };
 <%_ } _%>
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USERS), payload });
+      const toTest = userManagement(undefined, { type: getUsers.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -150,7 +152,7 @@ describe('User management reducer tests', () => {
 
     it('should update state according to a successful fetch user request', () => {
       const payload = { data: 'some handsome user' };
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USER), payload });
+      const toTest = userManagement(undefined, { type: getUser.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -160,7 +162,7 @@ describe('User management reducer tests', () => {
 
     it('should update state according to a successful fetch role request', () => {
       const payload = { data: [AUTHORITIES.ADMIN] };
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ROLES), payload });
+      const toTest = userManagement(undefined, { type: getRoles.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
@@ -169,17 +171,21 @@ describe('User management reducer tests', () => {
     });
 
     it('should set state to successful update', () => {
-      testMultipleTypes([SUCCESS(ACTION_TYPES.CREATE_USER), SUCCESS(ACTION_TYPES.UPDATE_USER)], { data: 'some handsome user' }, types => {
-        expect(types).toMatchObject({
-          updating: false,
-          updateSuccess: true,
-          user: 'some handsome user'
-        });
-      });
+      testMultipleTypes(
+        [createUser.fulfilled.type, updateUser.fulfilled.type],
+        { data: 'some handsome user' },
+        types => {
+          expect(types).toMatchObject({
+            updating: false,
+            updateSuccess: true,
+            user: 'some handsome user',
+          });
+        }
+      );
     });
 
     it('should set state to successful update with an empty user', () => {
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.DELETE_USER) });
+      const toTest = userManagement(undefined, { type: deleteUser.fulfilled.type });
 
       expect(toTest).toMatchObject({
         updating: false,
@@ -201,18 +207,11 @@ describe('User management reducer tests', () => {
         updateSuccess: false,
         totalItems: 0
       };
-      const payload = {
+      const initialStateNew = {
         ...initialState,
-        loading: true
+        loading: true,
       };
-      expect(
-        userManagement(
-          payload,
-          {
-            type: ACTION_TYPES.RESET
-          }
-        )
-      ).toEqual(initialState);
+      expect(userManagement(initialStateNew, reset)).toEqual(initialState);
     });
   });
 
@@ -221,148 +220,164 @@ describe('User management reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware]);
+      const mockStore = configureStore([thunk]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
+
     it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions', async () => {
-        const expectedActions = [
-          {
-            type: REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN)
-          },
-          {
-            type: SUCCESS(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
-            payload: resolvedObject
-          }
-        ];
-        await store.dispatch(getUsersAsAdmin()).then(() => expect(store.getActions()).toEqual(expectedActions));
-      });
-      it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions with pagination options', async () => {
-        const expectedActions = [
-          {
-            type: REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN)
-          },
-          {
-            type: SUCCESS(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
-            payload: resolvedObject
-          }
-        ];
-        await store.dispatch(getUsersAsAdmin(1, 20, 'id,desc')).then(() => expect(store.getActions()).toEqual(expectedActions));
-      });
+      const expectedActions = [
+        {
+          type: getUsersAsAdmin.pending.type,
+        },
+        {
+          type: getUsersAsAdmin.fulfilled.type,
+          payload: resolvedObject,
+        },
+      ];
+      await store.dispatch(getUsersAsAdmin({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+
+    it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions with pagination options', async () => {
+      const expectedActions = [
+        {
+          type: getUsersAsAdmin.pending.type,
+        },
+        {
+          type: getUsersAsAdmin.fulfilled.type,
+          payload: resolvedObject,
+        },
+      ];
+      await store.dispatch(getUsersAsAdmin({ page: 1, size: 20, sort: 'id,desc' }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+          type: getUsers.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
-          payload: resolvedObject
-        }
+          type: getUsers.fulfilled.type,
+          payload: resolvedObject,
+        },
       ];
-      await store.dispatch(getUsers()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getUsers({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
+
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+          type: getUsers.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
-          payload: resolvedObject
-        }
+          type: getUsers.fulfilled.type,
+          payload: resolvedObject,
+        },
       ];
-      await store.dispatch(getUsers(1, 20, 'id,desc')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getUsers({ page: 1, size: 20, sort: 'id,desc' }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
+
     it('dispatches FETCH_ROLES_PENDING and FETCH_ROLES_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_ROLES)
+          type: getRoles.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_ROLES),
-          payload: resolvedObject
-        }
+          type: getRoles.fulfilled.type,
+          payload: resolvedObject,
+        },
       ];
-      await store.dispatch(getRoles()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getRoles());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
+
     it('dispatches FETCH_USER_PENDING and FETCH_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_USER)
+          type: getUser.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_USER),
-          payload: resolvedObject
-        }
+          type: getUser.fulfilled.type,
+          payload: resolvedObject,
+        },
       ];
-      await store.dispatch(getUser(username)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getUser(username));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
+
     it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_USER)
+          type: createUser.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.CREATE_USER),
-          payload: resolvedObject
+          type: getUsersAsAdmin.pending.type,
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN)
+          type: createUser.fulfilled.type,
+          payload: resolvedObject,
         },
-        {
-          type: SUCCESS(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
-          payload: resolvedObject
-        }
       ];
-      await store.dispatch(createUser()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(createUser({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
+
     it('dispatches UPDATE_USER_PENDING and UPDATE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_USER)
+          type: updateUser.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.UPDATE_USER),
-          payload: resolvedObject
+          type: getUsersAsAdmin.pending.type,
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN)
+          type: updateUser.fulfilled.type,
+          payload: resolvedObject,
         },
-        {
-          type: SUCCESS(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
-          payload: resolvedObject
-        }
       ];
-      await store.dispatch(updateUser({ login: username })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(updateUser({ login: username }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
+
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.DELETE_USER)
+          type: deleteUser.pending.type,
         },
         {
-          type: SUCCESS(ACTION_TYPES.DELETE_USER),
-          payload: resolvedObject
+          type: getUsersAsAdmin.pending.type,
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN)
+          type: deleteUser.fulfilled.type,
+          payload: resolvedObject,
         },
-        {
-          type: SUCCESS(ACTION_TYPES.FETCH_USERS_AS_ADMIN),
-          payload: resolvedObject
-        }
       ];
-      await store.dispatch(deleteUser(username)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(deleteUser(username));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
     });
-    it('dispatches ACTION_TYPES.RESET actions', async () => {
+
+    it('dispatches RESET actions', async () => {
       const expectedActions = [
-        {
-          type: ACTION_TYPES.RESET
-        }
+        reset(),
       ];
       await store.dispatch(reset());
       expect(store.getActions()).toEqual(expectedActions);

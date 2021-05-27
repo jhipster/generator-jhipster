@@ -25,7 +25,6 @@ for (const field of fields.filter(field => !field.id)) {
 }
 _%>
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -44,7 +43,6 @@ import {
   translate
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IRootState } from 'app/shared/reducers';
 
 <%_
 let hasRelationshipQuery = false;
@@ -98,7 +96,7 @@ import {
   updateEntity,
   createEntity,
 <%_ if (fieldsContainBlob) { _%>
-    setBlob,
+  setBlob,
 <%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
@@ -107,18 +105,23 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 <%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
+export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: string}>) => {
+  const dispatch = useAppDispatch();
 
-export const <%= entityReactName %>Update = (props: I<%= entityReactName %>UpdateProps) => {
 <%_ manyToManyOwners.forEach(val => { _%>
   const [ids<%= val.relationshipName %>, setIds<%= val.relationshipName %>] = useState([]);
 <%_ }) _%>
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { <%= entityInstance %>Entity,<%
-  uniqueRelationFields.forEach(rel => {
-  %> <%= rel %>,<% }) %> loading, updating } = props;
+  <%_ otherEntityActions.forEach(val => { _%>
+  const <%= val.instance %> = useAppSelector(state => state.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>);
+  <%_ }) _%>
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
+  const loading = useAppSelector(state => state.<%= entityInstance %>.loading);
+  const updating = useAppSelector(state => state.<%= entityInstance %>.updating);
+  const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
 
 <%_ for (var i = 0; i < blobFields.length; i++) { _%>
   <%_
@@ -145,36 +148,36 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   useEffect(() => {
 <%_ if (paginationInfiniteScroll) { _%>
     if (!isNew) {
-      props.getEntity(props.match.params.id);
+      dispatch(getEntity(props.match.params.id));
     }
 <%_ } else { _%>
     if (isNew) {
-      props.reset();
+      dispatch(reset());
     } else {
-      props.getEntity(props.match.params.id);
+      dispatch(getEntity(props.match.params.id));
     }
 <%_ } _%>
 
 <%_ otherEntityActions.forEach(val => { _%>
-    props.<%= val.action %>();
+    dispatch(<%= val.action %>({}));
 <%_ }) _%>
   }, []);
 
 <%_ if (fieldsContainBlob) { _%>
   const onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => props.setBlob(name, data, contentType), isAnImage);
+    setFileData(event, (contentType, data) => dispatch(setBlob({ name, data, contentType })), isAnImage);
   };
 
   const clearBlob = name => () => {
-    props.setBlob(name, undefined, undefined);
+    dispatch(setBlob(name));
   };
 <%_ } _%>
 
   useEffect(() => {
-    if (props.updateSuccess) {
+    if (updateSuccess) {
       handleClose();
     }
-  }, [props.updateSuccess]);
+  }, [updateSuccess]);
 
   const saveEntity = (event, errors, values) => {
 <%_ for (field of fields.filter(field => !field.id)) {
@@ -200,9 +203,9 @@ _%>
       }
 
       if (isNew) {
-        props.createEntity(entity);
+        dispatch(createEntity(entity));
       } else {
-        props.updateEntity(entity);
+        dispatch(updateEntity(entity));
       }
     }
   }
@@ -253,7 +256,7 @@ _%>
               className="form-control"
               name="<%= fieldName %>"
               placeholder={"YYYY-MM-DD HH:mm"}
-              value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.<%= entityInstance %>Entity.<%= fieldName %>)}
+              value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>)}
               <%- include('react_validators'); %>
             />
   <%_ } else if (field.fieldTypeLocalDate) { _%>
@@ -453,30 +456,4 @@ _%>
   );
 };
 
-const mapStateToProps = (storeState: IRootState) => ({
-<%_ otherEntityActions.forEach(val => { _%>
-    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
-<%_ }) _%>
-  <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
-  loading: storeState.<%= entityInstance %>.loading,
-  updating: storeState.<%= entityInstance %>.updating,
-  updateSuccess: storeState.<%= entityInstance %>.updateSuccess,
-});
-
-const mapDispatchToProps = {
-<%_ otherEntityActions.forEach(val => { _%>
-  <%= val.action %>,
-<%_ }) _%>
-  getEntity,
-  updateEntity,
-<%_ if (fieldsContainBlob) { _%>
-  setBlob,
-<%_ } _%>
-  createEntity,
-  reset
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Update);
+export default <%= entityReactName %>Update;

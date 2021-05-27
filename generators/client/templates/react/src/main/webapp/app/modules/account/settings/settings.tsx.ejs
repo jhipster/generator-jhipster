@@ -18,44 +18,56 @@
 -%>
 import React, { useEffect } from 'react';
 import { Button, Col, Row } from 'reactstrap';
-import { connect } from 'react-redux';
 import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { toast } from 'react-toastify';
 
 <%_ if (enableTranslation) { _%>
 import { locales, languages } from 'app/config/translation';
 <%_ } _%>
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
 
-export interface IUserSettingsProps extends StateProps, DispatchProps {}
+export const SettingsPage = () => {
+  const dispatch = useAppDispatch();
+  const account = useAppSelector(state => state.authentication.account);
+  const successMessage = useAppSelector(state => state.settings.successMessage);
 
-export const SettingsPage = (props: IUserSettingsProps) => {
   useEffect(() => {
-    props.getSession();
+    dispatch(getSession());
     return () => {
-      props.reset();
+      dispatch(reset());
     };
   }, []);
 
   const handleValidSubmit = (event, values) => {
-    const account = {
-      ...props.account,
-      ...values
-    };
-
-    props.saveAccountSettings(account);
+    dispatch(
+      saveAccountSettings({
+        ...account,
+        ...values,
+      })
+    );
     event.persist();
   };
+
+<%_ if (enableTranslation) { _%>
+  if (successMessage) {
+    toast.success(translate(successMessage));
+  }
+<%_ } else { _%>
+  if (successMessage) {
+    toast.success(successMessage);
+  }
+<%_ } _%>
 
   return (
     <div>
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="settings-title">
-            <Translate contentKey="settings.title" interpolate={{ username: props.account.login }}>
-              User settings for {props.account.login}
+            <Translate contentKey="settings.title" interpolate={{ username: account.login }}>
+              User settings for {account.login}
             </Translate>
           </h2>
           <AvForm id="settings-form" onValidSubmit={handleValidSubmit}>
@@ -71,7 +83,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
                 minLength: { value: 1, errorMessage: translate('settings.messages.validate.firstname.minlength') },
                 maxLength: { value: 50, errorMessage: translate('settings.messages.validate.firstname.maxlength') }
               }}
-              value={props.account.firstName}
+              value={account.firstName}
               data-cy="firstname"
             />
             {/* Last name */}
@@ -86,7 +98,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
                 minLength: { value: 1, errorMessage: translate('settings.messages.validate.lastname.minlength') },
                 maxLength: { value: 50, errorMessage: translate('settings.messages.validate.lastname.maxlength') }
               }}
-              value={props.account.lastName}
+              value={account.lastName}
               data-cy="lastname"
             />
             {/* Email */}
@@ -100,7 +112,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
                 minLength: { value: 5, errorMessage: translate('global.messages.validate.email.minlength') },
                 maxLength: { value: 254, errorMessage: translate('global.messages.validate.email.maxlength') }
               }}
-              value={props.account.email}
+              value={account.email}
               data-cy="email"
             />
 <%_ if (enableTranslation) { _%>
@@ -111,7 +123,7 @@ export const SettingsPage = (props: IUserSettingsProps) => {
               name="langKey"
               className="form-control"
               label={translate('settings.form.language')}
-              value={props.account.langKey}
+              value={account.langKey}
               data-cy="langKey"
             >
               {locales.map(locale => (
@@ -131,14 +143,4 @@ export const SettingsPage = (props: IUserSettingsProps) => {
   );
 };
 
-const mapStateToProps = ({ authentication }: IRootState) => ({
-  account: authentication.account,
-  isAuthenticated: authentication.isAuthenticated,
-});
-
-const mapDispatchToProps = { getSession, saveAccountSettings, reset };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
+export default SettingsPage;

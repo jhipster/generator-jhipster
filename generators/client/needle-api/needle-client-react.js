@@ -67,9 +67,7 @@ module.exports = class extends needleClientBase {
       indexReducerPath,
       'jhipster-needle-add-reducer-import', // prettier-ignore
       this.generator.stripMargin(`|// prettier-ignore
-                    |import ${entityInstance}, {
-                    |  ${entityName}State
-                    |} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
+                    |import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
     );
     this.addBlockContentToFile(reducerAddImportRewriteFileModel, errorMessage(indexReducerPath));
 
