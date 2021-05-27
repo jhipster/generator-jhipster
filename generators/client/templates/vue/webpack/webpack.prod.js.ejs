@@ -19,7 +19,7 @@
 'use strict';
 const utils = require('./vue.utils');
 const webpack = require('webpack');
-const config = require('../config');
+const config = require('./env');
 const webpackMerge = require('webpack-merge').merge;
 const baseWebpackConfig = require('./webpack.common');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -30,7 +30,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const jhiUtils = require('./utils.js');
 
-const env = require('../config/prod.env');
+const env = require('./prod.env');
 
 const webpackConfig = webpackMerge(baseWebpackConfig, {
   mode: 'production',

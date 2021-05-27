@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 
+/**
+ * @jest-environment jsdom
+ */
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import thunk from 'redux-thunk';
 import axios from 'axios';

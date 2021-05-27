@@ -25,7 +25,7 @@ const { merge: webpackMerge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const utils = require('./vue.utils');
-const config = require('../config');
+const config = require('./env');
 const baseWebpackConfig = require('./webpack.common');
 const jhiUtils = require('./utils.js');
 
@@ -103,7 +103,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
+      'process.env': require('./dev.env')
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

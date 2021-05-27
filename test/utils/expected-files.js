@@ -497,6 +497,7 @@ const expectedFiles = {
     'tsconfig.spec.json',
     'tsconfig.json',
     'webpack/logo-jhipster.png',
+    'webpack/environment.js',
     'webpack/proxy.conf.js',
     'webpack/webpack.custom.js',
   ],
