@@ -1,0 +1,32 @@
+{
+  "adminApp": {
+    "recorderCategoryLabel": {
+      "home": {
+        "title": "Category Labels",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Category Label",
+        "createOrEditLabel": "Create or edit a Category Label",
+        "notFound": "No Category Labels found"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Category Label {{ id }}?"
+      },
+      "detail": {
+        "title": "Category Label"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "authorityAttach": "Authority Attach",
+      "record": "Record",
+      "userProfiles": "User Profiles"
+    }
+  },
+  "recorderApp": {
+    "recorderCategoryLabel": {
+      "created": "A new Category Label is created with identifier {{ param }}",
+      "updated": "A Category Label is updated with identifier {{ param }}",
+      "deleted": "A Category Label is deleted with identifier {{ param }}"
+    }
+  }
+}

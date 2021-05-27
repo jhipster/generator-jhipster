@@ -1,0 +1,33 @@
+{
+  "adminApp": {
+    "recorderNode": {
+      "home": {
+        "title": "Nodes",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Node",
+        "createOrEditLabel": "Créer ou éditer un Node",
+        "notFound": "Aucun Node trouvé"
+      },
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Node {{ id }} ?"
+      },
+      "detail": {
+        "title": "Node"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "timeToLive": "Time To Live",
+      "parent": "Parent",
+      "channels": "Channels",
+      "userProfiles": "User Profiles"
+    }
+  },
+  "recorderApp": {
+    "recorderNode": {
+      "created": "Un nouveau Node a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Node avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Node avec l'identifiant {{ param }} a été supprimé"
+    }
+  }
+}

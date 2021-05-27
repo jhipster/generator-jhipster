@@ -1,0 +1,42 @@
+{
+  "name": "SearchLabel",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "record",
+      "otherEntityRelationshipName": "searchLabels",
+      "relationshipName": "records",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "searchLabels",
+      "relationshipName": "userProfile"
+    }
+  ],
+  "entityTableName": "search_label",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["frontend", "admin", "recorder"],
+  "microserviceName": "recorder",
+  "clientRootFolder": "recorder",
+  "databaseType": "sql",
+  "changelogDate": "20210527073153"
+}

@@ -1,0 +1,31 @@
+{
+  "adminApp": {
+    "recorderSearchLabel": {
+      "home": {
+        "title": "Search Labels",
+        "refreshListLabel": "Liste aktualisieren",
+        "createLabel": "Search Label erstellen",
+        "createOrEditLabel": "Search Label erstellen oder bearbeiten",
+        "notFound": "Keine Search Labels gefunden"
+      },
+      "delete": {
+        "question": "Soll Search Label {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Search Label"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "records": "Records",
+      "userProfile": "User Profile"
+    }
+  },
+  "recorderApp": {
+    "recorderSearchLabel": {
+      "created": "Search Label erstellt mit ID {{ param }}",
+      "updated": "Search Label aktualisiert mit ID {{ param }}",
+      "deleted": "Search Label gelöscht mit ID {{ param }}"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "adminApp": {
+    "recorderRecord": {
+      "home": {
+        "title": "Records",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Record",
+        "createOrEditLabel": "Créer ou éditer un Record",
+        "notFound": "Aucun Record trouvé"
+      },
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Record {{ id }} ?"
+      },
+      "detail": {
+        "title": "Record"
+      },
+      "id": "ID",
+      "date": "Date",
+      "length": "Length",
+      "throwAway": "Throw Away",
+      "threat": "Threat",
+      "channel": "Channel",
+      "categoryLabel": "Category Label",
+      "searchLabels": "Search Labels",
+      "machineLabels": "Machine Labels"
+    }
+  },
+  "recorderApp": {
+    "recorderRecord": {
+      "created": "Un nouveau Record a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Record avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Record avec l'identifiant {{ param }} a été supprimé"
+    }
+  }
+}

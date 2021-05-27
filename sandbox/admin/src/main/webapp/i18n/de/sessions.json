@@ -1,0 +1,15 @@
+{
+  "sessions": {
+    "title": "Aktive Sitzungen für [<strong>{{username}}</strong>]",
+    "table": {
+      "ipaddress": "IP Adresse",
+      "useragent": "User Agent",
+      "date": "Datum",
+      "button": "Schließen"
+    },
+    "messages": {
+      "success": "<strong>Sitzung wurde geschlossen!</strong>",
+      "error": "<strong>Es ist ein Fehler aufgetreten!</strong> Die Sitzung konnte nicht geschlossen werden."
+    }
+  }
+}

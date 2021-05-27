@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": "Gateway",
+    "routes": {
+      "title": "Aktuelle Routen",
+      "url": "URL",
+      "service": "service",
+      "servers": "Verfügbare Server",
+      "error": "Achtung: keine Server verfügbar!"
+    },
+    "refresh": {
+      "button": "Aktualisieren"
+    }
+  }
+}
