@@ -25,7 +25,7 @@ import { Storage } from 'react-jhipster';
 <%_ } _%>
 
 import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
-import { getAccount<% if (authenticationTypeJwt) { %>, logoutSession<% } %> } from 'app/shared/reducers/authentication';
+import { getAccount<% if (authenticationTypeJwt) { %>, logoutSession<% } else { %>,logoutServer<% } %> } from 'app/shared/reducers/authentication';
 <%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
