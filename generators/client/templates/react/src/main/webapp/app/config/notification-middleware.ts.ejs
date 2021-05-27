@@ -122,10 +122,10 @@ export default () => next => action => {
             break;
 
           default:
-            if (data !== '' && data.message) {
-              addErrorAlert(data.message);
-            } else {
+            if (typeof data === 'string' && data !== '') {
               addErrorAlert(data);
+            } else {
+              toast.error(data?.message || data?.error || 'Unknown error!');
             }
         }
       }
