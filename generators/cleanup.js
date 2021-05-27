@@ -311,6 +311,12 @@ function cleanupOldFiles(generator) {
       generator.removeFile('config/prod.env.js');
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.1.0') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === REACT) {
+      generator.removeFile('shared/reducers/action-type.util.ts');
+      generator.removeFile('config/devtools.tsx');
+    }
+  }
 }
 
 /**
