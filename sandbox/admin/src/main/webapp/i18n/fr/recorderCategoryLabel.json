@@ -1,0 +1,32 @@
+{
+  "adminApp": {
+    "recorderCategoryLabel": {
+      "home": {
+        "title": "CategoryLabels",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Category Label",
+        "createOrEditLabel": "Créer ou éditer un Category Label",
+        "notFound": "Aucun Category Label trouvé"
+      },
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Category Label {{ id }} ?"
+      },
+      "detail": {
+        "title": "Category Label"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "authorityAttach": "Authority Attach",
+      "record": "Record",
+      "userProfiles": "User Profiles"
+    }
+  },
+  "recorderApp": {
+    "recorderCategoryLabel": {
+      "created": "Un nouveau Category Label a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Category Label avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Category Label avec l'identifiant {{ param }} a été supprimé"
+    }
+  }
+}

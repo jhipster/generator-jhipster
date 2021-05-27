@@ -1,0 +1,32 @@
+{
+  "adminApp": {
+    "recorderChannel": {
+      "home": {
+        "title": "Channels",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Channel",
+        "createOrEditLabel": "Create or edit a Channel",
+        "notFound": "No Channels found"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Channel {{ id }}?"
+      },
+      "detail": {
+        "title": "Channel"
+      },
+      "id": "ID",
+      "mediaType": "Media Type",
+      "name": "Name",
+      "throwAwayAllowed": "Throw Away Allowed",
+      "threatAllowed": "Threat Allowed",
+      "nodes": "Nodes"
+    }
+  },
+  "recorderApp": {
+    "recorderChannel": {
+      "created": "A new Channel is created with identifier {{ param }}",
+      "updated": "A Channel is updated with identifier {{ param }}",
+      "deleted": "A Channel is deleted with identifier {{ param }}"
+    }
+  }
+}
