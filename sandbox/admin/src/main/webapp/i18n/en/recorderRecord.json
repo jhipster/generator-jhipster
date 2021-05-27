@@ -1,0 +1,35 @@
+{
+  "adminApp": {
+    "recorderRecord": {
+      "home": {
+        "title": "Records",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Record",
+        "createOrEditLabel": "Create or edit a Record",
+        "notFound": "No Records found"
+      },
+      "delete": {
+        "question": "Are you sure you want to delete Record {{ id }}?"
+      },
+      "detail": {
+        "title": "Record"
+      },
+      "id": "ID",
+      "date": "Date",
+      "length": "Length",
+      "throwAway": "Throw Away",
+      "threat": "Threat",
+      "channel": "Channel",
+      "categoryLabel": "Category Label",
+      "searchLabels": "Search Labels",
+      "machineLabels": "Machine Labels"
+    }
+  },
+  "recorderApp": {
+    "recorderRecord": {
+      "created": "A new Record is created with identifier {{ param }}",
+      "updated": "A Record is updated with identifier {{ param }}",
+      "deleted": "A Record is deleted with identifier {{ param }}"
+    }
+  }
+}

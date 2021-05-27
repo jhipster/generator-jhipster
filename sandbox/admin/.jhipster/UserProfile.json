@@ -1,0 +1,70 @@
+{
+  "name": "UserProfile",
+  "fields": [
+    {
+      "fieldName": "principal",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "searchLabel",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "searchLabels",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "node",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "actualNode",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "node",
+      "otherEntityRelationshipName": "userProfiles",
+      "relationshipName": "assignedNodes",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "categoryLabel",
+      "otherEntityRelationshipName": "userProfiles",
+      "relationshipName": "assignedCategories",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "machineLabel",
+      "otherEntityRelationshipName": "userProfiles",
+      "relationshipName": "machineLabel",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userGroup",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "userGroups",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "user_profile",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["frontend", "admin", "recorder"],
+  "microserviceName": "recorder",
+  "clientRootFolder": "recorder",
+  "databaseType": "sql",
+  "changelogDate": "20210527073853"
+}
