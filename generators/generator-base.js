@@ -2515,6 +2515,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDerivedClientConfig(dest = this) {
     dest.clientFrameworkAngular = dest.clientFramework === ANGULAR;
     dest.clientFrameworkReact = dest.clientFramework === REACT;
+    dest.clientFrameworkVue = dest.clientFramework === VUE;
     dest.clientThemeNone = dest.clientTheme === 'none';
     dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
     dest.clientThemeLight = dest.clientThemeVariant === 'light';
