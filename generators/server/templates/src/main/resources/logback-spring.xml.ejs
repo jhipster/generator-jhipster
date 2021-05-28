@@ -152,6 +152,10 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
     <%_ } _%>
+    <!-- See https://github.com/jhipster/generator-jhipster/issues/13835 -->
+    <logger name="Validator" level="INFO"/>
+    <!-- See https://github.com/jhipster/generator-jhipster/issues/14444 -->
+    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
     <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level -->
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
