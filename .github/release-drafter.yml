@@ -10,14 +10,36 @@ categories:
       - 'changes: major :star:'
       - 'changes: minor'
   - title: 🐞 Bug Fixes
-    label: 'area: bug'
+    labels:
+      - 'area: bug'
+      - 'pr: bug-fix'
   - title: 🖥️ Frontend
     labels:
       - 'theme: front'
       - 'theme: vue'
       - 'theme: angular'
       - 'theme: react'
+  - title: 🔒 Authentication/Security
+    labels:
+      - 'theme: OIDC/OAuth2'
+      - 'theme: security'
+      - 'theme: keycloak"'
+  - title: 🐾 JDL/Internals/Blueprints
+    labels:
+      - 'theme: JDL'
+      - 'theme: jhipster-internals'
+      - 'theme: blueprint :paw_prints:'
+  - title: 🪶 Maven
+    labels:
+      - 'theme: maven'
+  - title: 🐘 Gradle
+    labels:
+      - 'theme: gradle'
   - title: 📝 Documentation
     label: 'area: documentation:books:'
   - title: 📦 Dependency updates
     label: 'theme: dependencies'
+  - title: 💩 Spam/Invalid
+    labels:
+      - 'spam'
+      - 'area: invalid'
