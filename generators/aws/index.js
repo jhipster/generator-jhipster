@@ -80,7 +80,7 @@ module.exports = class extends BaseBlueprintGenerator {
             this.dbEngine = MYSQL;
             break;
           case POSTGRESQL:
-            this.dbEngine = POSTGRESQL;
+            this.dbEngine = 'postgres';
             break;
           default:
             this.error('Sorry deployment for this database is not possible');
