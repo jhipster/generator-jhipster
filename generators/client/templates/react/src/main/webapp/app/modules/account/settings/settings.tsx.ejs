@@ -52,13 +52,17 @@ export const SettingsPage = () => {
   };
 
 <%_ if (enableTranslation) { _%>
-  if (successMessage) {
-    toast.success(translate(successMessage));
-  }
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(translate(successMessage));
+    }
+  }, [successMessage]);
 <%_ } else { _%>
-  if (successMessage) {
-    toast.success(successMessage);
-  }
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+    }
+  }, [successMessage]);
 <%_ } _%>
 
   return (
