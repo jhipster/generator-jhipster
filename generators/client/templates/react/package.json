@@ -57,7 +57,7 @@
     "fork-ts-checker-webpack-plugin": "6.2.10",
     "html-webpack-plugin": "5.3.1",
     "identity-obj-proxy": "3.0.0",
-    "jest": "27.0.1",
+    "jest": "27.0.3",
     "jest-junit": "12.1.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
