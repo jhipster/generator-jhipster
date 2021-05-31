@@ -59,7 +59,7 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
@@ -126,7 +126,7 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
@@ -134,7 +134,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-cache
           restore-keys: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
@@ -187,7 +187,7 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
@@ -195,12 +195,12 @@ jobs:
           key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-cache
           restore-keys: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
       - name: 'SETUP: load gradle cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.gradle/caches
