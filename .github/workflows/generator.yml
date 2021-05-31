@@ -42,7 +42,7 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
