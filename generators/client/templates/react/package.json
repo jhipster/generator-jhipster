@@ -4,7 +4,6 @@
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@reduxjs/toolkit": "1.5.1",
-    "availity-reactstrap-validation": "2.7.1",
     "axios": "0.21.1",
     "bootstrap": "4.6.0",
     "bootswatch": "5.0.1",
