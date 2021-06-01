@@ -386,6 +386,7 @@ const expectedFiles = {
     '.eslintrc.json',
     'package.json',
     '.browserslistrc',
+    '.npmrc',
     `${CLIENT_MAIN_SRC_DIR}main.ts`,
     `${CLIENT_MAIN_SRC_DIR}polyfills.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,

@@ -22,8 +22,6 @@ const path = require('path');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
-const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -35,25 +33,33 @@ const environment = require('./environment');
 const tls = process.env.TLS;
 
 module.exports = (config, options, targetOptions) => {
+  config.cache = {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, 'webpack.custom.js'),
+        path.resolve(__dirname, '../angular.json'),
+        path.resolve(__dirname, '../tsconfig.app.json'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
+    },
+  };
+
   // PLUGINS
   if (config.mode === 'development') {
     config.plugins.push(
       new ESLintPlugin({
         extensions: ['js', 'ts'],
       }),
-      new FriendlyErrorsWebpackPlugin(),
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       })
     );
-    if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
-      config.plugins.push(
-        new SimpleProgressWebpackPlugin({
-          format: 'compact',
-        })
-      );
-    }
   }
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
@@ -99,10 +105,6 @@ module.exports = (config, options, targetOptions) => {
         openAnalyzer: false,
         // Webpack statistics in target folder
         reportFilename: '../stats.html',
-      }),
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug: false,
       })
     );
   }

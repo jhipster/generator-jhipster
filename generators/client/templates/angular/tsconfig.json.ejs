@@ -18,32 +18,32 @@
 -%>
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "es2020",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "outDir": "./<%= DIST_DIR %>",
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
 <%_ if (protractorTests) { // Prevents Jest and Mocha types conflicts. See https://github.com/jhipster/generator-jhipster/pull/13083 _%>
     "skipLibCheck": true,
 <%_ } _%>
-    "outDir": "<%= DIST_DIR %>app",
-    "lib": ["es2018", "dom"],
-    "baseUrl": "./",
     "paths": {
       "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
     },
-    "importHelpers": true,
-    "downlevelIteration": true,
     "declaration": false,
-    "forceConsistentCasingInFileNames": true
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
-    "strictTemplates": true,
     "strictInputAccessModifiers": true,
+    "strictTemplates": true,
     "preserveWhitespaces": true
   }
 <%_ if (cypressTests) { _%>
