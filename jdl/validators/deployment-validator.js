@@ -18,6 +18,8 @@
  */
 
 const { MICROSERVICE } = require('../jhipster/application-types');
+const { NO } = require('../jhipster/database-types');
+const { ELASTICSEARCH } = require('../jhipster/search-engine-types');
 const { Options } = require('../jhipster/deployment-options');
 const Validator = require('./validator');
 
@@ -37,7 +39,7 @@ module.exports = class DeploymentValidator extends Validator {
         validateKubernetesRelatedDeployment(jdlDeployment);
         break;
       case Options.deploymentType.openshift:
-        // TODO
+        validateOpenshiftRelatedDeployment(jdlDeployment, options);
         break;
       default:
         throw new Error(`The deployment type ${jdlDeployment.deploymentType} isn't supported.`);
@@ -62,5 +64,21 @@ function validateKubernetesRelatedDeployment(jdlDeployment) {
   }
   if (jdlDeployment.kubernetesServiceType === Options.kubernetesServiceType.ingress && !jdlDeployment.ingressType) {
     throw new Error('An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.');
+  }
+}
+
+function validateOpenshiftRelatedDeployment(jdlDeployment, options) {
+  if (jdlDeployment.storageType) {
+    if (options.prodDatabaseType === NO) {
+      throw new Error("Can't have the storageType option set when there is no prodDatabaseType.");
+    }
+
+    if (options.searchEngine === ELASTICSEARCH) {
+      throw new Error("Can't have the storageType option set when elasticsearch is the search engine.");
+    }
+
+    if (jdlDeployment.monitoring === Options.monitoring.prometheus) {
+      throw new Error("Can't have the storageType option set when the monitoring is done with prometheus.");
+    }
   }
 }
