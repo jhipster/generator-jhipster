@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 import React, { useState, useEffect } from 'react';
-import { Translate, translate } from 'react-jhipster';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { Row, Col, Alert, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
 
@@ -41,13 +40,12 @@ export const RegisterPage = () => {
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
 <%_ } _%>
 
-  const handleValidSubmit = (event, values) => {
+  const handleValidSubmit = ({ username, email, firstPassword }) => {
 <%_ if (enableTranslation) { _%>
-    dispatch(handleRegister({ login: values.username, email: values.email, password: values.firstPassword, langKey: currentLocale }));
+    dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: currentLocale }));
 <%_ } else { _%>
-    dispatch(handleRegister({ login: values.username, email: values.email, password: values.firstPassword }));
+    dispatch(handleRegister({ login: username, email, password: firstPassword }));
 <%_ } _%>
-    event.preventDefault();
   };
 
   const updatePassword = event => setPassword(event.target.value);
@@ -79,62 +77,65 @@ export const RegisterPage = () => {
       </Row>
       <Row className="justify-content-center">
         <Col md="8">
-          <AvForm id="register-form" onValidSubmit={handleValidSubmit}>
-            <AvField
+          <ValidatedForm id="register-form" onSubmit={handleValidSubmit}>
+            <ValidatedField
               name="username"
               label={translate('global.form.username.label')}
               placeholder={translate('global.form.username.placeholder')}
               validate={{
-                required: { value: true, errorMessage: translate('register.messages.validate.login.required') },
-                pattern: { value: "<%- LOGIN_REGEX %>", errorMessage: translate('register.messages.validate.login.pattern') },
-                minLength: { value: 1, errorMessage: translate('register.messages.validate.login.minlength') },
-                maxLength: { value: 50, errorMessage: translate('register.messages.validate.login.maxlength') }
+                required: { value: true, message: translate('register.messages.validate.login.required') },
+                pattern: {
+                  value: /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/,
+                  message: translate('register.messages.validate.login.pattern'),
+                },
+                minLength: { value: 1, message: translate('register.messages.validate.login.minlength') },
+                maxLength: { value: 50, message: translate('register.messages.validate.login.maxlength') },
               }}
               data-cy="username"
             />
-            <AvField
+            <ValidatedField
               name="email"
               label={translate('global.form.email.label')}
               placeholder={translate('global.form.email.placeholder')}
               type="email"
               validate={{
-                required: { value: true, errorMessage: translate('global.messages.validate.email.required') },
-                minLength: { value: 5, errorMessage: translate('global.messages.validate.email.minlength') },
-                maxLength: { value: 254, errorMessage: translate('global.messages.validate.email.maxlength') }
+                required: { value: true, message: translate('global.messages.validate.email.required') },
+                minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
+                maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
               }}
               data-cy="email"
             />
-            <AvField
+            <ValidatedField
               name="firstPassword"
               label={translate('global.form.newpassword.label')}
               placeholder={translate('global.form.newpassword.placeholder')}
               type="password"
               onChange={updatePassword}
               validate={{
-                required: { value: true, errorMessage: translate('global.messages.validate.newpassword.required') },
-                minLength: { value: 4, errorMessage: translate('global.messages.validate.newpassword.minlength') },
-                maxLength: { value: 50, errorMessage: translate('global.messages.validate.newpassword.maxlength') }
+                required: { value: true, message: translate('global.messages.validate.newpassword.required') },
+                minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
+                maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
               }}
               data-cy="firstPassword"
             />
             <PasswordStrengthBar password={password} />
-            <AvField
+            <ValidatedField
               name="secondPassword"
               label={translate('global.form.confirmpassword.label')}
               placeholder={translate('global.form.confirmpassword.placeholder')}
               type="password"
               validate={{
-                required: { value: true, errorMessage: translate('global.messages.validate.confirmpassword.required') },
-                minLength: { value: 4, errorMessage: translate('global.messages.validate.confirmpassword.minlength') },
-                maxLength: { value: 50, errorMessage: translate('global.messages.validate.confirmpassword.maxlength') },
-                match: { value: 'firstPassword', errorMessage: translate('global.messages.error.dontmatch') }
+                required: { value: true, message: translate('global.messages.validate.confirmpassword.required') },
+                minLength: { value: 4, message: translate('global.messages.validate.confirmpassword.minlength') },
+                maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
+                validate: v => v === password || translate('global.messages.error.dontmatch'),
               }}
               data-cy="secondPassword"
             />
             <Button id="register-submit" color="primary" type="submit" data-cy="submit">
               <Translate contentKey="register.form.button">Register</Translate>
             </Button>
-          </AvForm>
+          </ValidatedForm>
           <p>&nbsp;</p>
           <Alert color="warning">
             <span>
