@@ -18,8 +18,7 @@
 -%>
 import React, { useEffect } from 'react';
 import { Button, Col, Row } from 'reactstrap';
-import { Translate, translate } from 'react-jhipster';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { toast } from 'react-toastify';
 
 <%_ if (enableTranslation) { _%>
@@ -41,16 +40,6 @@ export const SettingsPage = () => {
     };
   }, []);
 
-  const handleValidSubmit = (event, values) => {
-    dispatch(
-      saveAccountSettings({
-        ...account,
-        ...values,
-      })
-    );
-    event.persist();
-  };
-
 <%_ if (enableTranslation) { _%>
   useEffect(() => {
     if (successMessage) {
@@ -65,6 +54,15 @@ export const SettingsPage = () => {
   }, [successMessage]);
 <%_ } _%>
 
+  const handleValidSubmit = values => {
+    dispatch(
+      saveAccountSettings({
+        ...account,
+        ...values,
+      })
+    );
+  };
+
   return (
     <div>
       <Row className="justify-content-center">
@@ -74,60 +72,53 @@ export const SettingsPage = () => {
               User settings for {account.login}
             </Translate>
           </h2>
-          <AvForm id="settings-form" onValidSubmit={handleValidSubmit}>
-            {/* First name */}
-            <AvField
-              className="form-control"
+          <ValidatedForm id="settings-form" onSubmit={handleValidSubmit} defaultValues={account}>
+            <ValidatedField
               name="firstName"
               label={translate('settings.form.firstname')}
               id="firstName"
               placeholder={translate('settings.form.firstname.placeholder')}
               validate={{
-                required: { value: true, errorMessage: translate('settings.messages.validate.firstname.required') },
-                minLength: { value: 1, errorMessage: translate('settings.messages.validate.firstname.minlength') },
-                maxLength: { value: 50, errorMessage: translate('settings.messages.validate.firstname.maxlength') }
+                required: { value: true, message: translate('settings.messages.validate.firstname.required') },
+                minLength: { value: 1, message: translate('settings.messages.validate.firstname.minlength') },
+                maxLength: { value: 50, message: translate('settings.messages.validate.firstname.maxlength') },
               }}
               value={account.firstName}
               data-cy="firstname"
             />
-            {/* Last name */}
-            <AvField
-              className="form-control"
+            <ValidatedField
               name="lastName"
               label={translate('settings.form.lastname')}
               id="lastName"
               placeholder={translate('settings.form.lastname.placeholder')}
               validate={{
-                required: { value: true, errorMessage: translate('settings.messages.validate.lastname.required') },
-                minLength: { value: 1, errorMessage: translate('settings.messages.validate.lastname.minlength') },
-                maxLength: { value: 50, errorMessage: translate('settings.messages.validate.lastname.maxlength') }
+                required: { value: true, message: translate('settings.messages.validate.lastname.required') },
+                minLength: { value: 1, message: translate('settings.messages.validate.lastname.minlength') },
+                maxLength: { value: 50, message: translate('settings.messages.validate.lastname.maxlength') },
               }}
               value={account.lastName}
               data-cy="lastname"
             />
-            {/* Email */}
-            <AvField
+            <ValidatedField
               name="email"
               label={translate('global.form.email.label')}
               placeholder={translate('global.form.email.placeholder')}
               type="email"
               validate={{
-                required: { value: true, errorMessage: translate('global.messages.validate.email.required') },
-                minLength: { value: 5, errorMessage: translate('global.messages.validate.email.minlength') },
-                maxLength: { value: 254, errorMessage: translate('global.messages.validate.email.maxlength') }
+                required: { value: true, message: translate('global.messages.validate.email.required') },
+                minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
+                maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
               }}
               value={account.email}
               data-cy="email"
             />
 <%_ if (enableTranslation) { _%>
             {/* Language key */}
-            <AvField
+            <ValidatedField
               type="select"
               id="langKey"
               name="langKey"
-              className="form-control"
               label={translate('settings.form.language')}
-              value={account.langKey}
               data-cy="langKey"
             >
               {locales.map(locale => (
@@ -135,12 +126,12 @@ export const SettingsPage = () => {
                   {languages[locale].name}
                 </option>
               ))}
-            </AvField>
+            </ValidatedField>
 <%_ } _%>
             <Button color="primary" type="submit" data-cy="submit">
               <Translate contentKey="settings.form.button">Save</Translate>
             </Button>
-          </AvForm>
+          </ValidatedForm>
         </Col>
       </Row>
     </div>
