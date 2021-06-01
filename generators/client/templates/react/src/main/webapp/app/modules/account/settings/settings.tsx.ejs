@@ -83,7 +83,6 @@ export const SettingsPage = () => {
                 minLength: { value: 1, message: translate('settings.messages.validate.firstname.minlength') },
                 maxLength: { value: 50, message: translate('settings.messages.validate.firstname.maxlength') },
               }}
-              value={account.firstName}
               data-cy="firstname"
             />
             <ValidatedField
@@ -96,7 +95,6 @@ export const SettingsPage = () => {
                 minLength: { value: 1, message: translate('settings.messages.validate.lastname.minlength') },
                 maxLength: { value: 50, message: translate('settings.messages.validate.lastname.maxlength') },
               }}
-              value={account.lastName}
               data-cy="lastname"
             />
             <ValidatedField
@@ -109,11 +107,9 @@ export const SettingsPage = () => {
                 minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
                 maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
               }}
-              value={account.email}
               data-cy="email"
             />
 <%_ if (enableTranslation) { _%>
-            {/* Language key */}
             <ValidatedField
               type="select"
               id="langKey"
