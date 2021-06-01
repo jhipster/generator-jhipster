@@ -44,11 +44,13 @@ fi
 mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 cd "$JHI_FOLDER_APP"
 
-if [[ "$JHI_ENTITY" != "jdl" ]]; then
+if [[ "$JHI_ENTITY" != "jdl" && "$JHI_APP" != "jdl" ]]; then
     #-------------------------------------------------------------------------------
     # Copy jhipster config
     #-------------------------------------------------------------------------------
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
+    echo "$JHI_APP:"
+    ls -al "$JHI_FOLDER_APP"/
 fi
 
 if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
