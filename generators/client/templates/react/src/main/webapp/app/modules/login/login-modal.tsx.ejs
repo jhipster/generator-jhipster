@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Translate, translate } from 'react-jhipster';
 import { Translate, translate, ValidatedField } from 'react-jhipster';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, Row, Col, Form } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 export interface ILoginModalProps {
   showModal: boolean;
@@ -34,10 +34,17 @@ const LoginModal = (props: ILoginModalProps) => {
     props.handleLogin(username, password, rememberMe);
   };
 
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, touchedFields },
+  } = useForm({ mode: 'onTouched' });
+
   const { loginError, handleClose } = props;
 
   return (
     <Modal isOpen={props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
+      <Form onSubmit={handleSubmit(login)}>
           <ModalHeader id="login-title" data-cy="loginTitle" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
           <ModalBody>
             <Row>
