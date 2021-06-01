@@ -8,7 +8,7 @@
     "cypress-audit": "0.3.0",
     "lighthouse": "7.5.0",
     "nyc": "15.1.0",
-    "puppeteer": "9.1.1"
+    "puppeteer": "10.0.0"
   },
   "dependencies": {
     "dayjs": "1.10.5"
