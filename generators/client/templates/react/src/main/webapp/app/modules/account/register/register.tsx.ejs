@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React, { useState, useEffect } from 'react';
-import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { Row, Col, Alert, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
 
@@ -102,6 +102,7 @@ export const RegisterPage = () => {
                 required: { value: true, message: translate('global.messages.validate.email.required') },
                 minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
                 maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
+                validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
               data-cy="email"
             />

@@ -19,7 +19,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
-import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 <%_ if (enableTranslation) { _%>
@@ -150,6 +150,7 @@ export const UserManagementUpdate = (props: RouteComponentProps<{ login: string 
                 value: 254,
                 message: translate('global.messages.validate.email.maxlength'),
               },
+              validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
             }}
           />
           <ValidatedField

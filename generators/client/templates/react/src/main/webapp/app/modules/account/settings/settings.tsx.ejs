@@ -18,7 +18,7 @@
 -%>
 import React, { useEffect } from 'react';
 import { Button, Col, Row } from 'reactstrap';
-import { Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
+import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { toast } from 'react-toastify';
 
 <%_ if (enableTranslation) { _%>
@@ -106,6 +106,7 @@ export const SettingsPage = () => {
                 required: { value: true, message: translate('global.messages.validate.email.required') },
                 minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
                 maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
+                validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
               data-cy="email"
             />
