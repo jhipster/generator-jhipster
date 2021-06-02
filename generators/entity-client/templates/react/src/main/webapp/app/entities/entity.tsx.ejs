@@ -22,10 +22,11 @@ import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (searchEngine) { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
-<%_ if (searchEngine) { _%>
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-<%_ } _%>
 import {
+<%_ if (searchEngine) { _%>
+  ValidatedField,
+  ValidatedForm,
+<%_ } _%>
   <%_ if (blobFields.length > 0) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
   openFile,
@@ -307,20 +308,16 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
 <%_ if (searchEngine) { _%>
       <Row>
         <Col sm="12">
-          <AvForm onSubmit={startSearching}>
-            <AvGroup>
-              <InputGroup>
-                <AvInput type="text" name="search" value={search} onChange={handleSearch}
-                  placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
-                <Button className="input-group-addon">
-                  <FontAwesomeIcon icon="search" />
-                </Button>
-                <Button type="reset" className="input-group-addon" onClick={clear}>
-                  <FontAwesomeIcon icon="trash" />
-                </Button>
-              </InputGroup>
-            </AvGroup>
-          </AvForm>
+          <ValidatedForm onSubmit={startSearching}>
+            <ValidatedField type="text" name="search" defaultValue={search} onChange={handleSearch}
+              placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
+            <Button className="input-group-addon">
+              <FontAwesomeIcon icon="search" />
+            </Button>
+            <Button type="reset" className="input-group-addon" onClick={clear}>
+              <FontAwesomeIcon icon="trash" />
+            </Button>
+          </ValidatedForm>
         </Col>
       </Row>
 <%_ } _%>
