@@ -124,17 +124,6 @@ export const createEntitySlice = <T, Reducers extends SliceCaseReducers<EntitySt
       reset() {
         return initialState;
       },
-      /**
-       * Update the given blob to entity
-       */
-      setBlob(state: EntityState<T>, action: PayloadAction<{ name: string; data?: any; contentType?: string }>) {
-        const { name: blobName, data, contentType } = action.payload;
-        state.entity = {
-          ...state.entity,
-          [blobName]: data,
-          [blobName + 'ContentType']: contentType,
-        };
-      },
       ...reducers,
     },
     extraReducers(builder) {

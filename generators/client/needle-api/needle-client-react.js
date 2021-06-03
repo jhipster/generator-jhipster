@@ -71,13 +71,6 @@ module.exports = class extends needleClientBase {
     );
     this.addBlockContentToFile(reducerAddImportRewriteFileModel, errorMessage(indexReducerPath));
 
-    const reducerAddTypeRewriteFileModel = this.generateFileModel(
-      indexReducerPath,
-      'jhipster-needle-add-reducer-type',
-      this.generator.stripMargin(`|  readonly ${entityInstance}: ${entityName}State;`)
-    );
-    this.addBlockContentToFile(reducerAddTypeRewriteFileModel, errorMessage(indexReducerPath));
-
     const reducerAddCombineRewriteFileModel = this.generateFileModel(
       indexReducerPath,
       'jhipster-needle-add-reducer-combine',

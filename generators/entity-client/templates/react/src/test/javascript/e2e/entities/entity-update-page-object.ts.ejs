@@ -55,8 +55,6 @@ _%>
     <%= fieldName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'));
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
     <%= fieldName %>Input: ElementFinder = element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
-  <%_ } else if (field.fieldTypeBinary) { _%>
-    <%= fieldName %>Input: ElementFinder = element(by.css('input#file_<%= fieldName %>'));
   <%_ } else { _%>
     <%= fieldName %>Input: ElementFinder = element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
   <%_ } _%>
@@ -159,41 +157,31 @@ _%>
         await waitUntilDisplayed(this.saveButton);
   <%_ if (field.fieldTypeNumeric) { _%>
         await this.set<%= fieldNameCapitalized %>Input('5');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.eq('5');
   <%_ } else if (field.fieldTypeLocalDate) { _%>
         await this.set<%= fieldNameCapitalized %>Input('01-01-2001');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.eq('2001-01-01');
   <%_ } else if (field.fieldTypeTimed) { _%>
         await this.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
   <%_ } else if (field.fieldTypeDuration) { _%>
         await this.set<%= fieldNameCapitalized %>Input('PT12S');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.contain('PT12S');
   <%_ } else if (field.fieldTypeBoolean) { _%>
         const selected<%= fieldNameCapitalized %> = await this.get<%= fieldNameCapitalized %>Input().isSelected();
         if (selected<%= fieldNameCapitalized %>) {
             await this.get<%= fieldNameCapitalized %>Input().click();
-            expect(await this.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
         } else {
             await this.get<%= fieldNameCapitalized %>Input().click();
-            expect(await this.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
         }
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
         await this.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
   <%_ } else if (field.fieldTypeBinary) { _%>
         await this.set<%= fieldNameCapitalized %>Input(absolutePath);
   <%_ } else if (fieldIsEnum) { _%>
         await this.<%= fieldName %>SelectLastOption();
   <%_ } else if (field.fieldTypeUUID) { _%>
         await this.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
   <%_ } else if (field.fieldTypeString && fieldValidateSampleString) { _%>
         await this.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldValidateSampleString %>/);
   <%_ } else { _%>
         await this.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(await this.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
   <%_ } _%>
 <%_ }); _%>
 <%_ relationships.forEach((relationship) => {
@@ -207,6 +195,5 @@ _%>
 <%_ }); _%>
         await this.save();
         await waitUntilHidden(this.saveButton);
-        expect(await isVisible(this.saveButton)).to.be.false;
     }
 }

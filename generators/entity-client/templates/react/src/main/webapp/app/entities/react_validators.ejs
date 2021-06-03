@@ -23,33 +23,26 @@ let result = '';
 if (field.fieldValidate === true) {
     const validators = [];
     if (field.fieldValidationRequired && !field.fieldTypeBoolean) {
-        validators.push('required: { value: true, errorMessage: translate(\'entity.validation.required\') }');
+        validators.push('required: { value: true, message: translate(\'entity.validation.required\') }');
     }
     if (field.fieldValidationMinLength) {
-        validators.push('minLength: { value: ' + field.fieldValidateRulesMinlength + ', errorMessage: translate(\'entity.validation.minlength\', { min: ' + field.fieldValidateRulesMinlength + ' }) }');
+        validators.push('minLength: { value: ' + field.fieldValidateRulesMinlength + ', message: translate(\'entity.validation.minlength\', { min: ' + field.fieldValidateRulesMinlength + ' }) }');
     }
     if (field.fieldValidationMaxLength) {
-        validators.push('maxLength: { value: ' + field.fieldValidateRulesMaxlength + ', errorMessage: translate(\'entity.validation.maxlength\', { max: ' + field.fieldValidateRulesMaxlength + ' }) }');
+        validators.push('maxLength: { value: ' + field.fieldValidateRulesMaxlength + ', message: translate(\'entity.validation.maxlength\', { max: ' + field.fieldValidateRulesMaxlength + ' }) }');
     }
     if (field.fieldValidationMin) {
-        validators.push('min: { value: ' + field.fieldValidateRulesMin + ', errorMessage: translate(\'entity.validation.min\', { min: ' + field.fieldValidateRulesMin + ' }) }');
+        validators.push('min: { value: ' + field.fieldValidateRulesMin + ', message: translate(\'entity.validation.min\', { min: ' + field.fieldValidateRulesMin + ' }) }');
     }
     if (field.fieldValidationMax) {
-        validators.push('max: { value: ' + field.fieldValidateRulesMax + ', errorMessage: translate(\'entity.validation.max\', { max: ' + field.fieldValidateRulesMax + ' }) }');
+        validators.push('max: { value: ' + field.fieldValidateRulesMax + ', message: translate(\'entity.validation.max\', { max: ' + field.fieldValidateRulesMax + ' }) }');
     }
     if (field.fieldValidationPattern) {
-        validators.push('pattern: { value: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\', errorMessage: translate(\'entity.validation.pattern\', { pattern: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\' }) }');
+        validators.push('pattern: { value: /' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '/, message: translate(\'entity.validation.pattern\', { pattern: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\' }) }');
     }
     if (field.fieldTypeNumeric) {
-        validators.push('number: { value: true, errorMessage: translate(\'entity.validation.number\') }');
+        validators.push('validate: v => isNumber(v) || translate(\'entity.validation.number\')');
     }
-    // Not supported anymore because the server can't check the size of the blob before downloading it completely.
-    // if (rules.includes('minbytes')) {
-    //     validators.push('minbytes: { value: ' + field.fieldValidateRulesMinbytes + ', errorMessage: translate(\'entity.validation.minbytes\', { min: ' + field.fieldValidateRulesMinbytes + ' }) }');
-    // }
-    // if (rules.includes('maxbytes')) {
-    //     validators.push('maxbytes: { value: ' + field.fieldValidateRulesMaxbytes + ', errorMessage: translate(\'entity.validation.maxbytes\', { min: ' + field.fieldValidateRulesMaxbytes + ' }) }');
-    // }
 
     result = validators.join(',\n                ');
     result = `validate={{\n                ${result}\n                }}`;

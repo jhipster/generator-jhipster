@@ -167,6 +167,10 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%_ } _%>
   <%_ }); _%>
+  <%_ if (fieldsContainBlobOrImage) { _%>
+    // since cypress clicks submit too fast before the blob fields are validated
+    cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
+  <%_ } _%>
     cy.get(entityCreateSaveButtonSelector).click({force: true});
     cy.scrollTo('top', {ensureScrollable: false});
     cy.get(entityCreateSaveButtonSelector).should('not.exist');

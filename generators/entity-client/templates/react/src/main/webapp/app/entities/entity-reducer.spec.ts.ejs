@@ -42,9 +42,6 @@ import reducer, {
 <%_ if (!readOnly) { _%>
   updateEntity,
   partialUpdateEntity,
-  <%_ if (fieldsContainBlob) { _%>
-  setBlob,
-  <%_ } _%>
 <%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
@@ -430,20 +427,4 @@ describe('Entities reducer tests', () => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
-
-<%_ if (fieldsContainBlob && !readOnly) { _%>
-  describe('blobFields', () => {
-    it('should properly set a blob in state.', () => {
-      const payload = { name: 'fancyBlobName', data: 'fake data', contentType: 'fake dataType' };
-      expect(reducer(undefined, setBlob(payload))).toEqual({
-        ...initialState,
-        entity: {
-          ...initialState.entity,
-          fancyBlobName: payload.data,
-          fancyBlobNameContentType: payload.contentType
-        }
-      });
-    });
-  });
-<%_ } _%>
 });

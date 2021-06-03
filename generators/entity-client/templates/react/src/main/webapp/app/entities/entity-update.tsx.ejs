@@ -30,17 +30,16 @@ import {
   Button,
   Row,
   Col,
-  Label
-  <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+  FormText,
+  <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip,<% } %>
+} from 'reactstrap';
 import {
-  <%_ if (fieldsContainBlob) { _%>
-  setFileData,
-  <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
-  byteSize,
-  <%_ } _%>
+  isNumber,
   Translate,
-  translate
+  translate,
+  ValidatedField,
+  ValidatedForm,
+  <% if (fieldsContainBlobOrImage) { %> ValidatedBlobField,<% } %>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -95,9 +94,6 @@ import {
   getEntity,
   updateEntity,
   createEntity,
-<%_ if (fieldsContainBlob) { _%>
-  setBlob,
-<%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -110,9 +106,6 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: string}>) => {
   const dispatch = useAppDispatch();
 
-<%_ manyToManyOwners.forEach(val => { _%>
-  const [ids<%= val.relationshipName %>, setIds<%= val.relationshipName %>] = useState([]);
-<%_ }) _%>
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   <%_ otherEntityActions.forEach(val => { _%>
@@ -122,24 +115,6 @@ export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: str
   const loading = useAppSelector(state => state.<%= entityInstance %>.loading);
   const updating = useAppSelector(state => state.<%= entityInstance %>.updating);
   const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
-
-<%_ for (var i = 0; i < blobFields.length; i++) { _%>
-  <%_
-    const b = blobFields[i];
-    if (i === 0) {
-  _%>
-    const {
-  <%_ } _%>
-    <%= b.fieldName %>
-  <%_ if (!b.blobContentTypeText) { _%>
-    , <%= b.fieldName %>ContentType
-  <%_ } _%>
-  <%_ if (i+1 === blobFields.length) { _%>
-    } = <%= entityInstance %>Entity;
-  <%_ } else { _%>
-    ,
-  <%_ } _%>
-<%_ } _%>
 
   const handleClose = () => {
     props.history.push('/<%= entityFileName %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
@@ -163,23 +138,13 @@ export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: str
 <%_ }) _%>
   }, []);
 
-<%_ if (fieldsContainBlob) { _%>
-  const onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => dispatch(setBlob({ name, data, contentType })), isAnImage);
-  };
-
-  const clearBlob = name => () => {
-    dispatch(setBlob(name));
-  };
-<%_ } _%>
-
   useEffect(() => {
     if (updateSuccess) {
       handleClose();
     }
   }, [updateSuccess]);
 
-  const saveEntity = (event, errors, values) => {
+  const saveEntity = values => {
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
 _%>
@@ -188,27 +153,64 @@ _%>
   <%_ } _%>
 <%_ } _%>
 
-    if (errors.length === 0) {
-      const entity = {
-        ...<%= entityInstance %>Entity,
-        ...values,
+    const entity = {
+      ...<%= entityInstance %>Entity,
+      ...values,
 <%_ manyToManyOwners.forEach(rel => { _%>
-        <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
+      <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
 <%_ }) _%>
 <%_ relFieldNames.forEach(rel => { _%>
-  <%_ if (rel.relationshipManyToOne || (rel.ownerSide && rel.relationshipOneToOne))  { _%>
-          <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
-  <%_ } _%>
+<%_ if (rel.relationshipManyToOne || (rel.ownerSide && rel.relationshipOneToOne))  { _%>
+        <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
+<%_ } _%>
 <%_ }) _%>
-      }
+    }
 
-      if (isNew) {
-        dispatch(createEntity(entity));
-      } else {
-        dispatch(updateEntity(entity));
-      }
+    if (isNew) {
+      dispatch(createEntity(entity));
+    } else {
+      dispatch(updateEntity(entity));
     }
   }
+
+
+  const defaultValues = () =>
+    isNew
+      ? {
+<%_ for (field of fields.filter(field => !field.id)) {
+    const fieldName = field.fieldName;
+
+    if (field.fieldTypeTimed) { _%>
+          <%= fieldName %>: displayDefaultDateTime(),
+    <%_ } _%>
+<%_ } _%>
+        }
+      : {
+          ...<%= entityInstance %>Entity,
+<%_ for (field of fields.filter(field => !field.id)) {
+    const fieldType = field.fieldType;
+    const fieldName = field.fieldName;
+    const fieldNameHumanized = field.fieldNameHumanized;
+
+    if (field.fieldTypeTimed) { _%>
+          <%= fieldName %>: convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>),
+  <%_ } else if (field.fieldIsEnum) {
+      const enumValues = field.enumValues;
+  _%>
+          <%= fieldName %>: '<%= enumValues[0].name %>',
+  <%_ } _%>
+<%_ } _%>
+<%_ relationships.forEach(rel => {
+    const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
+    const relationshipFieldName = rel.relationshipFieldName;
+    const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
+    if (rel.relationshipManyToOne || (rel.relationshipOneToOne && rel.ownerSide)) { _%>
+          <%= relationshipFieldName %>Id: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.id,
+  <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
+          <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
+  <%_ } _%>
+<%_ }) _%>
+        };
 
   return (
     <div>
@@ -222,74 +224,52 @@ _%>
     <Row className="justify-content-center">
       <Col md="8">
         { loading ? <p>Loading...</p> :
-        <AvForm model={isNew ? {} : <%= entityInstance %>Entity} onSubmit={saveEntity} >
+        <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity} >
           { !isNew ?
-            <AvGroup>
-              <Label for="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"><Translate contentKey="<%= primaryKey.fields[0].fieldTranslationKey %>"><%= primaryKey.fields[0].fieldNameHumanized %></Translate></Label>
-              <AvInput id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>" type="text" className="form-control" name="<%= primaryKey.fields[0].fieldName %>" required readOnly/>
-            </AvGroup>
+            <ValidatedField
+              name="<%= primaryKey.fields[0].fieldName %>" required readOnly
+              id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
+              label={translate('<%= primaryKey.fields[0].fieldTranslationKey %>')}
+              validate={{ required: true }}
+            />
             : null
           }
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldType = field.fieldType;
     const fieldName = field.fieldName;
     const fieldNameHumanized = field.fieldNameHumanized;
-_%>
-          <AvGroup <% if (field.fieldTypeBoolean) { %> check <% } %>>
+
+    if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+          <ValidatedBlobField
+  <%_ } else { _%>
+          <ValidatedField
+  <%_ } _%>
+  <%_ if (enableTranslation) { _%>
+            label={translate('<%= field.fieldTranslationKey %>')}
+  <%_ } else { _%>
+            label="<%= fieldNameHumanized %>"
+  <%_ } _%>
+            id="<%= entityFileName %>-<%= fieldName %>"
+            name="<%= fieldName %>"
+            data-cy="<%= fieldName %>"
   <%_ if (field.fieldTypeBoolean) { _%>
-            <Label id="<%= fieldName %>Label">
-              <AvInput id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="checkbox" className="form-check-input" name="<%= fieldName %>" />
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
+            check
+            type="checkbox"
+          />
   <%_ } else if (field.fieldTypeTimed) { _%>
-            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-            <AvInput
-              id="<%= entityFileName %>-<%= fieldName %>"
-              data-cy="<%= fieldName %>"
-              type="datetime-local"
-              className="form-control"
-              name="<%= fieldName %>"
-              placeholder={"YYYY-MM-DD HH:mm"}
-              value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>)}
-              <%- include('react_validators'); %>
-            />
+            type="datetime-local"
+            placeholder="YYYY-MM-DD HH:mm"
+            <%- include('react_validators'); %>
+          />
   <%_ } else if (field.fieldTypeLocalDate) { _%>
-            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-            <AvField
-              id="<%= entityFileName %>-<%= fieldName %>"
-              data-cy="<%= fieldName %>"
-              type="date"
-              className="form-control"
-              name="<%= fieldName %>"
-              <%- include('react_validators'); %>
-            />
-  <%_
-    } else if (field.fieldIsEnum) {
+            type="date"
+            <%- include('react_validators'); %>
+          />
+  <%_ } else if (field.fieldIsEnum) {
       const enumValues = field.enumValues;
   _%>
-            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-            <AvInput
-              id="<%= entityFileName %>-<%= fieldName %>"
-              data-cy="<%= fieldName %>"
-              type="select"
-              className="form-control"
-              name="<%= fieldName %>"
-              value={(!isNew && <%= entityInstance %>Entity.<%= fieldName %>) || '<%= enumValues[0].name %>'}
-            >
+            type="select"
+          >
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType;
       enumValues.forEach(enumValue => { _%>
               <option value="<%= enumValue.name %>">
@@ -300,66 +280,29 @@ _%>
       <%_ } _%>
               </option>
     <%_ }); _%>
-            </AvInput>
+          </ValidatedField>
   <%_ } else if (field.fieldTypeNumeric) { _%>
-            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-            <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include('react_validators'); %> />
+            type="text"
+            <%- include('react_validators'); %>
+          />
   <%_ } else if (field.fieldTypeBinary) { _%>
-    <%_ if (!field.blobContentTypeText) {
-      const isAnImage = field.blobContentTypeImage; _%>
-
-          <AvGroup>
-            <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-            <br />
-            {<%= fieldName %> ? (
-              <div>
-                {<%= fieldName %>ContentType ? (
-                  <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
-      <%_ if (isAnImage) { _%>
-                    <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
-      <%_ } else { _%>
-                    <Translate contentKey="entity.action.open">Open</Translate>
-      <%_ } _%>
-                  </a>
-                ) : null}
-                <br />
-                <Row>
-                  <Col md="11">
-                    <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
-                  </Col>
-                  <Col md="1">
-                    <Button color="danger" onClick={clearBlob('<%= fieldName %>')}><FontAwesomeIcon icon="times-circle" /></Button>
-                  </Col>
-                </Row>
-              </div>
-            ) : null}
-            <input id="file_<%= fieldName %>" data-cy="<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
-            <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include('react_validators'); %>/>
-          </AvGroup>
-
+    <%_ if (!field.blobContentTypeText) {  _%>
+            <%_ if (field.blobContentTypeImage) {_%>
+            isImage accept="image/*"
+            <%_ } else { _%>
+            openActionLabel={translate('entity.action.open')}
+            <%_ } _%>
+            <%- include('react_validators'); %>
+          />
     <%_ } else { _%>
-            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-              <Translate contentKey="<%= field.fieldTranslationKey %>">
-                <%= fieldNameHumanized %>
-              </Translate>
-            </Label>
-            <AvInput id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include('react_validators'); %>/>
+            type="textarea"
+            <%- include('react_validators'); %>
+          />
     <%_ } _%>
   <%_ } else { _%>
-          <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-            <Translate contentKey="<%= field.fieldTranslationKey %>">
-              <%= fieldNameHumanized %>
-            </Translate>
-          </Label>
-          <AvField id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include('react_validators'); %>/>
+           type="text"
+           <%- include('react_validators'); %>
+        />
   <%_ } _%>
   <%_ if (field.javadoc) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">
@@ -370,7 +313,6 @@ _%>
     <%_ } _%>
           </UncontrolledTooltip>
   <%_ } _%>
-          </AvGroup>
 <%_ } _%>
 <%_ relationships.forEach(rel => {
     const ownerSide = rel.ownerSide;
@@ -384,20 +326,20 @@ _%>
     const relationshipRequired = rel.relationshipRequired;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
   <%_ if (rel.relationshipManyToOne || (rel.relationshipOneToOne && ownerSide)) { _%>
-          <AvGroup>
-            <Label for="<%= entityFileName %>-<%= relationshipName %>">
-              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
-            </Label>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              data-cy="<%= relationshipFieldName %>"
-              type="select"
-              className="form-control"
-              name="<%= relationshipFieldName %>Id"
-    <%_ if (relationshipRequired) { _%>
-              required
-    <%_ } _%>
-            >
+          <ValidatedField
+            id="<%= entityFileName %>-<%= relationshipName %>"
+            name="<%= relationshipFieldName %>Id"
+            data-cy="<%= relationshipFieldName %>"
+      <%_ if (enableTranslation) { _%>
+            label={translate('<%= translationKey %>')}
+      <%_ } else { _%>
+            label="<%= relationshipNameHumanized %>"
+      <%_ } _%>
+            type="select"
+      <%_ if (relationshipRequired) { _%>
+            required
+      <%_ } _%>
+          >
               <option value="" key="0" />
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -408,22 +350,22 @@ _%>
                   </option>
                 ) : null
               }
-            </AvInput>
+          </ValidatedField>
     <%_ if (relationshipRequired) { _%>
-            <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
+            <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>
     <%_ } _%>
-          </AvGroup>
   <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
-          <AvGroup>
-            <Label for="<%= entityFileName %>-<%= relationshipName %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
-            <AvInput
-              id="<%= entityFileName %>-<%= relationshipName %>"
-              data-cy="<%= relationshipFieldName %>"
-              type="select"
-              multiple
-              className="form-control"
-              name="<%= relationshipFieldNamePlural %>"
-              value={!isNew && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.<%= otherEntityPkName %>)}
+          <ValidatedField
+        <%_ if (enableTranslation) { _%>
+            label={translate('<%= i18nKeyPrefix %>.<%= relationshipName %>')}
+        <%_ } else { _%>
+            label="<%= relationshipNameHumanized %>"
+        <%_ } _%>
+            id="<%= entityFileName %>-<%= relationshipName %>"
+            data-cy="<%= relationshipFieldName %>"
+            type="select"
+            multiple
+            name="<%= relationshipFieldNamePlural %>"
             >
               <option value="" key="0" />
               {
@@ -435,8 +377,7 @@ _%>
                 </option>
                 ) : null
               }
-            </AvInput>
-          </AvGroup>
+          </ValidatedField>
   <%_ } _%>
 <%_ }) _%>
           <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityFileName %>" replace color="info">
@@ -448,7 +389,7 @@ _%>
             <FontAwesomeIcon icon="save" />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>
-        </AvForm>
+        </ValidatedForm>
         }
       </Col>
     </Row>
