@@ -14,7 +14,7 @@
     "react-dom": "17.0.1",
     "react-hook-form": "7.6.8",
     "react-hot-loader": "4.13.0",
-    "react-jhipster": "0.16.0",
+    "react-jhipster": "0.16.1",
     "react-loadable": "5.5.0",
     "react-redux": "7.2.4",
     "react-redux-loading-bar": "5.0.0",
