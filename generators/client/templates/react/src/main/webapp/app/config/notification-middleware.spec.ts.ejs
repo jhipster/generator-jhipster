@@ -257,13 +257,13 @@ describe('Notification Middleware', () => {
     expect(toastMsg).toContain('Incorrect password string');
   });
 
-  it('should trigger an error toast message and return error for string in data', () => {
+  it('should trigger an error toast message and return error for unknown 400 error', () => {
     expect(store.dispatch(UNKNON_400_ERROR).error.response.status).toEqual(400);
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('Unknown error!');
   });
 
-  it('should trigger an error toast message and return error for string in data', () => {
+  it('should trigger an error toast message and return error for unknown error', () => {
     expect(store.dispatch(UNKNON_ERROR).error.isAxiosError).toEqual(true);
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('Unknown error!');

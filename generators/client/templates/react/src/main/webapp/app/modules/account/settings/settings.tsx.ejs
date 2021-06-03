@@ -40,19 +40,15 @@ export const SettingsPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (successMessage) {
 <%_ if (enableTranslation) { _%>
-  useEffect(() => {
-    if (successMessage) {
       toast.success(translate(successMessage));
-    }
-  }, [successMessage]);
 <%_ } else { _%>
-  useEffect(() => {
-    if (successMessage) {
       toast.success(successMessage);
+<%_ } _%>
     }
   }, [successMessage]);
-<%_ } _%>
 
   const handleValidSubmit = values => {
     dispatch(
