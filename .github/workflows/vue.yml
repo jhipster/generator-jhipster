@@ -18,6 +18,9 @@
 #
 
 name: Vue
+concurrency:
+  group: vue-${{ github.head_ref || github.sha }}
+  cancel-in-progress: true
 on:
   push:
     branches-ignore:

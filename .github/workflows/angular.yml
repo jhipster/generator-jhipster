@@ -18,6 +18,9 @@
 #
 
 name: Angular
+concurrency:
+  group: angular-${{ github.head_ref || github.sha }}
+  cancel-in-progress: true
 on:
   push:
     branches-ignore:
