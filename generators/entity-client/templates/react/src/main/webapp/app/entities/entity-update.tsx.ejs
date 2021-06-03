@@ -244,7 +244,11 @@ _%>
   <%_ } else { _%>
           <ValidatedField
   <%_ } _%>
+  <%_ if (enableTranslation) { _%>
             label={translate('<%= field.fieldTranslationKey %>')}
+  <%_ } else { _%>
+            label="<%= fieldNameHumanized %>"
+  <%_ } _%>
             id="<%= entityFileName %>-<%= fieldName %>"
             name="<%= fieldName %>"
             data-cy="<%= fieldName %>"
@@ -326,7 +330,11 @@ _%>
             id="<%= entityFileName %>-<%= relationshipName %>"
             name="<%= relationshipFieldName %>Id"
             data-cy="<%= relationshipFieldName %>"
+      <%_ if (enableTranslation) { _%>
             label={translate('<%= translationKey %>')}
+      <%_ } else { _%>
+            label="<%= relationshipNameHumanized %>"
+      <%_ } _%>
             type="select"
       <%_ if (relationshipRequired) { _%>
             required
@@ -348,7 +356,11 @@ _%>
     <%_ } _%>
   <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
           <ValidatedField
+        <%_ if (enableTranslation) { _%>
             label={translate('<%= i18nKeyPrefix %>.<%= relationshipName %>')}
+        <%_ } else { _%>
+            label="<%= relationshipNameHumanized %>"
+        <%_ } _%>
             id="<%= entityFileName %>-<%= relationshipName %>"
             data-cy="<%= relationshipFieldName %>"
             type="select"
