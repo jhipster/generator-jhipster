@@ -12,7 +12,7 @@
     "path-browserify": "1.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-hook-form": "7.6.8",
+    "react-hook-form": "7.7.1",
     "react-hot-loader": "4.13.0",
     "react-jhipster": "0.16.2",
     "react-loadable": "5.5.0",
