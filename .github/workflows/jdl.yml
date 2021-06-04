@@ -28,6 +28,7 @@ on:
       - 'dependabot/**'
       - 'skip_ci*'
   pull_request:
+    types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
     paths-ignore:
@@ -66,6 +67,7 @@ jobs:
       !contains(github.event.head_commit.message, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
+      github.event.action != 'closed' &&
       (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
     timeout-minutes: 40
     strategy:
