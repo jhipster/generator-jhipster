@@ -19,7 +19,7 @@
 
 name: Cleanup Labels
 on:
-  issues: { types: closed }
+  issues: { types: [closed] }
 jobs:
   remove-labels:
     runs-on: ubuntu-latest
