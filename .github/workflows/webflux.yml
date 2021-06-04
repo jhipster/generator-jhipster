@@ -27,6 +27,9 @@ on:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
+    paths-ignore:
+      - 'generators/*client/templates/react/**'
+      - 'generators/*client/templates/vue/**'
   pull_request:
     branches:
       - '*'
