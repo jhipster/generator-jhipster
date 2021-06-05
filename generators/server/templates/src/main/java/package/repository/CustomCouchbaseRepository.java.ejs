@@ -72,7 +72,7 @@ public class CustomCouchbaseRepository<T, ID extends Serializable> extends Simpl
 <%_ if (searchEngine === 'couchbase') { _%>
 
     public Page<T> search(String indexName, String request, Pageable pageable) {
-        SearchQuery searchQuery = SearchQuery.queryString(request);
+        SearchQuery searchQuery = queryString(request);
         SearchOptions searchOptions = SearchOptions.searchOptions()
             .limit(pageable.getPageSize())
             .skip((int) pageable.getOffset());
@@ -83,7 +83,7 @@ public class CustomCouchbaseRepository<T, ID extends Serializable> extends Simpl
 
     @Override
     public List<T> search(String indexName, String request) {
-        SearchQuery searchQuery = SearchQuery.queryString(request);
+        SearchQuery searchQuery = queryString(request);
         return extractResults(couchbaseOperations.getCouchbaseClientFactory().getCluster().searchQuery(indexName, searchQuery));
     }
 
