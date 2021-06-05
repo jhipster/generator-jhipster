@@ -27,10 +27,13 @@ on:
     branches-ignore:
       - 'dependabot/**'
   pull_request:
+    types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
 jobs:
   generator-jhipster:
+    if: >-
+      github.event.action != 'closed'
     name: npm test
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
