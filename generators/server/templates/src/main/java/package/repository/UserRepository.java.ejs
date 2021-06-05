@@ -70,9 +70,7 @@ import org.springframework.data.domain.Page;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
-<% if (databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Sort;
-<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -97,7 +95,7 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
-<%_ } if (databaseType === 'couchbase') { _%>
+<%_ } if (databaseTypeCouchbase) { _%>
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ScanConsistency;

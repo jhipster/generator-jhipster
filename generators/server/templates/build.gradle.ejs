@@ -129,6 +129,8 @@ test {
 }
 
 task integrationTest(type: Test) {
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
