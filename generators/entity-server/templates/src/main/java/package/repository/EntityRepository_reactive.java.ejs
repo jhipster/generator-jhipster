@@ -26,11 +26,8 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.couchbase.repository.Query;
-import org.springframework.data.repository.reactive.ReactiveSortingRepository;
-import org.springframework.data.couchbase.repository.ScanConsistency;
+import org.springframework.data.couchbase.core.query.Query;
+import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
@@ -77,15 +74,12 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
   <%_ if (databaseTypeCouchbase || databaseTypeMongodb) { _%>
 
     @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
-    <% if (databaseTypeCouchbase) { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
-    <% if (databaseTypeCouchbase) { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
-    <% if (databaseTypeCouchbase) { %>@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)<% } %>
     Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
   <%_ } _%>
   <%_ if (databaseTypeNeo4j) { _%>
@@ -99,18 +93,8 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
   <%_ } _%>
 <%_ } _%>
-    <%_ if (databaseTypeCouchbase) { _%>
-    // Add ScanConsistency to fix issue with Spring Data Couchbase
-    // https://github.com/spring-projects/spring-data-couchbase/issues/897
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Flux<<%= asEntity(entityClass) %>> findAll();
-
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Flux<<%= asEntity(entityClass) %>> findAll(Sort sort);
-    <%_ } _%>
-    <%_ if (databaseTypeSql) {
+<%_
+if (databaseTypeSql) {
   if (fieldsContainOwnerManyToMany) { _%>
 
     @Override

@@ -59,7 +59,7 @@ import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
-import org.apache.commons.beanutils.BeanComparator;   
+import org.apache.commons.beanutils.BeanComparator;
 <%_ } _%>
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.annotation.Cacheable;
@@ -70,9 +70,7 @@ import org.springframework.data.domain.Page;
     <%_ } _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
-<% if (databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Sort;
-<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -339,7 +337,7 @@ public interface UserRepository extends R2dbcRepository<<%= asEntity('User') %>,
 
     @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
     Mono<Void> deleteUserAuthorities(Long userId);
-        
+
 }
 
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -388,8 +386,8 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     }
 
     <%_ } _%>
-    
-    
+
+
     @Override
     public Flux<<%= asEntity('User') %>> findAllWithAuthorities(Pageable pageable) {
         String property = pageable.getSort().stream().map(Sort.Order::getProperty).findFirst().orElse("id");
