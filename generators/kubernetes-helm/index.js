@@ -123,7 +123,7 @@ module.exports = class extends BaseDockerGenerator {
           this.loadDerivedAppConfig(element);
         });
         this.loadDeploymentConfig(this);
-        derivedDeploymentProperties();
+        derivedDeploymentProperties(this);
       },
     };
   }

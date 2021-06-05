@@ -148,7 +148,6 @@ module.exports = class extends BlueprintBaseGenerator {
     dest.dockerPushCommand = config.dockerPushCommand;
     dest.adminPassword = config.adminPassword;
     dest.jwtSecretKey = config[JWT_SECRET_KEY];
-
-    this.loadPlatformConfig(dest);
+    this.loadPlatformConfig(config, dest);
   }
 };
