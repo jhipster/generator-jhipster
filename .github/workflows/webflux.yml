@@ -235,7 +235,6 @@ jobs:
         working-directory: ${{ github.workspace }}/base/app
         run: |
           $JHI_SCRIPTS/11-generate-config.sh
-          cd ../app
           $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git
         env:
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app
