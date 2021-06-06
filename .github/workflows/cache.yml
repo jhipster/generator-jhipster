@@ -51,23 +51,22 @@ jobs:
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
         uses: actions/checkout@v2
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./.github/actions/setup
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: 14
-      - name: 'SETUP: Get date for cache key'
-        id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+          node-version: ${{ steps.setup.outputs.node-version }}
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
 
       - name: 'Install generator-jhipster npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
+        run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
       - name: Cache generator-jhipster node_modules
         run: npm ci
         continue-on-error: true
@@ -84,7 +83,7 @@ jobs:
         working-directory: generators/client/templates/angular
       - name: Cache client common node_modules
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npx cypress install
         continue-on-error: true
         working-directory: generators/client/templates/common
@@ -110,36 +109,31 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: generator-jhipster
-      - name: 'SETUP: Create required structure'
-        run: |
-          mkdir app
-        working-directory: ${{ github.workspace }}
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./generator-jhipster/.github/actions/setup
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: 14
+          node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11.x'
-      - name: 'SETUP: Get date for cache key'
-        id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+          java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-cache
-          restore-keys: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-cache
+          restore-keys: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
         uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'Install generator-jhipster npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
+        run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
 
       - name: 'GENERATION: install JHipster'
         run: $JHI_SCRIPTS/10-install-jhipster.sh
@@ -171,43 +165,38 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: generator-jhipster
-      - name: 'SETUP: Create required structure'
-        run: |
-          mkdir app
-        working-directory: ${{ github.workspace }}
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./generator-jhipster/.github/actions/setup
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: 14
+          node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11.x'
-      - name: 'SETUP: Get date for cache key'
-        id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+          java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-cache
-          restore-keys: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-cache
+          restore-keys: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
         uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load gradle cache'
         uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
       - name: 'Install generator-jhipster npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
+        run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
 
       - name: 'GENERATION: install JHipster'
         run: $JHI_SCRIPTS/10-install-jhipster.sh
