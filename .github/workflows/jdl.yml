@@ -60,8 +60,6 @@ jobs:
             extra-args: --workspaces --monorepository
             # Backend is failing, disable it
             skip-backend-tests: 1
-    env:
-      JHI_PROFILE: ${{ matrix.environment }}
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -162,19 +160,18 @@ jobs:
           npm uninstall -g generator-jhipster
           npm install
           npm install -g .
-      - name: 'MERGE: copy jdl'
-        if: steps.base-checkout.outcome == 'success'
-        working-directory: ${{ github.workspace }}/base/app
-        run: cp $JHI_JDL_SAMPLES/${{ matrix.jdl }}/*.jdl .
-      - name: 'MERGE: base project'
+      - name: 'MERGE: merge base project'
         continue-on-error: true
         id: base-app
         if: steps.base-checkout.outcome == 'success'
         working-directory: ${{ github.workspace }}/base/app
         run: |
+          $JHI_SCRIPTS/11-generate-config.sh
           # docker-compose is not reproducible, so copy old config
           ls ${{ github.workspace }}/app/docker-compose && mkdir docker-compose && cp ${{ github.workspace }}/app/docker-compose/.yo-rc.json docker-compose || true
-          jhipster jdl *.jdl --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }} --skip-git
+          $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }} --skip-git
+        env:
+          JHI_FOLDER_APP: ${{ github.workspace }}/base/app
       - name: 'MERGE: merge diff'
         continue-on-error: true
         id: merge-is-equal
