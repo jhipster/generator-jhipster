@@ -180,8 +180,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
-      - name: 'ENV: display variables'
-        run: $JHI_SCRIPTS/01-display-configuration.sh
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
