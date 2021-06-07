@@ -27,7 +27,7 @@
     "browser-sync": "2.26.14",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "9.0.0",
-    "eslint": "7.27.0",
+    "eslint": "7.28.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-webpack-plugin": "2.5.4",
     "jest": "26.6.3",
