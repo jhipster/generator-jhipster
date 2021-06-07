@@ -82,6 +82,13 @@ jobs:
       command: 'custom'
       customCommand: ' run ci:backend:test'
     displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/<%= buildDir %>test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
   <%_ } _%>
 <%_ if (!skipClient) { _%>
   - task: Npm@1
@@ -89,6 +96,12 @@ jobs:
       command: 'custom'
       customCommand: ' run ci:frontend:test'
     displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/<%= buildDir %>test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
 <%_ } _%>
 <%_ if (!skipServer) { _%>
   - task: Npm@1
@@ -119,6 +132,12 @@ jobs:
   <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
   <%= commented %>    CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
   <%= commented %>    CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  <%= commented %>- task: PublishPipelineArtifact@1
+  <%= commented %>  inputs:
+  <%= commented %>    artifactName: 'cypress-screenshots'
+  <%= commented %>    targetPath: '$(Build.SourcesDirectory)/<%= buildDir %>cypress/screenshots'
+  <%= commented %>  condition: failed()
+  <%= commented %>  displayName: 'E2E: Publish Cypress Screenshots'
   <%_ } _%>
   <%= commented %>- task: Npm@1
   <%= commented %>  inputs:

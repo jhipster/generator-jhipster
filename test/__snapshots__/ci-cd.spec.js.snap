@@ -70,11 +70,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/build/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -99,6 +112,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/build/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -192,11 +211,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/build/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -221,6 +253,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/build/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -302,11 +340,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -331,6 +382,12 @@ Object {
           CYPRESS_ENABLE_RECORD: true
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -424,11 +481,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -453,6 +523,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -534,11 +610,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -563,6 +652,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
