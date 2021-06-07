@@ -198,8 +198,6 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - name: 'TESTS: prepare keycloak'
-        run: echo "127.0.0.1 keycloak" | sudo tee -a /etc/hosts
       - name: 'TESTS: backend'
         id: backend
         if: steps.tests-should-be-skipped.outputs.skip-tests != 'true' && matrix.skip-backend-tests != 1
