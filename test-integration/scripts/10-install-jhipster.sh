@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$HOME"
 
-if [[ "$JHI_REPO" == *"/jhipster-bom" ]]; then
+if [[ "$JHI_REPO" == *"/jhipster-bom" && "$JHI_LIB_BRANCH" == "auto" ]]; then
     echo "*** jhipster: use local version at JHI_LIB_HOME=$JHI_LIB_HOME"
 
     cd "$JHI_LIB_HOME"
@@ -32,7 +32,7 @@ else
     if [ "$JHI_LIB_BRANCH" == "latest" ]; then
         LATEST=$(git describe --abbrev=0)
         git checkout "$LATEST"
-    elif [ "$JHI_LIB_BRANCH" != "main" ]; then
+    elif [ "$JHI_LIB_BRANCH" != "main" && "$JHI_LIB_BRANCH" != "auto" ]; then
         git checkout "$JHI_LIB_BRANCH"
     fi
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
