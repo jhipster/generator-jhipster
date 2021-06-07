@@ -79,7 +79,7 @@
     "terser-webpack-plugin": "5.1.3",
     "thread-loader": "3.0.4",
     "to-string-loader": "1.1.6",
-    "ts-jest": "27.0.2",
+    "ts-jest": "27.0.3",
     "ts-loader": "9.2.3",
     "typescript": "4.3.2",
     "webpack": "5.38.1",
