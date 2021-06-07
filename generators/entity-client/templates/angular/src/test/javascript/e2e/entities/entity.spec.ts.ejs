@@ -132,7 +132,9 @@ describe('<%= entityClass %> e2e test', () => {
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974'),
             <%_ } else if (field.fieldTypeString && fieldValidateSampleString) { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>'),
-            <%_ } else if (!field.fieldTypeBoolean) { _%>
+            <%_ } else if (field.fieldTypeBoolean) { _%>
+            <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click(),
+            <%_ } else { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>'),
             <%_ } _%>
         <%_ }); _%>
@@ -147,41 +149,6 @@ describe('<%= entityClass %> e2e test', () => {
             <%_ } _%>
         <%_ }); _%>
         ]);
-
-    <%_ fields.filter(field => !field.id).forEach((field) => {
-        const fieldName = field.fieldName;
-        const fieldNameCapitalized = field.fieldNameCapitalized;
-        const fieldValidateSampleString = field.fieldValidateSampleString;
-    _%>
-        <%_ if (field.fieldTypeNumeric) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5', 'Expected <%= fieldName %> value to be equals to 5');
-        <%_ } else if (field.fieldTypeLocalDate) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2000-12-31', 'Expected <%= fieldName %> value to be equals to 2000-12-31');
-        <%_ } else if (field.fieldTypeTimed) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30', 'Expected <%= fieldName %> value to be equals to 2000-12-31');
-        <%_ } else if (field.fieldTypeDuration) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12', 'Expected <%= fieldName %> value to be equals to 12');
-        <%_ } else if (field.fieldTypeString && fieldValidateSampleString) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldValidateSampleString %>', 'Expected <%= fieldNameCapitalized %> value to be equals to <%= fieldValidateSampleString %>');
-        <%_ } else if (field.fieldTypeBoolean) { _%>
-        const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
-        if (await selected<%= fieldNameCapitalized %>.isSelected()) {
-            await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected(), 'Expected <%= fieldName %> not to be selected').to.be.false;
-        } else {
-            await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected(), 'Expected <%= fieldName %> to be selected').to.be.true;
-        }
-        <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>', 'Expected <%= fieldNameCapitalized %> value to be equals to <%= fieldName %>');
-        <%_ } else if (field.fieldTypeBinary) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.endsWith(fileNameToUpload, 'Expected <%= fieldNameCapitalized %> value to be end with ' + fileNameToUpload);
-        <%_ } else if (field.fieldTypeUUID) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('64c99148-3908-465d-8c4a-e510e3ade974', 'Expected <%= fieldNameCapitalized %> value to be equals to 64c99148-3908-465d-8c4a-e510e3ade974');
-        <%_ } else if (!field.fieldIsEnum) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>', 'Expected <%= fieldNameCapitalized %> value to be equals to <%= fieldName %>');
-        <%_ } _%>
-    <%_ }); _%>
 
         await <%= entityInstance %>UpdatePage.save();
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
