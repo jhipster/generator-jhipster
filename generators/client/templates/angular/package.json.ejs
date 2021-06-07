@@ -162,7 +162,7 @@
     <%_ } _%>
     <%_ if (protractorTests) { _%>
     "postinstall": "<%= clientPackageManager %> run e2e:update-webdriver",
-    "e2e:update-webdriver": "webdriver-manager update --gecko false",
+    "e2e:update-webdriver": "webdriver-manager update --versions.chrome=90.0.4430.24 --gecko false",
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve --hmr",
