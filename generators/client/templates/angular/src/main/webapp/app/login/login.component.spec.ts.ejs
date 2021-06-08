@@ -148,7 +148,7 @@ describe('Component Tests', () => {
 
       it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
         // GIVEN
-        spyOn(mockRouter, 'getCurrentNavigation').and.returnValue({});
+        jest.spyOn(mockRouter, 'getCurrentNavigation').mockReturnValue({});
 
         // WHEN
         comp.login();

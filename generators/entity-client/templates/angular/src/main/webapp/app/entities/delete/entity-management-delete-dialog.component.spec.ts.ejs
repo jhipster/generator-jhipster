@@ -56,7 +56,7 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        spyOn(service, 'delete').and.returnValue(of({}));
+                        jest.spyOn(service, 'delete').mockReturnValue(of({}));
 
                         // WHEN
                         comp.confirmDelete(<%- tsKeyId %>);
@@ -71,7 +71,7 @@ describe('Component Tests', () => {
 
             it('Should not call delete service on clear', () => {
                 // GIVEN
-                spyOn(service, 'delete');
+                jest.spyOn(service, 'delete');
 
                 // WHEN
                 comp.cancel();

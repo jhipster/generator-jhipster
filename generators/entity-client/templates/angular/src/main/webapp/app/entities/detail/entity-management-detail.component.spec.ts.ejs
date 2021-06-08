@@ -63,7 +63,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining(<%- testEntity %>));
+                expect(comp.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
             });
         });
 
@@ -71,7 +71,7 @@ describe('Component Tests', () => {
         describe('byteSize', () => {
             it('Should call byteSize from DataUtils', () => {
                 // GIVEN
-                spyOn(dataUtils, 'byteSize');
+                jest.spyOn(dataUtils, 'byteSize');
                 const fakeBase64 = 'fake base64';
 
                 // WHEN
@@ -85,7 +85,7 @@ describe('Component Tests', () => {
         describe('openFile', () => {
             it('Should call openFile from DataUtils', () => {
                 // GIVEN
-                spyOn(dataUtils, 'openFile');
+                jest.spyOn(dataUtils, 'openFile');
                 const fakeContentType = 'fake content type';
                 const fakeBase64 = 'fake base64';
 
