@@ -24,16 +24,16 @@ import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
 
-import <%= packageName %>.domain.User;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.service.ColumnConverter;
 
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@link Row} to {@link User}, with proper type conversions.
+ * Converter between {@link Row} to {@link User<%= entitySuffix %>}, with proper type conversions.
  */
 @Service
-public class UserRowMapper implements BiFunction<Row, String, User> {
+public class UserRowMapper implements BiFunction<Row, String, <%= asEntity('User') %>> {
     private final ColumnConverter converter;
     public UserRowMapper(ColumnConverter converter) {
         this.converter = converter;
@@ -41,11 +41,11 @@ public class UserRowMapper implements BiFunction<Row, String, User> {
 
     /**
      * Take a {@link Row} and a column prefix, and extract all the fields.
-     * @return the {@link User} stored in the database.
+     * @return the {@link <%= asEntity('User') %>} stored in the database.
      */
     @Override
-    public User apply(Row row, String prefix) {
-        User entity = new User();
+    public <%= asEntity('User') %> apply(Row row, String prefix) {
+        <%= asEntity('User') %> entity = new <%= asEntity('User') %>();
         entity.setId(row.get(prefix + "_id", <%= user.primaryKey.type %>.class));
         entity.setLogin(converter.fromRow(row, prefix + "_login", String.class));
         <%_ if (authenticationType !== 'oauth2') { _%>
