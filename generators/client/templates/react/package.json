@@ -85,7 +85,7 @@
     "webpack": "5.38.1",
     "webpack-cli": "4.7.0",
     "webpack-dev-server": "3.11.2",
-    "webpack-merge": "5.7.3",
+    "webpack-merge": "5.8.0",
     "webpack-notifier": "1.13.0",
     "workbox-webpack-plugin": "6.1.5"
   }
