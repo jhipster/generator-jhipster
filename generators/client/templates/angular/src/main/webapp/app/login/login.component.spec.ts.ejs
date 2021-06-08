@@ -23,7 +23,7 @@ jest.mock('app/login/login.service');
 import { ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, Navigation } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -148,7 +148,7 @@ describe('Component Tests', () => {
 
       it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
         // GIVEN
-        jest.spyOn(mockRouter, 'getCurrentNavigation').mockReturnValue({});
+        jest.spyOn(mockRouter, 'getCurrentNavigation').mockReturnValue({} as Navigation);
 
         // WHEN
         comp.login();

@@ -169,7 +169,7 @@ describe('Component Tests', () => {
         describe('save', () => {
             it('Should call update service on save for existing entity', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
                 jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
                 jest.spyOn(comp, 'previousState');
@@ -190,7 +190,7 @@ describe('Component Tests', () => {
 
             it('Should call create service on save for new entity', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = new <%= entityAngularName %>();
                 jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
                 jest.spyOn(comp, 'previousState');
@@ -211,7 +211,7 @@ describe('Component Tests', () => {
 
             it('Should set isSaving to false on error', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
                 jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
                 jest.spyOn(comp, 'previousState');

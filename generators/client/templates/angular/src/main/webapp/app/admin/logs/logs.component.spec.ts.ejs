@@ -22,7 +22,7 @@ import { of } from 'rxjs';
 
 import { LogsComponent } from './logs.component';
 import { LogsService } from './logs.service';
-import { Log } from './log.model';
+import { Log, LoggersResponse } from './log.model';
 
 describe('Component Tests', () => {
   describe('LogsComponent', () => {
@@ -65,7 +65,7 @@ describe('Component Tests', () => {
                 effectiveLevel: 'WARN',
               },
             },
-          })
+          } as unknown as LoggersResponse)
         );
 
         // WHEN
@@ -89,7 +89,7 @@ describe('Component Tests', () => {
                 effectiveLevel: 'ERROR',
               },
             },
-          })
+          } as unknown as LoggersResponse)
         );
 
         // WHEN

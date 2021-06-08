@@ -112,7 +112,7 @@ describe('Component Tests', () => {
               })
             )
           );
-          jest.spyOn(service, 'update').mockReturnValue(of(new HttpResponse({ status: 200 })));
+          jest.spyOn(service, 'update').mockReturnValue(of(user));
 
           // WHEN
           comp.setActive(user, true);
