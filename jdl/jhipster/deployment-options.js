@@ -104,6 +104,7 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
       kubernetesNamespace: Options.kubernetesNamespace,
       kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
       kubernetesUseDynamicStorage: Options.kubernetesUseDynamicStorage.false,
+      kubernetesStorageClassName: Options.kubernetesStorageClassName,
       ingressDomain: Options.ingressDomain,
       monitoring: Options.monitoring.no,
       istio: Options.istio.false,

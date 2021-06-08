@@ -133,6 +133,7 @@ describe('JHipsterDeploymentExporter', () => {
               kubernetesServiceType: 'LoadBalancer',
               monitoring: 'no',
               kubernetesUseDynamicStorage: false,
+              kubernetesStorageClassName: '',
               serviceDiscoveryType: 'eureka',
             });
           });

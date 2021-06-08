@@ -68,6 +68,7 @@ describe('DeploymentOptions', () => {
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
             kubernetesUseDynamicStorage: false,
+            kubernetesStorageClassName: '',
             monitoring: 'no',
             serviceDiscoveryType: 'eureka',
             ingressDomain: '',
