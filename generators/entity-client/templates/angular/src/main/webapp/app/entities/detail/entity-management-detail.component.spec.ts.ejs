@@ -54,6 +54,7 @@ describe('Component Tests', () => {
             comp = fixture.componentInstance;
 <%_ if (fieldsContainBlob) { _%>
             dataUtils = TestBed.inject(DataUtils);
+            jest.spyOn(window, 'open').mockImplementation(() => null);
 <%_ } _%>
         });
 
