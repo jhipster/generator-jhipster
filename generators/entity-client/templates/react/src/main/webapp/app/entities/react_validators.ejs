@@ -38,7 +38,7 @@ if (field.fieldValidate === true) {
         validators.push('max: { value: ' + field.fieldValidateRulesMax + ', message: translate(\'entity.validation.max\', { max: ' + field.fieldValidateRulesMax + ' }) }');
     }
     if (field.fieldValidationPattern) {
-        validators.push('pattern: { value: /' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '/, message: translate(\'entity.validation.pattern\', { pattern: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\' }) }');
+        validators.push('pattern: { value: /' + field.fieldValidateRulesPatternReact + '/, message: translate(\'entity.validation.pattern\', { pattern: \'' + field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') + '\' }) }');
     }
     if (field.fieldTypeNumeric) {
         validators.push('validate: v => isNumber(v) || translate(\'entity.validation.number\')');
