@@ -154,7 +154,7 @@ _%>
         </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <% if (prodDatabaseType === 'mssql') { %>
         <sql dbms="mssql">
-            SET IDENTITY_INSERT jhi_user ON;
+            SET IDENTITY_INSERT jhi_user OFF;
         </sql>
         <% } %>   
         <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
