@@ -50,12 +50,9 @@ describe('DeploymentOptions', () => {
       context('when passing no args', () => {
         it('should return docker deployment config', () => {
           expect(Options.defaults()).to.eql({
-            deploymentType: 'docker-compose',
             appsFolders: new Set(),
             clusteredDbApps: new Set(),
             directoryPath: '../',
-            dockerPushCommand: 'docker push',
-            dockerRepositoryName: '',
             gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
             serviceDiscoveryType: 'eureka',
@@ -65,13 +62,13 @@ describe('DeploymentOptions', () => {
       context('when passing kubernetes as arg', () => {
         it('should return kubernetes deployment config', () => {
           expect(Options.defaults('kubernetes')).to.eql({
-            deploymentType: 'kubernetes',
             appsFolders: new Set(),
             clusteredDbApps: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
-            gatewayType: 'SpringCloudGateway',
+            kubernetesUseDynamicStorage: false,
+            kubernetesStorageClassName: '',
             monitoring: 'no',
             serviceDiscoveryType: 'eureka',
             ingressDomain: '',
@@ -84,17 +81,16 @@ describe('DeploymentOptions', () => {
       context('when passing openshift as arg', () => {
         it('should return openshift deployment config', () => {
           expect(Options.defaults('openshift')).to.eql({
-            deploymentType: 'openshift',
             appsFolders: new Set(),
             clusteredDbApps: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
-            gatewayType: 'SpringCloudGateway',
             monitoring: 'no',
             serviceDiscoveryType: 'eureka',
             openshiftNamespace: 'default',
             storageType: 'ephemeral',
+            registryReplicas: 2,
           });
         });
       });
