@@ -133,6 +133,21 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.packagejs = packagejs;
       },
 
+      configureDevServerPort() {
+        this.devServerBasePort = this.jhipsterConfig.clientFramework === ANGULAR ? 4200 : 9060;
+
+        if (this.jhipsterConfig.devServerBasePort !== undefined) return undefined;
+        let devServerPort;
+
+        if (this.jhipsterConfig.applicationIndex !== undefined) {
+          devServerPort = this.devServerBasePort + this.jhipsterConfig.applicationIndex;
+        } else if (!this.devServerPort) {
+          devServerPort = this.devServerBasePort;
+        }
+
+        this.jhipsterConfig.devServerPort = devServerPort;
+      },
+
       saveConfig() {
         this.setConfigDefaults(clientDefaultConfig);
       },

@@ -2510,6 +2510,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
+    dest.devServerPort = config.devServerPort;
   }
 
   loadDerivedClientConfig(dest = this) {

@@ -69,7 +69,7 @@ module.exports = (config, options, targetOptions) => {
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '<%= serverPort %>'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= serverPort %>'}`,
             <%_ if (websocket === 'spring-websocket') { _%>
             ws: true,
             <%_ } _%>
