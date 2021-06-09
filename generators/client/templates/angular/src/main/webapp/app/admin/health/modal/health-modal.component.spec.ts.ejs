@@ -103,7 +103,7 @@ describe('Component Tests', () => {
     describe('dismiss', () => {
       it('should call dismiss when dismiss modal is called', () => {
         // GIVEN
-        const spy = spyOn(mockActiveModal, 'dismiss').and.callThrough();
+        const spy = jest.spyOn(mockActiveModal, 'dismiss');
 
         // WHEN
         comp.dismiss();
