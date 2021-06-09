@@ -1861,4 +1861,46 @@ entity A {
       });
     });
   });
+  context('when parsing deployments', () => {
+    context('with kubernetesStorageClassName', () => {
+      context('being empty', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName ""
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: '',
+          });
+        });
+      });
+      context('being set', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName "SetValue"
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: 'SetValue',
+          });
+        });
+      });
+    });
+  });
 });
