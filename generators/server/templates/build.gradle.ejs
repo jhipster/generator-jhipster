@@ -535,13 +535,12 @@ dependencies {
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "com.github.sabomichal:liquibase-mssql"
-        <%_ if (!reactive) { _%>
-    liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
-        <%_ } else { _%>
+    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+        <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
+    liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
