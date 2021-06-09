@@ -20,7 +20,7 @@
 name: Incremental Changelog
 concurrency:
   # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
-  group: incremental-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
   cancel-in-progress: true
 on:
   push:
@@ -122,8 +122,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
-      - name: 'ENV: display variables'
-        run: $JHI_SCRIPTS/01-display-configuration.sh
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
