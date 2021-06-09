@@ -30,7 +30,7 @@ import <%= packageName %>.service.ColumnConverter;
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@link Row} to {@link User<%= entitySuffix %>}, with proper type conversions.
+ * Converter between {@link Row} to {@link <%= asEntity('User') %>}, with proper type conversions.
  */
 @Service
 public class UserRowMapper implements BiFunction<Row, String, <%= asEntity('User') %>> {
