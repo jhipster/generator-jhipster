@@ -89,14 +89,14 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
 
   it('should add webpack config to webpack.custom.js if framework is Angular', async () => {
     await generateAppWithClientFramework(ANGULAR);
-    assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, '{ devServer: {} },');
+    assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, '{ devServer: {} }');
   });
   it('should add webpack config to webpack.common.js if framework is React', async () => {
     await generateAppWithClientFramework(REACT);
-    assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} },');
+    assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
   });
   it('should add webpack config to webpack.common.js if framework is Vue', async () => {
     await generateAppWithClientFramework(VUE);
-    assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} },');
+    assert.fileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
   });
 });
