@@ -155,6 +155,9 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     inline: undefined,
     skipSampleRepository: undefined,
     workspaces: undefined,
+    forceNoFiltering: undefined,
+    unidirectionalRelationships: undefined,
+    localConfigOnly: undefined,
     fromJdl: true,
   };
 
@@ -162,17 +165,20 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     const oldCwd = process.cwd();
     process.chdir(cwd);
     env = env || EnvironmentBuilder.createDefaultBuilder(undefined, { cwd }).getEnvironment();
-    return env.run(`${CLI_NAME}:${command}`, generatorOptions).then(
-      () => {
+    return env
+      .run(`${CLI_NAME}:${command}`, generatorOptions)
+      .then(
+        () => {
+          logger.info(`Generator ${command} succeed`);
+        },
+        error => {
+          logger.error(`Error running generator ${command}: ${error}`, error);
+          return Promise.reject(error);
+        }
+      )
+      .finally(() => {
         process.chdir(oldCwd);
-        logger.info(`Generator ${command} succeed`);
-      },
-      error => {
-        process.chdir(oldCwd);
-        logger.error(`Error running generator ${command}: ${error}`, error);
-        return Promise.reject(error);
-      }
-    );
+      });
   }
   logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
   const args = [command, ...getOptionAsArgs(generatorOptions)];
@@ -350,6 +356,7 @@ class JDLProcessor {
       applicationType: this.options.applicationType,
       skipUserManagement: this.options.skipUserManagement,
       unidirectionalRelationships: this.options.unidirectionalRelationships,
+      forceNoFiltering: this.options.forceNoFiltering,
       generatorVersion: packagejs.version,
       skipFileGeneration: true,
     };
