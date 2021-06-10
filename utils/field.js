@@ -69,11 +69,13 @@ const fakeStringTemplateForFieldName = columnName => {
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
   let data;
+  let doubleQuote = false;
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
     const generated = field.createRandexp().gen();
     if (type === 'csv') {
+      doubleQuote = true;
       data = `"${generated.replace(/"/g, '')}"`;
     } else if (type === 'cypress') {
       data = generated.replace(/"/g, '');
@@ -128,7 +130,9 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     // manage String max length
     if (field.fieldValidateRules.includes('maxlength')) {
       const maxlength = field.fieldValidateRulesMaxlength;
-      data = data.substring(0, maxlength);
+      if (data.length - (doubleQuote ? 2 : 0) > maxlength) {
+        data = data.substring(0, maxlength);
+      }
     }
 
     // manage String min length
