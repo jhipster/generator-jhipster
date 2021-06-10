@@ -32,7 +32,7 @@ else
     if [ "$JHI_LIB_BRANCH" == "latest" ]; then
         LATEST=$(git describe --abbrev=0)
         git checkout "$LATEST"
-    elif [ "$JHI_LIB_BRANCH" != "main" && "$JHI_LIB_BRANCH" != "auto" ]; then
+    elif [[ "$JHI_LIB_BRANCH" != "main" && "$JHI_LIB_BRANCH" != "auto" ]]; then
         git checkout "$JHI_LIB_BRANCH"
     fi
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
