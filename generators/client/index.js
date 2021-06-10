@@ -365,6 +365,11 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
         }
       },
+
+      microfrontend() {
+        if (!this.microfrontend) return;
+        this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
+      },
     };
   }
 

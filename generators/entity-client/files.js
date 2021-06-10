@@ -437,7 +437,11 @@ function addSampleRegexTestingStrings(generator) {
 function writeFiles() {
   return {
     writeClientFiles() {
-      if (this.skipClient) return undefined;
+      if (
+        this.skipClient ||
+        (this.jhipsterConfig.microfrontend && this.jhipsterConfig.applicationType === 'gateway' && this.microserviceName)
+      )
+        return undefined;
       if (this.protractorTests) {
         addSampleRegexTestingStrings(this);
       }

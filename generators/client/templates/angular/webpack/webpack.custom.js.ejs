@@ -61,6 +61,7 @@ module.exports = (config, options, targetOptions) => {
       })
     );
   }
+<%_ if (!this.applicationTypeMicroservice) { _%>
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
       new BrowserSyncPlugin(
@@ -97,6 +98,7 @@ module.exports = (config, options, targetOptions) => {
       )
     );
   }
+<%_ } _%>
 
   if (config.mode === 'production') {
     config.plugins.push(

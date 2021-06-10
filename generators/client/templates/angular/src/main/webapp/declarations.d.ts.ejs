@@ -1,0 +1,5 @@
+<%_ for (const entity of Object.values(this.configOptions.sharedEntities).filter(entity => entity.microserviceName)) { _%>
+declare module '<%= entity.microserviceName %>/<%= entity.entityFileName %>' {
+  export class <%= entity.microserviceName ? upperFirstCamelCase(entity.microserviceName) : '' %><%= entity.entityAngularName %>Module {}
+}
+<%_ } _%>

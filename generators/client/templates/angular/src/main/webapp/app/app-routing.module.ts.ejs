@@ -32,6 +32,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
   imports: [
     RouterModule.forRoot(
       [
+<%_ if (!applicationTypeMicroservice) { _%>
         {
           path: 'admin',
           data: {
@@ -40,6 +41,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
+<%_ } _%>
 <%_ if (!skipUserManagement) { _%>
         {
           path: 'account',
