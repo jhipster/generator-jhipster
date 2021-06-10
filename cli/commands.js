@@ -62,6 +62,9 @@ const defaultCommands = {
   info: {
     desc: 'Display information about your current project and system',
   },
+  init: {
+    desc: 'Init project',
+  },
   jdl: {
     alias: 'import-jdl',
     argument: ['[jdlFiles...]'],
