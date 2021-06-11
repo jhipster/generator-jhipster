@@ -406,7 +406,7 @@ spec:
             claimName: samplekafka-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -820,7 +820,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -1110,7 +1110,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:13.2
+          image: postgres:13.3
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -1583,7 +1583,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2131,7 +2131,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2395,7 +2395,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3084,7 +3084,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3724,7 +3724,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -4032,7 +4032,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.5.9
+          image: mariadb:10.6.1
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -4392,7 +4392,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.4
+          image: mongo:4.4.6
           command:
             - /work-dir/peer-finder
           args:
@@ -4422,7 +4422,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.4
+          image: mongo:4.4.6
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -4678,7 +4678,7 @@ spec:
             claimName: msmssqldb-mssql-pvc
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU9-ubuntu-16.04
+          image: mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -4880,7 +4880,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -5170,7 +5170,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:13.2
+          image: postgres:13.3
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -5785,7 +5785,7 @@ spec:
             claimName: samplemysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -8854,7 +8854,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9439,7 +9439,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9915,7 +9915,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -10223,7 +10223,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.5.9
+          image: mariadb:10.6.1
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -10583,7 +10583,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.4
+          image: mongo:4.4.6
           command:
             - /work-dir/peer-finder
           args:
@@ -10613,7 +10613,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.4
+          image: mongo:4.4.6
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -10869,7 +10869,7 @@ spec:
             claimName: msmssqldb-mssql-pvc
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU9-ubuntu-16.04
+          image: mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -11071,7 +11071,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11361,7 +11361,7 @@ spec:
             claimName: mspsql-postgresql-pvc
       containers:
         - name: postgres
-          image: postgres:13.2
+          image: postgres:13.3
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -11846,7 +11846,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.23
+          image: mysql:8.0.25
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
