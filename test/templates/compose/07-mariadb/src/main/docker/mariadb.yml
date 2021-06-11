@@ -1,7 +1,7 @@
 version: '2'
 services:
     msmariadb-mariadb:
-        image: mariadb:10.3.7
+        image: mariadb:10.6.1
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/
         environment:

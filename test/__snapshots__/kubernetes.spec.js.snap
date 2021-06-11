@@ -191,7 +191,7 @@ spec:
     spec:
       containers:
         - name: kafka
-          image: confluentinc/cp-kafka:5.5.3
+          image: confluentinc/cp-kafka:5.5.4
           env:
             - name: KAFKA_ADVERTISED_LISTENERS
               value: \\"PLAINTEXT://jhipster-kafka.default.svc.cluster.local:9092\\"
@@ -239,7 +239,7 @@ spec:
     spec:
       containers:
         - name: zookeeper
-          image: confluentinc/cp-zookeeper:5.5.3
+          image: confluentinc/cp-zookeeper:5.5.4
           env:
             - name: ZOOKEEPER_CLIENT_PORT
               value: \\"2181\\"
@@ -8486,7 +8486,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:7.5.2
+          image: grafana/grafana:8.0.1
           ports:
             - containerPort: 3000
               name: http
