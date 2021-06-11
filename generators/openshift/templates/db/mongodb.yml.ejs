@@ -34,7 +34,7 @@ metadata:
     tags: db, <%= app.baseName.toLowerCase() %>-mongodb<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
     openshift.io/display-name: <%= app.baseName.toLowerCase() %>-mongodb-template
     openshift.io/long-description: >-
-        This template provides objects that are required to spin up a mongodb pod. <% if (storageType ==
+        This template provides objects that are required to spin up a mongodb pod.<% if (storageType ==
         'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
         Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %>
         <% if (storageType === 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>

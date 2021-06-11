@@ -182,7 +182,7 @@ metadata:
     tags: db, jhgate-mysqldb  ,ephemeral
     openshift.io/display-name: jhgate-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -268,7 +268,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -505,7 +505,7 @@ metadata:
     tags: db, msmysql-mysqldb  ,ephemeral
     openshift.io/display-name: msmysql-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -591,7 +591,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -1139,7 +1139,7 @@ metadata:
     tags: db, jhgate-mysqldb  ,ephemeral
     openshift.io/display-name: jhgate-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -1225,7 +1225,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -1320,7 +1320,7 @@ metadata:
     tags: db, mscassandra-cassandra  ,ephemeral
     openshift.io/display-name: mscassandra-cassandra-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a cassandra pod. 
+      This template provides objects that are required to spin up a cassandra pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -1726,7 +1726,7 @@ metadata:
     tags: db, msmariadb-mariadb  ,ephemeral
     openshift.io/display-name: msmariadb-mariadb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mariadb pod. 
+      This template provides objects that are required to spin up a mariadb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -1812,7 +1812,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mariadb:10.5.9
+              image: mariadb:10.6.1
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2046,7 +2046,7 @@ metadata:
     tags: db, msmongodb-mongodb  ,ephemeral
     openshift.io/display-name: msmongodb-mongodb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mongodb pod. 
+      This template provides objects that are required to spin up a mongodb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -2140,7 +2140,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.4
+              image: mongo:4.4.6
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}
@@ -2365,7 +2365,7 @@ metadata:
     tags: db, msmysql-mysqldb  ,ephemeral
     openshift.io/display-name: msmysql-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -2451,7 +2451,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2690,7 +2690,7 @@ metadata:
     tags: elasticsearch, mspsql-elasticsearch  ,ephemeral
     openshift.io/display-name: mspsql-elasticsearch-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up an elasticsearch pod. 
+      This template provides objects that are required to spin up an elasticsearch pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -2793,7 +2793,7 @@ metadata:
     tags: db, mspsql-postgresqldb  ,ephemeral
     openshift.io/display-name: mspsql-postgresqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a postgresqldb pod. 
+      This template provides objects that are required to spin up a postgresqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -2876,7 +2876,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.2
+              image: postgres:13.3
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -3482,7 +3482,7 @@ metadata:
     tags: elasticsearch, samplemysql-elasticsearch  ,ephemeral
     openshift.io/display-name: samplemysql-elasticsearch-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up an elasticsearch pod. 
+      This template provides objects that are required to spin up an elasticsearch pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -3585,7 +3585,7 @@ metadata:
     tags: db, samplemysql-mysqldb  ,ephemeral
     openshift.io/display-name: samplemysql-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -3671,7 +3671,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -3932,7 +3932,7 @@ metadata:
     tags: db, jhgate-mysqldb  ,ephemeral
     openshift.io/display-name: jhgate-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -4018,7 +4018,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4557,7 +4557,7 @@ metadata:
     tags: db, msmysql-mysqldb  ,ephemeral
     openshift.io/display-name: msmysql-mysqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a mysqldb pod. 
+      This template provides objects that are required to spin up a mysqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -4643,7 +4643,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.23
+              image: mysql:8.0.25
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4882,7 +4882,7 @@ metadata:
     tags: elasticsearch, mspsql-elasticsearch  ,ephemeral
     openshift.io/display-name: mspsql-elasticsearch-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up an elasticsearch pod. 
+      This template provides objects that are required to spin up an elasticsearch pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -4985,7 +4985,7 @@ metadata:
     tags: db, mspsql-postgresqldb  ,ephemeral
     openshift.io/display-name: mspsql-postgresqldb-template
     openshift.io/long-description: >-
-      This template provides objects that are required to spin up a postgresqldb pod. 
+      This template provides objects that are required to spin up a postgresqldb pod.
       The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -5068,7 +5068,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.2
+              image: postgres:13.3
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
