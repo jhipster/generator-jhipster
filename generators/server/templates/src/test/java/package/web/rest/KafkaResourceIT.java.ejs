@@ -102,7 +102,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         <%_ } else { _%>
-        client.post().uri("/api/jhipster-kafka/publish/topic-produce?message=value-produce")
+        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce")
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON);
@@ -140,7 +140,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         }
         fail("Expected content data:value-consume not received");
         <%_ } else { _%>
-        String value = client.get().uri("/api/jhipster-kafka/consume?topic=topic-consume")
+        String value = client.get().uri("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume")
             .accept(MediaType.TEXT_EVENT_STREAM)
             .exchange()
             .expectStatus().isOk()
