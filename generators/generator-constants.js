@@ -41,7 +41,7 @@ const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('
 const HIBERNATE_VERSION = '5.4.32.Final';
 
 const JACOCO_VERSION = '0.8.7';
-const KAFKA_VERSION = '5.5.3';
+const KAFKA_VERSION = '5.5.4';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
