@@ -59,19 +59,19 @@ inputs:
   generator-jhipster-repository:
     description: 'JHipster Generator repository'
     required: false
-    default: https://github.com/jhipster/generator-jhipster.git
+    default: https://github.com/DanielFran/generator-jhipster.git
   generator-jhipster-branch:
     description: 'JHipster Generator branch'
     required: false
-    default: main
+    default: spring-boot_2.4.7
   jhipster-bom-repository:
     description: 'JHipster BOM repository'
     required: false
-    default: https://github.com/jhipster/jhipster-bom.git
+    default: https://github.com/DanielFran/jhipster-bom.git
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: auto
+    default: spring-boot_2.4.7
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
