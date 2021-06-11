@@ -44,7 +44,7 @@ export const RegisterPage = () => {
 <%_ if (enableTranslation) { _%>
     dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: currentLocale }));
 <%_ } else { _%>
-    dispatch(handleRegister({ login: username, email, password: firstPassword }));
+    dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: 'en' }));
 <%_ } _%>
   };
 
