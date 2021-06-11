@@ -55,6 +55,7 @@ jobs:
         cache: [angular]
         jdl:
           - blog-store
+          - blog-store-microfrontend
         include:
           - jdl: blog-store
             environment: prod
@@ -62,6 +63,14 @@ jobs:
             extra-args: --workspaces --monorepository
             # Backend is failing, disable it
             skip-backend-tests: 1
+          - jdl: blog-store-microfrontend
+            environment: prod
+            # Use monorepository for diff
+            extra-args: --workspaces --monorepository --interactive
+            new-extra-args: --microfrontend
+            # Backend is failing, disable it
+            skip-backend-tests: 1
+            skip-frontend-tests: 0
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -131,7 +140,7 @@ jobs:
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }}
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
       - name: 'GENERATION: project'
         run: |
           git add .
