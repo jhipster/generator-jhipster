@@ -65,7 +65,7 @@
     "ts-loader": "9.2.3",
     "eslint": "6.8.0",
     "eslint-plugin-prettier": "3.4.0",
-    "eslint-plugin-vue": "7.10.0",
+    "eslint-plugin-vue": "7.11.0",
     "typescript": "4.3.2",
     "url-loader": "4.1.1",
     "webpack": "5.38.1",
