@@ -1,9 +1,0 @@
-{
-  "activate": {
-    "title": "Aktivierung",
-    "messages": {
-      "success": "<strong>Ihr Benutzer wurde aktiviert.</strong> Bitte ",
-      "error": "<strong>Ihr Benutzer konnte nicht aktiviert werden.</strong> Bitte benutzen Sie die Registrierungsmaske, um sich zu registrieren."
-    }
-  }
-}
