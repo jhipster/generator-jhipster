@@ -1,9 +1,0 @@
-{
-  "adminApp": {
-    "MediaType": {
-      "null": "",
-      "AUDIO": "AUDIO",
-      "VIDEO": "VIDEO"
-    }
-  }
-}
