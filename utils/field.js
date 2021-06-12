@@ -69,15 +69,11 @@ const fakeStringTemplateForFieldName = columnName => {
 
 const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => {
   let data;
-  let doubleQuote = false;
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
     const generated = field.createRandexp().gen();
-    if (type === 'csv') {
-      doubleQuote = true;
-      data = `"${generated.replace(/"/g, '')}"`;
-    } else if (type === 'cypress') {
+    if (type === 'csv' || type === 'cypress') {
       data = generated.replace(/"/g, '');
     } else {
       data = generated;
@@ -130,9 +126,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     // manage String max length
     if (field.fieldValidateRules.includes('maxlength')) {
       const maxlength = field.fieldValidateRulesMaxlength;
-      if (data.length - (doubleQuote ? 2 : 0) > maxlength) {
-        data = data.substring(0, maxlength);
-      }
+      data = data.substring(0, maxlength);
     }
 
     // manage String min length
@@ -156,6 +150,8 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     !['Boolean', 'Integer', 'Long', 'Float', '${floatType}', 'Double', 'BigDecimal'].includes(field.fieldType)
   ) {
     data = `'${data}'`;
+  } else if (type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
+    data = `"${data}"`;
   }
 
   return data;
