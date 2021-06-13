@@ -35,14 +35,14 @@ function setupProxy() {
         '/auth',
         '/health',
       ],
-      target: `http${tls ? 's' : ''}://localhost:<%= serverPort %>`,
+      target: `http${tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
       secure: false,
       changeOrigin: tls,
     },
 <%_ if (communicationSpringWebsocket) { _%>
     {
       context: ['/websocket'],
-      target: 'ws://127.0.0.1:<%= serverPort %>',
+      target: 'ws://127.0.0.1:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
       ws: true,
     },
 <%_ } _%>

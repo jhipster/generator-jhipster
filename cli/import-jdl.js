@@ -414,22 +414,28 @@ class JDLProcessor {
       return Promise.resolve();
     }
 
-    applicationsWithEntities.forEach((applicationWithEntities, idx) => {
-      applicationWithEntities.config.applicationIndex = idx;
-    });
+    const allApplications = Object.fromEntries(
+      applicationsWithEntities.map((applicationWithEntities, applicationIndex) => {
+        applicationWithEntities.config.applicationIndex = applicationIndex;
+        return [applicationWithEntities.config.baseName, applicationWithEntities.config];
+      })
+    );
 
-    const allApplications = applicationsWithEntities.map(applicationWithEntities => [
-      applicationWithEntities.config.baseName,
-      { applicationIndex: applicationWithEntities.config.applicationIndex, serverPort: applicationWithEntities.config.serverPort },
-    ]);
     applicationsWithEntities.forEach((applicationWithEntities, idx) => {
-      const relatedApplications = allApplications.filter(
+      const relatedApplications = Object.entries(allApplications).filter(
         ([baseName]) =>
           applicationWithEntities.config.baseName !== baseName &&
           applicationWithEntities.entities.find(entity => entity.microserviceName === baseName)
       );
+      const { serverPort: gatewayServerPort } = applicationWithEntities.config;
       if (relatedApplications.length > 0) {
-        applicationWithEntities.config.applications = Object.fromEntries(relatedApplications);
+        applicationWithEntities.config.applications = Object.fromEntries(
+          relatedApplications.map(([baseName, config]) => {
+            config.gatewayServerPort = gatewayServerPort;
+            const { serverPort, applicationIndex } = config;
+            return [baseName, { serverPort, applicationIndex }];
+          })
+        );
       }
     });
 
