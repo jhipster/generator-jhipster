@@ -197,6 +197,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadTranslationConfig();
       },
 
+      checkMicrofrontend() {
+        if (this.microfrontend && !this.clientFrameworkAngular) {
+          throw new Error(`Microfrontend requires ${ANGULAR} client framework.`);
+        }
+      },
+
       validateSkipServer() {
         if (
           this.jhipsterConfig.skipServer &&
