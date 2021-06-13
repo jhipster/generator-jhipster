@@ -66,7 +66,7 @@ jobs:
           - jdl: blog-store-microfrontend
             environment: prod
             # Use monorepository for diff
-            extra-args: --workspaces --monorepository --interactive
+            extra-args: --workspaces --monorepository
             new-extra-args: --microfrontend
             # Backend is failing, disable it
             skip-backend-tests: 1
