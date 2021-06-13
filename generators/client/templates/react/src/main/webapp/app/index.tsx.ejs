@@ -41,19 +41,15 @@ setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthoriz
 
 loadIcons();
 
-const rootEl = document.getElementById('root');
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
 
-const render = Component =>
-  // eslint-disable-next-line react/no-render-return-value
-  ReactDOM.render(
-    <ErrorBoundary>
-      <Provider store={store}>
-        <div>
-          <Component />
-        </div>
-      </Provider>
-    </ErrorBoundary>,
-    rootEl
-  );
-
-render(AppComponent);
+root.render(
+  <ErrorBoundary>
+    <Provider store={store}>
+      <div>
+        <AppComponent />
+      </div>
+    </Provider>
+  </ErrorBoundary>
+);
