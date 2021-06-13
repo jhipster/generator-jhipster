@@ -19,12 +19,12 @@
 
 name: Triage issues
 on:
-  issues: { types: opened }
+  issues: { types: [opened] }
 jobs:
   apply-label:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v4.0.2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |

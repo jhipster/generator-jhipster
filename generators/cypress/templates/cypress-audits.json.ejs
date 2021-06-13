@@ -16,20 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/**
- * Appends REQUEST async action type
- */
-
-export const REQUEST = actionType => `${actionType}_PENDING`;
-
-/**
- * Appends SUCCESS async action type
- */
-
-export const SUCCESS = actionType => `${actionType}_FULFILLED`;
-
-/**
- * Appends FAILURE async action type
- */
-
-export const FAILURE = actionType => `${actionType}_REJECTED`;
+{
+    "baseUrl": "http://localhost:<%= serverPort %>/",
+    "testFiles": "**/*.audits.ts",
+    "supportFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/support/index.ts",
+    "video": false,
+    "integrationFolder": "<%= CLIENT_TEST_SRC_DIR %>cypress/integration",
+    "fixturesFolder": "<%= CLIENT_TEST_SRC_DIR %>cypress/fixtures",
+    "pluginsFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index.ts",
+    "screenshotsFolder": "<%= BUILD_DIR %>cypress/screenshots",
+    "chromeWebSecurity": <% if(authenticationTypeOauth2) { %>false<% } else { %>true<% } %>,
+    "viewportWidth": 1200,
+    "viewportHeight": 720,
+    "retries": 2
+  }

@@ -55,7 +55,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15"
+assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15" || "16"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -336,7 +336,7 @@ dependencies {
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
         <%_ if (reactive) { _%>
-    implementation "commons-beanutils:commons-beanutils:1.9.4"
+    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
         <%_ } _%>
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
@@ -476,7 +476,7 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
-    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
+    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
     implementation "org.springframework.security:spring-security-data"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-web"
@@ -535,13 +535,12 @@ dependencies {
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "com.github.sabomichal:liquibase-mssql"
-        <%_ if (!reactive) { _%>
-    liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
-        <%_ } else { _%>
+    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+        <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
+    liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
@@ -627,11 +626,21 @@ wrapper {
 
 <%_ if (!skipClient) { _%>
 
+// Workaround npm failing with audit
+// https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
+npm_install {
+    args = ['--no-audit']
+}
+
 if (project.hasProperty("nodeInstall")) {
+    // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154
+    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
+    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
+    Boolean downloadNode = !os.isMacOsX() || arch.isAmd64()
     node {
         version = "<%= NODE_VERSION %>"
         npmVersion = "<%= NPM_VERSION %>"
-        download = true
+        download = downloadNode
     }
 }
 <%_ } _%>

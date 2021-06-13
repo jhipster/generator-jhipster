@@ -435,13 +435,6 @@ function addSampleRegexTestingStrings(generator) {
 
 function writeFiles() {
   return {
-    setupReproducibility() {
-      if (this.skipClient) return;
-
-      // In order to have consistent results with Faker, restart seed with current entity name hash.
-      this.resetFakerSeed();
-    },
-
     writeClientFiles() {
       if (this.skipClient) return undefined;
       if (this.protractorTests) {

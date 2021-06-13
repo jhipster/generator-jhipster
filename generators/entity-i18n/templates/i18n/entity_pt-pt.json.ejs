@@ -23,25 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Criar novo(a) <%= entityClassHumanized %>",
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Procurar por <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "Nenhum <%= entityClassPluralHumanized %> encontrado"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
             "updated": "<%= entityClassHumanized %> com identificador {{ param }} foi actualizado",
             "deleted": "<%= entityClassHumanized %> com identificador {{ param }} foi eliminado",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Tem a certeza que pretende eliminar o(a) <%= entityClassHumanized %> {{ id }}?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

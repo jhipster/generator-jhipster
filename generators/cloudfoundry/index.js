@@ -21,20 +21,23 @@ const childProcess = require('child_process');
 const chalk = require('chalk');
 const glob = require('glob');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const constants = require('../generator-constants');
+const { GENERATOR_CLOUDFOUNDRY } = require('../generator-list');
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 const NO_DATABASE_TYPE = databaseTypes.NO;
 
 const exec = childProcess.exec;
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
   initializing() {
     this.log(chalk.bold('CloudFoundry configuration is starting'));
     const configuration = this.config;
@@ -50,16 +53,22 @@ module.exports = class extends BaseGenerator {
     this.devDatabaseType = configuration.get(OptionNames.DEV_DATABASE_TYPE);
     this.prodDatabaseType = configuration.get(OptionNames.PROD_DATABASE_TYPE);
     this.frontendAppName = this.getFrontendAppName();
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLOUDFOUNDRY);
   }
 
-  get prompting() {
+  _prompting() {
     return prompts.prompting;
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'cloudfoundry');
+        statistics.sendSubGenEvent('generator', GENERATOR_CLOUDFOUNDRY);
       },
 
       derivedProperties() {
@@ -91,7 +100,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get default() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _default() {
     return {
       cloudfoundryAppShow() {
         if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
@@ -153,7 +167,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get end() {
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  _end() {
     return {
       cloudfoundryPush() {
         if (this.abort) return;
@@ -196,5 +215,10 @@ module.exports = class extends BaseGenerator {
         });
       },
     };
+  }
+
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 };

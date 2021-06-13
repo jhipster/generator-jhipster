@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 // eslint-disable-next-line spaced-comment
@@ -79,11 +97,11 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // ***********************************************
 
 export const classInvalid = <%_ if (clientFrameworkAngular) { _%>'ng-invalid';
-<%_ } else if (clientFrameworkReact) { _%>'av-invalid';
+<%_ } else if (clientFrameworkReact) { _%>'is-invalid';
 <%_ } else { _%>'invalid';<%_ } _%>
 
 export const classValid = <%_ if (clientFrameworkAngular) { _%>'ng-valid';
-<%_ } else if (clientFrameworkReact) { _%>'av-valid';
+<%_ } else if (clientFrameworkReact) { _%>'is-valid';
 <%_ } else { _%>'valid';<%_ } _%>
 
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -103,5 +121,6 @@ declare global {
 }
 <%_ } _%>
 
+import 'cypress-audit/commands';
 // Convert this to a module instead of script (allows import/export)
 export {};

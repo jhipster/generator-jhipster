@@ -24,6 +24,7 @@ const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrate
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { stringify } = require('../../utils');
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
+const { GENERATOR_DATABASE_CHANGELOG_LIQUIBASE } = require('../generator-list');
 
 const TYPE_LONG = CommonDBTypes.LONG;
 
@@ -48,15 +49,18 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Set number of rows to be generated
     this.numberOfRows = 10;
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('database-changelog-liquibase');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE);
   }
 
   _loading() {
     return {
       loadSharedConfig() {
         this.loadAppConfig();
+        this.loadDerivedAppConfig();
         this.loadClientConfig();
+        this.loadDerivedClientConfig();
         this.loadServerConfig();
+        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
       },
     };
@@ -92,15 +96,6 @@ module.exports = class extends BaseBlueprintGenerator {
             .filter(field => !field.transient)
             .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
         }
-      },
-
-      setupReproducibility() {
-        if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
-          return;
-        }
-
-        // In order to have consistent results with Faker, restart seed with current entity name hash.
-        this.entity.resetFakerSeed();
       },
 
       prepareFakeData() {

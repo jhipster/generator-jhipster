@@ -1,0 +1,1669 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster Docker Compose Sub Generator gateway and 1 microservice, with 1 couchbase cluster should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"10-couchbase\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": [\\"10-couchbase\\"],
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- mscouchbase (microservice application)
+- mscouchbase's couchbase database
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  mscouchbase:
+    image: mscouchbase
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
+      - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  mscouchbase-couchbase-node:
+    build:
+      context: 10-couchbase/src/main/docker
+      dockerfile: couchbase/Couchbase.Dockerfile
+    environment:
+      - TYPE=WORKER
+      - BUCKET=mscouchbase
+      - COUCHBASE_MASTER=mscouchbase-couchbase
+      - AUTO_REBALANCE=false
+  mscouchbase-couchbase:
+    build:
+      context: 10-couchbase/src/main/docker
+      dockerfile: couchbase/Couchbase.Dockerfile
+    environment:
+      - TYPE=MASTER
+      - BUCKET=mscouchbase
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and 1 microservice, with Cassandra cluster should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"05-cassandra\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- mscassandra (microservice application)
+- mscassandra's cassandra database
+- mscassandra's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  mscassandra:
+    image: mscassandra
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
+      - JHIPSTER_SLEEP=30
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  mscassandra-cassandra-node:
+    image: cassandra:3.11.10
+    environment:
+      - CASSANDRA_SEEDS=mscassandra-cassandra
+  mscassandra-cassandra-migration:
+    environment:
+      - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+      - USER=docker-cassandra-migration
+      - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+    build:
+      context: 05-cassandra/src/main/docker
+      dockerfile: cassandra/Cassandra-Migration.Dockerfile
+    volumes:
+      - 05-cassandra/src/main/resources/config/cql:/cql:ro
+  mscassandra-cassandra:
+    image: cassandra:3.11.10
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and multi microservices should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\",
+      \\"03-psql\\",
+      \\"04-mongo\\",
+      \\"07-mariadb\\"
+    ],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": [],
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+- mspsql (microservice application)
+- mspsql's postgresql database
+- mspsql's elasticsearch search engine
+- msmongodb (microservice application)
+- msmongodb's mongodb database
+- msmariadb (microservice application)
+- msmariadb's mariadb database
+- msmariadb's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  mspsql:
+    image: mspsql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
+      - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  mspsql-postgresql:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=
+  mspsql-elasticsearch:
+    image: elasticsearch:2.4.6
+
+  msmongodb:
+    image: msmongodb
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
+      - SPRING_DATA_MONGODB_DATABASE=msmongodb
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmongodb-mongodb:
+    image: mongo:4.4.6
+
+  msmariadb:
+    image: msmariadb
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmariadb-mariadb:
+    image: mariadb:10.6.1
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    ports:
+      - \\"3306:3306\\"
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and multi microservices, with 1 mongodb cluster should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\", \\"03-psql\\", \\"04-mongo\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": [\\"04-mongo\\"],
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+- mspsql (microservice application)
+- mspsql's postgresql database
+- mspsql's elasticsearch search engine
+- msmongodb (microservice application)
+- msmongodb's mongodb database
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  mspsql:
+    image: mspsql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
+      - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  mspsql-postgresql:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=
+  mspsql-elasticsearch:
+    image: elasticsearch:2.4.6
+
+  msmongodb:
+    image: msmongodb
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
+      - SPRING_DATA_MONGODB_DATABASE=msmongodb
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmongodb-mongodb-node:
+    build:
+      context: 04-mongo/src/main/docker
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --shardsvr --replSet rs1
+  msmongodb-mongodb-config:
+    image: mongo:4.4.6
+    command: mongod --configsvr --dbpath /data/db --replSet csvr
+  msmongodb-mongodb:
+    image: mongo:4.4.6
+    command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and multi microservices, with couchbase should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\",
+      \\"03-psql\\",
+      \\"10-couchbase\\",
+      \\"07-mariadb\\"
+    ],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": [],
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+- mspsql (microservice application)
+- mspsql's postgresql database
+- mspsql's elasticsearch search engine
+- mscouchbase (microservice application)
+- mscouchbase's couchbase database
+- msmariadb (microservice application)
+- msmariadb's mariadb database
+- msmariadb's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  mspsql:
+    image: mspsql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://mspsql-postgresql:5432/mspsql
+      - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  mspsql-postgresql:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=
+  mspsql-elasticsearch:
+    image: elasticsearch:2.4.6
+
+  mscouchbase:
+    image: mscouchbase
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
+      - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  mscouchbase-couchbase:
+    build:
+      context: 10-couchbase/src/main/docker
+      dockerfile: couchbase/Couchbase.Dockerfile
+    environment:
+      - BUCKET=mscouchbase
+
+  msmariadb:
+    image: msmariadb
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmariadb-mariadb:
+    image: mariadb:10.6.1
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    ports:
+      - \\"3306:3306\\"
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and one microservice should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and one microservice, with curator should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator gateway and one microservice, with prometheus should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"prometheus\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+
+### Additional Services:
+
+- [Prometheus server](http://localhost:9090)
+- [Prometheus Alertmanager](http://localhost:9093)
+- [Grafana](http://localhost:3000)
+",
+    "stateCleared": "modified",
+  },
+  "alertmanager-conf/config.yml": Object {
+    "contents": "route:
+  receiver: \\"webhook\\"
+  group_by: [\\"alertname\\"]
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 2h
+
+receivers:
+  - name: \\"webhook\\"
+    webhook_configs:
+      # For testing, create a sample alerting webhook at http://webhook.site/
+      - url: \\"http://webhook.site/<UUID>\\"
+        send_resolved: true
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+  "prometheus-conf/alert_rules.yml": Object {
+    "contents": "groups:
+  - name: example
+    rules:
+      - alert: InstanceDown
+        # Based on https://prometheus.io/docs/prometheus/latest/configuration/template_examples/
+        expr: up == 0
+        for: 10s
+        labels:
+          severity: page
+        annotations:
+          summary: \\"Instance {{$labels.instance}} down\\"
+          description: \\"{{$labels.instance}} of job {{$labels.job}} has been down for more than 10 seconds.\\"
+",
+    "stateCleared": "modified",
+  },
+  "prometheus-conf/prometheus.yml": Object {
+    "contents": "global:
+  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: \\"my-project\\"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - alert_rules.yml
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label \`job=<job_name>\` to any timeseries scraped from this config.
+  - job_name: \\"prometheus\\"
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    # scheme defaults to 'http'.
+    metrics_path: /management/prometheus
+    static_configs:
+      - targets:
+          - jhgate:8080
+          - msmysql:8081
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator monolith should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"08-monolith\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Applications and dependencies:
+
+- sampleMysql (monolith application)
+- sampleMysql's mysql database
+- sampleMysql's elasticsearch search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  samplemysql:
+    image: samplemysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - SPRING_DATASOURCE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_SLEEP=10
+    ports:
+      - \\"8080:8080\\"
+  samplemysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=samplemysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  samplemysql-elasticsearch:
+    image: elasticsearch:2.4.6
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=
+      - JHIPSTER_REGISTRY_PASSWORD=
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator one microservice and a directory path without a trailing slash should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator only gateway should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator only one microservice should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.25
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Docker Compose Sub Generator oracle monolith should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"12-oracle\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"clusteredDbApps\\": {},
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Applications and dependencies:
+
+- oracle-mono (monolith application)
+- oracle-mono's oracle database
+- oracle-mono's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  oracle-mono:
+    image: oracle-mono
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
+      - JHIPSTER_SLEEP=30
+      - SERVER_PORT=80
+    ports:
+      - \\"8080:8080\\"
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v6.7.1
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=
+      - JHIPSTER_REGISTRY_PASSWORD=
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;

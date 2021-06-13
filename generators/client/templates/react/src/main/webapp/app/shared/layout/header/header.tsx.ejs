@@ -26,15 +26,17 @@ import {
   NavbarToggler,
   Collapse
 } from 'reactstrap';
-
 import LoadingBar from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation && enableI18nRTL) { _%>
 import { isRTL } from 'app/config/translation';
 <%_ } _%>
-
 import { Home, Brand } from './header-components';
 import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
+<%_ if (enableTranslation) { _%>
+import { useAppDispatch } from 'app/config/store';
+import { setLocale } from 'app/shared/reducers/locale';
+<%_ } _%>
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -44,7 +46,6 @@ export interface IHeaderProps {
   isOpenAPIEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
-  onLocaleChange: (langKey: string) => void;
 <%_ } _%>
 }
 
@@ -56,10 +57,12 @@ const Header = (props: IHeaderProps) => {
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
+  const dispatch = useAppDispatch();
+
   const handleLocaleChange = event => {
     const langKey = event.target.value;
     Storage.session.set('locale', langKey);
-    props.onLocaleChange(langKey);
+    dispatch(setLocale(langKey));
   <%_ if (enableI18nRTL) { _%>
     document.querySelector('html').setAttribute('dir', isRTL(langKey) ? 'rtl' : 'ltr');
   <%_ } _%>
@@ -94,7 +97,7 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory) { %> showDatabase={!props.isInProduction} <%_ } _%> />}
+            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %> showDatabase={!props.isInProduction} <%_ } _%> />}
           <%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
           <%_ } _%>

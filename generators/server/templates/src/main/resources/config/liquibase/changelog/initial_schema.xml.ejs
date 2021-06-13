@@ -134,39 +134,40 @@ _%>
                                  referencedTableName="<%= user.entityTableName %>"/>
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
-        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <% if (prodDatabaseType === 'mssql') { %>
+        <sql dbms="mssql">
+            SET IDENTITY_INSERT jhi_user ON;
+        </sql>
+        <% } %>    
+        <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  <%_ if (prodDatabaseType === 'mssql') { _%>
-                  identityInsertEnabled="true"
-                  <%_ } _%>
                   tableName="<%= user.entityTableName %>">
             <%_ if (prodDatabaseType === 'postgresql') { _%>
             <column name="id" type="<%= idField.loadColumnType %>"/>
             <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
-        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
+        </loadData>
+        <% if (prodDatabaseType === 'mssql') { %>
+        <sql dbms="mssql">
+            SET IDENTITY_INSERT jhi_user OFF;
+        </sql>
+        <% } %>   
         <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
-        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  <%_ if (prodDatabaseType === 'mssql') { _%>
-                  identityInsertEnabled="true"
-                  <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="string"/>
-        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
+        </loadData>
 
-        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  <%_ if (prodDatabaseType === 'mssql') { _%>
-                  identityInsertEnabled="true"
-                  <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user_authority">
             <column name="user_id" type="<%= idField.loadColumnType %>"/>
-        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
+        </loadData>
     <%_ } _%>
 <%_ } _%>
     </changeSet>

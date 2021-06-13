@@ -21,11 +21,34 @@ const shelljs = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const _ = require('lodash');
+const { GENERATOR_GAE } = require('../generator-list');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 const dockerPrompts = require('../docker-prompts');
-
+const { OptionNames } = require('../../jdl/jhipster/application-options');
 const constants = require('../generator-constants');
+const cacheProviders = require('../../jdl/jhipster/cache-types');
+const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
+const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
+const { MARIADB, MYSQL, POSTGRESQL } = require('../../jdl/jhipster/database-types');
+const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+
+const NO_CACHE_PROVIDER = cacheProviders.NO;
+const {
+  APPLICATION_TYPE,
+  BASE_NAME,
+  BUILD_TOOL,
+  CACHE_PROVIDER,
+  CLIENT_PACKAGE_MANAGER,
+  DATABASE_TYPE,
+  ENABLE_HIBERNATE_CACHE,
+  PACKAGE_NAME,
+  PACKAGE_FOLDER,
+  PROD_DATABASE_TYPE,
+  SEARCH_ENGINE,
+  SERVICE_DISCOVERY_TYPE,
+  SKIP_CLIENT,
+} = OptionNames;
 
 module.exports = class extends BaseGenerator {
   get initializing() {
@@ -77,19 +100,20 @@ module.exports = class extends BaseGenerator {
       loadConfig() {
         const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = configuration.get('baseName');
+        this.baseName = configuration.get(BASE_NAME);
         this.mainClass = this.getMainClassName();
-        this.packageName = configuration.get('packageName');
-        this.packageFolder = configuration.get('packageFolder');
-        this.cacheProvider = configuration.get('cacheProvider') || 'no';
-        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = configuration.get('databaseType');
-        this.prodDatabaseType = configuration.get('prodDatabaseType');
-        this.searchEngine = configuration.get('searchEngine');
+        this.packageName = configuration.get(PACKAGE_NAME);
+        this.packageFolder = configuration.get(PACKAGE_FOLDER);
+        this.cacheProvider = configuration.get(CACHE_PROVIDER) || NO_CACHE_PROVIDER;
+        this.enableHibernateCache =
+          configuration.get(ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
+        this.databaseType = configuration.get(DATABASE_TYPE);
+        this.prodDatabaseType = configuration.get(PROD_DATABASE_TYPE);
+        this.searchEngine = configuration.get(SEARCH_ENGINE);
         this.frontendAppName = this.getFrontendAppName();
-        this.buildTool = configuration.get('buildTool');
-        this.applicationType = configuration.get('applicationType');
-        this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
+        this.buildTool = configuration.get(BUILD_TOOL);
+        this.applicationType = configuration.get(APPLICATION_TYPE);
+        this.serviceDiscoveryType = configuration.get(SERVICE_DISCOVERY_TYPE);
 
         this.gcpProjectId = configuration.get('gcpProjectId');
         this.gcpCloudSqlInstanceName = configuration.get('gcpCloudSqlInstanceName');
@@ -104,8 +128,8 @@ module.exports = class extends BaseGenerator {
         this.gaeMinInstances = configuration.get('gaeMinInstances');
         this.gaeCloudSQLInstanceNeeded = configuration.get('gaeCloudSQLInstanceNeeded');
         this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
-        this.skipClient = this.config.get('skipClient');
-        this.clientPackageManager = this.config.get('clientPackageManager');
+        this.skipClient = this.config.get(SKIP_CLIENT);
+        this.clientPackageManager = this.config.get(CLIENT_PACKAGE_MANAGER);
         this.dasherizedBaseName = _.kebabCase(this.baseName);
       },
     };
@@ -115,7 +139,7 @@ module.exports = class extends BaseGenerator {
     return {
       askForPath() {
         if (this.abort) return undefined;
-        if (this.applicationType !== 'gateway') return undefined;
+        if (this.applicationType !== GATEWAY) return undefined;
         const messageAskForPath = 'Enter the root directory where the microservices are located';
         const prompts = [
           {
@@ -151,7 +175,7 @@ module.exports = class extends BaseGenerator {
       },
       askForApps() {
         if (this.regenerate) return undefined;
-        if (this.applicationType !== 'gateway') return undefined;
+        if (this.applicationType !== GATEWAY) return undefined;
         const messageAskForApps = 'Which microservice applications do you want to include in your configuration?';
         const prompts = [
           {
@@ -433,7 +457,7 @@ module.exports = class extends BaseGenerator {
       askForCloudSqlInstance() {
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
         if (this.abort) return;
-        if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb' && this.prodDatabaseType !== 'postgresql') return;
+        if (this.prodDatabaseType !== MYSQL && this.prodDatabaseType !== MARIADB && this.prodDatabaseType !== POSTGRESQL) return;
 
         const done = this.async();
 
@@ -599,7 +623,7 @@ module.exports = class extends BaseGenerator {
   get configuring() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'gae');
+        statistics.sendSubGenEvent('generator', GENERATOR_GAE);
       },
 
       configureProject() {
@@ -740,7 +764,7 @@ module.exports = class extends BaseGenerator {
         this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
         this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
-        if (this.applicationType === 'gateway') {
+        if (this.applicationType === GATEWAY) {
           this.template('dispatch.yaml.ejs', `${constants.MAIN_DIR}/appengine/dispatch.yaml`);
         }
         this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
@@ -751,21 +775,21 @@ module.exports = class extends BaseGenerator {
 
       addDependencies() {
         if (this.abort) return;
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           this.addMavenDependency('org.springframework.boot.experimental', 'spring-boot-thin-layout', '1.0.23.RELEASE');
         }
         if (this.gaeCloudSQLInstanceNeeded === 'N') return;
-        if (this.prodDatabaseType === 'mysql' || this.prodDatabaseType === 'mariadb') {
-          if (this.buildTool === 'maven') {
+        if (this.prodDatabaseType === MYSQL || this.prodDatabaseType === MARIADB) {
+          if (this.buildTool === MAVEN) {
             this.addMavenDependency('com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
-          } else if (this.buildTool === 'gradle') {
+          } else if (this.buildTool === GRADLE) {
             this.addGradleDependency('compile', 'com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
           }
         }
-        if (this.prodDatabaseType === 'postgresql') {
-          if (this.buildTool === 'maven') {
+        if (this.prodDatabaseType === POSTGRESQL) {
+          if (this.buildTool === MAVEN) {
             this.addMavenDependency('com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
-          } else if (this.buildTool === 'gradle') {
+          } else if (this.buildTool === GRADLE) {
             this.addGradleDependency('compile', 'com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
           }
         }
@@ -773,7 +797,7 @@ module.exports = class extends BaseGenerator {
 
       addGradlePlugin() {
         if (this.abort) return;
-        if (this.buildTool === 'gradle') {
+        if (this.buildTool === GRADLE) {
           this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.2.0');
           this.addGradlePlugin('org.springframework.boot.experimental', 'spring-boot-thin-gradle-plugin', '1.0.13.RELEASE');
           this.applyFromGradleScript('gradle/gae');
@@ -782,7 +806,7 @@ module.exports = class extends BaseGenerator {
 
       addMavenPlugin() {
         if (this.abort) return;
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           this.render('pom-plugin.xml.ejs', rendered => {
             this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.2.0', rendered.trim());
           });
@@ -807,7 +831,7 @@ module.exports = class extends BaseGenerator {
             'Due to a Bug in GCloud SDK you will need to disable the generation of .gcloudignore file before deploying using: "gcloud config set gcloudignore/enabled false". For more info refer: https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376'
           )
         );
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));
         } else if (this.buildTool === 'gradle') {
           this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
@@ -853,10 +877,10 @@ module.exports = class extends BaseGenerator {
   }
 
   _defaultServiceNameChoices(defaultServiceExists) {
-    if (this.applicationType === 'monolith') {
+    if (this.applicationType === MONOLITH) {
       return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
     }
-    if (this.applicationType === 'gateway') {
+    if (this.applicationType === GATEWAY) {
       return ['default'];
     }
 
@@ -873,7 +897,7 @@ module.exports = class extends BaseGenerator {
         if (fs.existsSync(`${destinationPath}/${file.name}/.yo-rc.json`)) {
           try {
             const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
-            if (fileData['generator-jhipster'].applicationType === 'microservice') {
+            if (fileData['generator-jhipster'].applicationType === MICROSERVICE) {
               appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
             }
           } catch (err) {

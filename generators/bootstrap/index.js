@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { State } = require('mem-fs-editor');
 const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
@@ -25,6 +26,8 @@ const {
   createYoRcTransform,
   createYoResolveTransform,
 } = require('yeoman-environment/lib/util/transform');
+
+const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
 const { defaultConfig } = require('../generator-defaults');
@@ -76,7 +79,9 @@ module.exports = class extends BaseGenerator {
       },
 
       loadClientPackageManager() {
-        this.env.options.nodePackageManager = this.jhipsterConfig.clientPackageManager;
+        if (this.jhipsterConfig.clientPackageManager) {
+          this.env.options.nodePackageManager = this.jhipsterConfig.clientPackageManager;
+        }
       },
     };
   }
@@ -147,7 +152,9 @@ module.exports = class extends BaseGenerator {
           (path.basename(file.path) === '.yo-rc.json' ||
             (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
         ) {
-          file.state = file.state || 'modified';
+          if (!hasState(file) && !this.options.reproducibleTests) {
+            setModifiedFileState(file);
+          }
         }
       });
       const transformStreams = [
@@ -168,7 +175,7 @@ module.exports = class extends BaseGenerator {
       if (!this.options.skipPrettier) {
         const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+        const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         // docker-compose modifies .yo-rc.json from others folder, match them all.
         const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
@@ -280,7 +287,6 @@ module.exports = class extends BaseGenerator {
     });
     this.configOptions.sharedEntities.User = user;
 
-    user.resetFakerSeed();
     const liquibaseFakeData = oauth2
       ? []
       : [

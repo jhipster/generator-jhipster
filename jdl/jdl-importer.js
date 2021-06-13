@@ -29,6 +29,9 @@ const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-expo
 const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
 const JDLWithApplicationValidator = require('./validators/jdl-with-application-validator');
 const JDLWithoutApplicationValidator = require('./validators/jdl-without-application-validator');
+const { OptionNames } = require('./jhipster/application-options');
+
+const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
 
 module.exports = {
   createImporterFromContent,
@@ -231,7 +234,7 @@ function importOnlyEntities(jdlObject, configuration) {
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-  const { skipFileGeneration, unidirectionalRelationships } = configuration;
+  const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
 
   const importState = {
     exportedApplications: [],
@@ -245,7 +248,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   }
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
-  const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
+  const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
   const entitiesPerApplicationMap = JDLWithApplicationsToJSONConverter.convert({
     jdlObject,
     unidirectionalRelationships,
@@ -258,9 +261,10 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   if (jsonEntities.length !== 0) {
     const exportedJSONEntities = exportJSONEntities(jsonEntities, {
       applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
+      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: false,
       skipFileGeneration,
+      forceNoFiltering,
     });
     importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
     importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
@@ -269,7 +273,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-  const { skipFileGeneration, unidirectionalRelationships } = configuration;
+  const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
 
   const importState = {
     exportedApplications: [],
@@ -291,9 +295,10 @@ function importApplicationsAndEntities(jdlObject, configuration) {
     const jdlApplication = jdlObject.getApplication(applicationName);
     const exportedJSONEntities = exportJSONEntities(jsonEntities, {
       applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue('applicationType'),
+      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: true,
       skipFileGeneration,
+      forceNoFiltering,
     });
     const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
     importState.exportedApplicationsWithEntities[applicationName] = {

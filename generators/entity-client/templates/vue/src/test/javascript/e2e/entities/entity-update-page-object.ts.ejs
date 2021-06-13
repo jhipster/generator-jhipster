@@ -44,33 +44,30 @@ cancelButton: ElementFinder = element(by.id('cancel-save'));
 
 <%_ fields.filter(field => !field.id).forEach((field) => {
   const fieldName = field.fieldName;
-  const fieldType = field.fieldType;
-  const fieldTypeBlobContent = field.fieldTypeBlobContent;
   const fieldIsEnum = field.fieldIsEnum;
 _%>
 
-<%_ if (fieldType === 'Boolean') { _%>
+  <%_ if (field.fieldTypeBoolean) { _%>
   <%= fieldName %>Input: ElementFinder = element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
-<%_ } else if (fieldIsEnum) { _%>
+  <%_ } else if (fieldIsEnum) { _%>
   <%= fieldName %>Select = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
-<%_ } else { _%>
-  <%= fieldName %>Input: ElementFinder = <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
-  <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-    element(by.css('input#file_<%= fieldName %>'));
   <%_ } else { _%>
+  <%= fieldName %>Input: ElementFinder = <%_ if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
+    element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
+    <%_ } else if (field.fieldTypeBinary) { _%>
+    element(by.css('input#file_<%= fieldName %>'));
+    <%_ } else { _%>
     element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
-  <%_ } _%>
+    <%_ } _%>
 
-<%_ } _%>
+  <%_ } _%>
 <%_ }); _%>
 <%_ relationships.forEach((relationship) => {
-  const relationshipType = relationship.relationshipType;
   const ownerSide = relationship.ownerSide;
   const relationshipName = relationship.relationshipName;  _%>
-<%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+  <%_ if (ownerSide === true) { _%>
   <%= relationshipName %>Select = element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
 
-<%_ } _%>
+  <%_ } _%>
 <%_ }); _%>
 }

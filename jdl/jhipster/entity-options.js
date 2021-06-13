@@ -16,33 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const AWS = require('aws-sdk');
-const _ = require('lodash');
+const MapperTypes = {
+  MAPSTRUCT: 'mapstruct',
+  NO: 'no',
+};
 
-module.exports = class ECR {
-  constructor(region) {
-    this.ecr = new AWS.ECR({ region });
-  }
+const ServiceTypes = {
+  SERVICE_CLASS: 'serviceClass',
+  SERVICE_IMPL: 'serviceImpl',
+  NO: 'no',
+};
 
-  /**
-   * Returns the instance of the ECR class from the SDK
-   * @returns {AWS.ECR|ECR}
-   */
-  get sdk() {
-    return this.ecr;
-  }
+const PaginationTypes = {
+  PAGINATION: 'pagination',
+  INFINITE_SCROLL: 'infinite-scroll',
+  NO: 'no',
+};
 
-  /**
-   * Fetch the URI of the ECR repository off.
-   * @param respositoryName
-   * @returns {Promise.<string>}
-   */
-  getEcrRepositoryURI(respositoryName) {
-    return this.ecr
-      .describeRepositories({
-        repositoryNames: [respositoryName],
-      })
-      .promise()
-      .then(result => _(result.repositories).first().repositoryUri);
-  }
+const SearchTypes = {
+  ELASTICSEARCH: 'elasticsearch',
+  COUCHBASE: 'couchbase',
+};
+
+const FilteringTypes = {
+  JPA_METAMODEL: 'jpaMetamodel',
+  NO: 'no',
+};
+
+module.exports = {
+  MapperTypes,
+  ServiceTypes,
+  PaginationTypes,
+  SearchTypes,
+  FilteringTypes,
 };

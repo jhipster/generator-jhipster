@@ -1,5 +1,4 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
-import { mixins } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import UserManagementService from './user-management.service';
 

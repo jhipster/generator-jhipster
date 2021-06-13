@@ -16,21 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { State } = require('mem-fs-editor');
 const path = require('path');
-const through = require('through2');
+const { createFileTransform } = require('yeoman-environment/lib/util/transform');
 const prettier = require('prettier');
 const prettierPluginJava = require('prettier-plugin-java');
 const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 
+const { isFileStateDeleted } = State;
+
 const prettierTransform = function (options, generator, ignoreErrors = false) {
-  return through.obj((file, encoding, callback) => {
-    if (file.state === 'deleted') {
+  return createFileTransform((file, encoding, callback) => {
+    if (isFileStateDeleted(file)) {
       callback(null, file);
-      return;
+      return Promise.resolve();
     }
     /* resolve from the projects config */
     let fileContent;
-    prettier
+    return prettier
       .resolveConfig(file.relative)
       .then(function (resolvedDestinationFileOptions) {
         const prettierOptions = {
@@ -66,12 +69,12 @@ At: ${fileContent}`;
 };
 
 const generatedAnnotationTransform = generator => {
-  return through.obj(function (file, encoding, callback) {
+  return createFileTransform(function (file, encoding, callback) {
     if (
       !file.path.endsWith('package-info.java') &&
       !file.path.endsWith('MavenWrapperDownloader.java') &&
       path.extname(file.path) === '.java' &&
-      file.state !== 'deleted' &&
+      !isFileStateDeleted(file) &&
       !file.path.endsWith('GeneratedByJHipster.java')
     ) {
       const packageName = generator.jhipsterConfig.packageName;
@@ -86,8 +89,7 @@ const generatedAnnotationTransform = generator => {
         file.contents = Buffer.from(newContent);
       }
     }
-    this.push(file);
-    callback();
+    callback(null, file);
   });
 };
 

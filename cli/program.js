@@ -129,8 +129,11 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
               }
             }
             if (cmdName === 'jdl' || program.opts().fromJdl) {
-              const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
-              command.addGeneratorOptions(generator._options, chalk.gray(' (application)'));
+              const appGenerator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
+              command.addGeneratorOptions(appGenerator._options, chalk.gray(' (application)'));
+
+              const workspacesGenerator = env.create(`${JHIPSTER_NS}:workspaces`, { options: { help: true } });
+              command.addGeneratorOptions(workspacesGenerator._options, chalk.gray(' (workspaces)'));
             }
 
             // Register blueprint specific options.

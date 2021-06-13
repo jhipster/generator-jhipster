@@ -17,21 +17,10 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { IUser, defaultValue } from 'app/shared/model/user.model';
-
-export const ACTION_TYPES = {
-  FETCH_ROLES: 'userManagement/FETCH_ROLES',
-  FETCH_USERS: 'userManagement/FETCH_USERS',
-  FETCH_USERS_AS_ADMIN: 'userManagement/FETCH_USERS_AS_ADMIN',
-  FETCH_USER:  'userManagement/FETCH_USER',
-  CREATE_USER: 'userManagement/CREATE_USER',
-  UPDATE_USER: 'userManagement/UPDATE_USER',
-  DELETE_USER: 'userManagement/DELETE_USER',
-  RESET: 'userManagement/RESET'
-};
+import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
   loading: false,
@@ -44,152 +33,134 @@ const initialState = {
   totalItems: 0
 };
 
-export type UserManagementState = Readonly<typeof initialState>;
-
-// Reducer
-export default (state: UserManagementState = initialState, action): UserManagementState => {
-  switch (action.type) {
-    case REQUEST(ACTION_TYPES.FETCH_ROLES):
-      return {
-        ...state
-      };
-    case REQUEST(ACTION_TYPES.FETCH_USERS):
-    case REQUEST(ACTION_TYPES.FETCH_USERS_AS_ADMIN):
-    case REQUEST(ACTION_TYPES.FETCH_USER):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        loading: true
-      };
-    case REQUEST(ACTION_TYPES.CREATE_USER):
-    case REQUEST(ACTION_TYPES.UPDATE_USER):
-    case REQUEST(ACTION_TYPES.DELETE_USER):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        updating: true
-      };
-    case FAILURE(ACTION_TYPES.FETCH_USERS):
-    case FAILURE(ACTION_TYPES.FETCH_USERS_AS_ADMIN):
-    case FAILURE(ACTION_TYPES.FETCH_USER):
-    case FAILURE(ACTION_TYPES.FETCH_ROLES):
-    case FAILURE(ACTION_TYPES.CREATE_USER):
-    case FAILURE(ACTION_TYPES.UPDATE_USER):
-    case FAILURE(ACTION_TYPES.DELETE_USER):
-      return {
-        ...state,
-        loading: false,
-        updating: false,
-        updateSuccess: false,
-        errorMessage: action.payload
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_ROLES):
-      return {
-        ...state,
-        authorities: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_USERS):
-    case SUCCESS(ACTION_TYPES.FETCH_USERS_AS_ADMIN):
-      return {
-        ...state,
-        loading: false,
-        users: action.payload.data,
-<%_ if (!databaseTypeCassandra) { _%>
-          totalItems: parseInt(action.payload.headers['x-total-count'], 10)
-<%_ } _%>
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_USER):
-      return {
-        ...state,
-        loading: false,
-        user: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.CREATE_USER):
-    case SUCCESS(ACTION_TYPES.UPDATE_USER):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true,
-        user: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.DELETE_USER):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true,
-        user: defaultValue
-      };
-    case ACTION_TYPES.RESET:
-      return {
-        ...initialState
-      };
-    default:
-      return state;
-  }
-};
 
 const apiUrl = 'api/users';
 const adminUrl = 'api/admin/users';
-// Actions
-export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
+
+// Async Actions
+
+export const getUsers = createAsyncThunk('userManagement/fetch_users', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return {
-    type: ACTION_TYPES.FETCH_USERS,
-    payload: axios.get<IUser>(requestUrl)
-  };
-};
+  return axios.get<IUser[]>(requestUrl);
+});
 
-export const getUsersAsAdmin: ICrudGetAllAction<IUser> = (page, size, sort) => {
+export const getUsersAsAdmin = createAsyncThunk('userManagement/fetch_users_as_admin', async ({ page, size, sort }: IQueryParams) => {
   const requestUrl = `${adminUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return {
-    type: ACTION_TYPES.FETCH_USERS_AS_ADMIN,
-    payload: axios.get<IUser>(requestUrl),
-  };
-};
-
-export const getRoles = () => ({
-  type: ACTION_TYPES.FETCH_ROLES,
-  payload: axios.get(`api/authorities`)
+  return axios.get<IUser[]>(requestUrl);
 });
 
-export const getUser: ICrudGetAction<IUser> = id => {
-  const requestUrl = `${adminUrl}/${id}`;
-  return {
-    type: ACTION_TYPES.FETCH_USER,
-    payload: axios.get<IUser>(requestUrl)
-  };
-};
-
-export const createUser: ICrudPutAction<IUser> = user => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.CREATE_USER,
-    payload: axios.post(adminUrl, user)
-  });
-  dispatch(getUsersAsAdmin());
-  return result;
-};
-
-export const updateUser: ICrudPutAction<IUser> = user => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.UPDATE_USER,
-    payload: axios.put(adminUrl, user)
-  });
-  dispatch(getUsersAsAdmin());
-  return result;
-};
-
-export const deleteUser: ICrudDeleteAction<IUser> = id => async dispatch => {
-  const requestUrl = `${adminUrl}/${id}`;
-  const result = await dispatch({
-    type: ACTION_TYPES.DELETE_USER,
-    payload: axios.delete(requestUrl)
-  });
-  dispatch(getUsersAsAdmin());
-  return result;
-};
-
-export const reset = () => ({
-  type: ACTION_TYPES.RESET
+export const getRoles = createAsyncThunk('userManagement/fetch_roles', async () => {
+  return axios.get<any[]>(`api/authorities`);
 });
+
+export const getUser = createAsyncThunk(
+  'userManagement/fetch_user',
+  async (id: string) => {
+    const requestUrl = `${adminUrl}/${id}`;
+    return axios.get<IUser>(requestUrl);
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export const createUser = createAsyncThunk(
+  'userManagement/create_user',
+  async (user: IUser, thunkAPI) => {
+    const result = await axios.post<IUser>(adminUrl, user);
+    thunkAPI.dispatch(getUsersAsAdmin({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export const updateUser = createAsyncThunk(
+  'userManagement/update_user',
+  async (user: IUser, thunkAPI) => {
+    const result = await axios.put<IUser>(adminUrl, user);
+    thunkAPI.dispatch(getUsersAsAdmin({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export const deleteUser = createAsyncThunk(
+  'userManagement/delete_user',
+  async (id: string, thunkAPI) => {
+    const requestUrl = `${adminUrl}/${id}`;
+    const result = await axios.delete<IUser>(requestUrl);
+    thunkAPI.dispatch(getUsersAsAdmin({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
+
+export type UserManagementState = Readonly<typeof initialState>;
+
+export const UserManagementSlice = createSlice({
+  name: 'userManagement',
+  initialState: initialState as UserManagementState,
+  reducers: {
+    reset() {
+      return initialState;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(getRoles.fulfilled, (state, action) => {
+        state.authorities = action.payload.data;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(deleteUser.fulfilled, state => {
+        state.updating = false;
+        state.updateSuccess = true;
+        state.user = defaultValue;
+      })
+      .addMatcher(isFulfilled(getUsers, getUsersAsAdmin), (state, action) => {
+        state.loading = false;
+        state.users = action.payload.data;
+      <%_ if (!databaseTypeCassandra) { _%>
+        state.totalItems = parseInt(action.payload.headers['x-total-count'], 10);
+      <%_ } _%>
+      })
+      .addMatcher(isFulfilled(createUser, updateUser), (state, action) => {
+        state.updating = false;
+        state.loading = false;
+        state.updateSuccess = true;
+        state.user = action.payload.data;
+      })
+      .addMatcher(isPending(getUsers, getUsersAsAdmin, getUser), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
+      })
+      .addMatcher(isPending(createUser, updateUser, deleteUser), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.updating = true;
+      })
+      .addMatcher(
+        isRejected(
+          getUsers,
+          getUsersAsAdmin,
+          getUser,
+          getRoles,
+          createUser,
+          updateUser,
+          deleteUser
+        ),
+        (state, action) => {
+          state.loading = false;
+          state.updating = false;
+          state.updateSuccess = false;
+          state.errorMessage = action.error.message;
+        }
+      );
+  },
+});
+
+export const { reset } = UserManagementSlice.actions;
+
+// Reducer
+export default UserManagementSlice.reducer;

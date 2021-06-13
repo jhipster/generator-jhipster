@@ -18,7 +18,8 @@
  */
 const fs = require('fs');
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { GENERATOR_DATABASE_CHANGELOG, GENERATOR_DATABASE_CHANGELOG_LIQUIBASE } = require('../generator-list');
 
 const BASE_CHANGELOG = {
   addedFields: [],
@@ -27,7 +28,9 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
 };
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options) {
     super(args, options, { unique: 'namespace' });
 
@@ -42,6 +45,7 @@ module.exports = class extends BaseGenerator {
     }
     this.info(`Creating changelog for entities ${this.options.entities}`);
     this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DATABASE_CHANGELOG);
   }
 
   _default() {
@@ -71,6 +75,7 @@ module.exports = class extends BaseGenerator {
   }
 
   get default() {
+    if (useBlueprints) return;
     return this._default();
   }
 
@@ -80,7 +85,7 @@ module.exports = class extends BaseGenerator {
 
   _composeWithIncrementalChangelogProvider(databaseChangelog) {
     const skipWriting = !this.options.entities.includes(databaseChangelog.entityName);
-    this.composeWithJHipster('database-changelog-liquibase', {
+    this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, {
       databaseChangelog,
       skipWriting,
       configOptions: this.configOptions,

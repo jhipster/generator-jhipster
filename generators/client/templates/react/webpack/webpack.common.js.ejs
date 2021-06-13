@@ -25,7 +25,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-<%_ } if (buildToolUndefined) { _%>
+<%_ } if (buildToolUnknown) { _%>
 
 const packageJson = require('./../package.json');
 <%_ } _%>
@@ -33,12 +33,6 @@ const utils = require('./utils.js');
 
 const getTsLoaderRule = env => {
   const rules = [
-    {
-      loader: 'cache-loader',
-      options: {
-        cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
-      }
-    },
     {
       loader: 'thread-loader',
       options: {
@@ -67,7 +61,21 @@ const getTsLoaderRule = env => {
 module.exports = options => merge(
 // jhipster-needle-add-webpack-config - JHipster will add custom config
 {
-  cache: options.env !== 'production',
+  cache: {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, `webpack.${options.env == 'development' ? 'dev' : 'prod'}.js`),
+        path.resolve(__dirname, 'utils.js'),
+        path.resolve(__dirname, '../postcss.config.js'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
+    },
+  },
   resolve: {
     extensions: [
       '.js', '.jsx', '.ts', '.tsx', '.json'
@@ -123,7 +131,7 @@ module.exports = options => merge(
         <%_ if (enableTranslation) { _%>
         BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
         <%_ } _%>
-<%_ if (buildTool === undefined) { _%>
+<%_ if (buildToolUnknown) { _%>
         VERSION: `'${packageJson.version}'`,
 <%_ } else { _%>
         // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.

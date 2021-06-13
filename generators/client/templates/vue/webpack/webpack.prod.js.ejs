@@ -1,21 +1,41 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 'use strict';
-const utils = require('./vue.utils');
 const webpack = require('webpack');
-const config = require('../config');
 const webpackMerge = require('webpack-merge').merge;
-const baseWebpackConfig = require('./webpack.common');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
+const utils = require('./vue.utils');
+const config = require('./env');
+const baseWebpackConfig = require('./webpack.common');
 const jhiUtils = require('./utils.js');
 
-const env = require('../config/prod.env');
+const env = require('./prod.env');
+const MODE = 'production';
 
-const webpackConfig = webpackMerge(baseWebpackConfig, {
-  mode: 'production',
+const webpackConfig = {
+  mode: MODE,
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -30,11 +50,17 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
   },
   output: {
     path: jhiUtils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].[hash].bundle.js',
-    chunkFilename: 'app/[id].[hash].chunk.js'
+    filename: 'app/[name].[contenthash].bundle.js',
+    chunkFilename: 'app/[id].[chunkhash].chunk.js'
   },
   optimization: {
     moduleIds: 'deterministic',
+    minimizer: [
+      '...',
+      new CssMinimizerPlugin({
+        parallel: true,
+      }),
+    ],
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -89,9 +115,6 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
       filename: 'content/[name].[contenthash].css',
       chunkFilename: 'content/[id].css'
     }),
-    // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different components can be deduped.
-    new OptimizeCSSPlugin({}),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
@@ -131,7 +154,7 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
       exclude: [/swagger-ui/]
     })
   ]
-});
+};
 
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin');
@@ -152,4 +175,4 @@ if (config.build.bundleAnalyzerReport) {
   webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 
-module.exports = webpackConfig;
+module.exports = webpackMerge(baseWebpackConfig({ env: MODE }), webpackConfig);

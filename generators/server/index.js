@@ -28,6 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
+const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 let useBlueprints;
 
@@ -52,6 +53,30 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
+
+    // Not using normal blueprints or this is a normal blueprint.
+    if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
+      this.setFeatures({
+        customInstallTask: function customInstallTask(preferredPm, defaultInstallTask) {
+          if ((preferredPm && preferredPm !== 'npm') || this.skipClient || this.jhipsterConfig.skipClient) {
+            return defaultInstallTask();
+          }
+          const gradle = this.jhipsterConfig.buildTool === GRADLE;
+          const command = gradle ? './gradlew' : './npmw';
+          const args = gradle ? ['npm_install'] : ['install', '--no-audit'];
+
+          const failureCallback = error => {
+            this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
+            return true;
+          };
+
+          return this.spawnCommand(command, args, { preferLocal: true }).then(
+            () => true,
+            error => failureCallback(error)
+          );
+        }.bind(this),
+      });
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -430,6 +455,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:build-cache': './mvnw dependency:go-offline',
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
@@ -443,7 +469,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
-            'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+            'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+            'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
           });
         }
 
@@ -461,6 +488,19 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
+      },
+      packageJsonE2eScripts() {
+        const scriptsStorage = this.packageJson.createStorage('scripts');
+        const buildCmd = this.jhipsterConfig.buildTool === 'gradle' ? 'gradlew' : 'mvnw';
+        if (scriptsStorage.get('e2e')) {
+          scriptsStorage.set({
+            'ci:server:await':
+              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+            'pree2e:headless': 'npm run ci:server:await',
+            'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+            'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
+          });
+        }
       },
     };
   }
@@ -507,7 +547,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
     // Generate JWT secret key if key does not already exist in config
     if ((config.authenticationType === 'jwt' || config.applicationType === 'microservice') && config.jwtSecretKey === undefined) {
-      config.jwtSecretKey = getBase64Secret(null, 64);
+      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
     if (config.authenticationType === 'session' && !config.rememberMeKey) {

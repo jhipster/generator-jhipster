@@ -66,7 +66,6 @@ const files = {
         'config/constants.ts',
         'config/dayjs.ts',
         'config/axios-interceptor.ts',
-        { file: 'config/devtools.tsx', method: 'processJsx' },
         'config/error-middleware.ts',
         'config/logger-middleware.ts',
         'config/notification-middleware.ts',
@@ -126,7 +125,7 @@ const files = {
       path: REACT_DIR,
       templates: [
         'shared/reducers/index.ts',
-        'shared/reducers/action-type.util.ts',
+        'shared/reducers/reducer.utils.ts',
         'shared/reducers/authentication.ts',
         'shared/reducers/application-profile.ts',
       ],

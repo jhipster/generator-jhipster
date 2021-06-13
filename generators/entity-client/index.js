@@ -24,6 +24,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
+const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 
 let useBlueprints;
 
@@ -34,7 +35,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_CLIENT, { context: opts.context });
   }
 
   // Public API method used by the getter and also by Blueprints

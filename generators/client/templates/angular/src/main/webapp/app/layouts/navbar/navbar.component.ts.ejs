@@ -27,6 +27,7 @@ import { VERSION } from 'app/app.constants';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
+import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
@@ -44,12 +45,13 @@ export class NavbarComponent implements OnInit {
 <%_ } _%>
   openAPIEnabled?: boolean;
   version = '';
+  account: Account | null = null;
 
   constructor(
     private loginService: LoginService,
 <%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    private sessionStorage: SessionStorageService,
+    private sessionStorageService: SessionStorageService,
 <%_ } _%>
     private accountService: AccountService,
     private profileService: ProfileService,
@@ -65,21 +67,18 @@ export class NavbarComponent implements OnInit {
       this.inProduction = profileInfo.inProduction;
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
+    this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
   }
 
 <%_ if (enableTranslation) { _%>
   changeLanguage(languageKey: string): void {
-    this.sessionStorage.store('locale', languageKey);
+    this.sessionStorageService.store('locale', languageKey);
     this.translateService.use(languageKey);
   }
 <%_ } _%>
 
   collapseNavbar(): void {
     this.isNavbarCollapsed = true;
-  }
-
-  isAuthenticated(): boolean {
-    return this.accountService.isAuthenticated();
   }
 
   login(): void {
@@ -98,9 +97,5 @@ export class NavbarComponent implements OnInit {
 
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
-  }
-
-  getImageUrl(): string {
-    return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
   }
 }

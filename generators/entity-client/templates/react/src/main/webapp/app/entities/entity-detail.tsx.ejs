@@ -17,38 +17,37 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
 import {
   Translate,
-  <%_ if (fieldsContainBlob) { _%>
-    <%_ if (fieldsContainBlobOrImage) { _%>
+<%_ if (fieldsContainBlob) { _%>
+  <%_ if (fieldsContainBlobOrImage) { _%>
   openFile,
-    <%_ } _%>
+  <%_ } _%>
   byteSize,
-  <%_ } _%>
-  <%_ if (fieldsContainDate) { _%>
+<%_ } _%>
+<%_ if (fieldsContainDate) { _%>
   TextFormat
-  <%_ } _%>
+<%_ } _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './<%= entityFileName %>.reducer';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (fieldsContainDuration) { _%>
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface I<%= entityReactName %>DetailProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
+export const <%= entityReactName %>Detail = (props: RouteComponentProps<{id: string}>) => {
+  const dispatch = useAppDispatch();
 
-export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>DetailProps) => {
   useEffect(() => {
-    props.getEntity(props.match.params.id);
+    dispatch(getEntity(props.match.params.id));
   }, []);
 
-  const { <%= entityInstance %>Entity } = props;
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
   return (
     <Row>
       <Col md="8">
@@ -56,98 +55,88 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
           <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate>
         </h2>
           <dl className="jh-entity-details">
-          <%_ for (field of fields) {
-              const fieldType = field.fieldType;
-              const fieldName = field.fieldName;
-              const fieldNameHumanized = field.fieldNameHumanized;
-          _%>
+<%_ for (field of fields) {
+  const fieldName = field.fieldName;
+  const fieldNameHumanized = field.fieldNameHumanized;
+_%>
             <dt>
               <span id="<%= fieldName %>">
                 <Translate contentKey="<%= field.fieldTranslationKey %>">
                   <%= fieldNameHumanized %>
                 </Translate>
               </span>
-              <%_ if (field.javadoc) { _%>
+  <%_ if (field.javadoc) { _%>
               <UncontrolledTooltip target="<%= fieldName %>">
-                <%_ if (enableTranslation) { _%>
+    <%_ if (enableTranslation) { _%>
                 <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
-                <%_ } else { _%>
+    <%_ } else { _%>
                 <%= field.javadoc %>
-                <%_ } _%>
+    <%_ } _%>
               </UncontrolledTooltip>
-              <%_ } _%>
+  <%_ } _%>
             </dt>
             <dd>
-            <%_ if (fieldType === 'Boolean') { _%>
+  <%_ if (field.fieldTypeBoolean) { _%>
               {<%= entityInstance %>Entity.<%= fieldName %> ? 'true' : 'false'}
-            <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+  <%_ } else if (field.fieldTypeTimed) { _%>
               {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_DATE_FORMAT} />: null}
-            <%_ } else if (fieldType === 'Duration') { _%>
+  <%_ } else if (field.fieldTypeDuration) { _%>
               {<%= entityInstance %>Entity.<%= fieldName %> ? <DurationFormat value={<%= entityInstance %>Entity.<%= fieldName %>} />: null} ({<%= entityInstance %>Entity.<%= fieldName %>})
-            <%_ } else if (fieldType === 'LocalDate') { _%>
+  <%_ } else if (field.fieldTypeLocalDate) { _%>
               {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />: null}
-            <%_
-                } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
-
-                  const fieldBlobType = field.fieldTypeBlobContent;
-                  if (fieldBlobType !== 'text') {
-            _%>
+  <%_ } else if (field.fieldTypeBinary) { _%>
+    <%_ if (!field.blobContentTypeText) { _%>
                 {<%= entityInstance %>Entity.<%= fieldName %> ? (
                   <div>
                     {<%= entityInstance %>Entity.<%= fieldName %>ContentType ? (
                       <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
-                      <%_ if (fieldBlobType === 'image') { _%>
+        <%_ if (field.blobContentTypeImage) { _%>
                         <img src={`data:${<%= entityInstance %>Entity.<%= fieldName %>ContentType};base64,${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
-                      <%_ } else { _%>
+        <%_ } else { _%>
                         <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
-                      <%_ } _%>
+        <%_ } _%>
                       </a>
                     ) : null}
                     <span>{<%= entityInstance %>Entity.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>Entity.<%= fieldName %>)}</span>
                   </div>
                 ) : null}
-              <%_ } else { _%>
+    <%_ } else { _%>
                 {<%= entityInstance %>Entity.<%= field.fieldName %>}
-              <%_ } _%>
-            <%_ } else { _%>
+    <%_ } _%>
+  <%_ } else { _%>
             {<%= entityInstance %>Entity.<%= field.fieldName %>}
-            <%_ } _%>
+  <%_ } _%>
             </dd>
-            <%_ } _%>
-            <%_ for (relationship of relationships) {
-                const relationshipType = relationship.relationshipType;
-                const ownerSide = relationship.ownerSide;
-                const relationshipName = relationship.relationshipName;
-                const relationshipFieldName = relationship.relationshipFieldName;
-                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-                const relationshipNameHumanized = relationship.relationshipNameHumanized;
-                const otherEntityName = relationship.otherEntityName;
-                const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
-                const otherEntityStateName = relationship.otherEntityStateName;
-                const otherEntityField = relationship.otherEntityField;
-                const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
-                if (relationshipType === 'many-to-one'
-                || (relationshipType === 'one-to-one' && ownerSide === true)
-                || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+<%_ } _%>
+<%_ for (relationship of relationships) {
+    const ownerSide = relationship.ownerSide;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const relationshipNameHumanized = relationship.relationshipNameHumanized;
+    const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
+    const otherEntityField = relationship.otherEntityField; _%>
+  <%_ if (ownerSide) { _%>
             <dt>
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= relationshipName %>">
                 <%= relationshipNameHumanized %>
               </Translate>
             </dt>
             <dd>
-                <%_ if (otherEntityName === 'user') { _%>
-                    <%_ if (relationshipType === 'many-to-many') { _%>
+    <%_ if (relationship.otherEntityUser) { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
     {
       (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
           (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
               <span key={val.<%= otherEntityPkName %>}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
           )
       ) : null
-    }                  <%_ } else { _%>
+    }
+      <%_ } else { _%>
                 {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
-                    <%_ } _%>
-                <%_ } else { _%>
-                    <%_ if (relationshipType === 'many-to-many') { _%>
+      <%_ } _%>
+    <%_ } else { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
     {
         (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
             (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
@@ -155,13 +144,13 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
             )
         ) : null
     }
-                    <%_ } else { _%>
+      <%_ } else { _%>
                 {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
-                    <%_ } _%>
-                <%_ } _%>
+      <%_ } _%>
+    <%_ } _%>
             </dd>
-            <%_ } _%>
-          <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
           </dl>
         <Button tag={Link} to="/<%= entityFileName %>" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
@@ -174,13 +163,4 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
   );
 };
 
-const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-    <%= entityInstance %>Entity: <%= entityInstance %>.entity
-});
-
-const mapDispatchToProps = { getEntity };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Detail);
+export default <%= entityReactName %>Detail;

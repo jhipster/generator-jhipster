@@ -18,6 +18,12 @@
  */
 const JDLParser = require('./jdl-parser');
 const { deduplicate } = require('../utils/array-utils');
+const { OptionNames } = require('../jhipster/application-options');
+const { PaginationTypes } = require('../jhipster/entity-options');
+const { PATTERN, REQUIRED, UNIQUE } = require('../jhipster/validations');
+
+const { PAGINATION } = PaginationTypes;
+const { PACKAGE_NAME } = OptionNames;
 
 const parser = JDLParser.getParser();
 parser.parse();
@@ -85,7 +91,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.binaryOptionDeclaration) {
       context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
         if (option.optionName === 'paginate') {
-          option.optionName = 'pagination';
+          option.optionName = PAGINATION;
         }
         const newOption = !ast.options[option.optionName];
         if (newOption) {
@@ -209,13 +215,13 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     // only one of these alternatives can exist at the same time.
     if (context.REQUIRED) {
       return {
-        key: 'required',
+        key: REQUIRED,
         value: '',
       };
     }
     if (context.UNIQUE) {
       return {
-        key: 'unique',
+        key: UNIQUE,
         value: '',
       };
     }
@@ -244,7 +250,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const patternImage = context.REGEX[0].image;
 
     return {
-      key: 'pattern',
+      key: PATTERN,
       value: patternImage.substring(1, patternImage.length - 1),
     };
   }
@@ -477,7 +483,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.binaryOptionDeclaration) {
       context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
         if (option.optionName === 'paginate') {
-          option.optionName = 'pagination';
+          option.optionName = PAGINATION;
         }
         const newOption = !applicationSubDeclaration.options[option.optionName];
         if (newOption) {
@@ -512,7 +518,7 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       configProps.forEach(configProp => {
         config[configProp.key] = configProp.value;
 
-        if (configProp.key === 'packageName' && !config.packageFolder) {
+        if (configProp.key === PACKAGE_NAME && !config.packageFolder) {
           config.packageFolder = configProp.value.replace(/[.]/g, '/');
         }
       });

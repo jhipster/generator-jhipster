@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import {
   usernameRegisterSelector,
   emailRegisterSelector,
@@ -30,46 +48,67 @@ describe('/account/register', () => {
   });
 
   it('requires username', () => {
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
     cy.get(usernameRegisterSelector)
       .should('have.class', classInvalid)
-      .type('test')
-      .should('have.class', classValid)
+      .type('test');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(usernameRegisterSelector).should('have.class', classValid)
       .clear();
   });
 
   it('requires email', () => {
     cy.get(emailRegisterSelector)
       .should('have.class', classInvalid)
-      .type('testtest.fr')
-      .should('have.class', classInvalid)
+      .type('testtest.fr');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(emailRegisterSelector).should('have.class', classInvalid)
       .clear();
   });
 
   it('requires email in correct format', () => {
     cy.get(emailRegisterSelector)
       .should('have.class', classInvalid)
-      .type('test@test.fr')
-      .should('have.class', classValid)
+      .type('test@test.fr');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(emailRegisterSelector).should('have.class', classValid)
       .clear();
   });
 
   it('requires first password', () => {
     cy.get(firstPasswordRegisterSelector)
       .should('have.class', classInvalid)
-      .type('test@test.fr')
-      .should('have.class', classValid)
+      .type('test@test.fr');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(firstPasswordRegisterSelector).should('have.class', classValid)
       .clear();
   });
 
   it('requires password and confirm password to be same', () => {
     cy.get(firstPasswordRegisterSelector)
       .should('have.class', classInvalid)
-      .type('test')
-      .should('have.class', classValid);
+      .type('test');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(firstPasswordRegisterSelector).should('have.class', classValid);
     cy.get(secondPasswordRegisterSelector)
       .should('have.class', classInvalid)
-      .type('test')
-      .should('have.class', classValid);
+      .type('test');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(secondPasswordRegisterSelector).should('have.class', classValid);
     cy.get(firstPasswordRegisterSelector).clear();
     cy.get(secondPasswordRegisterSelector).clear();
   });
@@ -77,8 +116,11 @@ describe('/account/register', () => {
   it('requires password and confirm password have not the same value', () => {
     cy.get(firstPasswordRegisterSelector)
       .should('have.class', classInvalid)
-      .type('test')
-      .should('have.class', classValid);
+      .type('test');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(firstPasswordRegisterSelector).should('have.class', classValid);
 <%_ if (clientFrameworkAngular) { _%>
     cy.get(secondPasswordRegisterSelector)
       .should('have.class', classInvalid)
@@ -87,8 +129,11 @@ describe('/account/register', () => {
 <%_ } else { _%>
     cy.get(secondPasswordRegisterSelector)
       .should('have.class', classInvalid)
-      .type('otherPassword')
-      .should('have.class', classInvalid);
+      .type('otherPassword');
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
+    cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
 <%_ } _%>
     cy.get(firstPasswordRegisterSelector).clear();
     cy.get(secondPasswordRegisterSelector).clear();

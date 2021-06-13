@@ -22,6 +22,11 @@ const { isBlobType } = require('../../jhipster/field-types');
 const { UNIQUE, REQUIRED } = require('../../jhipster/validations');
 const { formatComment } = require('../../utils/format-utils');
 const { camelCase } = require('../../utils/string-utils');
+const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jhipster/field-types');
+
+const { ANY_BLOB, BLOB, IMAGE_BLOB, TEXT_BLOB } = CommonDBTypes;
+const { ANY, IMAGE, TEXT } = BlobTypes;
+const { BYTES } = RelationalOnlyDBTypes;
 
 module.exports = {
   convert,
@@ -86,18 +91,18 @@ function getConvertedFieldsForEntity(jdlEntity, jdlObject) {
 
 function getBlobFieldData(fieldType) {
   const blobFieldData = {
-    fieldType: 'byte[]',
+    fieldType: BYTES,
   };
   switch (fieldType) {
-    case 'ImageBlob':
-      blobFieldData.fieldTypeBlobContent = 'image';
+    case IMAGE_BLOB:
+      blobFieldData.fieldTypeBlobContent = IMAGE;
       break;
-    case 'Blob':
-    case 'AnyBlob':
-      blobFieldData.fieldTypeBlobContent = 'any';
+    case BLOB:
+    case ANY_BLOB:
+      blobFieldData.fieldTypeBlobContent = ANY;
       break;
-    case 'TextBlob':
-      blobFieldData.fieldTypeBlobContent = 'text';
+    case TEXT_BLOB:
+      blobFieldData.fieldTypeBlobContent = TEXT;
       break;
     default:
       throw new Error(`Unrecognised Blob type: ${fieldType}.`);

@@ -100,7 +100,7 @@
     "@angular/cli": "<%= dependabotPackageJson.devDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-builders/custom-webpack": "<%= dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
-    "@angular-builders/jest": "<%= dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
+    "@angular-builders/jest": "<%= dependabotPackageJson.devDependencies['@angular-builders/jest'] %>",
     "@angular/service-worker": "<%= dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-eslint/eslint-plugin": "<%= dependabotPackageJson.devDependencies['@angular-eslint/eslint-plugin'] %>",
     "@types/jest": "<%= dependabotPackageJson.devDependencies['@types/jest'] %>",
@@ -113,7 +113,6 @@
     "eslint": "<%= dependabotPackageJson.devDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= dependabotPackageJson.devDependencies['eslint-config-prettier'] %>",
     "eslint-webpack-plugin": "<%= dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
-    "friendly-errors-webpack-plugin": "<%= dependabotPackageJson.devDependencies['friendly-errors-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
     <%_ otherModules.forEach(module => { _%>
@@ -127,9 +126,8 @@
     "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
     "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
     "rimraf": "<%= dependabotPackageJson.devDependencies['rimraf'] %>",
-    "simple-progress-webpack-plugin": "<%= dependabotPackageJson.devDependencies['simple-progress-webpack-plugin'] %>",
+    "ts-jest": "<%= dependabotPackageJson.devDependencies['ts-jest'] %>",
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
-    "webpack": "<%= dependabotPackageJson.devDependencies['webpack'] %>",
     "webpack-bundle-analyzer": "<%= dependabotPackageJson.devDependencies['webpack-bundle-analyzer'] %>",
     "webpack-merge": "<%= dependabotPackageJson.devDependencies['webpack-merge'] %>",
     "webpack-notifier": "<%= dependabotPackageJson.devDependencies['webpack-notifier'] %>"
@@ -180,8 +178,8 @@
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
-    "webapp:build:dev": "ng build",
-    "webapp:build:prod": "ng build --prod",
+    "webapp:build:dev": "ng build --configuration development",
+    "webapp:build:prod": "ng build --configuration production",
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",

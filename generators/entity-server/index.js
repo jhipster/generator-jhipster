@@ -21,6 +21,9 @@ const constants = require('../generator-constants');
 const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { GENERATOR_ENTITY_SERVER } = require('../generator-list');
+const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
+const { SQL } = require('../../jdl/jhipster/database-types');
 const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 /* constants used throughout */
@@ -34,7 +37,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-server', { context: opts.context });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_SERVER, { context: opts.context });
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -50,6 +53,24 @@ module.exports = class extends BaseBlueprintGenerator {
   get initializing() {
     if (useBlueprints) return;
     return this._initializing();
+  }
+
+  _preparing() {
+    return {
+      validateDatabaseSafety() {
+        const entity = this.entity;
+        if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
+          entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
+        } else {
+          entity.entityInstanceDbSafe = entity.entityInstance;
+        }
+      },
+    };
+  }
+
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -79,7 +100,7 @@ module.exports = class extends BaseBlueprintGenerator {
       loadConfigIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
 
-        this.testsNeedCsrf = ['oauth2', 'session'].includes(this.entity.authenticationType);
+        this.testsNeedCsrf = [OAUTH2, SESSION].includes(this.entity.authenticationType);
         this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.entity.databaseType];
       },
 
@@ -118,7 +139,7 @@ module.exports = class extends BaseBlueprintGenerator {
         if (this.primaryKey && this.primaryKey.derived) {
           this.isUsingMapsId = true;
           this.mapsIdAssoc = this.relationships.find(rel => rel.id);
-          this.hasOauthUser = this.mapsIdAssoc.otherEntityName === 'user' && this.authenticationType === 'oauth2';
+          this.hasOauthUser = this.mapsIdAssoc.otherEntityName === 'user' && this.authenticationType === OAUTH2;
         } else {
           this.isUsingMapsId = false;
           this.mapsIdAssoc = null;
@@ -171,7 +192,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   _generateSqlSafeName(name) {
-    if (isReservedTableName(name, 'sql')) {
+    if (isReservedTableName(name, SQL)) {
       return `e_${name}`;
     }
     return name;
