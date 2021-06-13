@@ -138,7 +138,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
     if (
       field.fieldValidateRules.includes('pattern') &&
-      !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data.substring(1, data.length - 1))
+      !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data)
     ) {
       data = undefined;
     }
