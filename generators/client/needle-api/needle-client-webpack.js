@@ -41,7 +41,7 @@ module.exports = class extends needleClient {
   }
 
   addWebpackConfig(config) {
-    config = `${config},`;
+    config = `,${config}`;
     const rewriteFileModel = this.generateFileModel(this._getWebpackFile(), 'jhipster-needle-add-webpack-config', config);
     rewriteFileModel.prettierAware = true;
     this.addBlockContentToFile(rewriteFileModel, 'Webpack config not added to JHipster app.\n');

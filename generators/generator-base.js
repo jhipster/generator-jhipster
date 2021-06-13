@@ -2418,6 +2418,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.pkType = options.pkType;
     }
 
+    if (options.microfrontend) {
+      this.jhipsterConfig.microfrontend = options.microfrontend;
+    }
+
     if (options.clientPackageManager) {
       this.jhipsterConfig.clientPackageManager = options.clientPackageManager;
     }
@@ -2476,6 +2480,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.pages = config.pages;
     dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
     dest.withAdminUi = config.withAdminUi;
+    dest.microfrontend = config.microfrontend;
 
     dest.testFrameworks = config.testFrameworks || [];
     dest.cypressCoverage = config.cypressCoverage;
@@ -2510,6 +2515,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
+    dest.devServerPort = config.devServerPort;
   }
 
   loadDerivedClientConfig(dest = this) {

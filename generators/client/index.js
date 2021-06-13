@@ -133,6 +133,21 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.packagejs = packagejs;
       },
 
+      configureDevServerPort() {
+        this.devServerBasePort = this.jhipsterConfig.clientFramework === ANGULAR ? 4200 : 9060;
+
+        if (this.jhipsterConfig.devServerBasePort !== undefined) return undefined;
+        let devServerPort;
+
+        if (this.jhipsterConfig.applicationIndex !== undefined) {
+          devServerPort = this.devServerBasePort + this.jhipsterConfig.applicationIndex;
+        } else if (!this.devServerPort) {
+          devServerPort = this.devServerBasePort;
+        }
+
+        this.jhipsterConfig.devServerPort = devServerPort;
+      },
+
       saveConfig() {
         this.setConfigDefaults(clientDefaultConfig);
       },
@@ -349,6 +364,11 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
         }
+      },
+
+      microfrontend() {
+        if (!this.microfrontend) return;
+        this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
       },
     };
   }

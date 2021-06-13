@@ -16,25 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* after changing this file run '<%= clientPackageManager %> run webapp:build' */
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-/***************************
-put Sass variables here:
-eg $input-color: red;
-****************************/
-<%_ if (!clientThemeNone) { _%>
-@import '~bootswatch/dist/<%= clientTheme %>/variables';
-<%_ } _%>
-// Override Bootstrap variables
-@import 'bootstrap-variables';
-// Import Bootstrap source files from node_modules
-@import '~bootstrap/scss/bootstrap';
-<%_ if (!clientThemeNone) { _%>
-@import '~bootswatch/dist/<%= clientTheme %>/bootswatch';
-<%_ } _%>
+import { DEBUG_INFO_ENABLED } from './app/app.constants';
+import { AppModule } from './app/app.module';
 
-<%_ if (enableI18nRTL) { _%>
-@import 'content/scss/rtl.scss';
-<%_ } _%>
+// disable debug data on prod profile to improve performance
+if (!DEBUG_INFO_ENABLED) {
+  enableProdMode();
+}
 
-/* jhipster-needle-scss-add-vendor JHipster will add new css style */
+platformBrowserDynamic()
+  .bootstrapModule(AppModule, { preserveWhitespaces: true })
+  // eslint-disable-next-line no-console
+  .then(() => console.log('Application started'))
+  .catch(err => console.error(err));

@@ -56,11 +56,24 @@ const files = {
   angularApp: [
     {
       path: CLIENT_MAIN_SRC_DIR,
-      templates: ['main.ts', 'polyfills.ts'],
+      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts'],
     },
     {
       path: ANGULAR_DIR,
       templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts'],
+    },
+  ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js'],
+    },
+  ],
+  microfrontendGateway: [
+    {
+      condition: generator => generator.applicationTypeGateway && generator.microfrontend,
+      path: CLIENT_MAIN_SRC_DIR,
+      templates: ['declarations.d.ts'],
     },
   ],
   angularMain: [
@@ -169,6 +182,7 @@ const files = {
   ],
   angularAdminModule: [
     {
+      condition: generator => !generator.applicationTypeMicroservice,
       path: ANGULAR_DIR,
       templates: [
         { file: 'admin/admin-routing.module.ts', method: 'processJs' },
@@ -504,6 +518,5 @@ module.exports = {
 };
 
 function writeFiles() {
-  // write angular 2.x and above files
   return this.writeFilesToDisk(files, 'angular');
 }

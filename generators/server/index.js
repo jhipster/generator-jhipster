@@ -210,6 +210,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
+      configServerPort() {
+        if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
+          this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
+        }
+      },
       validateConfig() {
         this._validateServerConfiguration();
       },

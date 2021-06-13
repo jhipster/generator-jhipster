@@ -69,6 +69,7 @@ const commonFiles = {
   ],
   swagger: [
     {
+      condition: generator => !generator.applicationTypeMicroservice,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
     },

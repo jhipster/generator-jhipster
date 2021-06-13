@@ -388,6 +388,7 @@ const expectedFiles = {
     '.browserslistrc',
     '.npmrc',
     `${CLIENT_MAIN_SRC_DIR}main.ts`,
+    `${CLIENT_MAIN_SRC_DIR}bootstrap.ts`,
     `${CLIENT_MAIN_SRC_DIR}polyfills.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/app-routing.module.ts`,

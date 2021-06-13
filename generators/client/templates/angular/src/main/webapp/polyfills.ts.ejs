@@ -16,7 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (microfrontend) { _%>
+// import 'zone.js';
+// Microfrontends fails to load with new recommended zone.js import.
+import 'zone.js/dist/zone';
+<%_ } else { _%>
 import 'zone.js';
+<%_ } _%>
 import '@angular/localize/init';
 
 // Fix needed for SockJS, see https://github.com/sockjs/sockjs-client/issues/439

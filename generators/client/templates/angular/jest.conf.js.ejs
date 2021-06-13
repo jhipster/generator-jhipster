@@ -18,19 +18,19 @@
 -%>
 const { pathsToModuleNameMapper } = require('ts-jest/utils')
 
-const { compilerOptions } = require('./tsconfig.json');
+const { compilerOptions: { paths = {}, baseUrl = './' } } = require('./tsconfig.json');
 const environment = require('./webpack/environment');
 
 module.exports = {
   globals: {
     ...environment,
   },
-  roots: ['<rootDir>', `<rootDir>/${compilerOptions.baseUrl}`],
-  modulePaths: [`<rootDir>/${compilerOptions.baseUrl}`],
+  roots: ['<rootDir>', `<rootDir>/${baseUrl}`],
+  modulePaths: [`<rootDir>/${baseUrl}`],
   setupFiles: ['jest-date-mock'],
   cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: `<rootDir>/${compilerOptions.baseUrl}/` }),
+  moduleNameMapper: pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
   reporters: ['default', ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }]],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],

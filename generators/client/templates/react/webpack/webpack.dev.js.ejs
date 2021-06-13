@@ -59,6 +59,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     stats: options.stats,
     hot: true,
     contentBase: './<%= DIST_DIR %>',
+    port: <%= devServerPort %>,
     proxy: [{
       context: [
         '/api',
@@ -101,7 +102,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (communicationSpringWebsocket) { %>,
+          target: `http${options.tls ? 's' : ''}://localhost:<%= devServerPort %>`<% if (communicationSpringWebsocket) { %>,
           ws: true<% } %>,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
