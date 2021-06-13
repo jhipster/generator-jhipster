@@ -99,9 +99,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     data = faker.faker(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
     const generated = field.createRandexp().gen();
-    if (type === 'csv') {
-      data = `"${generated.replace(/"/g, '')}"`;
-    } else if (type === 'cypress') {
+    if (type === 'csv' || type === 'cypress') {
       data = generated.replace(/"/g, '');
     } else {
       data = generated;
@@ -167,10 +165,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     }
 
     // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
-    if (
-      field.fieldValidateRules.includes(PATTERN) &&
-      !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data.substring(1, data.length - 1))
-    ) {
+    if (field.fieldValidateRules.includes(PATTERN) && !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data)) {
       data = undefined;
     }
   }
@@ -181,6 +176,8 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)
   ) {
     data = `'${data}'`;
+  } else if (data !== undefined && type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes(PATTERN)) {
+    data = `"${data}"`;
   }
 
   return data;
