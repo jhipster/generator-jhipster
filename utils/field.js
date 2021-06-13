@@ -179,7 +179,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)
   ) {
     data = `'${data}'`;
-  } else if (data !== undefined && type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
+  } else if (data !== undefined && type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes(PATTERN)) {
     data = `"${data}"`;
   }
 
