@@ -26,27 +26,13 @@ jobs:
     pool:
       vmImage: 'ubuntu-20.04'
     variables:
-      JHI_PROFILE: dev,webpack
-      JHI_RUN_APP: 1
-      JHI_E2E: 0
-      JHI_JDK: 11
       # if JHI_LIB_BRANCH value is release, use the release from Maven
       JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
       JHI_LIB_BRANCH: main
       # if JHI_GEN_BRANCH value is release, use the release from NPM
       JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
       JHI_GEN_BRANCH: main
-      # specific config
-      SPRING_OUTPUT_ANSI_ENABLED: NEVER
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      JHI_E2E_HEADLESS: true
       JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
-      NG_CLI_ANALYTICS: false
-      # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
-      MAVEN_OPTS: '-Dhttp.keepAlive=false
-        -Dmaven.wagon.http.pool=false
-        -Dmaven.wagon.httpconnectionManager.ttlSeconds=120'
 
     strategy:
       matrix:
@@ -93,42 +79,30 @@ jobs:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
       #----------------------------------------------------------------------
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '14.16.0'
-        displayName: 'TOOLS: install Node.js'
-      - script: |
-          if [[ $JHI_JDK = '11' ]]; then
-              echo '*** Using OpenJDK 11'
-              sudo add-apt-repository ppa:openjdk-r/ppa
-              sudo apt-get update
-              sudo apt-get install -y openjdk-11-jdk
-              sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
-              java -version
-          else
-              echo '*** Using OpenJDK 8 by default'
-          fi
-        displayName: 'TOOLS: configuring OpenJDK'
-      - script: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: 'TOOLS: install google-chrome-stable'
-      - script: npm install -g npm
-        displayName: 'TOOLS: update NPM'
+      - bash: $(JHI_SCRIPTS)/01-configure-azure.sh
+        displayName: 'TOOLS: configure azure environment'
       - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
         displayName: 'TOOLS: display configuration'
       - bash: $(JHI_SCRIPTS)/03-system.sh
         displayName: 'TOOLS: configure tools installed by the system'
       - bash: $(JHI_SCRIPTS)/04-git-config.sh
         displayName: 'TOOLS: configure git'
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '$(JHI_NODE_VERSION)'
+        displayName: 'TOOLS: install Node.js'
+      - script: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+        displayName: 'TOOLS: install google-chrome-stable'
 
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
       - bash: $(JHI_SCRIPTS)/10-install-jhipster.sh
         displayName: 'GENERATION: install JHipster'
-      - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
-        displayName: 'GENERATION: entities'
+      - bash: $(JHI_SCRIPTS)/11-generate-config.sh
+        displayName: 'GENERATION: config'
       - bash: $(JHI_SCRIPTS)/12-generate-project.sh
         displayName: 'GENERATION: project'
       - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
@@ -145,13 +119,13 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - bash: $(JHI_SCRIPTS)/20-docker-compose.sh
+      - bash: $(JHI_SCRIPTS)/20-docker-compose-npm.sh
         displayName: 'TESTS: Start docker-compose containers'
-      - bash: $(JHI_SCRIPTS)/21-tests-backend.sh
+      - bash: $(JHI_SCRIPTS)/21-tests-backend-npm.sh
         displayName: 'TESTS: backend'
-      - bash: $(JHI_SCRIPTS)/22-tests-frontend.sh
+      - bash: $(JHI_SCRIPTS)/22-tests-frontend-npm.sh
         displayName: 'TESTS: frontend'
-      - bash: $(JHI_SCRIPTS)/23-package.sh
+      - bash: $(JHI_SCRIPTS)/23-package-npm.sh
         displayName: 'TESTS: packaging'
-      - bash: $(JHI_SCRIPTS)/24-tests-e2e.sh
+      - bash: $(JHI_SCRIPTS)/24-tests-e2e-npm.sh
         displayName: 'TESTS: End-to-End'
