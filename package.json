@@ -65,7 +65,7 @@
     "aws-sdk": "2.922.0",
     "axios": "0.21.1",
     "chalk": "4.1.1",
-    "chevrotain": "9.0.1",
+    "chevrotain": "9.0.2",
     "commander": "7.2.0",
     "conf": "10.0.1",
     "didyoumean": "1.2.1",
