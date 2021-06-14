@@ -80,7 +80,7 @@
     "mem-fs-editor": "^9.0.0",
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
-    "ora": "5.4.0",
+    "ora": "5.4.1",
     "os-locale": "5.0.0",
     "parse-gitignore": "1.0.1",
     "pluralize": "8.0.0",
