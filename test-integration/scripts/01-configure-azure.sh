@@ -4,7 +4,7 @@ set -e
 source $(dirname $0)/00-init-env.sh
 
 if [[ "$JHI_PROFILE" == "" ]]; then
-    echo "##vso[task.setvariable variable=JHI_PROFILE]dev,webapp"
+    echo "##vso[task.setvariable variable=JHI_PROFILE]dev"
 fi
 if [[ "$JHI_RUN_APP" == "" ]]; then
     echo "##vso[task.setvariable variable=JHI_RUN_APP]1"
