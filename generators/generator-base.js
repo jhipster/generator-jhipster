@@ -2481,6 +2481,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
     dest.withAdminUi = config.withAdminUi;
     dest.microfrontend = config.microfrontend;
+    dest.gatewayServerPort = config.gatewayServerPort;
 
     dest.testFrameworks = config.testFrameworks || [];
     dest.cypressCoverage = config.cypressCoverage;
