@@ -52,7 +52,7 @@
     "node-notifier": "9.0.1",
     "numeral": "2.0.6",
     "portfinder": "1.0.28",
-    "postcss": "8.3.2",
+    "postcss": "8.3.3",
     "postcss-import": "14.0.2",
     "postcss-loader": "6.1.0",
     "postcss-url": "10.1.3",
