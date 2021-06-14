@@ -118,10 +118,6 @@ springBoot {
 test {
     useJUnitPlatform()
     exclude "**/*IT*", "**/*IntTest*"
-    // See https://github.com/jhipster/generator-jhipster/issues/15308
-    <%_ if (prodDatabaseType === 'mariadb' && reactive) { _%>
-    jvmArgs += '-XX:+AllowRedefinitionToAddDeleteMethods'
-    <%_ } _%>
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
@@ -136,10 +132,6 @@ task integrationTest(type: Test) {
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
-    // See https://github.com/jhipster/generator-jhipster/issues/15308
-    <%_ if (prodDatabaseType === 'mariadb' && reactive) { _%>
-    jvmArgs += '-XX:+AllowRedefinitionToAddDeleteMethods'
-    <%_ } _%>
     include "**/*IT*", "**/*IntTest*"
 <%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
