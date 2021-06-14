@@ -52,6 +52,9 @@ public class JWTRelayGatewayFilterFactory extends AbstractGatewayFilterFactory<O
 
     private String extractJWTToken(ServerHttpRequest request) {
         String bearerToken = request.getHeaders().getFirst(AUTHORIZATION_HEADER);
+        if (bearerToken == null) {
+            return null;
+        }
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
