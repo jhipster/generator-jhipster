@@ -129,7 +129,6 @@ test {
 }
 
 task integrationTest(type: Test) {
- 
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
@@ -137,7 +136,6 @@ task integrationTest(type: Test) {
 <%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
 <%_ } _%>
-    
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
