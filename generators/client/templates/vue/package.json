@@ -68,7 +68,7 @@
     "eslint-plugin-vue": "7.11.1",
     "typescript": "4.3.2",
     "url-loader": "4.1.1",
-    "webpack": "5.38.1",
+    "webpack": "5.39.0",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.2",
     "webpack-dev-server": "3.11.2",
