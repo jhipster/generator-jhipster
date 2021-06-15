@@ -118,10 +118,10 @@ springBoot {
 test {
     useJUnitPlatform()
     exclude "**/*IT*", "**/*IntTest*"
-
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -136,11 +136,10 @@ task integrationTest(type: Test) {
 <%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
 <%_ } _%>
-
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
 <%_ if (databaseType === 'sql') { _%>
     if (project.hasProperty('testcontainers')) {
         <%_ if (!reactive) { _%>
