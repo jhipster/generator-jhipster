@@ -88,6 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       setup() {
         this.jhipsterConfig.jhipsterVersion = packagejs.version;
+        this.jhipsterConfig.projectName = this.projectName;
         this.jhipsterConfig.baseName = this.baseName;
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
