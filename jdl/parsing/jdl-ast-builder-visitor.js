@@ -339,8 +339,12 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   enumDeclaration(context) {
     const name = context.NAME[0].image;
     const values = this.visit(context.enumPropList);
+    let javadoc = null;
+    if (context.JAVADOC) {
+      javadoc = trimComment(context.JAVADOC[0].image);
+    }
 
-    return { name, values };
+    return { name, values, javadoc };
   }
 
   enumPropList(context) {

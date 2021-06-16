@@ -513,6 +513,7 @@ function getEnumInfo(field, clientRootFolder) {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: fieldType,
+    javadoc: field.fieldTypeJavadoc && this.getJavadoc(field.fieldTypeJavadoc,0),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,

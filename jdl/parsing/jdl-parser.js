@@ -329,6 +329,9 @@ module.exports = class JDLParser extends CstParser {
 
   enumDeclaration() {
     this.RULE('enumDeclaration', () => {
+      this.OPTION(() => {
+        this.CONSUME(LexerTokens.JAVADOC);
+      });
       this.CONSUME(LexerTokens.ENUM);
       this.CONSUME(LexerTokens.NAME);
       this.CONSUME(LexerTokens.LCURLY);
