@@ -153,6 +153,9 @@ const defaultCommands = {
   languages: {
     desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
   },
+  maven: {
+    desc: 'Create Maven project',
+  },
   openshift: {
     desc: 'Deploy the current application to OpenShift',
   },
