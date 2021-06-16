@@ -52,6 +52,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.jhipsterVersion = packagejs.version;
         const configuration = this.config;
 
+        this.projectName = configuration.get('projectName');
         this.baseName = configuration.get('baseName');
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
@@ -72,6 +73,7 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _prompting() {
     return {
+      askProjectName: prompts.askProjectName,
       askBaseName: prompts.askBaseName,
     };
   }

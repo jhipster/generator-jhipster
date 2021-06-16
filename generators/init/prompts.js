@@ -17,8 +17,20 @@
  * limitations under the License.
  */
 module.exports = {
+  askProjectName,
   askBaseName,
 };
+async function askProjectName() {
+  if (this.abort) return;
+  const defaultProjectName = this.getDefaultProjectName();
+  const answer = await this.prompt({
+    type: 'input',
+    name: 'projectName',
+    message: 'What is the project name of your application?',
+    default: defaultProjectName,
+  });
+  this.projectName = answer.projectName;
+}
 
 async function askBaseName() {
   if (this.abort) return;

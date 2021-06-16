@@ -6,6 +6,7 @@ describe('JHipster init generator', () => {
   describe('generate init', () => {
     before(async () => {
       await helpers.run(path.join(__dirname, '../generators/init')).withPrompts({
+        projectName: 'jhipster project',
         baseName: 'jhipster',
       });
     });
