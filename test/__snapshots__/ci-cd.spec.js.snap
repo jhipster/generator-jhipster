@@ -54,7 +54,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -183,7 +183,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -324,7 +324,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -453,7 +453,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -594,7 +594,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------

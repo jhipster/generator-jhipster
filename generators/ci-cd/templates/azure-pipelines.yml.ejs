@@ -44,7 +44,7 @@ jobs:
   <%= commented %>  inputs:
   <%= commented %>    targetType: 'inline'
   <%= commented %>    script: |
-  <%= commented %>      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  <%= commented %>      wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   <%= commented %>      sudo apt install ./google-chrome-stable_current_amd64.deb
   <%= commented %>  displayName: 'TOOLS: install Chrome'
 <%_ } _%>
