@@ -24,7 +24,7 @@ on:
     - cron: '0 0 * * *'
 env:
   JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
-  JHI_LIB_BRANCH: main
+  JHI_LIB_BRANCH: release
   JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
   JHI_GEN_BRANCH: main
   SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
