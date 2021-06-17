@@ -244,9 +244,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
     <%_ } _%>
             .authorizeRequests()
-    <%_ if (authenticationType !== 'oauth2') { _%>
             .antMatchers("/api/authenticate").permitAll()
-    <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
