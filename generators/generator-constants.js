@@ -25,7 +25,7 @@ const commonPackageJson = require('./common/templates/package.json');
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
-const NODE_VERSION = '14.16.0';
+const NODE_VERSION = '14.17.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 

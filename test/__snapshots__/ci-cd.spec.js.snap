@@ -35,7 +35,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -164,7 +164,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -305,7 +305,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -434,7 +434,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -575,7 +575,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -1117,7 +1117,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1126,7 +1126,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1204,7 +1204,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1213,7 +1213,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1368,7 +1368,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1377,7 +1377,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1449,7 +1449,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1458,7 +1458,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1635,7 +1635,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1644,7 +1644,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -3551,7 +3551,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"14.16.0\\"
+  - \\"14.17.1\\"
 cache:
   directories:
     - node
@@ -3559,7 +3559,7 @@ cache:
     - $HOME/.gradle
 env:
   global:
-    - NODE_VERSION=14.16.0
+    - NODE_VERSION=14.17.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3643,7 +3643,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"14.16.0\\"
+  - \\"14.17.1\\"
 cache:
   directories:
     - node
@@ -3651,7 +3651,7 @@ cache:
     - $HOME/.m2
 env:
   global:
-    - NODE_VERSION=14.16.0
+    - NODE_VERSION=14.17.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3736,7 +3736,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"14.16.0\\"
+  - \\"14.17.1\\"
 cache:
   directories:
     - node
@@ -3744,7 +3744,7 @@ cache:
     - $HOME/.m2
 env:
   global:
-    - NODE_VERSION=14.16.0
+    - NODE_VERSION=14.17.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
