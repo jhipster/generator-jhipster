@@ -27,7 +27,7 @@ fi
 #-------------------------------------------------------------------------------
 moveEntity() {
     local entity="$1"
-    cp "$JHI_SAMPLES"/.jhipster/"$entity".json "$JHI_FOLDER_APP"/.jhipster/
+    cp "$JHI_ENTITY_SAMPLES"/"$entity".json "$JHI_FOLDER_APP"/.jhipster/
 }
 
 prepareFolder() {
@@ -49,8 +49,13 @@ if [[ "$JHI_ENTITY" != "jdl" && "$JHI_APP" != "jdl" ]]; then
     #-------------------------------------------------------------------------------
     # Copy jhipster config
     #-------------------------------------------------------------------------------
-    cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
-    echo "$JHI_APP:"
+    if [[ -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json ]]; then
+        JHI_APP_SAMPLE_DIR="$JHI_SAMPLES"/"$JHI_APP"
+    else
+        JHI_APP_SAMPLE_DIR="$JHI_HOME"/test-integration/samples/"$JHI_APP"
+    fi
+    cp -f "$JHI_APP_SAMPLE_DIR"/.yo-rc.json "$JHI_FOLDER_APP"/
+    echo "$JHI_APP: ($JHI_APP_SAMPLE_DIR)"
     ls -al "$JHI_FOLDER_APP"/
 fi
 

@@ -685,11 +685,11 @@ _%>
             this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
       <%_ } _%>
         }
-        if (<%= relationshipFieldName %> != null) {
+        if (<%= otherEntityName %> != null) {
       <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            <%= relationshipFieldName %>.add<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%= otherEntityName %>.add<%= otherEntityRelationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            <%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
       <%_ } _%>
         }
     <%_ } _%>

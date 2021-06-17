@@ -29,11 +29,11 @@ const NODE_VERSION = '14.16.0';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
-const GRADLE_VERSION = '7.0.2';
+const GRADLE_VERSION = '7.1';
 const JIB_VERSION = '3.1.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.0.2-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.1.0';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.4.7';
 const LIQUIBASE_VERSION = '4.3.5';
@@ -46,7 +46,7 @@ const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.7.1';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.8.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.4.1';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.25';
