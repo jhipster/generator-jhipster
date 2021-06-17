@@ -591,19 +591,23 @@ function getEnums(enums, customValuesState, comments) {
     return enums.map(enumValue => ({
       name: enumValue,
       value: enumValue,
-      comment: comments[enumValue] && getJavadoc(comments[enumValue], 0),
+      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 0),
     }));
   }
   return enums.map(enumValue => {
     if (!doesTheEnumValueHaveACustomValue(enumValue)) {
-      return { name: enumValue.trim(), value: enumValue.trim(), comment: comments[enumValue] && getJavadoc(comments[enumValue], 0) };
+      return {
+        name: enumValue.trim(),
+        value: enumValue.trim(),
+        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 0),
+      };
     }
     // eslint-disable-next-line no-unused-vars
     const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
     return {
       name: matched[1],
       value: matched[2],
-      comment: comments[matched[1]] && getJavadoc(comments[matched[1]], 0),
+      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 0),
     };
   });
 }
