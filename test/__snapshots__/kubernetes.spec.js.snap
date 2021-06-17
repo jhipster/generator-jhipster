@@ -1264,7 +1264,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -1813,7 +1813,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -2550,7 +2550,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -3409,7 +3409,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -5324,7 +5324,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -9035,7 +9035,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -9602,7 +9602,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -11515,7 +11515,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
@@ -12088,7 +12088,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.7.1
+          image: jhipster/jhipster-registry:v6.8.0
           ports:
             - containerPort: 8761
           env:
