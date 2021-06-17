@@ -513,11 +513,11 @@ function getEnumInfo(field, clientRootFolder) {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: fieldType,
-    javadoc: field.fieldTypeJavadoc && this.getJavadoc(field.fieldTypeJavadoc,0),
+    javadoc: field.fieldTypeJavadoc && this.getJavadoc(field.fieldTypeJavadoc, 0),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,
-    enumValues: getEnums(enums, customValuesState),
+    enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
     clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
   };
 }
@@ -586,19 +586,24 @@ function getCustomValuesState(enumValues) {
   };
 }
 
-function getEnums(enums, customValuesState) {
+function getEnums(enums, customValuesState, comments) {
   if (customValuesState.withoutCustomValues) {
-    return enums.map(enumValue => ({ name: enumValue, value: enumValue }));
+    return enums.map(enumValue => ({
+      name: enumValue,
+      value: enumValue,
+      comment: comments[enumValue] && getJavadoc(comments[enumValue], 0),
+    }));
   }
   return enums.map(enumValue => {
     if (!doesTheEnumValueHaveACustomValue(enumValue)) {
-      return { name: enumValue.trim(), value: enumValue.trim() };
+      return { name: enumValue.trim(), value: enumValue.trim(), comment: comments[enumValue] && getJavadoc(comments[enumValue], 0) };
     }
     // eslint-disable-next-line no-unused-vars
     const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
     return {
       name: matched[1],
       value: matched[2],
+      comment: comments[matched[1]] && getJavadoc(comments[matched[1]], 0),
     };
   });
 }

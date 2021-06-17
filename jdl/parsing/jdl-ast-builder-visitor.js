@@ -355,6 +355,10 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const prop = {
       key: context.enumPropKey[0].image,
     };
+
+    if (context.JAVADOC) {
+      prop.comment = trimComment(context.JAVADOC[0].image);
+    }
     if (context.enumPropValue) {
       prop.value = context.enumPropValue[0].image;
     }
