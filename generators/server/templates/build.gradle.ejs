@@ -600,6 +600,7 @@ dependencies {
     <%_ if (cacheProvider === 'redis') { %>
     testImplementation "org.testcontainers:testcontainers"
     <%_ } _%>
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
