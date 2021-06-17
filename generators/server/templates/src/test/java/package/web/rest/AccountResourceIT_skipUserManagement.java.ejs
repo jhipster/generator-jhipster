@@ -131,7 +131,7 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
             .andExpect(content().string(TEST_USER_LOGIN));
     <%_ } else { _%>
     void testAuthenticatedUser() {
-        accountWebTestClient
+        webTestClient
             .get().uri("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
