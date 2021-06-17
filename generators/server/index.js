@@ -63,7 +63,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
           const gradle = this.jhipsterConfig.buildTool === GRADLE;
           const command = gradle ? './gradlew' : './npmw';
-          const args = gradle ? ['npm_install'] : ['install', '--no-audit'];
+          const args = gradle ? ['npm_install'] : ['install'];
 
           const failureCallback = error => {
             this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
