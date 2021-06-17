@@ -47,6 +47,12 @@ if [[ "$JHI_SAMPLES" == "" ]]; then
     JHI_SAMPLES="$JHI_INTEG"/samples
 fi
 
+if [[ -d "$JHI_SAMPLES"/.jhipster ]]; then
+    JHI_ENTITY_SAMPLES="$JHI_SAMPLES"/.jhipster
+else
+    JHI_ENTITY_SAMPLES="$JHI_HOME"/test-integration/samples/.jhipster
+fi
+
 # folder for jdls samples
 if [[ "$JHI_JDL_SAMPLES" == "" ]]; then
     JHI_JDL_SAMPLES="$JHI_INTEG"/jdl-samples
