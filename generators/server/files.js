@@ -1702,7 +1702,6 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.authenticationType !== 'oauth2',
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
