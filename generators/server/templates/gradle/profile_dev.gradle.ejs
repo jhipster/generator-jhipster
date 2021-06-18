@@ -64,7 +64,7 @@ task webapp(type: NpmTask) {
 
     outputs.dir("<%= CLIENT_DIST_DIR %>")
 
-    dependsOn npm_install
+    dependsOn npmInstall
 
     args = ["run", "webapp:build"]
     environment = [APP_VERSION: project.version]
