@@ -62,6 +62,7 @@ function getCst(input, startRule = 'prog') {
   if (extraSyntaxErrors.length > 0) {
     throwSyntaxError(extraSyntaxErrors);
   }
+
   return cst;
 }
 
