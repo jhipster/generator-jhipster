@@ -17,8 +17,8 @@
 # limitations under the License.
 #
 
-name: 'Install jhipster-bom and generator-jhipster'
-description: 'Install JHipster using test-integration scripts'
+name: 'Setup environment'
+description: 'Setup environment for test-integration scripts'
 inputs:
   application-path:
     description: 'Application path'
