@@ -106,6 +106,8 @@ import <%= packageName %>.security.SecurityUtils;
 
 <%_ } _%>
 import com.fasterxml.jackson.annotation.JsonCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 <%_ if (!reactive) { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -130,6 +132,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class AccountResource {
+
+    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private static class AccountResourceException extends RuntimeException {
     }
