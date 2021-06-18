@@ -1617,13 +1617,6 @@
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
-                                <configuration>
-                                    <!--
-                                        Workaround npm failing with audit
-                                        https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
-                                     -->
-                                    <arguments>install --no-audit</arguments>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>webapp build dev</id>
@@ -1737,13 +1730,6 @@
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
-                                <configuration>
-                                    <!--
-                                        Workaround npm failing with audit
-                                        https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
-                                     -->
-                                    <arguments>install --no-audit</arguments>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>webapp build test</id>
