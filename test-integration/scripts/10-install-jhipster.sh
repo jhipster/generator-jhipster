@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$HOME"
 
-if [[ "$JHI_REPO" == *"/jhipster-bom" && "$JHI_LIB_BRANCH" == "auto" ]]; then
+if [[ ("$JHI_REPO" == *"/jhipster-bom" && "$JHI_LIB_BRANCH" == "auto") || "$JHI_LIB_BRANCH" == "local" ]]; then
     echo "*** jhipster: use local version at JHI_LIB_HOME=$JHI_LIB_HOME"
 
     cd "$JHI_LIB_HOME"
