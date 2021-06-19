@@ -54,6 +54,7 @@
     "eslint-plugin-react": "7.24.0",
     "eslint-webpack-plugin": "2.5.4",
     "file-loader": "6.2.0",
+    "folder-hash": "4.0.1",
     "fork-ts-checker-webpack-plugin": "6.2.10",
     "html-webpack-plugin": "5.3.1",
     "identity-obj-proxy": "3.0.0",
