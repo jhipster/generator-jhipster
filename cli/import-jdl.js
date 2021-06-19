@@ -259,7 +259,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
   const cwd = path.join(processor.pwd, deploymentType);
   logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
 
-  return runGenerator(deploymentType, { cwd, fork: true }, { force: true, ...processor.options, skipPrompts: true });
+  return runGenerator(deploymentType, { cwd, fork: false }, { force: true, ...processor.options, skipPrompts: true });
 };
 
 /**
@@ -469,13 +469,10 @@ class JDLProcessor {
           throw error;
         }
       };
-      if (this.interactive) {
-        // Queue callGenerator in chain
-        return this.importState.exportedDeployments.reduce((promise, deployment) => {
-          return promise.then(() => callGenerator(deployment));
-        }, Promise.resolve());
-      }
-      return Promise.all(this.importState.exportedDeployments.map(callGenerator));
+      // Queue callGenerator in chain
+      return this.importState.exportedDeployments.reduce((promise, deployment) => {
+        return promise.then(() => callGenerator(deployment));
+      }, Promise.resolve());
     };
 
     return callDeploymentGenerator();
