@@ -16,17 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-constants');
+ constants = require('../generator-constants');
 
-const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
-const { OAUTH2, SESSION, JWT } = require('../../jdl/jhipster/authentication-types');
-const { GATEWAY } = require('../../jdl/jhipster/application-types');
-const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
+ { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, ANGULAR_DIR } = constants;
+
+ { OAUTH2, SESSION, JWT } = require('../../jdl/jhipster/authentication-types');
+ { GATEWAY } = require('../../jdl/jhipster/application-types');
+ { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-const files = {
+ files = {
   common: [
     {
       templates: [
@@ -510,6 +511,7 @@ module.exports = {
   files,
 };
 
-function writeFiles() {
-  return this.writeFilesToDisk(files, 'angular');
+
+ writeFiles() {
+  this.writeFilesToDisk(files, 'angular');
 }
