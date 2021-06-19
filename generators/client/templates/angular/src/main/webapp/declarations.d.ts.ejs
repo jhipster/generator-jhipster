@@ -1,5 +1,12 @@
-<%_ for (const entity of Object.values(this.configOptions.sharedEntities).filter(entity => entity.microserviceName)) { _%>
+declare const SERVER_API_URL: string;
+<%_ if (enableTranslation) { _%>
+declare const I18N_HASH: string;
+<%_ } _%>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+    <%_ for (const entity of Object.values(this.configOptions.sharedEntities).filter(entity => entity.microserviceName)) { _%>
 declare module '<%= entity.microserviceName %>/<%= entity.entityFileName %>' {
   export class <%= entity.microserviceName ? upperFirstCamelCase(entity.microserviceName) : '' %><%= entity.entityAngularName %>Module {}
 }
+    <%_ } _%>
 <%_ } _%>

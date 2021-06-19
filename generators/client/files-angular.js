@@ -56,7 +56,7 @@ const files = {
   angularApp: [
     {
       path: CLIENT_MAIN_SRC_DIR,
-      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts'],
+      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts', 'declarations.d.ts'],
     },
     {
       path: ANGULAR_DIR,
@@ -67,13 +67,6 @@ const files = {
     {
       condition: generator => generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
-    },
-  ],
-  microfrontendGateway: [
-    {
-      condition: generator => generator.applicationTypeGateway && generator.microfrontend,
-      path: CLIENT_MAIN_SRC_DIR,
-      templates: ['declarations.d.ts'],
     },
   ],
   angularMain: [
