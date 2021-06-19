@@ -18,7 +18,11 @@
 -%>
 import './home.<%= styleSheetExt %>';
 
+<%_ if (authenticationTypeOauth2) { _%>
 import React, { useEffect } from 'react';
+<%_ } else { _%>
+import React from 'react';
+<%_ } _%>  
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { Row, Col, Alert } from 'reactstrap';
