@@ -323,8 +323,8 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     <%_ } _%>
     @Override
     public Flux<<%= asEntity('User') %>> findAllWithAuthorities(Pageable pageable) {
-        String property = pageable.getSort().stream().map(Sort.Order::getProperty).findFirst().get();
-        String direction = String.valueOf(pageable.getSort().stream().map(Sort.Order::getDirection).findFirst().get());
+        String property = pageable.getSort().stream().map(Sort.Order::getProperty).findFirst().orElse("id");
+        String direction = String.valueOf(pageable.getSort().stream().map(Sort.Order::getDirection).findFirst().orElse(Sort.DEFAULT_DIRECTION));
         long page = pageable.getPageNumber();
         long size = pageable.getPageSize();
 
