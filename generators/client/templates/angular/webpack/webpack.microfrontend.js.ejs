@@ -28,15 +28,15 @@ module.exports = (config, options, targetOptions) => {
         name: '<%= lowercaseBaseName %>',
         filename: 'remoteEntry.js',
         exposes: {
-    <%_ for (entity of Object.values(this.configOptions.sharedEntities).filter(e => e.microserviceName)) { _%>
+    <%_ for (entity of Object.values(this.configOptions.sharedEntities || {}).filter(e => e.microserviceName)) { _%>
           './<%= entity.entityFileName %>': 'app/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>.module.ts',
     <%_ } _%>
         },
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
         remotes: {
-          <%_ for (microserviceName of Object.keys(jhipsterConfig.applications)) { _%>
-          '<%= microserviceName %>': `<%= microserviceName %>@${targetOptions.target !== 'serve' ? '/services/<%= microserviceName %>' : 'http://localhost:<%= jhipsterConfig.applications[microserviceName].applicationIndex + devServerBasePort %>'}/remoteEntry.js`,
+          <%_ for ([microserviceName, microserviceConfig] of Object.entries(jhipsterConfig.applications || {})) { _%>
+          '<%= microserviceName %>': `<%= microserviceName %>@${targetOptions.target !== 'serve' ? '/services/<%= microserviceName %>' : 'http://localhost:<%= microserviceConfig.applicationIndex + devServerBasePort %>'}/remoteEntry.js`,
           <%_ } _%>
         },
 <%_ } _%>
