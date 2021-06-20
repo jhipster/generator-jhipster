@@ -27,7 +27,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 <%_ if (fieldsContainDate) { _%>
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 <%_ } _%>
 
 import { isPresent } from 'app/core/util/operators';

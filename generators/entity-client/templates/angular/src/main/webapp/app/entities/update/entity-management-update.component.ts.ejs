@@ -43,7 +43,7 @@ import { Observable } from 'rxjs';
 import { finalize<% if (relationships.some(rel => rel.ownerSide === true)) { %>, map<% } %> } from 'rxjs/operators';
 
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 
