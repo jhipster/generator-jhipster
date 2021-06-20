@@ -274,7 +274,7 @@ const LANGUAGES = [
     localeId: 'pt-PT',
     dayjsLocaleId: 'pt',
   },
-  { 
+  {
     name: 'Punjabi',
     dispName: 'ਪੰਜਾਬੀ',
     value: 'pa',
