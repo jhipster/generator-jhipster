@@ -274,6 +274,12 @@ const LANGUAGES = [
     localeId: 'pt-PT',
     dayjsLocaleId: 'pt',
   },
+  {
+    name: 'Punjabi',
+    dispName: 'ਪੰਜਾਬੀ',
+    value: 'pa',
+    dayjsLocaleId: 'pa-in',
+  },
   { name: 'Romanian', dispName: 'Română', value: 'ro' },
   { name: 'Russian', dispName: 'Русский', value: 'ru' },
   { name: 'Slovak', dispName: 'Slovenský', value: 'sk' },
