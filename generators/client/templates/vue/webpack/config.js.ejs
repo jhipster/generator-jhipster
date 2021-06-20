@@ -1,28 +1,21 @@
 'use strict';
-// Template version: 1.3.1
-// see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path');
 
+<%_ if (buildToolUnknown) { _%>
+const packageJson = require('./../package.json');
+<%_ } _%>
+
 module.exports = {
+    serverApiUrl: '',
+<%_ if (buildToolUnknown) { _%>
+    version: packageJson.version,
+<%_ } else { _%>
+    // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+    version: process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'UNKNOWN',
+<%_ } _%>
+
     dev: {
-        // Paths
-        assetsSubDirectory: 'static',
-        assetsPublicPath: '/',
-        proxyTable: {},
-
-        // Various Dev Server settings
-        host: 'localhost', // can be overwritten by process.env.HOST
-        port: <%= serverPort %>, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-        autoOpenBrowser: false,
-        errorOverlay: true,
-        notifyOnErrors: true,
-        poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
-        /**
-         * Source Maps
-         */
-
         // https://webpack.js.org/configuration/devtool/#development
         devtool: 'cheap-module-source-map',
 
@@ -35,18 +28,6 @@ module.exports = {
     },
 
     build: {
-        // Template for index.html
-        index: path.resolve(__dirname, '../target/www/index.html'),
-
-        // Paths
-        assetsRoot: path.resolve(__dirname, '../target'),
-        assetsSubDirectory: 'static',
-        assetsPublicPath: '/',
-
-        /**
-         * Source Maps
-         */
-
         productionSourceMap: true,
         // https://webpack.js.org/configuration/devtool/#production
         devtool: 'source-map',

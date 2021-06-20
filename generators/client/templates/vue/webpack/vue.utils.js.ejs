@@ -1,17 +1,14 @@
 'use strict';
 const path = require('path');
-const config = require('./env');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const packageConfig = require('../package.json');
 const sass = require('sass');
 
-exports.assetsPath = function(_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production' ? config.build.assetsSubDirectory : config.dev.assetsSubDirectory;
+const packageConfig = require('../package.json');
+const config = require('./config');
 
-  return path.posix.join(assetsSubDirectory, _path);
-};
+const sourceMapEnabled = production => production ? config.build.productionSourceMap : config.dev.cssSourceMap;
 
-exports.cssLoaders = function(options) {
+const cssLoaders = options => {
   options = options || {};
 
   const cssLoader = {
@@ -60,9 +57,9 @@ exports.cssLoaders = function(options) {
 };
 
 // Generate loaders for standalone style files (outside of .vue)
-exports.styleLoaders = function(options) {
+const styleLoaders = options => {
   const output = [];
-  const loaders = exports.cssLoaders(options);
+  const loaders = cssLoaders(options);
 
   for (const extension in loaders) {
     const loader = loaders[extension];
@@ -74,3 +71,24 @@ exports.styleLoaders = function(options) {
 
   return output;
 };
+
+const vueLoaderConfig = production => ({
+  loaders: cssLoaders({
+    sourceMap: sourceMapEnabled(production),
+    extract: production
+  }),
+  cssSourceMap: sourceMapEnabled(production),
+  cacheBusting: config.dev.cacheBusting,
+  transformToRequire: {
+    video: ['src', 'poster'],
+    source: 'src',
+    img: 'src',
+    image: 'xlink:href'
+  }
+});
+
+module.exports = {
+  cssLoaders,
+  styleLoaders,
+  vueLoaderConfig,
+}

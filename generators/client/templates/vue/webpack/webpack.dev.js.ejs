@@ -18,20 +18,16 @@
 -%>
 'use strict';
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const path = require('path');
 const webpack = require('webpack');
-const { merge: webpackMerge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const utils = require('./vue.utils');
-const config = require('./env');
-const commonConfig = require('./webpack.common');
-const jhiUtils = require('./utils.js');
-const MODE = 'development';
+const { styleLoaders } = require('./vue.utils');
+const config = require('./config');
 
-module.exports = async env => webpackMerge(await commonConfig({ env: MODE }), {
-  mode: MODE,
+module.exports = (env, options) => ({
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+    rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
@@ -40,7 +36,6 @@ module.exports = async env => webpackMerge(await commonConfig({ env: MODE }), {
     main: './<%= MAIN_SRC_DIR %>app/main'
   },
   output: {
-    path: jhiUtils.root('<%= DIST_DIR %>'),
     filename: 'app/[contenthash].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
