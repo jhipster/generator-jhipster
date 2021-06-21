@@ -16,43 +16,42 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const reactivePrefix = reactive ? 'Reactive' : ''; _%>
 package <%= packageName %>.web.rest;
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.config.TestSecurityConfiguration;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-<%_ if (reactive) { _%>
-import org.springframework.context.ApplicationContext;
-<%_ } _%>
-import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-<%_ if (!reactive) { _%>
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-<%_ } else { _%>
-import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ } _%>
-
-import java.time.Instant;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import static <%= packageName %>.web.rest.TestUtil.ID_TOKEN;
-import static <%= packageName %>.web.rest.TestUtil.authenticationToken;
+import static <%= packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
+import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
 <%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } else { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 <%_ } _%>
+
+import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.security.AuthoritiesConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.client.<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
+<%_ if (!reactive) { _%>
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+<%_ } else { _%>
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Integration tests for the {@link LogoutResource} REST controller.
@@ -66,23 +65,30 @@ class LogoutResourceIT {
     @Autowired
     private <% if (!reactive) { %>Web<% } %>ApplicationContext context;
 
+    @Autowired
+    private <%= reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+	private ClientRegistration clientRegistration;
+
 <%_ if (!reactive) { _%>
     private MockMvc restLogoutMockMvc;
 <%_ } else { _%>
     private WebTestClient webTestClient;
 <%_ } _%>
 
-    private OidcIdToken idToken;
+    private Map<String, Object> claims;
 
     @BeforeEach
     public void before() <% if (!reactive) { %>throws Exception <% } %>{
-        Map<String, Object> claims = new HashMap<>();
+        claims = new HashMap<>();
         claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
         claims.put("sub", 123);
-        this.idToken = new OidcIdToken(ID_TOKEN, Instant.now(), Instant.now().plusSeconds(60), claims);
 
     <%_ if (!reactive) { _%>
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
+        SecurityContextHolder
+            .getContext()
+            .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)));
         SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
         authInjector.afterPropertiesSet();
 
@@ -111,7 +117,7 @@ class LogoutResourceIT {
                 .get("end_session_endpoint").toString()).block();
 
         this.webTestClient.mutateWith(csrf())
-            .mutateWith(mockAuthentication(TestUtil.authenticationToken(idToken)))
+            .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
             .post().uri("/api/logout").exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)

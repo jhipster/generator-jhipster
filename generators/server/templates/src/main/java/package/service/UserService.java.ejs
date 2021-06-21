@@ -74,6 +74,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -878,6 +879,9 @@ public class UserService {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    <%_ } _%>
     private <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
         <%_ if (!reactive) { _%>
@@ -999,7 +1003,16 @@ public class UserService {
             })
             <%_ } _%>
             .collect(Collectors.toSet()));
-        return <% if (databaseType !== 'no' && !reactive) { %>new <%= asDto('AdminUser') %>(syncUserWithIdP(attributes, user))<% } else if (!reactive) { %>user<% } %><% if (databaseType === 'no' && reactive) { %>Mono.just(user)<% } else if (reactive) { %>syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= asDto('AdminUser') %>(u)))<% } %>;
+
+    <%_ if (databaseType === 'no') { _%>
+        return <% if (reactive) { %>Mono.just(user)<% } else { %>user<% } %>;
+    <%_ } else { _%>
+        <%_ if (!reactive) { _%>
+        return new <%= asDto('AdminUser') %>(syncUserWithIdP(attributes, user));
+        <%_ } else { _%>
+        return syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= asDto('AdminUser') %>(u)));
+        <%_ } _%>
+    <%_ } _%>
     }
 
     private static <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> getUser(Map<String, Object> details) {

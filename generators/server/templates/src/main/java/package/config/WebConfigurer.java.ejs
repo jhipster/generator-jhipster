@@ -111,7 +111,13 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         this.jHipsterProperties = jHipsterProperties;
 <%_ if (devDatabaseTypeH2Any && reactive) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            H2ConfigurationHelper.initH2Console();
+    <%_ if (!applicationTypeMonolith) { _%>
+            try {
+    <%_ } _%>  
+                H2ConfigurationHelper.initH2Console();
+    <%_ if (!applicationTypeMonolith) { _%>
+            } catch (Exception e) {};
+    <%_ } _%>  
         }
 <%_ } _%>  
     }

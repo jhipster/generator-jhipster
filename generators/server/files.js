@@ -1165,6 +1165,35 @@ const serverFiles = {
       templates: ['META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'],
     },
   ],
+  springBootOauth2: [
+    {
+      condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith',
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/OAuth2Configuration.java',
+          renameTo: generator => `${generator.javaDir}config/OAuth2Configuration.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: generator => `package/web/filter/OAuth2${generator.reactive ? 'Reactive' : ''}RefreshTokensWebFilter.java`,
+          renameTo: generator => `${generator.javaDir}web/filter/OAuth2${generator.reactive ? 'Reactive' : ''}RefreshTokensWebFilter.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        { file: 'package/test/util/OAuth2TestUtil.java', renameTo: generator => `${generator.testDir}test/util/OAuth2TestUtil.java` },
+      ],
+    },
+  ],
   serverTestFw: [
     {
       condition: generator => generator.databaseType === 'cassandra',
