@@ -126,9 +126,9 @@ export function initVueXStore(vue) {
   return new Vuex.Store({
     modules: {
       accountStore,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       translationStore,
-      <%_ } _%>
+<%_ } _%>
     },
   });
 }

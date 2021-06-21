@@ -56,6 +56,7 @@ let applicationsPerEntityName;
  * @param {String} configurationObject.databaseType - The application's database type
  * @param {String} configurationObject.generatorVersion - The generator's version
  * @param {Boolean} configurationObject.skippedUserManagement - Whether user management is skipped
+ * @param {Boolean} [configurationObject.unidirectionalRelationships] - Whether to generate unidirectional relationships
  * @return {JDLObject} the built JDL object.
  */
 function parseFromConfigurationObject(configurationObject) {
@@ -63,12 +64,13 @@ function parseFromConfigurationObject(configurationObject) {
   if (!parsedContent) {
     throw new Error('The parsed JDL content must be passed.');
   }
+  const { unidirectionalRelationships } = configurationObject;
   init(configurationObject);
   fillApplications();
   fillDeployments();
   fillEnums();
   fillClassesAndFields();
-  fillAssociations();
+  fillAssociations({ unidirectionalRelationships });
   fillOptions();
   return jdlObject;
 }
@@ -191,11 +193,9 @@ function getConstantValueFromConstantName(constantName) {
   return parsedContent.constants[constantName];
 }
 
-function fillAssociations() {
-  const conversionOptions = {
-    generateBidirectionalOneToMany: configuration.databaseType !== DatabaseTypes.NEO4J,
-  };
-  const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, conversionOptions);
+function fillAssociations(conversionOptions = {}) {
+  const { unidirectionalRelationships = configuration.databaseType === DatabaseTypes.NEO4J } = conversionOptions;
+  const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions, { unidirectionalRelationships });
   jdlRelationships.forEach(jdlRelationship => {
     jdlObject.addRelationship(jdlRelationship, configuration.skippedUserManagement);
   });

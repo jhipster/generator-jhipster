@@ -16,7 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-web: java $JAVA_OPTS <% if (applicationType === 'gateway' || dynoSize === 'Free') { %>-Xmx256m<% } %> -jar <% if (buildTool === 'maven') { %>target<% } %><% if (buildTool === 'gradle') { %>build/libs<% } %>/*.jar --spring.profiles.active=prod,heroku<% if (buildTool == 'maven' && herokuDeployType == 'git') { %>,no-liquibase<% } %> <% if (prodDatabaseType === 'mongodb') { %>--spring.data.mongodb.database=$(echo "$MONGODB_URI" | sed "s/^.*:[0-9]*\///g")<% } %>
-<%_ if (buildTool == 'maven' && herokuDeployType == 'git' && (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb')) { _%>
-release: cp -R src/main/resources/config config && ./mvnw -ntp liquibase:update -Pprod,heroku
-<%_ } _%>
+web: java $JAVA_OPTS <% if (applicationType === 'gateway' || dynoSize === 'Free') { %>-Xmx256m<% } %> -jar <% if (buildTool === 'maven') { %>target<% } %><% if (buildTool === 'gradle') { %>build/libs<% } %>/*.jar --spring.profiles.active=prod,heroku <% if (prodDatabaseType === 'mongodb') { %>--spring.data.mongodb.database=$(echo "$MONGODB_URI" | sed "s/^.*:[0-9]*\///g")<% } %>

@@ -1,0 +1,162 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "ਤੁਸੀਂ ਇੱਕ <strong>ਪੁਰਾਣਾ</strong> ਬ੍ਰਾਉਜ਼ਰ ਵਰਤ ਰਹੇ ਹੋ । ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਤਜ਼ਰਬੇ ਨੂੰ ਬਿਹਤਰ ਬਣਾਉਣ ਲਈ ਆਪਣੇ ਬ੍ਰਾਉਜ਼ਰ <a href=\"http://browsehappy.com/?locale=en\">ਨੂੰ ਅਪਗ੍ਰੇਡ ਕਰੋ ।</a>",
+        "menu": {
+            "home": "ਹੋਮ",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "ਇਕਾਈਆਂ",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "ਖਾਤਾ",
+                "settings": "ਸੈਟਿੰਗਜ਼",
+                "password": "ਪਾਸਵਰਡ",
+                "sessions": "ਸੈਸ਼ਨ",
+                "login": "ਸਾਈਨ ਇਨ",
+                "logout": "ਸਾਈਨ ਆਉਟ",
+                "register": "ਰਜਿਸਟਰ ਕਰੋ"
+            },
+            "admin": {
+                "main": "ਪ੍ਰਸ਼ਾਸਨ",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "ਗੇਟਵੇ",
+                <%_ } _%>
+                "userManagement": "ਉਪਭੋਗਤਾ ਪ੍ਰਬੰਧਨ",
+                "tracker": "ਉਪਭੋਗਤਾ ਟਰੈਕਰ",
+                "metrics": "ਮੈਟ੍ਰਿਕਸ",
+                "health": "ਸਿਹਤ",
+                "configuration": "ਕੌਂਫਿਗਰੇਸ਼ਨ",
+                "logs": "ਲੌਗਸ",
+                "apidocs": "ਏ.ਪੀ.ਆਈ",
+                "database": "ਡਾਟਾਬੇਸ",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "ਭਾਸ਼ਾ"
+        },
+        "form": {
+            "username.label": "ਯੂਜ਼ਰਨੇਮ",
+            "username.placeholder": "ਤੁਹਾਡਾ ਯੂਜ਼ਰਨੇਮ",
+            "currentpassword.label": "ਮੌਜੂਦਾ ਪਾਸਵਰਡ",
+            "currentpassword.placeholder": "ਮੌਜੂਦਾ ਪਾਸਵਰਡ",
+            "newpassword.label": "ਨਵਾਂ ਪਾਸਵਰਡ",
+            "newpassword.placeholder": "ਨਵਾਂ ਪਾਸਵਰਡ",
+            "confirmpassword.label": "ਨਵਾਂ ਪਾਸਵਰਡ ਪੁਸ਼ਟੀਕਰਣ",
+            "confirmpassword.placeholder": "ਨਵੇਂ ਪਾਸਵਰਡ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+            "email.label": "ਈਮੇਲ",
+            "email.placeholder": "ਤੁਹਾਡੀ ਈਮੇਲ"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "ਜੇ ਤੁਸੀਂ ਚਾਹੁੰਦੇ ਹੋ ",
+                    "link": "ਸਾਈਨ ਇਨ",
+                    "suffix": ", ਤੁਸੀਂ ਡਿਫਾਲਟ ਖਾਤਿਆਂ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਸਕਦੇ ਹੋ:<br/> - ਐਡਮਿਨਿਸਟ੍ਰੇਟਰ (ਲਾਗਇਨ=\"admin \" ਅਤੇ ਪਾਸਵਰਡ = \"admin\") <br/> - ਯੂਜ਼ਰ (ਲਾਗਇਨ=\"user\" ਅਤੇ ਪਾਸਵਰਡ=\"user\")."
+                },
+                "register": {
+                    "noaccount": "ਤੁਹਾਡੇ ਕੋਲ ਅਜੇ ਖਾਤਾ ਨਹੀਂ ਹੈ?",
+                    "link": "ਨਵਾਂ ਖਾਤਾ ਰਜਿਸਟਰ ਕਰੋ"
+                }
+            },
+            "error": {
+                "dontmatch": "ਪਾਸਵਰਡ ਅਤੇ ਇਸ ਦੀ ਪੁਸ਼ਟੀ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "ਤੁਹਾਡਾ ਪਾਸਵਰਡ ਲੋੜੀਂਦਾ ਹੈ ।",
+                    "minlength": "ਤੁਹਾਡਾ ਪਾਸਵਰਡ ਘੱਟੋ ਘੱਟ 4 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਲਾਜ਼ਮੀ ਹੈ ।",
+                    "maxlength": "ਤੁਹਾਡਾ ਪਾਸਵਰਡ 50 ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋਣਾ ਚਾਹੀਦਾ ।",
+                    "strength": "ਪਾਸਵਰਡ ਤਾਕਤ ।"
+                },
+                "confirmpassword": {
+                    "required": "ਤੁਹਾਡਾ ਪੁਸ਼ਟੀਕਰਣ ਪਾਸਵਰਡ ਲੋੜੀਂਦਾ ਹੈ ।",
+                    "minlength": "ਤੁਹਾਡਾ ਪੁਸ਼ਟੀਕਰਣ ਪਾਸਵਰਡ ਘੱਟੋ ਘੱਟ 4 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਲਾਜ਼ਮੀ ਹੈ ।",
+                    "maxlength": "ਤੁਹਾਡਾ ਪੁਸ਼ਟੀਕਰਣ ਪਾਸਵਰਡ 50 ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦਾ ।"
+                },
+                "email": {
+                    "required": "ਤੁਹਾਡੀ ਈਮੇਲ ਲੋੜੀਂਦੀ ਹੈ ।",
+                    "invalid": "ਤੁਹਾਡੀ ਈਮੇਲ ਅਵੈਧ ਹੈ ।",
+                    "minlength": "ਤੁਹਾਡੀ ਈਮੇਲ ਘੱਟੋ ਘੱਟ 5 ਅੱਖਰਾਂ ਦੀ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ ।",
+                    "maxlength": "ਤੁਹਾਡੀ ਈਮੇਲ 50 ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦੀ ।"
+                }
+            }
+        },
+        "field": {
+            "id": "ਆਈਡੀ"
+        },
+        "ribbon": {
+            "dev": "ਡਿਵੈਲਪਮੈਂਟ"
+        },
+        "item-count": "{{first}} - {{second}} ਆਈਟਮਾਂ, ਕੁੱਲ {{total}} ਆਈਟਮਾਂ ਵਿੱਚੋ ਦਿਖਾਇਆਂ ਜਾ ਰਹੀਆਂ ਹਨ ।"
+    },
+    "entity": {
+        "action": {
+            "addblob": "ਬਲੌਬ ਸ਼ਾਮਲ ਕਰੋ",
+            "addimage": "ਚਿੱਤਰ ਸ਼ਾਮਲ ਕਰੋ",
+            "back": "ਵਾਪਸ",
+            "cancel": "ਰੱਦ ਕਰੋ",
+            "delete": "ਮਿਟਾਓ",
+            "edit": "ਸੋਧ",
+            "open": "ਖੋਲੋ",
+            "save": "ਸੇਵ",
+            "view": "ਦਿਖਾਓ"
+        },
+        "detail": {
+            "field": "ਫੀਲਡ",
+            "value": "ਵੇਲੀਯੁ"
+        },
+        "delete": {
+            "title": "ਮਿਟਾਉਣ ਦੀ ਕਾਰਵਾਈ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"
+        },
+        "validation": {
+            "required": "ਇਹ ਖੇਤਰ ਲੋੜੀਂਦਾ ਹੈ ।",
+            "minlength": "ਇਹ ਖੇਤਰ ਘੱਟੋ ਘੱਟ {{ min }} ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਲਾਜ਼ਮੀ ਹੈ ।",
+            "maxlength": "ਇਹ ਖੇਤਰ {{ max }} ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦਾ ।",
+            "min": "ਇਹ ਖੇਤਰ ਘੱਟੋ ਘੱਟ {{ min }} ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ।",
+            "max": "ਇਹ ਖੇਤਰ {{ max }} ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦਾ ।",
+            "minbytes": "ਇਹ ਖੇਤਰ ਘੱਟੋ ਘੱਟ {{ min }} ਬਾਈਟ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ।",
+            "maxbytes": "ਇਹ ਖੇਤਰ {{ max }} ਬਾਈਟ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦਾ ।",
+            "pattern": "ਇਸ ਖੇਤਰ ਨੂੰ {{ pattern }} ਪੈਟਰਨ ਦੀ ਪਾਲਣਾ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ ।",
+            "number": "ਇਹ ਖੇਤਰ ਇੱਕ ਨੰਬਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ।",
+            "datetimelocal": "ਇਹ ਖੇਤਰ ਮਿਤੀ ਅਤੇ ਸਮਾਂ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ।",
+            "patternLogin": "ਇਹ ਖੇਤਰ ਸਿਰਫ ਅੱਖਰ, ਅੰਕ ਅਤੇ ਈ-ਮੇਲ ਪਤੇ ਰੱਖ ਸਕਦਾ ਹੈ ।"
+        }
+    },
+    "error": {
+        "internalServerError": "ਇੰਟਰਨਲ ਸਰਵਰ ਅਸ਼ੁੱਧੀ",
+        "server.not.reachable": "ਸਰਵਰ ਪਹੁੰਚ ਵਿੱਚ ਨਹੀਂ ਹੈ",
+        "url.not.found": "ਨਹੀਂ ਮਿਲਿਆ",
+        "NotNull": "ਫੀਲਡ {{ fieldName }} ਖਾਲੀ ਨਹੀਂ ਹੋ ਸਕਦਾ!",
+        "Size": "ਫੀਲਡ {{ fieldName }} ਘੱਟੋ - ਘੱਟ / ਅਧਿਕਤਮ ਆਕਾਰ ਦੀਆਂ ਜ਼ਰੂਰਤਾਂ ਨੂੰ ਪੂਰਾ ਨਹੀਂ ਕਰਦਾ!",
+        "userexists": "ਲੌਗਇਨ ਨਾਮ ਪਹਿਲਾਂ ਹੀ ਵਰਤਿਆ ਗਿਆ ਹੈ!",
+        "emailexists": "ਈਮੇਲ ਪਹਿਲਾਂ ਹੀ ਵਰਤੋਂ ਅਧੀਨ ਹੈ!",
+        "idexists": "ਇੱਕ ਨਵਾਂ {{ entityName }} ਦਾ ਪਹਿਲਾਂ ਹੀ ਕੋਈ ਆਈਡੀ ਨਹੀਂ ਹੋ ਸਕਦੀ",
+        "idnull": "ਗਲਤ ਆਈ.ਡੀ.",
+        "idinvalid": "ਗਲਤ ਆਈਡੀ",
+        "idnotfound": "ਆਈ.ਡੀ. ਨਹੀਂ ਲੱਭੀ",
+        "file": {
+            "could.not.extract": "ਫਾਇਲ ਨੂੰ ਖੋਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ",
+            "not.image": "ਫਾਈਲ ਤੋਂ ਇੱਕ ਚਿੱਤਰ ਹੋਣ ਦੀ ਉਮੀਦ ਸੀ ਪਰ \"{{ fileType }}\" ਹੈ"
+        }
+    },
+    "footer": "ਇਹ ਤੁਹਾਡਾ ਫੁੱਟਰ ਹੈ"
+}

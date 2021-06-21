@@ -65,7 +65,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
       });
   }
 
-  public init(userId: <% if (user.primaryKey.type === 'String' || user.primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>): void {
+  public init(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): void {
     this.userManagementService().get(userId).then(res => {
       this.userAccount = res.data;
     });
@@ -89,9 +89,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
         });
       });
     } else {
-      <%_ if (!enableTranslation) { _%>
+<%_ if (!enableTranslation) { _%>
       this.userAccount.langKey = 'en';
-      <%_ } _%>
+<%_ } _%>
       this.userManagementService().create(this.userAccount).then(res => {
         this.returnToList();
         this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {

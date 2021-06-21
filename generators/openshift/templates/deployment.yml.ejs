@@ -169,7 +169,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mongodb') { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://${APPLICATION_NAME}-mongodb<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+              value: mongodb://${APPLICATION_NAME}-mongodb<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %>
             - name: SPRING_DATA_MONGODB_DATABASE
               value: ${APPLICATION_NAME}
             - name: SPRING_DATASOURCE_USERNAME

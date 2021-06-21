@@ -37,11 +37,11 @@ body {
     font-weight: 400;
     line-height: 1.5;
     text-align: left;
-    <%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
     color: #212529;
     background: #e4e5e6;
     background-color: #fff;
-    <%_ } _%>
+<%_ } _%>
 }
 
 a {
@@ -116,9 +116,9 @@ Generic styles
     padding: 1.5%;
     margin-top: 20px;
     border: none;
-    <%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
     background: inherit;
-    <%_ } _%>
+<%_ } _%>
 }
 
 .error {

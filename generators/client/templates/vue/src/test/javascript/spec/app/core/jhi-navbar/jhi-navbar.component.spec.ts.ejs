@@ -24,41 +24,41 @@ localVue.component('b-navbar-nav', {});
 describe('JhiNavbar', () => {
 let jhiNavbar: JhiNavbarClass;
 let wrapper: Wrapper<JhiNavbarClass>;
-  <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   const loginService = { openLogin: jest.fn() };
-  <%_ } else if (authenticationType === 'session') { _%>
+<%_ } else if (authenticationTypeSession) { _%>
   const loginService = { openLogin: jest.fn(), logout: jest.fn() };
-  <%_ } else if (authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
   const loginService = { login: jest.fn(), logout: jest.fn() };
-  <%_ } _%>
+<%_ } _%>
   const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   const translationService = { refreshTranslation: jest.fn() };
-  <%_ } _%>
+<%_ } _%>
 
   beforeEach(() => {
     wrapper = shallowMount<JhiNavbarClass>(JhiNavbar, {
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       store,
       router,
       localVue,
       provide: {
         loginService: () => loginService,
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         translationService: () => translationService,
-        <%_ } _%>
+<%_ } _%>
         accountService: () => accountService
       }
     });
     jhiNavbar = wrapper.vm;
   });
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   it('should refresh translations', () => {
     expect(translationService.refreshTranslation).toHaveBeenCalled();
   });
-  <%_ } _%>
+<%_ } _%>
 
   it('should not have user data set', () => {
     expect(jhiNavbar.authenticated).toBeFalsy();
@@ -81,11 +81,11 @@ let wrapper: Wrapper<JhiNavbarClass>;
 
   it('should use login service', () => {
     jhiNavbar.openLogin();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalled();
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalled();
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should use account service', () => {
@@ -96,16 +96,16 @@ let wrapper: Wrapper<JhiNavbarClass>;
 
   it('logout should clear credentials', () => {
     store.commit('authenticated', { login: 'test' });
-    <%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
     loginService.logout.mockReturnValue(Promise.resolve());
-    <%_ } _%>
+<%_ } _%>
     jhiNavbar.logout();
 
-    <%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
     expect(loginService.logout).toHaveBeenCalled();
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(jhiNavbar.authenticated).toBeFalsy();
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should determine active route', () => {
@@ -116,7 +116,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
     expect(jhiNavbar.subIsActive(['/toto', 'toto'])).toBeTruthy();
   });
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   it('should call translationService when changing language', () => {
     jhiNavbar.changeLanguage('fr');
 
@@ -129,5 +129,5 @@ let wrapper: Wrapper<JhiNavbarClass>;
     expect(jhiNavbar.isActiveLanguage('en')).toBeFalsy();
     expect(jhiNavbar.isActiveLanguage('fr')).toBeTruthy();
   });
-  <%_ } _%>
+<%_ } _%>
 });

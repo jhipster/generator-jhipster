@@ -30,9 +30,9 @@ describe('Activate Component', () => {
     axiosStub.get.resolves({});
 
     wrapper = shallowMount<ActivateClass>(Activate, {
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         activateService: () => new ActivateService(),

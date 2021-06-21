@@ -18,20 +18,23 @@
 -%>
 import './home.<%= styleSheetExt %>';
 
+<%_ if (authenticationTypeOauth2) { _%>
 import React, { useEffect } from 'react';
+<%_ } else { _%>
+import React from 'react';
+<%_ } _%>  
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
-import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
 <%_ } _%>
+import { useAppSelector } from 'app/config/store';
 
-export type IHomeProp = StateProps;
-
-export const Home = (props: IHomeProp) => {
-<%_ if (authenticationType === 'oauth2') { _%>
+export const Home = () => {
+  const account = useAppSelector(state => state.authentication.account);
+<%_ if (authenticationTypeOauth2) { _%>
   useEffect(() => {
     const redirectURL = localStorage.getItem(REDIRECT_URL);
     if (redirectURL) {
@@ -40,8 +43,6 @@ export const Home = (props: IHomeProp) => {
     }
   });
 <%_ } _%>
-
-  const { account } = props;
 
   return (
     <Row>
@@ -63,25 +64,25 @@ export const Home = (props: IHomeProp) => {
               <Alert color="warning">
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
                 <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
-                <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
                 <a href={getLoginUrl()} className="alert-link">
                   <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
                 </a>
-                <%_ } else { _%>
+<%_ } else { _%>
                 <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link"> sign in</Translate></Link>
-                <%_ } _%>
+<%_ } _%>
                 <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
                   <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
                   <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
                 </Translate>
               </Alert>
 
-              <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
               <Alert color="warning">
                 <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
                 <Link to="/account/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
               </Alert>
-              <%_ } _%>
+<%_ } _%>
             </div>
           )
         }
@@ -96,7 +97,7 @@ export const Home = (props: IHomeProp) => {
             </a>
           </li>
           <li>
-            <a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">
+            <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">
               <Translate contentKey="home.link.stackoverflow">JHipster on Stack Overflow</Translate>
             </a>
           </li>
@@ -127,11 +128,5 @@ export const Home = (props: IHomeProp) => {
   );
 };
 
-const mapStateToProps = storeState => ({
-  account: storeState.authentication.account,
-  isAuthenticated: storeState.authentication.isAuthenticated
-});
+export default Home;
 
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-export default connect(mapStateToProps)(Home);

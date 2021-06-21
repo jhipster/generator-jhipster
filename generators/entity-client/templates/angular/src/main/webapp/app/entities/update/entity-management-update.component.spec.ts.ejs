@@ -83,7 +83,7 @@ describe('Component Tests', () => {
 
         describe('ngOnInit', () => {
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
-    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && !rel.otherEntityUser); _%>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
         <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity; _%>
@@ -100,7 +100,7 @@ describe('Component Tests', () => {
         <%_ } _%>
 
                     const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
                     const additional<%= otherEntity.entityAngularNamePlural %> = [
         <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
             <%_ const reference = relationship.reference _%>
@@ -108,7 +108,7 @@ describe('Component Tests', () => {
         <%_ } _%>
                     ];
                     const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                     activatedRoute.data = of({ <%= entityInstance %> });
                     comp.ngOnInit();
@@ -128,9 +128,9 @@ describe('Component Tests', () => {
                     <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
 
                     const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
                     const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                     activatedRoute.data = of({ <%= entityInstance %> });
                     comp.ngOnInit();
@@ -157,7 +157,7 @@ describe('Component Tests', () => {
 
                 expect(comp.editForm.value).toEqual(expect.objectContaining(<%= entityInstance %>));
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
-    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipType === 'one-to-one' && rel.otherEntityName !== 'user'); _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && !rel.otherEntityUser); _%>
     <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
         <%_ const otherEntity = relationship.otherEntity _%>
                 expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationship.relationshipFieldNamePlural %><% } %>Collection).toContain(<%= relationship.reference.name %>);
@@ -169,10 +169,10 @@ describe('Component Tests', () => {
         describe('save', () => {
             it('Should call update service on save for existing entity', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-                spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
-                spyOn(comp, 'previousState');
+                jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+                jest.spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
@@ -190,10 +190,10 @@ describe('Component Tests', () => {
 
             it('Should call create service on save for new entity', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = new <%= entityAngularName %>();
-                spyOn(<%= entityInstance %>Service, 'create').and.returnValue(saveSubject);
-                spyOn(comp, 'previousState');
+                jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+                jest.spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
@@ -211,10 +211,10 @@ describe('Component Tests', () => {
 
             it('Should set isSaving to false on error', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-                spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
-                spyOn(comp, 'previousState');
+                jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+                jest.spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
@@ -236,7 +236,6 @@ _%>
         describe('Tracking relationships identifiers', () => {
     <%_ for (reference of trackedEntities) {
             const otherEntity = reference.relationship.otherEntity;
-            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
     _%>
             describe('track<%= otherEntity.entityAngularName %>By<%= otherEntity.primaryKey.nameCapitalized %>', () => {
                 it('Should return tracked <%= otherEntity.entityAngularName %> primary key', () => {
@@ -249,16 +248,13 @@ _%>
     <%_ } _%>
         });
 <%_ } _%>
-<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipType === 'many-to-many' && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
+<%_ const selectableEntities = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.relationshipManyToMany && rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference);
     if (selectableEntities.length > 0) {
 _%>
 
         describe('Getting selected relationships', () => {
     <%_ for (reference of selectableEntities) {
             const otherEntity = reference.relationship.otherEntity;
-            const otherEntityTsKeyId = generateTestEntityId(otherEntity.primaryKey.type);
-            const otherEntityAlternativeTsKeyId = generateTestEntityId(otherEntity.primaryKey.type, 1);
-            const isUserRelation = isBuiltInUser(otherEntity.entityAngularName);
     _%>
             describe('getSelected<%= otherEntity.entityAngularName %>', () => {
                 it('Should return option if no <%= otherEntity.entityAngularName %> is selected', () => {

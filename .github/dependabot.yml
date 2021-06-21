@@ -27,11 +27,6 @@ updates:
     versioning-strategy: increase
     labels:
       - 'theme: dependencies'
-    ignore:
-      # Ignore updates to husky due to the license change
-      # See https://github.com/jhipster/generator-jhipster/issues/13940
-      - dependency-name: 'husky'
-        versions: ['5.x']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/common/'

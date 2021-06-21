@@ -25,11 +25,11 @@ _%>
 <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.save(<%= instanceName %>)
 <%_ } else { _%>
-        return <%= entityInstance %>Repository.save(<%if (dto === 'mapstruct') { %><%= dtoToEntity %>(<% } %><%= instanceName %>)<%if (dto === 'mapstruct') { %>)<% } -%>
-    <%_ if (searchEngine === 'elasticsearch') { %>
+        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %>)<%if (dtoMapstruct) { %>)<% } -%>
+    <%_ if (searchEngineElasticsearch) { %>
             .flatMap(<%= entityInstance %>SearchRepository::save)
     <%_ } -%>
-    <%_ if (dto === 'mapstruct') { %>
+    <%_ if (dtoMapstruct) { %>
             .map(<%= entityToDtoReference  %>)
     <%_ } -%>
     <%_ if (returnDirectly) { _%>;<%_ } _%>

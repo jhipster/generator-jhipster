@@ -71,8 +71,8 @@ describe('Component Tests', () => {
             },
           },
         ];
-        spyOn(service, 'getBeans').and.returnValue(of(beans));
-        spyOn(service, 'getPropertySources').and.returnValue(of(propertySources));
+        jest.spyOn(service, 'getBeans').mockReturnValue(of(beans));
+        jest.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
 
         // WHEN
         comp.ngOnInit();

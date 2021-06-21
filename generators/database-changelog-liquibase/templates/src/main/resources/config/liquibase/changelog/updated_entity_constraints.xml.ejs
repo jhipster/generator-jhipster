@@ -21,89 +21,88 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd">
-    <%_
-    const entityTableName = entity.entityTableName;
-    const entityClass = entity.entityClass;
-    const name = entity.name;
-    if (hasFieldConstraint) { _%>
+<%_
+const entityTableName = entity.entityTableName;
+const entityClass = entity.entityClass;
+const name = entity.name;
+if (hasFieldConstraint) { _%>
 
     <!--
         Added the field constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-fields-constraints" author="jhipster">
-        <%_ for (field of addedFields) {
-            if (field.unique) {
-        _%>
+    <%_ for (field of addedFields) {
+        if (field.unique) {
+    _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
             columnNames="<%= field.columnName %>"
             constraintName="<%= field.getUXConstraintName(entityTableName) %>"/>
-        <%  }
-            if (!field.nullable) {
-        _%>
+    <%_ }
+        if (!field.nullable) {
+    _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= field.columnName %>"
             columnDataType="<%= field.fieldType %>"/>
-                <%_ if (field.shouldCreateContentType) {
-                _%>
+        <%_ if (field.shouldCreateContentType) { _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
-        <%      }
-            }
-        } _%>
+    <%_     }
+        }
+    } _%>
     </changeSet>
-    <% } _%>
-    <%_ if (hasRelationshipConstraint) { _%>
+<% } _%>
+<%_ if (hasRelationshipConstraint) { _%>
 
     <!--
         Added the relationship constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-relationship-constraints" author="jhipster">
-        <%_
-        for (idx in addedRelationships) {
-            const relationshipData = addedRelationships[idx];
-            if (relationshipData.unique) {
-                const idField = relationship.otherEntity.primaryKey.ownFields[0];
-                const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
-        _%>
+    <%_
+    for (idx in addedRelationships) {
+        const relationshipData = addedRelationships[idx];
+        if (relationshipData.unique) {
+            const idField = relationship.otherEntity.primaryKey.ownFields[0];
+            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+    _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
             columnNames="<%= relationshipData.columnName %>_id"
             constraintName="<%= uniqueConstraintName %>"/>
-        <% }
+        <%_ }
         if (!relationshipData.nullable) {
         _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= relationshipData.columnName %>"
             columnDataType="<%= relationshipData.columnDataType %>"/>
-        <%  }
-         } _%>
+    <%_  }
+     } _%>
     </changeSet>
-    <% } _%>
-    <%_ if (shouldWriteAnyRelationship) { %>
+<%_ } _%>
+<%_ if (shouldWriteAnyRelationship) { %>
 
     <!--
         Added the relationship constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-relationship-foreign-keys" author="jhipster">
-        <% for (idx in addedRelationships) {
-            const relationship = addedRelationships[idx];
-            relationshipName = relationship.relationshipName;
-            if (relationship.shouldWriteRelationship) {
-                const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
-                let baseColumnName = getColumnName(relationshipName) + '_id';
-                if (relationship.relationshipType === 'one-to-one' && relationship.id === true) {
-                    baseColumnName = 'id';
-                }
-        %>
+    <%_ for (idx in addedRelationships) {
+        const relationship = addedRelationships[idx];
+        relationshipName = relationship.relationshipName;
+        if (relationship.shouldWriteRelationship) {
+            const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
+            let baseColumnName = getColumnName(relationshipName) + '_id';
+            if (relationship.relationshipType === 'one-to-one' && relationship.id === true) {
+                baseColumnName = 'id';
+            }
+    _%>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"/>
-        <%_ } else if (relationship.shouldWriteJoinTable) {
-                const constraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(entityTableName), prodDatabaseType);
-                const otherEntityConstraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(relationshipName), prodDatabaseType);
-        _%>
+    <%_ } else if (relationship.shouldWriteJoinTable) {
+            const constraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(entityTableName), prodDatabaseType);
+            const otherEntityConstraintName = getFKConstraintName(relationship.joinTable.name, getColumnName(relationshipName), prodDatabaseType);
+    _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
@@ -116,9 +115,8 @@
                                  constraintName="<%= getColumnName(otherEntityConstraintName) %>"
                                  referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"/>
-    <%_     }
-        }
-    _%>
+    <%_ }
+    } _%>
     </changeSet>
-    <%_ } _%>
+<%_ } _%>
 </databaseChangeLog>

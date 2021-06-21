@@ -332,7 +332,7 @@ public class UserService {
             })
             .publishOn(Schedulers.boundedElastic())
             .then(Mono.fromCallable(() -> {
-                User newUser = new <%= asEntity('User') %>();
+                <%= asEntity('User') %> newUser = new <%= asEntity('User') %>();
                 <%_ if (databaseType === 'cassandra') { _%>
                 newUser.setId(UUID.randomUUID().toString());
                 <%_ } _%>
@@ -539,7 +539,13 @@ public class UserService {
             })
         <%_ } else { // reactive _%>
                 <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
+                    <%_ if (databaseType === 'sql') { _%>
+                return userRepository
+                    .deleteUserAuthorities(user.getId())
+                    .thenMany(Flux.fromIterable(userDTO.getAuthorities()))
+                    <%_ } else { _%>
                 return Flux.fromIterable(userDTO.getAuthorities())
+                    <%_ } _%>
                     .flatMap(authorityRepository::findById)
                     .map(managedAuthorities::add)
                     .then(Mono.just(user));
@@ -742,7 +748,7 @@ public class UserService {
     <%_ } _%>
     <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('AdminUser') %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll<% if (reactive) { %>ByIdNotNull<% } %>(pageable).map(<%= asDto('AdminUser') %>::new);
+        return userRepository.findAll<% if (reactive) { %><% if (databaseType === 'sql') { %>WithAuthorities<% } else { %>ByIdNotNull<% }} %>(pageable).map(<%= asDto('AdminUser') %>::new);
     }
 
     <%_ if (databaseType === 'sql') { _%>
@@ -843,7 +849,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    public Flux<User> removeNotActivatedUsersReactively() {
+    public Flux<<%= asEntity('User') %>> removeNotActivatedUsersReactively() {
         return userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(<%_ if (databaseType === 'sql') { _%>LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)<%_ } else { _%>Instant.now().minus(3, ChronoUnit.DAYS)<%_ } _%>)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))

@@ -198,6 +198,13 @@ const serverFiles = {
         { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },
       ],
     },
+    {
+      condition: generator => generator.buildTool === 'maven',
+      templates: [
+        { file: 'npmw', method: 'copy', noEjs: true },
+        { file: 'npmw.cmd', method: 'copy', noEjs: true },
+      ],
+    },
   ],
   serverResource: [
     {
@@ -1695,7 +1702,6 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.authenticationType !== 'oauth2',
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {

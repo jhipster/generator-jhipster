@@ -1,0 +1,679 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster Heroku Sub Generator microservice application with JAR deployment should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"promptValues\\": {
+      \\"packageName\\": \\"com.mycompany.myapp\\"
+    },
+    \\"jhipsterVersion\\": \\"4.14.0\\",
+    \\"baseName\\": \\"sampleMicroservice\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"serverPort\\": \\"8081\\",
+    \\"authenticationType\\": \\"jwt\\",
+    \\"cacheProvider\\": \\"hazelcast\\",
+    \\"enableHibernateCache\\": false,
+    \\"websocket\\": false,
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": false,
+    \\"messageBroker\\": false,
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableSwaggerCodegen\\": false,
+    \\"jwtSecretKey\\": \\"fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8\\",
+    \\"enableTranslation\\": false,
+    \\"applicationType\\": \\"microservice\\",
+    \\"testFrameworks\\": [],
+    \\"jhiPrefix\\": \\"jhi\\",
+    \\"clientPackageManager\\": \\"npm\\",
+    \\"skipClient\\": true,
+    \\"skipUserManagement\\": true,
+    \\"herokuAppName\\": \\"jhipster-test\\",
+    \\"herokuDeployType\\": \\"jar\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-test.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+  client:
+    service-url:
+      defaultZone: \${JHIPSTER_REGISTRY_URL}/eureka/
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+spring:
+  cloud:
+    config:
+      fail-fast: true
+      uri: \${JHIPSTER_REGISTRY_URL}/config
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application in the EU should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-test\\",
+    \\"herokuDeployType\\": \\"jar\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-test.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application in the US should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-test\\",
+    \\"herokuDeployType\\": \\"jar\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-test.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application with Git deployment should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-test\\",
+    \\"herokuDeployType\\": \\"git\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-test.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application with PostgreSQL should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"postgresql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-test\\",
+    \\"herokuDeployType\\": \\"jar\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-test.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application with an unavailable app name should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-new-name\\",
+    \\"herokuDeployType\\": \\"jar\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-new-name.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application with elasticsearch should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"samplePsql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"postgresql\\",
+    \\"searchEngine\\": \\"elasticsearch\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-test\\",
+    \\"herokuDeployType\\": \\"jar\\",
+    \\"herokuJavaVersion\\": \\"11\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-test.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+  elasticsearch:
+    rest:
+      uris: \${BONSAI_URL}
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=11 ",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster Heroku Sub Generator monolith application with existing app should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"applicationType\\": \\"monolith\\",
+    \\"baseName\\": \\"sampleMysql\\",
+    \\"packageName\\": \\"com.mycompany.myapp\\",
+    \\"packageFolder\\": \\"com/mycompany/myapp\\",
+    \\"authenticationType\\": \\"session\\",
+    \\"cacheProvider\\": \\"ehcache\\",
+    \\"websocket\\": \\"no\\",
+    \\"databaseType\\": \\"sql\\",
+    \\"devDatabaseType\\": \\"h2Disk\\",
+    \\"prodDatabaseType\\": \\"mysql\\",
+    \\"searchEngine\\": \\"no\\",
+    \\"buildTool\\": \\"maven\\",
+    \\"enableTranslation\\": true,
+    \\"nativeLanguage\\": \\"en\\",
+    \\"languages\\": [\\"en\\", \\"fr\\"],
+    \\"rememberMeKey\\": \\"2bb60a80889aa6e6767e9ccd8714982681152aa5\\",
+    \\"testFrameworks\\": [\\"gatling\\"],
+    \\"herokuAppName\\": \\"jhipster-existing\\",
+    \\"herokuDeployType\\": \\"git\\",
+    \\"herokuJavaVersion\\": 1
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "Procfile": Object {
+    "contents": "web: java $JAVA_OPTS -Xmx256m -jar target/*.jar --spring.profiles.active=prod,heroku 
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Boot configuration for the \\"heroku\\" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+  instance:
+    hostname: jhipster-existing.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: \${JDBC_DATABASE_URL}
+    username: \${JDBC_DATABASE_USERNAME}
+    password: \${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
+server:
+  port: \${PORT:8080}
+",
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": Object {
+    "contents": "# ===================================================================
+# Spring Cloud Config bootstrap configuration for the \\"heroku\\" profile
+# ===================================================================
+
+",
+    "stateCleared": "modified",
+  },
+  "system.properties": Object {
+    "contents": "java.runtime.version=1 ",
+    "stateCleared": "modified",
+  },
+}
+`;

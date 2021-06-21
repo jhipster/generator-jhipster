@@ -17,7 +17,13 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+import { HttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+<%_ } _%>
 import { SharedModule } from 'app/shared/shared.module';
 import { <%= entityAngularName %>Component } from './list/<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './detail/<%= entityFileName %>-detail.component';
@@ -27,23 +33,50 @@ import { <%= entityAngularName %>DeleteDialogComponent } from './delete/<%= enti
 <%_ } _%>
 import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileName %>-routing.module';
 
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+function translatePartialLoader(http: HttpClient, applicationConfigService: ApplicationConfigService): TranslateLoader {
+  const prefix = applicationConfigService.getEndpointFor('i18n/', '<%= microserviceName %>');
+  return new TranslateHttpLoader(http, prefix, `.json?_=${I18N_HASH}`);
+}
+
+<%_ } _%>
 @NgModule({
-    imports: [
-        SharedModule,
-        <%= entityAngularName %>RoutingModule,
-    ],
-    declarations: [
-        <%= entityAngularName %>Component,
-        <%= entityAngularName %>DetailComponent,
-        <%_ if (!readOnly) { _%>
-        <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>DeleteDialogComponent,
-        <%_ } %>
-    ],
-    <%_ if (!readOnly) { _%>
-    entryComponents: [
-        <%= entityAngularName %>DeleteDialogComponent
-    ]
-    <%_ } _%>
+  imports: [
+    SharedModule,
+    <%= entityAngularName %>RoutingModule,
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (translatePartialLoader),
+        deps: [HttpClient, ApplicationConfigService]
+      },
+      isolate: false,
+      extend: true,
+    }),
+<%_ } _%>
+  ],
+  declarations: [
+    <%= entityAngularName %>Component,
+    <%= entityAngularName %>DetailComponent,
+<%_ if (!readOnly) { _%>
+    <%= entityAngularName %>UpdateComponent,
+    <%= entityAngularName %>DeleteDialogComponent,
+<%_ } %>
+  ],
+<%_ if (!readOnly) { _%>
+  entryComponents: [
+    <%= entityAngularName %>DeleteDialogComponent
+  ]
+<%_ } _%>
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {}
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : '' %><%= entityAngularName %>Module {
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+  constructor(private translateService: TranslateService, private translateLoader: TranslateLoader) {
+    const currentLang = translateService.store.currentLang;
+    this.translateLoader.getTranslation(currentLang).subscribe(translation => {
+      this.translateService.setTranslation(currentLang, translation);
+    });
+  }
+<%_ } _%>
+}

@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import {
   firstNameSettingsSelector,
   lastNameSettingsSelector,
@@ -6,11 +24,16 @@ import {
 } from '../../support/commands';
 
 describe('/account/settings', () => {
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
+
   before(() => {
     cy.window().then((win) => {
       win.sessionStorage.clear()
     });
-    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
+<%_ if (authenticationTypeSession) { _%>
+    cy.clearCookie('SESSION');
+<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.login('user', 'user');
@@ -26,7 +49,7 @@ describe('/account/settings', () => {
     // need to modify email because default email does not match regex in vue
     cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click({force: true});
-    cy.wait('@settingsSave').then(({ request, response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
   });
 
   it("should be able to change 'user' lastname settings", () => {
@@ -34,20 +57,20 @@ describe('/account/settings', () => {
     // need to modify email because default email does not match regex in vue
     cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click({force: true});
-    cy.wait('@settingsSave').then(({ request, response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
   });
 
   it("should be able to change 'user' email settings", () => {
     cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
     cy.get(submitSettingsSelector).click({force: true});
-    cy.wait('@settingsSave').then(({ request, response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
   });
 
   it("should not be able to change 'user' settings if email already exists", () => {
     // add an email for admin account
     cy.clickOnLogoutItem();
     cy.visit('');
-    cy.login('admin', 'admin');
+    cy.login(username, password);
     cy.clickOnSettingsItem();
     cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
     cy.get(submitSettingsSelector).click({force: true});
@@ -66,6 +89,6 @@ describe('/account/settings', () => {
     // Fix in future version of cypress
     // => https://glebbahmutov.com/blog/cypress-intercept-problems/#no-overwriting-interceptors
     // => https://github.com/cypress-io/cypress/issues/9302
-    // cy.wait('@settingsNotSave').then(({ request, response }) => expect(response.statusCode).to.equal(400));
+    // cy.wait('@settingsNotSave').then(({ response }) => expect(response.statusCode).to.equal(400));
   });
 })

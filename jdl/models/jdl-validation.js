@@ -38,7 +38,7 @@ module.exports = class JDLValidation {
 
 function defaults() {
   return {
-    name: 'required',
+    name: Validations.REQUIRED,
     value: '',
   };
 }

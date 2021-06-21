@@ -25,7 +25,7 @@ applications:
      - https://github.com/cloudfoundry/java-buildpack
     env:
       SPRING_PROFILES_ACTIVE: <%= cloudfoundryProfile %>, cloudfoundry
-<%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
     services:
       - <%= cloudfoundryDeployedName %>
 <%_ } _%>

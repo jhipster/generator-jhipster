@@ -1,11 +1,10 @@
 version: '2'
 services:
     msmysql-mysql:
-        image: mysql:5.7.18
+        image: mysql:8.0.25
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/
         environment:
-            - MYSQL_USER=root
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=msmysql
         ports:

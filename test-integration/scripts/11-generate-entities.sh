@@ -8,6 +8,9 @@ else
 fi
 
 echo "11-generate-entities.sh script is deprecated, use 11-generate-config.sh instead"
+if [[ "$JHI_GENERATE_SKIP_CONFIG" == "1" ]]; then
+    exit 1
+fi
 
 #-------------------------------------------------------------------------------
 # Functions
@@ -18,7 +21,9 @@ moveEntity() {
 }
 
 prepareFolder() {
-    rm -rf "$JHI_FOLDER_APP"
+    if [[$(dirname $(pwd)) != $(dirname $JHI_FOLDER_APP)]]; then
+      rm -rf "$JHI_FOLDER_APP"
+    fi
     mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 }
 #-------------------------------------------------------------------------------

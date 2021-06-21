@@ -1,30 +1,30 @@
 import axios from 'axios';
-<% if (pagination !== 'no') { %>
+<% if (!paginationNo) { %>
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 <% } %>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 
 <%_
-const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 _%>
 
 const baseApiUrl = '<%= baseApi + entityApiUrl %>';
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine) { _%>
 const baseSearchApiUrl = '<%= baseApi %>_search/<%= entityApiUrl %>?query=';
 <%_ } _%>
 
 export default class <%= entityAngularName %>Service {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
-  public search(query<% if (pagination !== 'no') { %>, paginationQuery<% } %>) : Promise<any> {
+<%_ if (searchEngine) { _%>
+  public search(query<% if (!paginationNo) { %>, paginationQuery<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.get(`${baseSearchApiUrl}${query}<% if (pagination !== 'no') { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(res => {
-        resolve(<% if (pagination !== 'no') { %>res<% } else { %>res.data<% } %>);
+      axios.get(`${baseSearchApiUrl}${query}<% if (!paginationNo) { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(res => {
+        resolve(<% if (!paginationNo) { %>res<% } else { %>res.data<% } %>);
       }).catch(err => { reject(err); });
     });
   }
-  <%_ } _%>
+<%_ } _%>
 
-  public find(id: <% if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<I<%= entityAngularName %>> {
+  public find(id: <%- getTypescriptKeyType(primaryKey) %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
       axios.get(`${baseApiUrl}/${id}`).then(res => {
         resolve(res.data);
@@ -32,17 +32,16 @@ export default class <%= entityAngularName %>Service {
     });
   }
 
-  public retrieve(<% if (pagination !== 'no') { %>paginationQuery?: any<% } %>) : Promise<any> {
+  public retrieve(<% if (!paginationNo) { %>paginationQuery?: any<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.get(baseApiUrl<% if (pagination !== 'no') { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(res => {
+      axios.get(baseApiUrl<% if (!paginationNo) { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(res => {
         resolve(res);
       }).catch(err => { reject(err); });
     });
   }
-  <%_
-  if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
 
-  public delete(id: <% if (primaryKey.type === 'String'  || primaryKey.type === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<any> {
+  public delete(id: <%- getTypescriptKeyType(primaryKey) %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios.delete(`${baseApiUrl}/${id}`).then(res => {
         resolve(res);
@@ -73,5 +72,5 @@ export default class <%= entityAngularName %>Service {
       }).catch(err => { reject(err); });
     });
   }
-  <%_ } _%>
+<%_ } _%>
 }

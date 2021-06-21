@@ -40,25 +40,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Atualizar lista",
-                <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
                 "createLabel": "Criar <%= novo %> <%= entityClassHumanized %>",
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>",
-                <%_ } _%>
-                <%_ if (searchEngine !== false) { _%>
+<%_ } _%>
+<%_ if (searchEngine) { _%>
                 "search": "Pesquisar por <%= entityClassHumanized %>",
-                <%_ } _%>
+<%_ } _%>
                 "notFound": "<%= Nenhum %> <%= entityClassHumanized %> <%= encontrado %>"
             },
-            <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= Um %> <%= novo %> <%= entityClassHumanized %> foi <%= criado %> com o identificador {{ param }}",
             "updated": "<%= Um %> <%= entityClassHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
             "deleted": "<%= Um %> <%= entityClassHumanized %> foi <%= excluido %> com o identificador {{ param }}",
-            <%_ } _%>
-            <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
-            <%_ } _%>
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {

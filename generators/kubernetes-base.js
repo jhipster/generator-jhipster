@@ -72,7 +72,7 @@ function loadConfig() {
   this.ingressType = this.config.get('ingressType');
   this.ingressDomain = this.config.get('ingressDomain');
   this.istio = this.config.get('istio');
-  this.dbRandomPassword = crypto.randomBytes(30).toString('hex');
+  this.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
   this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
   this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
   this.generatorType = this.config.get('generatorType');

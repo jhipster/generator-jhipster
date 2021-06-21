@@ -19,6 +19,7 @@
 const logger = require('../utils/objects/logger');
 const RelationshipTypes = require('../jhipster/relationship-types');
 const { lowerFirst } = require('../utils/string-utils');
+const { REQUIRED } = require('../jhipster/validations');
 
 module.exports = class JDLRelationship {
   constructor(args) {
@@ -33,7 +34,7 @@ module.exports = class JDLRelationship {
     if (
       merged.type === RelationshipTypes.ONE_TO_MANY &&
       (!merged.injectedFieldInFrom || !merged.injectedFieldInTo) &&
-      merged.generateBidirectionalOneToMany
+      !merged.unidirectionalRelationships
     ) {
       logger.warn(
         `In the One-to-Many relationship from ${merged.from} to ${merged.to}, ` +
@@ -106,7 +107,7 @@ module.exports = class JDLRelationship {
     }
     string += `${this.from}`;
     if (this.injectedFieldInFrom) {
-      string += `{${this.injectedFieldInFrom}${this.isInjectedFieldInFromRequired ? ' required' : ''}}`;
+      string += `{${this.injectedFieldInFrom}${this.isInjectedFieldInFromRequired ? ` ${REQUIRED}` : ''}}`;
     }
     string += ' to';
     if (this.commentInTo) {
@@ -128,7 +129,7 @@ module.exports = class JDLRelationship {
     }
     string += `${this.to}`;
     if (this.injectedFieldInTo) {
-      string += `{${this.injectedFieldInTo}${this.isInjectedFieldInToRequired ? ' required' : ''}}`;
+      string += `{${this.injectedFieldInTo}${this.isInjectedFieldInToRequired ? ` ${REQUIRED}` : ''}}`;
     }
     const globalOptions = this.options.global;
     if (Object.keys(globalOptions).length !== 0) {
@@ -172,7 +173,7 @@ function defaults() {
     },
     commentInFrom: '',
     commentInTo: '',
-    generateBidirectionalOneToMany: true,
+    unidirectionalRelationships: false,
   };
 }
 

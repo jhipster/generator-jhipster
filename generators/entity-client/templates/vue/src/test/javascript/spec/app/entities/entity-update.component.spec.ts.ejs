@@ -16,50 +16,45 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = generateTestEntityId(primaryKey.type);
-_%>
+<%_ const tsKeyId = generateTestEntityId(primaryKey.type); _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 
-<%_
-    let dayJsIncluded = false;
-    for (field of fields.filter(field => !field.id)) {
-        const fieldName = field.fieldName;
-        const fieldType = field.fieldType;
-        if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dayJsIncluded) {
-            dayJsIncluded = true;
-_%>
+<%_ let dayJsIncluded = false;
+  for (field of fields.filter(field => !field.id)) { _%>
+  <%_ if (field.fieldTypeTimed && !dayJsIncluded) {
+      dayJsIncluded = true; _%>
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-<%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
 
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
-<%_
-    const importEntitiesSeen = [entityAngularName];
-    for (relationship of relationships) {
-      if (!relationship.otherEntityIsEmbedded) {
-        const otherEntityAngularName = relationship.otherEntityAngularName;
-        const otherEntityFileName = relationship.otherEntityFileName;
-        const otherEntityFolderName = relationship.otherEntityFileName;
-        const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder;
-        const otherEntityModelName = relationship.otherEntityModelName;
-        if (!importEntitiesSeen.includes(otherEntityAngularName)) {
-_%>
-  <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
+<%_ const importEntitiesSeen = [entityAngularName];
+  for (relationship of relationships) { _%>
+  <%_ if (!relationship.otherEntityIsEmbedded) {
+    const otherEntityAngularName = relationship.otherEntityAngularName;
+    const otherEntityFileName = relationship.otherEntityFileName;
+    const otherEntityFolderName = relationship.otherEntityFileName;
+    const otherEntityClientRootFolder = relationship.otherEntityClientRootFolder; _%>
+    <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
+      <% if (relationship.otherEntityUser && !authenticationTypeOauth2) { %>
 import UserService from '@/admin/user-management/user-management.service';
- <%_ } else if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { _%>
+      <%_ } else if (relationship.otherEntityUser && authenticationTypeOauth2) { _%>
 import UserOAuth2Service from '@/entities/user/user.oauth2.service';
-  <% } else if (otherEntityAngularName !== 'User') { %>
+      <% } else if (!relationship.otherEntityUser) { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
-  <% } } %>
-<%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
+      <%_ } _%>
+    <%_ } _%>
+    <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } _%>
+<%_ } _%>
 
 const localVue = createLocalVue();
 
@@ -88,43 +83,41 @@ describe('Component Tests', () => {
 
       wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, {
         store,
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         i18n,
-        <%_ } _%>
+<%_ } _%>
         localVue,
         router,
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-          <%_
-            const entitiesSeen = [entityAngularName];
-            for (relationship of relationships) {
-              if (!relationship.otherEntityIsEmbedded) {
-                const otherEntityName = relationship.otherEntityName;
-                const otherEntityNamePlural = relationship.otherEntityNamePlural;
-                const otherEntityAngularName = relationship.otherEntityAngularName;
-          _%>
-          <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-          <%_ if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { _%>
+<%_
+  const entitiesSeen = [entityAngularName];
+  for (relationship of relationships) { _%>
+  <%_ if (!relationship.otherEntityIsEmbedded) {
+      const otherEntityName = relationship.otherEntityName;
+      const otherEntityAngularName = relationship.otherEntityAngularName; _%>
+    <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
+      <%_ if (relationship.otherEntityUser && authenticationTypeOauth2) { _%>
           userOAuth2Service: () => new UserOAuth2Service(),
-          <%_ } else { _%>
+      <%_ } else { _%>
           <%= otherEntityName %>Service: () => new <%= otherEntityAngularName %>Service(),
-          <%_ } _%>
-          <%_ } _%>
-          <%_ entitiesSeen.push(otherEntityAngularName); } }_%>
+      <%_ } _%>
+    <%_ } _%>
+    <%_ entitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } _%>
+<%_ } _%>
 
         }
       });
       comp = wrapper.vm;
     });
 
-    <%_
-      let dateTestsIncluded = false;
-      for (field of fields.filter(field => !field.id)) {
-          const fieldName = field.fieldName;
-          const fieldType = field.fieldType;
-          if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !dateTestsIncluded) {
-              dateTestsIncluded = true;
-    _%>
+<%_
+  let dateTestsIncluded = false;
+  for (field of fields.filter(field => !field.id)) {
+    if (field.fieldTypeTimed && !dateTestsIncluded) {
+      dateTestsIncluded = true;
+_%>
     describe('load', () => {
       it('Should convert date from string', () => {
         // GIVEN
@@ -141,7 +134,8 @@ describe('Component Tests', () => {
         expect(comp.convertDateTimeFromServer(null)).toBeNull();
       });
     });
-    <%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {

@@ -25,19 +25,19 @@ public enum <%= enumName %> {
 <%_ if (withoutCustomValues) { _%>
     <%= enumValues.map(enumValue => enumValue.name).join(', ') %>
 <%_ } else {
-    enumValues.forEach((enumWithCustomValue, index) => {
-        if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
+  enumValues.forEach((enumWithCustomValue, index) => {
+    if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
     <%= enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
-        <%_ } else { _%>
+    <%_ } else { _%>
     <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
-        <%_ }
-    }); _%>
+    <%_ }
+  }); _%>
 
     private<% if (withCustomValues) { %> final<% } %> String value;
 
-<%_ if (withSomeCustomValues) { _%>
+  <%_ if (withSomeCustomValues) { _%>
     <%= enumName %>() {}
-<%_ } _%>
+  <%_ } _%>
 
     <%= enumName %>(String value) {
         this.value = value;

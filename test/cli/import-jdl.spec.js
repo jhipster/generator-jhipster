@@ -123,7 +123,7 @@ describe('JHipster generator import jdl', () => {
 
     it('calls generator in order', () => {
       expect(subGenCallParams.count).to.equal(5);
-      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
+      expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
       expect(subGenCallParams.options[0]).to.eql([
         '--reproducible',
         '--force',
@@ -132,7 +132,13 @@ describe('JHipster generator import jdl', () => {
         '--no-insight',
         '--from-jdl',
       ]);
-      expect(subGenCallParams.options[3]).to.eql(['--force', '--skip-install', '--no-insight', '--skip-prompts', '--from-jdl']);
+      expect(subGenCallParams.options[3]).to.eql({
+        force: true,
+        skipInstall: true,
+        fromJdl: true,
+        noInsight: true,
+        skipPrompts: true,
+      });
     });
   });
 
@@ -623,10 +629,16 @@ describe('JHipster generator import jdl', () => {
       ]);
     });
     it('calls deployment generator', () => {
-      const invokedSubgens = ['docker-compose', 'kubernetes', 'openshift'];
+      const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
       expect(subGenCallParams.commands).to.eql(invokedSubgens);
       expect(subGenCallParams.count).to.equal(invokedSubgens.length);
-      expect(subGenCallParams.options[0]).to.eql(['--force', '--skip-install', '--no-skip-git', '--skip-prompts', '--from-jdl']);
+      expect(subGenCallParams.options[0]).to.eql({
+        force: true,
+        skipInstall: true,
+        skipGit: false,
+        fromJdl: true,
+        skipPrompts: true,
+      });
     });
   });
 
@@ -645,7 +657,7 @@ describe('JHipster generator import jdl', () => {
 
       it('calls generator in order', () => {
         expect(subGenCallParams.count).to.equal(5);
-        expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'docker-compose', 'kubernetes']);
+        expect(subGenCallParams.commands).to.eql(['app', 'app', 'app', 'jhipster:docker-compose', 'jhipster:kubernetes']);
         expect(subGenCallParams.options[0]).to.eql([
           '--reproducible',
           '--force',
@@ -655,14 +667,14 @@ describe('JHipster generator import jdl', () => {
           '--no-skip-git',
           '--from-jdl',
         ]);
-        expect(subGenCallParams.options[3]).to.eql([
-          '--force',
-          '--skip-install',
-          '--no-insight',
-          '--no-skip-git',
-          '--skip-prompts',
-          '--from-jdl',
-        ]);
+        expect(subGenCallParams.options[3]).to.eql({
+          force: true,
+          skipInstall: true,
+          skipGit: false,
+          noInsight: true,
+          fromJdl: true,
+          skipPrompts: true,
+        });
       });
     });
     describe('creates config files', () => {

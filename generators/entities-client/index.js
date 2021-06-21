@@ -17,18 +17,16 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { GENERATOR_ENTITIES_CLIENT } = require('../generator-list');
 
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
-
     if (this.options.help) return;
-
     this.clientEntities = this.options.clientEntities;
-
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entities-client');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITIES_CLIENT);
   }
 
   // Public API method used by the getter and also by Blueprints

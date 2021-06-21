@@ -19,42 +19,40 @@
 
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
 <%_ for (const field of fields) {
-        const fieldType = field.fieldType;
-        const fieldName = field.fieldName;
-        const fieldNameUnderscored = field.fieldNameUnderscored;
-        const fieldTypeBlobContent = field.fieldTypeBlobContent; _%>
-    <%_ if (fieldType === 'UUID') { _%>
+  const fieldName = field.fieldName;
+  const fieldNameUnderscored = field.fieldNameUnderscored; _%>
+  <%_ if (field.fieldTypeUUID) { _%>
     <%= fieldName %> uuid,
-    <%_ } else if (fieldType === 'String' || field.fieldIsEnum) { _%>
+  <%_ } else if (field.fieldTypeString || field.fieldIsEnum) { _%>
     <%= fieldName %> text,
-    <%_ } else if (fieldType === 'Integer') { _%>
+  <%_ } else if (field.fieldTypeInteger) { _%>
     <%= fieldName %> int,
-    <%_ } else if (fieldType === 'Long') { _%>
+  <%_ } else if (field.fieldTypeLong) { _%>
     <%= fieldName %> bigint,
-    <%_ } else if (fieldType === 'Float') { _%>
+  <%_ } else if (field.fieldTypeFloat) { _%>
     <%= fieldName %> float,
-    <%_ } else if (fieldType === 'Double') { _%>
+  <%_ } else if (field.fieldTypeDouble) { _%>
     <%= fieldName %> double,
-    <%_ } else if (fieldType === 'BigDecimal') { _%>
+  <%_ } else if (field.fieldTypeBigDecimal) { _%>
     <%= fieldName %> decimal,
-    <%_ } else if (fieldType === 'LocalDate') { _%>
+  <%_ } else if (field.fieldTypeLocalDate) { _%>
     <%= fieldName %> date,
-    <%_ } else if (fieldType === 'Instant') { _%>
+  <%_ } else if (field.fieldTypeInstant) { _%>
     <%= fieldName %> timestamp,
-    <%_ } else if (fieldType === 'Duration') { _%>
+  <%_ } else if (field.fieldTypeDuration) { _%>
     <%= fieldName %> text,
-    <%_ } else if (fieldType === 'ZonedDateTime') { _%>
+  <%_ } else if (field.fieldTypeZonedDateTime) { _%>
     <%= fieldName %> tuple<timestamp,varchar>,
-    <%_ } else if (fieldType === 'Boolean') { _%>
+  <%_ } else if (field.fieldTypeBoolean) { _%>
     <%= fieldName %> boolean,
-    <%_ } else if (fieldType === 'ByteBuffer') { _%>
-        <%_ if (fieldTypeBlobContent !== 'text') { _%>
+  <%_ } else if (field.fieldTypeByteBuffer) { _%>
+    <%_ if (!field.blobContentTypeText) { _%>
     <%= fieldName %> blob,
     <%= fieldNameUnderscored %>_content_type text,
-        <%_ } else { _%>
+    <%_ } else { _%>
     <%= fieldName %> text,
-        <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
     PRIMARY KEY(id)
 );

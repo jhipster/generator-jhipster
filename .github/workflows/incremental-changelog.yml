@@ -18,12 +18,17 @@
 #
 
 name: Incremental Changelog
+concurrency:
+  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
 on:
   push:
     branches-ignore:
       - 'dependabot/**'
       - 'skip_ci*'
   pull_request:
+    types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
     paths:
@@ -33,28 +38,6 @@ on:
       - 'generators/entity/**'
       - 'generators/database-changelog/**'
       - 'generators/database-changelog-liquibase/**'
-env:
-  JHI_RUN_APP: 1
-  JHI_JDK: 11
-  JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
-  JHI_LIB_BRANCH: release
-  JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-  JHI_GEN_BRANCH: main
-  SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
-  SPRING_JPA_SHOW_SQL: false
-  JHI_DISABLE_WEBPACK_LOGS: true
-  JHI_E2E_HEADLESS: true
-  JHI_HOME: ${{ github.workspace }}/generator-jhipster
-  JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
-  JHI_FOLDER_APP: ${{ github.workspace }}/app
-  NG_CLI_ANALYTICS: 'false'
-  JHI_GITHUB_CI: true
-  FORCE_COLOR: 1
-  # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
-  MAVEN_OPTS: >-
-    -Dhttp.keepAlive=false
-    -Dmaven.wagon.http.pool=false
-    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
 jobs:
   applications:
     name: ${{ matrix.app-type }}
@@ -67,31 +50,24 @@ jobs:
       !contains(github.event.head_commit.message, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
+      github.event.action != 'closed' &&
       (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')) &&
       !contains(github.event.pull_request.user.login, 'dependabot')
     timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
-        node_version: [14.16.0]
         os: [ubuntu-20.04]
+        cache: [angular]
         app-type:
           - liquibase-jdl-rename-field
         include:
           - app-type: liquibase-jdl-rename-field
             entity: jdl
             liquibase: jdl
-            profile: prod
+            environment: prod
             war: 0
             e2e: 1
-    env:
-      JHI_ENTITY: ${{ matrix.entity }}
-      JHI_APP: ${{ matrix.app-type }}
-      JHI_LIQUIBASE: ${{ matrix.liquibase }}
-      JHI_PROFILE: ${{ matrix.profile }}
-      JHI_WAR: ${{ matrix.war }}
-      JHI_E2E: ${{ matrix.e2e }}
-      JHI_TESTCONTAINERS: ${{ matrix.testcontainers }}
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -100,54 +76,52 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: generator-jhipster
-      - name: 'SETUP: Create required structure'
-        run: |
-          mkdir app
-        working-directory: ${{ github.workspace }}
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./generator-jhipster/.github/actions/setup
+        with:
+          application-sample: ${{ matrix.app-type }}
+          entities-sample: ${{ matrix.entity }}
+          application-environment: ${{ matrix.environment }}
+          application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
+          enable-testcontainers: ${{ matrix.testcontainers == 1 }}
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: ${{ matrix.node_version }}
-      - uses: actions/setup-java@v1
+          node-version: ${{ steps.setup.outputs.node-version }}
+      - uses: actions/setup-java@v2
         with:
-          java-version: '11.x'
-      - name: 'SETUP: Get date'
-        id: get-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+          distribution: 'adopt'
+          java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json.ejs') }}
+          path: |
+            ~/.npm
+            ~/.cache/Cypress/
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
           restore-keys: |
-            ${{ runner.os }}-maven-${{ matrix.app-type }}-${{ steps.get-date.outputs.date }}-
+            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
+            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load gradle cache'
         if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
+          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.app-type }}-
-      - name: 'SETUP: load e2e cache'
-        if: matrix.e2e == 1
-        uses: actions/cache@v2.1.4
-        with:
-          path: ~/.cache/Cypress/
-          key: ${{ runner.os }}-e2e-${{ matrix.app-type }}-${{ hashFiles('generator-jhipster/**/package.json.ejs') }}
-          restore-keys: |
-            ${{ runner.os }}-e2e-${{ matrix.app-type }}-
-      - name: 'ENV: display variables'
-        run: $JHI_SCRIPTS/01-display-configuration.sh
+            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
+            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
@@ -157,8 +131,8 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'GENERATION: install JHipster'
         run: $JHI_SCRIPTS/10-install-jhipster.sh
-      - name: 'GENERATION: entities'
-        run: $JHI_SCRIPTS/11-generate-entities.sh
+      - name: 'GENERATION: config'
+        run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
         run: $JHI_SCRIPTS/12-generate-project.sh --with-entities --force --skip-jhipster-dependencies --creation-timestamp '2020-01-01'
         env:
@@ -195,7 +169,7 @@ jobs:
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.app-type }}
-          path: ${{ github.workspace }}/app/*/cypress/screenshots
+          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
       - name: 'ANALYSIS: Sonar analysis'
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:

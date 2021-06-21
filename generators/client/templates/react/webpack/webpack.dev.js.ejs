@@ -19,7 +19,6 @@
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge').merge;
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
@@ -30,7 +29,7 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
 
-module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
+module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
@@ -60,6 +59,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     stats: options.stats,
     hot: true,
     contentBase: './<%= DIST_DIR %>',
+    port: <%= devServerPort %>,
     proxy: [{
       context: [
         '/api',
@@ -68,7 +68,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         '/swagger-resources',
         '/v2/api-docs',
         '/v3/api-docs',
-        '/h2-console',<% if (authenticationType === 'oauth2') { %>
+        '/h2-console',<% if (authenticationTypeOauth2) { %>
         '/oauth2',
         '/login',<% } %>
         '/auth'
@@ -76,7 +76,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
       secure: false,
       changeOrigin: options.tls
-    }<% if (websocket === 'spring-websocket') { %>,{
+    }<% if (communicationSpringWebsocket) { %>,{
       context: [
         '/websocket'
       ],
@@ -96,14 +96,13 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       : new SimpleProgressWebpackPlugin({
           format: options.stats === 'minimal' ? 'compact' : 'expanded'
         }),
-    new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin(
       {
         https: options.tls,
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (websocket === 'spring-websocket') { %>,
+          target: `http${options.tls ? 's' : ''}://localhost:<%= devServerPort %>`<% if (communicationSpringWebsocket) { %>,
           ws: true<% } %>,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430

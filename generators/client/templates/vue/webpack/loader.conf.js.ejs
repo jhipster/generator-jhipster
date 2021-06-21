@@ -1,6 +1,6 @@
 'use strict';
 const utils = require('./vue.utils');
-const config = require('../config/index');
+const config = require('./env');
 const isProduction = process.env.NODE_ENV === 'production';
 const sourceMapEnabled = isProduction ? config.build.productionSourceMap : config.dev.cssSourceMap;
 

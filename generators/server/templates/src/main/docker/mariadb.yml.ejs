@@ -24,7 +24,6 @@ services:
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
     environment:
-      - MYSQL_USER=root
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
     # If you want to expose these ports outside your dev PC,

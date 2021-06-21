@@ -351,14 +351,20 @@ module.exports = class JDLParser extends CstParser {
 
   enumProp() {
     this.RULE('enumProp', () => {
-      this.CONSUME(LexerTokens.NAME, { LABEL: 'enumPropKey' });
       this.OPTION(() => {
+        this.CONSUME(LexerTokens.JAVADOC);
+      });
+      this.CONSUME(LexerTokens.NAME, { LABEL: 'enumPropKey' });
+      this.OPTION1(() => {
         this.CONSUME(LexerTokens.LPAREN);
         this.OR([
           { ALT: () => this.CONSUME2(LexerTokens.STRING, { LABEL: 'enumPropValueWithQuotes' }) },
           { ALT: () => this.CONSUME3(LexerTokens.NAME, { LABEL: 'enumPropValue' }) },
         ]);
         this.CONSUME(LexerTokens.RPAREN);
+      });
+      this.OPTION2(() => {
+        this.CONSUME1(LexerTokens.JAVADOC);
       });
     });
   }

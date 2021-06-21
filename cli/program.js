@@ -45,6 +45,7 @@ const createProgram = () => {
         '--blueprints <value>',
         'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs'
       )
+      .option('--force-insight', 'Force insight')
       .option('--no-insight', 'Disable insight')
       // Conflicter options
       .option('--force', 'Override every file', false)
@@ -54,6 +55,8 @@ const createProgram = () => {
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp())
+      .addOption(new Option('--prefer-global', 'Run jhipster installed globally').hideHelp())
+      .addOption(new Option('--prefer-local', 'Run jhipster installed locally').hideHelp())
   );
 };
 
@@ -126,8 +129,11 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
               }
             }
             if (cmdName === 'jdl' || program.opts().fromJdl) {
-              const generator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
-              command.addGeneratorOptions(generator._options, chalk.gray(' (application)'));
+              const appGenerator = env.create(`${JHIPSTER_NS}:app`, { options: { help: true } });
+              command.addGeneratorOptions(appGenerator._options, chalk.gray(' (application)'));
+
+              const workspacesGenerator = env.create(`${JHIPSTER_NS}:workspaces`, { options: { help: true } });
+              command.addGeneratorOptions(workspacesGenerator._options, chalk.gray(' (workspaces)'));
             }
 
             // Register blueprint specific options.

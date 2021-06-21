@@ -43,11 +43,11 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webapp_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>") {
+task webapp_test(type: NpmTask, dependsOn: "npm_install") {
     args = ["run", "webapp:test"]
 }
 
-task webapp(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>") {
+task webapp(type: NpmTask, dependsOn: "npm_install") {
     args = ["run", "webapp:prod"]
     environment = [APP_VERSION: project.version]
 }

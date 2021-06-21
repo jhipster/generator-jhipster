@@ -18,23 +18,19 @@
 -%>
 'use strict';
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
-const path = require('path');
 const webpack = require('webpack');
 const { merge: webpackMerge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const utils = require('./vue.utils');
-const config = require('../config');
-const baseWebpackConfig = require('./webpack.common');
+const config = require('./env');
+const commonConfig = require('./webpack.common');
 const jhiUtils = require('./utils.js');
+const MODE = 'development';
 
-const HOST = process.env.HOST;
-const PORT = process.env.PORT && Number(process.env.PORT);
-
-module.exports = webpackMerge(baseWebpackConfig, {
-  mode: 'development',
+module.exports = async env => webpackMerge(await commonConfig({ env: MODE }), {
+  mode: MODE,
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
   },
@@ -46,7 +42,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
   },
   output: {
     path: jhiUtils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].bundle.js',
+    filename: 'app/[contenthash].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
   optimization: {
@@ -54,7 +50,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
   },
   devServer: {
     contentBase: './<%= DIST_DIR %>',
-    port: 9060,
+    port: <%= devServerPort %>,
     proxy: [
       {
         context: [
@@ -64,16 +60,18 @@ module.exports = webpackMerge(baseWebpackConfig, {
           '/swagger-resources',
           '/v2/api-docs',
           '/v3/api-docs',
-          '/h2-console',<% if (authenticationType === 'oauth2') { %>
+          '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
           '/oauth2',
-          '/login',<% } %>
+          '/login',
+<%_ } _%>
           '/auth'
         ],
         target: 'http://127.0.0.1:<%= serverPort %>',
         secure: false,
         headers: { host: 'localhost:9000' }
       },
-      <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
       {
         context: [
           '/websocket'
@@ -81,7 +79,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
         target: 'ws://127.0.0.1:<%= serverPort %>',
         ws: true
       }
-      <%_ } _%>
+<%_ } _%>
     ],
     watchOptions: {
       ignored: /node_modules/
@@ -89,9 +87,6 @@ module.exports = webpackMerge(baseWebpackConfig, {
     historyApiFallback: true
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
@@ -106,10 +101,10 @@ module.exports = webpackMerge(baseWebpackConfig, {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: 'http://localhost:9060',
-          <%_ if (websocket === 'spring-websocket') { _%>
+          target: 'http://localhost:<%= devServerPort %>',
+<%_ if (communicationSpringWebsocket) { _%>
           ws: true,
-          <%_ } _%>
+<%_ } _%>
         },
         socket: {
           clients: {
@@ -125,7 +120,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
         } */
       },
       {
-        reload: false
+        reload: true
       }
     )
   ]

@@ -1,0 +1,154 @@
+#
+# Copyright 2013-2021 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: 'Setup environment'
+description: 'Setup environment for test-integration scripts'
+inputs:
+  application-path:
+    description: 'Application path'
+    required: false
+    default: ${{ github.workspace }}/app
+  application-sample:
+    description: 'Application sample'
+    required: false
+    default: jdl
+  jdl-sample:
+    description: 'JDL application sample'
+    required: false
+    default: ''
+  entities-sample:
+    description: 'Entities sample'
+    required: false
+    default: none
+  jdl-entities-sample:
+    description: 'JDL entities sample'
+    required: false
+    default: ''
+  application-environment:
+    description: 'Application environment'
+    required: false
+    default: prod
+  application-packaging:
+    description: 'Application packaging'
+    required: false
+    default: jar
+  enable-testcontainers:
+    description: 'Enable test containers'
+    required: false
+    default: 'true'
+  generator-jhipster-directory:
+    description: 'JHipster Generator path'
+    required: false
+    default: ${{ github.workspace }}/generator-jhipster
+  generator-jhipster-repository:
+    description: 'JHipster Generator repository'
+    required: false
+    default: https://github.com/jhipster/generator-jhipster.git
+  generator-jhipster-branch:
+    description: 'JHipster Generator branch'
+    required: false
+    default: main
+  jhipster-bom-repository:
+    description: 'JHipster BOM repository'
+    required: false
+    default: https://github.com/jhipster/jhipster-bom.git
+  jhipster-bom-branch:
+    description: 'JHipster BOM branch'
+    required: false
+    default: auto
+  jhipster-bom-directory:
+    description: 'JHipster BOM path'
+    required: false
+    default: ${{ github.workspace }}/jhipster-bom
+outputs:
+  java-version:
+    description: 'Java version'
+    value: ${{ steps.variables.outputs.java-version }}
+  node-version:
+    description: 'Node version'
+    value: ${{ steps.variables.outputs.node-version }}
+  npm-version:
+    description: 'NPM version'
+    value: ${{ steps.variables.outputs.npm-version }}
+  application-path:
+    description: 'Application path'
+    value: ${{ steps.variables.outputs.application-path }}
+  date:
+    description: 'Current date'
+    value: ${{ steps.variables.outputs.date }}
+runs:
+  using: 'composite'
+  steps:
+    - name: 'ENV: setup variables'
+      id: variables
+      run: |
+        JHI_HOME="${{ inputs.generator-jhipster-directory }}"
+        source "$JHI_HOME/test-integration/scripts/00-init-env.sh"
+
+        echo "JHI_HOME=$JHI_HOME" >> $GITHUB_ENV
+        echo "JHI_SCRIPTS=$JHI_SCRIPTS" >> $GITHUB_ENV
+
+        echo "JHI_LIB_REPO=${{inputs.jhipster-bom-repository}}" >> $GITHUB_ENV
+        echo "JHI_LIB_BRANCH=${{inputs.jhipster-bom-branch}}" >> $GITHUB_ENV
+        echo "JHI_LIB_HOME=${{inputs.jhipster-bom-directory}}" >> $GITHUB_ENV
+        echo "JHI_GEN_REPO=${{inputs.generator-jhipster-repository}}" >> $GITHUB_ENV
+        echo "JHI_GEN_BRANCH=${{inputs.generator-jhipster-branch}}" >> $GITHUB_ENV
+        echo "JHI_FOLDER_APP=${{inputs.application-path}}" >> $GITHUB_ENV
+
+        echo "JHI_JDL_APP=${{ inputs.jdl-sample }}" >> $GITHUB_ENV
+        echo "JHI_APP=${{inputs.application-sample}}" >> $GITHUB_ENV
+        echo "JHI_ENTITY=${{inputs.entities-sample}}" >> $GITHUB_ENV
+        echo "JHI_JDL_ENTITY=${{inputs.jdl-entities-sample}}" >> $GITHUB_ENV
+
+        echo "JHI_PROFILE=${{inputs.application-environment}}" >> $GITHUB_ENV
+        test ${{inputs.application-packaging}} != war || echo "JHI_WAR=1" >> $GITHUB_ENV
+        test ${{inputs.enable-testcontainers}} != true || echo "JHI_TESTCONTAINERS=true" >> $GITHUB_ENV
+        test ${{inputs.enable-testcontainers}} != true || echo "SPRING_PROFILES_ACTIVE=testcontainers" >> $GITHUB_ENV
+
+        echo "JHI_GENERATE_SKIP_CONFIG=1" >> $GITHUB_ENV
+        echo "JHI_DISABLE_WEBPACK_LOGS=true" >> $GITHUB_ENV
+        echo "JHI_GITHUB_CI=true" >> $GITHUB_ENV
+        echo "JHI_E2E_HEADLESS=true" >> $GITHUB_ENV
+        echo "JHI_RUN_APP=1" >> $GITHUB_ENV
+        echo "JHI_E2E=1" >> $GITHUB_ENV
+        echo "FORCE_COLOR=1" >> $GITHUB_ENV
+
+        echo "SPRING_OUTPUT_ANSI_ENABLED=ALWAYS" >> $GITHUB_ENV
+        echo "SPRING_JPA_SHOW_SQL=false" >> $GITHUB_ENV
+        echo "NG_CLI_ANALYTICS=ci" >> $GITHUB_ENV
+
+        # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
+        echo "MAVEN_OPTS=-Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120" >> $GITHUB_ENV
+
+        echo "::set-output name=application-path::${{inputs.application-path}}"
+        echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        echo "::set-output name=java-version::$JHI_JDK"
+        echo "::set-output name=node-version::$JHI_NODE_VERSION"
+        echo "::set-output name=npm-version::$JHI_NPM_VERSION"
+
+        echo "Variables added to environment"
+        cat $GITHUB_ENV
+        echo "=============================="
+      shell: bash
+    - name: 'ENV: display variables'
+      run: $JHI_SCRIPTS/01-display-configuration.sh
+      shell: bash
+    - name: 'SETUP: Create required structure'
+      run: mkdir -p $JHI_FOLDER_APP
+      shell: bash
