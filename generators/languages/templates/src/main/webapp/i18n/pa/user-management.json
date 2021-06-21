@@ -1,0 +1,31 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "ਉਪਭੋਗਤਾ",
+            "refreshListLabel": "ਸੂਚੀ ਤਾਜ਼ਾ ਕਰੋ",
+            "createLabel": "ਨਵਾਂ ਉਪਭੋਗਤਾ ਬਣਾਓ",
+            "createOrEditLabel": "ਇੱਕ ਉਪਭੋਗਤਾ ਬਣਾਓ ਜਾਂ ਸੰਪਾਦਿਤ ਕਰੋ"
+        },
+        "created": "ਇੱਕ ਨਵਾਂ ਉਪਭੋਗਤਾ ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਬਣਾਇਆ ਗਿਆ ਹੈ",
+        "updated": "ਇੱਕ ਉਪਭੋਗਤਾ ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਅਪਡੇਟ ਕੀਤਾ ਗਿਆ ਹੈ",
+        "deleted": "ਉਪਭੋਗਤਾ ਪਛਾਣਕਰਤਾ {{ param }} ਨਾਲ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ",
+        "delete": {
+            "question": "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਯੂਜ਼ਰ {{ login }} ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
+        },
+        "detail": {
+            "title": "ਉਪਭੋਗਤਾ"
+        },
+        "login": "ਲੌਗਇਨ",
+        "firstName": "ਪਹਿਲਾ ਨਾਮ",
+        "lastName": "ਆਖਰੀ ਨਾਮ",
+        "email": "ਈਮੇਲ",
+        "activated": "ਸਰਗਰਮ",
+        "deactivated": "ਅਯੋਗ",
+        "profiles": "ਪ੍ਰੋਫਾਈਲ",
+        "langKey": "ਭਾਸ਼ਾ",
+        "createdBy": "ਦੁਆਰਾ ਬਣਾਇਆ",
+        "createdDate": "ਰਚਨਾ ਦੀ ਮਿਤੀ",
+        "lastModifiedBy": "ਦੁਆਰਾ ਸੰਸ਼ੋਧਿਤ",
+        "lastModifiedDate": "ਸੰਸ਼ੋਧਿਤ ਹੋਣ ਦੀ ਮਿਤੀ"
+    }
+}

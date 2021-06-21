@@ -738,9 +738,9 @@ describe('Generator Base', () => {
       });
     });
     describe('when called for mssql', () => {
-      it('return r2dbc:sqlserver://localhost:1433;database=test', () => {
+      it('return r2dbc:mssql://localhost:1433/test', () => {
         expect(BaseGenerator.getR2DBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-          'r2dbc:sqlserver://localhost:1433;database=test'
+          'r2dbc:mssql://localhost:1433/test'
         );
       });
     });

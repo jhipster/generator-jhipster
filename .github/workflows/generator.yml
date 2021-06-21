@@ -18,15 +18,22 @@
 #
 
 name: Generator
+concurrency:
+  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
 on:
   push:
     branches-ignore:
       - 'dependabot/**'
   pull_request:
+    types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
 jobs:
   generator-jhipster:
+    if: >-
+      github.event.action != 'closed'
     name: npm test
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20

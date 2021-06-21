@@ -16,7 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (enableTranslation) { _%>
+declare const I18N_HASH: string;
 
+<%_ } _%>
 declare module '*.json' {
     const value: any;
     export default value;

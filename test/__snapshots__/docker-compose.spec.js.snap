@@ -72,7 +72,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -104,7 +104,7 @@ eureka:
       - BUCKET=mscouchbase
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -202,7 +202,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -217,7 +217,7 @@ eureka:
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscassandra-cassandra-node:
-    image: cassandra:2.2.5
+    image: cassandra:3.11.10
     environment:
       - CASSANDRA_SEEDS=mscassandra-cassandra
   mscassandra-cassandra-migration:
@@ -231,10 +231,10 @@ eureka:
     volumes:
       - 05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
-    image: cassandra:2.2.5
+    image: cassandra:3.11.10
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -346,7 +346,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -360,7 +360,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -375,7 +375,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:9.5.1
+    image: postgres:13.3
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -391,7 +391,7 @@ eureka:
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmongodb-mongodb:
-    image: mongo:4.2.3
+    image: mongo:4.4.6
 
   msmariadb:
     image: msmariadb
@@ -401,7 +401,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.3.7
+    image: mariadb:10.6.1
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -410,7 +410,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -513,7 +513,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -527,7 +527,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -542,7 +542,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:9.5.1
+    image: postgres:13.3
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -563,14 +563,14 @@ eureka:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
-    image: mongo:4.2.5
+    image: mongo:4.4.6
     command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
-    image: mongo:4.2.5
+    image: mongo:4.4.6
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -682,7 +682,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -696,7 +696,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -711,7 +711,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:9.5.1
+    image: postgres:13.3
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -741,7 +741,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.3.7
+    image: mariadb:10.6.1
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -750,7 +750,7 @@ eureka:
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -848,7 +848,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -862,14 +862,14 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -967,7 +967,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -981,14 +981,14 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1107,7 +1107,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -1121,14 +1121,14 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1256,7 +1256,7 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
     ports:
       - \\"8080:8080\\"
   samplemysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=samplemysql
@@ -1265,7 +1265,7 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
     image: elasticsearch:2.4.6
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1358,14 +1358,14 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1460,14 +1460,14 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1560,14 +1560,14 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:5.7.18
+    image: mysql:8.0.25
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
@@ -1643,7 +1643,7 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
       - \\"8080:8080\\"
 
   jhipster-registry:
-    image: jhipster/jhipster-registry:v6.7.1
+    image: jhipster/jhipster-registry:v6.8.0
     volumes:
       - ./central-server-config:/central-config
     # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"

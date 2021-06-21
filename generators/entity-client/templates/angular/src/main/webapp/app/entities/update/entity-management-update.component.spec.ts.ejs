@@ -100,7 +100,7 @@ describe('Component Tests', () => {
         <%_ } _%>
 
                     const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
                     const additional<%= otherEntity.entityAngularNamePlural %> = [
         <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
             <%_ const reference = relationship.reference _%>
@@ -108,7 +108,7 @@ describe('Component Tests', () => {
         <%_ } _%>
                     ];
                     const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                     activatedRoute.data = of({ <%= entityInstance %> });
                     comp.ngOnInit();
@@ -128,9 +128,9 @@ describe('Component Tests', () => {
                     <%= entityInstance %>.<%= reference.name %> = <%= reference.name %>;
 
                     const <%= reference.name %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- generateTestEntityPrimaryKey(otherEntity.primaryKey) %>];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'query').and.returnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= reference.name %>Collection })));
                     const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= reference.name %>, ...<%= reference.name %>Collection];
-                    spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').and.returnValue(expectedCollection);
+                    jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                     activatedRoute.data = of({ <%= entityInstance %> });
                     comp.ngOnInit();
@@ -169,10 +169,10 @@ describe('Component Tests', () => {
         describe('save', () => {
             it('Should call update service on save for existing entity', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-                spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
-                spyOn(comp, 'previousState');
+                jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+                jest.spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
@@ -190,10 +190,10 @@ describe('Component Tests', () => {
 
             it('Should call create service on save for new entity', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = new <%= entityAngularName %>();
-                spyOn(<%= entityInstance %>Service, 'create').and.returnValue(saveSubject);
-                spyOn(comp, 'previousState');
+                jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+                jest.spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 
@@ -211,10 +211,10 @@ describe('Component Tests', () => {
 
             it('Should set isSaving to false on error', () => {
                 // GIVEN
-                const saveSubject = new Subject();
+                const saveSubject = new Subject<HttpResponse<<%= entityAngularName %>>>();
                 const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-                spyOn(<%= entityInstance %>Service, 'update').and.returnValue(saveSubject);
-                spyOn(comp, 'previousState');
+                jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+                jest.spyOn(comp, 'previousState');
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
 

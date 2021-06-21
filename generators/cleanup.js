@@ -313,8 +313,8 @@ function cleanupOldFiles(generator) {
   }
   if (generator.isJhipsterVersionLessThan('7.1.0') && generator.jhipsterConfig) {
     if (generator.jhipsterConfig.clientFramework === REACT) {
-      generator.removeFile('shared/reducers/action-type.util.ts');
-      generator.removeFile('config/devtools.tsx');
+      generator.removeFile(`${REACT_DIR}shared/reducers/action-type.util.ts`);
+      generator.removeFile(`${REACT_DIR}config/devtools.tsx`);
     }
   }
 }

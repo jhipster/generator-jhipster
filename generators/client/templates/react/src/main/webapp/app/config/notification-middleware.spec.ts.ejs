@@ -129,6 +129,49 @@ describe('Notification Middleware', () => {
     },
   };
 
+  const TITLE_ERROR = {
+    type: ERROR_TYPE,
+    error: {
+      isAxiosError: true,
+      response: {
+        data: {
+          title: 'Incorrect password',
+          status: 400,
+          type: 'https://www.jhipster.tech/problem/invalid-password',
+        },
+        status: 400,
+      },
+    },
+  };
+
+  const STRING_DATA_ERROR = {
+    type: ERROR_TYPE,
+    error: {
+      isAxiosError: true,
+      response: {
+        data: 'Incorrect password string',
+        status: 400,
+      },
+    },
+  };
+
+  const UNKNON_400_ERROR = {
+    type: ERROR_TYPE,
+    error: {
+      isAxiosError: true,
+      response: {
+        status: 400,
+      },
+    },
+  };
+
+  const UNKNON_ERROR = {
+    type: ERROR_TYPE,
+    error: {
+      isAxiosError: true,
+    },
+  };
+
   const makeStore = () => applyMiddleware(notificationMiddleware)(createStore)(() => null);
 
 <%_ if (enableTranslation) { _%>
@@ -196,9 +239,33 @@ describe('Notification Middleware', () => {
     expect(toastMsg).toContain('foo.creation');
   });
 
-  it('should not trigger an error toast message and return error for 40 response code', () => {
+  it('should not trigger an error toast message and return error for 401 response code', () => {
     expect(store.dispatch(LOGIN_REJECTED_ERROR).error.response.status).toEqual(401);
     expect((toastify.toast as any).error.called).toEqual(false);
     expect((toastify.toast as any).success.called).toEqual(false);
+  });
+
+  it('should trigger an error toast message and return error for 400 response code', () => {
+    expect(store.dispatch(TITLE_ERROR).error.response.status).toEqual(400);
+    const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
+    expect(toastMsg).toContain('Incorrect password');
+  });
+
+  it('should trigger an error toast message and return error for string in data', () => {
+    expect(store.dispatch(STRING_DATA_ERROR).error.response.status).toEqual(400);
+    const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
+    expect(toastMsg).toContain('Incorrect password string');
+  });
+
+  it('should trigger an error toast message and return error for unknown 400 error', () => {
+    expect(store.dispatch(UNKNON_400_ERROR).error.response.status).toEqual(400);
+    const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
+    expect(toastMsg).toContain('Unknown error!');
+  });
+
+  it('should trigger an error toast message and return error for unknown error', () => {
+    expect(store.dispatch(UNKNON_ERROR).error.isAxiosError).toEqual(true);
+    const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
+    expect(toastMsg).toContain('Unknown error!');
   });
 });

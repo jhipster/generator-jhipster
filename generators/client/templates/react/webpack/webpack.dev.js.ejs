@@ -29,22 +29,7 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
 
-module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
-  cache: {
-    // 1. Set cache type to filesystem
-    type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
-    buildDependencies: {
-      // 2. Add your config as buildDependency to get cache invalidation on config change
-      config: [
-        __filename,
-        path.resolve(__dirname, 'webpack.common.js'),
-        path.resolve(__dirname, 'utils.js'),
-        path.resolve(__dirname, '../postcss.config.js'),
-        path.resolve(__dirname, '../tsconfig.json')
-      ],
-    },
-  },
+module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
@@ -74,6 +59,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     stats: options.stats,
     hot: true,
     contentBase: './<%= DIST_DIR %>',
+    port: <%= devServerPort %>,
     proxy: [{
       context: [
         '/api',
@@ -116,7 +102,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (communicationSpringWebsocket) { %>,
+          target: `http${options.tls ? 's' : ''}://localhost:<%= devServerPort %>`<% if (communicationSpringWebsocket) { %>,
           ws: true<% } %>,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430

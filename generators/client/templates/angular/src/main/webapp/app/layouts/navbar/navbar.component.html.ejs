@@ -128,12 +128,14 @@
             </a>
           </li>
 <%_ } _%>
+<%_ if (!applicationTypeMicroservice) { _%>
           <li *ngIf="openAPIEnabled">
             <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
               <span <%= jhiPrefix %>Translate="global.menu.admin.apidocs">API</span>
             </a>
           </li>
+<%_ } _%>
           <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
 <%_ if (devDatabaseTypeH2Any || devDatabaseTypeCouchbase) { _%>
           <li *ngIf="!inProduction">

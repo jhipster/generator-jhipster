@@ -79,8 +79,8 @@ node {
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
         <%_ if (insideDocker) { _%>
-<%= indent %>           npm install
-<%= indent %>           npm test
+<%= indent %>           sh "npm install"
+<%= indent %>           sh "npm test"
         <%_ } else { _%>
 <%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
         <%_ } _%>
@@ -184,10 +184,10 @@ node {
 <%= gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
     <%_ if (buildToolMaven) { _%>
 <%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
-<%= gitLabIndent %>        sh "./mvnw -ntp jib:build"
+<%= gitLabIndent %>        sh "./mvnw -ntp -Pprod verify jib:build"
     <%_ } else if (buildToolGradle) { _%>
 <%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
-<%= gitLabIndent %>        sh "./gradlew jib"
+<%= gitLabIndent %>        sh "./gradlew bootJar jib -Pprod -PnodeInstall --no-daemon"
     <%_ } _%>
 <%= gitLabIndent %>    }
 <%_ } _%>

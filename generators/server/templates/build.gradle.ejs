@@ -118,10 +118,10 @@ springBoot {
 test {
     useJUnitPlatform()
     exclude "**/*IT*", "**/*IntTest*"
-
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -136,11 +136,10 @@ task integrationTest(type: Test) {
 <%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
 <%_ } _%>
-
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
 <%_ if (databaseType === 'sql') { _%>
     if (project.hasProperty('testcontainers')) {
         <%_ if (!reactive) { _%>
@@ -535,13 +534,12 @@ dependencies {
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "com.github.sabomichal:liquibase-mssql"
-        <%_ if (!reactive) { _%>
-    liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
-        <%_ } else { _%>
+    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+        <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
+    liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
@@ -602,6 +600,7 @@ dependencies {
     <%_ if (cacheProvider === 'redis') { %>
     testImplementation "org.testcontainers:testcontainers"
     <%_ } _%>
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
@@ -626,12 +625,6 @@ wrapper {
 }
 
 <%_ if (!skipClient) { _%>
-
-// Workaround npm failing with audit
-// https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
-npm_install {
-    args = ['--no-audit']
-}
 
 if (project.hasProperty("nodeInstall")) {
     // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154

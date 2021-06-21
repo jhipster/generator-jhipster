@@ -103,7 +103,10 @@
     "jest-serializer-vue": "<%= dependabotPackageJson.devDependencies['jest-serializer-vue'] %>",
     "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
     "jest-vue-preprocessor": "<%= dependabotPackageJson.devDependencies['jest-vue-preprocessor'] %>",
+<%_ if (enableTranslation) { _%>
+    "folder-hash": "<%= dependabotPackageJson.devDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
+<%_ } _%>
     "mini-css-extract-plugin": "<%= dependabotPackageJson.devDependencies['mini-css-extract-plugin'] %>",
     "node-notifier": "<%= dependabotPackageJson.devDependencies['node-notifier'] %>",
     "numeral": "<%= dependabotPackageJson.devDependencies['numeral'] %>",
@@ -119,9 +122,6 @@
     "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
-    <%_ if (authenticationTypeOauth2) { _%>
-    "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
-    <%_ } _%>
 <%_ } _%>
     "rimraf": "<%= dependabotPackageJson.devDependencies['rimraf'] %>",
     "sass": "<%= dependabotPackageJson.devDependencies['sass'] %>",

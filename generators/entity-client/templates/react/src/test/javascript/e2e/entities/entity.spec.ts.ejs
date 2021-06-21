@@ -89,6 +89,7 @@ describe('<%= entityClass %> e2e test', () => {
         const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         <%= entityInstance %>UpdatePage = await <%= entityInstance %>ComponentsPage.goToCreate<%= entityClass %>();
         await <%= entityInstance %>UpdatePage.enterData();
+        expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);

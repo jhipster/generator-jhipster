@@ -104,10 +104,10 @@ describe('Component Tests', () => {
       beforeEach(() => {
         routerState.snapshot.root = { data: {} };
 <%_ if (enableTranslation) { _%>
-        spyOn(translateService, 'get').and.callFake((key: string) => of(key + ' translated'));
+        jest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
         translateService.currentLang = '<%= nativeLanguage %>';
 <%_ } _%>
-        spyOn(titleService, 'setTitle');
+        jest.spyOn(titleService, 'setTitle');
         comp.ngOnInit();
       });
 

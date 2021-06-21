@@ -63,7 +63,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.user).toEqual(
-          jasmine.objectContaining({
+          expect.objectContaining({
             id: <%- tsKeyId %>,
             login: 'user',
             firstName: 'first',

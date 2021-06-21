@@ -1,6 +1,6 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url]
 
 [![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Webflux Build Status][github-actions-webflux-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
@@ -147,3 +147,5 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [npmcharts-url]: https://npmcharts.com/compare/generator-jhipster
 [gitter-badge-image]: https://badges.gitter.im/jhipster/generator-jhipster.svg
 [gitter-badge-url]: https://gitter.im/jhipster/generator-jhipster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[snyk-image]: https://snyk.io/test/npm/generator-jhipster/badge.svg
+[snyk-url]: https://snyk.io/test/npm/generator-jhipster

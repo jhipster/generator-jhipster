@@ -32,7 +32,7 @@ describe('Component Tests', () => {
 
     it('Should call profileService.getProfileInfo on init', () => {
       // GIVEN
-      spyOn(profileService, 'getProfileInfo').and.returnValue(of(new ProfileInfo()));
+      jest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
 
       // WHEN
       comp.ngOnInit();

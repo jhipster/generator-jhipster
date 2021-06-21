@@ -125,7 +125,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version>4.9.0</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.18.0</archunit-junit5.version>
+        <archunit-junit5.version>0.19.0</archunit-junit5.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
@@ -141,9 +141,9 @@
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+        <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.3.0</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
@@ -151,20 +151,20 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
-        <maven-checkstyle.version>3.1.2</maven-checkstyle.version>
-        <checkstyle.version>8.42</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+        <checkstyle.version>8.43</checkstyle.version>
         <nohttp-checkstyle.version>0.0.8</nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
         <checksum-maven-plugin.version>1.10</checksum-maven-plugin.version>
         <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>4.0.5</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>4.3.1</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>5.1.1</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
@@ -476,8 +476,9 @@
             <artifactId>mssql-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.sabomichal</groupId>
+            <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-mssql</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
     <%_ if (reactive) { _%>
         <dependency>
@@ -643,6 +644,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -978,7 +983,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${maven-checkstyle.version}</version>
+                    <version>${maven-checkstyle-plugin.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
@@ -1542,7 +1547,7 @@
                                 <goals>
                                     <goal>files</goal>
                                 </goals>
-                                <phase>generate-sources</phase>
+                                <phase>generate-resources</phase>
                             </execution>
                         </executions>
                         <configuration>
@@ -1556,7 +1561,7 @@
                                     </includes>
                                     <excludes>
                                         <exclude>**/app/**/service-worker.js</exclude>
-                                        <exclude>**/node_modules/**/*.*</exclude>
+                                        <exclude>**/app/**/vendor.css</exclude>
                                     </excludes>
                                 </fileSet>
                             </fileSets>
@@ -1577,7 +1582,7 @@
                         <executions>
                             <execution>
                                 <id>eval-frontend-checksum</id>
-                                <phase>generate-sources</phase>
+                                <phase>generate-resources</phase>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
@@ -1616,13 +1621,6 @@
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
-                                <configuration>
-                                    <!--
-                                        Workaround npm failing with audit
-                                        https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
-                                     -->
-                                    <arguments>install --no-audit</arguments>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>webapp build dev</id>
@@ -1736,13 +1734,6 @@
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
-                                <configuration>
-                                    <!--
-                                        Workaround npm failing with audit
-                                        https://github.com/jhipster/generator-jhipster/pull/14315#issuecomment-844149669
-                                     -->
-                                    <arguments>install --no-audit</arguments>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>webapp build test</id>

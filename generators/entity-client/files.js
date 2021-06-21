@@ -390,7 +390,8 @@ const commonFiles = {
 
 module.exports = {
   writeFiles,
-  customizeFiles,
+  addToMenu,
+  replaceTranslations,
   angularFiles,
   reactFiles,
   vueFiles,
@@ -436,7 +437,11 @@ function addSampleRegexTestingStrings(generator) {
 function writeFiles() {
   return {
     writeClientFiles() {
-      if (this.skipClient) return undefined;
+      if (
+        this.skipClient ||
+        (this.jhipsterConfig.microfrontend && this.jhipsterConfig.applicationType === 'gateway' && this.microserviceName)
+      )
+        return undefined;
       if (this.protractorTests) {
         addSampleRegexTestingStrings(this);
       }
@@ -462,12 +467,17 @@ function writeFiles() {
       addEnumerationFiles(this, clientMainSrcDir);
       if (!files) return undefined;
 
-      return Promise.all([this.writeFilesToDisk(files, templatesDir), this.writeFilesToDisk(commonFiles, 'common')]);
+      return this.writeFilesToDisk(files, templatesDir);
+    },
+
+    writeTestFiles() {
+      if (this.skipClient) return undefined;
+      return this.writeFilesToDisk(commonFiles, 'common');
     },
   };
 }
 
-function customizeFiles() {
+function addToMenu() {
   if (this.skipClient) return;
 
   if (!this.embedded) {
@@ -480,7 +490,9 @@ function customizeFiles() {
       this.entityClassHumanized
     );
   }
+}
 
+function replaceTranslations() {
   if (this.clientFramework === VUE && !this.enableTranslation) {
     if (!this.readOnly) {
       utils.vueReplaceTranslation(this, [

@@ -24,6 +24,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 <%_ if (enableTranslation) { _%>
+const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } if (buildToolUnknown) { _%>
 
@@ -58,9 +59,32 @@ const getTsLoaderRule = env => {
   return rules;
 };
 
-module.exports = options => merge(
-// jhipster-needle-add-webpack-config - JHipster will add custom config
+module.exports = async options => {
+<%_ if (enableTranslation) { _%>
+  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= MAIN_SRC_DIR %>i18n'), {
+    algo: 'md5',
+    encoding: 'hex',
+    files: { include: ['*.json'] },
+  });
+
+<%_ } _%>
+return merge(
 {
+  cache: {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, `webpack.${options.env == 'development' ? 'dev' : 'prod'}.js`),
+        path.resolve(__dirname, 'utils.js'),
+        path.resolve(__dirname, '../postcss.config.js'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
+    },
+  },
   resolve: {
     extensions: [
       '.js', '.jsx', '.ts', '.tsx', '.json'
@@ -111,11 +135,11 @@ module.exports = options => merge(
   },
   plugins: [
     new webpack.DefinePlugin({
+<%_ if (enableTranslation) { _%>
+      I18N_HASH: JSON.stringify(languagesHash.hash),
+<%_ } _%>
       'process.env': {
         NODE_ENV: `'${options.env}'`,
-        <%_ if (enableTranslation) { _%>
-        BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
-        <%_ } _%>
 <%_ if (buildToolUnknown) { _%>
         VERSION: `'${packageJson.version}'`,
 <%_ } else { _%>
@@ -169,4 +193,7 @@ module.exports = options => merge(
     }),
 <%_ } _%>
   ]
-});
+}
+// jhipster-needle-add-webpack-config - JHipster will add custom config
+);
+};

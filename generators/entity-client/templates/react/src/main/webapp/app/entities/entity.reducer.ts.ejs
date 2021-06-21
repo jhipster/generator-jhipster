@@ -218,7 +218,7 @@ export const <%= entityReactName %>Slice = createEntitySlice({
   },
 });
 
-export const { <% if (fieldsContainBlob) { %>setBlob,<% } %>reset } = <%= entityReactName %>Slice.actions;
+export const { reset } = <%= entityReactName %>Slice.actions;
 
 // Reducer
 export default <%= entityReactName %>Slice.reducer;

@@ -35,7 +35,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -54,7 +54,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -70,11 +70,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/build/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -99,6 +112,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/build/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -145,7 +164,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -164,7 +183,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -192,11 +211,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/build/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -221,6 +253,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/build/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -267,7 +305,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -286,7 +324,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -302,11 +340,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -331,6 +382,12 @@ Object {
           CYPRESS_ENABLE_RECORD: true
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -377,7 +434,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -396,7 +453,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -424,11 +481,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -453,6 +523,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -499,7 +575,7 @@ Object {
     pool:
       vmImage: \\"ubuntu-20.04\\"
     variables:
-      NODE_VERSION: 14.16.0
+      NODE_VERSION: 14.17.1
       SPRING_OUTPUT_ANSI_ENABLED: NEVER
       SPRING_JPA_SHOW_SQL: false
       JHI_DISABLE_WEBPACK_LOGS: true
@@ -518,7 +594,7 @@ Object {
         inputs:
           targetType: \\"inline\\"
           script: |
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install ./google-chrome-stable_current_amd64.deb
         displayName: \\"TOOLS: install Chrome\\"
       #----------------------------------------------------------------------
@@ -534,11 +610,24 @@ Object {
           command: \\"custom\\"
           customCommand: \\" run ci:backend:test\\"
         displayName: \\"TESTS: backend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"**/TEST-*.xml\\"
+          searchFolder: \\"$(Build.SourcesDirectory)/target/test-results\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
           customCommand: \\" run ci:frontend:test\\"
         displayName: \\"TESTS: frontend\\"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: \\"JUnit\\"
+          testResultsFiles: \\"$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml\\"
+        condition: succeededOrFailed()
+        displayName: \\"TESTS: publish test results\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -563,6 +652,12 @@ Object {
           CYPRESS_ENABLE_RECORD: false
           CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
           CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: \\"cypress-screenshots\\"
+          targetPath: \\"$(Build.SourcesDirectory)/target/cypress/screenshots\\"
+        condition: failed()
+        displayName: \\"E2E: Publish Cypress Screenshots\\"
       - task: Npm@1
         inputs:
           command: \\"custom\\"
@@ -1022,7 +1117,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1031,7 +1126,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1109,7 +1204,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1118,7 +1213,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1273,7 +1368,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1282,7 +1377,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1354,7 +1449,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1363,7 +1458,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -1540,7 +1635,7 @@ jobs:
         if: \\"!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')\\"
         timeout-minutes: 40
         env:
-            NODE_VERSION: 14.16.0
+            NODE_VERSION: 14.17.1
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
@@ -1549,7 +1644,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 14.16.0
+                  node-version: 14.17.1
             - uses: actions/setup-java@v2
               with:
                   distribution: 'adopt'
@@ -2747,8 +2842,8 @@ node {
 
         stage('frontend tests') {
             try {
-               npm install
-               npm test
+               sh \\"npm install\\"
+               sh \\"npm test\\"
             } catch(err) {
                 throw err
             } finally {
@@ -2771,7 +2866,7 @@ node {
     stage('publish docker') {
         // A pre-requisite to this step is to setup authentication to the docker registry
         // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
-        sh \\"./mvnw -ntp jib:build\\"
+        sh \\"./mvnw -ntp -Pprod verify jib:build\\"
     }
 }
 ",
@@ -3260,7 +3355,7 @@ node {
     stage('publish docker') {
         // A pre-requisite to this step is to setup authentication to the docker registry
         // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
-        sh \\"./mvnw -ntp jib:build\\"
+        sh \\"./mvnw -ntp -Pprod verify jib:build\\"
     }
 }
 ",
@@ -3456,7 +3551,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"14.16.0\\"
+  - \\"14.17.1\\"
 cache:
   directories:
     - node
@@ -3464,7 +3559,7 @@ cache:
     - $HOME/.gradle
 env:
   global:
-    - NODE_VERSION=14.16.0
+    - NODE_VERSION=14.17.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3548,7 +3643,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"14.16.0\\"
+  - \\"14.17.1\\"
 cache:
   directories:
     - node
@@ -3556,7 +3651,7 @@ cache:
     - $HOME/.m2
 env:
   global:
-    - NODE_VERSION=14.16.0
+    - NODE_VERSION=14.17.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -3641,7 +3736,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - \\"14.16.0\\"
+  - \\"14.17.1\\"
 cache:
   directories:
     - node
@@ -3649,7 +3744,7 @@ cache:
     - $HOME/.m2
 env:
   global:
-    - NODE_VERSION=14.16.0
+    - NODE_VERSION=14.17.1
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true

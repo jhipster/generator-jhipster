@@ -107,6 +107,11 @@ const defaultCommands = {
         option: '--unidirectional-relationships',
         desc: 'Generate unidirectional relationships',
       },
+      {
+        option: '--force-no-filtering',
+        desc: "Don't filter jdl entities",
+        default: false,
+      },
     ],
     desc: `Create entities from the JDL file/URL/content passed in argument.
     Use the '--fork' or '--interactive' flag to change the process forking behavior when generating multiple applications.`,

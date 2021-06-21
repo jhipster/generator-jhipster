@@ -39,6 +39,7 @@ class ApplicationValidator extends Validator {
     checkForValidValues(jdlApplication);
     checkForInvalidDatabaseCombinations(jdlApplication);
     checkApplicationOptions(jdlApplication);
+    checkForReactiveAppWithWebsocket(jdlApplication);
   }
 }
 
@@ -240,5 +241,11 @@ function checkApplicationOptions(jdlApplication) {
 function checkForPaginationInAppWithCassandra(jdlOption, jdlApplication) {
   if (jdlApplication.getConfigurationOptionValue('databaseType') === CASSANDRA && jdlOption.name === Options.PAGINATION) {
     throw new Error("Pagination isn't allowed when the app uses Cassandra.");
+  }
+}
+
+function checkForReactiveAppWithWebsocket(jdlApplication) {
+  if (jdlApplication.getConfigurationOptionValue('reactive') === true && !!jdlApplication.getConfigurationOptionValue('websocket')) {
+    throw new Error("Websockets aren't allowed when the app is reactive.");
   }
 }

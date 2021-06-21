@@ -133,11 +133,7 @@ describe('Account', () => {
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     await registerPage.autoSignUpUsing('user_test', 'admin@localhost.jh', 'user_test');
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByInnerText('Registration saved! Please check your email for confirmation.');
-    <% } else { %>
-    const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
-    <%_ } _%>
+    const toast = getToastByInnerText('Registration saved!');
     await waitUntilDisplayed(toast);
 
     // Success toast should appear
@@ -238,11 +234,7 @@ describe('Account', () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     await passwordPage.autoChangePassword('bad_password', 'new_password', 'new_password');
-  <%_ if (enableTranslation) { _%>
     const toast = getToastByInnerText('An error has occurred! The password could not be changed.');
-  <% } else { %>
-    const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
-  <%_ } _%>
     await waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -255,11 +247,7 @@ describe('Account', () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     await passwordPage.autoChangePassword(username, 'new_password', 'new_password');
-  <%_ if (enableTranslation) { _%>
     const toast = getToastByInnerText('Password changed!');
-  <% } else { %>
-    const toast = getToastByInnerText('<strong>Password changed!</strong>');
-  <%_ } _%>
     await waitUntilDisplayed(toast);
 
     // Success toast should appear
@@ -282,11 +270,7 @@ describe('Account', () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     await passwordPage.autoChangePassword('new_password', password, password);
-  <%_ if (enableTranslation) { _%>
     const toast = getToastByInnerText('Password changed!');
-  <% } else { %>
-    const toast = getToastByInnerText('<strong>Password changed!</strong>');
-  <%_ } _%>
     await waitUntilDisplayed(toast);
 
     // Success toast should appear
