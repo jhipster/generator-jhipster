@@ -48,7 +48,7 @@ _%>
    return existing<%= entityClass %>;
    })
    .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)<% if (searchEngine === 'elasticsearch') { %>
-   .<%= mapOrFlatMap %>(<%_ if(reactive) { %><%= entityInstance %>SearchRepository::save<% } else { %>saved<%= entityClass %> -> {
+   .<%= mapOrFlatMap %>(<% if(reactive) { %>sqlResult -> <%= entityInstance %>SearchRepository.save(sqlResult).then(Mono.just(sqlResult))<% } else { %>saved<%= entityClass %> -> {
          <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
          return saved<%= entityClass %>;
       }<% } %>)<% } %><% if (dto !== 'no') { %>
