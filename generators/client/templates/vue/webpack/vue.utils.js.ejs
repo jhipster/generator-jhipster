@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const config = require('../config');
+const config = require('./env');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const packageConfig = require('../package.json');
 const sass = require('sass');

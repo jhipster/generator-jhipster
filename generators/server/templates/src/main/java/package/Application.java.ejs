@@ -108,7 +108,8 @@ public class <%= mainClass %> {
             hostAddress,
             serverPort,
             contextPath,
-            env.getActiveProfiles());
+            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
+        );
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway')) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");

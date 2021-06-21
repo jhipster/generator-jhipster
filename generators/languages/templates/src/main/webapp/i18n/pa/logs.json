@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "ਲੌਗਸ",
+        "nbloggers": "{{ total }} ਲਾਗਰ ਹਨ ।",
+        "filter": "ਫਿਲਟਰ",
+        "table": {
+            "name": "ਨਾਮ",
+            "level": "ਲੈਵਲ"
+        }
+    }
+}

@@ -29,6 +29,9 @@ import <%= packageName %>.config.Constants;
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.repository.AuthorityRepository;
+<%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -165,6 +168,11 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
 
     @Autowired
     private UserRepository userRepository;
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
+    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
@@ -249,7 +257,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     public static void deleteEntities(EntityManager em) {
         try {
             em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
-            em.deleteAll(User.class).block();
+            em.deleteAll(<%= asEntity('User') %>.class).block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
@@ -480,7 +488,13 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     <%_ } _%>
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;      
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        authorityRepository
+            .findById(AuthoritiesConstants.USER)
+            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
+            .block();
+        <%_ } _%>
 
         // Get all the users
         <%_ if (!reactive) { _%>
@@ -512,6 +526,9 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        <%_ if (databaseType === 'sql') { _%>
+        assertThat(foundUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+        <%_ } _%>
         <%_ } _%>
     }
 
@@ -522,6 +539,13 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        authorityRepository
+            .findById(AuthoritiesConstants.USER)
+            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
+            .block();
+        <%_ } _%>
+        
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -556,7 +580,10 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
             <%_ if (databaseType !== 'cassandra') { _%>
             .jsonPath("$.imageUrl").isEqualTo(DEFAULT_IMAGEURL)
             <%_ } _%>
-            .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
+            .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY)<% if (databaseType !== 'sql') { %>;<% } else { %>
+            .jsonPath("$.authorities")
+            .isEqualTo(AuthoritiesConstants.USER);
+            <% } %>
         <%_ } _%>
 
         <%_ if (cacheProvider === 'memcached') { _%>

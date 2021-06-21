@@ -17,21 +17,26 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
-const AwsFactory = require('./lib/aws.js');
+const AwsFactory = require('./lib/aws');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { GENERATOR_AWS } = require('../generator-list');
 
 const { BUILD_TOOL, BASE_NAME, PROD_DATABASE_TYPE } = OptionNames;
-const databaseTypes = require('../../jdl/jhipster/database-types');
 
-const MYSQL = databaseTypes.MYSQL;
-const POSTGRESQL = databaseTypes.POSTGRESQL;
-const MARIADB = databaseTypes.MARIADB;
+const { MYSQL, POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-types');
 
-module.exports = class extends BaseGenerator {
-  get initializing() {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
+  constructor(args, options) {
+    super(args, options);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_AWS);
+  }
+
+  _initializing() {
     return {
       initAws() {
         const done = this.async();
@@ -75,7 +80,7 @@ module.exports = class extends BaseGenerator {
             this.dbEngine = MYSQL;
             break;
           case POSTGRESQL:
-            this.dbEngine = POSTGRESQL;
+            this.dbEngine = 'postgres';
             break;
           default:
             this.error('Sorry deployment for this database is not possible');
@@ -84,14 +89,24 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get prompting() {
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
     return prompts.prompting;
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'aws');
+        statistics.sendSubGenEvent('generator', GENERATOR_AWS);
       },
       createAwsFactory() {
         const cb = this.async();
@@ -112,7 +127,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get default() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _default() {
     return {
       productionBuild() {
         const cb = this.async();
@@ -202,7 +222,7 @@ module.exports = class extends BaseGenerator {
         this.log(chalk.bold('Waiting for database (This may take several minutes)'));
 
         if (this.dbEngine === 'postgres') {
-          this.dbEngine = 'postgresql';
+          this.dbEngine = POSTGRESQL;
         }
 
         const rds = this.awsFactory.getRds();
@@ -263,5 +283,10 @@ module.exports = class extends BaseGenerator {
         });
       },
     };
+  }
+
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
   }
 };

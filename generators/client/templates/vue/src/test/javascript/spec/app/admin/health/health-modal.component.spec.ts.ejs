@@ -21,9 +21,9 @@ let wrapper: Wrapper<HealthModalClass>;
       propsData: {
         currentHealth: {},
       },
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         healthService: () => healthsService
@@ -70,9 +70,9 @@ describe('Health Modal Component for diskSpace', () => {
       propsData: {
         currentHealth: {name: 'diskSpace'},
       },
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         healthService: () => healthsService

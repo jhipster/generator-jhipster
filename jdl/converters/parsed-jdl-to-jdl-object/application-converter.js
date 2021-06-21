@@ -19,6 +19,9 @@
 
 const { createJDLApplication } = require('../../models/jdl-application-factory');
 const { convertOptions } = require('./option-converter');
+const { OptionNames } = require('../../jhipster/application-options');
+
+const { BASE_NAME } = OptionNames;
 
 module.exports = { convertApplications };
 
@@ -39,7 +42,7 @@ function convertApplications(parsedApplications, configuration = {}) {
     const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
     jdlApplication.addEntityNames(parsedApplication.entities);
     const entityOptions = getEntityOptionsInApplication(parsedApplication);
-    checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue('baseName'), entityOptions, parsedApplication.entities);
+    checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME), entityOptions, parsedApplication.entities);
     entityOptions.forEach(option => jdlApplication.addOption(option));
     return jdlApplication;
   });

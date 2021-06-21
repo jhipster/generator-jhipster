@@ -61,15 +61,13 @@ export class <%= entityClass %>UpdatePage {
 
 <%_ fields.forEach((field) => {
     const fieldName = field.fieldName;
-    const fieldType = field.fieldType;
     const fieldIsEnum = field.fieldIsEnum;
-    const fieldTypeBlobContent = field.fieldTypeBlobContent;
 _%>
     <%_ if (fieldIsEnum) { _%>
     <%= fieldName %>Select = element(by.id('field_<%= fieldName %>'));
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
     <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeBinary) { _%>
     <%= fieldName %>Input = element(by.id('file_<%= fieldName %>'));
     <%_ } else { _%>
     <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
@@ -77,12 +75,10 @@ _%>
 <%_ }); _%>
 
 <%_ relationships.forEach((relationship) => {
-    const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
-    const relationshipFieldName = relationship.relationshipFieldName;
 _%>
-    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%_ if (ownerSide) { _%>
     <%= relationshipName %>Select = element(by.id('field_<%= relationshipName %>'));
     <%_ } _%>
 <%_ }); _%>
@@ -94,14 +90,9 @@ _%>
 <%_ fields.forEach((field) => {
     const fieldName = field.fieldName;
     const fieldNameCapitalized = field.fieldNameCapitalized;
-    const fieldNameHumanized = field.fieldNameHumanized;
-    const fieldType = field.fieldType;
-    const fieldTypeBlobContent = field.fieldTypeBlobContent;
     const fieldIsEnum = field.fieldIsEnum;
-    let fieldInputType = 'text';
-    let ngModelOption = '';
 _%>
-    <%_ if (fieldType === 'Boolean') { _%>
+    <%_ if (field.fieldTypeBoolean) { _%>
     get<%= fieldNameCapitalized %>Input(): ElementFinder {
         return this.<%= fieldName %>Input;
     }
@@ -119,7 +110,7 @@ _%>
         await this.<%= fieldName %>Select.all(by.tagName('option')).last().click();
     }
 
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
     async set<%= fieldNameCapitalized %>Input(<%= fieldName %>: string): Promise<void> {
         await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
@@ -141,13 +132,11 @@ _%>
 <%_ }); _%>
 
 <%_ relationships.forEach((relationship) => {
-    const relationshipType = relationship.relationshipType;
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
-    const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
 _%>
-    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%_ if (ownerSide) { _%>
     async <%= relationshipName %>SelectLastOption(): Promise<void> {
         await this.<%= relationshipName %>Select.all(by.tagName('option')).last().click();
     }

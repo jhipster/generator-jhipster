@@ -20,6 +20,13 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const { loadConfigs, setClusteredApps } = require('./docker-base');
 const { getBase64Secret } = require('./utils');
+const { MICROSERVICE, MONOLITH, GATEWAY } = require('../jdl/jhipster/application-types');
+const { COUCHBASE, MONGODB } = require('../jdl/jhipster/database-types');
+const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
+const monitoring = require('../jdl/jhipster/monitoring-types');
+
+const NO_MONITORING = monitoring.NO;
+const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 
 module.exports = {
   askForApplicationType,
@@ -48,15 +55,15 @@ async function askForApplicationType() {
       message: 'Which *type* of application would you like to deploy?',
       choices: [
         {
-          value: 'monolith',
+          value: MONOLITH,
           name: 'Monolithic application',
         },
         {
-          value: 'microservice',
+          value: MICROSERVICE,
           name: 'Microservice application',
         },
       ],
-      default: 'monolith',
+      default: MONOLITH,
     },
   ];
 
@@ -69,7 +76,7 @@ async function askForApplicationType() {
  */
 async function askForGatewayType() {
   if (this.regenerate) return;
-  if (this.deploymentApplicationType !== 'microservice') return;
+  if (this.deploymentApplicationType !== MICROSERVICE) return;
 
   const prompts = [
     {
@@ -98,7 +105,7 @@ async function askForPath() {
 
   const deploymentApplicationType = this.deploymentApplicationType;
   let messageAskForPath;
-  if (deploymentApplicationType === 'monolith') {
+  if (deploymentApplicationType === MONOLITH) {
     messageAskForPath = 'Enter the root directory where your applications are located';
   } else {
     messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
@@ -115,9 +122,7 @@ async function askForPath() {
           const appsFolders = getAppFolders.call(this, input, deploymentApplicationType);
 
           if (appsFolders.length === 0) {
-            return deploymentApplicationType === 'monolith'
-              ? `No monolith found in ${path}`
-              : `No microservice or gateway found in ${path}`;
+            return deploymentApplicationType === MONOLITH ? `No monolith found in ${path}` : `No microservice or gateway found in ${path}`;
           }
           return true;
         }
@@ -178,7 +183,7 @@ async function askForClustersMode() {
 
   const clusteredDbApps = [];
   this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.prodDatabaseType === 'mongodb' || appConfig.prodDatabaseType === 'couchbase') {
+    if (appConfig.prodDatabaseType === MONGODB || appConfig.prodDatabaseType === COUCHBASE) {
       clusteredDbApps.push(this.appsFolders[index]);
     }
   });
@@ -212,15 +217,15 @@ async function askForMonitoring() {
       message: 'Do you want to setup monitoring for your applications ?',
       choices: [
         {
-          value: 'no',
+          value: NO_MONITORING,
           name: 'No',
         },
         {
-          value: 'prometheus',
+          value: PROMETHEUS,
           name: 'Yes, for metrics only with Prometheus',
         },
       ],
-      default: this.monitoring ? this.monitoring : 'no',
+      default: this.monitoring ? this.monitoring : NO_MONITORING,
     },
   ];
 
@@ -250,7 +255,7 @@ async function askForServiceDiscovery() {
   }
 
   if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')) {
-    this.serviceDiscoveryType = 'consul';
+    this.serviceDiscoveryType = CONSUL;
     this.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
   } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')) {
     this.serviceDiscoveryType = 'eureka';
@@ -269,11 +274,11 @@ async function askForServiceDiscovery() {
         message: 'Which Service Discovery registry and Configuration server would you like to use ?',
         choices: [
           {
-            value: 'eureka',
+            value: EUREKA,
             name: 'JHipster Registry',
           },
           {
-            value: 'consul',
+            value: CONSUL,
             name: 'Consul',
           },
           {
@@ -281,7 +286,7 @@ async function askForServiceDiscovery() {
             name: 'No Service Discovery and Configuration',
           },
         ],
-        default: 'eureka',
+        default: EUREKA,
       },
     ];
 
@@ -294,7 +299,7 @@ async function askForServiceDiscovery() {
  * Ask For Admin Password
  */
 async function askForAdminPassword() {
-  if (this.regenerate || this.serviceDiscoveryType !== 'eureka') return;
+  if (this.regenerate || this.serviceDiscoveryType !== EUREKA) return;
 
   const prompts = [
     {
@@ -308,7 +313,7 @@ async function askForAdminPassword() {
 
   const props = await this.prompt(prompts);
   this.adminPassword = props.adminPassword;
-  this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
+  this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
 }
 
 /**
@@ -369,7 +374,7 @@ function getAppFolders(input, deploymentApplicationType) {
             fileData['generator-jhipster'].baseName !== undefined &&
             (deploymentApplicationType === undefined ||
               deploymentApplicationType === fileData['generator-jhipster'].applicationType ||
-              (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'gateway'))
+              (deploymentApplicationType === MICROSERVICE && fileData['generator-jhipster'].applicationType === GATEWAY))
           ) {
             appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
           }

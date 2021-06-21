@@ -1,52 +1,40 @@
-/* eslint-disable @typescript-eslint/camelcase */
-/* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable @typescript-eslint/no-use-before-define */
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 // eslint-disable-next-line spaced-comment
 /// <reference types="cypress" />
 
 Cypress.Commands.add('getOauth2Data', () => {
   cy.request({
-    method: 'GET',
     url: '/oauth2/authorization/oidc',
     followRedirect: false,
   }).then(response => {
-    const url = new URL(response.headers['location']);
-    const clientId = url.searchParams.get('client_id');
-    const responseType = url.searchParams.get('response_type');
-    const redirectUri = url.searchParams.get('redirect_uri');
-    const nonce = url.searchParams.get("nonce");
-    const state = url.searchParams.get("state");
-    const scope = url.searchParams.get("scope");
-    const origin = url.origin;
-    const authenticationUrl = `${origin}${url.pathname}`;
-    const isOkta = origin.includes("okta")
-
-    let logoutUrl = "";
-    if (isOkta) {
-      logoutUrl = `${origin}${url.pathname.split('/',2).join('/')}/v1/logout`
-    } else {
-      logoutUrl = `${origin}${url.pathname.split('/', 4).join('/')}/protocol/openid-connect/logout`
-    }
-
     const data = {
-      url,
-      clientId,
-      responseType,
-      scope,
-      redirectUri,
-      nonce,
-      state,
-      authenticationUrl,
-      logoutUrl,
-      isOkta
-    };  
+      url : response.headers['location']
+    };
     cy.wrap(data).as('oauth2Data');
   });
 });
 
 Cypress.Commands.add('oauthLogin', (oauth2Data: any, username: string, password: string) => {
-  if (oauth2Data.isOkta) {
-    cy.oktaLogin(username, password);
+  const url = new URL(oauth2Data.url);
+  if(url.origin.includes('okta')) {
+    cy.oktaLogin(oauth2Data, username, password);
   } else {
     cy.keycloakLogin(oauth2Data, username, password);
   }
@@ -57,63 +45,92 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data: any, username: string, passwo
     url: `${oauth2Data.url}`,
     followRedirect: false,
   })
-  .then(response => {
-    const html = document.createElement('html');
-    html.innerHTML = response.body;
+    .then(response => {
+      const html = document.createElement('html');
+      html.innerHTML = response.body;
 
-    const form = html.getElementsByTagName('form')[0];
-    const url = form.action;
-    return cy.request({
-      method: 'POST',
-      url,
-      followRedirect: false,
-      form: true,
-      body: {
-        username: username,
-        password: password,
-      },
-    });
-  })
-  .then(() => {
-    cy.request({
-      method: 'GET',
-      url: '/oauth2/authorization/oidc',
-      followRedirect: true,
-    }).then(() => {
+      const form = html.getElementsByTagName('form')[0];
+      const url = form.action;
+      return cy.request({
+        method: 'POST',
+        url,
+        followRedirect: false,
+        form: true,
+        body: {
+          username: username,
+          password: password,
+        },
+      });
+    })
+    .then(() => {
+      cy.request({
+        url: '/oauth2/authorization/oidc',
+        followRedirect: true,
+    })
+    .then(() => {
       cy.visit('/');
     });
   })
 });
 
-Cypress.Commands.add('oktaLogin', (username, password) => {
-  cy.task('login', {
-    baseUrl: Cypress.config().baseUrl, 
-    username: username, 
-    password: password
+Cypress.Commands.add('oktaLogin', (oauth2Data: any, username, password) => {
+  const url = new URL(oauth2Data.url);
+  cy.request({
+    method: 'POST',
+    url: `${url.origin}/api/v1/authn`,
+    followRedirect: false,
+    body: {
+      username,
+      password,
+    },
   })
-  .then((cookies: Array<any>) => {
-    cookies.forEach(c => {
-      const name = c.name;
-      const value = c.value;
-      const options = {
-        ...c
-      }
-      cy.setCookie(name, value, options);
+    .its('body.sessionToken')
+    .as('sessionToken')
+    .then(function() {
+      cy.request({
+        url: `${oauth2Data.url}&sessionToken=${this.sessionToken}`,
+        followRedirect: true,
+    })
+    .then(() => {
+      cy.visit('/');
     });
-    cy.visit('/');
   });
 });
 
-Cypress.Commands.add('oauthLogout', (oauth2Data: any) => {
-  if (oauth2Data.isOkta) {
-    cy.task('logout').then(cookies => {
-      cy.clearCookies();
-    });
-  } else {
-    return cy.request({
-      url: `${oauth2Data.logoutUrl}`,
-    });
-  }
+Cypress.Commands.add('oauthLogout', () => {
+  cy.getCookie('XSRF-TOKEN')
+    .then(csrfCookie => {
+      return cy.request({
+        method: 'POST',
+        url: `api/logout`,
+        headers: {
+          'X-XSRF-TOKEN': csrfCookie?.value,
+        },
+      })
+  })
+  .then(res => {
+    expect(res.status).to.eq(200)
+    let logoutUrl = res.body.logoutUrl
+    let redirectUri
+    cy.location().then(loc$ => {
+      redirectUri = loc$.origin
+      // Keycloak: uri has protocol/openid-connect/token
+      if (logoutUrl.includes('/protocol')) {
+        logoutUrl = `${logoutUrl}?redirect_uri=${redirectUri}`
+      } else {
+        // Else, Okta
+        logoutUrl = `${logoutUrl}?id_token_hint=${res.body.idToken}&post_logout_redirect_uri=${redirectUri}`
+      }
+      return cy.request({
+        url: logoutUrl,
+        followRedirect: true,
+      })
+    })
+  })
+  .then(res => {
+    expect(res.status).to.eq(200)
+    cy.visit('/')
+  })
 });
 
 Cypress.Commands.add('clearCache', () => {
@@ -130,8 +147,8 @@ declare global {
       getOauth2Data(): Cypress.Chainable;
       oauthLogin(oauth2Data: any, username: string, password: string): Cypress.Chainable;
       keycloakLogin(oauth2Data: any, username: string, password: string): Cypress.Chainable;
-      oktaLogin(username: string, password: string): Cypress.Chainable;
-      oauthLogout(oauth2Data: any): Cypress.Chainable;
+      oktaLogin(oauth2Data: any, username: string, password: string): Cypress.Chainable;
+      oauthLogout(): Cypress.Chainable;
       clearCache(): Cypress.Chainable;
     }
   }

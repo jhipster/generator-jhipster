@@ -1,17 +1,31 @@
 'use strict';
 const path = require('path');
+const { merge } = require('webpack-merge');
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 <%_ if (enableTranslation) { _%>
+const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
+const { DefinePlugin } = require('webpack');
 const vueLoaderConfig = require('./loader.conf');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
 }
 
-module.exports = {
+module.exports = async env => {
+<%_ if (enableTranslation) { _%>
+  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= MAIN_SRC_DIR %>i18n'), {
+    algo: 'md5',
+    encoding: 'hex',
+    files: { include: ['*.json'] },
+  });
+
+<%_ } _%>
+
+  return merge(
+{
   mode: 'development',
   context: path.resolve(__dirname, '../'),
   entry: {
@@ -34,6 +48,21 @@ module.exports = {
       net: 'empty',
       tls: 'empty',
       child_process: 'empty',
+    },
+  },
+  cache: {
+    // 1. Set cache type to filesystem
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
+    buildDependencies: {
+      // 2. Add your config as buildDependency to get cache invalidation on config change
+      config: [
+        __filename,
+        path.resolve(__dirname, `webpack.${env.env == 'development' ? 'dev' : 'prod'}.js`),
+        path.resolve(__dirname, 'utils.js'),
+        path.resolve(__dirname, '../.postcssrc.js'),
+        path.resolve(__dirname, '../tsconfig.json')
+      ],
     },
   },
   module: {
@@ -87,6 +116,12 @@ module.exports = {
     ]
   },
   plugins: [
+    new DefinePlugin({
+<%_ if (enableTranslation) { _%>
+      I18N_HASH: JSON.stringify(languagesHash.hash),
+<%_ } _%>
+      'process.env': require(env.env == 'development' ? './dev.env' : './prod.env'),
+    }),
     new VueLoaderPlugin(),
     new CopyWebpackPlugin({
       patterns: [
@@ -116,4 +151,7 @@ module.exports = {
       }
     })<% } %>
   ]
+}
+// jhipster-needle-add-webpack-config - JHipster will add custom config
+);
 };

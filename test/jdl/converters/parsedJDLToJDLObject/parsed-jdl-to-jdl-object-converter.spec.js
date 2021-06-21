@@ -544,7 +544,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
           expect(deployment).to.deep.equal({
             deploymentType: 'docker-compose',
             directoryPath: '../',
-            dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             gatewayType: 'SpringCloudGateway',
             monitoring: 'no',

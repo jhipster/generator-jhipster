@@ -17,5 +17,5 @@
  limitations under the License.
 -%>
             <properties>
-                <spring.profiles.active>prod${profile.api-docs}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase},prod-gae<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase},prod-gae<%_ } _%></spring.profiles.active>
             </properties>

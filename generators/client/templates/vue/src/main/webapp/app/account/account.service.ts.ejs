@@ -5,7 +5,7 @@ import VueRouter from 'vue-router';
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import TrackerService from '@/admin/tracker/tracker.service';
 <%_ } _%>
 
@@ -13,15 +13,15 @@ export default class AccountService {
 
   constructor(
     private store: Store<any>,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translationService: TranslationService,
-    <%_ } _%>
-    <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
     private cookie: any,
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     private trackerService: TrackerService,
-    <%_ } _%>
+<%_ } _%>
     private router: VueRouter
   ) {
     this.init();
@@ -51,26 +51,26 @@ export default class AccountService {
         const account = response.data;
         if (account) {
           this.store.commit('authenticated', account);
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           if (this.store.getters.currentLanguage !== account.langKey) {
             this.store.commit('currentLanguage', account.langKey);
           }
-          <%_ } _%>
+<%_ } _%>
           if(sessionStorage.getItem('requested-url')) {
             this.router.replace(sessionStorage.getItem("requested-url"));
             sessionStorage.removeItem("requested-url");
           }
-          <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
           this.trackerService.connect();
-          <%_ } _%>
+<%_ } _%>
         } else {
           this.store.commit('logout');
           this.router.push('/', () => {});
           sessionStorage.removeItem("requested-url");
         }
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         this.translationService.refreshTranslation(this.store.getters.currentLanguage);
-        <%_ } _%>
+<%_ } _%>
         resolve(true);
       }).catch(() => {
         this.store.commit('logout');
@@ -85,21 +85,21 @@ export default class AccountService {
     }
 
     if (!this.authenticated || !this.userAuthorities) {
-      const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
+      const token = <%_ if (authenticationTypeJwt) { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
       if (!this.store.getters.account && !this.store.getters.logon && token) {
         return this.retrieveAccount();
       } else {
-        return new Promise(resolve => { resolve(false); });;
+        return Promise.resolve(false);
       }
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return new Promise(resolve => { resolve(true); });;
+    for (const authority of authorities) {
+      if (this.userAuthorities.includes(authority)) {
+        return Promise.resolve(true);
       }
     }
 
-    return new Promise(resolve => { resolve(false); });;
+    return Promise.resolve(false);
   }
 
   public get authenticated(): boolean {

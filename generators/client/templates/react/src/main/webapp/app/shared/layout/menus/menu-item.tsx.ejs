@@ -32,7 +32,7 @@ export interface IMenuItem {
 export default class MenuItem extends React.Component<IMenuItem> {
 
   render() {
-    const { to, icon, id, children, "data-cy": string } = this.props;
+    const { to, icon, id, children } = this.props;
 
     return (
       <DropdownItem tag={Link} to={to} id={id} data-cy={this.props["data-cy"]} >

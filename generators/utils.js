@@ -283,6 +283,16 @@ function renderContent(source, generator, context, options, cb) {
     context: generator,
     ...options,
   };
+  if (context.entityClass) {
+    const basename = path.basename(source);
+    if (context.configOptions && context.configOptions.sharedEntities) {
+      Object.values(context.configOptions.sharedEntities).forEach(entity => {
+        entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+      });
+    } else if (context.resetFakerSeed) {
+      context.resetFakerSeed(basename);
+    }
+  }
   const promise = ejs.renderFile(generator.templatePath(source), context, options);
   if (cb) {
     return promise
@@ -645,7 +655,10 @@ function getRandomHex(len = 50) {
  * @param {string} value the value used to get base64 secret
  * @param {int} len the length to use for random hex, defaults to 50
  */
-function getBase64Secret(value, len = 50) {
+function getBase64Secret(value = '', len = 50) {
+  if (this && this.options && this.options.reproducibleTests) {
+    return `SECRET-${value}-${len}`;
+  }
   return Buffer.from(value || getRandomHex(len)).toString('base64');
 }
 

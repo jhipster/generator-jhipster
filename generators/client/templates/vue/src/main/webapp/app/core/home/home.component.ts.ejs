@@ -8,11 +8,11 @@ export default class Home extends Vue {
   private loginService: () => LoginService;
 
   public openLogin(): void {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     this.loginService().openLogin((<any>this).$root);
-    <%_ } else { %>
+<%_ } else { %>
     this.loginService().login();
-    <%_ } %>
+<%_ } %>
   }
 
   public get authenticated(): boolean {

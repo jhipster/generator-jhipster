@@ -16,6 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = require('./entity-options');
+
+const { MAPSTRUCT } = MapperTypes;
+const NO_MAPPER = MapperTypes.NO;
+
+const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
+const NO_SERVICE = ServiceTypes.NO;
+
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const NO_PAGINATION = PaginationTypes.NO;
+
+const { ELASTICSEARCH, COUCHBASE } = SearchTypes;
 
 const Options = {
   DTO: 'dto',
@@ -30,14 +42,14 @@ const Options = {
 const optionNames = Object.values(Options);
 
 const Values = {
-  [Options.DTO]: { MAPSTRUCT: 'mapstruct', NO: 'no' },
-  [Options.SERVICE]: { SERVICE_CLASS: 'serviceClass', SERVICE_IMPL: 'serviceImpl', NO: 'no' },
+  [Options.DTO]: { MAPSTRUCT, NO: NO_MAPPER },
+  [Options.SERVICE]: { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE },
   [Options.PAGINATION]: {
-    PAGINATION: 'pagination',
-    'INFINITE-SCROLL': 'infinite-scroll',
-    NO: 'no',
+    PAGINATION,
+    'INFINITE-SCROLL': INFINITE_SCROLL,
+    NO: NO_PAGINATION,
   },
-  [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
+  [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE },
 };
 
 const DefaultValues = {

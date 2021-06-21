@@ -34,7 +34,7 @@ describe('entity utilities', () => {
           ...entityDefaultConfig,
           name: 'Entity',
           changelogDate: formatDateForChangelog(new Date()),
-          fields: [{ fieldName: 'id', fieldType: 'CustomType' }],
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
         };
         beforeEach(() => {
           entity = prepareEntityPrimaryKeyForTemplates(entity, defaultGenerator);
@@ -45,6 +45,8 @@ describe('entity utilities', () => {
             fieldName: 'id',
             fieldType: 'CustomType',
             id: true,
+            path: ['id'],
+            relationshipsPath: [],
           });
         });
 
@@ -66,8 +68,8 @@ describe('entity utilities', () => {
           name: 'Entity',
           changelogDate: formatDateForChangelog(new Date()),
           fields: [
-            { fieldName: 'id', fieldType: 'CustomType' },
-            { fieldName: 'uuid', fieldType: 'UUID', id: true },
+            { fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] },
+            { fieldName: 'uuid', fieldType: 'UUID', id: true, path: ['uuid'], relationshipsPath: [] },
           ],
         };
         beforeEach(() => {
@@ -77,6 +79,8 @@ describe('entity utilities', () => {
           expect(entity.fields[0]).to.eql({
             fieldName: 'id',
             fieldType: 'CustomType',
+            path: ['id'],
+            relationshipsPath: [],
           });
         });
       });
@@ -93,7 +97,17 @@ describe('entity utilities', () => {
             name: 'Entity1',
             entityClass: 'Entity1',
             entityInstance: 'entity1',
-            fields: [{ fieldName: 'id', fieldNameCapitalized: 'Id', columnName: 'id', fieldType: 'String', id: true }],
+            fields: [
+              {
+                fieldName: 'id',
+                fieldNameCapitalized: 'Id',
+                columnName: 'id',
+                fieldType: 'String',
+                id: true,
+                path: ['id'],
+                relationshipsPath: [],
+              },
+            ],
           };
           entity2 = {
             ...entityDefaultConfig,
@@ -101,7 +115,16 @@ describe('entity utilities', () => {
             entityClass: 'Entity2',
             entityInstance: 'entity2',
             fields: [
-              { fieldName: 'uuid', fieldNameCapitalized: 'Uuid', columnName: 'uuid', fieldType: 'UUID', id: true, autoGenerate: true },
+              {
+                fieldName: 'uuid',
+                fieldNameCapitalized: 'Uuid',
+                columnName: 'uuid',
+                fieldType: 'UUID',
+                id: true,
+                autoGenerate: true,
+                path: ['uuid'],
+                relationshipsPath: [],
+              },
             ],
           };
           entity3 = {
@@ -124,7 +147,17 @@ describe('entity utilities', () => {
             name: 'Entity4',
             entityClass: 'Entity4',
             entityInstance: 'entity4',
-            fields: [{ fieldName: 'uuid', fieldType: 'UUID', columnName: 'uuid', id: true, autoGenerate: false }],
+            fields: [
+              {
+                fieldName: 'uuid',
+                fieldType: 'UUID',
+                columnName: 'uuid',
+                id: true,
+                autoGenerate: false,
+                path: ['uuid'],
+                relationshipsPath: [],
+              },
+            ],
             relationships: [
               {
                 relationshipName: 'otherEntity1',
@@ -216,7 +249,8 @@ describe('entity utilities', () => {
             columnName: 'other_entity1_id',
             derivedPath: ['otherEntity1', 'id'],
             path: ['otherEntity1', 'id'],
-
+            relationshipsPath: [entity4.relationships[0]],
+            autoGenerate: true,
             derivedEntity: entity1,
             reference: field.reference,
           });
@@ -244,7 +278,7 @@ describe('entity utilities', () => {
             columnName: 'other_entity3_uuid',
             derivedPath: ['otherEntity3', 'uuid'],
             path: ['otherEntity3', 'entity2', 'uuid'],
-
+            relationshipsPath: [entity4.relationships[1], entity3.relationships[0]],
             derivedEntity: entity3,
             reference: field.reference,
           });

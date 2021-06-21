@@ -17,13 +17,13 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Switch <% if (websocket === 'spring-websocket') { %>, useLocation <% } %>} from 'react-router-dom';
+import { Switch <% if (communicationSpringWebsocket) { %>, useLocation <% } %>} from 'react-router-dom';
 import Loadable from 'react-loadable';
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import Login from 'app/modules/login/login';
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import LoginRedirect from 'app/modules/login/login-redirect';
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
@@ -39,7 +39,7 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
 
@@ -56,33 +56,33 @@ const Admin = Loadable({
 });
 
 const Routes = () => {
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
   const location = useLocation();
   React.useEffect(() => {
     sendActivity(location.pathname);
   }, [location]);
-  <%_ } _%>
+<%_ } _%>
   return (
     <div className="view-routes">
       <Switch>
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         <ErrorBoundaryRoute path="/login" component={Login} />
-      <%_ } _%>
+<%_ } _%>
         <ErrorBoundaryRoute path="/logout" component={Logout} />
-      <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
         <ErrorBoundaryRoute path="/account/register" component={Register} />
         <ErrorBoundaryRoute path="/account/activate/:key?" component={Activate} />
         <ErrorBoundaryRoute path="/account/reset/request" component={PasswordResetInit} />
         <ErrorBoundaryRoute path="/account/reset/finish/:key?" component={PasswordResetFinish} />
-      <%_ } _%>
+<%_ } _%>
         <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
-      <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
         <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
-      <%_ } _%>
+<%_ } _%>
         <ErrorBoundaryRoute path="/" exact component={Home}/>
-      <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
         <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
-      <%_ } _%>
+<%_ } _%>
         <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
         <ErrorBoundaryRoute component={PageNotFound} />
       </Switch>

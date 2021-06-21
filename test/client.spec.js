@@ -345,17 +345,6 @@ describe('JHipster client generator', () => {
       it('admin reducer should contains admin component related code', () => {
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          "  FETCH_LOGS: 'administration/FETCH_LOGS',\n" +
-            "  FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',\n" +
-            "  FETCH_HEALTH: 'administration/FETCH_HEALTH',\n" +
-            "  FETCH_METRICS: 'administration/FETCH_METRICS',\n" +
-            "  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',\n" +
-            "  FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',\n" +
-            "  FETCH_ENV: 'administration/FETCH_ENV',"
-        );
-
-        runResult.assertFileContent(
-          `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
           `
   logs: {
     loggers: [] as any[],
@@ -372,12 +361,7 @@ describe('JHipster client generator', () => {
 
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+          'isPending(getSystemHealth, getSystemMetrics, getSystemThreadDump, getLoggers, getConfigurations, getEnv)'
         );
       });
 
@@ -466,12 +450,12 @@ describe('JHipster client generator', () => {
 
         runResult.assertNoFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+          'getSystemHealth.pending,\n' +
+            '          getSystemMetrics.pending,\n' +
+            '          getSystemThreadDump.pending,\n' +
+            '          getLoggers.pending,\n' +
+            '          getConfigurations.pending,\n' +
+            '          getEnv.pending'
         );
       });
 

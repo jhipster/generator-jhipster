@@ -16,6 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+
 module.exports = {
   writeFiles,
 };
@@ -34,14 +38,14 @@ function writeFiles() {
     },
 
     writeKeycloakFiles() {
-      if (this.authenticationType === 'oauth2' && this.applicationType !== 'microservice') {
+      if (this.authenticationType === OAUTH2 && this.applicationType !== MICROSERVICE) {
         this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
         this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
       }
     },
 
     writePrometheusFiles() {
-      if (this.monitoring !== 'prometheus') return;
+      if (this.monitoring !== PROMETHEUS) return;
 
       // Generate a list of target apps to monitor for the prometheus config
       const appsToMonitor = [];

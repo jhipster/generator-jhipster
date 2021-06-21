@@ -104,20 +104,20 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     <%_ } _%>
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(<% if (!reactive || (['h2Disk', 'h2Memory'].includes(devDatabaseType) && reactive)) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(<% if (!reactive || (devDatabaseTypeH2Any && reactive)) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
         <%_ if (!reactive) { _%>
         this.env = env;
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && reactive) { _%>
+<%_ if (devDatabaseTypeH2Any && reactive) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             H2ConfigurationHelper.initH2Console();
         }
-        <%_ } _%>  
+<%_ } _%>  
     }
 
 
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -125,11 +125,11 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
 
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    <%_ if (devDatabaseTypeH2Any) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             initH2Console(servletContext);
         }
-        <%_ } _%>
+    <%_ } _%>
         log.info("Web application fully configured");
     }
     <%_ if (!skipClient) { _%>
@@ -175,14 +175,14 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         return extractedPath.substring(0, extractionEndIndex);
     }
 
-        <%_ } _%>
     <%_ } _%>
+<%_ } _%>
 
     @Bean
     public Cors<% if (reactive) { %>Web<% } %>Filter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
-        if (!CollectionUtils.isEmpty(config.getAllowedOrigins())) {
+        if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || ! CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
             log.debug("Registering CORS filter");
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/management/**", config);

@@ -184,7 +184,7 @@ before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
         <%_ if (!insideDocker) { _%>
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
     <%_ } _%>

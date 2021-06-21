@@ -44,13 +44,17 @@ const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME]
  */
 const baseNameConfigExists = baseName => fs.existsSync(baseName === undefined ? '.yo-rc.json' : path.join(baseName, '.yo-rc.json'));
 
+const multiplesApplications = processor => {
+  return Object.values(processor.importState.exportedApplicationsWithEntities).length > 1;
+};
+
 /**
  * When importing multiples applications, we should import each of them at it's own baseName folder.
  * @param {JDLProcessor} processor
  * @return {boolean}
  */
 const shouldRunInFolder = processor => {
-  return Object.values(processor.importState.exportedApplicationsWithEntities).length > 1;
+  return multiplesApplications(processor);
 };
 
 /**
@@ -150,6 +154,10 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     ignoreDeployments: undefined,
     inline: undefined,
     skipSampleRepository: undefined,
+    workspaces: undefined,
+    forceNoFiltering: undefined,
+    unidirectionalRelationships: undefined,
+    localConfigOnly: undefined,
     fromJdl: true,
   };
 
@@ -157,17 +165,20 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     const oldCwd = process.cwd();
     process.chdir(cwd);
     env = env || EnvironmentBuilder.createDefaultBuilder(undefined, { cwd }).getEnvironment();
-    return env.run(`${CLI_NAME}:${command}`, generatorOptions).then(
-      () => {
+    return env
+      .run(`${CLI_NAME}:${command}`, generatorOptions)
+      .then(
+        () => {
+          logger.info(`Generator ${command} succeed`);
+        },
+        error => {
+          logger.error(`Error running generator ${command}: ${error}`, error);
+          return Promise.reject(error);
+        }
+      )
+      .finally(() => {
         process.chdir(oldCwd);
-        logger.info(`Generator ${command} succeed`);
-      },
-      error => {
-        process.chdir(oldCwd);
-        logger.error(`Error running generator ${command}: ${error}`, error);
-        return Promise.reject(error);
-      }
-    );
+      });
   }
   logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
   const args = [command, ...getOptionAsArgs(generatorOptions)];
@@ -248,7 +259,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
   const cwd = path.join(processor.pwd, deploymentType);
   logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
 
-  return runGenerator(deploymentType, { cwd, fork: true }, { force: true, ...processor.options, skipPrompts: true });
+  return runGenerator(deploymentType, { cwd, fork: false }, { force: true, ...processor.options, skipPrompts: true });
 };
 
 /**
@@ -344,6 +355,8 @@ class JDLProcessor {
       databaseType: this.options.db,
       applicationType: this.options.applicationType,
       skipUserManagement: this.options.skipUserManagement,
+      unidirectionalRelationships: this.options.unidirectionalRelationships,
+      forceNoFiltering: this.options.forceNoFiltering,
       generatorVersion: packagejs.version,
       skipFileGeneration: true,
     };
@@ -370,6 +383,15 @@ class JDLProcessor {
     statistics.sendSubGenEvent('generator', 'import-jdl');
   }
 
+  generateWorkspaces(options) {
+    if (!options.workspaces || !multiplesApplications(this)) {
+      return Promise.resolve();
+    }
+    return EnvironmentBuilder.createDefaultBuilder()
+      .getEnvironment()
+      .run('jhipster:workspaces', { workspaces: false, ...options, importState: this.importState });
+  }
+
   generateApplications() {
     if (this.options.ignoreApplication) {
       logger.debug('Applications not generated');
@@ -391,6 +413,32 @@ class JDLProcessor {
     if (applicationsWithEntities.length === 0) {
       return Promise.resolve();
     }
+
+    const allApplications = Object.fromEntries(
+      applicationsWithEntities.map((applicationWithEntities, applicationIndex) => {
+        applicationWithEntities.config.applicationIndex = applicationIndex;
+        return [applicationWithEntities.config.baseName, applicationWithEntities.config];
+      })
+    );
+
+    applicationsWithEntities.forEach((applicationWithEntities, idx) => {
+      const relatedApplications = Object.entries(allApplications).filter(
+        ([baseName]) =>
+          applicationWithEntities.config.baseName !== baseName &&
+          applicationWithEntities.entities.find(entity => entity.microserviceName === baseName)
+      );
+      const { serverPort: gatewayServerPort } = applicationWithEntities.config;
+      if (relatedApplications.length > 0) {
+        applicationWithEntities.config.applications = Object.fromEntries(
+          relatedApplications.map(([baseName, config]) => {
+            config.gatewayServerPort = gatewayServerPort;
+            const { serverPort, applicationIndex } = config;
+            return [baseName, { serverPort, applicationIndex }];
+          })
+        );
+      }
+    });
+
     if (this.interactive) {
       return applicationsWithEntities.reduce((promise, applicationWithEntities) => {
         return promise.then(() => callGenerator(applicationWithEntities));
@@ -421,13 +469,10 @@ class JDLProcessor {
           throw error;
         }
       };
-      if (this.interactive) {
-        // Queue callGenerator in chain
-        return this.importState.exportedDeployments.reduce((promise, deployment) => {
-          return promise.then(() => callGenerator(deployment));
-        }, Promise.resolve());
-      }
-      return Promise.all(this.importState.exportedDeployments.map(callGenerator));
+      // Queue callGenerator in chain
+      return this.importState.exportedDeployments.reduce((promise, deployment) => {
+        return promise.then(() => callGenerator(deployment));
+      }, Promise.resolve());
     };
 
     return callDeploymentGenerator();
@@ -463,15 +508,13 @@ module.exports = (jdlFiles, options = {}, env) => {
     const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
     jdlImporter.importJDL();
     jdlImporter.sendInsight();
+    jdlImporter.config();
+
     return jdlImporter
-      .config()
-      .generateApplications()
-      .then(() => {
-        return jdlImporter.generateEntities(env);
-      })
-      .then(() => {
-        return jdlImporter.generateDeployments();
-      })
+      .generateWorkspaces(options)
+      .then(() => jdlImporter.generateApplications())
+      .then(() => jdlImporter.generateEntities(env))
+      .then(() => jdlImporter.generateDeployments())
       .then(() => {
         printSuccess();
         return jdlFiles;

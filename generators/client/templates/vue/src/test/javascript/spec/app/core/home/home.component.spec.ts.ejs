@@ -14,19 +14,19 @@ localVue.component('router-link', {});
 describe('Home', () => {
   let home: HomeClass;
   let wrapper: Wrapper<HomeClass>;
-  <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   const loginService = { openLogin: jest.fn() };
-  <%_ } else if (authenticationType === 'session') { _%>
+<%_ } else if (authenticationTypeSession) { _%>
   const loginService = { openLogin: jest.fn(), logout: jest.fn() };
-  <%_ } else if (authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
   const loginService = { login: jest.fn(), logout: jest.fn() };
-  <%_ } _%>
+<%_ } _%>
 
   beforeEach(() => {
     wrapper = shallowMount<HomeClass>(Home, {
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       store,
       localVue,
       provide: {
@@ -51,10 +51,10 @@ describe('Home', () => {
   it('should use login service', () => {
     home.openLogin();
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalled();
-    <%_ } else { %>
+<%_ } else { %>
     expect(loginService.login).toHaveBeenCalled();
-    <%_ } %>
+<%_ } %>
   });
 });

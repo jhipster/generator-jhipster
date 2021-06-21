@@ -34,6 +34,16 @@ describe('main utilities', () => {
   );
 
   describe('prepareFieldForTemplates', () => {
+    describe('when called', () => {
+      let field = { fieldName: 'name', fieldType: 'String' };
+      beforeEach(() => {
+        field = prepareFieldForTemplates(defaultEntity, field, defaultGenerator);
+      });
+      it('should prepare path and relationshipsPath correctly', () => {
+        expect(field.path).to.deep.eq(['name']);
+        expect(field.relationshipsPath).to.deep.eq([]);
+      });
+    });
     describe('with dto != mapstruct and @MapstructExpression', () => {
       const field = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
       it('should fail', () => {

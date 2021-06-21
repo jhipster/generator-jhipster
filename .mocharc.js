@@ -5,4 +5,5 @@ module.exports = {
   timeout: 30000,
   ui: 'bdd',
   extension: 'js',
+  require: 'mocha-expect-snapshot',
 };

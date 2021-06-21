@@ -161,11 +161,12 @@ spring:
         useServerPrepStmts: true
     <%_ } _%>
   <%_ } _%>
-  <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
   h2:
     console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
-  <%_ } _%>
+<%_ } _%>
   <%_ if (databaseType === 'sql' && !reactive) { _%>
   jpa:
     <%_ if (devDatabaseType === 'postgresql') { _%>
@@ -353,7 +354,7 @@ jhipster:
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-    allowed-origins: "http://localhost:8100"
+    allowed-origins: "http://localhost:8100,http://localhost:9000<%_ if (!skipClient) { _%>,http://localhost:<%= devServerPort %><%_ } _%>"
     allowed-methods: "*"
     allowed-headers: "*"
     <%_ if (authenticationType === 'session') { _%>
@@ -367,7 +368,7 @@ jhipster:
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
   # cors:
-  #   allowed-origins: "*"
+  #   allowed-origins: "http://localhost:9000"
   #   allowed-methods: "*"
   #   allowed-headers: "*"
   #   exposed-headers: "Authorization,Link,X-Total-Count"

@@ -104,12 +104,8 @@ describe('needle API React: JHipster client generator with blueprint', () => {
 
     assert.fileContent(
       indexReducerPath,
-      '// prettier-ignore\n' +
-        'import entityInstance, {\n' +
-        '  entityNameState\n' +
-        "} from 'app/entities/entityFolderName/entityFileName.reducer';"
+      "// prettier-ignore\nimport entityInstance from 'app/entities/entityFolderName/entityFileName.reducer';"
     );
-    assert.fileContent(indexReducerPath, 'readonly entityInstance: entityNameState;');
     assert.fileContent(indexReducerPath, 'entityInstance,');
   });
 

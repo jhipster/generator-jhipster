@@ -110,8 +110,11 @@
 <%_ if (authenticationTypeJwt) { _%>
             requestInterceptor: function (req) {
               var authToken =
-                localStorage.getItem('<%= jhiPrefixDashed %>-authenticationtoken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
+                localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
               if (authToken) {
+<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
+                authToken = JSON.parse(authToken);
+<%_ } _%>
                 req.headers['Authorization'] = 'Bearer ' + authToken;
               }
               // Remove the sample Swagger UI request body if present

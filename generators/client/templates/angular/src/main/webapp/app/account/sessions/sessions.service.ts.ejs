@@ -25,7 +25,7 @@ import { Session } from './session.model';
 
 @Injectable({ providedIn: 'root' })
 export class SessionsService {
-  public resourceUrl = this.applicationConfigService.getEndpointFor('api/account/sessions/');
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/account/sessions/');
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 

@@ -51,10 +51,10 @@ export class <%= entityClass %>DeleteDialog {
 
 
 export default class <%= entityClass %>ComponentsPage {
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     createButton: ElementFinder = element(by.id('jh-create-entity'));
     deleteButtons = element.all(by.css('div table .btn-danger'));
-    <%_ } _%>
+<%_ } _%>
     title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
     noRecords: ElementFinder = element(by.css('#app-view-container .table-responsive div.alert.alert-warning'));
     table: ElementFinder = element(by.css('#app-view-container div.table-responsive > table'));
@@ -65,7 +65,7 @@ export default class <%= entityClass %>ComponentsPage {
       return record.element(by.css('a.btn.btn-info.btn-sm'));
     }
 
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     getEditButton(record: ElementFinder) {
       return record.element(by.css('a.btn.btn-primary.btn-sm'));
     }
@@ -73,7 +73,7 @@ export default class <%= entityClass %>ComponentsPage {
     getDeleteButton(record: ElementFinder) {
       return record.element(by.css('a.btn.btn-danger.btn-sm'));
     }
-    <%_ } _%>
+<%_ } _%>
 
     async goToPage(navBarPage: NavBarPage) {
       await navBarPage.getEntityPage('<%= entityStateName %>');
@@ -81,7 +81,7 @@ export default class <%= entityClass %>ComponentsPage {
       return this;
     }
 
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     async goToCreate<%= entityClass %>() {
       await this.createButton.click();
       return new <%= entityClass %>UpdatePage();
@@ -100,5 +100,5 @@ export default class <%= entityClass %>ComponentsPage {
 
       expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
     }
-    <%_ } _%>
+<%_ } _%>
 }

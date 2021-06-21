@@ -19,21 +19,21 @@
 #common configuration shared between all applications
 configserver:
   name: Docker JHipster Registry
-  status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
+  status: Connected to <% if (serviceDiscoveryEureka) { %>the JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %> running in Docker
 
 jhipster:
   security:
     authentication:
       jwt:
         base64-secret: <%= jwtSecretKey %>
-<%_ if (monitoring === 'prometheus') { _%>
+<%_ if (monitoringPrometheus) { _%>
 management:
   metrics:
     export:
       prometheus:
         enabled: true
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 eureka:
   client:
     service-url:

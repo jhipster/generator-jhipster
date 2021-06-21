@@ -21,7 +21,7 @@ package <%= packageName %>.domain;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
-<%_ if (primaryKey && primaryKey.fields.some(f => f.fieldType === 'UUID')) { _%>
+<%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -30,16 +30,16 @@ class <%= persistClass %>Test {
     @Test
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= persistClass %>.class);
-    <%_if (!embedded) { _%>
+<%_if (!embedded) { _%>
         <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
-        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.type === 'Long') { %>1L<% } else if (primaryKey.type === 'String') { %>"id1"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
+        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
         <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
         assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
-        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.type === 'Long') { %>2L<% } else if (primaryKey.type === 'String') { %>"id2"<% } else if (primaryKey.type === 'UUID') { %>UUID.randomUUID()<% } %>);
+        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeLong) { %>2L<% } else if (primaryKey.typeString) { %>"id2"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
         <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
-    <%_} _%>
+<%_} _%>
     }
 }

@@ -47,7 +47,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webapp(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+task webapp(type: NpmTask) {
     inputs.files("package-lock.json")
     inputs.files("build.gradle")
     <%_ if (clientFramework === ANGULAR) { _%>
@@ -64,7 +64,7 @@ task webapp(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     outputs.dir("<%= CLIENT_DIST_DIR %>")
 
-    dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
+    dependsOn npmInstall
 
     args = ["run", "webapp:build"]
     environment = [APP_VERSION: project.version]

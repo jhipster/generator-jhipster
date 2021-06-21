@@ -19,6 +19,7 @@
 /* eslint-disable consistent-return */
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
+const { GENERATOR_ENTITY_I18N } = require('../generator-list');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
@@ -31,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
     this.entity = opts.context;
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_I18N, { context: opts.context });
   }
 
   // Public API method used by the getter and also by Blueprints

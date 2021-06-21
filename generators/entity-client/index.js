@@ -18,12 +18,13 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
-const { writeFiles, customizeFiles } = require('./files');
+const { writeFiles, addToMenu, replaceTranslations } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
+const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 
 let useBlueprints;
 
@@ -34,7 +35,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-client', { context: opts.context });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_CLIENT, { context: opts.context });
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -121,8 +122,17 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _postWriting() {
     return {
-      customizeFiles() {
-        return customizeFiles.call(this);
+      addToMenu() {
+        return addToMenu.call(this);
+      },
+
+      replaceTranslations() {
+        if (
+          this.skipClient ||
+          (this.jhipsterConfig.microfrontend && this.jhipsterConfig.applicationType === 'gateway' && this.microserviceName)
+        )
+          return undefined;
+        return replaceTranslations.call(this);
       },
     };
   }
