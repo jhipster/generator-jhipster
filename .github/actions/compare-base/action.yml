@@ -24,6 +24,10 @@ inputs:
     description: 'Application path'
     required: false
     default: ${{ github.workspace }}/base/app
+  extra-args:
+    description: 'Extra arguments'
+    required: false
+    default: ''
 outputs:
   application-path:
     description: 'Application path'
@@ -60,7 +64,7 @@ runs:
     - name: 'MERGE: merge base project'
       id: base
       run: |
-        $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git
+        $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git ${{ inputs.extra-args }}
         echo "::set-output name=application-path::${{inputs.application-path}}"
       env:
         JHI_FOLDER_APP: ${{ inputs.application-path }}
