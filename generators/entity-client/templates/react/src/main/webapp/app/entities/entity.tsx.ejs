@@ -20,12 +20,8 @@ import React, { useState, useEffect } from 'react';
 <%_ if (paginationInfiniteScroll) { _%>
 import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine) { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
-<%_ if (searchEngine) { _%>
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-<%_ } _%>
+import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form,<% } %>Col, Row, Table } from 'reactstrap';
 import {
   <%_ if (blobFields.length > 0) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
@@ -33,10 +29,10 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine) { %>, translate, ICrudSearchAction<% } %>
+  Translate<% if (searchEngine) { %>, translate<% } %>
   <% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (!paginationNo) { _%>
-  , getSortState, IPaginationBaseState
+  , getSortState
   <%_ if (paginationPagination) { _%>
   , JhiPagination, JhiItemCount
   <%_ }
@@ -48,14 +44,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 
-import { IRootState } from 'app/shared/reducers';
 import {
 <%_ if (searchEngine) { _%>
-  getSearchEntities,
+  searchEntities,
 <%_ } _%>
-  getEntities
+  getEntities,
 <%_ if (paginationInfiniteScroll) { _%>
-  , reset
+  reset,
 <%_ } _%>
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -64,10 +59,11 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
+export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>) => {
+  const dispatch = useAppDispatch();
 
-export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 <%_ if (searchEngine) { _%>
   const [search, setSearch] = useState('');
 <%_ } _%>
@@ -78,28 +74,58 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const [sorting, setSorting] = useState(false);
 <%_ } _%>
 
+  const <%= entityInstance %>List = useAppSelector(state => state.<%= entityInstance %>.entities);
+  const loading = useAppSelector(state => state.<%= entityInstance %>.loading);
+  <%_ if (!paginationNo) { _%>
+  const totalItems = useAppSelector(state => state.<%= entityInstance %>.totalItems);
+  <%_ } _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+  const links = useAppSelector(state => state.<%= entityInstance %>.links);
+  const entity = useAppSelector(state => state.<%= entityInstance %>.entity);
+  const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
+  <%_ } _%>
+
 <%_ if (paginationPagination || paginationInfiniteScroll || !paginationNo && !paginationInfiniteScroll) { _%>
   const getAllEntities = () => {
   <%_ if (searchEngine) { _%>
     if (search) {
-      props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+      dispatch(
+        searchEntities({
+          query: search,
+          page: paginationState.activePage - 1,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`
+        })
+      );
     } else {
-      props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+      dispatch(
+        getEntities({
+          page: paginationState.activePage - 1,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+        })
+      );
     }
   <%_ } else { _%>
-    props.getEntities(paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+      dispatch(
+        getEntities({
+          page: paginationState.activePage - 1,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+        })
+      );
   <%_ } _%>
   };
 <%_ } _%>
 
 <%_ if (paginationInfiniteScroll) { _%>
   const resetAll = () => {
-    props.reset();
+    dispatch(reset());
     setPaginationState({
       ...paginationState,
       activePage: 1
     });
-    props.getEntities();
+    dispatch(getEntities({}));
   };
 <%_ } _%>
 
@@ -108,32 +134,40 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ if (!paginationNo) { _%>
     resetAll();
   <%_ } else { _%>
-    props.getEntities();
+    dispatch(getEntities({}));
   <%_ } _%>
   }, []);
 <%_ } _%>
 
 <%_ if (searchEngine) { _%>
-  const startSearching = () => {
+  const startSearching = (e) => {
     if (search) {
   <%_ if (paginationInfiniteScroll) { _%>
-      props.reset();
+      dispatch(reset());
   <%_ } _%>
   <%_ if (!paginationNo) { _%>
       setPaginationState({
         ...paginationState,
         activePage: 1
       });
-      props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
+      dispatch(
+        searchEntities({
+          query: search,
+          page: paginationState.activePage - 1,
+          size: paginationState.itemsPerPage,
+          sort: `${paginationState.sort},${paginationState.order}`,
+        })
+      );
   <%_ } else { _%>
-      props.getSearchEntities(search);
+      dispatch(searchEntities({query: search}));
   <%_ } _%>
     }
+    e.preventDefault();
   };
 
   const clear = () => {
   <%_ if (paginationInfiniteScroll) { _%>
-    props.reset();
+    dispatch(reset());
   <%_ } _%>
     setSearch('');
   <%_ if (!paginationNo) { _%>
@@ -142,7 +176,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       activePage: 1
     });
   <%_ } _%>
-    props.getEntities();
+    dispatch(getEntities({}));
   };
 
   const handleSearch = event => setSearch(event.target.value);
@@ -150,10 +184,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
 <%_ if (paginationInfiniteScroll) { _%>
   useEffect(() => {
-    if (props.updateSuccess) {
+    if (updateSuccess) {
       resetAll();
     }
-  }, [props.updateSuccess]);
+  }, [updateSuccess]);
 
   useEffect(() => {
     getAllEntities()
@@ -210,7 +244,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   const sort = p => () => {
   <%_ if (paginationInfiniteScroll) { _%>
-    props.reset();
+    dispatch(reset());
     setPaginationState({
       ...paginationState,
       activePage: 1,
@@ -238,7 +272,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   const handleSyncList = () => {
 <%_ if (paginationNo) { _%>
-      props.getEntities();
+      dispatch(getEntities({}));
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
       sortEntities();
@@ -248,7 +282,8 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 <%_ } _%>
   };
 
-  const { <%= entityInstance %>List, match, loading<% if (paginationPagination) { %>, totalItems<% } %>} = props;
+  const { match } = props;
+
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
@@ -270,11 +305,11 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 <%_ if (searchEngine) { _%>
       <Row>
         <Col sm="12">
-          <AvForm onSubmit={startSearching}>
-            <AvGroup>
+          <Form onSubmit={startSearching}>
+            <FormGroup>
               <InputGroup>
-                <AvInput type="text" name="search" value={search} onChange={handleSearch}
-                  placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
+                <Input type="text" name="search" defaultValue={search} onChange={handleSearch}
+              placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
                 <Button className="input-group-addon">
                   <FontAwesomeIcon icon="search" />
                 </Button>
@@ -282,8 +317,8 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                   <FontAwesomeIcon icon="trash" />
                 </Button>
               </InputGroup>
-            </AvGroup>
-          </AvForm>
+            </FormGroup>
+          </Form>
         </Col>
       </Row>
 <%_ } _%>
@@ -291,7 +326,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 <%_ if (paginationInfiniteScroll) { _%>
         <InfiniteScroll pageStart={paginationState.activePage}
                         loadMore={handleLoadMore}
-                        hasMore={paginationState.activePage - 1 < props.links.next}
+                        hasMore={paginationState.activePage - 1 < links.next}
                         loader={<div className="loader">Loading ...</div>}
                         threshold={0}
                         initialLoad={false}>
@@ -445,7 +480,7 @@ _%>
       </div>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
-        { props.totalItems ? (<div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
+        { totalItems ? (<div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
           <Row className="justify-content-center">
             <JhiItemCount
               page={paginationState.activePage}
@@ -460,7 +495,7 @@ _%>
               onSelect={handlePagination}
               maxButtons={5}
               itemsPerPage={paginationState.itemsPerPage}
-              totalItems={props.totalItems}
+              totalItems={totalItems}
             />
           </Row>
         </div>) : '' }
@@ -470,30 +505,4 @@ _%>
   );
 };
 
-const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-  <%= entityInstance %>List: <%= entityInstance %>.entities,
-  loading: <%= entityInstance %>.loading,
-<%_ if (!paginationNo) { _%>
-  totalItems: <%= entityInstance %>.totalItems,
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-  links: <%= entityInstance %>.links,
-  entity: <%= entityInstance %>.entity,
-  updateSuccess: <%= entityInstance %>.updateSuccess,
-<%_ } _%>
-});
-
-const mapDispatchToProps = {
- <%_ if (searchEngine) { _%>
- getSearchEntities,
- <%_ } _%>
- getEntities,
- <%_ if (paginationInfiniteScroll) { _%>
- reset
- <%_ } _%>
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);
+export default <%= entityReactName %>;

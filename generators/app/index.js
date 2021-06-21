@@ -255,6 +255,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('microfrontend', {
+      desc: 'Use experimental microfrontend support',
+      type: Boolean,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;
@@ -366,7 +371,8 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          this.jhipsterConfig.skipClient = true;
+          this.jhipsterConfig.skipClient = !this.jhipsterConfig.microfrontend;
+          this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
         }
 

@@ -49,7 +49,7 @@ describe('account', () => {
 <%_ } else { _%>
     const expect1 = 'Welcome, <%= backendName %> Hipster!';
 <%_ } _%>
-    const value1 = await element(by.css('h1')).<%- elementGetter %>;
+    const value1 = await element(by.css('h1 > span')).<%- elementGetter %>;
     expect(value1).to.eq(expect1);
 <%_ if (!authenticationTypeOauth2) { _%>
     signInPage = await navBarPage.getSignInPage();

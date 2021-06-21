@@ -7,7 +7,7 @@ const expect = require('chai').expect;
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
-const jhipsterVersion = require('../../package').version;
+const jhipsterVersion = require('../../package.json').version;
 const constants = require('../../generators/generator-constants');
 const EnvironmentBuilder = require('../../cli/environment-builder');
 

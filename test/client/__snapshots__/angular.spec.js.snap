@@ -1,0 +1,750 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster angular generator microfrontend should match generated files snapshot 1`] = `
+Object {
+  ".browserslistrc": Object {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintignore": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".huskyrc": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".npmrc": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "angular.json": Object {
+    "stateCleared": "modified",
+  },
+  "jest.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "ngsw-config.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/404.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/WEB-INF/web.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/admin-routing.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/log.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app-routing.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/authority.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/datepicker-adapter.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/dayjs.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/error.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/font-awesome-icons.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/input.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/language.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/pagination.constants.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/translation.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/uib-pagination.config.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/account.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/account.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/account.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/auth-session.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/state-storage.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/user-route-access.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/config/application-config.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/config/application-config.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/error-handler.interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/index.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/interceptor/notification.interceptor.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/request/request-util.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/request/request.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/alert.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/alert.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/data-util.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/data-util.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/event-manager.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/event-manager.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/operators.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/operators.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/parse-links.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/parse-links.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-routing.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/home/home.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/home/home.component.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/home/home.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/home/home.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/home/home.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/home/home.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/footer/footer.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/footer/footer.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/main/main.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/main/main.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/main/main.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/active-menu.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar.component.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/page-ribbon.component.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/page-ribbon.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/page-ribbon.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/profile-info.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/profile.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/login/login.service.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/login/logout.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert-error.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert-error.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert-error.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert-error.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/alert/alert.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/has-any-authority.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/duration.pipe.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/format-medium-date.pipe.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/format-medium-date.pipe.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/format-medium-datetime.pipe.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translate.directive.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/pagination/item-count.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/shared-libs.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/shared.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sort-by.directive.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sort-by.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sort.directive.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sort.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/bootstrap.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/declarations.d.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/activate.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/configuration.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/error.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/global.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/health.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/home.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/login.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/logs.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/metrics.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/password.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/register.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/reset.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/sessions.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/settings.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/user-management.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/activate.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/configuration.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/error.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/global.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/health.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/home.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/login.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/logs.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/metrics.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/password.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/register.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/reset.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/sessions.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/settings.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/user-management.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/main.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/polyfills.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.app.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": Object {
+    "stateCleared": "modified",
+  },
+  "tsconfig.spec.json": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/environment.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/logo-jhipster.png": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/proxy.conf.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.custom.js": Object {
+    "stateCleared": "modified",
+  },
+  "webpack/webpack.microfrontend.js": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

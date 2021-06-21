@@ -17,34 +17,32 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getUser, deleteUser } from './user-management.reducer';
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface IUserManagementDeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
+export const UserManagementDeleteDialog = (props: RouteComponentProps<{ login: string }>) => {
+  const dispatch = useAppDispatch();
 
-export const UserManagementDeleteDialog = (props: IUserManagementDeleteDialogProps) => {
   useEffect(() => {
-    props.getUser(props.match.params.login);
+    dispatch(getUser(props.match.params.login));
   }, []);
-
 
   const handleClose = event => {
     event.stopPropagation();
     props.history.push('/admin/user-management');
   };
 
+  const user = useAppSelector(state => state.userManagement.user);
+
   const confirmDelete = event => {
-    props.deleteUser(props.user.login);
+    dispatch(deleteUser(user.login));
     handleClose(event);
   };
-
-  const { user } = props;
 
   return (
     <Modal isOpen toggle={handleClose}>
@@ -66,13 +64,4 @@ export const UserManagementDeleteDialog = (props: IUserManagementDeleteDialogPro
   );
 };
 
-const mapStateToProps = (storeState: IRootState) => ({
-  user: storeState.userManagement.user
-});
-
-const mapDispatchToProps = { getUser, deleteUser };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDeleteDialog);
+export default UserManagementDeleteDialog;

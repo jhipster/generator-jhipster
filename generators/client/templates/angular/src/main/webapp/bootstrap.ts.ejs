@@ -16,14 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
-import { createDevTools } from '@redux-devtools/core';
-import LogMonitor from '@redux-devtools/log-monitor';
-import DockMonitor from '@redux-devtools/dock-monitor';
-// You can toggle visibility of devTools with ctrl + H
-// and change their position with ctrl + Q
-export default createDevTools(
-  <DockMonitor toggleVisibilityKey="ctrl-h" changePositionKey="ctrl-q" defaultIsVisible={false}>
-    <LogMonitor />
-  </DockMonitor>
-);
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { DEBUG_INFO_ENABLED } from './app/app.constants';
+import { AppModule } from './app/app.module';
+
+// disable debug data on prod profile to improve performance
+if (!DEBUG_INFO_ENABLED) {
+  enableProdMode();
+}
+
+platformBrowserDynamic()
+  .bootstrapModule(AppModule, { preserveWhitespaces: true })
+  // eslint-disable-next-line no-console
+  .then(() => console.log('Application started'))
+  .catch(err => console.error(err));

@@ -28,6 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
+const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 let useBlueprints;
 
@@ -52,6 +53,30 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
+
+    // Not using normal blueprints or this is a normal blueprint.
+    if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
+      this.setFeatures({
+        customInstallTask: function customInstallTask(preferredPm, defaultInstallTask) {
+          if ((preferredPm && preferredPm !== 'npm') || this.skipClient || this.jhipsterConfig.skipClient) {
+            return defaultInstallTask();
+          }
+          const gradle = this.jhipsterConfig.buildTool === GRADLE;
+          const command = gradle ? './gradlew' : './npmw';
+          const args = gradle ? ['npmInstall'] : ['install'];
+
+          const failureCallback = error => {
+            this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
+            return true;
+          };
+
+          return this.spawnCommand(command, args, { preferLocal: true }).then(
+            () => true,
+            error => failureCallback(error)
+          );
+        }.bind(this),
+      });
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -185,6 +210,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
+      configServerPort() {
+        if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
+          this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
+        }
+      },
       validateConfig() {
         this._validateServerConfiguration();
       },
@@ -444,7 +474,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
-            'postci:e2e:package': 'cp build/libs/*SNAPSHOT.$npm_package_config_packaging e2e.$npm_package_config_packaging',
+            'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
             'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
           });
         }

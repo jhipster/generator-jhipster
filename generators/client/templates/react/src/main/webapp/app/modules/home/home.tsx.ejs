@@ -18,19 +18,22 @@
 -%>
 import './home.<%= styleSheetExt %>';
 
+<%_ if (authenticationTypeOauth2) { _%>
 import React, { useEffect } from 'react';
+<%_ } else { _%>
+import React from 'react';
+<%_ } _%>  
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
-import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
 <%_ } _%>
+import { useAppSelector } from 'app/config/store';
 
-export type IHomeProp = StateProps;
-
-export const Home = (props: IHomeProp) => {
+export const Home = () => {
+  const account = useAppSelector(state => state.authentication.account);
 <%_ if (authenticationTypeOauth2) { _%>
   useEffect(() => {
     const redirectURL = localStorage.getItem(REDIRECT_URL);
@@ -40,8 +43,6 @@ export const Home = (props: IHomeProp) => {
     }
   });
 <%_ } _%>
-
-  const { account } = props;
 
   return (
     <Row>
@@ -127,11 +128,5 @@ export const Home = (props: IHomeProp) => {
   );
 };
 
-const mapStateToProps = storeState => ({
-  account: storeState.authentication.account,
-  isAuthenticated: storeState.authentication.isAuthenticated
-});
+export default Home;
 
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-export default connect(mapStateToProps)(Home);

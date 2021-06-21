@@ -19,7 +19,7 @@
 
 name: Triage issues
 on:
-  issues: { types: opened }
+  issues: { types: [opened] }
 jobs:
   apply-label:
     runs-on: ubuntu-latest

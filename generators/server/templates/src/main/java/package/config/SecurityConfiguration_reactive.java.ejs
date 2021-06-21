@@ -129,7 +129,7 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
-    
+
     <%_ if (!skipUserManagement) { _%>
     private final ReactiveUserDetailsService userDetailsService;
 
@@ -247,10 +247,10 @@ public class SecurityConfiguration {
             .pathMatchers("/").permitAll()
             .pathMatchers("/*.*").permitAll()
             <%_ } _%>
+            .pathMatchers("/api/authenticate").permitAll()
             <%_ if (!skipUserManagement) { _%>
             .pathMatchers("/api/register").permitAll()
             .pathMatchers("/api/activate").permitAll()
-            .pathMatchers("/api/authenticate").permitAll()
             .pathMatchers("/api/account/reset-password/init").permitAll()
             .pathMatchers("/api/account/reset-password/finish").permitAll()
             <%_ } _%>

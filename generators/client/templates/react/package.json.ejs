@@ -29,10 +29,7 @@
     "@fortawesome/fontawesome-svg-core": "<%= dependabotPackageJson.dependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= dependabotPackageJson.dependencies['@fortawesome/free-solid-svg-icons'] %>",
     "@fortawesome/react-fontawesome": "<%= dependabotPackageJson.dependencies['@fortawesome/react-fontawesome'] %>",
-    "@redux-devtools/core": "<%= dependabotPackageJson.dependencies['@redux-devtools/core'] %>",
-    "@redux-devtools/dock-monitor": "<%= dependabotPackageJson.dependencies['@redux-devtools/dock-monitor'] %>",
-    "@redux-devtools/log-monitor": "<%= dependabotPackageJson.dependencies['@redux-devtools/log-monitor'] %>",
-    "availity-reactstrap-validation": "<%= dependabotPackageJson.dependencies['availity-reactstrap-validation'] %>",
+    "@reduxjs/toolkit": "<%= dependabotPackageJson.dependencies['@reduxjs/toolkit'] %>",
     "axios": "<%= dependabotPackageJson.dependencies['axios'] %>",
     "bootstrap": "<%= dependabotPackageJson.dependencies['bootstrap'] %>",
 <%_ if (!clientThemeNone) { _%>
@@ -44,6 +41,7 @@
     "path-browserify": "<%= dependabotPackageJson.dependencies['path-browserify'] %>",
     "react": "<%= dependabotPackageJson.dependencies['react'] %>",
     "react-dom": "<%= dependabotPackageJson.dependencies['react-dom'] %>",
+    "react-hook-form": "<%= dependabotPackageJson.dependencies['react-hook-form'] %>",
     "react-hot-loader": "<%= dependabotPackageJson.dependencies['react-hot-loader'] %>",
     "react-jhipster": "<%= dependabotPackageJson.dependencies['react-jhipster'] %>",
     "react-loadable": "<%= dependabotPackageJson.dependencies['react-loadable'] %>",
@@ -54,7 +52,6 @@
     "react-transition-group": "<%= dependabotPackageJson.dependencies['react-transition-group'] %>",
     "reactstrap": "<%= dependabotPackageJson.dependencies['reactstrap'] %>",
     "redux": "<%= dependabotPackageJson.dependencies['redux'] %>",
-    "redux-promise-middleware": "<%= dependabotPackageJson.dependencies['redux-promise-middleware'] %>",
     "redux-thunk": "<%= dependabotPackageJson.dependencies['redux-thunk'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
     "rxjs": "6.6.3",
@@ -125,6 +122,7 @@
     "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
+    "folder-hash": "<%= dependabotPackageJson.devDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
     "mini-css-extract-plugin": "<%= dependabotPackageJson.devDependencies['mini-css-extract-plugin'] %>",
@@ -162,9 +160,6 @@
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
-  <%_ if (authenticationTypeOauth2) { _%>
-    "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
-  <%_ } _%>
 <%_ } _%>
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
 <%_ if (protractorTests) { _%>
@@ -224,8 +219,8 @@
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env stats=minimal",
     "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress=profile",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env stats=minimal",
-    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --progress=profile --env stats=normal",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --env stats=minimal",
+    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --progress=profile --env stats=normal",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "npm run webpack -- serve",

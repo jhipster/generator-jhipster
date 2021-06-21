@@ -1,6 +1,8 @@
+const expect = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+
 const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const angularfiles = require('../generators/client/files-angular').files;
@@ -103,6 +105,27 @@ describe('JHipster server generator', () => {
           ['package.json']
         )
       );
+    });
+  });
+
+  describe('microfrontend', () => {
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(path.join(__dirname, '../generators/server'))
+        .withOptions({
+          baseName: 'jhipster',
+          skipInstall: true,
+          auth: 'oauth2',
+          microfrontend: true,
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+        })
+        .run();
+    });
+    it('should match generated files snapshot', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
 });

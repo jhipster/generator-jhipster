@@ -18,19 +18,19 @@
 -%>
 'use strict';
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const path = require('path');
 const portfinder = require('portfinder');
 const webpack = require('webpack');
 const { merge: webpackMerge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const utils = require('./vue.utils');
-const config = require('../config');
-const baseWebpackConfig = require('./webpack.common');
+const config = require('./env');
+const commonConfig = require('./webpack.common');
 const jhiUtils = require('./utils.js');
+const MODE = 'development';
 
-module.exports = webpackMerge(baseWebpackConfig, {
-  mode: 'development',
+module.exports = async env => webpackMerge(await commonConfig({ env: MODE }), {
+  mode: MODE,
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
   },
@@ -42,30 +42,15 @@ module.exports = webpackMerge(baseWebpackConfig, {
   },
   output: {
     path: jhiUtils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].bundle.js',
+    filename: 'app/[contenthash].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
   optimization: {
     moduleIds: 'named',
   },
-  cache: {
-    // 1. Set cache type to filesystem
-    type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '../<%= buildDir %>webpack'),
-    buildDependencies: {
-      // 2. Add your config as buildDependency to get cache invalidation on config change
-      config: [
-        __filename,
-        path.resolve(__dirname, 'webpack.common.js'),
-        path.resolve(__dirname, 'utils.js'),
-        path.resolve(__dirname, '../.postcssrc.js'),
-        path.resolve(__dirname, '../tsconfig.json')
-      ],
-    },
-  },
   devServer: {
     contentBase: './<%= DIST_DIR %>',
-    port: 9060,
+    port: <%= devServerPort %>,
     proxy: [
       {
         context: [
@@ -102,9 +87,6 @@ module.exports = webpackMerge(baseWebpackConfig, {
     historyApiFallback: true
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
@@ -119,7 +101,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: 'http://localhost:9060',
+          target: 'http://localhost:<%= devServerPort %>',
 <%_ if (communicationSpringWebsocket) { _%>
           ws: true,
 <%_ } _%>

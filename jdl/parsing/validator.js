@@ -44,6 +44,7 @@ const LANGUAGE_PATTERN = /^[a-z]+(-[A-Za-z0-9]+)*$/;
 const PATH_PATTERN = /^"([^\/]+).*"$/;
 // const PASSWORD_PATTERN = /^(.+)$/;
 const REPONAME_PATTERN = /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:\/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/;
+const KUBERNETES_STORAGE_CLASS_NAME = /^"[A-Za-z]*"$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
@@ -275,10 +276,21 @@ const deploymentConfigPropsValidations = {
     pattern: ALPHABETIC,
     msg: 'kubernetesServiceType property',
   },
+  KUBERNETES_STORAGE_CLASS_NAME: {
+    type: 'STRING',
+    pattern: KUBERNETES_STORAGE_CLASS_NAME,
+    msg: 'kubernetesStorageClassName property',
+  },
+  KUBERNETES_USE_DYNAMIC_STORAGE: { type: 'BOOLEAN' },
   INGRESS_DOMAIN: {
     type: 'STRING',
     pattern: REPONAME_PATTERN,
     msg: 'ingressDomain property',
+  },
+  INGRESS_TYPE: {
+    type: 'STRING',
+    pattern: ALPHABETIC,
+    msg: 'ingressType property',
   },
   ISTIO: {
     type: 'BOOLEAN',
@@ -289,6 +301,7 @@ const deploymentConfigPropsValidations = {
     pattern: ALPHANUMERIC_DASH,
     msg: 'openshiftNamespace property',
   },
+  REGISTRY_REPLICAS: { type: 'INTEGER' },
   STORAGE_TYPE: {
     type: 'NAME',
     pattern: ALPHABETIC_LOWER,

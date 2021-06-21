@@ -38,10 +38,12 @@ const files = {
         '.eslintrc.json',
         'angular.json',
         'ngsw-config.json',
+        'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
         '.browserslistrc',
         { file: 'webpack/logo-jhipster.png', method: 'copy' },
+        '.npmrc',
       ],
     },
   ],
@@ -54,11 +56,17 @@ const files = {
   angularApp: [
     {
       path: CLIENT_MAIN_SRC_DIR,
-      templates: ['main.ts', 'polyfills.ts'],
+      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts', 'declarations.d.ts'],
     },
     {
       path: ANGULAR_DIR,
       templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts'],
+    },
+  ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js'],
     },
   ],
   angularMain: [
@@ -167,6 +175,7 @@ const files = {
   ],
   angularAdminModule: [
     {
+      condition: generator => !generator.applicationTypeMicroservice,
       path: ANGULAR_DIR,
       templates: [
         { file: 'admin/admin-routing.module.ts', method: 'processJs' },
@@ -502,6 +511,5 @@ module.exports = {
 };
 
 function writeFiles() {
-  // write angular 2.x and above files
   return this.writeFilesToDisk(files, 'angular');
 }

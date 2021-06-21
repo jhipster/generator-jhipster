@@ -1281,7 +1281,11 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     } else if (databaseType === ORACLE) {
       dbcUrl = `${protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
     } else if (databaseType === MSSQL) {
-      dbcUrl = `${protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+      if (protocol === 'r2dbc') {
+        dbcUrl = `${protocol}:mssql://${options.hostname}:1433/${options.databaseName}`;
+      } else {
+        dbcUrl = `${protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+      }
     } else if (databaseType === H2_DISK) {
       if (!options.localDirectory) {
         throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);

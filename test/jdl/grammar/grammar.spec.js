@@ -1060,6 +1060,146 @@ entity A {
         });
       });
     });
+
+    context('without custom values but with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+            },
+            {
+              key: 'ITALY',
+            },
+            {
+              key: 'ENGLAND',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'IRELAND',
+            },
+            {
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('with custom values containing spaces and with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE ("cheese and wine country") /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND ("not a tea country") /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+              value: 'cheese and wine country',
+            },
+            {
+              key: 'ITALY',
+            },
+            {
+              key: 'ENGLAND',
+              value: 'not a tea country',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'IRELAND',
+            },
+            {
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('with custom values containing underscores and with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE ("cheese_and_wine_country") /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND ("not_a_tea_country") /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+              value: 'cheese_and_wine_country',
+            },
+            {
+              key: 'ITALY',
+            },
+            {
+              key: 'ENGLAND',
+              value: 'not_a_tea_country',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'IRELAND',
+            },
+            {
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
     context('without values', () => {
       context('without spaces', () => {
         let parsedEnum;
@@ -1716,6 +1856,48 @@ entity A {
                 optionValues: [optionValue],
               },
             ]);
+          });
+        });
+      });
+    });
+  });
+  context('when parsing deployments', () => {
+    context('with kubernetesStorageClassName', () => {
+      context('being empty', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName ""
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: '',
+          });
+        });
+      });
+      context('being set', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName "SetValue"
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: 'SetValue',
           });
         });
       });

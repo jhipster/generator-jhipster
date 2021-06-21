@@ -1,0 +1,5416 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster OpenShift Sub Generator gateway and one microservice with mysql should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"clusteredDbApps\\": {},
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"monitoring\\": \\"no\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"dockerPushCommand\\": \\"docker push\\",
+    \\"openshiftNamespace\\": \\"default\\",
+    \\"storageType\\": \\"ephemeral\\",
+    \\"registryReplicas\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/jhgate/jhgate-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhgate-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhgate service pod
+    tags: jhgate, service
+    openshift.io/display-name: jhgate-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhgate service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhgate-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhgate
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: jhgate-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8080\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/jhgate
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/jhgate/jhgate-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhgate-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, jhgate-mysqldb  ,ephemeral
+    openshift.io/display-name: jhgate-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: jhgate-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhgate-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: jhgate-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: jhgate
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmysql/msmysql-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmysql-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an msmysql service pod
+    tags: msmysql, service
+    openshift.io/display-name: msmysql-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a msmysql service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: msmysql-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmysql
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmysql-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/msmysql
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmysql/msmysql-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmysql-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, msmysql-mysqldb  ,ephemeral
+    openshift.io/display-name: msmysql-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: msmysql-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmysql-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmysql-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: msmysql
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/ocp-apply.sh": Object {
+    "contents": "#!/usr/bin/env sh
+# Use this script to run oc commands to create resources in the selected namespace. Files are ordered
+# in proper order. 'oc process' processes the template as resources which is again piped to
+# 'oc apply' to create those resources in OpenShift namespace
+oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
+oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
+oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/jhgate/jhgate-mysql.yml | oc apply -f -
+oc process -f ./ocp/jhgate/jhgate-deployment.yml | oc apply -f -
+oc process -f ./ocp/msmysql/msmysql-mysql.yml | oc apply -f -
+oc process -f ./ocp/msmysql/msmysql-deployment.yml | oc apply -f -
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/application-configmap.yml": Object {
+    "contents": "# ConfigMap template.
+#
+# This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
+# *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: application-config-template
+  namespace: default
+  annotations:
+    description: This template defines the config objects
+    tags: \\"config, key/value\\"
+    openshift.io/display-name: application-config-template
+    openshift.io/long-description: \\"This template provides the config objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: application-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: application-config
+    description: Name of the resource
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: \${APPLICATION_NAME}
+    #common configuration shared between all applications
+    data:
+      application.yml: |-
+        configserver:
+          name:  JHipster Registry
+          status: Connected to the JHipster Registry running in OpenShift
+        eureka:
+          client:
+            initial-instance-info-replication-interval-seconds: 15
+            instance-info-replication-interval-seconds: 15
+            registry-fetch-interval-seconds: 15
+            fetch-registry: true
+            register-with-eureka: true
+            eureka-service-url-poll-interval-seconds: 15
+          instance:
+            lease-renewal-interval-in-seconds: 10
+            registry-default-open-for-traffic-count: 0
+        jhipster:
+          security:
+            authentication:
+              jwt:
+                base64-secret: SECRET--50
+      # app specific configuration
+      jhipster-registry.yml: |-
+        eureka:
+          client:
+            service-url:
+              # This must contain a list of all Eureka server replicas for registry HA to work correctly
+              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/jhipster-registry.yml": Object {
+    "contents": "# JHipster Registry HA cluster
+#
+# As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
+# It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
+#
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
+# note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-registry-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhipster-registry pod
+    tags: jhipster-registry, eureka, spring-cloud
+    openshift.io/display-name: jhipster-registry-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhipster-registry pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhipster-registry
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhipster-registry
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: reg-secret-ref
+    description: Name of the application
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    type: Opaque
+    data:
+      registry-admin-password: SECRET-admin-50 # base64 encoded \\"admin\\"
+  - apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        matchLabels:
+          app: \${APPLICATION_NAME}
+      serviceName: \${APPLICATION_NAME}
+      replicas: 2
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          terminationGracePeriodSeconds: 10
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: jhipster/jhipster-registry:v6.8.0
+              ports:
+                - name: http
+                  containerPort: 8761
+              env:
+                # Registry configuration
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,k8s
+                - name: SPRING_SECURITY_USER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: registry-admin-password
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+                  value: native
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+                  value: file:./central-config
+                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
+                  value: \\"15\\"
+                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
+                  value: \\"30\\"
+                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                  value: \\"3\\"
+                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
+                  value: \\"false\\"
+                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
+                  value: \\"2000\\"
+                - name: EUREKA_CLIENT_FETCH_REGISTRY
+                  value: \\"true\\"
+                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+                  value: \\"true\\"
+                - name: K8S_CONFIG_PATH
+                  value: \\"/central-config/\\"
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /central-config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: application-config
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
+    spec:
+      ports:
+        - name: http-bc
+          port: 8761
+          targetPort: 8761
+        - name: http
+          port: 80
+          targetPort: 8761
+      clusterIP: None
+      selector:
+        app: \${APPLICATION_NAME}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: http
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/scc-config.yml": Object {
+    "contents": "# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: default
+  annotations:
+    description: This template defines the scc objects
+    tags: \\"scc\\"
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: \\"This template provides the scc objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: \${SVC_ID}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description:
+          \\"This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+          This mostly inherits anyuid scc.\\"
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+      - system:serviceaccount:default:\${SVC_ID}
+    volumes:
+      - configMap
+      - downwardAPI
+      - emptyDir
+      - persistentVolumeClaim
+      - secret
+      - hostPath
+      - nfs
+    priority: 1
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster OpenShift Sub Generator gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [
+      \\"01-gateway\\",
+      \\"02-mysql\\",
+      \\"03-psql\\",
+      \\"04-mongo\\",
+      \\"05-cassandra\\",
+      \\"07-mariadb\\"
+    ],
+    \\"directoryPath\\": \\"./\\",
+    \\"clusteredDbApps\\": {},
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"monitoring\\": \\"no\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"dockerPushCommand\\": \\"docker push\\",
+    \\"openshiftNamespace\\": \\"default\\",
+    \\"storageType\\": \\"ephemeral\\",
+    \\"registryReplicas\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/jhgate/jhgate-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhgate-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhgate service pod
+    tags: jhgate, service
+    openshift.io/display-name: jhgate-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhgate service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhgate-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhgate
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: jhgate-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8080\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/jhgate
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/jhgate/jhgate-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhgate-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, jhgate-mysqldb  ,ephemeral
+    openshift.io/display-name: jhgate-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: jhgate-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhgate-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: jhgate-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: jhgate
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mscassandra/mscassandra-cassandra.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the Cassandra service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls  note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+# Replication mode is not tested yet.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mscassandra-cassandra-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a cassandra pod
+    tags: db, mscassandra-cassandra  ,ephemeral
+    openshift.io/display-name: mscassandra-cassandra-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a cassandra pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: mscassandra-cassandra
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mscassandra-cassandra
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+          post:
+            failurePolicy: ignore
+            execNewPod:
+              command:
+                - \\"/bin/sh\\"
+                - \\"-ec\\"
+                - |
+                  hostname && cqlsh \${APPLICATION_NAME} -e \\"CREATE KEYSPACE
+                  IF NOT EXISTS mscassandra  WITH REPLICATION = {'class':
+                  'SimpleStrategy','replication_factor': 1} AND DURABLE_WRITES =
+                  true;\\"  && cqlsh \${APPLICATION_NAME} -e \\"CREATE TABLE IF NOT EXISTS
+                  mscassandra.schema_version(script_name text,checksum text,executed_by
+                  text,executed_on timestamp,execution_time int,status text, PRIMARY
+                  KEY(script_name));\\" && sleep 30
+              containerName: \${APPLICATION_NAME}
+        resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: cassandra:3.11.10
+              env:
+                - name: DATA_FILE_DIRECTORIES
+                  value: /data/db
+              ports:
+                - containerPort: 9042
+                  name: cql
+                  protocol: TCP
+                - containerPort: 9160
+                  name: thrift
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 15
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-ec\\"
+                    - cqlsh  -e \\"quit\\"
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 9042
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /data/db
+              resources:
+              imagePullPolicy: IfNotPresent
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: cassandra-tcp
+          protocol: TCP
+          port: 9042
+          targetPort: 9042
+        - name: cassandra-thrift
+          protocol: TCP
+          port: 9160
+          targetPort: 9160
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mscassandra/mscassandra-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mscassandra-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an mscassandra service pod
+    tags: mscassandra, service
+    openshift.io/display-name: mscassandra-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a mscassandra service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: mscassandra-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mscassandra
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: mscassandra-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-cassandra 9042)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/mscassandra
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
+                  value: \${APPLICATION_NAME}-cassandra
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-cassandra\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: 80
+          targetPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmariadb/msmariadb-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmariadb-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an msmariadb service pod
+    tags: msmariadb, service
+    openshift.io/display-name: msmariadb-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a msmariadb service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: msmariadb-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmariadb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmariadb-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mariadb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/msmariadb
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mariadb://\${APPLICATION_NAME}-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mariadb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: 80
+          targetPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmariadb/msmariadb-mariadb.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MariaDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmariadb-mariadb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mariadb pod
+    tags: db, msmariadb-mariadb  ,ephemeral
+    openshift.io/display-name: msmariadb-mariadb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mariadb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: msmariadb-mariadb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmariadb-mariadb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmariadb-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MariaDB Connection Username
+    description: Username for MariaDB user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MariaDB Connection Password
+    description: Password for the MariaDB connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MariaDB root user Password
+    description: Password for the MariaDB root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: msmariadb
+    displayName: MariaDB DB Name
+    description: Name of the MariaDB database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mariadb:10.6.1
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mariadb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        - name: mariadb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmongodb/msmongodb-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmongodb-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an msmongodb service pod
+    tags: msmongodb, service
+    openshift.io/display-name: msmongodb-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a msmongodb service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: msmongodb-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmongodb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmongodb-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mongodb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/msmongodb
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_DATA_MONGODB_URI
+                  value: mongodb://\${APPLICATION_NAME}-mongodb
+                - name: SPRING_DATA_MONGODB_DATABASE
+                  value: \${APPLICATION_NAME}
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mongodb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: 80
+          targetPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmongodb/msmongodb-mongodb.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MongoDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+# Replication mode is not tested yet.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmongodb-mongodb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mongodb pod
+    tags: db, msmongodb-mongodb  ,ephemeral
+    openshift.io/display-name: msmongodb-mongodb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mongodb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: msmongodb-mongodb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmongodb-mongodb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: DATABASE_NAME
+    displayName: MongoDB Database Name
+    description: Name of the MongoDB database accessed.
+    value: msmongodb
+    required: true
+  - name: MONGODB_USER
+    displayName: MongoDB Connection Username
+    description: Username for MongoDB user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MONGODB_PASSWORD
+    displayName: MongoDB Connection Password
+    description: Password for the MongoDB connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MONGODB_ADMIN_PASSWORD
+    displayName: MongoDB Admin Password
+    description: Password for the database admin user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MONGODB_USER}\\"
+      database-password: \\"\${MONGODB_PASSWORD}\\"
+      database-admin-password: \\"\${MONGODB_ADMIN_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+          post:
+            failurePolicy: ignore
+            execNewPod:
+              command:
+                - \\"/bin/sh\\"
+                - \\"-ec\\"
+                - |
+                  hostname && mongo \${APPLICATION_NAME}:27017 --eval \\"db.getSiblingDB('\${MONGODB_DATABASE}').createUser({'user':'\${MONGODB_USER}','pwd':'\${MONGODB_PASSWORD}','roles':[]})\\" && sleep 15
+              containerName: \${APPLICATION_NAME}
+        resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mongo:4.4.6
+              env:
+                - name: MONGODB_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MONGODB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MONGODB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MONGODB_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-admin-password
+              ports:
+                - containerPort: 27017
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 15
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - mongo 127.0.0.1:27017 --eval=\\"quit()\\"
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 20
+                tcpSocket:
+                  port: 27017
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /data/db
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mongodb-bc
+          protocol: TCP
+          port: 27017
+          targetPort: 27017
+        - name: mongodb
+          protocol: TCP
+          port: 80
+          targetPort: 27017
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmysql/msmysql-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmysql-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an msmysql service pod
+    tags: msmysql, service
+    openshift.io/display-name: msmysql-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a msmysql service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: msmysql-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmysql
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmysql-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/msmysql
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmysql/msmysql-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmysql-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, msmysql-mysqldb  ,ephemeral
+    openshift.io/display-name: msmysql-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: msmysql-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmysql-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmysql-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: msmysql
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mspsql/mspsql-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mspsql-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an mspsql service pod
+    tags: mspsql, service
+    openshift.io/display-name: mspsql-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a mspsql service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: mspsql-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mspsql
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: mspsql-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-postgresqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/mspsql
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:postgresql://\${APPLICATION_NAME}-postgresqldb:5432/\${APPLICATION_NAME}
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: SPRING_ELASTICSEARCH_REST_URIS
+                  value: http://\${APPLICATION_NAME}-elasticsearch:9200
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-postgresqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mspsql/mspsql-elasticsearch.yml": Object {
+    "contents": "# Search template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the Elasticsearch service. This template can even
+# be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mspsql-elasticsearch-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an elasticsearch pod
+    tags: elasticsearch, mspsql-elasticsearch  ,ephemeral
+    openshift.io/display-name: mspsql-elasticsearch-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up an elasticsearch pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: mspsql-elasticsearch
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mspsql-elasticsearch
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+              ports:
+                - containerPort: 9200
+                  name: http
+                  protocol: TCP
+                - containerPort: 9300
+                  name: transport
+                  protocol: TCP
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /usr/share/elasticsearch/data/
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: http
+          port: 9200
+          protocol: TCP
+          targetPort: 9200
+        - name: transport
+          port: 9300
+          protocol: TCP
+          targetPort: 9300
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mspsql/mspsql-postgresql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the PostgresDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mspsql-postgresqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a postgresqldb pod
+    tags: db, mspsql-postgresqldb  ,ephemeral
+    openshift.io/display-name: mspsql-postgresqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a postgresqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: mspsql-postgresqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mspsql-postgresqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: mspsql-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: POSTGRESQL_USER
+    displayName: PostgreSQL Connection Username
+    description: Username for PostgreSQL user that will be used for accessing the database.
+    value: mspsql
+    required: true
+  - name: POSTGRESQL_PASSWORD
+    displayName: PostgreSQL Connection Password
+    description: Password for the PostgreSQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    displayName: PostgreSQL Database Name
+    description: Name of the PostgreSQL database accessed.
+    value: mspsql
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${POSTGRESQL_USER}\\"
+      database-password: \\"\${POSTGRESQL_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: postgres:13.3
+              env:
+                - name: POSTGRES_DATABASE
+                  value: \${DATABASE_NAME}
+                  # This image requires the username to be db name
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - containerPort: 5432
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 15
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - psql -h 127.0.0.1 -U $POSTGRES_USER -q -d $POSTGRES_DATABASE -c
+                      'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 5432
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/postgresql/data
+              resources:
+              imagePullPolicy: IfNotPresent
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: postgresqldb-bc
+          protocol: TCP
+          port: 5432
+          targetPort: 5432
+        - name: postgresqldb
+          protocol: TCP
+          port: 80
+          targetPort: 5432
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/ocp-apply.sh": Object {
+    "contents": "#!/usr/bin/env sh
+# Use this script to run oc commands to create resources in the selected namespace. Files are ordered
+# in proper order. 'oc process' processes the template as resources which is again piped to
+# 'oc apply' to create those resources in OpenShift namespace
+oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
+oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
+oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/jhgate/jhgate-mysql.yml | oc apply -f -
+oc process -f ./ocp/jhgate/jhgate-deployment.yml | oc apply -f -
+oc process -f ./ocp/msmysql/msmysql-mysql.yml | oc apply -f -
+oc process -f ./ocp/msmysql/msmysql-deployment.yml | oc apply -f -
+oc process -f ./ocp/mspsql/mspsql-postgresql.yml | oc apply -f -
+oc process -f ./ocp/mspsql/mspsql-elasticsearch.yml | oc apply -f -
+oc process -f ./ocp/mspsql/mspsql-deployment.yml | oc apply -f -
+oc process -f ./ocp/msmongodb/msmongodb-mongodb.yml | oc apply -f -
+oc process -f ./ocp/msmongodb/msmongodb-deployment.yml | oc apply -f -
+oc process -f ./ocp/mscassandra/mscassandra-cassandra.yml | oc apply -f -
+oc process -f ./ocp/mscassandra/mscassandra-deployment.yml | oc apply -f -
+oc process -f ./ocp/msmariadb/msmariadb-mariadb.yml | oc apply -f -
+oc process -f ./ocp/msmariadb/msmariadb-deployment.yml | oc apply -f -
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/application-configmap.yml": Object {
+    "contents": "# ConfigMap template.
+#
+# This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
+# *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: application-config-template
+  namespace: default
+  annotations:
+    description: This template defines the config objects
+    tags: \\"config, key/value\\"
+    openshift.io/display-name: application-config-template
+    openshift.io/long-description: \\"This template provides the config objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: application-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: application-config
+    description: Name of the resource
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: \${APPLICATION_NAME}
+    #common configuration shared between all applications
+    data:
+      application.yml: |-
+        configserver:
+          name:  JHipster Registry
+          status: Connected to the JHipster Registry running in OpenShift
+        eureka:
+          client:
+            initial-instance-info-replication-interval-seconds: 15
+            instance-info-replication-interval-seconds: 15
+            registry-fetch-interval-seconds: 15
+            fetch-registry: true
+            register-with-eureka: true
+            eureka-service-url-poll-interval-seconds: 15
+          instance:
+            lease-renewal-interval-in-seconds: 10
+            registry-default-open-for-traffic-count: 0
+        jhipster:
+          security:
+            authentication:
+              jwt:
+                base64-secret: SECRET--50
+      # app specific configuration
+      jhipster-registry.yml: |-
+        eureka:
+          client:
+            service-url:
+              # This must contain a list of all Eureka server replicas for registry HA to work correctly
+              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/jhipster-registry.yml": Object {
+    "contents": "# JHipster Registry HA cluster
+#
+# As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
+# It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
+#
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
+# note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-registry-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhipster-registry pod
+    tags: jhipster-registry, eureka, spring-cloud
+    openshift.io/display-name: jhipster-registry-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhipster-registry pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhipster-registry
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhipster-registry
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: reg-secret-ref
+    description: Name of the application
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    type: Opaque
+    data:
+      registry-admin-password: SECRET-admin-50 # base64 encoded \\"admin\\"
+  - apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        matchLabels:
+          app: \${APPLICATION_NAME}
+      serviceName: \${APPLICATION_NAME}
+      replicas: 2
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          terminationGracePeriodSeconds: 10
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: jhipster/jhipster-registry:v6.8.0
+              ports:
+                - name: http
+                  containerPort: 8761
+              env:
+                # Registry configuration
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,k8s
+                - name: SPRING_SECURITY_USER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: registry-admin-password
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+                  value: native
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+                  value: file:./central-config
+                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
+                  value: \\"15\\"
+                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
+                  value: \\"30\\"
+                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                  value: \\"3\\"
+                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
+                  value: \\"false\\"
+                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
+                  value: \\"2000\\"
+                - name: EUREKA_CLIENT_FETCH_REGISTRY
+                  value: \\"true\\"
+                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+                  value: \\"true\\"
+                - name: K8S_CONFIG_PATH
+                  value: \\"/central-config/\\"
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /central-config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: application-config
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
+    spec:
+      ports:
+        - name: http-bc
+          port: 8761
+          targetPort: 8761
+        - name: http
+          port: 80
+          targetPort: 8761
+      clusterIP: None
+      selector:
+        app: \${APPLICATION_NAME}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: http
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/scc-config.yml": Object {
+    "contents": "# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: default
+  annotations:
+    description: This template defines the scc objects
+    tags: \\"scc\\"
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: \\"This template provides the scc objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: \${SVC_ID}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description:
+          \\"This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+          This mostly inherits anyuid scc.\\"
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+      - system:serviceaccount:default:\${SVC_ID}
+    volumes:
+      - configMap
+      - downwardAPI
+      - emptyDir
+      - persistentVolumeClaim
+      - secret
+      - hostPath
+      - nfs
+    priority: 1
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster OpenShift Sub Generator monolith application should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"08-monolith\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"clusteredDbApps\\": {},
+    \\"serviceDiscoveryType\\": false,
+    \\"monitoring\\": \\"no\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"dockerPushCommand\\": \\"docker push\\",
+    \\"openshiftNamespace\\": \\"default\\",
+    \\"storageType\\": \\"ephemeral\\",
+    \\"registryReplicas\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/ocp-apply.sh": Object {
+    "contents": "#!/usr/bin/env sh
+# Use this script to run oc commands to create resources in the selected namespace. Files are ordered
+# in proper order. 'oc process' processes the template as resources which is again piped to
+# 'oc apply' to create those resources in OpenShift namespace
+oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
+oc process -f ./ocp/samplemysql/samplemysql-mysql.yml | oc apply -f -
+oc process -f ./ocp/samplemysql/samplemysql-elasticsearch.yml | oc apply -f -
+oc process -f ./ocp/samplemysql/samplemysql-deployment.yml | oc apply -f -
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/scc-config.yml": Object {
+    "contents": "# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: default
+  annotations:
+    description: This template defines the scc objects
+    tags: \\"scc\\"
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: \\"This template provides the scc objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: \${SVC_ID}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description:
+          \\"This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+          This mostly inherits anyuid scc.\\"
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+      - system:serviceaccount:default:\${SVC_ID}
+    volumes:
+      - configMap
+      - downwardAPI
+      - emptyDir
+      - persistentVolumeClaim
+      - secret
+      - hostPath
+      - nfs
+    priority: 1
+",
+    "stateCleared": "modified",
+  },
+  "ocp/samplemysql/samplemysql-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: samplemysql-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an samplemysql service pod
+    tags: samplemysql, service
+    openshift.io/display-name: samplemysql-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a samplemysql service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: samplemysql-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: samplemysql
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: samplemysql-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8080\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/samplemysql
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: SPRING_ELASTICSEARCH_REST_URIS
+                  value: http://\${APPLICATION_NAME}-elasticsearch:9200
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: 80
+          targetPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/samplemysql/samplemysql-elasticsearch.yml": Object {
+    "contents": "# Search template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the Elasticsearch service. This template can even
+# be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: samplemysql-elasticsearch-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an elasticsearch pod
+    tags: elasticsearch, samplemysql-elasticsearch  ,ephemeral
+    openshift.io/display-name: samplemysql-elasticsearch-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up an elasticsearch pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: samplemysql-elasticsearch
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: samplemysql-elasticsearch
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+              ports:
+                - containerPort: 9200
+                  name: http
+                  protocol: TCP
+                - containerPort: 9300
+                  name: transport
+                  protocol: TCP
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /usr/share/elasticsearch/data/
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: http
+          port: 9200
+          protocol: TCP
+          targetPort: 9200
+        - name: transport
+          port: 9300
+          protocol: TCP
+          targetPort: 9300
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/samplemysql/samplemysql-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: samplemysql-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, samplemysql-mysqldb  ,ephemeral
+    openshift.io/display-name: samplemysql-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: samplemysql-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: samplemysql-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: samplemysql-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: samplemysql
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster OpenShift Sub Generator only gateway should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"clusteredDbApps\\": {},
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"monitoring\\": \\"no\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"dockerPushCommand\\": \\"docker push\\",
+    \\"openshiftNamespace\\": \\"default\\",
+    \\"storageType\\": \\"ephemeral\\",
+    \\"registryReplicas\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/jhgate/jhgate-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhgate-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhgate service pod
+    tags: jhgate, service
+    openshift.io/display-name: jhgate-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhgate service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhgate-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhgate
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: jhgate-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8080\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/jhgate
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/jhgate/jhgate-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhgate-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, jhgate-mysqldb  ,ephemeral
+    openshift.io/display-name: jhgate-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: jhgate-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhgate-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: jhgate-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: jhgate
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/ocp-apply.sh": Object {
+    "contents": "#!/usr/bin/env sh
+# Use this script to run oc commands to create resources in the selected namespace. Files are ordered
+# in proper order. 'oc process' processes the template as resources which is again piped to
+# 'oc apply' to create those resources in OpenShift namespace
+oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
+oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
+oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/jhgate/jhgate-mysql.yml | oc apply -f -
+oc process -f ./ocp/jhgate/jhgate-deployment.yml | oc apply -f -
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/application-configmap.yml": Object {
+    "contents": "# ConfigMap template.
+#
+# This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
+# *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: application-config-template
+  namespace: default
+  annotations:
+    description: This template defines the config objects
+    tags: \\"config, key/value\\"
+    openshift.io/display-name: application-config-template
+    openshift.io/long-description: \\"This template provides the config objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: application-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: application-config
+    description: Name of the resource
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: \${APPLICATION_NAME}
+    #common configuration shared between all applications
+    data:
+      application.yml: |-
+        configserver:
+          name:  JHipster Registry
+          status: Connected to the JHipster Registry running in OpenShift
+        eureka:
+          client:
+            initial-instance-info-replication-interval-seconds: 15
+            instance-info-replication-interval-seconds: 15
+            registry-fetch-interval-seconds: 15
+            fetch-registry: true
+            register-with-eureka: true
+            eureka-service-url-poll-interval-seconds: 15
+          instance:
+            lease-renewal-interval-in-seconds: 10
+            registry-default-open-for-traffic-count: 0
+        jhipster:
+          security:
+            authentication:
+              jwt:
+                base64-secret: SECRET--50
+      # app specific configuration
+      jhipster-registry.yml: |-
+        eureka:
+          client:
+            service-url:
+              # This must contain a list of all Eureka server replicas for registry HA to work correctly
+              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/jhipster-registry.yml": Object {
+    "contents": "# JHipster Registry HA cluster
+#
+# As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
+# It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
+#
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
+# note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-registry-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhipster-registry pod
+    tags: jhipster-registry, eureka, spring-cloud
+    openshift.io/display-name: jhipster-registry-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhipster-registry pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhipster-registry
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhipster-registry
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: reg-secret-ref
+    description: Name of the application
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    type: Opaque
+    data:
+      registry-admin-password: SECRET-openshiftpaas-50 # base64 encoded \\"openshiftpaas\\"
+  - apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        matchLabels:
+          app: \${APPLICATION_NAME}
+      serviceName: \${APPLICATION_NAME}
+      replicas: 2
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          terminationGracePeriodSeconds: 10
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: jhipster/jhipster-registry:v6.8.0
+              ports:
+                - name: http
+                  containerPort: 8761
+              env:
+                # Registry configuration
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,k8s
+                - name: SPRING_SECURITY_USER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: registry-admin-password
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+                  value: native
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+                  value: file:./central-config
+                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
+                  value: \\"15\\"
+                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
+                  value: \\"30\\"
+                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                  value: \\"3\\"
+                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
+                  value: \\"false\\"
+                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
+                  value: \\"2000\\"
+                - name: EUREKA_CLIENT_FETCH_REGISTRY
+                  value: \\"true\\"
+                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+                  value: \\"true\\"
+                - name: K8S_CONFIG_PATH
+                  value: \\"/central-config/\\"
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /central-config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: application-config
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
+    spec:
+      ports:
+        - name: http-bc
+          port: 8761
+          targetPort: 8761
+        - name: http
+          port: 80
+          targetPort: 8761
+      clusterIP: None
+      selector:
+        app: \${APPLICATION_NAME}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: http
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/scc-config.yml": Object {
+    "contents": "# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: default
+  annotations:
+    description: This template defines the scc objects
+    tags: \\"scc\\"
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: \\"This template provides the scc objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: \${SVC_ID}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description:
+          \\"This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+          This mostly inherits anyuid scc.\\"
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+      - system:serviceaccount:default:\${SVC_ID}
+    volumes:
+      - configMap
+      - downwardAPI
+      - emptyDir
+      - persistentVolumeClaim
+      - secret
+      - hostPath
+      - nfs
+    priority: 1
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster OpenShift Sub Generator two microservices backed by mysql and postgres without gateway should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"02-mysql\\", \\"03-psql\\"],
+    \\"directoryPath\\": \\"./\\",
+    \\"clusteredDbApps\\": {},
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"monitoring\\": \\"no\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"dockerPushCommand\\": \\"docker push\\",
+    \\"openshiftNamespace\\": \\"default\\",
+    \\"storageType\\": \\"ephemeral\\",
+    \\"registryReplicas\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmysql/msmysql-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmysql-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an msmysql service pod
+    tags: msmysql, service
+    openshift.io/display-name: msmysql-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a msmysql service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: msmysql-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmysql
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmysql-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-mysqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/msmysql
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:mysql://\${APPLICATION_NAME}-mysqldb:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-mysqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/msmysql/msmysql-mysql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the MySQLDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: msmysql-mysqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a mysqldb pod
+    tags: db, msmysql-mysqldb  ,ephemeral
+    openshift.io/display-name: msmysql-mysqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a mysqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: msmysql-mysqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: msmysql-mysqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: msmysql-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: MYSQL_USER
+    displayName: MySQL Connection Username
+    description: Username for MySQL user that will be used for accessing the database.
+    generate: expression
+    from: user[A-Z0-9]{3}
+    required: true
+  - name: MYSQL_PASSWORD
+    displayName: MySQL Connection Password
+    description: Password for the MySQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: MYSQL_ROOT_PASSWORD
+    displayName: MySQL root user Password
+    description: Password for the MySQL root user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    value: msmysql
+    displayName: MySQL DB Name
+    description: Name of the MySQL database accessed.
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${MYSQL_USER}\\"
+      database-password: \\"\${MYSQL_PASSWORD}\\"
+      database-root-password: \\"\${MYSQL_ROOT_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: mysql:8.0.25
+              env:
+                #            - name: MYSQL_USER
+                #              value: root
+                #            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+                #              value: 'yes'
+                - name: MYSQL_DATABASE
+                  value: \${DATABASE_NAME}
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-root-password
+              #        command:
+              #        - mysqld
+              #        - --lower_case_table_names=1
+              #        - --skip-ssl
+              #        - --character_set_server=utf8mb4
+              #        - --explicit_defaults_for_timestamp
+              ports:
+                - containerPort: 3306
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - MYSQL_PWD=\\"$MYSQL_PASSWORD\\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                      -e 'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 3306
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/mysql
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: mysqldb-bc
+          protocol: TCP
+          port: 3306
+          targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        - name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mspsql/mspsql-deployment.yml": Object {
+    "contents": "#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mspsql-app-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an mspsql service pod
+    tags: mspsql, service
+    openshift.io/display-name: mspsql-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a mspsql service pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: mspsql-app
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mspsql
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: mspsql-ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: APP_PORT
+    value: \\"8081\\"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          initContainers:
+            - name: init-ds
+              image: busybox:latest
+              command:
+                - \\"/bin/sh\\"
+                - \\"-c\\"
+                - |
+                  while true
+                  do
+                    rt=$(nc -z -w 1 \${APPLICATION_NAME}-postgresqldb 80)
+                    if [ $? -eq 0 ]; then
+                      echo \\"DB is UP\\"
+                      break
+                    fi
+                    echo \\"DB is not yet reachable;sleep for 10s before retry\\"
+                    sleep 10
+                  done
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: ocrepo/mspsql
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,api-docs
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:postgresql://\${APPLICATION_NAME}-postgresqldb:5432/\${APPLICATION_NAME}
+                - name: SPRING_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: SPRING_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+                - name: SPRING_ELASTICSEARCH_REST_URIS
+                  value: http://\${APPLICATION_NAME}-elasticsearch:9200
+              ports:
+                - name: http
+                  containerPort: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          \\"name\\":\\"\${APPLICATION_NAME}-postgresqldb\\", \\"namespace\\": \\"\\", \\"kind\\": \\"Service\\"}]'
+      labels:
+        app: \${APPLICATION_NAME}
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        app: \${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: \${{APP_PORT}}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: \\"http\\"
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mspsql/mspsql-elasticsearch.yml": Object {
+    "contents": "# Search template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the Elasticsearch service. This template can even
+# be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mspsql-elasticsearch-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an elasticsearch pod
+    tags: elasticsearch, mspsql-elasticsearch  ,ephemeral
+    openshift.io/display-name: mspsql-elasticsearch-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up an elasticsearch pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: mspsql-elasticsearch
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mspsql-elasticsearch
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+              ports:
+                - containerPort: 9200
+                  name: http
+                  protocol: TCP
+                - containerPort: 9300
+                  name: transport
+                  protocol: TCP
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /usr/share/elasticsearch/data/
+              resources:
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: http
+          port: 9200
+          protocol: TCP
+          targetPort: 9200
+        - name: transport
+          port: 9300
+          protocol: TCP
+          targetPort: 9300
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/mspsql/mspsql-postgresql.yml": Object {
+    "contents": "# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the PostgresDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: mspsql-postgresqldb-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up a postgresqldb pod
+    tags: db, mspsql-postgresqldb  ,ephemeral
+    openshift.io/display-name: mspsql-postgresqldb-template
+    openshift.io/long-description: >-
+      This template provides objects that are required to spin up a postgresqldb pod.
+      The database is not stored on persistent storage, so any restart of the service will result in all data being lost.
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: mspsql-postgresqldb
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: mspsql-postgresqldb
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: mspsql-ds-secret-ref
+    description: Name of the secret reference
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: POSTGRESQL_USER
+    displayName: PostgreSQL Connection Username
+    description: Username for PostgreSQL user that will be used for accessing the database.
+    value: mspsql
+    required: true
+  - name: POSTGRESQL_PASSWORD
+    displayName: PostgreSQL Connection Password
+    description: Password for the PostgreSQL connection user.
+    generate: expression
+    from: \\"[a-zA-Z0-9]{16}\\"
+    required: true
+  - name: DATABASE_NAME
+    displayName: PostgreSQL Database Name
+    description: Name of the PostgreSQL database accessed.
+    value: mspsql
+    required: true
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+  - name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    stringData:
+      database-user: \\"\${POSTGRESQL_USER}\\"
+      database-password: \\"\${POSTGRESQL_PASSWORD}\\"
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      # This is to define the deployment strategy (either be Rolling or Recreate)
+      #     strategy:
+      #       type: Rolling
+      #       rollingParams:
+      #         updatePeriodSeconds: 1
+      #         intervalSeconds: 1
+      #         timeoutSeconds: 600
+      #         maxUnavailable: 25%
+      #         maxSurge: 25%
+      #       resources:
+      triggers:
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        app: \${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          volumes:
+            - name: \${APPLICATION_NAME}-data
+              emptyDir: {}
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: postgres:13.3
+              env:
+                - name: POSTGRES_DATABASE
+                  value: \${DATABASE_NAME}
+                  # This image requires the username to be db name
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-user
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: database-password
+              ports:
+                - containerPort: 5432
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 15
+                exec:
+                  command:
+                    - \\"/bin/sh\\"
+                    - \\"-i\\"
+                    - \\"-c\\"
+                    - psql -h 127.0.0.1 -U $POSTGRES_USER -q -d $POSTGRES_DATABASE -c
+                      'SELECT 1'
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 5432
+              volumeMounts:
+                - name: \${APPLICATION_NAME}-data
+                  mountPath: /var/lib/postgresql/data
+              resources:
+              imagePullPolicy: IfNotPresent
+          serviceAccount: \${SVC_ID}
+          serviceAccountName: \${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+    spec:
+      ports:
+        - name: postgresqldb-bc
+          protocol: TCP
+          port: 5432
+          targetPort: 5432
+        - name: postgresqldb
+          protocol: TCP
+          port: 80
+          targetPort: 5432
+      selector:
+        app: \${APPLICATION_NAME}
+",
+    "stateCleared": "modified",
+  },
+  "ocp/ocp-apply.sh": Object {
+    "contents": "#!/usr/bin/env sh
+# Use this script to run oc commands to create resources in the selected namespace. Files are ordered
+# in proper order. 'oc process' processes the template as resources which is again piped to
+# 'oc apply' to create those resources in OpenShift namespace
+oc process -f ./ocp/registry/scc-config.yml | oc apply -f -
+oc process -f ./ocp/registry/application-configmap.yml | oc apply -f -
+oc process -f ./ocp/registry/jhipster-registry.yml | oc apply -f -
+oc process -f ./ocp/msmysql/msmysql-mysql.yml | oc apply -f -
+oc process -f ./ocp/msmysql/msmysql-deployment.yml | oc apply -f -
+oc process -f ./ocp/mspsql/mspsql-postgresql.yml | oc apply -f -
+oc process -f ./ocp/mspsql/mspsql-elasticsearch.yml | oc apply -f -
+oc process -f ./ocp/mspsql/mspsql-deployment.yml | oc apply -f -
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/application-configmap.yml": Object {
+    "contents": "# ConfigMap template.
+#
+# This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
+# *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: application-config-template
+  namespace: default
+  annotations:
+    description: This template defines the config objects
+    tags: \\"config, key/value\\"
+    openshift.io/display-name: application-config-template
+    openshift.io/long-description: \\"This template provides the config objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: application-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: application-config
+    description: Name of the resource
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: \${APPLICATION_NAME}
+    #common configuration shared between all applications
+    data:
+      application.yml: |-
+        configserver:
+          name:  JHipster Registry
+          status: Connected to the JHipster Registry running in OpenShift
+        eureka:
+          client:
+            initial-instance-info-replication-interval-seconds: 15
+            instance-info-replication-interval-seconds: 15
+            registry-fetch-interval-seconds: 15
+            fetch-registry: true
+            register-with-eureka: true
+            eureka-service-url-poll-interval-seconds: 15
+          instance:
+            lease-renewal-interval-in-seconds: 10
+            registry-default-open-for-traffic-count: 0
+        jhipster:
+          security:
+            authentication:
+              jwt:
+                base64-secret: SECRET--50
+      # app specific configuration
+      jhipster-registry.yml: |-
+        eureka:
+          client:
+            service-url:
+              # This must contain a list of all Eureka server replicas for registry HA to work correctly
+              defaultZone: http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:\${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-1.jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/jhipster-registry.yml": Object {
+    "contents": "# JHipster Registry HA cluster
+#
+# As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
+# It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
+#
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
+# note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-registry-template
+  namespace: default
+  annotations:
+    description: This template defines objects that are required to spin up an jhipster-registry pod
+    tags: jhipster-registry, eureka, spring-cloud
+    openshift.io/display-name: jhipster-registry-template
+    openshift.io/long-description: \\"This template provides objects that are required to spin up a jhipster-registry pod.\\"
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhipster-registry
+  createdBy: JHipster-Team
+parameters:
+  - name: APPLICATION_NAME
+    value: jhipster-registry
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  - name: SECRET_REF
+    value: reg-secret-ref
+    description: Name of the application
+    required: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: \${SECRET_REF}
+    type: Opaque
+    data:
+      registry-admin-password: SECRET-admin-50 # base64 encoded \\"admin\\"
+  - apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      selector:
+        matchLabels:
+          app: \${APPLICATION_NAME}
+      serviceName: \${APPLICATION_NAME}
+      replicas: 2
+      template:
+        metadata:
+          labels:
+            app: \${APPLICATION_NAME}
+        spec:
+          terminationGracePeriodSeconds: 10
+          containers:
+            - name: \${APPLICATION_NAME}
+              image: jhipster/jhipster-registry:v6.8.0
+              ports:
+                - name: http
+                  containerPort: 8761
+              env:
+                # Registry configuration
+                - name: SPRING_PROFILES_ACTIVE
+                  value: prod,k8s
+                - name: SPRING_SECURITY_USER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${SECRET_REF}
+                      key: registry-admin-password
+                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+                  value: native
+                - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+                  value: file:./central-config
+                - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
+                  value: \\"15\\"
+                - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
+                  value: \\"30\\"
+                - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+                  value: \\"15000\\"
+                - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
+                  value: \\"3\\"
+                - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
+                  value: \\"false\\"
+                - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
+                  value: \\"2000\\"
+                - name: EUREKA_CLIENT_FETCH_REGISTRY
+                  value: \\"true\\"
+                - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+                  value: \\"true\\"
+                - name: K8S_CONFIG_PATH
+                  value: \\"/central-config/\\"
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /central-config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: application-config
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: \${APPLICATION_NAME}
+      labels:
+        app: \${APPLICATION_NAME}
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
+    spec:
+      ports:
+        - name: http-bc
+          port: 8761
+          targetPort: 8761
+        - name: http
+          port: 80
+          targetPort: 8761
+      clusterIP: None
+      selector:
+        app: \${APPLICATION_NAME}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: \${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: \${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: http
+      wildcardPolicy: None
+",
+    "stateCleared": "modified",
+  },
+  "ocp/registry/scc-config.yml": Object {
+    "contents": "# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: default
+  annotations:
+    description: This template defines the scc objects
+    tags: \\"scc\\"
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: \\"This template provides the scc objects\\"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  - name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: \\"*** PLEASE DO NOT CHANGE THIS ***\\"
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: \${SVC_ID}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description:
+          \\"This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+          This mostly inherits anyuid scc.\\"
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+      - system:serviceaccount:default:\${SVC_ID}
+    volumes:
+      - configMap
+      - downwardAPI
+      - emptyDir
+      - persistentVolumeClaim
+      - secret
+      - hostPath
+      - nfs
+    priority: 1
+",
+    "stateCleared": "modified",
+  },
+}
+`;

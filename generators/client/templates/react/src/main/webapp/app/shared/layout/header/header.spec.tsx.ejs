@@ -16,30 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+/**
+ * @jest-environment jsdom
+ */
 import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
-<% if (enableTranslation) { %>
-import sinon from 'sinon';
-<% } %>
-
 import initStore from 'app/config/store';
 import Header from './header';
 
 describe('Header', () => {
   let mountedWrapper;
-<% if (enableTranslation) { %>
-  const localeSpy = sinon.spy();
-<% } %>
   const devProps = {
     isAuthenticated: true,
     isAdmin: true,
 <%_ if (enableTranslation) { _%>
     currentLocale: 'en',
-    onLocaleChange: localeSpy,
 <%_ } _%>
     ribbonEnv: 'dev',
     isInProduction: false,
