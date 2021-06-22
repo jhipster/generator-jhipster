@@ -12,7 +12,7 @@
     "vue-class-component": "7.2.6",
     "vue-cookie": "1.1.4",
     "vue-infinite-loading": "2.4.5",
-    "vue-router": "3.5.1",
+    "vue-router": "3.5.2",
     "vue-i18n": "8.24.5",
     "vue-property-decorator": "9.1.2",
     "vuelidate": "0.7.6",
