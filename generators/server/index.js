@@ -252,6 +252,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       loadSharedConfig() {
         this.loadAppConfig();
         this.loadClientConfig();
+        this.loadDerivedClientConfig();
         this.loadServerConfig();
         this.loadTranslationConfig();
       },
