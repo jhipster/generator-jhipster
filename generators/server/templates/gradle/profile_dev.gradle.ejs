@@ -48,21 +48,45 @@ bootRun {
 
 <%_ if (!skipClient) { _%>
 task webapp(type: NpmTask) {
+    inputs.property('appVersion', project.version)
     inputs.files("package-lock.json")
+        .withPropertyName('package-lock')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.files("build.gradle")
+        .withPropertyName('build.gradle')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ if (clientFramework === ANGULAR) { _%>
     inputs.files("angular.json")
+        .withPropertyName('angular.json')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files("tsconfig.json", "tsconfig.app.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
+        .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ } _%>
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
+        .withPropertyName("webapp-source-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ if (clientFramework !== ANGULAR) { _%>
+    inputs.files("tsconfig.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
 
     def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
     webpackDevFiles.exclude("webpack.prod.js")
     inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ } _%>
-
+    <%_ if (clientFramework === VUE) { _%>
+    inputs.files(".postcssrc")
+        .withPropertyName("postcssrc")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } _%>
     outputs.dir("<%= CLIENT_DIST_DIR %>")
+        .withPropertyName("webapp-build-dir")
 
     dependsOn npmInstall
 
