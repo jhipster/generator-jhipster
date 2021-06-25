@@ -29,7 +29,7 @@
         Added columns to the entity <%= entity.entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1-add-columns" author="jhipster">
-        <addColumn tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
+        <addColumn tableName="<%= entity.entityTableName %>">
     <%_ for (field of addedFields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- formatAsLiquibaseRemarks(field.javadoc, true) %>/>
         <%_ if (field.shouldCreateContentType) { _%>
@@ -75,7 +75,7 @@
     -->
     <changeSet id="<%= changelogDate %>-1-add-relationships" author="jhipster">
         <%_ if (hasRelationShips) { _%>
-        <addColumn tableName="<%= entity.entityTableName %>"<%- formatAsLiquibaseRemarks(entity.javadoc, true) %>>
+        <addColumn tableName="<%= entity.entityTableName %>">
             <%_
             for (relationship of addedRelationships) {
                 relationshipColumnType = relationship.otherEntityName === 'user' && authenticationTypeOauth2 ? 'varchar(100)' : 'bigint';
