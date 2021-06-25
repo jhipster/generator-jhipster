@@ -98,13 +98,13 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-type: react-maven-couchbase-caffeine
+          - app-sample: react-maven-couchbase-caffeine
             entity: couchbase
             environment: prod
             war: 0
             e2e: 0
-            testcontainers: 0
-          - app-type: react-gradle-mysql-es-noi18n-mapsid
+            testcontainers: 1
+          - app-sample: react-gradle-mysql-es-noi18n-mapsid
             entity: sqlfull
             environment: prod
             war: 0
@@ -122,12 +122,12 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-type: react-gradle-couchbase-caffeine
+          - app-sample: react-gradle-couchbase-caffeine
             entity: couchbase
             environment: prod
             war: 0
             e2e: 1
-            testcontainers: 0
+            testcontainers: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
