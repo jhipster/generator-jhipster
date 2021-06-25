@@ -4,7 +4,7 @@
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@fortawesome/vue-fontawesome": "2.0.2",
     "axios": "0.21.1",
-    "bootstrap": "4.6.0",
+    "bootstrap": "5.0.2",
     "bootstrap-vue": "2.21.2",
     "bootswatch": "5.0.2",
     "swagger-ui-dist": "3.51.0",
