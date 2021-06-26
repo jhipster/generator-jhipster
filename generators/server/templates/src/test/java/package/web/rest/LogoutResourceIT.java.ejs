@@ -69,7 +69,7 @@ class LogoutResourceIT {
     private <%= reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
 
     @Autowired
-	private ClientRegistration clientRegistration;
+    private ClientRegistration clientRegistration;
 
 <%_ if (!reactive) { _%>
     private MockMvc restLogoutMockMvc;
