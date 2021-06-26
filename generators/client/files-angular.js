@@ -38,6 +38,7 @@ const files = {
         '.eslintrc.json',
         'angular.json',
         'ngsw-config.json',
+        'README.md.jhi.client.angular',
         'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',

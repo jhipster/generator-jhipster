@@ -16,10 +16,29 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<&_
+ // EJS requires every option to exist in the object, even undefined.
+ const partialOptions = {
+   partialImportSection: false,
+   partialStaticImportSection: false,
+   partialAnnotationSection: false,
+<%_ for (const field of fields) { _%>
+   partialField<%- field.fieldNameCapitalized %>AnnotationSection: false,
+  <%_ if (field.fieldWithContentType) { _%>
+   partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: false,
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>
+   partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection: false,
+<%_ } _%>
+ };
+-&>
 package <%= packageName %>.domain;
 
-<%_
+<&- partials.render({...partialOptions, partialStaticImportSection: true}) &>
 
+<&- partials.render({...partialOptions, partialImportSection: true}) &>
+<%_
 let hasDto = dtoMapstruct;
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
@@ -47,10 +66,6 @@ import io.swagger.annotations.ApiModel;
 <%_ } _%>
 <%_ if (!hasDto && importApiModelProperty) { _%>
 import io.swagger.annotations.ApiModelProperty;
-<%_ } _%>
-<%_ if (enableHibernateCache) { _%>
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
 <%_ if (!reactive && (hasTextBlob || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb)))) { _%>
 import org.hibernate.annotations.Type;
@@ -85,18 +100,8 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
   <%_ if (hasRelationship) { _%>
 import org.springframework.data.neo4j.core.schema.Relationship;
   <%_ } _%>
-<%_ } if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
-  <%_ } else { _%>
-
-import javax.persistence.*;
-  <%_ } _%>
-<%_ } if (validation) { _%>
+<%_ } _%>
+<%_ if (validation) { _%>
 import javax.validation.constraints.*;
 <%_ } _%>
 
@@ -145,17 +150,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
   <%_ } _%>
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
-@Table("<%= entityTableName %>")
-  <%_ } else { _%>
-@Entity
-@Table(name = "<%= entityTableName %>")
-    <%_ if (enableHibernateCache) { _%>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    <%_ } _%>
-  <%_ } _%>
-<%_ } _%>
+<&- partials.render({...partialOptions, partialAnnotationSection: true}) &>
 <%_ if (!embedded) { _%>
   <%_ if (databaseTypeMongodb) { _%>
 @Document(collection = "<%= entityTableName %>")
@@ -182,21 +177,15 @@ public class <%= persistClass %> implements Serializable {
 <%_ } _%>
 
 <%_ if (!embedded) { _%>
+  <%_ if (!databaseTypeSql) { _%>
     @Id
-  <%_ if (databaseTypeSql && !isUsingMapsId && !reactive && !primaryKey.composite) { _%>
-    <%_ if (primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    <%_ } else if (primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    <%_ } else if (primaryKey.fields[0].jpaGeneratedValue) { _%>
-    @GeneratedValue
-    <%_ } _%>
-  <%_ } else if (databaseTypeCouchbase && !embedded) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
   <%_ } else if (databaseTypeNeo4j) { _%>
     @GeneratedValue(UUIDStringGenerator.class)
   <%_ } _%>
+<&- partials.render({...partialOptions, partialField<%- primaryKey.fields[0].fieldNameCapitalized %>AnnotationSection: true}) &>
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
@@ -224,30 +213,7 @@ public class <%= persistClass %> implements Serializable {
   <%_ if (!hasDto && typeof field.javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (required) { %>, required = true<% } %>)
   <%_ } _%>
-  <%_ if (databaseTypeSql && reactive) { _%>
-    @Column("<%- fieldNameAsDatabaseColumn %>")
-  <%_ } _%>
-  <%_ if (databaseTypeSql && !reactive) {
-        if (field.fieldIsEnum) { _%>
-    @Enumerated(EnumType.STRING)
-    <%_ } _%>
-    <%_ if (field.fieldTypeBytes) { _%>
-    @Lob
-      <%_ if (databaseTypePostgres && field.blobContentTypeText) { _%>
-    @Type(type = "org.hibernate.type.TextType")
-      <%_ } _%>
-    <%_ } _%>
-    <%_ if (field.fieldTypeTemporal || field.fieldTypeDuration) { _%>
-    @Column(name = "<%- fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
-    <%_ } else if (field.fieldTypeBigDecimal) { _%>
-    @Column(name = "<%- fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
-    <%_ } else if (field.fieldTypeUUID && (databaseTypeMysql || databaseTypeMariadb)) { _%>
-    @Type(type = "uuid-char")
-    @Column(name = "<%- fieldNameAsDatabaseColumn %>", length = 36<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
-    <%_ } else { _%>
-    @Column(name = "<%- fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
-    <%_ } _%>
-  <%_ } _%>
+<&- partials.render({...partialOptions, partialField<%- field.fieldNameCapitalized %>AnnotationSection: true}) &>
   <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("<%= fieldNameUnderscored %>")
   <%_ } _%>
@@ -261,16 +227,11 @@ public class <%= persistClass %> implements Serializable {
   <%_ } _%>
 
   <%_ if (field.fieldWithContentType) { _%>
-    <%_ if ((databaseTypeSql && !reactive) || databaseTypeCassandra) { _%>
+<&- partials.render({...partialOptions, partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: true}) &>
+    <%_ if (databaseTypeCassandra) { _%>
     @Column(<% if (!databaseTypeCassandra) { %>name = <% } %>"<%- fieldNameAsDatabaseColumn %>_content_type"<% if (required && !databaseTypeCassandra) { %>, nullable = false<% } %>)
       <%_ if (required && databaseTypeCassandra) { _%>
     @NotNull
-      <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
-      @Column("<%- fieldNameAsDatabaseColumn %>_content_type")
-      <%_ if (required) { _%>
-      @NotNull
       <%_ } _%>
     <%_ } _%>
     <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
@@ -317,12 +278,9 @@ public class <%= persistClass %> implements Serializable {
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
     <%_ } _%>
   <%_ } _%>
+<&- partials.render({...partialOptions, partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection: true}) &>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (databaseTypeSql && !reactive) { _%>
-    @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
-      <%_ if (enableHibernateCache) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-      <%_ } _%>
     <%_ } else if (databaseTypeMongodb || databaseTypeCouchbase) {
       if (databaseTypeMongodb && !otherEntityIsEmbedded) { _%>
     @DBRef
@@ -349,7 +307,6 @@ public class <%= persistClass %> implements Serializable {
 
   <%_ } else if (relationship.relationshipManyToOne) {
     if (databaseTypeSql && !reactive) { _%>
-    @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
       <%_ if (relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
       <%_ } _%>
@@ -389,10 +346,7 @@ public class <%= persistClass %> implements Serializable {
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     <%_ if (databaseTypeSql && !reactive) { _%>
-    @ManyToMany<% if (!ownerSide) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<% } %>
-      <%_ if (enableHibernateCache) {_%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-      <%_ } if (ownerSide) { _%>
+      <%_ if (ownerSide) { _%>
         <%_ if (relationshipValidate) { _%>
     <%- include('relationship_validators', { relationship }); -%>
         <%_ } _%>

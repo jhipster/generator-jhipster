@@ -68,8 +68,28 @@ const serverFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/domain/Entity.java',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java`,
+          file: 'package/domain/Entity.java.jhi',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java.jhi`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.embedded,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java.jhi.spring_data`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && generator.enableHibernateCache,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.hibernate_cache',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java.jhi.hibernate_cache`,
         },
       ],
     },
