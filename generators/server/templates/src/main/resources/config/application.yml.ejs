@@ -115,7 +115,7 @@ management:
       liveness:
         include: livenessState
       readiness:
-        include: readinessState<% if (databaseType === 'sql') { %>,datasource<% } %>
+        include: readinessState<% if (databaseType === 'sql') { %>,db<% } %>
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
