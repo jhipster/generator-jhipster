@@ -1167,7 +1167,7 @@ const serverFiles = {
   ],
   springBootOauth2: [
     {
-      condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith',
+      condition: generator => generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1177,7 +1177,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
+      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1187,7 +1187,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
+      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         { file: 'package/test/util/OAuth2TestUtil.java', renameTo: generator => `${generator.testDir}test/util/OAuth2TestUtil.java` },

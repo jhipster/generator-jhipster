@@ -1000,7 +1000,7 @@ public class UserService {
             <%_ } _%>
             .collect(Collectors.toSet()));
 
-    <%_ if (databaseType === 'no') { _%>
+    <%_ if (databaseTypeNo) { _%>
         return <% if (reactive) { %>Mono.just(user)<% } else { %>user<% } %>;
     <%_ } else { _%>
         <%_ if (!reactive) { _%>
