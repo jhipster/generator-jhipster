@@ -2422,6 +2422,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.microfrontend = options.microfrontend;
     }
 
+    if (options.reactive !== undefined) {
+      this.jhipsterConfig.reactive = options.reactive;
+    }
+
     if (options.clientPackageManager) {
       this.jhipsterConfig.clientPackageManager = options.clientPackageManager;
     }
