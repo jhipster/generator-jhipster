@@ -116,7 +116,10 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     <%_ } _%>  
                 H2ConfigurationHelper.initH2Console();
     <%_ if (!applicationTypeMonolith) { _%>
-            } catch (Exception e) {};
+            } catch (Exception e) {
+                // Console may already be running on another app.
+                e.printStackTrace();
+            };
     <%_ } _%>  
         }
 <%_ } _%>  
