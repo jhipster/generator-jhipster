@@ -21,6 +21,8 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const writeFiles = require('./files').writeFiles;
+const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
 const packagejs = require('../../package.json');
 const dependabotPackagejs = require('./templates/package.json');
@@ -103,21 +105,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _writing() {
     return {
-      writeFiles() {
-        this.template('editorconfig.ejs', '.editorconfig');
-
-        this.template('gitattributes.ejs', '.gitattributes');
-        this.template('gitignore.ejs', '.gitignore');
-
-        this.template('.huskyrc.ejs', '.huskyrc');
-        this.template('.lintstagedrc.js.ejs', '.lintstagedrc.js');
-        this.template('.prettierignore.ejs', '.prettierignore');
-        this.template('.prettierrc.ejs', '.prettierrc');
-
-        this.template('package.json.ejs', 'package.json');
-
-        this.template('README.md.ejs', 'README.md');
+      writePrettierConfig() {
+        // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+        return this.writeFilesToDisk(prettierConfigFiles);
       },
+      ...writeFiles(),
+      ...super._missingPostWriting(),
     };
   }
 
