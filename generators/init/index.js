@@ -130,7 +130,7 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _install() {
     return {
-      // Initialize git repository before package manager install for commit hooks */
+      // Initialize git repository before package manager install for commit hooks
       initGitRepo() {
         if (!this.options.skipGit) {
           if (this.gitInstalled || this.isGitInstalled()) {
