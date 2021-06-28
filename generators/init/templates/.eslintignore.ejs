@@ -18,13 +18,10 @@
 -%>
 node_modules/
 src/main/docker/
-<%_ if (cypressTests) { _%>
 <%= CLIENT_TEST_SRC_DIR %>cypress/
-<%_ } _%>
-<%_ if (protractorTests) { _%>
 <%= CLIENT_TEST_SRC_DIR %>protractor.conf.js
-<%_ } _%>
-<%= clientFramework !== VUE ? '' : CLIENT_TEST_SRC_DIR %>jest.conf.js
+jest.conf.js
+src/test/javascript/jest.conf.js
 webpack/
 target/
 build/
