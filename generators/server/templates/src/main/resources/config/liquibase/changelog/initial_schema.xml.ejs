@@ -134,11 +134,6 @@ _%>
                                  referencedTableName="<%= user.entityTableName %>"/>
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
-        <% if (prodDatabaseType === 'mssql') { %>
-        <sql dbms="mssql">
-            SET IDENTITY_INSERT jhi_user ON;
-        </sql>
-        <% } %>    
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
@@ -149,11 +144,7 @@ _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
-        <% if (prodDatabaseType === 'mssql') { %>
-        <sql dbms="mssql">
-            SET IDENTITY_INSERT jhi_user OFF;
-        </sql>
-        <% } %>   
+        <% } %>
         <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
         <loadData
                   file="config/liquibase/data/authority.csv"
