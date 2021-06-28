@@ -999,7 +999,16 @@ public class UserService {
             })
             <%_ } _%>
             .collect(Collectors.toSet()));
-        return <% if (databaseType !== 'no' && !reactive) { %>new <%= asDto('AdminUser') %>(syncUserWithIdP(attributes, user))<% } else if (!reactive) { %>user<% } %><% if (databaseType === 'no' && reactive) { %>Mono.just(user)<% } else if (reactive) { %>syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= asDto('AdminUser') %>(u)))<% } %>;
+
+    <%_ if (databaseTypeNo) { _%>
+        return <% if (reactive) { %>Mono.just(user)<% } else { %>user<% } %>;
+    <%_ } else { _%>
+        <%_ if (!reactive) { _%>
+        return new <%= asDto('AdminUser') %>(syncUserWithIdP(attributes, user));
+        <%_ } else { _%>
+        return syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= asDto('AdminUser') %>(u)));
+        <%_ } _%>
+    <%_ } _%>
     }
 
     private static <%= databaseType === 'no' ? asDto('AdminUser') : asEntity('User') %> getUser(Map<String, Object> details) {

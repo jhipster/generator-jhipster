@@ -165,6 +165,15 @@ describe('Service Tests', () => {
     });
 
     describe('identity', () => {
+      it('should call /account only once if last call have not returned', () => {
+        // When I call
+        service.identity().subscribe();
+        // Once more
+        service.identity().subscribe();
+        // Then there is only request
+        httpMock.expectOne({ method: 'GET' });
+      });
+
       it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
         // Given the user is authenticated
         service.identity().subscribe();

@@ -253,9 +253,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     return {
       loadSharedConfig() {
         this.loadAppConfig();
+        this.loadDerivedAppConfig();
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
+        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
       },
     };
@@ -464,6 +466,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
+            'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
