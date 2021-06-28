@@ -17,84 +17,85 @@
  limitations under the License.
 -%>
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId><%= packageName %></groupId>
-  <artifactId><%= dasherizedBaseName %></artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name><%= humanizedBaseName %></name>
-  <description><%= projectName %> generated with generator-jhipster@<%= packagejs.version %></description>
-  <packaging>jar</packaging>
+    <groupId><%= packageName %></groupId>
+    <artifactId><%= dasherizedBaseName %></artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name><%= humanizedBaseName %></name>
+    <description><%= projectName %> generated with generator-jhipster@<%= packagejs.version %></description>
+    <packaging>jar</packaging>
 
-  <!-- jhipster-needle-maven-parent -->
+    <!-- jhipster-needle-maven-parent -->
 
-  <repositories>
-    <!-- jhipster-needle-maven-repository -->
-  </repositories>
-  
-  <pluginRepositories>
-    <!-- jhipster-needle-maven-plugin-repository -->
-  </pluginRepositories>
+    <repositories>
+        <!-- jhipster-needle-maven-repository -->
+    </repositories>
 
-  <properties>
-    <java.version>11</java.version>
+    <pluginRepositories>
+        <!-- jhipster-needle-maven-plugin-repository -->
+    </pluginRepositories>
 
-    <!-- properties used by maven sub generator -->
-    <junit.version>5.7.0</junit.version>
-    <assertj.version>3.18.1</assertj.version>
-    <mockito.version>3.6.28</mockito.version>
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
-    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-    
-    <!-- jhipster-needle-maven-property -->
-  </properties>
+    <properties>
+        <java.version>11</java.version>
 
-  <dependencies>
-    <!-- properties used by maven sub generator -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- jhipster-needle-maven-add-dependency -->
-  </dependencies>
+        <!-- properties used by maven sub generator -->
+        <junit.version>5.7.0</junit.version>
+        <assertj.version>3.18.1</assertj.version>
+        <mockito.version>3.6.28</mockito.version>
+        <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler-plugin.version}</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
-      </plugin>
-      <!-- jhipster-needle-maven-add-plugin -->
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <!-- jhipster-needle-maven-add-plugin-management -->
-      </plugins>
-    </pluginManagement>
-  </build>
+        <!-- jhipster-needle-maven-property -->
+    </properties>
+
+    <dependencies>
+        <!-- properties used by maven sub generator -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- jhipster-needle-maven-add-dependency -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+            </plugin>
+            <!-- jhipster-needle-maven-add-plugin -->
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!-- jhipster-needle-maven-add-plugin-management -->
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
