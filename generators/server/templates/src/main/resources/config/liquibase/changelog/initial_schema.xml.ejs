@@ -144,7 +144,6 @@ _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
-        <% } %>
         <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
         <loadData
                   file="config/liquibase/data/authority.csv"
@@ -152,7 +151,6 @@ _%>
                   tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="string"/>
         </loadData>
-
         <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
