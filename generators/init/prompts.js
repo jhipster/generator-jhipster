@@ -19,6 +19,8 @@
 module.exports = {
   askProjectName,
   askBaseName,
+  askPrettierDefaultIndent,
+  askPrettierJavaIndent,
 };
 async function askProjectName() {
   if (this.abort) return;
@@ -54,4 +56,28 @@ async function askBaseName() {
     default: defaultAppBaseName,
   });
   this.baseName = answer.baseName;
+}
+
+async function askPrettierDefaultIndent() {
+  if (this.abort) return;
+  const prettierDefaultIndent = 2;
+  const answer = await this.prompt({
+    type: 'input',
+    name: 'prettierDefaultIndent',
+    message: 'What is the default indentation?',
+    default: prettierDefaultIndent,
+  });
+  this.prettierDefaultIndent = answer.prettierDefaultIndent;
+}
+
+async function askPrettierJavaIndent() {
+  if (this.abort) return;
+  const prettierJavaIndent = 4;
+  const answer = await this.prompt({
+    type: 'input',
+    name: 'prettierJavaIndent',
+    message: 'What is the Java indentation?',
+    default: prettierJavaIndent,
+  });
+  this.prettierJavaIndent = answer.prettierJavaIndent;
 }

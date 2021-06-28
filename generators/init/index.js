@@ -56,6 +56,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.projectName = configuration.get('projectName');
         this.baseName = configuration.get('baseName');
+        this.prettierDefaultIndent = configuration.get('prettierDefaultIndent');
+        this.prettierJavaIndent = configuration.get('prettierJavaIndent');
+
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
         this.dependencies = packagejs.dependencies;
@@ -77,6 +80,8 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       askProjectName: prompts.askProjectName,
       askBaseName: prompts.askBaseName,
+      askPrettierDefaultIndent: prompts.askPrettierDefaultIndent,
+      askPrettierJavaIndent: prompts.askPrettierJavaIndent,
     };
   }
 
@@ -92,6 +97,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.jhipsterConfig.jhipsterVersion = packagejs.version;
         this.jhipsterConfig.projectName = this.projectName;
         this.jhipsterConfig.baseName = this.baseName;
+        this.jhipsterConfig.prettierDefaultIndent = this.prettierDefaultIndent;
+        this.jhipsterConfig.prettierJavaIndent = this.prettierJavaIndent;
+
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
       },
