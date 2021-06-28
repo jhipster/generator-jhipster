@@ -1154,7 +1154,18 @@ _%>
     <%_ } else { _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+    <%_ if (databaseTypeSql && !reactive) { _%>
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %>;
+    if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
+        <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        em.persist(<%= relationship.relationshipFieldName %>);
+        em.flush();
+    } else {
+        <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
+    }
+    <%_ } else { _%>
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);        
+    <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
