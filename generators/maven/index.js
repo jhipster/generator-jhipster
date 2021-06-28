@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const prompts = require('./prompts');
 
@@ -51,10 +52,10 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.projectName = configuration.get('projectName');
         this.baseName = configuration.get('baseName');
+        this.packageName = configuration.get('packageName');
+
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
-
-        this.packageName = configuration.get('packageName');
       },
     };
   }
@@ -85,6 +86,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.jhipsterConfig.projectName = this.projectName;
         this.jhipsterConfig.baseName = this.baseName;
         this.jhipsterConfig.packageName = this.packageName;
+
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
       },
@@ -98,16 +100,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _writing() {
     return {
-      writeFiles() {
-        this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
-        this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
-        this.copy('.mvn/wrapper/MavenWrapperDownloader.java', '.mvn/wrapper/MavenWrapperDownloader.java');
-
-        this.copy('mvnw', 'mvnw');
-        this.copy('mvnw.cmd', 'mvnw.cmd');
-
-        this.template('pom.xml.ejs', 'pom.xml');
-      },
+      ...writeFiles(),
+      ...super._missingPostWriting(),
     };
   }
 
