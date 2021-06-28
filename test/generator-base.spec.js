@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
+const jestExpect = require('expect');
 const sinon = require('sinon');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const Environment = require('yeoman-environment');
 
-const expectedFiles = require('./utils/expected-files');
 const Base = require('../generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
 const { parseLiquibaseChangelogDate } = require('../utils/liquibase');
@@ -302,11 +302,8 @@ describe('Generator Base', () => {
           authenticationType: 'jwt',
           testFrameworks: [],
         };
-        let filesToAssert = expectedFiles.client;
-        filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
-        filesToAssert = filesToAssert.concat(expectedFiles.userManagementClient).sort();
         const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-        expect(out).to.eql(filesToAssert);
+        jestExpect(out).toMatchSnapshot();
       });
     });
     describe('when called with default angular client options skipping user-management', () => {
@@ -319,11 +316,8 @@ describe('Generator Base', () => {
           skipUserManagement: true,
           testFrameworks: [],
         };
-        let filesToAssert = expectedFiles.client;
-        filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
-        filesToAssert = filesToAssert.sort();
         const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-        expect(out).to.eql(filesToAssert);
+        jestExpect(out).toMatchSnapshot();
       });
     });
     describe('when called without jhipsterTemplatesFolders and without rootTemplatesPath', () => {

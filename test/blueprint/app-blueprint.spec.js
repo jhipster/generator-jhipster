@@ -3,10 +3,8 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const jestExpect = require('expect');
 const expect = require('chai').expect;
-const expectedFiles = require('../utils/expected-files');
-const getFilesForOptions = require('../utils/utils').getFilesForOptions;
-const angularFiles = require('../../generators/client/files-angular').files;
 const jhipsterVersion = require('../../package.json').version;
 const constants = require('../../generators/generator-constants');
 const EnvironmentBuilder = require('../../cli/environment-builder');
@@ -15,8 +13,9 @@ const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster application generator with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {
-    before(() => {
-      return helpers
+    let runResult;
+    before(async () => {
+      runResult = await helpers
         .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
         .inTmpDir(dir => {
           // Fake the presence of the blueprint in node_modules
@@ -44,16 +43,7 @@ describe('JHipster application generator with blueprint', () => {
     });
 
     it('creates expected default files for server and angularX', () => {
-      assert.file(expectedFiles.common);
-      assert.file(expectedFiles.server);
-      assert.file(
-        getFilesForOptions(angularFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          testFrameworks: [],
-        })
-      );
+      jestExpect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
@@ -118,8 +108,9 @@ describe('JHipster application generator with blueprint', () => {
   });
 
   describe('generate application with a peer version-compatible blueprint', () => {
-    before(() => {
-      return helpers
+    let runResult;
+    before(async () => {
+      runResult = await helpers
         .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
         .inTmpDir(dir => {
           // Fake the presence of the blueprint in node_modules
@@ -147,16 +138,7 @@ describe('JHipster application generator with blueprint', () => {
     });
 
     it('creates expected default files for server and angularX', () => {
-      assert.file(expectedFiles.common);
-      assert.file(expectedFiles.server);
-      assert.file(
-        getFilesForOptions(angularFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          testFrameworks: [],
-        })
-      );
+      jestExpect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {

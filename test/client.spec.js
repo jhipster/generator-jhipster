@@ -1,8 +1,9 @@
+const expect = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
+
 const { skipPrettierHelpers: helpers, getFilesForOptions } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
-const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
 const constants = require('../generators/generator-constants');
 const { appDefaultConfig } = require('../generators/generator-defaults');
@@ -51,8 +52,9 @@ describe('JHipster client generator', () => {
   });
 
   describe('generate client with Angular', () => {
+    let runResult;
     before(async () => {
-      await helpers
+      runResult = await helpers
         .run(path.join(__dirname, '../generators/client'))
         .withOptions({ skipInstall: true, auth: 'jwt' })
         .withPrompts({
@@ -66,20 +68,7 @@ describe('JHipster client generator', () => {
     });
 
     it('creates expected files for default configuration for client generator', () => {
-      assert.noFile(expectedFiles.server);
-      assert.noFile(expectedFiles.maven);
-      assert.file(expectedFiles.common);
-      assert.file(expectedFiles.i18nJson);
-      assert.file(expectedFiles.i18nAdminJson);
-      assert.file(expectedFiles.clientCommon);
-      assert.file(
-        getFilesForOptions(angularFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          testFrameworks: [],
-        })
-      );
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('contains clientFramework with angularX value', () => {
       assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
