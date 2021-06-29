@@ -38,10 +38,7 @@ module.exports = class extends BaseBlueprintGenerator {
     });
 
     if (this.options.help) return;
-    // TODO JHipster 8 drop.
-    // Fallback to those paths if the file don't exist in the generator template folder.
-    this.jhipsterTemplatesFolders.push(this.fetchFromInstalledJHipster('common/templates'));
-    this.jhipsterTemplatesFolders.push(this.fetchFromInstalledJHipster('client/templates/common'));
+
     this.instantiateBlueprints('init');
   }
 
