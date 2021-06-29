@@ -24,6 +24,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
 const prompts = require('./prompts');
+const { initDefaultPromptConfig } = require('../generator-defaults');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
@@ -50,19 +51,8 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!this.showHello()) return;
         this.log(chalk.white('⬢ Welcome to the JHipster Init ⬢'));
       },
-      getConfig() {
-        const configuration = this.config;
-
-        this.projectName = configuration.get('projectName');
-        this.baseName = configuration.get('baseName');
-        this.prettierDefaultIndent = configuration.get('prettierDefaultIndent');
-        this.prettierJavaIndent = configuration.get('prettierJavaIndent');
-
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.humanizedBaseName = _.startCase(this.baseName);
-      },
-      initConstant() {
-        this.NODE_VERSION = constants.NODE_VERSION;
+      loadRuntimeOptions() {
+        this.loadRuntimeOptions();
       },
     };
   }
@@ -95,9 +85,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.jhipsterConfig.baseName = this.baseName;
         this.jhipsterConfig.prettierDefaultIndent = this.prettierDefaultIndent;
         this.jhipsterConfig.prettierJavaIndent = this.prettierJavaIndent;
-
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.humanizedBaseName = _.startCase(this.baseName);
       },
     };
   }
@@ -109,7 +96,16 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _loading() {
     return {
-      loadDependabot() {
+      loadConfig() {
+        this.loadInitConfig();
+      },
+      loadDerivedConfig() {
+        this.loadDerivedInitConfig();
+      },
+      loadConstant() {
+        this.NODE_VERSION = constants.NODE_VERSION;
+      },
+      loadDependabotDependencies() {
         this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
       },
     };

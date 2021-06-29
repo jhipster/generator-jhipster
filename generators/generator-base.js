@@ -31,8 +31,7 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
-const { defaultConfig } = require('./generator-defaults');
-const { defaultConfigMicroservice } = require('./generator-defaults');
+const { initDefaultConfig, defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -2460,6 +2459,33 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // Deprecated use dependabotDependencies instead
     config.dependabotPackageJson = config.dependabotPackageJson || {};
     dest.dependabotPackageJson = config.dependabotPackageJson;
+  }
+
+  /**
+   * Load init configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} config - config to load config from
+   * @param {any} dest - destination context to use default is context
+   */
+  loadInitConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
+    dest.jhipsterVersion = config.jhipsterVersion;
+    dest.baseName = config.baseName;
+    dest.projectName = config.projectName;
+    dest.prettierDefaultIndent = config.prettierDefaultIndent;
+    dest.prettierJavaIndent = config.prettierJavaIndent;
+  }
+
+  /**
+   * Load derived init configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} config - config to load config from
+   * @param {any} dest - destination context to use default is context
+   */
+  loadDerivedInitConfig(dest = this) {
+    dest.dasherizedBaseName = _.kebabCase(dest.baseName);
+    dest.humanizedBaseName = _.startCase(dest.baseName);
   }
 
   /**
