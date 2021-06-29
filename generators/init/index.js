@@ -39,7 +39,6 @@ module.exports = class extends BaseBlueprintGenerator {
     this.instantiateBlueprints('init');
   }
 
-  // Public API method used by the getter and also by Blueprints
   _initializing() {
     return {
       validateFromCli() {
@@ -60,7 +59,6 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
-  // Public API method used by the getter and also by Blueprints
   _prompting() {
     return {
       async showPrompts() {
@@ -108,7 +106,6 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._prompting();
   }
 
-  // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
       setDefaults() {
@@ -155,7 +152,6 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._writing();
   }
 
-  // Public API method used by the getter and also by Blueprints
   _install() {
     return {
       // Initialize git repository before package manager install for commit hooks
