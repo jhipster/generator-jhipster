@@ -21,15 +21,12 @@
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-const prettierConfigFiles = {
-  global: [
+const commonFiles = {
+  prettier: [
     {
       templates: ['.prettierrc', '.prettierignore'],
     },
   ],
-};
-
-const commonFiles = {
   git: [
     {
       templates: [
@@ -42,17 +39,19 @@ const commonFiles = {
           renameTo: () => '.gitattributes',
           method: 'copy',
         },
-        {
-          file: 'editorconfig',
-          renameTo: () => '.editorconfig',
-          method: 'copy',
-        },
       ],
     },
   ],
   global: [
     {
-      templates: ['README.md', 'package.json'],
+      templates: [
+        'README.md',
+        'package.json',
+        {
+          file: 'editorconfig',
+          renameTo: () => '.editorconfig',
+        },
+      ],
     },
   ],
   commitHooks: [
@@ -73,6 +72,5 @@ function writeFiles() {
 
 module.exports = {
   writeFiles,
-  prettierConfigFiles,
   commonFiles,
 };

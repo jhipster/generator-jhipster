@@ -22,7 +22,6 @@ const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
-const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
 const packagejs = require('../../package.json');
 const dependabotPackagejs = require('./templates/package.json');
@@ -118,10 +117,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _writing() {
     return {
-      writePrettierConfig() {
-        // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
-        return this.writeFilesToDisk(prettierConfigFiles);
-      },
       ...writeFiles(),
     };
   }
