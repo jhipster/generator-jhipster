@@ -28,12 +28,6 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.option('skip-prompts', {
-      desc: 'Skips prompts',
-      type: Boolean,
-      defaults: false,
-    });
-
     this.option('jhipster-version', {
       desc: 'Force jhipsterVersion for reproducibility',
       type: Boolean,
