@@ -23,8 +23,6 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
-const packagejs = require('../../package.json');
-const dependabotPackagejs = require('./templates/package.json');
 const prompts = require('./prompts');
 
 module.exports = class extends BaseBlueprintGenerator {
@@ -53,7 +51,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.log(chalk.white('⬢ Welcome to the JHipster Init ⬢'));
       },
       getConfig() {
-        this.jhipsterVersion = packagejs.version;
         const configuration = this.config;
 
         this.projectName = configuration.get('projectName');
@@ -63,8 +60,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.dasherizedBaseName = _.kebabCase(this.baseName);
         this.humanizedBaseName = _.startCase(this.baseName);
-        this.dependencies = packagejs.dependencies;
-        this.dependabotDependencies = dependabotPackagejs.devDependencies;
       },
       initConstant() {
         this.NODE_VERSION = constants.NODE_VERSION;
@@ -96,7 +91,6 @@ module.exports = class extends BaseBlueprintGenerator {
   _configuring() {
     return {
       setup() {
-        this.jhipsterConfig.jhipsterVersion = packagejs.version;
         this.jhipsterConfig.projectName = this.projectName;
         this.jhipsterConfig.baseName = this.baseName;
         this.jhipsterConfig.prettierDefaultIndent = this.prettierDefaultIndent;
@@ -111,6 +105,19 @@ module.exports = class extends BaseBlueprintGenerator {
   get configuring() {
     if (this.fromBlueprint) return;
     return this._configuring();
+  }
+
+  _loading() {
+    return {
+      loadDependabot() {
+        this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
+      },
+    };
+  }
+
+  get loading() {
+    if (this.fromBlueprint) return;
+    return this._loading();
   }
 
   _writing() {
