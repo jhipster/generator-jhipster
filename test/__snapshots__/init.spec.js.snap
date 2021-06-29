@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`JHipster init generator with custom prompt values and askAnsweredOption on a exiting project should write custom prompt values 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"BeautifulProject\\",
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"projectName\\": \\"Beautiful Project\\",
+    \\"prettierDefaultIndent\\": 4,
+    \\"prettierJavaIndent\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`JHipster init generator with custom prompt values and default options should write custom config to .yo-rc.json 1`] = `
 Object {
   ".yo-rc.json": Object {
@@ -10,6 +28,24 @@ Object {
     \\"baseName\\": \\"BeautifulProject\\",
     \\"prettierDefaultIndent\\": 4,
     \\"prettierJavaIndent\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom prompt values and existing config should not write custom prompt values 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"existing\\",
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"prettierDefaultIndent\\": 2,
+    \\"prettierJavaIndent\\": 4,
+    \\"projectName\\": \\"JHipster project\\"
   }
 }
 ",

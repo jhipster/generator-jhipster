@@ -72,11 +72,13 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       async showPrompts() {
         if (this.options.skipPrompts) return;
+        // Consider existing baseName a project regeneration.
+        if (this.jhipsterConfig.baseName && !this.options.askAnswered) return;
         await this.prompt(
           [
             {
               name: 'projectName',
-              when: () => !this.abort && !this.options.skipP,
+              when: () => !this.abort,
               type: 'input',
               message: 'What is the project name of your application?',
               default: () => this._getDefaultProjectName(),

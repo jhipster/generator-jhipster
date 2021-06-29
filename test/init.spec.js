@@ -44,5 +44,31 @@ describe('JHipster init generator', () => {
         expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
       });
     });
+    describe('and existing config', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .run(path.join(__dirname, '../generators/init'))
+          .withOptions({ localConfig: { baseName: 'existing' } })
+          .withPrompts(promptValues);
+      });
+      it('should not write custom prompt values', () => {
+        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
+        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
+      });
+    });
+    describe('and askAnsweredOption on a exiting project', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .run(path.join(__dirname, '../generators/init'))
+          .withOptions({ askAnswered: true, localConfig: { baseName: 'existing' } })
+          .withPrompts(promptValues);
+      });
+      it('should write custom prompt values', () => {
+        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
+        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
+      });
+    });
   });
 });
