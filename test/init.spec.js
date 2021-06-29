@@ -57,7 +57,7 @@ describe('JHipster init generator', () => {
         expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
       });
     });
-    describe('and askAnsweredOption on a exiting project', () => {
+    describe('and askAnswered option on an exiting project', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
