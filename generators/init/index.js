@@ -21,6 +21,7 @@ const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { files } = require('./files');
+const { default: initOptions } = require('./options');
 const constants = require('../generator-constants');
 const { initDefaultPromptConfig } = require('../generator-defaults');
 
@@ -28,11 +29,7 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.option('jhipster-version', {
-      desc: 'Force jhipsterVersion for reproducibility',
-      type: Boolean,
-      hide: true,
-    });
+    this.jhipsterOptions(initOptions);
 
     if (this.options.help) return;
 
@@ -47,9 +44,6 @@ module.exports = class extends BaseBlueprintGenerator {
       sayHello() {
         if (!this.showHello()) return;
         this.log(chalk.white('⬢ Welcome to the JHipster Init ⬢'));
-      },
-      loadCliOptions() {
-        this.loadInitCliOptions();
       },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();

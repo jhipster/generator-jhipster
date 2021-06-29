@@ -61,6 +61,12 @@ const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 
+function camelcase(str) {
+  return str.split('-').reduce((str, word) => {
+    return str + word[0].toUpperCase() + word.slice(1);
+  });
+}
+
 // Reverse order.
 const CUSTOM_PRIORITIES = [
   {
@@ -2488,16 +2494,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Load cli init options into config.
-   * @param {any} options - option object to load from
-   */
-  loadInitCliOptions(options = this.options) {
-    if (options.jhipsterVersion) {
-      this.jhipsterConfig.jhipsterVersion = options.jhipsterVersion;
-    }
-  }
-
-  /**
    * Load app configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
@@ -2780,5 +2776,26 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   loadDependabotDependencies(dependabotFile) {
     _.merge(this.configOptions.dependabotDependencies, this.fs.readJSON(dependabotFile).dependencies);
+  }
+
+  /**
+   * Load options from an object.
+   * When composing, we need to load options from others generators, externalising options allow to easily load them.
+   * @param String options - Object containing options.
+   */
+  jhipsterOptions(options = {}) {
+    Object.entries(options).forEach(([optionName, optionDesc]) => {
+      this.option(optionName, optionDesc);
+      if (!optionDesc.scope) return;
+      const camelCaseName = camelcase(optionName);
+      const optionValue = this.options[camelCaseName];
+      if (optionValue !== undefined) {
+        if (optionDesc.scope === 'storage') {
+          this.config.set(camelCaseName, optionValue);
+        } else if (optionDesc.scope === 'runtime') {
+          this.configOptions[camelCaseName] = optionValue;
+        }
+      }
+    });
   }
 };

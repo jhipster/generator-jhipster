@@ -24,7 +24,7 @@ describe('JHipster init generator', () => {
     };
     describe('and default options', () => {
       before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions().withPrompts(promptValues);
+        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withPrompts(promptValues);
       });
       it('should write custom config to .yo-rc.json', () => {
         const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
