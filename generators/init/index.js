@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const writeFiles = require('./files').writeFiles;
+const { files } = require('./files');
 const constants = require('../generator-constants');
 const { initDefaultPromptConfig } = require('../generator-defaults');
 
@@ -143,7 +143,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _writing() {
     return {
-      ...writeFiles(),
+      writeFiles() {
+        return this.writeFilesToDisk(files);
+      },
     };
   }
 
