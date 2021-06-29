@@ -75,7 +75,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (this.useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._initializing();
   }
 
@@ -90,7 +90,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (this.useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._prompting();
   }
 
@@ -111,7 +111,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (this.useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._configuring();
   }
 
@@ -122,7 +122,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (this.useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._writing();
   }
 
@@ -152,7 +152,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get install() {
-    if (this.useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._install();
   }
 
@@ -211,7 +211,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (this.useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._end();
   }
 };
