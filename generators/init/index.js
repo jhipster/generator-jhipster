@@ -23,7 +23,7 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { files } = require('./files');
 const { default: initOptions } = require('./options');
 const constants = require('../generator-constants');
-const { initDefaultPromptConfig } = require('../generator-defaults');
+const { initDefaultConfig, initRequiredConfig } = require('../generator-defaults');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
@@ -84,14 +84,14 @@ module.exports = class extends BaseBlueprintGenerator {
               when: () => !this.abort,
               type: 'input',
               message: 'What is the default indentation?',
-              default: 2,
+              default: initDefaultConfig.prettierDefaultIndent,
             },
             {
               name: 'prettierJavaIndent',
               when: () => !this.abort,
               type: 'input',
               message: 'What is the Java indentation?',
-              default: 4,
+              default: initDefaultConfig.prettierJavaIndent,
             },
           ],
           this.config
@@ -108,7 +108,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _configuring() {
     return {
       setDefaults() {
-        this.config.defaults(initDefaultPromptConfig);
+        this.config.defaults(initRequiredConfig);
       },
     };
   }
@@ -249,7 +249,7 @@ module.exports = class extends BaseBlueprintGenerator {
    * @returns default app name
    */
   _getDefaultProjectName() {
-    return initDefaultPromptConfig.projectName;
+    return initDefaultConfig.projectName;
   }
 
   /**

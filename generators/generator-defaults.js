@@ -26,17 +26,17 @@ const optionNames = applicationOptions.OptionNames;
 const defaultNewApplicationOptions = defaultApplicationOptions.getConfigForApplicationType();
 const defaultMonolithOptions = defaultApplicationOptions.getConfigForApplicationType(MONOLITH);
 
-/** Required config for prompts to be skipped */
-const initDefaultPromptConfig = {
-  prettierDefaultIndent: 2,
-  prettierJavaIndent: 4,
-  projectName: 'JHipster project',
+/** Required config to be skipped */
+const initRequiredConfig = {
   jhipsterVersion,
+  projectName: 'JHipster project',
 };
 
 /** Init default config for templates */
 const initDefaultConfig = {
-  ...initDefaultPromptConfig,
+  ...initRequiredConfig,
+  prettierDefaultIndent: 2,
+  prettierJavaIndent: 4,
   skipCommitHook: false,
 };
 
@@ -151,7 +151,7 @@ const entityDefaultConfig = {
 };
 
 module.exports = {
-  initDefaultPromptConfig,
+  initRequiredConfig,
   initDefaultConfig,
   appDefaultConfig,
   serverDefaultConfig,

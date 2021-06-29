@@ -43,8 +43,6 @@ Object {
   \\"generator-jhipster\\": {
     \\"baseName\\": \\"existing\\",
     \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"prettierDefaultIndent\\": 2,
-    \\"prettierJavaIndent\\": 4,
     \\"projectName\\": \\"JHipster project\\"
   }
 }
@@ -60,8 +58,6 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"prettierDefaultIndent\\": 2,
-    \\"prettierJavaIndent\\": 4,
     \\"projectName\\": \\"JHipster project\\"
   }
 }
