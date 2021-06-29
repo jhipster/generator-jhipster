@@ -1,67 +1,48 @@
 const path = require('path');
-const assert = require('yeoman-assert');
+const expect = require('expect');
+const normalizePath = require('normalize-path');
+
 const { skipPrettierHelpers: helpers } = require('./utils/utils');
 
 describe('JHipster init generator', () => {
-  describe('generate init', () => {
+  describe('with default options', () => {
+    let runResult;
     before(async () => {
-      await helpers.run(path.join(__dirname, '../generators/init'));
+      runResult = await helpers.run(path.join(__dirname, '../generators/init'));
     });
-    it('creates expected files for init generator', () => {
-      assert.file('.editorconfig');
-      assert.file('.gitattributes');
-      assert.file('.gitignore');
-      assert.file('.huskyrc');
-      assert.file('.lintstagedrc.js');
-      assert.file('package.json');
-      assert.file('.prettierignore');
-      assert.file('.prettierrc');
-      assert.file('README.md');
-      assert.file('.yo-rc.json');
+    it('should create expected files', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
-  describe('generate init with default value', () => {
-    before(async () => {
-      await helpers.run(path.join(__dirname, '../generators/init')).withPrompts({
-        projectName: 'jhipster project',
-        baseName: 'jhipster',
-        prettierDefaultIndent: 2,
-        prettierJavaIndent: 4,
+  describe('with custom prompt values', () => {
+    let runResult;
+    const promptValues = {
+      projectName: 'Beautiful Project',
+      baseName: 'BeautifulProject',
+      prettierDefaultIndent: 4,
+      prettierJavaIndent: 2,
+    };
+    describe('and default options', () => {
+      before(async () => {
+        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions().withPrompts(promptValues);
+      });
+      it('should write custom config to .yo-rc.json', () => {
+        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
+        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
       });
     });
-    it('creates expected files for init generator', () => {
-      assert.file('.editorconfig');
-      assert.file('.gitattributes');
-      assert.file('.gitignore');
-      assert.file('.huskyrc');
-      assert.file('.lintstagedrc.js');
-      assert.file('package.json');
-      assert.file('.prettierignore');
-      assert.file('.prettierrc');
-      assert.file('README.md');
-      assert.file('.yo-rc.json');
-    });
-  });
-  describe('generate init with different values', () => {
-    before(async () => {
-      await helpers.run(path.join(__dirname, '../generators/init')).withPrompts({
-        projectName: 'Beautiful Project',
-        baseName: 'BeautifulProject',
-        prettierDefaultIndent: 4,
-        prettierJavaIndent: 2,
+    describe('and skipPrompts option', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .run(path.join(__dirname, '../generators/init'))
+          .withOptions({ skipPrompts: true })
+          .withPrompts(promptValues);
       });
-    });
-    it('creates expected files for init generator', () => {
-      assert.file('.editorconfig');
-      assert.file('.gitattributes');
-      assert.file('.gitignore');
-      assert.file('.huskyrc');
-      assert.file('.lintstagedrc.js');
-      assert.file('package.json');
-      assert.file('.prettierignore');
-      assert.file('.prettierrc');
-      assert.file('README.md');
-      assert.file('.yo-rc.json');
+      it('should write default values to .yo-rc.json', () => {
+        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
+        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
+      });
     });
   });
 });

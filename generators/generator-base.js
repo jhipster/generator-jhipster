@@ -2480,12 +2480,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Load derived init configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
+   * @param {any} dest - source/destination context
    */
   loadDerivedInitConfig(dest = this) {
     dest.dasherizedBaseName = _.kebabCase(dest.baseName);
     dest.humanizedBaseName = _.startCase(dest.baseName);
+  }
+
+  /**
+   * Load cli init options into config.
+   * @param {any} options - option object to load from
+   */
+  loadInitCliOptions(options = this.options) {
+    if (options.jhipsterVersion) {
+      this.jhipsterConfig.jhipsterVersion = options.jhipsterVersion;
+    }
   }
 
   /**

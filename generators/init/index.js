@@ -34,6 +34,12 @@ module.exports = class extends BaseBlueprintGenerator {
       defaults: false,
     });
 
+    this.option('jhipster-version', {
+      desc: 'Force jhipsterVersion for reproducibility',
+      type: Boolean,
+      hide: true,
+    });
+
     if (this.options.help) return;
 
     this.instantiateBlueprints('init');
@@ -47,6 +53,9 @@ module.exports = class extends BaseBlueprintGenerator {
       sayHello() {
         if (!this.showHello()) return;
         this.log(chalk.white('⬢ Welcome to the JHipster Init ⬢'));
+      },
+      loadCliOptions() {
+        this.loadInitCliOptions();
       },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
