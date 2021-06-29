@@ -52,6 +52,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.checkInvocationFromCLI();
       },
       sayHello() {
+        if (!this.showHello()) return;
         this.log(chalk.white('⬢ Welcome to the JHipster Init ⬢'));
       },
       getConfig() {

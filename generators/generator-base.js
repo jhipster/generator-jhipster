@@ -2722,4 +2722,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   getR2DBCUrl(databaseType, options = {}) {
     return this.getDBCUrl(databaseType, 'r2dbc', options);
   }
+
+  showHello() {
+    if (this.configOptions.showHello === false) return false;
+    this.configOptions.showHello = false;
+    return true;
+  }
 };
