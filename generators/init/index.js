@@ -28,8 +28,6 @@ const packagejs = require('../../package.json');
 const dependabotPackagejs = require('./templates/package.json');
 const prompts = require('./prompts');
 
-let useBlueprints;
-
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
@@ -71,7 +69,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.useBlueprints) return;
     return this._initializing();
   }
 
@@ -86,7 +84,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.useBlueprints) return;
     return this._prompting();
   }
 
@@ -107,7 +105,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.useBlueprints) return;
     return this._configuring();
   }
 
@@ -123,7 +121,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.useBlueprints) return;
     return this._writing();
   }
 
@@ -153,7 +151,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get install() {
-    if (useBlueprints) return;
+    if (this.useBlueprints) return;
     return this._install();
   }
 
@@ -234,7 +232,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.useBlueprints) return;
     return this._end();
   }
 };
