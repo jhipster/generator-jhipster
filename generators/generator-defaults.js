@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { version: jhipsterVersion } = require('../package.json');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const applicationOptions = require('../jdl/jhipster/application-options');
 const { MONOLITH } = require('../jdl/jhipster/application-types');
@@ -25,20 +24,6 @@ const binaryOptions = require('../jdl/jhipster/binary-options');
 const optionNames = applicationOptions.OptionNames;
 const defaultNewApplicationOptions = defaultApplicationOptions.getConfigForApplicationType();
 const defaultMonolithOptions = defaultApplicationOptions.getConfigForApplicationType(MONOLITH);
-
-/** Required config to be skipped */
-const initRequiredConfig = {
-  jhipsterVersion,
-  projectName: 'JHipster project',
-};
-
-/** Init default config for templates */
-const initDefaultConfig = {
-  ...initRequiredConfig,
-  prettierDefaultIndent: 2,
-  prettierJavaIndent: 4,
-  skipCommitHook: false,
-};
 
 /** Required config for prompts to be skipped */
 const appRequiredConfig = {
@@ -151,8 +136,6 @@ const entityDefaultConfig = {
 };
 
 module.exports = {
-  initRequiredConfig,
-  initDefaultConfig,
   appDefaultConfig,
   serverDefaultConfig,
   clientDefaultConfig,

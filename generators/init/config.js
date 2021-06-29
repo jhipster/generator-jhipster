@@ -16,17 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { version: jhipsterVersion } = require('../../package.json');
 
-module.exports.options = {
-  'jhipster-version': {
-    desc: 'Force jhipsterVersion for reproducibility',
-    type: Boolean,
-    hide: true,
-    scope: 'storage',
-  },
-  'skip-commit-hook': {
-    desc: 'Skip adding husky commit hooks',
-    type: Boolean,
-    scope: 'storage',
-  },
+/** Required config to be skipped */
+const requiredConfig = {
+  jhipsterVersion,
+  projectName: 'JHipster project',
 };
+
+/** Init default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+  prettierDefaultIndent: 2,
+  prettierJavaIndent: 4,
+  skipCommitHook: false,
+};
+
+module.exports = { requiredConfig, defaultConfig };
