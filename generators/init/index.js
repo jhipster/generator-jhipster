@@ -18,20 +18,18 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
-const prompts = require('./prompts');
 const { initDefaultPromptConfig } = require('../generator-defaults');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.option('skip-build', {
-      desc: 'Skips building the application',
+    this.option('skip-prompts', {
+      desc: 'Skips prompts',
       type: Boolean,
       defaults: false,
     });
@@ -65,10 +63,43 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _prompting() {
     return {
-      askProjectName: prompts.askProjectName,
-      askBaseName: prompts.askBaseName,
-      askPrettierDefaultIndent: prompts.askPrettierDefaultIndent,
-      askPrettierJavaIndent: prompts.askPrettierJavaIndent,
+      async showPrompts() {
+        if (this.options.skipPrompts) return;
+        await this.prompt(
+          [
+            {
+              name: 'projectName',
+              when: () => !this.abort && !this.options.skipP,
+              type: 'input',
+              message: 'What is the project name of your application?',
+              default: () => this._getDefaultProjectName(),
+            },
+            {
+              name: 'baseName',
+              when: () => !this.abort,
+              type: 'input',
+              validate: input => this._validateBaseName(input),
+              message: 'What is the base name of your application?',
+              default: () => this.getDefaultAppName(),
+            },
+            {
+              name: 'prettierDefaultIndent',
+              when: () => !this.abort,
+              type: 'input',
+              message: 'What is the default indentation?',
+              default: 2,
+            },
+            {
+              name: 'prettierJavaIndent',
+              when: () => !this.abort,
+              type: 'input',
+              message: 'What is the Java indentation?',
+              default: 4,
+            },
+          ],
+          this.config
+        );
+      },
     };
   }
 
@@ -80,11 +111,8 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
-      setup() {
-        this.jhipsterConfig.projectName = this.projectName;
-        this.jhipsterConfig.baseName = this.baseName;
-        this.jhipsterConfig.prettierDefaultIndent = this.prettierDefaultIndent;
-        this.jhipsterConfig.prettierJavaIndent = this.prettierJavaIndent;
+      setDefaults() {
+        this.config.defaults(initDefaultPromptConfig);
       },
     };
   }
@@ -214,5 +242,34 @@ module.exports = class extends BaseBlueprintGenerator {
   get end() {
     if (this.fromBlueprint) return;
     return this._end();
+  }
+
+  /*
+   * Start of local public API, blueprints may override to customize the generator behavior.
+   */
+
+  /**
+   * @returns default app name
+   */
+  _getDefaultProjectName() {
+    return initDefaultPromptConfig.projectName;
+  }
+
+  /**
+   * Validates baseName
+   * @param String input - Base name to be checked
+   * @returns Boolean
+   */
+  _validateBaseName(input) {
+    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+      return 'Your base name cannot contain special characters or a blank space';
+    }
+    if (/_/.test(input)) {
+      return 'Your base name cannot contain underscores as this does not meet the URI spec';
+    }
+    if (input === 'application') {
+      return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
+    }
+    return true;
   }
 };
