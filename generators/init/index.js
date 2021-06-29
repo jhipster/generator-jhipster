@@ -109,7 +109,10 @@ module.exports = class extends BaseBlueprintGenerator {
   _configuring() {
     return {
       setDefaults() {
-        this.config.defaults(requiredConfig);
+        this.config.defaults({
+          baseName: this.getDefaultAppName(),
+          ...requiredConfig,
+        });
       },
     };
   }
