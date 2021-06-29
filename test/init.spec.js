@@ -71,4 +71,15 @@ describe('JHipster init generator', () => {
       });
     });
   });
+  describe('with custom', () => {
+    describe('skipCommitHook option', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ skipCommitHook: true });
+      });
+      it('should create expected files', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+    });
+  });
 });

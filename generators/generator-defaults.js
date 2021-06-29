@@ -34,9 +34,10 @@ const initDefaultPromptConfig = {
   jhipsterVersion,
 };
 
-/** Init config efaults for templates */
+/** Init default config for templates */
 const initDefaultConfig = {
   ...initDefaultPromptConfig,
+  skipCommitHook: false,
 };
 
 /** Required config for prompts to be skipped */

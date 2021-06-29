@@ -24,4 +24,9 @@ module.exports.default = {
     hide: true,
     scope: 'storage',
   },
+  'skip-commit-hook': {
+    desc: 'Skip adding husky commit hooks',
+    type: Boolean,
+    scope: 'storage',
+  },
 };

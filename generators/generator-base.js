@@ -2480,6 +2480,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.projectName = config.projectName;
     dest.prettierDefaultIndent = config.prettierDefaultIndent;
     dest.prettierJavaIndent = config.prettierJavaIndent;
+    dest.skipCommitHook = config.skipCommitHook;
   }
 
   /**
