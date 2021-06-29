@@ -46,6 +46,7 @@ public class OAuth2ReactiveRefreshTokensWebFilter implements WebFilter {
             .filter(principal -> principal instanceof OAuth2AuthenticationToken)
             .cast(OAuth2AuthenticationToken.class)
             .flatMap(authentication -> authorizedClient(exchange, authentication))
+            .onErrorResume(e -> Mono.empty())
             .thenReturn(exchange)
             .flatMap(chain::filter);
     }
