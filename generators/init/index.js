@@ -123,7 +123,6 @@ module.exports = class extends BaseBlueprintGenerator {
         return this.writeFilesToDisk(prettierConfigFiles);
       },
       ...writeFiles(),
-      ...super._missingPostWriting(),
     };
   }
 
