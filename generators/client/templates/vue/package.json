@@ -43,7 +43,7 @@
     "folder-hash": "4.0.1",
     "fork-ts-checker-webpack-plugin": "6.2.12",
     "html-webpack-plugin": "5.3.2",
-    "jest": "27.0.5",
+    "jest": "27.0.6",
     "jest-junit": "12.2.0",
     "jest-serializer-vue": "2.0.2",
     "jest-sonar-reporter": "2.0.0",
