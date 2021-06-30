@@ -39,15 +39,5 @@ const gatlingFiles = {
 };
 
 module.exports = {
-  writeFiles,
   gatlingFiles,
 };
-
-function writeFiles() {
-  return {
-    writeGatlingSimulationFiles() {
-      // write gatling simulation side files
-      this.writeFilesToDisk(gatlingFiles);
-    },
-  };
-}
