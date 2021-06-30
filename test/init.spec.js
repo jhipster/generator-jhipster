@@ -84,7 +84,7 @@ describe('JHipster init generator', () => {
       });
     });
   });
-  describe.only('git feature', () => {
+  describe('git feature', () => {
     describe('with default option', () => {
       let runResult;
       before(async () => {
