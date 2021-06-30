@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const writeFiles = require('./files').writeFiles;
+const { writeFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { GENERATOR_ENTITY_GATLING } = require('../generator-list');
 
 /* constants used throughout */
 let useBlueprints;
@@ -27,15 +28,22 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts);
-    utils.copyObjectProps(this, opts.context);
+
+    this.entity = opts.context;
+
     this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-gatling', { context: opts.context });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_GATLING, { context: opts.context });
   }
 
   // Public API method used by the getter and also by Blueprints
   _default() {
-    return super._missingPreDefault();
+    return {
+      ...super._missingPreDefault(),
+      loadConfigIntoGenerator() {
+        utils.copyObjectProps(this, this.entity);
+      },
+    };
   }
 
   get default() {

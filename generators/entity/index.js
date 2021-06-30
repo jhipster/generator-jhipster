@@ -37,7 +37,7 @@ const {
 const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
-const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
 const {
   GENERATOR_ENTITIES,
@@ -45,8 +45,10 @@ const {
   GENERATOR_ENTITY_CLIENT,
   GENERATOR_ENTITY_I18N,
   GENERATOR_ENTITY_SERVER,
+  GENERATOR_ENTITY_GATLING,
 } = require('../generator-list');
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
+const { GATLING } = require('../../jdl/jhipster/test-framework-types');
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -540,6 +542,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
             });
           }
         }
+        const gatlingTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes(GATLING);
+        if (gatlingTests && (this.jhipsterConfig.applicationType === GATEWAY || this.jhipsterConfig.applicationType === MONOLITH)) {
+          this.composeWithJHipster(GENERATOR_ENTITY_GATLING, this.arguments, {
+            context,
+          });
+        }
       },
     };
   }
@@ -801,40 +809,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
           rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)
         );
         this.context.reactiveRegularEagerRelations = this.context.reactiveEagerRelations.filter(rel => rel.id !== true);
-      },
-
-      /*
-       * Composed generators uses context ready for the templates.
-       */
-      composing() {
-        const context = this.context;
-        if (!context.skipServer) {
-          this.composeWithJHipster('entity-server', {
-            context,
-          });
-        }
-
-        if (!context.skipClient) {
-          this.composeWithJHipster('entity-client', {
-            context,
-            skipInstall: this.options.skipInstall,
-          });
-          if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster('entity-i18n', {
-              context,
-              skipInstall: this.options.skipInstall,
-            });
-          }
-        }
-
-        if (
-          this.jhipsterConfig.gatlingTests &&
-          (this.jhipsterConfig.applicationType === 'gateway' || this.jhipsterConfig.applicationType === 'monolith')
-        ) {
-          this.composeWithJHipster('entity-gatling', {
-            context,
-          });
-        }
       },
 
       insight() {
