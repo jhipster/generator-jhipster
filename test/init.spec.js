@@ -18,10 +18,10 @@ describe('JHipster init generator', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
-  describe('with skipPrompts option', () => {
+  describe('with defaults option', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ skipPrompts: true });
+      runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ defaults: true });
     });
     it('should load default config into the generator', () => {
       expect(runResult.generator).toMatchObject(testDefaultConfg);

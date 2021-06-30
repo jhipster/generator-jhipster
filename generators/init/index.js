@@ -22,7 +22,7 @@ const simpleGit = require('simple-git');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { files } = require('./files');
-const { options: initOptions } = require('./options');
+const { commonOptions, initOptions } = require('../options');
 const constants = require('../generator-constants');
 const { defaultConfig, requiredConfig } = require('./config');
 
@@ -30,9 +30,17 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts, { unique: 'namespace' });
 
+    this.jhipsterOptions(commonOptions);
     this.jhipsterOptions(initOptions);
 
     if (this.options.help) return;
+
+    if (this.options.defaults) {
+      this.config.defaults({
+        ...requiredConfig,
+        baseName: this.getDefaultAppName(),
+      });
+    }
 
     this.instantiateBlueprints('init');
   }
