@@ -85,11 +85,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && authenticationTypeOauth2) { _%>
-        .check(status.is(302))
-<%_ } else { _%>
         .check(status.is(401))
-<%_ } _%>
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))
 <%_ } _%>
