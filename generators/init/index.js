@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const simpleGit = require('simple-git');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { GENERATOR_INIT } = require('../generator-list');
 const { files } = require('./files');
 const { commonOptions, initOptions } = require('../options');
 const constants = require('../generator-constants');
@@ -42,7 +43,7 @@ module.exports = class extends BaseBlueprintGenerator {
       });
     }
 
-    this.instantiateBlueprints('init');
+    this.instantiateBlueprints(GENERATOR_INIT);
   }
 
   _initializing() {
@@ -142,7 +143,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.NODE_VERSION = constants.NODE_VERSION;
       },
       loadDependabotDependencies() {
-        this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
+        this.loadDependabotDependencies(this.fetchFromInstalledJHipster(GENERATOR_INIT, 'templates', 'package.json'));
       },
     };
   }

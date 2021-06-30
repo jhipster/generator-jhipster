@@ -38,6 +38,7 @@ const Generators = {
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
+  GENERATOR_INIT: 'init',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
   GENERATOR_SERVER: 'server',
