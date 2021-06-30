@@ -2,10 +2,10 @@ const path = require('path');
 const expect = require('expect');
 const { access } = require('fs/promises');
 const normalizePath = require('normalize-path');
-const simpleGit = require('simple-git');
 
 const { skipPrettierHelpers: helpers } = require('./utils/utils');
 const { defaultConfig } = require('../generators/init/config');
+
 const testDefaultConfg = { ...defaultConfig, jhipsterVersion: '0.0.0' };
 
 describe('JHipster init generator', () => {
@@ -105,8 +105,11 @@ describe('JHipster init generator', () => {
         await expect(access(path.resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
       });
       it('should create 1 commit', async () => {
-        const git = simpleGit({ baseDir: runResult.cwd });
-        await expect(git.log()).resolves.toMatchObject({ total: 1, latest: { message: expect.stringMatching(/^Initial version of/) } });
+        const git = runResult.generator._createGit();
+        await expect(git.log()).resolves.toMatchObject({
+          total: 1,
+          latest: { message: expect.stringMatching(/^Initial version of/) },
+        });
       });
     });
     describe('with skipGit option', () => {
@@ -128,11 +131,11 @@ describe('JHipster init generator', () => {
           .run();
       });
       it('should have 1 commit', async () => {
-        const git = simpleGit({ baseDir: runResult.cwd });
+        const git = runResult.generator._createGit();
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
       it('should have uncommited files', async () => {
-        const git = simpleGit({ baseDir: runResult.cwd });
+        const git = runResult.generator._createGit();
         await expect(git.diff()).resolves.toMatch(/\+ {4}"jhipsterVersion": "1\.0\.0"/);
       });
     });

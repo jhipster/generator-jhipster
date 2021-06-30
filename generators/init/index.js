@@ -167,7 +167,7 @@ module.exports = class extends BaseBlueprintGenerator {
           return;
         }
         try {
-          const git = simpleGit({ baseDir: this.destinationPath() });
+          const git = this._createGit();
           this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
           this.log(chalk.green.bold('Git repository initialized.'));
         } catch (error) {
@@ -192,7 +192,7 @@ module.exports = class extends BaseBlueprintGenerator {
           return;
         }
         this.debug('Committing files to git');
-        const git = simpleGit({ baseDir: this.destinationPath() });
+        const git = this._createGit();
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         let result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
@@ -254,5 +254,12 @@ module.exports = class extends BaseBlueprintGenerator {
       return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
     }
     return true;
+  }
+
+  _createGit() {
+    return simpleGit({ baseDir: this.destinationPath() }).env({
+      ...process.env,
+      LANG: 'en',
+    });
   }
 };
