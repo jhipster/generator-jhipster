@@ -21,21 +21,31 @@
  EJS partials will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (partialImportSection) { -&>
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+<%_ if (validation) { _%>
+import javax.validation.constraints.*;
+<%_ } _%>
 <&_ } -&>
 
 <&_ if (partialAnnotationSection) { -&>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 <&_ } -&>
+
+<%_ for (const field of fields) { _%>
+<&_ if (partialField<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+  <%_ if (field.fieldValidate === true) { -%>
+    <%- include('../common/field_validators', {field, reactive}); -%>
+  <%_ } _%>
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
+<&_ if (partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+  <%_ if (field.fieldValidationRequired) { _%>
+      @NotNull
+  <%_ } _%>
+<&_ } -&>
+<%_ } -%>
 
 <%_ for (const relationship of relationships) { _%>
 <&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (relationship.relationshipOneToMany) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-  <%_ } _%>
-  <%_ if (relationship.relationshipManyToMany) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-  <%_ } _%>
 <&_ } -&>
 <%_ } -%>

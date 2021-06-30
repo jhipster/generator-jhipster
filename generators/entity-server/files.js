@@ -69,27 +69,91 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java.jhi`,
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi`,
+        },
+        {
+          file: 'package/domain/Entity.java.jhi.javax_validation',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.javax_validation`,
         },
       ],
     },
     {
-      condition: generator => generator.databaseTypeSql && !generator.embedded,
+      condition: generator => generator.databaseTypeSql && generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/domain/Entity.java.jhi.spring_data',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java.jhi.spring_data`,
+          file: 'package/domain/Entity.java.jhi.spring_data_reactive',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_reactive`,
         },
       ],
     },
     {
-      condition: generator => generator.databaseTypeSql && generator.enableHibernateCache,
+      condition: generator => generator.databaseTypeCassandra,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_cassandra',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_cassandra`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeNeo4j,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_neo4j',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_neo4j`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.javax_persistence',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.javax_persistence`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeMongodb,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_mongodb',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_mongodb`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeCouchbase,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_couchbase',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_couchbase`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.hibernate_cache',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java.jhi.hibernate_cache`,
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.hibernate_cache`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngineElasticsearch,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.elastic_search',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.elastic_search`,
         },
       ],
     },
@@ -250,7 +314,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/EntityTest.java',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}Test.java`,
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}Test.java`,
         },
       ],
     },

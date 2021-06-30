@@ -3,7 +3,9 @@ const debugBuilder = require('debug');
 const ejs = require('ejs');
 const path = require('path');
 
-module.exports.EjsFile = class EjsFile {
+const { TemplateData } = require('./template-data');
+
+module.exports.TemplateFile = class TemplateFile {
   constructor(filename, extension) {
     this._filename = filename;
     this._extension = extension;
@@ -25,6 +27,7 @@ module.exports.EjsFile = class EjsFile {
     assert(contents, 'contents is required');
     assert(options, 'options is required');
 
+    this.filePath = filePath;
     if (this.rootTemplate) {
       this.basePath = filePath.slice(0, -path.extname(filePath).length);
     } else {
@@ -32,7 +35,7 @@ module.exports.EjsFile = class EjsFile {
     }
 
     if (this._debug.enabled) {
-      this._debug(this._file.path);
+      this._debug(filePath);
       this._debug('======');
       this._debug(contents);
     }
@@ -46,21 +49,36 @@ module.exports.EjsFile = class EjsFile {
     this._childs.push(templateFile);
   }
 
-  render(data) {
-    const rendered = this._compiled({
-      partial: false,
-      partialName: this._partialName,
-      partials: {
-        render: childData => this._childs.map(templateFile => templateFile.render({ partial: true, ...data, ...childData })).join(''),
-      },
-      ...data,
-    });
-    if (this._debug.enabled) {
-      this._debug(`${this._file.path}: ${JSON.stringify(data)}`);
-      this._debug('======');
-      this._debug(rendered);
-      this._debug('======');
+  renderChilds(data) {
+    return this._childs.map(templateFile => templateFile.render(data));
+  }
+
+  render(data = {}) {
+    const partials = new TemplateData(this, data);
+    try {
+      const rendered = this._compiled({
+        partial: false,
+        partialName: this._partialName,
+        partials,
+        ...data,
+      })
+        .trimEnd()
+        .replace(/^(\r\n|\n|\r)+/, '');
+      if (this._debug.enabled) {
+        this._debug(`${this.filePath}`);
+        this._debug(`${JSON.stringify(data)}`);
+        this._debug('======');
+        this._debug(rendered);
+        this._debug('======');
+      }
+      return rendered;
+    } catch (error) {
+      /* eslint-disable no-console */
+      console.log(`Error rendering ${this._filename}`);
+      console.log(`Available sessions ${data.sections}`);
+      console.log(error);
+      /* eslint-enable no-console */
+      throw error;
     }
-    return rendered;
   }
 };

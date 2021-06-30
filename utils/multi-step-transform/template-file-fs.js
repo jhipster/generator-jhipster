@@ -2,7 +2,7 @@ const assert = require('assert');
 const minimatch = require('minimatch');
 const path = require('path');
 
-const { EjsFile } = require('./template-file');
+const { TemplateFile } = require('./template-file');
 
 module.exports.TemplateFileFs = class TemplateFileFs {
   constructor(options = {}) {
@@ -37,7 +37,7 @@ module.exports.TemplateFileFs = class TemplateFileFs {
 
   get(filePath) {
     assert(filePath, 'filePath is required');
-    this.partialFiles[filePath] = this.partialFiles[filePath] || new EjsFile(path.basename(filePath), this.extension);
+    this.partialFiles[filePath] = this.partialFiles[filePath] || new TemplateFile(path.basename(filePath), this.extension);
     return this.partialFiles[filePath];
   }
 };

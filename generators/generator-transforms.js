@@ -57,7 +57,10 @@ const prettierTransform = function (options, generator, ignoreErrors = false) {
       .catch(error => {
         const errorMessage = `Error parsing file ${file.relative}: ${error}
 
-At: ${fileContent}`;
+At: ${fileContent
+          .split('\n')
+          .map((value, idx) => `${idx + 1}: ${value}`)
+          .join('\n')}`;
         if (ignoreErrors) {
           generator.warning(errorMessage);
           callback(null, file);

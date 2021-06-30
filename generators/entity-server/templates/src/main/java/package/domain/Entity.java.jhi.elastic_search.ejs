@@ -20,22 +20,6 @@
  This is a partial file, it will be merged into to root template if available.
  EJS partials will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (partialImportSection) { -&>
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-<&_ } -&>
-
 <&_ if (partialAnnotationSection) { -&>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <&_ } -&>
-
-<%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (relationship.relationshipOneToMany) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-  <%_ } _%>
-  <%_ if (relationship.relationshipManyToMany) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-  <%_ } _%>
-<&_ } -&>
-<%_ } -%>

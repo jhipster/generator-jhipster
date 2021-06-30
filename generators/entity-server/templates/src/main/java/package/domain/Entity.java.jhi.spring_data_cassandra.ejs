@@ -21,21 +21,28 @@
  EJS partials will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <&_ if (partialImportSection) { -&>
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.Id;
+    <%_ if (fieldsContainBlob) { _%>
+import java.nio.ByteBuffer;
+import org.springframework.data.cassandra.core.mapping.Column;
+    <%_ } _%>
+import org.springframework.data.cassandra.core.mapping.Table;
 <&_ } -&>
 
 <&_ if (partialAnnotationSection) { -&>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table("<%= entityInstance %>")
 <&_ } -&>
 
-<%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (relationship.relationshipOneToMany) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+<%_ for (const field of fields) { _%>
+<&_ if (partialField<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+  <%_ if (field.id) { _%>
+    @Id
   <%_ } _%>
-  <%_ if (relationship.relationshipManyToMany) { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-  <%_ } _%>
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { -%>
+<&_ if (partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+    @Column("<%- field.fieldNameAsDatabaseColumn %>_content_type")
 <&_ } -&>
 <%_ } -%>

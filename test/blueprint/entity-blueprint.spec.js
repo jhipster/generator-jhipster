@@ -50,6 +50,26 @@ const mockBlueprintSubGen = class extends EntityGenerator {
     return super._configuring();
   }
 
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
+  get preparingFields() {
+    return super._preparingFields();
+  }
+
+  get preparingRelationships() {
+    return super._preparingRelationships();
+  }
+
   get default() {
     return super._default();
   }
@@ -72,8 +92,8 @@ describe('JHipster entity generator with blueprint', () => {
 
   blueprintNames.forEach(blueprintName => {
     describe(`generate entity with blueprint option '${blueprintName}'`, () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../../generators/entity'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
@@ -93,8 +113,7 @@ describe('JHipster entity generator with blueprint', () => {
             dto: 'no',
             service: 'no',
             pagination: 'no',
-          })
-          .on('end', done);
+          });
       });
 
       it('creates expected files from jhipster entity generator', () => {

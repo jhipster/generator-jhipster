@@ -85,6 +85,15 @@ module.exports = class extends BaseBlueprintGenerator {
         const derivedFields = this.entity.primaryKey.derivedFields;
         this.entity.fields.unshift(...derivedFields);
       },
+      processFieldType() {
+        this.entity.fields.forEach(field => {
+          if (field.blobContentTypeText) {
+            field.javaFieldType = 'String';
+          } else {
+            field.javaFieldType = field.fieldType;
+          }
+        });
+      },
     };
   }
 

@@ -17,102 +17,49 @@
  limitations under the License.
 -%>
 <&_
- // EJS requires every option to exist in the object, even undefined.
- const partialOptions = {
-   partialImportSection: false,
-   partialStaticImportSection: false,
-   partialAnnotationSection: false,
+ // Register sections 0 for unlimited childs, 1 for only one child.
+  partials.registerSections({
+    partialImportSection: 0,
+    partialStaticImportSection: 0,
+    partialAnnotationSection: 0,
+    partialClassStaticFieldsSection: 0,
+    partialClassFieldsSection: 0,
+    partialClassAdditionalFieldsSection: 0,
+    partialClassAdditionalFieldsMethodsSection: 0,
+    partialClassAdditionalRelationshipsSection: 0,
+    partialClassAdditionalRelationshipsMethodsSection: 0,
 <%_ for (const field of fields) { _%>
-   partialField<%- field.fieldNameCapitalized %>AnnotationSection: false,
+    partialField<%- field.fieldNameCapitalized %>AnnotationSection: 0,
   <%_ if (field.fieldWithContentType) { _%>
-   partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: false,
+    partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: 0,
   <%_ } _%>
+    partialField<%- field.fieldNameCapitalized %>CustomSetSection: 1,
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
-   partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection: false,
+    partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection: 0,
+    partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection: 1,
+    partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection: 1,
+    partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection: 1,
 <%_ } _%>
- };
+  });
 -&>
 package <%= packageName %>.domain;
 
-<&- partials.render({...partialOptions, partialStaticImportSection: true}) &>
-
-<&- partials.render({...partialOptions, partialImportSection: true}) &>
-<%_
-let hasDto = dtoMapstruct;
-let hasTextBlob = false;
-let hasRelationship = relationships.length !== 0;
-_%>
-<%_
-for (const field of fields.filter(field => !field.transient)) {
-  if (databaseTypePostgres && field.blobContentTypeText) {
-    hasTextBlob = true;
-    break;
-  }
-}
-_%>
-<%_ if (databaseTypeCassandra) { _%>
-import org.springframework.data.annotation.Id;
-  <%_ if (fieldsContainBlob) { _%>
-import org.springframework.data.cassandra.core.mapping.Column;
-  <%_ } _%>
-import org.springframework.data.cassandra.core.mapping.Table;
-<%_ } _%>
+<&- partials.partialStaticImportSection() -&>
+<&- partials.partialImportSection() -&>
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
-<%_ if (!hasDto && typeof javadoc != 'undefined') { _%>
+<%_ if (!dtoMapstruct && typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
 <%_ } _%>
-<%_ if (!hasDto && importApiModelProperty) { _%>
+<%_ if (!dtoMapstruct && importApiModelProperty) { _%>
 import io.swagger.annotations.ApiModelProperty;
 <%_ } _%>
-<%_ if (!reactive && (hasTextBlob || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb)))) { _%>
-import org.hibernate.annotations.Type;
-<%_ } _%>
-<%_ if (databaseTypeMongodb) {
-  if (!embedded) { _%>
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-  <%_ } _%>
-import org.springframework.data.mongodb.core.mapping.Field;
-  <%_ if (hasRelationship) { _%>
-import org.springframework.data.mongodb.core.mapping.DBRef;
-  <%_ } _%>
-<%_ } else if (databaseTypeCouchbase) {
-  if (!embedded) { _%>
-import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
-import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
-  <%_ } _%>
-import com.couchbase.client.java.repository.annotation.Field;
-  <%_ if (hasRelationship) { _%>
-import org.springframework.data.couchbase.core.query.FetchType;
-import org.springframework.data.couchbase.core.query.N1qlJoin;
-  <%_ } _%>
-<%_ } else if (databaseTypeNeo4j) { _%>
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
-  <%_ if (hasRelationship) { _%>
-import org.springframework.data.neo4j.core.schema.Relationship;
-  <%_ } _%>
-<%_ } _%>
-<%_ if (validation) { _%>
-import javax.validation.constraints.*;
-<%_ } _%>
 
-<%_ if (searchEngineElasticsearch) { _%>
-import org.springframework.data.elasticsearch.annotations.FieldType;
-<%_ } _%>
 import java.io.Serializable;
 <%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_ } if (fieldsContainBlob && databaseTypeCassandra) { _%>
-import java.nio.ByteBuffer;
 <%_ } if (fieldsContainInstant) { _%>
 import java.time.Instant;
 <%_ } if (fieldsContainLocalDate) { _%>
@@ -124,8 +71,6 @@ import java.time.Duration;
 <%_ } if (entityContainsCollectionField) { _%>
 import java.util.HashSet;
 import java.util.Set;
-<%_ } if (databaseTypeCouchbase && hasRelationship) { _%>
-import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (fieldsContainUUID) { _%>
 import java.util.UUID;
@@ -135,167 +80,57 @@ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
-<%_ if (databaseTypeCouchbase && !embedded) { _%>
-import static <%= packageName %>.config.Constants.ID_DELIMITER;
-import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
-
-<%_ } _%>
 <%_ if (typeof javadoc == 'undefined') { _%>
 /**
  * A <%= persistClass %>.
  */
 <%_ } else { _%>
 <%- formatAsClassJavadoc(javadoc) %>
-  <%_ if (!hasDto) { _%>
+  <%_ if (!dtoMapstruct) { _%>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
   <%_ } _%>
 <%_ } _%>
-<&- partials.render({...partialOptions, partialAnnotationSection: true}) -&>
-<%_ if (!embedded) { _%>
-  <%_ if (databaseTypeMongodb) { _%>
-@Document(collection = "<%= entityTableName %>")
-  <%_ } else if (databaseTypeNeo4j) { _%>
-@Node
-  <%_ } else if (databaseTypeCouchbase) { _%>
-@Document
-  <%_ } else if (databaseTypeCassandra) { _%>
-@Table("<%= entityInstance %>")
-  <%_ } _%>
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
-<%_ } _%>
+<&- partials.partialAnnotationSection() -&>
 public class <%= persistClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-<%_ if (databaseTypeCouchbase && !embedded) { _%>
-    public static final String PREFIX = "<%= entityInstance.toLowerCase() %>";
 
-    @SuppressWarnings("unused")
-    @IdPrefix
-    private String prefix = PREFIX;
-<%_ } _%>
-
-<%_ if (!embedded) { _%>
-  <%_ if (!databaseTypeSql) { _%>
+<%_ if (!embedded && primaryKey.composite) { _%>
     @Id
-  <%_ } _%>
-  <%_ if (databaseTypeCouchbase && !embedded) { _%>
-    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-  <%_ } else if (databaseTypeNeo4j) { _%>
-    @GeneratedValue(UUIDStringGenerator.class)
-  <%_ } _%>
-<&- partials.render({...partialOptions, partialField<%- primaryKey.fields[0].fieldNameCapitalized %>AnnotationSection: true}) &>
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-  if (typeof field.javadoc !== 'undefined') { _%>
+<&- partials.partialClassStaticFieldsSection() -&>
+<&- partials.partialClassFieldsSection() -&>
+<%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
+  <%_ if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
-  <%_ }
-  let required = false;
-  let unique = false;
-  const fieldValidate = field.fieldValidate;
-  const fieldValidateRulesMaxlength = field.fieldValidateRulesMaxlength;
-  const fieldType = field.fieldType;
-  const fieldName = field.fieldName;
-  const fieldNameUnderscored = field.fieldNameUnderscored;
-  const fieldNameAsDatabaseColumn = field.fieldNameAsDatabaseColumn;
-  if (fieldValidate === true) {
-    if (field.fieldValidationRequired) {
-      required = true;
-    }
-    if (field.fieldValidationUnique) {
-      unique = true;
-    } _%>
-    <%- include('../common/field_validators', {field, reactive}); -%>
   <%_ } _%>
-  <%_ if (!hasDto && typeof field.javadoc != 'undefined') { _%>
-    @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (required) { %>, required = true<% } %>)
+  <%_ if (!dtoMapstruct && typeof field.javadoc != 'undefined') { _%>
+    @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
-<&- partials.render({...partialOptions, partialField<%- field.fieldNameCapitalized %>AnnotationSection: true}) &>
-  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
-    @Field("<%= fieldNameUnderscored %>")
-  <%_ } _%>
-  <%_ if (databaseTypeNeo4j) { _%>
-    @Property("<%=fieldNameUnderscored %>")
-  <%_ } _%>
-  <%_ if (!field.blobContentTypeText) { _%>
-    private <%= fieldType %> <%= fieldName %>;
-  <%_ } else { _%>
-    private String <%= fieldName %>;
-  <%_ } _%>
+<&- partials.partialField<%- field.fieldNameCapitalized %>AnnotationSection() -&>
+    private <%= field.javaFieldType %> <%= field.fieldName %>;
 
   <%_ if (field.fieldWithContentType) { _%>
-<&- partials.render({...partialOptions, partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection: true}) &>
-    <%_ if (databaseTypeCassandra) { _%>
-    @Column(<% if (!databaseTypeCassandra) { %>name = <% } %>"<%- fieldNameAsDatabaseColumn %>_content_type"<% if (required && !databaseTypeCassandra) { %>, nullable = false<% } %>)
-      <%_ if (required && databaseTypeCassandra) { _%>
-    @NotNull
-      <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
-    @Field("<%= fieldNameUnderscored %>_content_type")
-    <%_ } _%>
-    <%_ if (databaseTypeNeo4j) { _%>
-    @Property("<%=fieldNameUnderscored %>_content_type")
-    <%_ } _%>
-    private String <%= fieldName %>ContentType;
+<&- partials.partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection() -&>
+    private String <%= field.fieldName %>ContentType;
 
   <%_ } _%>
 <%_ } _%>
+<&- partials.partialClassAdditionalFieldsSection() -&>
 
-<%_ relationships.forEach((relationship, idx) => {
-  const otherEntityRelationshipName =
-    databaseTypeNeo4j
-      ? "HAS_" + _.toUpper(_.snakeCase(relationship.otherEntityRelationshipName))
-      : relationship.otherEntityRelationshipName;
-  const otherEntityRelationshipNamePlural = relationship.otherEntityRelationshipNamePlural;
-  const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
-  const relationshipName =
-    databaseTypeNeo4j
-      ? "HAS_" + _.toUpper(_.snakeCase(relationship.relationshipName))
-      : relationship.relationshipName;
-  const relationshipFieldName = relationship.relationshipFieldName;
-  const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-  const relationshipValidate = relationship.relationshipValidate;
-  const relationshipRequired = relationship.relationshipRequired;
-  const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-  const ownerSide = relationship.ownerSide || false;
-  const isUsingMapsId = relationship.id;
-  if (otherEntityRelationshipName) {
-    mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
-  }
-
-    // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
-  if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
-    return;
-  }
-
+<%_
+// An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+for (relationship of relationships.filter(relationship => !relationship.embedded || relationship.otherEntity.embedded || relationship.ownerSide)) {
   if (typeof relationship.javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationship.javadoc) %>
-    <%_ if (!hasDto) { _%>
+    <%_ if (!dtoMapstruct) { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
     <%_ } _%>
   <%_ } _%>
-<&- partials.render({...partialOptions, partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection: true}) &>
+<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
-    <%_ if (databaseTypeSql && !reactive) { _%>
-    <%_ } else if (databaseTypeMongodb || databaseTypeCouchbase) {
-      if (databaseTypeMongodb && !otherEntityIsEmbedded) { _%>
-    @DBRef
-      <%_ } _%>
-    @Field("<%= relationshipFieldName %>")
-      <%_ if (databaseTypeCouchbase && !otherEntityIsEmbedded) { _%>
-    private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
-
-    @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-      <%_ } _%>
-    <%_ } else if (databaseTypeNeo4j) { _%>
-    @Relationship("<%= relationshipName %>")
-    <%_ } else if (databaseTypeSql && reactive) { _%>
-    @Transient
-    <%_ } _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
         <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
@@ -303,30 +138,9 @@ public class <%= persistClass %> implements Serializable {
         <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
 
-  <%_ } else if (relationship.relationshipManyToOne) {
-    if (databaseTypeSql && !reactive) { _%>
-      <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationship }); -%>
-      <%_ } _%>
-    <%_ } else if ((databaseTypeMongodb || databaseTypeCouchbase) && !otherEntityIsEmbedded) {
-        if (databaseTypeMongodb) { _%>
-    @DBRef
-      <%_ } _%>
-    @Field("<%= relationshipFieldName %>")
-      <%_ if (databaseTypeCouchbase) { _%>
-    private String <%= relationshipFieldName %>Id;
-
-    @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-      <%_ } _%>
-    <%_ } else if (databaseTypeNeo4j) { _%>
-      <%_ if (relationship.ignoreOtherSideProperty) { _%>
-    @Relationship(value = "<%= otherEntityRelationshipName %>", direction = Relationship.Direction.INCOMING)
-      <%_ } else {_%>
-    @Relationship("<%= relationshipName %>")
-      <%_ } _%>
-    <%_ } _%>
+  <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
@@ -334,49 +148,9 @@ public class <%= persistClass %> implements Serializable {
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
-    @Transient
-    <%_ } _%>
-    private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
-
-    <%_ if (databaseTypeSql && reactive) { _%>
-    @Column("<%= getColumnName(relationshipName) %>_id")
-    private <%= relationship.otherEntity.primaryKey.type %> <%= relationshipFieldName %>Id;
-    <%_ } _%>
+    private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
-    <%_ if (databaseTypeSql && !reactive) { _%>
-      <%_ if (ownerSide) { _%>
-        <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationship }); -%>
-        <%_ } _%>
-    @JoinTable(name = "<%= relationship.joinTable.name %>",
-               joinColumns = <%= entity.primaryKey.fields.length > 1 ? '{' : '' %>
-                   <%_ entity.primaryKey.fields.forEach((field, idx) => { _%>
-                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
-                   <%_ }); _%>
-               <%= entity.primaryKey.fields.length > 1 ? '}' : '' %>,
-               inverseJoinColumns = <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
-                   <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
-                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
-                   <%_ }); _%>
-               <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
-      <%_ } _%>
-    <%_ } else if ((databaseTypeMongodb || databaseTypeCouchbase) && !otherEntityIsEmbedded) { _%>
-      <%_ if (databaseTypeMongodb) { _%>
-    @DBRef
-      <%_ } _%>
-    @Field("<%= relationshipFieldNamePlural %>")
-      <%_ if (databaseTypeCouchbase) { _%>
-    private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
-
-    @N1qlJoin(on = "lks.<%= relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-      <%_ } _%>
-    <%_ } else if (databaseTypeNeo4j) { _%>
-    @Relationship(<%_
-            if (ownerSide) { _%>"<%= relationshipName %>"<%_
-            } else { _%>value = "<%= otherEntityRelationshipName %>", direction = Relationship.Direction.INCOMING<%_ } _%>)
-    <%_ } _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
@@ -384,286 +158,168 @@ public class <%= persistClass %> implements Serializable {
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
-    @Transient
-    <%_ } _%>
-    private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
 
-  <%_ } else {
-    if (databaseTypeSql && !reactive) {
-      if (relationship.ignoreOtherSideProperty) { _%>
-    @JsonIgnoreProperties(value = {
-        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.relationshipReferenceField %>",
-        <%_ }); _%>
-    }, allowSetters = true)
-      <%_ } _%>
-      <%_ if (ownerSide) { _%>
-    @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
-        <%_ if (relationshipValidate) { _%>
-    <%- include('relationship_validators', { relationship }); -%>
-        <%_ } _%>
-        <%_ if (isUsingMapsId) { %>
-    @MapsId
-    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.fields[0].columnName %>")
-        <%_ } else { _%>
-    @JoinColumn(unique = true)
-        <%_ } _%>
-      <%_ } else { _%>
-    @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
-      <%_ } _%>
-    <%_ } else if ((databaseTypeMongodb || databaseTypeCouchbase) && !otherEntityIsEmbedded) { _%>
-      <%_ if (databaseTypeMongodb) { _%>
-    @DBRef
-      <%_ } _%>
-    @Field("<%= relationshipFieldName %>")
-      <%_ if (databaseTypeCouchbase) { _%>
-    private String <%= relationshipFieldName %>Id;
-
-    @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-      <%_ } _%>
-    <%_ } else if (databaseTypeSql && reactive) { _%>
-      <%_ if (ownerSide && !isUsingMapsId) { _%>
-    private <%= relationship.otherEntity.primaryKey.type %> <%= relationshipFieldName %>Id;
-
-      <%_ } _%>
-    @Transient
-    <%_ } else if (databaseTypeNeo4j) { _%>
-    @Relationship("<%= relationshipName %>")
-    <%_ } _%>
-    private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
-
+  <%_ } else { _%>
+    private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
   <%_ } _%>
-<%_ }); _%>
+
+<%_ }; _%>
+<&- partials.partialClassAdditionalRelationshipsSection() -&>
     // jhipster-needle-entity-add-field - JHipster will add fields here
-<%_ if (!embedded) { _%>
-    public <%= primaryKey.type %> get<%= primaryKey.nameCapitalized %>() {
-        return <%= primaryKey.name %>;
-    }
+<%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
 
-    public void set<%= primaryKey.nameCapitalized %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
-        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
-    }
-
-  <%_ if (fluentMethods) { _%>
-    public <%= persistClass %> <%= primaryKey.name %>(<%= primaryKey.type %> <%= primaryKey.name %>) {
-        this.<%= primaryKey.name %> = <%= primaryKey.name %>;
-        return this;
-    }
-  <%_ } _%>
-<%_ } _%>
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-  const fieldType = field.fieldType;
-  const fieldName = field.fieldName;
-  const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod; _%>
-
-  <%_ if (!field.blobContentTypeText) { _%>
-    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
-  <%_ } else { _%>
-    public String get<%= fieldInJavaBeanMethod %>() {
-  <%_ } _%>
-        return this.<%= fieldName %>;
+    public <%= field.javaFieldType %> get<%= field.fieldInJavaBeanMethod %>() {
+        return this.<%= field.fieldName %>;
     }
   <%_ if (fluentMethods) { _%>
 
-    <%_ if (!field.blobContentTypeText) { _%>
-    public <%= persistClass %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
-    <%_ } else { _%>
-    public <%= persistClass %> <%= fieldName %>(String <%= fieldName %>) {
-    <%_ } _%>
-    <%_ if (field.fieldTypeBigDecimal && databaseTypeSql && reactive) { _%>
-        this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
-    <%_ } else { _%>
-        this.<%= fieldName %> = <%= fieldName %>;
-    <%_ } _%>
+    public <%= persistClass %> <%= field.fieldName %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
+        this.set<%= field.fieldInJavaBeanMethod %>(<%= field.fieldName %>);
         return this;
     }
   <%_ } _%>
 
-  <%_ if (!field.blobContentTypeText) { _%>
-    public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
-  <%_ } else { _%>
-    public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
-  <%_ } _%>
-  <%_ if (field.fieldTypeBigDecimal && databaseTypeSql && reactive) { _%>
-        this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
-  <%_ } else { _%>
-        this.<%= fieldName %> = <%= fieldName %>;
-  <%_ } _%>
+<&- partials.partialField<%- field.fieldNameCapitalized %>CustomSetSection() -&>
+<&_ if (!partials.partialField<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
+    public void set<%= field.fieldInJavaBeanMethod %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
+        this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
+<&_ } -&>
   <%_ if (field.fieldWithContentType) { _%>
 
-    public String get<%= fieldInJavaBeanMethod %>ContentType() {
-        return this.<%= fieldName %>ContentType;
+    public String get<%= field.fieldInJavaBeanMethod %>ContentType() {
+        return this.<%= field.fieldName %>ContentType;
     }
     <%_ if (fluentMethods) { _%>
 
-    public <%= persistClass %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
-        this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
+    public <%= persistClass %> <%= field.fieldName %>ContentType(String <%= field.fieldName %>ContentType) {
+        this.<%= field.fieldName %>ContentType = <%= field.fieldName %>ContentType;
         return this;
     }
     <%_ } _%>
 
-    public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
-        this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
+    public void set<%= field.fieldInJavaBeanMethod %>ContentType(String <%= field.fieldName %>ContentType) {
+        this.<%= field.fieldName %>ContentType = <%= field.fieldName %>ContentType;
     }
   <%_ } _%>
 <%_ } _%>
+
+<&- partials.partialClassAdditionalFieldsMethodsSection('\n\n') -&>
 <%_
 for (const relationship of relationships) {
-  const relationshipFieldName = relationship.relationshipFieldName;
-  const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-  const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
-  const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
-  const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
-  const otherEntityName = relationship.otherEntityName;
-  const otherEntityNamePlural = relationship.otherEntityNamePlural;
-  const otherEntityRelationshipNameCapitalized = relationship.otherEntityRelationshipNameCapitalized;
-  const otherEntityRelationshipNameCapitalizedPlural = relationship.otherEntityRelationshipNameCapitalizedPlural;
-  const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
-  const ownerSide = relationship.ownerSide || false;
-
-        // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
-  if (embedded && !otherEntityIsEmbedded && !ownerSide) {
+  // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+  if (embedded && !relationship.otherEntity.embedded && !relationship.ownerSide) {
     continue;
   }
-
-  const id = relationship.id;
-  const reactiveRelationshipWithId = (databaseTypeSql && reactive && !(relationship.relationshipOneToOne &&
-    (!ownerSide || (ownerSide && id))));
 _%>
-  <%_ if (relationship.relationshipOneToMany || relationship.relationshipManyToMany) { _%>
-
-    public Set<<%= asEntity(otherEntityNameCapitalized) %>> get<%= relationshipNameCapitalizedPlural %>() {
-        return this.<%= relationshipFieldNamePlural %>;
-    }
-    <%_ if (fluentMethods) { _%>
-
-    public <%= persistClass %> <%= relationshipFieldNamePlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
-        this.set<%= relationshipNameCapitalizedPlural %>(<%= otherEntityNamePlural %>);
-      <%_ if (databaseTypeCouchbase && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
-            .map(<%= asEntity(otherEntityNameCapitalized) %>::getId)
-            .collect(Collectors.toSet());
-      <%_ } _%>
-        return this;
+  <%_ if (relationship.collection) { _%>
+    public Set<<%= relationship.otherEntity.persistClass %>> get<%= relationship.relationshipNameCapitalizedPlural %>() {
+        return this.<%= relationship.relationshipFieldNamePlural %>;
     }
 
-    public <%= persistClass %> add<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
-      <%_ if (!otherEntityIsEmbedded || embedded && ownerSide) { _%>
-        <%_ if (databaseTypeCouchbase && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Ids.add(<%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>());
-        <%_ } _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (relationship.relationshipOneToMany) { _%>
-            <%_ if (!databaseTypeNeo4j) { _%>
-        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
-            <%_ } _%>
-          <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && !relationship.otherEntityUser && relationship.relationshipManyToMany) {
-                /* JHipster version < 3.6.0 didn't ask for this relationship name */ _%>
-        <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
-          <%_ } _%>
-        <%_ } _%>
-      <%_ } _%>
-        return this;
+  <%_ } else { _%>
+    public <%= relationship.otherEntity.persistClass %> get<%= relationship.relationshipNameCapitalized %>() {
+        return this.<%= relationship.relationshipFieldName %>;
     }
 
-    public <%= persistClass %> remove<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
-      <%_ if (!otherEntityIsEmbedded || (embedded && ownerSide)) { _%>
-        <%_ if (databaseTypeCouchbase && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Ids.remove(<%= otherEntityName %>.get<%= primaryKey.nameCapitalized %>());
-        <%_ } _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (relationship.relationshipOneToMany) { _%>
-            <%_ if (!databaseTypeNeo4j) { _%>
-        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
-            <%_ } _%>
-          <%_ } else if (otherEntityRelationshipNameCapitalizedPlural && !relationship.otherEntityUser && relationship.relationshipManyToMany) {
-                /* JHipster version < 3.6.0 didn't ask for this relationship name */ _%>
-        <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
-          <%_ } _%>
-        <%_ } _%>
-      <%_ } _%>
-        return this;
-    }
-    <%_ } _%>
-
-    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
+  <%_ } _%>
+<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection() -&>
+<&_ if (!partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
+  <%_ if (relationship.collection) { _%>
+    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
-        if (this.<%= relationshipFieldNamePlural %> != null) {
+        if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            this.<%= relationshipFieldNamePlural %>.forEach(i -> i.remove<%= otherEntityRelationshipNameCapitalized %>(this));
+            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            this.<%= relationshipFieldNamePlural %>.forEach(i -> i.set<%= otherEntityRelationshipNameCapitalized %>(null));
+            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
       <%_ } _%>
         }
-        if (<%= otherEntityNamePlural %> != null) {
+        if (<%= relationship.otherEntityNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            <%= otherEntityNamePlural %>.forEach(i -> i.add<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%= relationship.otherEntityNamePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= otherEntityNamePlural %>.forEach(i -> i.set<%= otherEntityRelationshipNameCapitalized %>(this));
+            <%= relationship.otherEntityNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } _%>
         }
     <%_ } _%>
-        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
-    <%_ if (databaseTypeCouchbase && !otherEntityIsEmbedded) { _%>
-        this.<%= relationshipFieldName %>Ids = <%= otherEntityNamePlural %>.stream()
-            .map(<%= asEntity(otherEntityNameCapitalized) %>::getId)
-            .collect(Collectors.toSet());
-    <%_ } _%>
+        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntityNamePlural %>;
     }
   <%_ } else { _%>
-
-    public <%= asEntity(otherEntityNameCapitalized) %> get<%= relationshipNameCapitalized %>() {
-        return this.<%= relationshipFieldName %>;
+    public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+    <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+        if (this.<%= relationship.relationshipFieldName %> != null) {
+      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+      <%_ } else { _%>
+            this.<%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
+      <%_ } _%>
+        }
+        if (<%= relationship.otherEntityName %> != null) {
+      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+            <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+      <%_ } else { _%>
+            <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+      <%_ } _%>
+        }
+    <%_ } _%>
+        this.<%= relationship.relationshipFieldName %> = <%= relationship.otherEntityName %>;
     }
+  <%_ } _%>
+<&_ } -&>
     <%_ if (fluentMethods) { _%>
+      <%_ if (relationship.collection) { _%>
 
-    public <%= persistClass %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-        this.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
-      <%_ if ((databaseTypeCouchbase && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
+    public <%= persistClass %> <%= relationship.relationshipFieldNamePlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
+        this.set<%= relationship.relationshipNameCapitalizedPlural %>(<%= relationship.otherEntityNamePlural %>);
+        return this;
+    }
+
+<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection() -&>
+<&_ if (!partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection()) { -&>
+    public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+        this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
+      <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
+        <%_ if (relationship.otherRelationship) { _%>
+          <%_ if (!relationship.otherRelationship.collection) { _%>
+        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+          <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().add(this);
+          <%_ } _%>
+        <%_ } _%>
       <%_ } _%>
         return this;
     }
-    <%_ } _%>
+<&_ } -&>
 
-    public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
-    <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
-        if (this.<%= relationshipFieldName %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            this.<%= relationshipFieldName %>.remove<%= otherEntityRelationshipNameCapitalized %>(this);
-      <%_ } else { _%>
-            this.<%= relationshipFieldName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
+<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection() -&>
+<&_ if (!partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection()) { -&>
+    public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+        this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
+      <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
+        <%_ if (relationship.otherRelationship) { _%>
+          <%_ if (!relationship.otherRelationship.collection) { _%>
+        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
+          <%_ } else if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().remove(this);
+          <%_ } _%>
+        <%_ } _%>
       <%_ } _%>
-        }
-        if (<%= otherEntityName %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
-            <%= otherEntityName %>.add<%= otherEntityRelationshipNameCapitalized %>(this);
+        return this;
+    }
+<&_ } -&>
       <%_ } else { _%>
-            <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+
+    public <%= persistClass %> <%= relationship.relationshipFieldName %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+        this.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntityName %>);
+        return this;
+    }
       <%_ } _%>
-        }
     <%_ } _%>
-        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-    <%_ if ((databaseTypeCouchbase && !otherEntityIsEmbedded) || reactiveRelationshipWithId) { _%>
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
-    <%_ } _%>
-    }
-    <%_ if (reactiveRelationshipWithId) { _%>
 
-    public <%= relationship.otherEntity.primaryKey.type %> get<%= relationshipNameCapitalized %>Id() {
-        return this.<%= relationshipFieldName %>Id;
-    }
-
-    public void set<%= relationshipNameCapitalized %>Id(<%= relationship.otherEntity.primaryKey.type %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldName %>Id = <%= otherEntityName %>;
-    }
-    <%_ } _%>
-  <%_ } _%>
 <%_ } _%>
+<&- partials.partialClassAdditionalRelationshipsMethodsSection() -&>
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -695,26 +351,18 @@ _%>
             "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-  const fieldName = field.fieldName;
-  const fieldInJavaBeanMethod = field.fieldInJavaBeanMethod;
   const isNumeric = field.fieldTypeNumeric; _%>
-            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            ", <%= field.fieldName %>=<% if (! isNumeric) { %>'<% } %>" + get<%= field.fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
   <%_ if (field.fieldWithContentType) { _%>
-            ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
+            ", <%= field.fieldName %>ContentType='" + get<%= field.fieldInJavaBeanMethod %>ContentType() + "'" +
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships) {
-  const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
-  const relationshipFieldName = relationship.relationshipFieldName;
-  const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
-  const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-  const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
-  const ownerSide = relationship.ownerSide; _%>
-  <%_ if (otherEntityIsEmbedded) {
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.otherEntity.embedded) {
     if (relationship.relationshipManyToOne) { _%>
-            ", <%= relationshipFieldNamePlural %>='" + get<%= relationshipNameCapitalizedPlural %>() + "'" +
-    <%_ } else if (relationship.relationshipOneToOne && ownerSide) { _%>
-            ", <%= relationshipFieldName %>='" + get<%= relationshipNameCapitalized %>() + "'" +
+            ", <%= relationship.relationshipFieldNamePlural %>='" + get<%= relationship.relationshipNameCapitalizedPlural %>() + "'" +
+    <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>
+            ", <%= relationship.relationshipFieldName %>='" + get<%= relationship.relationshipNameCapitalized %>() + "'" +
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
