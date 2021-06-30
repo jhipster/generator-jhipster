@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const { writeFiles } = require('./files');
+const { gatlingFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { GENERATOR_ENTITY_GATLING } = require('../generator-list');
@@ -58,8 +58,6 @@ module.exports = class extends BaseBlueprintGenerator {
         // write gatling simulation side files
         await this.writeFilesToDisk(gatlingFiles);
       },
-  };
-}
     };
   }
 
