@@ -5,6 +5,8 @@ const normalizePath = require('normalize-path');
 const simpleGit = require('simple-git');
 
 const { skipPrettierHelpers: helpers } = require('./utils/utils');
+const { defaultConfig } = require('../generators/init/config');
+const testDefaultConfg = { ...defaultConfig, jhipsterVersion: '0.0.0' };
 
 describe('JHipster init generator', () => {
   describe('with default options', () => {
@@ -14,6 +16,15 @@ describe('JHipster init generator', () => {
     });
     it('should create expected files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+  describe('with skipPrompts option', () => {
+    let runResult;
+    before(async () => {
+      runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ skipPrompts: true });
+    });
+    it('should load default config into the generator', () => {
+      expect(runResult.generator).toMatchObject(testDefaultConfg);
     });
   });
   describe('with custom prompt values', () => {

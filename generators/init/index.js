@@ -28,7 +28,7 @@ const { defaultConfig, requiredConfig } = require('./config');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
     this.jhipsterOptions(initOptions);
 
