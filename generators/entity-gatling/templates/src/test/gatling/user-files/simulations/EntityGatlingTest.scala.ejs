@@ -145,12 +145,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .pause(10)
         .repeat(2) {
             exec(http("Get all <%= entityInstancePlural %>")
-            .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .get("<% if (applicationTypeGateway) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new <%= entityInstance %>")
-            .post("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .post("<% if (applicationTypeGateway) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
 <%_ fields.filter(f => !(f.id && f.autoGenerate)).forEach((field, idx) => { _%>
@@ -162,12 +162,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .pause(10)
             .repeat(5) {
                 exec(http("Get created <%= entityInstance %>")
-                .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+                .get("<% if (applicationTypeGateway) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
             .exec(http("Delete created <%= entityInstance %>")
-            .delete("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+            .delete("<% if (applicationTypeGateway) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }
