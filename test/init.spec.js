@@ -38,7 +38,7 @@ describe('JHipster init generator', () => {
       before(async () => {
         runResult = await helpers
           .run(path.join(__dirname, '../generators/init'))
-          .withOptions({ skipPrompts: true })
+          .withOptions({ skipPrompts: true, baseName: 'jhipster' })
           .withPrompts(promptValues);
       });
       it('should write default values to .yo-rc.json', () => {
