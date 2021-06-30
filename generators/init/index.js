@@ -43,7 +43,9 @@ module.exports = class extends BaseBlueprintGenerator {
       });
     }
 
-    this.instantiateBlueprints(GENERATOR_INIT);
+    if (!this.fromBlueprint) {
+      this.instantiateBlueprints(GENERATOR_INIT);
+    }
   }
 
   _initializing() {
