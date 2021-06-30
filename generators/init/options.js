@@ -20,9 +20,15 @@
 module.exports.options = {
   'jhipster-version': {
     desc: 'Force jhipsterVersion for reproducibility',
-    type: Boolean,
+    type: String,
     hide: true,
     scope: 'storage',
+  },
+  'base-name': {
+    desc: 'Application base name',
+    type: String,
+    scope: 'storage',
+    hide: true,
   },
   'skip-commit-hook': {
     desc: 'Skip adding husky commit hooks',

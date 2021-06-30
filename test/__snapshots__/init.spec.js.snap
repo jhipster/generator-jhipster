@@ -76,7 +76,7 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"baseName\\": \\"8a2732dd48e2bf5a4f56ab5e85900d6d74a99c5c\\",
+    \\"baseName\\": \\"jhipster\\",
     \\"projectName\\": \\"JHipster project\\"
   }
 }
