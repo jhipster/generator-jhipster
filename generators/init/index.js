@@ -146,8 +146,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _writing() {
     return {
-      writeFiles() {
-        return this.writeFilesToDisk(files);
+      async writeFiles() {
+        await this.writeFilesToDisk(files);
       },
     };
   }
