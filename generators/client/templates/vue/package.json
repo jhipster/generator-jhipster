@@ -49,7 +49,7 @@
     "jest-sonar-reporter": "2.0.0",
     "jest-vue-preprocessor": "1.7.1",
     "merge-jsons-webpack-plugin": "1.0.21",
-    "mini-css-extract-plugin": "1.6.2",
+    "mini-css-extract-plugin": "2.0.0",
     "node-notifier": "9.0.1",
     "numeral": "2.0.6",
     "portfinder": "1.0.28",
