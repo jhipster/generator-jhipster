@@ -29,7 +29,7 @@ const NODE_VERSION = '14.17.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
-const GRADLE_VERSION = '7.0.2';
+const GRADLE_VERSION = '7.1.1';
 const JIB_VERSION = '3.1.1';
 
 // Libraries version
@@ -53,7 +53,7 @@ const DOCKER_MYSQL = 'mysql:8.0.25';
 const DOCKER_MARIADB = 'mariadb:10.6.1';
 const DOCKER_POSTGRESQL = 'postgres:13.3';
 const DOCKER_MONGODB = 'mongo:4.4.6';
-const DOCKER_COUCHBASE = 'couchbase:6.6.2';
+const DOCKER_COUCHBASE = 'couchbase/server:6.6.2';
 const DOCKER_CASSANDRA = 'cassandra:3.11.10';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04';
 const DOCKER_NEO4J = 'neo4j:4.2.7';

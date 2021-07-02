@@ -42,6 +42,7 @@ const Generators = {
   GENERATOR_KUBERNETES: 'kubernetes',
   GENERATOR_KUBERNETES_HELM: 'kubernetes-helm',
   GENERATOR_KUBERNETES_KNATIVE: 'kubernetes-knative',
+  GENERATOR_INIT: 'init',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
   GENERATOR_SERVER: 'server',

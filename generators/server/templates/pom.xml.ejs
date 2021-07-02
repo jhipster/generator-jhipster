@@ -1544,10 +1544,21 @@
                         <version>${checksum-maven-plugin.version}</version>
                         <executions>
                             <execution>
+                                <id>create-pre-compiled-webapp-checksum</id>
                                 <goals>
                                     <goal>files</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
+                            </execution>
+                            <execution>
+                                <id>create-compiled-webapp-checksum</id>
+                                <goals>
+                                    <goal>files</goal>
+                                </goals>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <csvSummaryFile>checksums.csv.old</csvSummaryFile>
+                                </configuration>
                             </execution>
                         </executions>
                         <configuration>
@@ -1556,8 +1567,20 @@
                                     <directory>${project.basedir}</directory>
                                     <includes>
                                         <include><%= MAIN_DIR %>webapp/**/*.*</include>
+                                        <include>target/classes/static/**/*.*</include>
+                                        <include>package-lock.json</include>
                                         <include>package.json</include>
                                         <include>webpack/*.*</include>
+                                        <include>tsconfig.json</include>
+<%_ if (clientFrameworkAngular) { _%>
+                                        <include>tsconfig.app.json</include>
+<%_ } _%>
+<%_ if (clientFrameworkReact) { _%>
+                                        <include>.postcss.config.js</include>
+<%_ } _%>
+<%_ if (clientFrameworkVue) { _%>
+                                        <include>.postcssrc.js</include>
+<%_ } _%>
                                     </includes>
                                     <excludes>
                                         <exclude>**/app/**/service-worker.js</exclude>
@@ -1595,7 +1618,6 @@
                                                 <filesmatch file1="${project.build.directory}/checksums.csv" file2="${project.build.directory}/checksums.csv.old" />
                                             </and>
                                         </condition>
-                                        <copy file="${project.build.directory}/checksums.csv" tofile="${project.build.directory}/checksums.csv.old"/>
                                     </target>
                                     <exportAntProperties>true</exportAntProperties>
                                 </configuration>

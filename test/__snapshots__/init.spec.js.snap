@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster init generator with custom prompt values and askAnswered option on an exiting project should write custom prompt values 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"BeautifulProject\\",
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"projectName\\": \\"Beautiful Project\\",
+    \\"prettierDefaultIndent\\": 4,
+    \\"prettierJavaIndent\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom prompt values and askAnsweredOption on a exiting project should write custom prompt values 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"BeautifulProject\\",
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"projectName\\": \\"Beautiful Project\\",
+    \\"prettierDefaultIndent\\": 4,
+    \\"prettierJavaIndent\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom prompt values and default options should write custom config to .yo-rc.json 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"projectName\\": \\"Beautiful Project\\",
+    \\"baseName\\": \\"BeautifulProject\\",
+    \\"prettierDefaultIndent\\": 4,
+    \\"prettierJavaIndent\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom prompt values and existing config should not write custom prompt values 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"baseName\\": \\"existing\\",
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"projectName\\": \\"JHipster project\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom prompt values and skipPrompts option should write default values to .yo-rc.json 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"baseName\\": \\"jhipster\\",
+    \\"projectName\\": \\"JHipster project\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom skipCommitHook option should create expected files 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with default options should create expected files 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".huskyrc": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

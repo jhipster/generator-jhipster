@@ -489,7 +489,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;      
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+        <%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
         authorityRepository
             .findById(AuthoritiesConstants.USER)
             .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
@@ -526,7 +526,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-        <%_ if (databaseType === 'sql') { _%>
+        <%_ if (databaseTypeSql && !applicationTypeMicroservice) { _%>
         assertThat(foundUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
         <%_ } _%>
         <%_ } _%>
@@ -539,7 +539,7 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+        <%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
         authorityRepository
             .findById(AuthoritiesConstants.USER)
             .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
@@ -577,10 +577,12 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
             .jsonPath("$.firstName").isEqualTo(DEFAULT_FIRSTNAME)
             .jsonPath("$.lastName").isEqualTo(DEFAULT_LASTNAME)
             .jsonPath("$.email").isEqualTo(DEFAULT_EMAIL)
-            <%_ if (databaseType !== 'cassandra') { _%>
+                <%_ if (!databaseTypeCassandra) { _%>
             .jsonPath("$.imageUrl").isEqualTo(DEFAULT_IMAGEURL)
-            <%_ } _%>
-            .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY)<% if (databaseType !== 'sql') { %>;<% } else { %>
+                <%_ } _%>
+            .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY)<%
+                if (!databaseTypeSql || applicationTypeMicroservice) { %>;
+            <%_ } else { _%>
             .jsonPath("$.authorities")
             .isEqualTo(AuthoritiesConstants.USER);
             <% } %>

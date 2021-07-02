@@ -26,7 +26,7 @@
 
   <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration">
     <thead>
-      <tr <%= jhiPrefix %>Sort predicate="prefix" [(ascending)]="beansAscending" [callback]="filterAndSortBeans.bind(this)">
+      <tr <%= jhiPrefix %>Sort predicate="prefix" [(ascending)]="beansAscending" (sortChange)="filterAndSortBeans()">
         <th <%= jhiPrefix %>SortBy="prefix" scope="col" class="w-40">
           <span <%= jhiPrefix %>Translate="configuration.table.prefix">Prefix</span> <fa-icon icon="sort"></fa-icon>
         </th>

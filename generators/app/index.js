@@ -260,6 +260,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('reactive', {
+      desc: 'Generate a reactive backend',
+      type: Boolean,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;

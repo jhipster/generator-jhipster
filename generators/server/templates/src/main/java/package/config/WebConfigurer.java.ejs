@@ -111,7 +111,12 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         this.jHipsterProperties = jHipsterProperties;
 <%_ if (devDatabaseTypeH2Any && reactive) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            H2ConfigurationHelper.initH2Console();
+            try {
+                H2ConfigurationHelper.initH2Console();
+            } catch (Exception e) {
+                // Console may already be running on another app or after a refresh.
+                e.printStackTrace();
+            };
         }
 <%_ } _%>  
     }

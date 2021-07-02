@@ -31,8 +31,8 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
-const { defaultConfig } = require('./generator-defaults');
-const { defaultConfigMicroservice } = require('./generator-defaults');
+const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
+const { defaultConfig: initDefaultConfig } = require('./init/config');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -62,6 +62,13 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
+
+/* Taken from commander.js source code, options camelCase must match */
+function camelcase(str) {
+  return str.split('-').reduce((str, word) => {
+    return str + word[0].toUpperCase() + word.slice(1);
+  });
+}
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -2423,6 +2430,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.microfrontend = options.microfrontend;
     }
 
+    if (options.reactive !== undefined) {
+      this.jhipsterConfig.reactive = options.reactive;
+    }
+
     if (options.clientPackageManager) {
       this.jhipsterConfig.clientPackageManager = options.clientPackageManager;
     }
@@ -2450,8 +2461,44 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.logo = config.logo;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
+
+    config.dependabotDependencies = config.dependabotDependencies || {
+      prettier: packagejs.dependencies.prettier,
+      'prettier-plugin-java': packagejs.dependencies['prettier-plugin-java'],
+      'prettier-plugin-packagejson': packagejs.dependencies['prettier-plugin-packagejson'],
+    };
+    dest.dependabotDependencies = config.dependabotDependencies;
+
+    // Deprecated use dependabotDependencies instead
     config.dependabotPackageJson = config.dependabotPackageJson || {};
     dest.dependabotPackageJson = config.dependabotPackageJson;
+  }
+
+  /**
+   * Load init configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} config - config to load config from
+   * @param {any} dest - destination context to use default is context
+   */
+  loadInitConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
+    dest.jhipsterVersion = config.jhipsterVersion;
+    dest.baseName = config.baseName;
+    dest.projectName = config.projectName;
+    dest.prettierDefaultIndent = config.prettierDefaultIndent;
+    dest.prettierJavaIndent = config.prettierJavaIndent;
+    dest.skipCommitHook = config.skipCommitHook;
+  }
+
+  /**
+   * Load derived init configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} dest - source/destination context
+   */
+  loadDerivedInitConfig(dest = this) {
+    dest.dasherizedBaseName = _.kebabCase(dest.baseName);
+    dest.humanizedBaseName = _.startCase(dest.baseName);
   }
 
   /**
@@ -2735,5 +2782,41 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   getR2DBCUrl(databaseType, options = {}) {
     return this.getDBCUrl(databaseType, 'r2dbc', options);
+  }
+
+  showHello() {
+    if (this.configOptions.showHello === false) return false;
+    this.configOptions.showHello = false;
+    return true;
+  }
+
+  /**
+   * Load dependabot package.json into shared dependabot dependencies.
+   * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
+   * @param String dependabotFile - package.json path
+   */
+  loadDependabotDependencies(dependabotFile) {
+    _.merge(this.configOptions.dependabotDependencies, this.fs.readJSON(dependabotFile).dependencies);
+  }
+
+  /**
+   * Load options from an object.
+   * When composing, we need to load options from others generators, externalising options allow to easily load them.
+   * @param String options - Object containing options.
+   */
+  jhipsterOptions(options = {}) {
+    Object.entries(options).forEach(([optionName, optionDesc]) => {
+      this.option(optionName, optionDesc);
+      if (!optionDesc.scope) return;
+      const camelCaseName = camelcase(optionName);
+      const optionValue = this.options[camelCaseName];
+      if (optionValue !== undefined) {
+        if (optionDesc.scope === 'storage') {
+          this.config.set(camelCaseName, optionValue);
+        } else if (optionDesc.scope === 'runtime') {
+          this.configOptions[camelCaseName] = optionValue;
+        }
+      }
+    });
   }
 };
