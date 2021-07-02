@@ -386,7 +386,6 @@ const expectedFiles = {
     '.eslintrc.json',
     'package.json',
     '.browserslistrc',
-    '.npmrc',
     `${CLIENT_MAIN_SRC_DIR}main.ts`,
     `${CLIENT_MAIN_SRC_DIR}bootstrap.ts`,
     `${CLIENT_MAIN_SRC_DIR}declarations.d.ts`,
