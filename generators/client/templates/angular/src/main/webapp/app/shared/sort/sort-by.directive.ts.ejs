@@ -28,9 +28,9 @@ import { SortDirective } from './sort.directive';
   selector: '[<%= jhiPrefix %>SortBy]',
 })
 export class SortByDirective<T> implements AfterContentInit, OnDestroy {
-  @Input() <%= jhiPrefix %>SortBy?: T;
+  @Input() <%= jhiPrefix %>SortBy!: T;
 
-  @ContentChild(FaIconComponent, { static: true })
+  @ContentChild(FaIconComponent, { static: false })
   iconComponent?: FaIconComponent;
 
   sortIcon = faSort;
@@ -46,7 +46,9 @@ export class SortByDirective<T> implements AfterContentInit, OnDestroy {
 
   @HostListener('click')
   onClick(): void {
-    this.sort.sort(this.<%= jhiPrefix %>SortBy);
+    if (this.iconComponent) {
+      this.sort.sort(this.<%= jhiPrefix %>SortBy);
+    }
   }
 
   ngAfterContentInit(): void {

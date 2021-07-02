@@ -26,7 +26,7 @@
 
   <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
     <thead>
-      <tr <%= jhiPrefix %>Sort [(predicate)]="orderProp" [(ascending)]="ascending" [callback]="filterAndSort.bind(this)">
+      <tr <%= jhiPrefix %>Sort [(predicate)]="orderProp" [(ascending)]="ascending" (sortChange)="filterAndSort()">
         <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
         <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level">Level</span> <fa-icon icon="sort"></fa-icon></th>
       </tr>
