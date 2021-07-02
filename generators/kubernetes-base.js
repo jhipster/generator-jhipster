@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const crypto = require('crypto');
+const { defaultKubernetesConfig } = require('./generator-defaults');
 const { loadFromYoRc } = require('./docker-base');
 const constants = require('./generator-constants');
 const { MICROSERVICE } = require('../jdl/jhipster/application-types');
@@ -30,7 +33,7 @@ module.exports = {
   saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
-  derivedDeploymentProperties,
+  derivedKubernetesPlatformProperties,
 };
 
 function checkKubernetes() {
@@ -81,24 +84,29 @@ function loadConfig() {
 }
 
 function saveConfig() {
-  this.config.set({
-    appsFolders: this.appsFolders,
-    directoryPath: this.directoryPath,
-    clusteredDbApps: this.clusteredDbApps,
-    serviceDiscoveryType: this.serviceDiscoveryType,
-    jwtSecretKey: this.jwtSecretKey,
-    dockerRepositoryName: this.dockerRepositoryName,
-    dockerPushCommand: this.dockerPushCommand,
-    kubernetesNamespace: this.kubernetesNamespace,
-    kubernetesServiceType: this.kubernetesServiceType,
-    kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
-    kubernetesStorageClassName: this.kubernetesStorageClassName,
-    generatorType: this.generatorType,
-    ingressType: this.ingressType,
-    ingressDomain: this.ingressDomain,
-    monitoring: this.monitoring,
-    istio: this.istio,
-  });
+  this.config.set(
+    _.defaults(
+      {
+        appsFolders: this.appsFolders,
+        directoryPath: this.directoryPath,
+        clusteredDbApps: this.clusteredDbApps,
+        serviceDiscoveryType: this.serviceDiscoveryType,
+        jwtSecretKey: this.jwtSecretKey,
+        dockerRepositoryName: this.dockerRepositoryName,
+        dockerPushCommand: this.dockerPushCommand,
+        kubernetesNamespace: this.kubernetesNamespace,
+        kubernetesServiceType: this.kubernetesServiceType,
+        kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
+        kubernetesStorageClassName: this.kubernetesStorageClassName,
+        generatorType: this.generatorType,
+        ingressType: this.ingressType,
+        ingressDomain: this.ingressDomain,
+        monitoring: this.monitoring,
+        istio: this.istio,
+      },
+      defaultKubernetesConfig
+    )
+  );
 }
 
 function setupKubernetesConstants() {
@@ -112,7 +120,7 @@ function setupKubernetesConstants() {
   this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
 }
 
-function derivedDeploymentProperties(dest = this) {
+function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
   dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
   dest.ingressTypeNginx = dest.ingressType === 'nginx';
   dest.ingressTypeGke = dest.ingressType === 'gke';

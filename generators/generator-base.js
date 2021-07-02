@@ -2631,10 +2631,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
-    if (dest.serviceDiscoveryType === undefined) {
-      dest.serviceDiscoveryType = EUREKA;
-    }
-
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
   }
@@ -2708,7 +2704,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return { ...defaultApplicationOptions.getConfigForApplicationType(applicationType), ...defaultConfig };
   }
 
-  setConfigDefaults(defaults = this.jhipsterConfig.applicationType !== MICROSERVICE ? defaultConfig : defaultConfigMicroservice) {
+  setConfigDefaults(defaults = this.jhipsterConfig.applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();

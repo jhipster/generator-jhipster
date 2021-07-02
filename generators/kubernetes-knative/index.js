@@ -25,6 +25,7 @@ const { writeFiles } = require('./files');
 const BaseDockerGenerator = require('../generator-base-docker');
 const { GENERATOR_KUBERNETES_KNATIVE } = require('../generator-list');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const {
   checkHelm,
@@ -33,7 +34,7 @@ const {
   saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
-  derivedDeploymentProperties,
+  derivedKubernetesPlatformProperties,
 } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
@@ -120,7 +121,7 @@ module.exports = class extends BaseDockerGenerator {
       setPostPromptProp() {
         this.appConfigs.forEach(element => {
           element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === 'kafka') {
+          if (element.messageBroker === KAFKA) {
             this.useKafka = true;
           }
         });
@@ -137,13 +138,13 @@ module.exports = class extends BaseDockerGenerator {
   _loading() {
     return {
       loadSharedConfig() {
-        this.loadDeploymentConfig(this);
         this.appConfigs.forEach(element => {
           this.loadServerConfig(element);
           this.loadDerivedServerConfig(element);
           this.loadDerivedAppConfig(element);
         });
-        derivedDeploymentProperties(this);
+        this.loadDeploymentConfig(this);
+        derivedKubernetesPlatformProperties(this);
       },
     };
   }

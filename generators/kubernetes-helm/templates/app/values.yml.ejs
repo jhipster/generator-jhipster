@@ -1,4 +1,4 @@
-<%_ if (app.prodDatabaseType === 'mysql') { _%>
+<%_ if (app.prodDatabaseTypeMysql) { _%>
 mysql:
   enabled: true
   mysqlDatabase: <%= app.baseName.toLowerCase() %>
@@ -10,7 +10,7 @@ mysql:
   initializationFiles:
     grant.sql: |-
       grant all privileges on *.* to root@'%' identified by '' with grant option;
-<%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+<%_ } else if (app.prodDatabaseTypePostgres) { _%>
 postgresql:
   enabled: true
   postgresqlUsername: <%= app.baseName.toLowerCase() %>
@@ -23,7 +23,7 @@ postgresql:
     podAnnotations:
       sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
+<%_ } else if (app.prodDatabaseTypeMariadb) { _%>
 mariadb:
   enabled: true
   replication:
@@ -38,7 +38,7 @@ mariadb:
     annotations:
       sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseType === 'mongodb') { _%>
+<%_ } else if (app.prodDatabaseTypeMongodb) { _%>
 mongodb:
   enabled: true
 mongodb-replicaset:
@@ -47,7 +47,7 @@ mongodb-replicaset:
   podAnnotations:
     sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseType === 'couchbase') { _%>
+<%_ } else if (app.prodDatabaseTypeCouchbase) { _%>
 couchdb:
   enabled: true
   allowAdminParty: true

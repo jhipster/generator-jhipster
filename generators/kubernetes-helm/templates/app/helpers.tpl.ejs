@@ -1,5 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
-<%_ if (app.prodDatabaseType === 'mariadb') { _%>
+<%_ if (app.prodDatabaseTypeMariadb) { _%>
 {{/*
 mariadb customisation
 */}}
@@ -10,7 +10,7 @@ mariadb customisation
 {{- define "mariadb.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-mariadb" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseType === 'mysql') { _%>
+<%_ } else if (app.prodDatabaseTypeMysql) { _%>
 {{/*
 mysql customisation
 */}}
@@ -21,7 +21,7 @@ mysql customisation
 {{- define "mysql.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-mysql" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+<%_ } else if (app.prodDatabaseTypePostgres) { _%>
 {{/*
 postgresql customisation
 */}}
@@ -32,7 +32,7 @@ postgresql customisation
 {{- define "postgresql.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-postgresql" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseType === 'mongodb') { _%>
+<%_ } else if (app.prodDatabaseTypeMongodb) { _%>
 {{/*
 mongodb customisation
 */}}
@@ -43,7 +43,7 @@ mongodb customisation
 {{- define "mongodb-replicaset.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-mongodb" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseType === 'couchbase') { _%>
+<%_ } else if (app.prodDatabaseTypeCouchbase) { _%>
 {{/*
 couchdb customisation
 */}}

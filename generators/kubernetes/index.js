@@ -26,7 +26,7 @@ const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { GENERATOR_KUBERNETES } = require('../generator-list');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
-const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants, derivedDeploymentProperties } = require('../kubernetes-base');
+const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants, derivedKubernetesPlatformProperties } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 let useBlueprints;
@@ -111,13 +111,13 @@ module.exports = class extends BaseDockerGenerator {
   _loading() {
     return {
       loadSharedConfig() {
-        this.loadDeploymentConfig(this);
         this.appConfigs.forEach(element => {
           this.loadServerConfig(element);
           this.loadDerivedServerConfig(element);
           this.loadDerivedAppConfig(element);
         });
-        derivedDeploymentProperties(this);
+        this.loadDeploymentConfig(this);
+        derivedKubernetesPlatformProperties(this);
       },
     };
   }

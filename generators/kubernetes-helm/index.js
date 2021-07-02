@@ -23,6 +23,7 @@ const prompts = require('../kubernetes/prompts');
 const { writeFiles } = require('./files');
 const BaseDockerGenerator = require('../generator-base-docker');
 const { GENERATOR_KUBERNETES_HELM } = require('../generator-list');
+const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const {
   checkKubernetes,
@@ -31,7 +32,7 @@ const {
   saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
-  derivedDeploymentProperties,
+  derivedKubernetesPlatformProperties,
 } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
@@ -100,7 +101,7 @@ module.exports = class extends BaseDockerGenerator {
       setPostPromptProp() {
         this.appConfigs.forEach(element => {
           element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
-          if (element.messageBroker === 'kafka') {
+          if (element.messageBroker === KAFKA) {
             this.useKafka = true;
           }
         });
@@ -123,7 +124,7 @@ module.exports = class extends BaseDockerGenerator {
           this.loadDerivedAppConfig(element);
         });
         this.loadDeploymentConfig(this);
-        derivedDeploymentProperties(this);
+        derivedKubernetesPlatformProperties(this);
       },
     };
   }
