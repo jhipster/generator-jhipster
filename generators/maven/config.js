@@ -16,18 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { version: jhipsterVersion } = require('../../package.json');
 
-module.exports.files = {
-  maven: [
-    {
-      templates: [
-        { file: 'mvnw', method: 'copy', noEjs: true },
-        { file: 'mvnw.cmd', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/MavenWrapperDownloader.java', method: 'copy', noEjs: true },
-        { file: 'pom.xml' },
-      ],
-    },
-  ],
+/** Required config to be skipped */
+const requiredConfig = {
+  jhipsterVersion,
+  packageName: 'com.mycompany',
 };
+
+/** Maven default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+};
+
+module.exports = { requiredConfig, defaultConfig };

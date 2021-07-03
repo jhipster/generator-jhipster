@@ -18,95 +18,127 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const writeFiles = require('./files').writeFiles;
-const packagejs = require('../../package.json');
-const prompts = require('./prompts');
-
-let useBlueprints;
+const { GENERATOR_MAVEN } = require('../generator-list');
+const { files } = require('./files');
+const { commonOptions, initOptions } = require('../options');
+const constants = require('../generator-constants');
+const { defaultConfig, requiredConfig } = require('./config');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts, { unique: 'namespace' });
 
-    this.option('skip-build', {
-      desc: 'Skips building the application',
-      type: Boolean,
-      defaults: false,
-    });
+    this.jhipsterOptions(commonOptions);
+    this.jhipsterOptions(initOptions);
+
+    if (this.options.help) return;
+
+    if (this.options.defaults) {
+      this.config.defaults({
+        ...requiredConfig,
+        packageName: this.getDefaultPackageName(),
+      });
+    }
+
+    if (!this.fromBlueprint) {
+      this.instantiateBlueprints(GENERATOR_MAVEN);
+    }
   }
 
-  // Public API method used by the getter and also by Blueprints
   _initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
       },
       sayHello() {
+        if (!this.showHello()) return;
         this.log(chalk.white('⬢ Welcome to the JHipster Maven ⬢'));
       },
-      getConfig() {
-        const configuration = this.config;
-
-        this.projectName = configuration.get('projectName');
-        this.baseName = configuration.get('baseName');
-        this.packageName = configuration.get('packageName');
-
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.humanizedBaseName = _.startCase(this.baseName);
+      loadRuntimeOptions() {
+        this.loadRuntimeOptions();
       },
     };
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._initializing();
   }
 
-  // Public API method used by the getter and also by Blueprints
   _prompting() {
     return {
-      askPackageName: prompts.askPackageName,
+      async showPrompts() {
+        if (this.options.skipPrompts) return;
+        if (this.jhipsterConfig.packageName && !this.options.askAnswered) return;
+        await this.prompt(
+          [
+            {
+              name: 'packageName',
+              when: () => !this.abort,
+              type: 'input',
+              validate: input => this._validatePackageName(input),
+              message: 'What is your default Java package name?',
+              default: () => this._getDefaultPackageName(),
+            },
+          ],
+          this.config
+        );
+      },
     };
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._prompting();
   }
 
-  // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
-      setup() {
-        this.packagejs = packagejs;
-
-        this.jhipsterConfig.projectName = this.projectName;
-        this.jhipsterConfig.baseName = this.baseName;
-        this.jhipsterConfig.packageName = this.packageName;
-
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.humanizedBaseName = _.startCase(this.baseName);
+      setDefaults() {
+        this.config.defaults({
+          packageName: this.getDefaultPackageName(),
+          ...requiredConfig,
+        });
       },
     };
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._configuring();
+  }
+
+  _loading() {
+    return {
+      loadConfig() {
+        this.loadMavenConfig();
+      },
+      loadDerivedConfig() {
+        this.loadDerivedInitConfig();
+      },
+      loadConstant() {
+        this.NODE_VERSION = constants.NODE_VERSION;
+      },
+    };
+  }
+
+  get loading() {
+    if (this.fromBlueprint) return;
+    return this._loading();
   }
 
   _writing() {
     return {
-      ...writeFiles(),
-      ...super._missingPostWriting(),
+      async writeFiles() {
+        await this.writeFilesToDisk(files);
+      },
     };
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._writing();
   }
 
@@ -115,7 +147,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get install() {
-    if (useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._install();
   }
 
@@ -124,7 +156,26 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.fromBlueprint) return;
     return this._end();
+  }
+
+  /**
+   * @returns default app name
+   */
+  _getDefaultPackageName() {
+    return defaultConfig.projectName;
+  }
+
+  /**
+   * Validates packageName
+   * @param String input - Package name to be checked
+   * @returns Boolean
+   */
+  _validatePackageName(input) {
+    if (!/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) {
+      return 'The package name you have provided is not a valid Java package name.';
+    }
+    return true;
   }
 };

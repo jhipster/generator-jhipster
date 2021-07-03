@@ -39,6 +39,7 @@ const Generators = {
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
   GENERATOR_INIT: 'init',
+  GENERATOR_MAVEN: 'maven',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
   GENERATOR_SERVER: 'server',

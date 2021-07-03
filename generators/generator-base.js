@@ -2489,6 +2489,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.skipCommitHook = config.skipCommitHook;
   }
 
+  loadMavenConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
+    dest.jhipsterVersion = config.jhipsterVersion;
+    dest.baseName = config.baseName;
+    dest.projectName = config.projectName;
+    dest.packageName = config.packageName;
+  }
+
   /**
    * Load derived init configs into dest.
    * all variables should be set to dest,
