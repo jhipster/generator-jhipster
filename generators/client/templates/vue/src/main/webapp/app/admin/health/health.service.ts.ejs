@@ -1,12 +1,10 @@
-import axios, { AxiosInstance, AxiosPromise } from 'axios';
+import axios, { AxiosPromise } from 'axios';
 
 export default class HealthService {
   public separator: string;
-  private axios: AxiosInstance;
 
   constructor() {
     this.separator = '.';
-    this.axios = axios;
   }
 
   public checkHealth(): AxiosPromise<any> {
