@@ -26,7 +26,13 @@ const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { GENERATOR_KUBERNETES } = require('../generator-list');
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
-const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants, derivedKubernetesPlatformProperties } = require('../kubernetes-base');
+const {
+  checkKubernetes,
+  loadConfig,
+  saveConfig,
+  setupKubernetesConstants,
+  derivedKubernetesPlatformProperties,
+} = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 let useBlueprints;

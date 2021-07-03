@@ -96,12 +96,6 @@ const translationDefaultConfig = {
   },
 };
 
-const kubernetesDefaultConfig = {
-  kubernetesServiceType: 'LoadBalancer',
-  monitoring: 'no',
-  istio: false,
-};
-
 /** Required config for prompts to be skipped, baseName is missing */
 const requiredDefaultConfig = {
   ...appRequiredConfig,
@@ -114,10 +108,6 @@ const defaultConfig = {
   ...serverDefaultConfig,
   ...clientDefaultConfig,
   ...translationDefaultConfig,
-};
-
-const defaultKubernetesConfig = {
-  ...kubernetesDefaultConfig,
 };
 
 const defaultConfigMicroservice = {
