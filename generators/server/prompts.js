@@ -26,7 +26,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('
 const cacheProviderTypes = require('../../jdl/jhipster/cache-types');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = require('../../jdl/jhipster/database-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
@@ -151,6 +151,10 @@ function askForServerSideOpts() {
           opts.push({
             value: SQL,
             name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
+          });
+          opts.push({
+            value: COUCHBASE,
+            name: 'Couchbase',
           });
         } else {
           opts.push({
@@ -328,7 +332,7 @@ function askForOptionalItems() {
       value: 'searchEngine:elasticsearch',
     });
   }
-  if (databaseType === 'couchbase') {
+  if (databaseTypeCouchbase) {
     choices.push({
       name: 'Couchbase FTS as search engine',
       value: 'searchEngine:couchbase',
