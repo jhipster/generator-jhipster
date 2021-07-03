@@ -144,5 +144,4 @@ module.exports = {
   requiredDefaultConfig,
   entityDefaultConfig,
   translationDefaultConfig,
-  defaultKubernetesConfig,
 };
