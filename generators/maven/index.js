@@ -24,7 +24,7 @@ const { GENERATOR_MAVEN } = require('../generator-list');
 const { files } = require('./files');
 const { commonOptions, initOptions } = require('../options');
 const constants = require('../generator-constants');
-const { defaultConfig, requiredConfig } = require('./config');
+const { requiredConfig } = require('./config');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
