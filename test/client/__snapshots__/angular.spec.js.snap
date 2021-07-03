@@ -26,9 +26,6 @@ Object {
   ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
-  ".npmrc": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },

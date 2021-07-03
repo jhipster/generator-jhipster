@@ -317,6 +317,11 @@ function cleanupOldFiles(generator) {
       generator.removeFile(`${REACT_DIR}config/devtools.tsx`);
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.1.1') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+      generator.removeFile('.npmrc');
+    }
+  }
 }
 
 /**
