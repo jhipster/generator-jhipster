@@ -21,7 +21,6 @@ const { version: jhipsterVersion } = require('../../package.json');
 /** Required config to be skipped */
 const requiredConfig = {
   jhipsterVersion,
-  packageName: 'com.mycompany',
 };
 
 /** Maven default config for templates */

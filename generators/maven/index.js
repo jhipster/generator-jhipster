@@ -80,7 +80,7 @@ module.exports = class extends BaseBlueprintGenerator {
               type: 'input',
               validate: input => this._validatePackageName(input),
               message: 'What is your default Java package name?',
-              default: () => this._getDefaultPackageName(),
+              default: () => this.getDefaultPackageName(),
             },
           ],
           this.config
@@ -158,13 +158,6 @@ module.exports = class extends BaseBlueprintGenerator {
   get end() {
     if (this.fromBlueprint) return;
     return this._end();
-  }
-
-  /**
-   * @returns default app name
-   */
-  _getDefaultPackageName() {
-    return defaultConfig.projectName;
   }
 
   /**
