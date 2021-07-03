@@ -54,16 +54,16 @@ spec:
   gateways:
   - <%= app.baseName.toLowerCase() %>-gateway
   http:
-  <%_ if (!app.serviceDiscoveryType) { _%>
-    <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
+<%_ if (!app.serviceDiscoveryType) { _%>
+  <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
         prefix: /<%= config.baseName.toLowerCase() %>/
     route:
     - destination:
         host: <%= config.baseName.toLowerCase() %>
-    <%_ }); _%>
-  <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
   - match:
     - uri:
         prefix: /

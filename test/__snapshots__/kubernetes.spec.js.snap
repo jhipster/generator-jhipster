@@ -494,10 +494,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -1348,10 +1350,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -1894,10 +1898,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -2634,6 +2640,7 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"example.com\\",
@@ -3499,10 +3506,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -5873,10 +5882,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"prometheus\\"
+    \\"monitoring\\": \\"prometheus\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -9116,10 +9127,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -9690,10 +9703,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -11611,10 +11626,12 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",

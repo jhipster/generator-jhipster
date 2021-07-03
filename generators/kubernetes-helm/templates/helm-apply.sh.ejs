@@ -55,7 +55,7 @@ helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.bas
   fi
 <%_ }) _%>
 
-<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+<%_ if (istio && kubernetesServiceTypeIngress) { _%>
 kubectl apply -f istio-${suffix}/
 <%_ } _%>
 
