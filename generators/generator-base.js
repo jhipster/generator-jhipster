@@ -26,13 +26,15 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const normalize = require('normalize-path');
+
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
-const { defaultConfig: initDefaultConfig } = require('./init/config');
+const { initDefaultConfig, initRequiredConfig, projectNameDefaultConfig, projectNameRequiredConfig } = require('./config');
+const { commonOptions, initOptions, projectNameOptions } = require('./options');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -157,6 +159,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     this._config = this._getStorage('generator-jhipster');
     /* JHipster config using proxy mode used as a plain object instead of using get/set. */
     this.jhipsterConfig = this.config.createProxy();
+
+    this.parseTestOptions();
+
+    if (this.configOptions.existingProject === undefined) {
+      this.configOptions.existingProject = Boolean(this.jhipsterConfig.baseName);
+    }
+    // TODO v8 rename to existingProject.
+    this.existingModularProject = this.configOptions.existingProject;
 
     /* Register generator for compose once */
     this.registerComposedGenerator(this.options.namespace);
@@ -2475,6 +2485,27 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Register and parse common options.
+   */
+  registerCommonOptions() {
+    this.jhipsterOptions(commonOptions);
+  }
+
+  /**
+   * Register and parse init options.
+   */
+  registerInitOptions() {
+    this.jhipsterOptions(initOptions);
+  }
+
+  /**
+   * Load required init configs into config.
+   */
+  configureInit() {
+    this.config.defaults(initRequiredConfig);
+  }
+
+  /**
    * Load init configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
@@ -2482,9 +2513,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadInitConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
-    dest.jhipsterVersion = config.jhipsterVersion;
-    dest.baseName = config.baseName;
-    dest.projectName = config.projectName;
     dest.prettierDefaultIndent = config.prettierDefaultIndent;
     dest.prettierJavaIndent = config.prettierJavaIndent;
     dest.skipCommitHook = config.skipCommitHook;
@@ -2496,7 +2524,45 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * all variables should be referred from config,
    * @param {any} dest - source/destination context
    */
-  loadDerivedInitConfig(dest = this) {
+  loadDerivedInitConfig(dest = this) {}
+
+  /**
+   * Register and parse project-name options.
+   */
+  registerProjectNameOptions() {
+    this.jhipsterOptions(projectNameOptions);
+  }
+
+  /**
+   * Load required project-name configs into config.
+   */
+  configureProjectName() {
+    this.config.defaults({
+      ...projectNameRequiredConfig,
+      baseName: this.getDefaultAppName(),
+    });
+  }
+
+  /**
+   * Load project-name configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} config - config to load config from
+   * @param {any} dest - destination context to use default is context
+   */
+  loadProjectNameConfig(config = _.defaults({}, this.jhipsterConfig, projectNameDefaultConfig), dest = this) {
+    dest.jhipsterVersion = config.jhipsterVersion;
+    dest.baseName = config.baseName;
+    dest.projectName = config.projectName;
+  }
+
+  /**
+   * Load derived project-name configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} dest - source/destination context
+   */
+  loadDerivedProjectNameConfig(dest = this) {
     dest.dasherizedBaseName = _.kebabCase(dest.baseName);
     dest.humanizedBaseName = _.startCase(dest.baseName);
   }
@@ -2800,6 +2866,32 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Load config for simulating existing project.
+   */
+  parseTestOptions() {
+    /*
+     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
+     * generator and then executes generator.config.defaults(localConfig).
+     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
+     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
+     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
+     * 'defaults' function sets every key that has undefined value at current config.
+     */
+    if (this.options.defaultLocalConfig) {
+      this.config.defaults(this.options.defaultLocalConfig);
+      delete this.options.defaultLocalConfig;
+    }
+    /*
+     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
+     * 'set' function sets every key from 'localConfig'.
+     */
+    if (this.options.localConfig) {
+      this.config.set(this.options.localConfig);
+      delete this.options.localConfig;
+    }
+  }
+
+  /**
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
    * @param String options - Object containing options.
@@ -2815,7 +2907,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           this.config.set(camelCaseName, optionValue);
         } else if (optionDesc.scope === 'runtime') {
           this.configOptions[camelCaseName] = optionValue;
+        } else {
+          throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
+        delete this.options[camelCaseName];
       }
     });
   }

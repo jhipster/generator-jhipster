@@ -45,6 +45,7 @@ const Generators = {
   GENERATOR_INIT: 'init',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
+  GENERATOR_PROJECT_NAME: 'project-name',
   GENERATOR_SERVER: 'server',
 };
 

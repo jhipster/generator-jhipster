@@ -16,15 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** Required config to be skipped */
-const requiredConfig = {};
+const { requiredConfig: initRequiredConfig, defaultConfig: initDefaultConfig } = require('./init/config');
+const { requiredConfig: projectNameRequiredConfig, defaultConfig: projectNameDefaultConfig } = require('./project-name/config');
 
-/** Init default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-  prettierDefaultIndent: 2,
-  prettierJavaIndent: 4,
-  skipCommitHook: false,
+module.exports = {
+  initDefaultConfig,
+  initRequiredConfig,
+  projectNameDefaultConfig,
+  projectNameRequiredConfig,
 };
-
-module.exports = { requiredConfig, defaultConfig };
