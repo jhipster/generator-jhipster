@@ -5,9 +5,9 @@ Object {
   ".yo-rc.json": Object {
     "contents": "{
   \\"generator-jhipster\\": {
-    \\"baseName\\": \\"BeautifulProject\\",
+    \\"baseName\\": \\"existing\\",
     \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"projectName\\": \\"Beautiful Project\\",
+    \\"projectName\\": \\"JHipster project\\",
     \\"prettierDefaultIndent\\": 4,
     \\"prettierJavaIndent\\": 2
   }
@@ -42,10 +42,26 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"projectName\\": \\"Beautiful Project\\",
-    \\"baseName\\": \\"BeautifulProject\\",
+    \\"baseName\\": \\"jhipster\\",
+    \\"projectName\\": \\"JHipster project\\",
     \\"prettierDefaultIndent\\": 4,
     \\"prettierJavaIndent\\": 2
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with custom prompt values and defaults option should not write custom config to .yo-rc.json 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"jhipsterVersion\\": \\"0.0.0\\",
+    \\"baseName\\": \\"jhipster\\",
+    \\"projectName\\": \\"JHipster project\\"
   }
 }
 ",

@@ -3,8 +3,10 @@ const expect = require('expect');
 const { access } = require('fs/promises');
 const normalizePath = require('normalize-path');
 
-const { skipPrettierHelpers: helpers } = require('./utils/utils');
-const { defaultConfig } = require('../generators/init/config');
+const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { defaultConfig } = require('../../generators/init/config');
+
+const initGeneratorPath = path.join(__dirname, '../../generators/init');
 
 const testDefaultConfg = { ...defaultConfig, jhipsterVersion: '0.0.0' };
 
@@ -12,7 +14,7 @@ describe('JHipster init generator', () => {
   describe('with default options', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(path.join(__dirname, '../generators/init'));
+      runResult = await helpers.run(initGeneratorPath);
     });
     it('should create expected files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -21,7 +23,7 @@ describe('JHipster init generator', () => {
   describe('with defaults option', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ defaults: true });
+      runResult = await helpers.run(initGeneratorPath).withOptions({ defaults: true });
     });
     it('should load default config into the generator', () => {
       expect(runResult.generator).toMatchObject(testDefaultConfg);
@@ -30,16 +32,23 @@ describe('JHipster init generator', () => {
   describe('with custom prompt values', () => {
     let runResult;
     const promptValues = {
-      projectName: 'Beautiful Project',
-      baseName: 'BeautifulProject',
       prettierDefaultIndent: 4,
       prettierJavaIndent: 2,
     };
     describe('and default options', () => {
       before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withPrompts(promptValues);
+        runResult = await helpers.run(initGeneratorPath).withOptions({ baseName: 'jhipster' }).withPrompts(promptValues);
       });
       it('should write custom config to .yo-rc.json', () => {
+        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
+        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
+      });
+    });
+    describe('and defaults option', () => {
+      before(async () => {
+        runResult = await helpers.run(initGeneratorPath).withOptions({ baseName: 'jhipster', defaults: true }).withPrompts(promptValues);
+      });
+      it('should not write custom config to .yo-rc.json', () => {
         const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
         expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
       });
@@ -47,10 +56,7 @@ describe('JHipster init generator', () => {
     describe('and skipPrompts option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(path.join(__dirname, '../generators/init'))
-          .withOptions({ skipPrompts: true, baseName: 'jhipster' })
-          .withPrompts(promptValues);
+        runResult = await helpers.run(initGeneratorPath).withOptions({ skipPrompts: true, baseName: 'jhipster' }).withPrompts(promptValues);
       });
       it('should write default values to .yo-rc.json', () => {
         const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
@@ -61,7 +67,7 @@ describe('JHipster init generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .run(path.join(__dirname, '../generators/init'))
+          .run(initGeneratorPath)
           .withOptions({ localConfig: { baseName: 'existing' } })
           .withPrompts(promptValues);
       });
@@ -74,7 +80,7 @@ describe('JHipster init generator', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
-          .run(path.join(__dirname, '../generators/init'))
+          .run(initGeneratorPath)
           .withOptions({ askAnswered: true, localConfig: { baseName: 'existing' } })
           .withPrompts(promptValues);
       });
@@ -88,7 +94,7 @@ describe('JHipster init generator', () => {
     describe('skipCommitHook option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ skipCommitHook: true });
+        runResult = await helpers.run(initGeneratorPath).withOptions({ skipCommitHook: true });
       });
       it('should create expected files', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -99,7 +105,7 @@ describe('JHipster init generator', () => {
     describe('with default option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/init'));
+        runResult = await helpers.run(initGeneratorPath);
       });
       it('should create .git', async () => {
         await expect(access(path.resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
@@ -115,7 +121,7 @@ describe('JHipster init generator', () => {
     describe('with skipGit option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/init')).withOptions({ skipGit: true });
+        runResult = await helpers.run(initGeneratorPath).withOptions({ skipGit: true });
       });
       it('should not create .git', async () => {
         await expect(access(path.resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
@@ -124,11 +130,8 @@ describe('JHipster init generator', () => {
     describe('regenerating', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(path.join(__dirname, '../generators/init'));
-        runResult = await runResult
-          .create(path.join(__dirname, '../generators/init'))
-          .withOptions({ skipPrettier: true, jhipsterVersion: '1.0.0' })
-          .run();
+        runResult = await helpers.run(initGeneratorPath);
+        runResult = await runResult.create(initGeneratorPath).withOptions({ skipPrettier: true, jhipsterVersion: '1.0.0' }).run();
       });
       it('should have 1 commit', async () => {
         const git = runResult.generator._createGit();
