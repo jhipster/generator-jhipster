@@ -20,30 +20,24 @@
 const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { GENERATOR_MAVEN, GENERATOR_PROJECT_NAME, GENERATOR_JAVA_PACKAGE_NAME } = require('../generator-list');
-const { files } = require('./files');
-const constants = require('../generator-constants');
+const { GENERATOR_JAVA_PACKAGE_NAME } = require('../generator-list');
+const { defaultConfig } = require('./config');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts, { unique: 'namespace' });
 
     this.registerCommonOptions();
-    this.registerProjectNameOptions();
     this.registerJavaPackageNameOptions();
 
     if (this.options.help) return;
 
     if (this.options.defaults) {
-      this.configureProjectName();
       this.configureJavaPackageName();
     }
 
-    this.composeWithJHipster(GENERATOR_PROJECT_NAME);
-    this.composeWithJHipster(GENERATOR_JAVA_PACKAGE_NAME);
-
     if (!this.fromBlueprint) {
-      this.instantiateBlueprints(GENERATOR_MAVEN);
+      this.instantiateBlueprints(GENERATOR_JAVA_PACKAGE_NAME);
     }
   }
 
@@ -54,10 +48,27 @@ module.exports = class extends BaseBlueprintGenerator {
       },
       sayHello() {
         if (!this.showHello()) return;
-        this.log(chalk.white('⬢ Welcome to the JHipster Maven ⬢'));
+        this.log(chalk.white('⬢ Welcome to the JHipster Java Package Name ⬢'));
       },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
+      },
+      // TODO move to prompting once queueing composed generator before current support is added.
+      async showPrompts() {
+        if (this.options.defaults || this.options.skipPrompts || (this.existingModularProject && !this.options.askAnswered)) return;
+        await this.prompt(
+          [
+            {
+              name: 'packageName',
+              when: () => !this.abort,
+              type: 'input',
+              validate: input => this._validatePackageName(input),
+              message: 'What is your default Java package name?',
+              default: () => this._getDefaultPackageName(),
+            },
+          ],
+          this.config
+        );
       },
     };
   }
@@ -67,10 +78,18 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._initializing();
   }
 
+  _prompting() {
+    return {};
+  }
+
+  get prompting() {
+    if (this.fromBlueprint) return;
+    return this._prompting();
+  }
+
   _configuring() {
     return {
       configure() {
-        this.configureProjectName();
         this.configureJavaPackageName();
       },
     };
@@ -84,15 +103,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadConfig() {
-        this.loadProjectNameConfig();
         this.loadJavaPackageNameConfig();
-      },
-      loadDerivedConfig() {
-        this.loadDerivedProjectNameConfig();
-        this.loadDerivedJavaPackageNameConfig();
-      },
-      loadConstant() {
-        this.NODE_VERSION = constants.NODE_VERSION;
       },
     };
   }
@@ -102,34 +113,26 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._loading();
   }
 
-  _writing() {
-    return {
-      async writeFiles() {
-        await this.writeFilesToDisk(files);
-      },
-    };
+  /*
+   * Start of local public API, blueprints may override to customize the generator behavior.
+   */
+
+  /**
+   * Validates packageName
+   * @param String input - Package name to be checked
+   * @returns Boolean
+   */
+  _validatePackageName(input) {
+    if (!/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) {
+      return 'The package name you have provided is not a valid Java package name.';
+    }
+    return true;
   }
 
-  get writing() {
-    if (this.fromBlueprint) return;
-    return this._writing();
-  }
-
-  _install() {
-    return {};
-  }
-
-  get install() {
-    if (this.fromBlueprint) return;
-    return this._install();
-  }
-
-  _end() {
-    return {};
-  }
-
-  get end() {
-    if (this.fromBlueprint) return;
-    return this._end();
+  /**
+   * @returns default package name
+   */
+  _getDefaultPackageName() {
+    return defaultConfig.packageName;
   }
 };

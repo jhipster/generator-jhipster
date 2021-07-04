@@ -65,6 +65,9 @@ const defaultCommands = {
   init: {
     desc: 'Init project (alpha)',
   },
+  'java-package-name': {
+    desc: 'Configure Java package name (alpha)',
+  },
   jdl: {
     alias: 'import-jdl',
     argument: ['[jdlFiles...]'],

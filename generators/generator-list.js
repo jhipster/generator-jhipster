@@ -43,6 +43,7 @@ const Generators = {
   GENERATOR_KUBERNETES_HELM: 'kubernetes-helm',
   GENERATOR_KUBERNETES_KNATIVE: 'kubernetes-knative',
   GENERATOR_INIT: 'init',
+  GENERATOR_JAVA_PACKAGE_NAME: 'java-package-name',
   GENERATOR_MAVEN: 'maven',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',

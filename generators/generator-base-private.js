@@ -520,13 +520,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
-   * @returns default package name
-   */
-  getDefaultPackageName() {
-    return 'com.mycompany.myapp';
-  }
-
-  /**
    * Format As Class Javadoc
    *
    * @param {string} text - text to format

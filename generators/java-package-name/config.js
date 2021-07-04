@@ -16,25 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const { serverDefaultConfig } = require('../generator-defaults');
-
-module.exports = {
-  askPackageName,
+/** Required config to be skipped */
+const requiredConfig = {
+  packageName: 'com.mycompany.myapp',
 };
 
-async function askPackageName() {
-  if (this.abort) return;
-  const answer = await this.prompt({
-    type: 'input',
-    name: 'packageName',
-    validate: input =>
-      /^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)
-        ? true
-        : 'The package name you have provided is not a valid Java package name.',
-    message: 'What is your default Java package name?',
-    default: serverDefaultConfig.packageName,
-    store: true,
-  });
-  this.packageName = answer.packageName;
-}
+/** Init default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+};
+
+module.exports = { requiredConfig, defaultConfig };
