@@ -114,22 +114,4 @@ module.exports = class extends BaseBlueprintGenerator {
     if (this.fromBlueprint) return;
     return this._writing();
   }
-
-  _install() {
-    return {};
-  }
-
-  get install() {
-    if (this.fromBlueprint) return;
-    return this._install();
-  }
-
-  _end() {
-    return {};
-  }
-
-  get end() {
-    if (this.fromBlueprint) return;
-    return this._end();
-  }
 };
