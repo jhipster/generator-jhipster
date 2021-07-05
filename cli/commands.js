@@ -63,7 +63,7 @@ const defaultCommands = {
     desc: 'Display information about your current project and system',
   },
   init: {
-    desc: 'Init project',
+    desc: 'Init project (alpha)',
   },
   jdl: {
     alias: 'import-jdl',
@@ -160,7 +160,7 @@ const defaultCommands = {
     desc: 'Create a new page. (Supports vue clients)',
   },
   'project-name': {
-    desc: 'Configure project name',
+    desc: 'Configure project name (alpha)',
   },
   run: {
     desc: 'Run a module or custom generator',
