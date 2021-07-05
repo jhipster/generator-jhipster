@@ -53,7 +53,16 @@ module.exports = class extends BaseBlueprintGenerator {
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
-      // TODO move to prompting once queueing composed generator before current support is added.
+    };
+  }
+
+  get initializing() {
+    if (this.fromBlueprint) return;
+    return this._initializing();
+  }
+
+  _prompting() {
+    return {
       async showPrompts() {
         if (this.options.defaults || this.options.skipPrompts || (this.existingModularProject && !this.options.askAnswered)) return;
         await this.prompt(
@@ -71,15 +80,6 @@ module.exports = class extends BaseBlueprintGenerator {
         );
       },
     };
-  }
-
-  get initializing() {
-    if (this.fromBlueprint) return;
-    return this._initializing();
-  }
-
-  _prompting() {
-    return {};
   }
 
   get prompting() {
