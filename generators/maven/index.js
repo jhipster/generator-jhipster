@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { GENERATOR_MAVEN } = require('../generator-list');
+const { GENERATOR_MAVEN, GENERATOR_PROJECT_NAME, GENERATOR_JAVA_PACKAGE_NAME } = require('../generator-list');
 const { files } = require('./files');
 const { commonOptions, initOptions } = require('../options');
 const constants = require('../generator-constants');
@@ -30,17 +30,20 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts, { unique: 'namespace' });
 
-    this.jhipsterOptions(commonOptions);
-    this.jhipsterOptions(initOptions);
+    this.registerCommonOptions();
+    this.registerProjectNameOptions();
+    this.registerJavaPackageNameOptions();
+
 
     if (this.options.help) return;
 
     if (this.options.defaults) {
-      this.config.defaults({
-        ...requiredConfig,
-        packageName: this.getDefaultPackageName(),
-      });
+      this.configureProjectName();
+      this.configureJavaPackageName();
     }
+
+    this.composeWithJHipster(GENERATOR_PROJECT_NAME);
+    this.composeWithJHipster(GENERATOR_JAVA_PACKAGE_NAME);
 
     if (!this.fromBlueprint) {
       this.instantiateBlueprints(GENERATOR_MAVEN);
@@ -96,11 +99,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _configuring() {
     return {
-      setDefaults() {
-        this.config.defaults({
-          packageName: this.getDefaultPackageName(),
-          ...requiredConfig,
-        });
+      configure() {
+        this.configureProjectName();
+        this.configureJavaPackageName();
       },
     };
   }
@@ -113,10 +114,12 @@ module.exports = class extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadConfig() {
-        this.loadMavenConfig();
+        this.loadProjectNameConfig();
+        this.loadJavaPackageNameConfig();
       },
       loadDerivedConfig() {
-        this.loadDerivedInitConfig();
+        this.loadDerivedProjectNameConfig();
+        this.loadDerivedJavaPackageNameConfig();
       },
       loadConstant() {
         this.NODE_VERSION = constants.NODE_VERSION;
