@@ -84,7 +84,7 @@ describe('Page subgenerator', () => {
       containsVueFiles();
     });
 
-    describe('regenerating a exiting page', () => {
+    describe('regenerating an existing page', () => {
       before(async () => {
         runResult = await createClientProject({ localConfig: { clientFramework: 'vue', pages: [{ name: pageName }] } });
       });

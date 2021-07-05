@@ -72,7 +72,7 @@ describe('JHipster project-name generator', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: testDefaultConfig });
       });
     });
-    describe('and askAnswered option on an exiting project', () => {
+    describe('and askAnswered option on an existing project', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
