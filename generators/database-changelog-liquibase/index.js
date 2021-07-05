@@ -60,8 +60,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
+        this.loadPlatformConfig();
       },
     };
   }

@@ -25,9 +25,9 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name: <% if (serviceDiscoveryType === 'eureka') { %> JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %>
-      status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Kubernetes
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+      name: <% if (serviceDiscoveryEureka) { %> JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>
+      status: Connected to <% if (serviceDiscoveryEureka) { %>the JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %> running in Kubernetes
+<%_ if (serviceDiscoveryEureka) { _%>
     eureka:
       client:
         initial-instance-info-replication-interval-seconds: 15
@@ -39,17 +39,17 @@ data:
       instance:
         lease-renewal-interval-in-seconds: 10
         registry-default-open-for-traffic-count: 0
-    <%_ } _%>
+<%_ } _%>
     jhipster:
       security:
         authentication:
           jwt:
             base64-secret: <%= jwtSecretKey %>
   # app specific configuration
-  <%_ if (serviceDiscoveryType === 'eureka') {  _%>
+<%_ if (serviceDiscoveryEureka) {  _%>
   jhipster-registry.yml: |-
     eureka:
       client:
         service-url:
           defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
-  <%_ } _%>
+<%_ } _%>

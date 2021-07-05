@@ -26,13 +26,15 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const normalize = require('normalize-path');
+
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
-const { defaultConfig: initDefaultConfig } = require('./init/config');
+const { initDefaultConfig, initRequiredConfig, projectNameDefaultConfig, projectNameRequiredConfig } = require('./config');
+const { commonOptions, initOptions, projectNameOptions } = require('./options');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -52,6 +54,7 @@ const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4
 const NO_DATABASE = databaseTypes.NO;
 
 const { GENERATOR_BOOTSTRAP } = require('./generator-list');
+const { PROMETHEUS, ELK } = require('../jdl/jhipster/monitoring-types');
 const { JWT, OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
 const { EHCACHE, REDIS, HAZELCAST, MEMCACHED } = require('../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -156,6 +159,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     this._config = this._getStorage('generator-jhipster');
     /* JHipster config using proxy mode used as a plain object instead of using get/set. */
     this.jhipsterConfig = this.config.createProxy();
+
+    this.parseTestOptions();
+
+    if (this.configOptions.existingProject === undefined) {
+      this.configOptions.existingProject = Boolean(this.jhipsterConfig.baseName);
+    }
+    // TODO v8 rename to existingProject.
+    this.existingModularProject = this.configOptions.existingProject;
 
     /* Register generator for compose once */
     this.registerComposedGenerator(this.options.namespace);
@@ -2474,6 +2485,27 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Register and parse common options.
+   */
+  registerCommonOptions() {
+    this.jhipsterOptions(commonOptions);
+  }
+
+  /**
+   * Register and parse init options.
+   */
+  registerInitOptions() {
+    this.jhipsterOptions(initOptions);
+  }
+
+  /**
+   * Load required init configs into config.
+   */
+  configureInit() {
+    this.config.defaults(initRequiredConfig);
+  }
+
+  /**
    * Load init configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
@@ -2481,9 +2513,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - destination context to use default is context
    */
   loadInitConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
-    dest.jhipsterVersion = config.jhipsterVersion;
-    dest.baseName = config.baseName;
-    dest.projectName = config.projectName;
     dest.prettierDefaultIndent = config.prettierDefaultIndent;
     dest.prettierJavaIndent = config.prettierJavaIndent;
     dest.skipCommitHook = config.skipCommitHook;
@@ -2502,7 +2531,45 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * all variables should be referred from config,
    * @param {any} dest - source/destination context
    */
-  loadDerivedInitConfig(dest = this) {
+  loadDerivedInitConfig(dest = this) {}
+
+  /**
+   * Register and parse project-name options.
+   */
+  registerProjectNameOptions() {
+    this.jhipsterOptions(projectNameOptions);
+  }
+
+  /**
+   * Load required project-name configs into config.
+   */
+  configureProjectName() {
+    this.config.defaults({
+      ...projectNameRequiredConfig,
+      baseName: this.getDefaultAppName(),
+    });
+  }
+
+  /**
+   * Load project-name configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} config - config to load config from
+   * @param {any} dest - destination context to use default is context
+   */
+  loadProjectNameConfig(config = _.defaults({}, this.jhipsterConfig, projectNameDefaultConfig), dest = this) {
+    dest.jhipsterVersion = config.jhipsterVersion;
+    dest.baseName = config.baseName;
+    dest.projectName = config.projectName;
+  }
+
+  /**
+   * Load derived project-name configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} dest - source/destination context
+   */
+  loadDerivedProjectNameConfig(dest = this) {
     dest.dasherizedBaseName = _.kebabCase(dest.baseName);
     dest.humanizedBaseName = _.startCase(dest.baseName);
   }
@@ -2617,6 +2684,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
+    dest.reactive = config.reactive;
     dest.searchEngine = config.searchEngine;
     dest.cacheProvider = config.cacheProvider;
     dest.enableHibernateCache = config.enableHibernateCache;
@@ -2624,8 +2692,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
     dest.messageBroker = config.messageBroker;
     dest.websocket = config.websocket;
-    dest.serviceDiscoveryType = config.serviceDiscoveryType;
-
     dest.embeddableLaunchScript = config.embeddableLaunchScript;
 
     this.loadDerivedServerConfig(dest);
@@ -2646,8 +2712,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
     dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
 
-    dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
+    dest.prodDatabaseTypeCouchbase = dest.prodDatabaseType === COUCHBASE;
+    dest.prodDatabaseTypeH2Disk = dest.prodDatabaseType === H2_DISK;
     dest.prodDatabaseTypeMariadb = dest.prodDatabaseType === MARIADB;
+    dest.prodDatabaseTypeMongodb = dest.prodDatabaseType === MONGODB;
+    dest.prodDatabaseTypeMssql = dest.prodDatabaseType === MSSQL;
+    dest.prodDatabaseTypeMysql = dest.prodDatabaseType === MYSQL;
+    dest.prodDatabaseTypeNeo4j = dest.prodDatabaseType === NEO4J;
+    dest.prodDatabaseTypeOracle = dest.prodDatabaseType === ORACLE;
     dest.prodDatabaseTypePostgres = dest.prodDatabaseType === POSTGRESQL;
 
     dest.databaseTypeNo = dest.databaseType === NO_DATABASE;
@@ -2668,11 +2740,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
-    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
-    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
-
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
 
     dest.reactiveSqlTestContainers =
       dest.reactive &&
@@ -2680,7 +2749,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.devDatabaseType));
   }
 
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {}
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.serviceDiscoveryType = config.serviceDiscoveryType;
+    dest.monitoring = config.monitoring;
+    this.loadDerivedPlatformConfig(dest);
+  }
+
+  loadDerivedPlatformConfig(dest = this) {
+    dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
+    dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+    dest.monitoringELK = dest.monitoring === ELK;
+    dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
+  }
 
   /**
    * Get all the generator configuration from the .yo-rc.json file
@@ -2744,7 +2824,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return { ...defaultApplicationOptions.getConfigForApplicationType(applicationType), ...defaultConfig };
   }
 
-  setConfigDefaults(defaults = this.jhipsterConfig.applicationType !== MICROSERVICE ? defaultConfig : defaultConfigMicroservice) {
+  setConfigDefaults(defaults = this.jhipsterConfig.applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
@@ -2793,6 +2873,32 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Load config for simulating existing project.
+   */
+  parseTestOptions() {
+    /*
+     * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
+     * generator and then executes generator.config.defaults(localConfig).
+     * JHipster workflow does a lot of configuration at the constructor, sometimes this is required due to current
+     * blueprints support implementation, making it incompatible with yeoman-test's withLocalConfig.
+     * 'defaultLocalConfig' option is a replacement for yeoman-test's withLocalConfig method.
+     * 'defaults' function sets every key that has undefined value at current config.
+     */
+    if (this.options.defaultLocalConfig) {
+      this.config.defaults(this.options.defaultLocalConfig);
+      delete this.options.defaultLocalConfig;
+    }
+    /*
+     * Option 'localConfig' uses set instead of defaults of 'defaultLocalConfig'.
+     * 'set' function sets every key from 'localConfig'.
+     */
+    if (this.options.localConfig) {
+      this.config.set(this.options.localConfig);
+      delete this.options.localConfig;
+    }
+  }
+
+  /**
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
    * @param String options - Object containing options.
@@ -2808,7 +2914,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           this.config.set(camelCaseName, optionValue);
         } else if (optionDesc.scope === 'runtime') {
           this.configOptions[camelCaseName] = optionValue;
+        } else {
+          throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
+        delete this.options[camelCaseName];
       }
     });
   }

@@ -47,22 +47,22 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-mssql
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       volumes:
       - name: mssqldb
         persistentVolumeClaim:
           claimName: mssql-data
       - name: data
-        <%_ if (kubernetesUseDynamicStorage) { _%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
           claimName: <%= app.baseName.toLowerCase() %>-mssql-pvc
-        <%_ } else { _%>
+<%_ } else { _%>
         emptyDir: {}
-        <%_ } _%>
+<%_ } _%>
       containers:
       - name: mysql
         image: <%= DOCKER_MSSQL %>

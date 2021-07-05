@@ -183,10 +183,10 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-mongodb
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       initContainers:
         - name: config

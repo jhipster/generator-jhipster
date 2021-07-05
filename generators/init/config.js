@@ -16,13 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { version: jhipsterVersion } = require('../../package.json');
-
 /** Required config to be skipped */
-const requiredConfig = {
-  jhipsterVersion,
-  projectName: 'JHipster project',
-};
+const requiredConfig = {};
 
 /** Init default config for templates */
 const defaultConfig = {

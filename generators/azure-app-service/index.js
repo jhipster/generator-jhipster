@@ -28,8 +28,6 @@ const { defaultConfig } = require('../generator-defaults');
 // Global constants
 const constants = require('../generator-constants');
 
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list');
 
@@ -70,7 +68,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _initializing() {
     return {
-      getConfig() {
+      sayHello() {
         if (!this.options.fromCli) {
           this.warning(
             `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
@@ -79,8 +77,12 @@ module.exports = class extends BaseBlueprintGenerator {
           );
         }
         this.log(chalk.bold('Azure App Service configuration is starting'));
-        this.baseName = this.config.get(OptionNames.BASE_NAME);
-        this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
+      },
+      getSharedConfig() {
+        this.loadAppConfig();
+        this.loadServerConfig();
+      },
+      getConfig() {
         this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureLocation = this.config.get('azureLocation');
         this.azureAppServicePlan = this.config.get('azureAppServicePlan');
@@ -484,8 +486,11 @@ which is free for the first 30 days`);
     return this._default();
   }
 
-  _loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    super.loadPlatformConfig(config, dest);
+  _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    this.loadAppConfig();
+    this.loadServerConfig();
+    super.loadDerivedServerConfig(config, dest);
+    super.loadDerivedAppConfig(config, dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 
@@ -493,7 +498,7 @@ which is free for the first 30 days`);
   _loading() {
     return {
       loadSharedConfig() {
-        this._loadPlatformConfig();
+        this._computeDerivedConfig();
       },
     };
   }
