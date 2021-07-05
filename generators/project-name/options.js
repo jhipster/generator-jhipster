@@ -16,15 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** Required config to be skipped */
-const requiredConfig = {};
 
-/** Init default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-  prettierDefaultIndent: 2,
-  prettierJavaIndent: 4,
-  skipCommitHook: false,
+module.exports.options = {
+  'jhipster-version': {
+    desc: 'Force jhipsterVersion for reproducibility',
+    type: String,
+    hide: true,
+    scope: 'storage',
+  },
+  'base-name': {
+    desc: 'Application base name',
+    type: String,
+    scope: 'storage',
+  },
 };
-
-module.exports = { requiredConfig, defaultConfig };

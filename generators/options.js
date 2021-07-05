@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const { options: initOptions } = require('./init/options');
+const { options: projectNameOptions } = require('./project-name/options');
 
 const commonOptions = {
   defaults: {
@@ -28,4 +29,5 @@ const commonOptions = {
 module.exports = {
   commonOptions,
   initOptions,
+  projectNameOptions,
 };

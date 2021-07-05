@@ -21,27 +21,27 @@ const chalk = require('chalk');
 const simpleGit = require('simple-git');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { GENERATOR_INIT } = require('../generator-list');
+const { GENERATOR_INIT, GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { files } = require('./files');
-const { commonOptions, initOptions } = require('../options');
 const constants = require('../generator-constants');
-const { defaultConfig, requiredConfig } = require('./config');
+const { defaultConfig } = require('./config');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
     super(args, opts, { unique: 'namespace' });
 
-    this.jhipsterOptions(commonOptions);
-    this.jhipsterOptions(initOptions);
+    this.registerCommonOptions();
+    this.registerProjectNameOptions();
+    this.registerInitOptions();
 
     if (this.options.help) return;
 
     if (this.options.defaults) {
-      this.config.defaults({
-        ...requiredConfig,
-        baseName: this.getDefaultAppName(),
-      });
+      this.configureProjectName();
+      this.configureInit();
     }
+
+    this.composeWithJHipster(GENERATOR_PROJECT_NAME);
 
     if (!this.fromBlueprint) {
       this.instantiateBlueprints(GENERATOR_INIT);
@@ -71,26 +71,9 @@ module.exports = class extends BaseBlueprintGenerator {
   _prompting() {
     return {
       async showPrompts() {
-        if (this.options.skipPrompts) return;
-        // Consider existing baseName a project regeneration.
-        if (this.jhipsterConfig.baseName && !this.options.askAnswered) return;
+        if (this.options.defaults || this.options.skipPrompts || (this.existingModularProject && !this.options.askAnswered)) return;
         await this.prompt(
           [
-            {
-              name: 'projectName',
-              when: () => !this.abort,
-              type: 'input',
-              message: 'What is the project name of your application?',
-              default: () => this._getDefaultProjectName(),
-            },
-            {
-              name: 'baseName',
-              when: () => !this.abort,
-              type: 'input',
-              validate: input => this._validateBaseName(input),
-              message: 'What is the base name of your application?',
-              default: () => this.getDefaultAppName(),
-            },
             {
               name: 'prettierDefaultIndent',
               when: () => !this.abort,
@@ -119,11 +102,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _configuring() {
     return {
-      setDefaults() {
-        this.config.defaults({
-          baseName: this.getDefaultAppName(),
-          ...requiredConfig,
-        });
+      configure() {
+        this.configureProjectName();
+        this.configureInit();
       },
     };
   }
@@ -136,9 +117,11 @@ module.exports = class extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadConfig() {
+        this.loadProjectNameConfig();
         this.loadInitConfig();
       },
       loadDerivedConfig() {
+        this.loadDerivedProjectNameConfig();
         this.loadDerivedInitConfig();
       },
       loadConstant() {
@@ -241,31 +224,6 @@ module.exports = class extends BaseBlueprintGenerator {
   /*
    * Start of local public API, blueprints may override to customize the generator behavior.
    */
-
-  /**
-   * @returns default app name
-   */
-  _getDefaultProjectName() {
-    return defaultConfig.projectName;
-  }
-
-  /**
-   * Validates baseName
-   * @param String input - Base name to be checked
-   * @returns Boolean
-   */
-  _validateBaseName(input) {
-    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-      return 'Your base name cannot contain special characters or a blank space';
-    }
-    if (/_/.test(input)) {
-      return 'Your base name cannot contain underscores as this does not meet the URI spec';
-    }
-    if (input === 'application') {
-      return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
-    }
-    return true;
-  }
 
   _createGit() {
     return simpleGit({ baseDir: this.destinationPath() }).env({
