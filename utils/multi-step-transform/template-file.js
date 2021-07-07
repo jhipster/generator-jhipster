@@ -11,12 +11,12 @@ module.exports.TemplateFile = class TemplateFile {
     this._extension = extension;
     this._compiled = () => '';
     this._fragments = [];
-    this._partialName = filename.split(`.${this._extension}.`)[1] || '';
+    this._fragmentName = filename.split(`.${this._extension}.`)[1] || '';
     this._debug = debugBuilder(`jhipster.templates.${this._filename}`);
 
-    this.rootTemplate = !this._partialName;
+    this.rootTemplate = !this._fragmentName;
     if (!this.rootTemplate) {
-      this.depth = (this._partialName.match(/\./g) || []).length + 1;
+      this.depth = (this._fragmentName.match(/\./g) || []).length + 1;
     } else {
       this.depth = 0;
     }
@@ -57,8 +57,8 @@ module.exports.TemplateFile = class TemplateFile {
     const fragments = new TemplateData(this, data);
     try {
       const rendered = this._compiled({
-        partial: false,
-        partialName: this._partialName,
+        fragment: false,
+        fragmentName: this._fragmentName,
         fragments,
         ...data,
       })

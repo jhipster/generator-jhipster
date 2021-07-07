@@ -8,7 +8,7 @@ module.exports.TemplateFileFs = class TemplateFileFs {
   constructor(options = {}) {
     this.extension = options.extension || 'jhi';
     this.delimiter = options.delimiter || '&';
-    this.partialFiles = {};
+    this.fragmentFiles = {};
   }
 
   isTemplate(filePath) {
@@ -37,7 +37,7 @@ module.exports.TemplateFileFs = class TemplateFileFs {
 
   get(filePath) {
     assert(filePath, 'filePath is required');
-    this.partialFiles[filePath] = this.partialFiles[filePath] || new TemplateFile(path.basename(filePath), this.extension);
-    return this.partialFiles[filePath];
+    this.fragmentFiles[filePath] = this.fragmentFiles[filePath] || new TemplateFile(path.basename(filePath), this.extension);
+    return this.fragmentFiles[filePath];
   }
 };

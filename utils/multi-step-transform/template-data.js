@@ -2,6 +2,7 @@ module.exports.TemplateData = class TemplateData {
   constructor(templateFile, defaultData = {}) {
     this.templateFile = templateFile;
     this.defaultData = defaultData;
+    this.sections = {};
   }
 
   registerSections(sections) {
@@ -23,12 +24,16 @@ module.exports.TemplateData = class TemplateData {
     return this[`_${section}`];
   }
 
-  render(fragmentData, suffix = '\n') {
+  /**
+   * Render fragments using default join and suffix.
+   */
+  render(fragmentData = {}, suffix = '\n') {
     const renderedFragments = this.renderFragments(fragmentData).filter(fragment => fragment);
-    if (fragmentData.section) {
-      const limit = this.sections[fragmentData.section];
+    const section = fragmentData.section || this.defaultData.section;
+    if (section) {
+      const limit = this.sections[section];
       if (limit && renderedFragments.length > limit) {
-        throw new Error(`${fragmentData.section} must have at most ${limit} fragments`);
+        throw new Error(`${section} must have at most ${limit} fragments`);
       }
     }
     const rendered = renderedFragments.join('\n');
@@ -36,7 +41,10 @@ module.exports.TemplateData = class TemplateData {
     return rendered && suffix ? `${rendered}${suffix}` : rendered;
   }
 
+  /**
+   * Proxy to renderFragments for templates.
+   */
   renderFragments(fragmentData) {
-    return this.templateFile.renderFragments({ ...this.disableSections, ...this.defaultData, partial: true, ...fragmentData });
+    return this.templateFile.renderFragments({ ...this.disableSections, ...this.defaultData, fragment: true, ...fragmentData });
   }
 };

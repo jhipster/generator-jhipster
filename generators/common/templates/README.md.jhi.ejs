@@ -22,13 +22,13 @@
 -%>
 <&_
  // EJS requires every option to exist in the object.
- const partialOptions = {
-   partialDevelopmentSection: false,
-   partialProductionSection: false,
-   partialTestingSection: false,
-   partialOthersSection: false,
-   partialReferenceSection: false,
- };
+ fragments.registerSections({
+   partialDevelopmentSection: 0,
+   partialProductionSection: 0,
+   partialTestingSection: 0,
+   partialOthersSection: 0,
+   partialReferenceSection: 0,
+ });
 _&>
 # <%= baseName %>
 
@@ -58,7 +58,7 @@ To start your application in the dev profile, run:
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
 <%_ } _%>
-<&- fragments.render({...partialOptions, partialDevelopmentSection: true}) &>
+<&- fragments.partialDevelopmentSection() &>
 ### JHipster Control Center
 
 JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
@@ -207,7 +207,7 @@ To package your application as a war in order to deploy it to an application ser
 <%_ } _%>
 ```
 
-<&- fragments.render({...partialOptions, partialProductionSection: true}) &>
+<&- fragments.partialProductionSection() &>
 ## Testing
 
 To launch your application's tests, run:
@@ -220,7 +220,7 @@ To launch your application's tests, run:
 <%_ } _%>
 ```
 
-<&- fragments.render({...partialOptions, partialTestingSection: true}) -&>
+<&- fragments.partialTestingSection() -&>
 <%_ if (gatlingTests) { _%>
 ### Other tests
 
@@ -322,10 +322,9 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-<& const othersSection = fragments.render({...partialOptions, partialOthersSection: true}) &>
-<& if (othersSection) { &>
+<& if (fragments.partialOthersSection()) { &>
 ## Others
-<&- othersSection &>
+<&- fragments.partialOthersSection() &>
 <& } &>
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
@@ -347,7 +346,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/
-<&- fragments.render({...partialOptions, partialReferenceSection: true}) &>
+<&- fragments.partialReferenceSection() &>
 <% if (gatlingTests) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (enableSwaggerCodegen) { _%>
 [OpenAPI-Generator]: https://openapi-generator.tech
