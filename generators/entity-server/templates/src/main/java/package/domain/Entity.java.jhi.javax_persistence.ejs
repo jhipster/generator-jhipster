@@ -22,7 +22,7 @@
 -%>
 <&_ if (importSection) { -&>
 import javax.persistence.*;
-<%_ if ((databaseTypePostgres && fields.find(field => !field.transient && field.blobContentTypeText)) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
+<%_ if ((databaseTypePostgres && fieldsContainTextBlob) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
 import org.hibernate.annotations.Type;
 <%_ } _%>
 <&_ } -&>
