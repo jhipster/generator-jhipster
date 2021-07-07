@@ -16,18 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { requiredConfig: initRequiredConfig, defaultConfig: initDefaultConfig } = require('./init/config');
-const {
-  requiredConfig: javaPackageNameRequiredConfig,
-  defaultConfig: javaPackageNameDefaultConfig,
-} = require('./java-package-name/config');
-const { requiredConfig: projectNameRequiredConfig, defaultConfig: projectNameDefaultConfig } = require('./project-name/config');
-
-module.exports = {
-  initDefaultConfig,
-  initRequiredConfig,
-  javaPackageNameDefaultConfig,
-  javaPackageNameRequiredConfig,
-  projectNameDefaultConfig,
-  projectNameRequiredConfig,
+/** Required config to be skipped */
+const requiredConfig = {
+  packageName: 'com.mycompany.myapp',
 };
+
+/** Init default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+};
+
+module.exports = { requiredConfig, defaultConfig };

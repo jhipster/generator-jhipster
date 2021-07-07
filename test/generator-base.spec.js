@@ -350,7 +350,7 @@ describe('Generator Base', () => {
           jhipsterTemplatesFolders: [path.join(fixturesPath, 'templates', 'specific'), path.join(fixturesPath, 'templates', 'common')],
         });
       });
-      describe('exiting file in templates/specific and templates/common folders', () => {
+      describe('existing file in templates/specific and templates/common folders', () => {
         const templates = ['all'];
         const files = { files: [{ templates }] };
         let out;
@@ -369,7 +369,7 @@ describe('Generator Base', () => {
           expect(generator.template.getCall(0).args[3].root).to.be.eql(generator.jhipsterTemplatesFolders);
         });
       });
-      describe('exiting file only in templates/common folder', () => {
+      describe('existing file only in templates/common folder', () => {
         const templates = ['common'];
         const files = { files: [{ templates }] };
         let out;
@@ -398,7 +398,7 @@ describe('Generator Base', () => {
           jhipsterTemplatesFolders: [path.join(fixturesPath, 'templates_override'), path.join(fixturesPath, 'templates')],
         });
       });
-      describe('exiting file in templates_override/specific, templates/specific, templates/common folders', () => {
+      describe('existing file in templates_override/specific, templates/specific, templates/common folders', () => {
         const templates = ['all'];
         const files = { files: [{ templates }] };
         let out;
@@ -424,7 +424,7 @@ describe('Generator Base', () => {
           ]);
         });
       });
-      describe('exiting file only templates/specific folder', () => {
+      describe('existing file only templates/specific folder', () => {
         const templates = ['specific'];
         const files = { files: [{ templates }] };
         let out;
@@ -448,7 +448,7 @@ describe('Generator Base', () => {
           ]);
         });
       });
-      describe('exiting file only templates/common folder', () => {
+      describe('existing file only templates/common folder', () => {
         const templates = ['common'];
         const files = { files: [{ templates }] };
         let out;

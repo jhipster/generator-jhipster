@@ -33,8 +33,15 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
-const { initDefaultConfig, initRequiredConfig, projectNameDefaultConfig, projectNameRequiredConfig } = require('./config');
-const { commonOptions, initOptions, projectNameOptions } = require('./options');
+const {
+  initDefaultConfig,
+  initRequiredConfig,
+  javaPackageNameDefaultConfig,
+  javaPackageNameRequiredConfig,
+  projectNameDefaultConfig,
+  projectNameRequiredConfig,
+} = require('./config');
+const { commonOptions, initOptions, javaPackageNameOptions, projectNameOptions } = require('./options');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -2525,6 +2532,39 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - source/destination context
    */
   loadDerivedInitConfig(dest = this) {}
+
+  /**
+   * Register and parse java-package-name options.
+   */
+  registerJavaPackageNameOptions() {
+    this.jhipsterOptions(javaPackageNameOptions);
+  }
+
+  /**
+   * Load required java-package-name configs into config.
+   */
+  configureJavaPackageName() {
+    this.config.defaults(javaPackageNameRequiredConfig);
+  }
+
+  /**
+   * Load java-package-name configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} config - config to load config from
+   * @param {any} dest - destination context to use default is context
+   */
+  loadJavaPackageNameConfig(config = _.defaults({}, this.jhipsterConfig, javaPackageNameDefaultConfig), dest = this) {
+    dest.packageName = config.packageName;
+  }
+
+  /**
+   * Load derived java-package-name configs into dest.
+   * all variables should be set to dest,
+   * all variables should be referred from config,
+   * @param {any} dest - source/destination context
+   */
+  loadDerivedJavaPackageNameConfig(dest = this) {}
 
   /**
    * Register and parse project-name options.

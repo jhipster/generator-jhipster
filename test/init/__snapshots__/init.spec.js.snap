@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster init generator with custom prompt values and askAnswered option on an exiting project should write custom prompt values 1`] = `
+exports[`JHipster init generator with custom prompt values and askAnswered option on an existing project should write custom prompt values 1`] = `
 Object {
   ".yo-rc.json": Object {
     "contents": "{
@@ -8,24 +8,6 @@ Object {
     \\"baseName\\": \\"existing\\",
     \\"jhipsterVersion\\": \\"0.0.0\\",
     \\"projectName\\": \\"JHipster project\\",
-    \\"prettierDefaultIndent\\": 4,
-    \\"prettierJavaIndent\\": 2
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster init generator with custom prompt values and askAnsweredOption on a exiting project should write custom prompt values 1`] = `
-Object {
-  ".yo-rc.json": Object {
-    "contents": "{
-  \\"generator-jhipster\\": {
-    \\"baseName\\": \\"BeautifulProject\\",
-    \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"projectName\\": \\"Beautiful Project\\",
     \\"prettierDefaultIndent\\": 4,
     \\"prettierJavaIndent\\": 2
   }

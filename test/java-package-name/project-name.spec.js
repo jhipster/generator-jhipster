@@ -2,14 +2,14 @@ const path = require('path');
 const expect = require('expect');
 
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { requiredConfig, defaultConfig } = require('../../generators/project-name/config');
+const { requiredConfig, defaultConfig } = require('../../generators/java-package-name/config');
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 
-const projectNameGeneratorPath = path.join(__dirname, '../../generators/project-name');
+const projectNameGeneratorPath = path.join(__dirname, '../../generators/java-package-name');
 
-const testDefaultConfig = { ...requiredConfig, jhipsterVersion: '0.0.0' };
+const testDefaultConfig = requiredConfig;
 
-describe('JHipster project-name generator', () => {
+describe('JHipster java-package-name generator', () => {
   describe('with defaults option', () => {
     let runResult;
     before(async () => {
@@ -37,8 +37,7 @@ describe('JHipster project-name generator', () => {
   describe('with custom prompt values', () => {
     let runResult;
     const promptValues = {
-      projectName: 'Beautiful Project',
-      baseName: 'BeautifulProject',
+      packageName: 'my.custom.package.name',
     };
     describe('and default options', () => {
       before(async () => {

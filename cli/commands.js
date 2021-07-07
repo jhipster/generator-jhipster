@@ -65,6 +65,9 @@ const defaultCommands = {
   init: {
     desc: 'Init project (alpha)',
   },
+  'java-package-name': {
+    desc: 'Configure Java package name (alpha)',
+  },
   jdl: {
     alias: 'import-jdl',
     argument: ['[jdlFiles...]'],
@@ -152,6 +155,9 @@ const defaultCommands = {
   },
   languages: {
     desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
+  },
+  maven: {
+    desc: 'Create Maven project (alpha)',
   },
   openshift: {
     desc: 'Deploy the current application to OpenShift',
