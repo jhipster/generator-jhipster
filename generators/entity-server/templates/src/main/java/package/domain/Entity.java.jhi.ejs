@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <&_
- // Register sections 0 for unlimited fragments, 1 for only one fragment.
+ // Register sections and max allowed fragments, 0 for unlimited.
   fragments.registerSections({
     partialImportSection: 0,
     partialStaticImportSection: 0,
@@ -50,7 +50,7 @@ package <%= packageName %>.domain;
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
-<%_ if (!dtoMapstruct && typeof javadoc != 'undefined') { _%>
+<%_ if (!dtoMapstruct && typeof javadoc !== 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
 <%_ } _%>
 <%_ if (!dtoMapstruct && importApiModelProperty) { _%>
@@ -80,7 +80,7 @@ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
-<%_ if (typeof javadoc == 'undefined') { _%>
+<%_ if (typeof javadoc === 'undefined') { _%>
 /**
  * A <%= persistClass %>.
  */
@@ -106,7 +106,7 @@ public class <%= persistClass %> implements Serializable {
   <%_ if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
   <%_ } _%>
-  <%_ if (!dtoMapstruct && typeof field.javadoc != 'undefined') { _%>
+  <%_ if (!dtoMapstruct && typeof field.javadoc !== 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
 <&- fragments.partialField<%- field.fieldNameCapitalized %>AnnotationSection() -&>
@@ -121,9 +121,9 @@ public class <%= persistClass %> implements Serializable {
 <&- fragments.partialClassAdditionalFieldsSection() -&>
 
 <%_
-// An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+// An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships.filter(relationship => !relationship.embedded || relationship.otherEntity.embedded || relationship.ownerSide)) {
-  if (typeof relationship.javadoc != 'undefined') { _%>
+  if (typeof relationship.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationship.javadoc) %>
     <%_ if (!dtoMapstruct) { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
@@ -208,7 +208,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
 <&- fragments.partialClassAdditionalFieldsMethodsSection('\n\n') -&>
 <%_
 for (const relationship of relationships) {
-  // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
+  // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
   if (embedded && !relationship.otherEntity.embedded && !relationship.ownerSide) {
     continue;
   }

@@ -20,7 +20,7 @@ module.exports.MultiStepTransform = class MultiStepTransform extends OOOTransfor
       if (file.contents && this.templateFileFs.isTemplate(file.path)) {
         const templateFile = this.templateFileFs.add(file.path, file.contents.toString());
         if (templateFile.rootTemplate) {
-          // If multi-step root, postPone.
+          // If multi-step root, postpone.
           this.twoStepTemplateQueue.add(() => {
             if (this.pendingFiles.includes(templateFile.basePath)) {
               return;
