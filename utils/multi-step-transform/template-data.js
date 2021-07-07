@@ -45,6 +45,10 @@ module.exports.TemplateData = class TemplateData {
    * Proxy to renderFragments for templates.
    */
   renderFragments(fragmentData) {
+    if (fragmentData.section && this.defaultData.section) {
+      // Disable section passed by the parent.
+      fragmentData[this.defaultData.section] = false;
+    }
     return this.templateFile.renderFragments({ ...this.disableSections, ...this.defaultData, fragment: true, ...fragmentData });
   }
 };

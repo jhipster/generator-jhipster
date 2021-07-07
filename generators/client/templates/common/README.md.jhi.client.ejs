@@ -20,6 +20,12 @@
  This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
+<&_
+ // Register sections and max allowed fragments, 0 for unlimited.
+ fragments.registerSections({
+   customCliSection: 1,
+ });
+_&>
 <%_
 let clientPackageMngrName = 'Npm';
 let clientPackageMngrAddGlobal = 'install -g';
@@ -39,7 +45,7 @@ You will only need to run this command when dependencies change in [package.json
 <%= clientPackageManager %> install
 ```
 
-We use <%= clientPackageManager %> scripts and <% if (clientFrameworkAngular) { %>[Angular CLI][] with <% } %>[Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[Webpack][] as our build system.
 
   <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
