@@ -17,17 +17,17 @@
  limitations under the License.
 -%>
 <%#
- This is a partial file, it will be merged into to root template if available.
+ This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (partialStaticImportSection) { -&>
+<&_ if (staticImportSection) { -&>
 <%_ if (!embedded) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
 <&_ } -&>
 
-<&_ if (partialImportSection) { -&>
+<&_ if (importSection) { -&>
   <%_ if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
@@ -42,17 +42,17 @@ import java.util.stream.Collectors;
   <%_ } _%>
 <&_ } -&>
 
-<&_ if (partialAnnotationSection) { -&>
+<&_ if (annotationSection) { -&>
 @Document
 <&_ } -&>
 
-<&_ if (partialClassStaticFieldsSection) { -&>
+<&_ if (classStaticFieldsSection) { -&>
 <%_ if (!embedded) { _%>
     public static final String PREFIX = "<%= entityInstance.toLowerCase() %>";
 <%_ } _%>
 <&_ } -&>
 
-<&_ if (partialClassFieldsSection) { -&>
+<&_ if (classFieldsSection) { -&>
 <%_ if (!embedded) { _%>
     @SuppressWarnings("unused")
     @IdPrefix
@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id && !embedded) { _%>
     @Id
     <%_ if (field.id && !embedded) { _%>
@@ -74,13 +74,13 @@ import java.util.stream.Collectors;
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
     @Field("<%= field.fieldNameUnderscored %>_content_type")
 <&_ } -&>
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
     @N1qlJoin(on = "lks.<%= relationship.relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
@@ -101,7 +101,7 @@ import java.util.stream.Collectors;
 <&_ } -&>
 <%_ } -%>
 
-<&_ if (partialClassAdditionalRelationshipsSection) { -&>
+<&_ if (classAdditionalRelationshipsSection) { -&>
     <%_ for (const relationship of relationships) { _%>
       <%_ if (!relationship.id) { _%>
         <%_ if (relationship.collection) { _%>
@@ -116,7 +116,7 @@ import java.util.stream.Collectors;
 <&_ } -&>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (relationship.collection) { _%>
     public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
@@ -168,7 +168,7 @@ import java.util.stream.Collectors;
 <%_ } _%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
     public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
@@ -189,7 +189,7 @@ import java.util.stream.Collectors;
 <%_ } _%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
     public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>

@@ -17,20 +17,20 @@
  limitations under the License.
 -%>
 <%#
- This is a partial file, it will be merged into to root template if available.
+ This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (partialImportSection) { -&>
+<&_ if (importSection) { -&>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <&_ } -&>
 
-<&_ if (partialAnnotationSection) { -&>
+<&_ if (annotationSection) { -&>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 <&_ } -&>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   <%_ } _%>

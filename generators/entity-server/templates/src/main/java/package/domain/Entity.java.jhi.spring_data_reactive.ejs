@@ -17,29 +17,29 @@
  limitations under the License.
 -%>
 <%#
- This is a partial file, it will be merged into to root template if available.
+ This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (partialImportSection) { -&>
+<&_ if (importSection) { -&>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 <&_ } -&>
 
-<&_ if (partialAnnotationSection) { -&>
+<&_ if (annotationSection) { -&>
 @Table("<%= entityTableName %>")
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id) { _%>
     @Id
   <%_ } _%>
     @Column("<%- field.fieldNameAsDatabaseColumn %>")
 <&_ } -&>
   <%_ if (field.fieldTypeBigDecimal) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>CustomSetSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>CustomSetSection) { -&>
     public void set<%= field.fieldInJavaBeanMethod %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %> != null ? <%= field.fieldName %>.stripTrailingZeros() : null;
     }
@@ -48,13 +48,13 @@ import org.springframework.data.relational.core.mapping.Table;
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
     @Column("<%- field.fieldNameAsDatabaseColumn %>_content_type")
 <&_ } -&>
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
     @Transient
 <&_ } -&>
 <%_ } -%>
@@ -63,7 +63,7 @@ import org.springframework.data.relational.core.mapping.Table;
   const reactiveRelationshipWithId = (databaseTypeSql && reactive && !(relationship.relationshipOneToOne &&
     (!relationship.ownerSide || (relationship.ownerSide && relationship.id))));
  _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (!relationship.collection && reactiveRelationshipWithId) { _%>
     public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
     <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
@@ -89,7 +89,7 @@ import org.springframework.data.relational.core.mapping.Table;
 <&_ } -&>
 <%_ } _%>
 
-<&_ if (partialClassAdditionalRelationshipsSection) { -&>
+<&_ if (classAdditionalRelationshipsSection) { -&>
     <%_ for (const relationship of relationships) { _%>
       <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
     @Column("<%= relationship.columnName %>_id")
@@ -98,7 +98,7 @@ import org.springframework.data.relational.core.mapping.Table;
     <%_ } _%>
 <&_ } -&>
 
-<&_ if (partialClassAdditionalRelationshipsMethodsSection) { -&>
+<&_ if (classAdditionalRelationshipsMethodsSection) { -&>
     <%_ for (const relationship of relationships) { _%>
       <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
 

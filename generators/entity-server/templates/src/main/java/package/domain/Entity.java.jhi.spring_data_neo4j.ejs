@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 <%#
- This is a partial file, it will be merged into to root template if available.
+ This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (partialImportSection) { -&>
+<&_ if (importSection) { -&>
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -31,12 +31,12 @@ import org.springframework.data.neo4j.core.schema.Relationship;
   <%_ } _%>
 <&_ } -&>
 
-<&_ if (partialAnnotationSection) { -&>
+<&_ if (annotationSection) { -&>
 @Node
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id && !embedded) { _%>
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -47,7 +47,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
-<&_ if (partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+<&_ if (field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
     @Property("<%=field.fieldNameUnderscored %>_content_type")
 <&_ } -&>
 <%_ } -%>
@@ -55,7 +55,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ for (const relationship of relationships) { -%>
   <%_ const relationshipForwardReference = "HAS_" + _.toUpper(_.snakeCase(relationship.relationshipName)); %>
   <%_ const relationshipBackReference = "HAS_" + _.toUpper(_.snakeCase(relationship.otherEntityRelationshipName)); %>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
     <%_ if (relationship.ownerSide) { _%>
     @Relationship(value = "<%= relationshipBackReference %>", direction = Relationship.Direction.INCOMING)
     <%_ } else { _%>
@@ -65,7 +65,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
     public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
@@ -81,7 +81,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
+<&_ if (relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
     public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
