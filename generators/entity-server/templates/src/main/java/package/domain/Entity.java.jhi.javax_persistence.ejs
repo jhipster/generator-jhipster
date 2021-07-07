@@ -20,20 +20,20 @@
  This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (importSection) { -&>
+<&_ if (fragment.importSection) { -&>
 import javax.persistence.*;
 <%_ if ((databaseTypePostgres && fieldsContainTextBlob) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
 import org.hibernate.annotations.Type;
 <%_ } _%>
 <&_ } -&>
 
-<&_ if (annotationSection) { -&>
+<&_ if (fragment.annotationSection) { -&>
 @Entity
 @Table(name = "<%= entityTableName %>")
 <&_ } -&>
 
 <%_ for (const field of fields) { -%>
-<&_ if (field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id) { _%>
     @Id
     <%_ if (field.jpaGeneratedValue === 'identity') { _%>
@@ -68,7 +68,7 @@ import org.hibernate.annotations.Type;
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { -%>
-<&_ if (field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
     @Column(
         name = "<%- field.fieldNameAsDatabaseColumn %>_content_type"
         <%_ if (field.fieldValidationRequired) { %>, nullable = false<% } _%>
@@ -77,7 +77,7 @@ import org.hibernate.annotations.Type;
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { -%>
-<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { -%>
     @OneToMany(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>

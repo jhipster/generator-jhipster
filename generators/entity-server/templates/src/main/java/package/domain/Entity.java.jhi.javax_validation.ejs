@@ -20,17 +20,17 @@
  This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (importSection) { -&>
+<&_ if (fragment.importSection) { -&>
 <%_ if (validation) { _%>
 import javax.validation.constraints.*;
 <%_ } _%>
 <&_ } -&>
 
-<&_ if (annotationSection) { -&>
+<&_ if (fragment.annotationSection) { -&>
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
-<&_ if (field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.fieldValidate === true) { -%>
     <%- include('../common/field_validators', {field, reactive}); -%>
   <%_ } _%>
@@ -38,7 +38,7 @@ import javax.validation.constraints.*;
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
-<&_ if (field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
   <%_ if (field.fieldValidationRequired) { _%>
       @NotNull
   <%_ } _%>
@@ -46,6 +46,6 @@ import javax.validation.constraints.*;
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
 <&_ } -&>
 <%_ } -%>

@@ -20,17 +20,17 @@
  This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (importSection) { -&>
+<&_ if (fragment.importSection) { -&>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <&_ } -&>
 
-<&_ if (annotationSection) { -&>
+<&_ if (fragment.annotationSection) { -&>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 <&_ } -&>
 
 <%_ for (const relationship of relationships) { _%>
-<&_ if (relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   <%_ } _%>

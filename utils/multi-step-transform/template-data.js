@@ -1,14 +1,15 @@
 module.exports.TemplateData = class TemplateData {
   constructor(templateFile, defaultData = {}) {
-    this.templateFile = templateFile;
-    this.defaultData = defaultData;
-    this.sections = {};
+    this._templateFile = templateFile;
+    this._defaultData = defaultData;
+    this._sections = {};
+    this._defaultFragment = {};
   }
 
   registerSections(sections) {
-    this.sections = sections;
-    this.disableSections = Object.fromEntries(Object.keys(this.sections).map(section => [section, false]));
-    Object.keys(this.sections).forEach(section => {
+    this._sections = sections;
+    this._defaultFragment = Object.fromEntries(Object.keys(this._sections).map(section => [section, false]));
+    Object.keys(this._sections).forEach(section => {
       this[section] = (fragmentData, suffix) => this.renderSection(section, fragmentData, suffix);
     });
   }
@@ -19,7 +20,10 @@ module.exports.TemplateData = class TemplateData {
       fragmentData = {};
     }
     if (!this[`_${section}`]) {
-      this[`_${section}`] = this.render({ ...fragmentData, [section]: true, section, sections: this.sections }, suffix);
+      this[`_${section}`] = this.render(
+        { ...fragmentData, fragment: { [section]: true }, section, sections: Object.keys(this._sections) },
+        suffix
+      );
     }
     return this[`_${section}`];
   }
@@ -29,9 +33,9 @@ module.exports.TemplateData = class TemplateData {
    */
   render(fragmentData = {}, suffix = '\n') {
     const renderedFragments = this.renderFragments(fragmentData).filter(fragment => fragment);
-    const section = fragmentData.section || this.defaultData.section;
+    const section = fragmentData.section || this._defaultData.section;
     if (section) {
-      const limit = this.sections[section];
+      const limit = this._sections[section];
       if (limit && renderedFragments.length > limit) {
         throw new Error(`${section} must have at most ${limit} fragments`);
       }
@@ -44,11 +48,12 @@ module.exports.TemplateData = class TemplateData {
   /**
    * Proxy to renderFragments for templates.
    */
-  renderFragments(fragmentData) {
-    if (fragmentData.section && this.defaultData.section) {
+  renderFragments(fragmentData = {}) {
+    const fragment = { ...this._defaultData.fragment, ...fragmentData.fragment };
+    if (this._defaultData.section && fragmentData.section) {
       // Disable section passed by the parent.
-      fragmentData[this.defaultData.section] = false;
+      fragment[this._defaultData.section] = false;
     }
-    return this.templateFile.renderFragments({ ...this.disableSections, ...this.defaultData, fragment: true, ...fragmentData });
+    return this._templateFile.renderFragments({ ...this._defaultData, ...fragmentData, fragment });
   }
 };

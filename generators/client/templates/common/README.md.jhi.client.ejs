@@ -32,7 +32,7 @@ let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 -%>
-<&_ if (developmentSection) { -&>
+<&_ if (fragment.developmentSection) { -&>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
@@ -150,7 +150,7 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
 <&_ } -&>
-<&_ if (testingSection) { -&>
+<&_ if (fragment.testingSection) { -&>
 ### Client tests
 
 Unit tests are run by [Jest][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
@@ -174,7 +174,7 @@ You should only run the audits when your application is packaged with the produc
 The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
   <%_ } _%>
 <&_ } -&>
-<&_ if (referenceSection) { -&>
+<&_ if (fragment.referenceSection) { -&>
 [Webpack]: https://webpack.github.io/
 [BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/

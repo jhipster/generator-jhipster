@@ -20,10 +20,10 @@
  This is a fragment file, it will be merged into to root template if available.
  EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
-<&_ if (customCliSection) { -&>
+<&_ if (fragment.customCliSection) { -&>
 [Angular CLI][] with 
 <&_ } -&>
-<&_ if (developmentSection) { -&>
+<&_ if (fragment.developmentSection) { -&>
 ### Using Angular CLI
 
 You can also use [Angular CLI][] to generate some custom client code.
@@ -43,6 +43,6 @@ update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
 ```
 
 <&_ } -&>
-<&_ if (referenceSection) { _&>
+<&_ if (fragment.referenceSection) { _&>
 [Angular CLI]: https://cli.angular.io/
 <&_ } -&>
