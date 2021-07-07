@@ -30,7 +30,7 @@ module.exports.TemplateFileFs = class TemplateFileFs {
     const templateFile = this.get(filePath);
     templateFile.compile(filePath, contents, { delimiter: this.delimiter });
     if (!templateFile.rootTemplate) {
-      this.get(templateFile.parentPath).addChild(templateFile);
+      this.get(templateFile.parentPath).addFragment(templateFile);
     }
     return templateFile;
   }

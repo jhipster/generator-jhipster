@@ -8,35 +8,35 @@ module.exports.TemplateData = class TemplateData {
     this.sections = sections;
     this.disableSections = Object.fromEntries(Object.keys(this.sections).map(section => [section, false]));
     Object.keys(this.sections).forEach(section => {
-      this[section] = (childData, suffix) => this.renderSection(section, childData, suffix);
+      this[section] = (fragmentData, suffix) => this.renderSection(section, fragmentData, suffix);
     });
   }
 
-  renderSection(section, childData, suffix) {
-    if (typeof childData === 'string') {
-      suffix = childData;
-      childData = {};
+  renderSection(section, fragmentData, suffix) {
+    if (typeof fragmentData === 'string') {
+      suffix = fragmentData;
+      fragmentData = {};
     }
     if (!this[`_${section}`]) {
-      this[`_${section}`] = this.render({ ...childData, [section]: true, section, sections: this.sections }, suffix);
+      this[`_${section}`] = this.render({ ...fragmentData, [section]: true, section, sections: this.sections }, suffix);
     }
     return this[`_${section}`];
   }
 
-  render(childData, suffix = '\n') {
-    const renderedChilds = this.renderChilds(childData).filter(child => child);
-    if (childData.section) {
-      const limit = this.sections[childData.section];
-      if (limit && renderedChilds.length > limit) {
-        throw new Error(`${childData.section} must have at most ${limit} childs`);
+  render(fragmentData, suffix = '\n') {
+    const renderedFragments = this.renderFragments(fragmentData).filter(fragment => fragment);
+    if (fragmentData.section) {
+      const limit = this.sections[fragmentData.section];
+      if (limit && renderedFragments.length > limit) {
+        throw new Error(`${fragmentData.section} must have at most ${limit} fragments`);
       }
     }
-    const rendered = renderedChilds.join('\n');
+    const rendered = renderedFragments.join('\n');
     this.last = rendered;
     return rendered && suffix ? `${rendered}${suffix}` : rendered;
   }
 
-  renderChilds(childData) {
-    return this.templateFile.renderChilds({ ...this.disableSections, ...this.defaultData, partial: true, ...childData });
+  renderFragments(fragmentData) {
+    return this.templateFile.renderFragments({ ...this.disableSections, ...this.defaultData, partial: true, ...fragmentData });
   }
 };

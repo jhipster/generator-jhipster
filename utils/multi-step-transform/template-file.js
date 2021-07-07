@@ -10,7 +10,7 @@ module.exports.TemplateFile = class TemplateFile {
     this._filename = filename;
     this._extension = extension;
     this._compiled = () => '';
-    this._childs = [];
+    this._fragments = [];
     this._partialName = filename.split(`.${this._extension}.`)[1] || '';
     this._debug = debugBuilder(`jhipster.templates.${this._filename}`);
 
@@ -43,14 +43,14 @@ module.exports.TemplateFile = class TemplateFile {
     this._compiled = ejs.compile(contents, options);
   }
 
-  addChild(templateFile) {
+  addFragment(templateFile) {
     assert(templateFile, 'templateFile is required');
 
-    this._childs.push(templateFile);
+    this._fragments.push(templateFile);
   }
 
-  renderChilds(data) {
-    return this._childs.map(templateFile => templateFile.render(data));
+  renderFragments(data) {
+    return this._fragments.map(templateFile => templateFile.render(data));
   }
 
   render(data = {}) {
