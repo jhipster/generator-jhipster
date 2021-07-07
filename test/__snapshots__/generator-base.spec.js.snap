@@ -4,7 +4,6 @@ exports[`Generator Base writeFilesToDisk when called with default angular client
 Array [
   ".browserslistrc",
   ".eslintrc.json",
-  ".npmrc",
   "README.md.jhi.client.angular",
   "angular.json",
   "jest.conf.js",
@@ -190,7 +189,6 @@ exports[`Generator Base writeFilesToDisk when called with default angular client
 Array [
   ".browserslistrc",
   ".eslintrc.json",
-  ".npmrc",
   "README.md.jhi.client.angular",
   "angular.json",
   "jest.conf.js",
