@@ -20,7 +20,7 @@
     "vue2-filters": "0.13.0"
   },
   "devDependencies": {
-    "@types/jest": "26.0.23",
+    "@types/jest": "26.0.24",
     "@types/node": "16.0.0",
     "@types/sinon": "10.0.2",
     "@types/vuelidate": "0.7.15",
