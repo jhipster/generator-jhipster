@@ -54,12 +54,12 @@ module.exports.TemplateFile = class TemplateFile {
   }
 
   render(data = {}) {
-    const partials = new TemplateData(this, data);
+    const fragments = new TemplateData(this, data);
     try {
       const rendered = this._compiled({
         partial: false,
         partialName: this._partialName,
-        partials,
+        fragments,
         ...data,
       })
         .trimEnd()

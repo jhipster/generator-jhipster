@@ -18,7 +18,7 @@
 -%>
 <%#
  This is a partial file, it will be merged into to root template if available.
- EJS partials will process % delimiter tags in template and & delimiter tags in the merge process.
+ EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
 -%>
 <%_
 let clientPackageMngrName = 'Npm';
@@ -181,4 +181,4 @@ The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/l
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/
 <&_ } -&>
-<&- partials.render({...locals}) -&>
+<&- fragments.render({...locals}) -&>

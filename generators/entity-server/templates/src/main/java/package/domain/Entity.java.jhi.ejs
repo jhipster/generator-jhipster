@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <&_
- // Register sections 0 for unlimited childs, 1 for only one child.
-  partials.registerSections({
+ // Register sections 0 for unlimited fragments, 1 for only one fragment.
+  fragments.registerSections({
     partialImportSection: 0,
     partialStaticImportSection: 0,
     partialAnnotationSection: 0,
@@ -45,8 +45,8 @@
 -&>
 package <%= packageName %>.domain;
 
-<&- partials.partialStaticImportSection() -&>
-<&- partials.partialImportSection() -&>
+<&- fragments.partialStaticImportSection() -&>
+<&- fragments.partialImportSection() -&>
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
@@ -90,7 +90,7 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
   <%_ } _%>
 <%_ } _%>
-<&- partials.partialAnnotationSection() -&>
+<&- fragments.partialAnnotationSection() -&>
 public class <%= persistClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -100,8 +100,8 @@ public class <%= persistClass %> implements Serializable {
     private <%= primaryKey.type %> <%= primaryKey.name %>;
 
 <%_ } _%>
-<&- partials.partialClassStaticFieldsSection() -&>
-<&- partials.partialClassFieldsSection() -&>
+<&- fragments.partialClassStaticFieldsSection() -&>
+<&- fragments.partialClassFieldsSection() -&>
 <%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
   <%_ if (typeof field.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(field.javadoc) %>
@@ -109,16 +109,16 @@ public class <%= persistClass %> implements Serializable {
   <%_ if (!dtoMapstruct && typeof field.javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
-<&- partials.partialField<%- field.fieldNameCapitalized %>AnnotationSection() -&>
+<&- fragments.partialField<%- field.fieldNameCapitalized %>AnnotationSection() -&>
     private <%= field.javaFieldType %> <%= field.fieldName %>;
 
   <%_ if (field.fieldWithContentType) { _%>
-<&- partials.partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection() -&>
+<&- fragments.partialField<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection() -&>
     private String <%= field.fieldName %>ContentType;
 
   <%_ } _%>
 <%_ } _%>
-<&- partials.partialClassAdditionalFieldsSection() -&>
+<&- fragments.partialClassAdditionalFieldsSection() -&>
 
 <%_
 // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
@@ -129,7 +129,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
     <%_ } _%>
   <%_ } _%>
-<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>
+<&- fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
@@ -165,7 +165,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
   <%_ } _%>
 
 <%_ }; _%>
-<&- partials.partialClassAdditionalRelationshipsSection() -&>
+<&- fragments.partialClassAdditionalRelationshipsSection() -&>
     // jhipster-needle-entity-add-field - JHipster will add fields here
 <%_ for (const field of fields.filter(field => !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
 
@@ -180,8 +180,8 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
     }
   <%_ } _%>
 
-<&- partials.partialField<%- field.fieldNameCapitalized %>CustomSetSection() -&>
-<&_ if (!partials.partialField<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
+<&- fragments.partialField<%- field.fieldNameCapitalized %>CustomSetSection() -&>
+<&_ if (!fragments.partialField<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
     public void set<%= field.fieldInJavaBeanMethod %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
@@ -205,7 +205,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
   <%_ } _%>
 <%_ } _%>
 
-<&- partials.partialClassAdditionalFieldsMethodsSection('\n\n') -&>
+<&- fragments.partialClassAdditionalFieldsMethodsSection('\n\n') -&>
 <%_
 for (const relationship of relationships) {
   // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
@@ -224,8 +224,8 @@ _%>
     }
 
   <%_ } _%>
-<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection() -&>
-<&_ if (!partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
+<&- fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection() -&>
+<&_ if (!fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
   <%_ if (relationship.collection) { _%>
     public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
@@ -276,8 +276,8 @@ _%>
         return this;
     }
 
-<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection() -&>
-<&_ if (!partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection()) { -&>
+<&- fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection() -&>
+<&_ if (!fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomAddSection()) { -&>
     public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
@@ -293,8 +293,8 @@ _%>
     }
 <&_ } -&>
 
-<&- partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection() -&>
-<&_ if (!partials.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection()) { -&>
+<&- fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection() -&>
+<&_ if (!fragments.partialRelationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection()) { -&>
     public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
@@ -319,7 +319,7 @@ _%>
     <%_ } _%>
 
 <%_ } _%>
-<&- partials.partialClassAdditionalRelationshipsMethodsSection() -&>
+<&- fragments.partialClassAdditionalRelationshipsMethodsSection() -&>
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

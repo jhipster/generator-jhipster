@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%#
- This is a partial root file, it will be merge partials if available.
- EJS partials will process % delimiter tags in template rendering and & delimiter tags in the merge process.
+ This is a partial root file, it will be merge fragments if available.
+ EJS fragments will process % delimiter tags in template rendering and & delimiter tags in the merge process.
 -%>
 <&_
  // EJS requires every option to exist in the object.
@@ -58,7 +58,7 @@ To start your application in the dev profile, run:
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
 <%_ } _%>
-<&- partials.render({...partialOptions, partialDevelopmentSection: true}) &>
+<&- fragments.render({...partialOptions, partialDevelopmentSection: true}) &>
 ### JHipster Control Center
 
 JHipster Control Center can help you to manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
@@ -207,7 +207,7 @@ To package your application as a war in order to deploy it to an application ser
 <%_ } _%>
 ```
 
-<&- partials.render({...partialOptions, partialProductionSection: true}) &>
+<&- fragments.render({...partialOptions, partialProductionSection: true}) &>
 ## Testing
 
 To launch your application's tests, run:
@@ -220,7 +220,7 @@ To launch your application's tests, run:
 <%_ } _%>
 ```
 
-<&- partials.render({...partialOptions, partialTestingSection: true}) -&>
+<&- fragments.render({...partialOptions, partialTestingSection: true}) -&>
 <%_ if (gatlingTests) { _%>
 ### Other tests
 
@@ -322,7 +322,7 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-<& const othersSection = partials.render({...partialOptions, partialOthersSection: true}) &>
+<& const othersSection = fragments.render({...partialOptions, partialOthersSection: true}) &>
 <& if (othersSection) { &>
 ## Others
 <&- othersSection &>
@@ -347,7 +347,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/
-<&- partials.render({...partialOptions, partialReferenceSection: true}) &>
+<&- fragments.render({...partialOptions, partialReferenceSection: true}) &>
 <% if (gatlingTests) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (enableSwaggerCodegen) { _%>
 [OpenAPI-Generator]: https://openapi-generator.tech
