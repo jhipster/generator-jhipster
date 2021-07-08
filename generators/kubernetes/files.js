@@ -17,6 +17,15 @@
  * limitations under the License.
  */
 
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+
+const NO_DATABASE = databaseTypes.NO;
+
 module.exports = {
   writeFiles,
 };
@@ -32,23 +41,23 @@ function writeFiles() {
         this.template('deployment.yml.ejs', `${appOut}/${appName}-deployment.yml`);
         this.template('service.yml.ejs', `${appOut}/${appName}-service.yml`);
         // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
-        if (this.app.prodDatabaseType !== 'no') {
+        if (this.app.prodDatabaseType !== NO_DATABASE) {
           this.template(`db/${this.app.prodDatabaseType}.yml.ejs`, `${appOut}/${appName}-${this.app.prodDatabaseType}.yml`);
         }
-        if (this.app.searchEngine === 'elasticsearch') {
+        if (this.app.searchEngine === ELASTICSEARCH) {
           this.template('db/elasticsearch.yml.ejs', `${appOut}/${appName}-elasticsearch.yml`);
         }
-        if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+        if (this.app.applicationType === GATEWAY || this.app.applicationType === MONOLITH) {
           if (this.istio) {
             this.template('istio/gateway.yml.ejs', `${appOut}/${appName}-gateway.yml`);
           } else if (this.kubernetesServiceType === 'Ingress') {
             this.template('ingress.yml.ejs', `${appOut}/${appName}-ingress.yml`);
           }
         }
-        if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+        if (!this.app.serviceDiscoveryType && this.app.authenticationType === JWT) {
           this.template('secret/jwt-secret.yml.ejs', `${appOut}/jwt-secret.yml`);
         }
-        if (this.monitoring === 'prometheus') {
+        if (this.monitoring === PROMETHEUS) {
           this.template('monitoring/jhipster-prometheus-sm.yml.ejs', `${appOut}/${appName}-prometheus-sm.yml`);
         }
         if (this.istio) {
@@ -75,7 +84,7 @@ function writeFiles() {
 
     writePrometheusGrafanaFiles() {
       const monitOut = 'monitoring'.concat('-', suffix);
-      if (this.monitoring === 'prometheus') {
+      if (this.monitoring === PROMETHEUS) {
         this.template('monitoring/jhipster-prometheus-crd.yml.ejs', `${monitOut}/jhipster-prometheus-crd.yml`);
         this.template('monitoring/jhipster-prometheus-cr.yml.ejs', `${monitOut}/jhipster-prometheus-cr.yml`);
         this.template('monitoring/jhipster-grafana.yml.ejs', `${monitOut}/jhipster-grafana.yml`);
@@ -88,10 +97,10 @@ function writeFiles() {
 
     writeRegistryFiles() {
       const registryOut = 'registry'.concat('-', suffix);
-      if (this.serviceDiscoveryType === 'eureka') {
+      if (this.serviceDiscoveryType === EUREKA) {
         this.template('registry/jhipster-registry.yml.ejs', `${registryOut}/jhipster-registry.yml`);
         this.template('registry/application-configmap.yml.ejs', `${registryOut}/application-configmap.yml`);
-      } else if (this.serviceDiscoveryType === 'consul') {
+      } else if (this.serviceDiscoveryType === CONSUL) {
         this.template('registry/consul.yml.ejs', `${registryOut}/consul.yml`);
         this.template('registry/consul-config-loader.yml.ejs', `${registryOut}/consul-config-loader.yml`);
         this.template('registry/application-configmap.yml.ejs', `${registryOut}/application-configmap.yml`);

@@ -1088,6 +1088,11 @@ jhipster:
     authentication:
       jwt:
         base64-secret: SECRET--50
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 eureka:
   client:
     service-url:
@@ -1145,8 +1150,42 @@ eureka:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
     ports:
       - 8761:8761
+
+  prometheus:
+    image: prom/prometheus:v2.27.1
+    volumes:
+      - ./prometheus-conf/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - \\"--config.file=/etc/prometheus/prometheus.yml\\"
+    ports:
+      - 9090:9090
+  alertmanager:
+    image: prom/alertmanager:v0.22.2
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager-conf/:/etc/alertmanager/
+    command:
+      - \\"--config.file=/etc/alertmanager/config.yml\\"
+      - \\"--storage.path=/alertmanager\\"
+
+  grafana:
+    image: grafana/grafana:8.0.1
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
 ",
     "stateCleared": "modified",
   },
@@ -1263,27 +1302,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
   samplemysql-elasticsearch:
     image: elasticsearch:2.4.6
-
-  jhipster-registry:
-    image: jhipster/jhipster-registry:v6.8.0
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
-    # Spring profiles.
-    # \\"native\\" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=
-      - JHIPSTER_REGISTRY_PASSWORD=
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-    ports:
-      - 8761:8761
 ",
     "stateCleared": "modified",
   },
@@ -1641,27 +1659,6 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
       - SERVER_PORT=80
     ports:
       - \\"8080:8080\\"
-
-  jhipster-registry:
-    image: jhipster/jhipster-registry:v6.8.0
-    volumes:
-      - ./central-server-config:/central-config
-    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
-    # Spring profiles.
-    # \\"native\\" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-    environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_SECURITY_USER_PASSWORD=
-      - JHIPSTER_REGISTRY_PASSWORD=
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-    ports:
-      - 8761:8761
 ",
     "stateCleared": "modified",
   },

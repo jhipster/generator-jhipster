@@ -93,10 +93,10 @@ spec:
       name: consul
       labels:
         app: consul
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       securityContext:
         fsGroup: 1000

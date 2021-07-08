@@ -38,8 +38,16 @@ const Generators = {
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
+  GENERATOR_HEROKU: 'heroku',
+  GENERATOR_KUBERNETES: 'kubernetes',
+  GENERATOR_KUBERNETES_HELM: 'kubernetes-helm',
+  GENERATOR_KUBERNETES_KNATIVE: 'kubernetes-knative',
+  GENERATOR_INIT: 'init',
+  GENERATOR_JAVA_PACKAGE_NAME: 'java-package-name',
+  GENERATOR_MAVEN: 'maven',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
+  GENERATOR_PROJECT_NAME: 'project-name',
   GENERATOR_SERVER: 'server',
 };
 

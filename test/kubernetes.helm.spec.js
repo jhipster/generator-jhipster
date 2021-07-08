@@ -305,6 +305,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
+          istio: false,
         })
         .run();
     });

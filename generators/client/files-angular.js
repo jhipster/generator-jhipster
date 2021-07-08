@@ -44,7 +44,6 @@ const files = {
         'webpack/webpack.custom.js',
         '.browserslistrc',
         { file: 'webpack/logo-jhipster.png', method: 'copy' },
-        '.npmrc',
       ],
     },
   ],

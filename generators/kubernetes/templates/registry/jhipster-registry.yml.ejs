@@ -75,10 +75,10 @@ spec:
       labels:
         app: jhipster-registry
         version: "1.0"
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -96,10 +96,10 @@ spec:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
-        <%_ if (istio) { _%>
+<%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
-        <%_ } _%>
+<%_ } _%>
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
           value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
         - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE

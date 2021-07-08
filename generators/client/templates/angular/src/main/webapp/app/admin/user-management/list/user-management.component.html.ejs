@@ -38,7 +38,7 @@
   <div class="table-responsive" *ngIf="users">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
-        <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
+        <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()"<% } %>>
           <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
             <span <%= jhiPrefix %>Translate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %>
           </th>

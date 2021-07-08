@@ -72,7 +72,7 @@ if (hasFieldConstraint) { _%>
         if (!relationshipData.nullable) {
         _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
-            columnName="<%= relationshipData.columnName %>"
+            columnName="<%= relationshipData.columnName %>_id"
             columnDataType="<%= relationshipData.columnDataType %>"/>
     <%_  }
      } _%>

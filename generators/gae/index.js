@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const os = require('os');
 const shelljs = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const _ = require('lodash');
 const { GENERATOR_GAE } = require('../generator-list');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 const dockerPrompts = require('../docker-prompts');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
 const constants = require('../generator-constants');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
@@ -34,24 +34,15 @@ const { MARIADB, MYSQL, POSTGRESQL } = require('../../jdl/jhipster/database-type
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
-const {
-  APPLICATION_TYPE,
-  BASE_NAME,
-  BUILD_TOOL,
-  CACHE_PROVIDER,
-  CLIENT_PACKAGE_MANAGER,
-  DATABASE_TYPE,
-  ENABLE_HIBERNATE_CACHE,
-  PACKAGE_NAME,
-  PACKAGE_FOLDER,
-  PROD_DATABASE_TYPE,
-  SEARCH_ENGINE,
-  SERVICE_DISCOVERY_TYPE,
-  SKIP_CLIENT,
-} = OptionNames;
 
-module.exports = class extends BaseGenerator {
-  get initializing() {
+let useBlueprints;
+module.exports = class extends BaseBlueprintGenerator {
+  constructor(args, opts) {
+    super(args, opts);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_GAE);
+  }
+
+  _initializing() {
     return {
       sayHello() {
         this.log(chalk.bold('Welcome to Google App Engine Generator'));
@@ -97,24 +88,20 @@ module.exports = class extends BaseGenerator {
         );
       },
 
+      loadCommonConfig() {
+        this.loadAppConfig();
+        this.loadServerConfig();
+        this.loadPlatformConfig();
+        this.loadClientConfig();
+      },
+
       loadConfig() {
         const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = configuration.get(BASE_NAME);
         this.mainClass = this.getMainClassName();
-        this.packageName = configuration.get(PACKAGE_NAME);
-        this.packageFolder = configuration.get(PACKAGE_FOLDER);
-        this.cacheProvider = configuration.get(CACHE_PROVIDER) || NO_CACHE_PROVIDER;
-        this.enableHibernateCache =
-          configuration.get(ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-        this.databaseType = configuration.get(DATABASE_TYPE);
-        this.prodDatabaseType = configuration.get(PROD_DATABASE_TYPE);
-        this.searchEngine = configuration.get(SEARCH_ENGINE);
+        this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
+        this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
         this.frontendAppName = this.getFrontendAppName();
-        this.buildTool = configuration.get(BUILD_TOOL);
-        this.applicationType = configuration.get(APPLICATION_TYPE);
-        this.serviceDiscoveryType = configuration.get(SERVICE_DISCOVERY_TYPE);
-
         this.gcpProjectId = configuration.get('gcpProjectId');
         this.gcpCloudSqlInstanceName = configuration.get('gcpCloudSqlInstanceName');
         this.gcpCloudSqlUserName = configuration.get('gcpCloudSqlUserName');
@@ -128,14 +115,17 @@ module.exports = class extends BaseGenerator {
         this.gaeMinInstances = configuration.get('gaeMinInstances');
         this.gaeCloudSQLInstanceNeeded = configuration.get('gaeCloudSQLInstanceNeeded');
         this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
-        this.skipClient = this.config.get(SKIP_CLIENT);
-        this.clientPackageManager = this.config.get(CLIENT_PACKAGE_MANAGER);
         this.dasherizedBaseName = _.kebabCase(this.baseName);
       },
     };
   }
 
-  get prompting() {
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
     return {
       askForPath() {
         if (this.abort) return undefined;
@@ -616,11 +606,16 @@ module.exports = class extends BaseGenerator {
     };
   }
 
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
   get default() {
     return {};
   }
 
-  get configuring() {
+  _configuring() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_GAE);
@@ -756,7 +751,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get writing() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _writing() {
     return {
       copyFiles() {
         if (this.abort) return;
@@ -821,7 +821,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get end() {
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _end() {
     return {
       productionBuild() {
         if (this.abort) return;
@@ -860,6 +865,11 @@ module.exports = class extends BaseGenerator {
                 }); */
       },
     };
+  }
+
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 
   _defaultProjectId() {

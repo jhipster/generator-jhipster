@@ -1,13 +1,13 @@
 commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
-<%_ if (kubernetesNamespace !== 'default') { _%>
+<%_ if (!kubernetesNamespaceDefault) { _%>
 namespace: <%= kubernetesNamespace %>
 <%_ } _%>
 
 resources:
 <%_
-if (kubernetesNamespace !== 'default') { _%>
+if (!kubernetesNamespaceDefault) { _%>
 - namespace.yml
 <%_ } _%>
 # Individual apps
@@ -18,58 +18,59 @@ const appName = appConfig.baseName.toLowerCase();
 const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-deployment.yml
 - <%= appOut %>/<%= appName %>-service.yml
-<%_
-  if (appConfig.prodDatabaseType !== 'no') { _%>
+  <%_
+  if (!appConfig.databaseTypeNo) { _%>
 - <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType %>.yml
-<%_  }
-  if (appConfig.searchEngine === 'elasticsearch') { _%>
+  <%_  }
+  if (appConfig.searchEngineElasticsearch) { _%>
 - <%= appOut %>/<%= appName %>-elasticsearch.yml
-<%_  }
-  if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+  <%_  }
+  if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) {
     if (istio) { _%>
 - <%= appOut %>/<%= appName %>-gateway.yml
-<%_    } else if (kubernetesServiceType === 'Ingress') { _%>
+    <%_ } else if (kubernetesServiceTypeIngress) { _%>
 - <%= appOut %>/<%= appName %>-ingress.yml
-<%_    }
+    <%_ }
   }
-  if (!appConfig.serviceDiscoveryType && appConfig.authenticationType === 'jwt') { _%>
+  if (!appConfig.serviceDiscoveryType && appConfig.authenticationTypeJwt) { _%>
 - <%= appOut %>/jwt-secret.yml
-<%_  }
-  if (monitoring === 'prometheus') { _%>
+  <%_ }
+  if (monitoringPrometheus) { _%>
 - <%= appOut %>/<%= appName %>-prometheus-sm.yml
-<%_  }
+  <%_ }
   if (istio) { _%>
 - <%= appOut %>/<%= appName %>-destination-rule.yml
 - <%= appOut %>/<%= appName %>-virtual-service.yml
-<%_  } _%>
+  <%_  } _%>
 <%_ }) _%>
 <%_ if (useKafka) { _%>
 # messagebroker
 - messagebroker-<%= suffix %>/kafka.yml
 <%_ } _%>
-<%_ if (monitoring === 'prometheus') {
-    const monitOut = 'monitoring'.concat('-', suffix); _%>
+<%_ if (monitoringPrometheus) {
+  const monitOut = 'monitoring'.concat('-', suffix); _%>
 # monitoring prometheus
 - <%= monitOut %>/jhipster-prometheus-cr.yml
 - <%= monitOut %>/jhipster-prometheus-crd.yml
 - <%= monitOut %>/jhipster-grafana.yml
 - <%= monitOut %>/jhipster-grafana-dashboard.yml
-<%_ if (istio) { _%>
+  <%_ if (istio) { _%>
 - <%= monitOut %>/jhipster-grafana-gateway.yml
-<%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
 # service discovery eureka/consul
-<%_ if (serviceDiscoveryType === 'eureka') {
-    const registryOut = 'registry'.concat('-', suffix); _%>
+<%_ if (serviceDiscoveryEureka) {
+  const registryOut = 'registry'.concat('-', suffix); _%>
 - <%= registryOut %>/jhipster-registry.yml
 - <%= registryOut %>/application-configmap.yml
-<%_ }  else if (serviceDiscoveryType === 'consul') {
+<%_ }  else if (serviceDiscoveryConsul) {
     const registryOut = 'registry'.concat('-', suffix);_%>
 - <%= registryOut %>/consul.yml
 - <%= registryOut %>/consul-config-loader.yml
 - <%= registryOut %>/application-configmap.yml
 <%_ } _%>
 <%_ if (istio) {
-    const istioOut = 'istio'.concat('-', suffix); _%>
+  const istioOut = 'istio'.concat('-', suffix); _%>
 # istio
 - <%= istioOut %>/grafana-gateway.yml
 - <%= istioOut %>/zipkin-gateway.yml
@@ -78,7 +79,7 @@ const appOut = appName.concat('-', suffix); _%>
 
 patchesJson6902:
 <%_ if (istio) {
-    const patchOut = 'patch'.concat('-', suffix); _%>
+  const patchOut = 'patch'.concat('-', suffix); _%>
 - target:
     version: v1
     kind: Namespace
