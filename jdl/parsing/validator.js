@@ -288,7 +288,7 @@ const deploymentConfigPropsValidations = {
     msg: 'ingressDomain property',
   },
   INGRESS_TYPE: {
-    type: 'STRING',
+    type: 'NAME',
     pattern: ALPHABETIC,
     msg: 'ingressType property',
   },
