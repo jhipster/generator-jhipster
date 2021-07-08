@@ -24,6 +24,15 @@ const commonOptions = {
     desc: 'Use default config',
     type: Boolean,
   },
+  reproducible: {
+    desc: 'Force a reproducible project for testing',
+    type: Boolean,
+    hide: true,
+  },
+  add: {
+    desc: 'Compose with a generator at current project',
+    type: Boolean,
+  },
 };
 
 module.exports = {

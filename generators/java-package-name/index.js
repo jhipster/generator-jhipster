@@ -35,9 +35,11 @@ module.exports = class extends BaseBlueprintGenerator {
     if (this.options.defaults) {
       this.configureJavaPackageName();
     }
+  }
 
+  async _beforeQueue() {
     if (!this.fromBlueprint) {
-      this.instantiateBlueprints(GENERATOR_JAVA_PACKAGE_NAME);
+      await this.composeWithBlueprints(GENERATOR_JAVA_PACKAGE_NAME);
     }
   }
 
@@ -57,14 +59,14 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._initializing();
   }
 
   _prompting() {
     return {
       async showPrompts() {
-        if (this.options.defaults || this.options.skipPrompts || (this.existingModularProject && !this.options.askAnswered)) return;
+        if (this.skipPrompts()) return;
         await this.prompt(
           [
             {
@@ -83,7 +85,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._prompting();
   }
 
@@ -96,20 +98,21 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._configuring();
   }
 
   _loading() {
     return {
       loadConfig() {
+        this.loadProjectNameConfig();
         this.loadJavaPackageNameConfig();
       },
     };
   }
 
   get loading() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._loading();
   }
 

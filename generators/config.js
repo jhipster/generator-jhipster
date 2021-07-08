@@ -21,7 +21,11 @@ const {
   requiredConfig: javaPackageNameRequiredConfig,
   defaultConfig: javaPackageNameDefaultConfig,
 } = require('./java-package-name/config');
-const { requiredConfig: projectNameRequiredConfig, defaultConfig: projectNameDefaultConfig } = require('./project-name/config');
+const {
+  requiredConfig: projectNameRequiredConfig,
+  defaultConfig: projectNameDefaultConfig,
+  reproducibleConfig: projectNameReproducibleConfig,
+} = require('./project-name/config');
 
 module.exports = {
   initDefaultConfig,
@@ -29,5 +33,6 @@ module.exports = {
   javaPackageNameDefaultConfig,
   javaPackageNameRequiredConfig,
   projectNameDefaultConfig,
+  projectNameReproducibleConfig,
   projectNameRequiredConfig,
 };

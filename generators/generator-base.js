@@ -39,6 +39,7 @@ const {
   javaPackageNameDefaultConfig,
   javaPackageNameRequiredConfig,
   projectNameDefaultConfig,
+  projectNameReproducibleConfig,
   projectNameRequiredConfig,
 } = require('./config');
 const { commonOptions, initOptions, javaPackageNameOptions, projectNameOptions } = require('./options');
@@ -71,13 +72,6 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
-
-/* Taken from commander.js source code, options camelCase must match */
-function camelcase(str) {
-  return str.split('-').reduce((str, word) => {
-    return str + word[0].toUpperCase() + word.slice(1);
-  });
-}
 
 // Reverse order.
 const CUSTOM_PRIORITIES = [
@@ -1468,6 +1462,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Register the composed generator for compose once.
    * @param {string} namespace - jhipster generator.
    * @return {boolean} false if already composed
@@ -1490,6 +1485,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    */
   composeWithJHipster(generator, args, options, once = false) {
     const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
+    let immediately = false;
+    if (typeof once === 'object') {
+      immediately = once.immediately;
+      once = false;
+    }
     if (typeof args === 'boolean') {
       once = args;
       args = [];
@@ -1519,11 +1519,27 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       }
     }
 
-    return this.env.composeWith(generator, args, {
-      ...this.options,
-      configOptions: this.configOptions,
-      ...options,
-    });
+    return this.env.composeWith(
+      generator,
+      args,
+      {
+        ...this.options,
+        configOptions: this.configOptions,
+        ...options,
+      },
+      !immediately
+    );
+  }
+
+  /**
+   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
+   * @param {String} generator - jhipster generator.
+   * @param {String[]} [args] - arguments to pass
+   * @param {Object} [options] - options to pass
+   * @return {Object} the composed generator
+   */
+  dependsOnJHipster(generator, args, options) {
+    return this.composeWithJHipster(generator, args, options, { immediately: true });
   }
 
   /**
@@ -1637,6 +1653,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * executes a Git command using shellJS
    * gitExec(args [, options] [, callback])
    *
@@ -2577,6 +2594,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Load required project-name configs into config.
    */
   configureProjectName() {
+    if (this.options.reproducible) {
+      this.config.defaults(projectNameReproducibleConfig);
+    }
     this.config.defaults({
       ...projectNameRequiredConfig,
       baseName: this.getDefaultAppName(),
@@ -2796,6 +2816,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @deprecated
    * Get all the generator configuration from the .yo-rc.json file
    * @param {string} yoRcPath - .yo-rc.json folder.
    */
@@ -2906,6 +2927,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Check if prompts must be skipped.
+   * @return {Boolean}
+   */
+  skipPrompts() {
+    return (
+      this.options.defaults || this.options.skipPrompts || (!this.options.add && this.existingModularProject && !this.options.askAnswered)
+    );
+  }
+
+  /**
    * Load config for simulating existing project.
    */
   parseTestOptions() {
@@ -2940,7 +2971,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     Object.entries(options).forEach(([optionName, optionDesc]) => {
       this.option(optionName, optionDesc);
       if (!optionDesc.scope) return;
-      const camelCaseName = camelcase(optionName);
+      const camelCaseName = _.camelCase(optionName);
       const optionValue = this.options[camelCaseName];
       if (optionValue !== undefined) {
         if (optionDesc.scope === 'storage') {

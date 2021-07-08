@@ -1,102 +1,45 @@
 const path = require('path');
 const expect = require('expect');
 const { access } = require('fs/promises');
-const normalizePath = require('normalize-path');
 
+const { basicTests, testBlueprintSupport } = require('../support');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { defaultConfig } = require('../../generators/init/config');
+const { defaultConfig, reproducibleConfig, requiredConfig } = require('../../generators/init/config');
+const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 
 const initGeneratorPath = path.join(__dirname, '../../generators/init');
-
-const testDefaultConfg = { ...defaultConfig, jhipsterVersion: '0.0.0' };
+const contextBuilder = () => helpers.create(initGeneratorPath).withOptions({ skipGit: true });
 
 describe('JHipster init generator', () => {
-  describe('with default options', () => {
-    let runResult;
-    before(async () => {
-      runResult = await helpers.run(initGeneratorPath);
-    });
-    it('should create expected files', () => {
-      expect(runResult.getStateSnapshot()).toMatchSnapshot();
-    });
-  });
-  describe('with defaults option', () => {
-    let runResult;
-    before(async () => {
-      runResult = await helpers.run(initGeneratorPath).withOptions({ defaults: true });
-    });
-    it('should load default config into the generator', () => {
-      expect(runResult.generator).toMatchObject(testDefaultConfg);
-    });
-  });
-  describe('with custom prompt values', () => {
-    let runResult;
-    const promptValues = {
+  basicTests({
+    requiredConfig: { ...requiredConfig, ...reproducibleConfig },
+    defaultConfig: { ...defaultConfig, ...reproducibleConfig },
+    customPrompts: {
       prettierDefaultIndent: 4,
       prettierJavaIndent: 2,
-    };
-    describe('and default options', () => {
-      before(async () => {
-        runResult = await helpers.run(initGeneratorPath).withOptions({ baseName: 'jhipster' }).withPrompts(promptValues);
-      });
-      it('should write custom config to .yo-rc.json', () => {
-        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
-        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
-      });
-    });
-    describe('and defaults option', () => {
-      before(async () => {
-        runResult = await helpers.run(initGeneratorPath).withOptions({ baseName: 'jhipster', defaults: true }).withPrompts(promptValues);
-      });
-      it('should not write custom config to .yo-rc.json', () => {
-        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
-        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
-      });
-    });
-    describe('and skipPrompts option', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers.run(initGeneratorPath).withOptions({ skipPrompts: true, baseName: 'jhipster' }).withPrompts(promptValues);
-      });
-      it('should write default values to .yo-rc.json', () => {
-        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
-        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
-      });
-    });
-    describe('and existing config', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers
-          .run(initGeneratorPath)
-          .withOptions({ localConfig: { baseName: 'existing' } })
-          .withPrompts(promptValues);
-      });
-      it('should not write custom prompt values', () => {
-        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
-        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
-      });
-    });
-    describe('and askAnswered option on an existing project', () => {
-      let runResult;
-      before(async () => {
-        runResult = await helpers
-          .run(initGeneratorPath)
-          .withOptions({ askAnswered: true, localConfig: { baseName: 'existing' } })
-          .withPrompts(promptValues);
-      });
-      it('should write custom prompt values', () => {
-        const yoFile = normalizePath(path.join(runResult.cwd, '.yo-rc.json'));
-        expect(runResult.getSnapshot(file => file.path === yoFile)).toMatchSnapshot();
-      });
-    });
+    },
+    contextBuilder,
   });
-  describe('with custom', () => {
+  describe('with', () => {
+    describe('default config', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers.run(initGeneratorPath);
+      });
+      it('should write files and match snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+    });
     describe('skipCommitHook option', () => {
       let runResult;
+      const options = { skipCommitHook: true };
       before(async () => {
-        runResult = await helpers.run(initGeneratorPath).withOptions({ skipCommitHook: true });
+        runResult = await helpers.run(initGeneratorPath).withOptions({ ...options });
       });
-      it('should create expected files', () => {
+      it('should write options to .yo-rc.json', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: options });
+      });
+      it('should not create husky files and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
@@ -143,4 +86,5 @@ describe('JHipster init generator', () => {
       });
     });
   });
+  describe('blueprint support', () => testBlueprintSupport('init'));
 });

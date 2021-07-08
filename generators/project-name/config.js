@@ -18,7 +18,13 @@
  */
 const { version: jhipsterVersion } = require('../../package.json');
 
-/** Required config to be skipped */
+/** Reproducible config */
+const reproducibleConfig = {
+  jhipsterVersion: '0.0.0',
+  baseName: 'jhipster',
+};
+
+/** Required config */
 const requiredConfig = {
   jhipsterVersion,
   projectName: 'JHipster project',
@@ -29,4 +35,4 @@ const defaultConfig = {
   ...requiredConfig,
 };
 
-module.exports = { requiredConfig, defaultConfig };
+module.exports = { requiredConfig, defaultConfig, reproducibleConfig };

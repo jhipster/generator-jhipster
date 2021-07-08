@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { GENERATOR_PROJECT } = require('../generator-list');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config');
 
 module.exports = class extends BaseBlueprintGenerator {
@@ -35,9 +35,14 @@ module.exports = class extends BaseBlueprintGenerator {
     if (this.options.defaults) {
       this.configureProjectName();
     }
+  }
 
+  /**
+   * Async initialization before queueing.
+   */
+  async _beforeQueue() {
     if (!this.fromBlueprint) {
-      this.instantiateBlueprints(GENERATOR_PROJECT);
+      await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
     }
   }
 
@@ -53,9 +58,18 @@ module.exports = class extends BaseBlueprintGenerator {
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
-      // TODO move to prompting once queueing composed generator before current support is added.
+    };
+  }
+
+  get initializing() {
+    if (this.delegateToBlueprint) return;
+    return this._initializing();
+  }
+
+  _prompting() {
+    return {
       async showPrompts() {
-        if (this.options.defaults || this.options.skipPrompts || (this.existingModularProject && !this.options.askAnswered)) return;
+        if (this.skipPrompts()) return;
         await this.prompt(
           [
             {
@@ -80,17 +94,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
-    if (this.fromBlueprint) return;
-    return this._initializing();
-  }
-
-  _prompting() {
-    return {};
-  }
-
   get prompting() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._prompting();
   }
 
@@ -103,7 +108,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._configuring();
   }
 
@@ -116,7 +121,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._loading();
   }
 
