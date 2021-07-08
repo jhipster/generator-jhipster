@@ -19,7 +19,8 @@
 trigger:
   branches:
     exclude:
-      - dependabot/*
+      - dependabot/npm_and_yarn/generators/*
+      - dependabot/github_actions/*
 jobs:
   - job: Test
     condition: not(contains(variables['System.PullRequest.SourceBranch'], 'dependabot'))
