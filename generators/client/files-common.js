@@ -27,7 +27,7 @@ module.exports = {
 const commonFiles = {
   common: [
     {
-      templates: ['.eslintignore', `${CLIENT_MAIN_SRC_DIR}manifest.webapp`],
+      templates: ['.eslintignore', 'README.md.jhi.client', `${CLIENT_MAIN_SRC_DIR}manifest.webapp`],
     },
     {
       path: CLIENT_MAIN_SRC_DIR,

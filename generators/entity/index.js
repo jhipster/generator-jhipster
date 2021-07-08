@@ -968,9 +968,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _setupEntityOptions(generator, context = generator, dest = context) {
     dest.regenerate = context.options.regenerate;
 
-    if (context.options.fluentMethods !== undefined) {
-      this.entityConfig.fluentMethods = context.options.fluentMethods;
-    }
     if (context.options.skipCheckLengthOfIdentifier !== undefined) {
       this.entityConfig.skipCheckLengthOfIdentifier = context.options.skipCheckLengthOfIdentifier;
     }

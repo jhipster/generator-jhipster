@@ -1,9 +1,9 @@
+const expect = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
-const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
 
 const outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([$/])/, 'src/main/webapp2$1') : undefined);
@@ -15,9 +15,10 @@ const applyCustomizers = paths => clientTestPathCustomizer(outputPathCustomizer(
 describe('JHipster generator', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
           .withEnvironment(env => {
             env.sharedOptions.outputPathCustomizer = [outputPathCustomizer, clientTestPathCustomizer];
             return env;
@@ -49,27 +50,11 @@ describe('JHipster generator', () => {
             skipUserManagement: false,
             serverSideOptions: [],
           })
-          .on('end', done);
+          .run();
       });
 
       it('creates expected default files for angularX', () => {
-        assert.file(expectedFiles.common.map(applyCustomizers));
-        assert.file(expectedFiles.server.map(applyCustomizers));
-        assert.file(expectedFiles.userManagementServer.map(applyCustomizers));
-        assert.file(expectedFiles.jwtServer.map(applyCustomizers));
-        assert.file(expectedFiles.maven.map(applyCustomizers));
-        assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-        assert.file(expectedFiles.postgresql.map(applyCustomizers));
-        assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            outputPathCustomizer: applyCustomizers,
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('outputPathCustomizer converts webapp to webapp2', () => {
         assert.equal(applyCustomizers('src/main/webapp/foo'), 'src/main/webapp2/foo');

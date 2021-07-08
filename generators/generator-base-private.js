@@ -819,10 +819,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       this.debug(`File ${destination} ignored`);
       return Promise.resolved();
     }
-    return jhipsterUtils.renderContent(source, _this, _context, options).then(res => {
-      _this.fs.write(customDestination, res);
-      return customDestination;
-    });
+    return jhipsterUtils
+      .renderContent(source, _this, _context, options)
+      .then(res => {
+        _this.fs.write(customDestination, res);
+        return customDestination;
+      })
+      .catch(error => {
+        this.warning(source);
+        throw error;
+      });
   }
 
   /**

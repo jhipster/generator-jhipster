@@ -30,6 +30,7 @@ const {
 const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
+const { MultiStepTransform } = require('../../utils/multi-step-transform');
 const { defaultConfig } = require('../generator-defaults');
 const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
@@ -158,6 +159,8 @@ module.exports = class extends BaseGenerator {
         }
       });
       const transformStreams = [
+        // multi-step changes the file path, should be executed earlier in the pipeline
+        new MultiStepTransform(),
         createYoResolveTransform(this.env.conflicter),
         createYoRcTransform(),
         createEachFileTransform(file => {
