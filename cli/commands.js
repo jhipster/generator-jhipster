@@ -18,6 +18,9 @@
  */
 
 const defaultCommands = {
+  add: {
+    desc: 'Add a feature to current project',
+  },
   app: {
     desc: '[Default] Create a new JHipster application based on the selected options',
   },

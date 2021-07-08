@@ -18,6 +18,7 @@
  */
 
 const Generators = {
+  GENERATOR_ADD: 'add',
   GENERATOR_AWS: 'aws',
   GENERATOR_BOOTSTRAP: 'bootstrap',
   GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
