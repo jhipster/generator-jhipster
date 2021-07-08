@@ -34,7 +34,7 @@
     "@types/lodash": "4.14.171",
     "@types/node": "16.0.1",
     "@types/react": "17.0.14",
-    "@types/react-dom": "17.0.8",
+    "@types/react-dom": "17.0.9",
     "@types/react-redux": "7.1.17",
     "@types/react-router-dom": "5.1.8",
     "@types/redux": "3.6.31",
