@@ -21,13 +21,11 @@ package <%= packageName %>.config;
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
-import tech.jhipster.config.JHipsterConstants;
 <%_ if (applicationType === 'gateway' && databaseType !== 'cassandra') { _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
 import org.springframework.data.convert.ReadingConverter;
