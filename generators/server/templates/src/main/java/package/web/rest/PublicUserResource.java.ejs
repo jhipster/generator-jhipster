@@ -172,7 +172,7 @@ public class PublicUserResource {
     <%_ if (searchEngine === 'elasticsearch') { _%>
         <%_ if (!reactive) { _%>
         return StreamSupport
-            .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .stream(userSearchRepository.search(query).spliterator(), false)
             .map(<%= asDto('User') %>::new)
             .collect(Collectors.toList());
         <%_ } else { _%>

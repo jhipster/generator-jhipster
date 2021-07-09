@@ -192,9 +192,6 @@ import static <%= packageName %>.web.rest.TestUtil.sameNumber;
 import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (searchEngineElasticsearch && !reactive) { _%>
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-<%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
@@ -1729,10 +1726,10 @@ _%>
             .thenReturn(Flux.just(<%= persistInstance %>));
     <%_ } else { _%>
       <%_ if (!paginationNo) { _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()), PageRequest.of(0, 20)))
+        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>(), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(<%= persistInstance %>), PageRequest.of(0, 1), 1));
       <%_ } else { _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())))
+        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
             .thenReturn(Collections.singletonList(<%= persistInstance %>));
       <%_ } _%>
     <%_ } _%>

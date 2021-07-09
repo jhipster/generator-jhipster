@@ -19,17 +19,24 @@
 package <%= packageName %>.repository.search;
 
 import <%= packageName %>.domain.<%= persistClass %>;
-<%_ if (reactive) { _%>
-  <%_ if (!paginationNo) { _%>
+
+<%_ if (!paginationNo) { _%>
 import org.springframework.data.domain.Pageable;
-  <%_ } _%>
-import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 <%_ } _%>
+<%_ if (reactive) { _%>
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+<%_ } else { _%>
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.StringQuery;
+<%_ } _%>
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
+<%_ } else { _%>
+import java.util.stream.Stream;
 <%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 
@@ -43,7 +50,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 /**
  * Spring Data Elasticsearch repository for the {@link <%= persistClass %>} entity.
  */
-public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
+public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= persistClass %>, <%= primaryKey.type %>>, <%= entityClass %>SearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 
@@ -68,6 +75,32 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         return reactiveElasticsearchTemplate
             .search(nativeSearchQuery, <%= entityClass %>.class)
             .map(SearchHit::getContent);
+    }
+}
+<%_ } else { _%>
+
+interface <%= entityClass %>SearchRepositoryInternal {
+  Stream<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+}
+
+class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
+
+    private final ElasticsearchRestTemplate elasticsearchTemplate;
+
+    <%= entityClass %>SearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
+        this.elasticsearchTemplate = elasticsearchTemplate;
+    }
+
+    @Override
+    public Stream<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
+      StringQuery stringQuery = new StringQuery(query);
+  <%_ if (!paginationNo) { _%>
+    stringQuery.setPageable(pageable);
+  <%_ } _%>
+        return elasticsearchTemplate
+            .search(stringQuery, <%= entityClass %>.class)
+            .map(SearchHit::getContent)
+            .stream();
     }
 }
 <%_ } _%>

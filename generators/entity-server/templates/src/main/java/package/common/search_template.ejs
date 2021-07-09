@@ -33,7 +33,7 @@ if (paginationNo) { %>
     <%_ if (viaService) { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);
     <%_ } else { _%>
-        Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineElasticsearch) { %>queryStringQuery(query)<% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable);
+        Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineElasticsearch) { %>query<% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable);
     <%_ } _%>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dtoMapstruct) { %>)<% } %>);
