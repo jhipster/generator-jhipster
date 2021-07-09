@@ -1866,6 +1866,18 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
+    context('and using for ingressType', () => {
+      context('a valid value', () => {
+        it('should not report a syntax error', () => {
+          expect(() =>
+            parse(`
+          deployment {
+ingressType nginx
+}`)
+          ).not.to.throw();
+        });
+      });
+    });
   });
   context('when declaring an enum', () => {
     context('with specific values', () => {
