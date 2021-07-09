@@ -62,7 +62,7 @@ public class DatabaseConfiguration {
 
     @WritingConverter
     class ZonedDateTimeToTupleConverter implements Converter<ZonedDateTime, TupleValue> {
-        private TupleType type = DataTypes.tupleOf(DataTypes.TIMESTAMP, DataTypes.ASCII);
+        private TupleType type = DataTypes.tupleOf(DataTypes.TIMESTAMP, DataTypes.TEXT);
 
         @Override
         public TupleValue convert(@Nonnull ZonedDateTime source) {
