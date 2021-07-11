@@ -1,12 +1,12 @@
 const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../support');
-const { requiredConfig, defaultConfig, reproducibleConfig } = require('../../generators/project-name/config');
+const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('../../generators/project-name/config');
 
 describe('JHipster project-name generator', () => {
   basicTests({
-    requiredConfig: { ...requiredConfig, ...reproducibleConfig },
-    defaultConfig: { ...defaultConfig, ...reproducibleConfig },
+    requiredConfig: { ...requiredConfig, ...reproducibleConfigForTests },
+    defaultConfig: { ...defaultConfig, ...reproducibleConfigForTests },
     customPrompts: {
       projectName: 'Beautiful Project',
       baseName: 'BeautifulProject',

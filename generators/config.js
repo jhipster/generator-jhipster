@@ -24,7 +24,7 @@ const {
 const {
   requiredConfig: projectNameRequiredConfig,
   defaultConfig: projectNameDefaultConfig,
-  reproducibleConfig: projectNameReproducibleConfig,
+  reproducibleConfigForTests: projectNameReproducibleConfigForTests,
 } = require('./project-name/config');
 
 module.exports = {
@@ -33,6 +33,6 @@ module.exports = {
   javaPackageNameDefaultConfig,
   javaPackageNameRequiredConfig,
   projectNameDefaultConfig,
-  projectNameReproducibleConfig,
+  projectNameReproducibleConfigForTests,
   projectNameRequiredConfig,
 };

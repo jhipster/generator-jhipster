@@ -39,7 +39,7 @@ const {
   javaPackageNameDefaultConfig,
   javaPackageNameRequiredConfig,
   projectNameDefaultConfig,
-  projectNameReproducibleConfig,
+  projectNameReproducibleConfigForTests,
   projectNameRequiredConfig,
 } = require('./config');
 const { commonOptions, initOptions, javaPackageNameOptions, projectNameOptions } = require('./options');
@@ -2595,7 +2595,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   configureProjectName() {
     if (this.options.reproducible) {
-      this.config.defaults(projectNameReproducibleConfig);
+      this.config.defaults(projectNameReproducibleConfigForTests);
     }
     this.config.defaults({
       ...projectNameRequiredConfig,

@@ -19,7 +19,7 @@
 const { version: jhipsterVersion } = require('../../package.json');
 
 /** Reproducible config */
-const reproducibleConfig = {
+const reproducibleConfigForTests = {
   jhipsterVersion: '0.0.0',
   baseName: 'jhipster',
 };
@@ -35,4 +35,4 @@ const defaultConfig = {
   ...requiredConfig,
 };
 
-module.exports = { requiredConfig, defaultConfig, reproducibleConfig };
+module.exports = { requiredConfig, defaultConfig, reproducibleConfigForTests };

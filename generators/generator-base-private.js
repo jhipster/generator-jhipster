@@ -26,7 +26,7 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
 
-const { projectNameReproducibleConfig } = require('./config');
+const { projectNameReproducibleConfigForTests } = require('./config');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -518,7 +518,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    */
   getDefaultAppName() {
     if (this.options.reproducible) {
-      return projectNameReproducibleConfig.baseName;
+      return projectNameReproducibleConfigForTests.baseName;
     }
     return /^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())) ? path.basename(process.cwd()) : 'jhipster';
   }
