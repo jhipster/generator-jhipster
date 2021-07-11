@@ -4,7 +4,7 @@ const { access } = require('fs/promises');
 
 const { basicTests, testBlueprintSupport } = require('../support');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { defaultConfig, reproducibleConfig, requiredConfig } = require('../../generators/init/config');
+const { defaultConfig, requiredConfig } = require('../../generators/init/config');
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 
 const initGeneratorPath = path.join(__dirname, '../../generators/init');
@@ -12,8 +12,8 @@ const contextBuilder = () => helpers.create(initGeneratorPath).withOptions({ ski
 
 describe('JHipster init generator', () => {
   basicTests({
-    requiredConfig: { ...requiredConfig, ...reproducibleConfig },
-    defaultConfig: { ...defaultConfig, ...reproducibleConfig },
+    requiredConfig,
+    defaultConfig,
     customPrompts: {
       prettierDefaultIndent: 4,
       prettierJavaIndent: 2,
