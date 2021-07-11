@@ -28,6 +28,7 @@ on:
       - 'dependabot/**'
       - 'skip_ci*'
     paths-ignore:
+      - 'package*.json'
       - 'generators/*client/templates/react/**'
       - 'generators/*client/templates/vue/**'
   pull_request:
