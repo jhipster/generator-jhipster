@@ -175,6 +175,9 @@ import java.util.ArrayList;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.Collections;
+  <%_ if (paginationNo) { _%>
+import java.util.stream.Stream;
+  <%_ } _%>
 <%_ } _%>
 import java.util.List;
 <%_ if (fieldsContainUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
@@ -1730,7 +1733,7 @@ _%>
             .thenReturn(new PageImpl<>(Collections.singletonList(<%= persistInstance %>), PageRequest.of(0, 1), 1));
       <%_ } else { _%>
         when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
-            .thenReturn(Collections.singletonList(<%= persistInstance %>));
+            .thenReturn(Stream.of(<%= persistInstance %>));
       <%_ } _%>
     <%_ } _%>
   <%_ } else if (searchEngineCouchbase) { _%>
