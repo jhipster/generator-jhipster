@@ -21,6 +21,7 @@ package <%= packageName %>.repository.search;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 <%_ } else { _%>
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -66,7 +67,7 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     @Override
     public Flux<User> search(String query) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        return reactiveElasticsearchTemplate.find(nativeSearchQuery, User.class);
+        return reactiveElasticsearchTemplate.search(nativeSearchQuery, User.class).map(SearchHit::getContent);
     }
 }
 <%_ } else { _%>
