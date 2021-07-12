@@ -3532,7 +3532,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+              image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
               ports:
                 - containerPort: 9200
                   name: http
@@ -4932,7 +4932,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+              image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
               ports:
                 - containerPort: 9200
                   name: http
