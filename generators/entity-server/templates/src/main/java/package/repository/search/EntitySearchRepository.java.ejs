@@ -21,6 +21,11 @@ package <%= packageName %>.repository.search;
 import <%= packageName %>.domain.<%= persistClass %>;
 
 <%_ if (!paginationNo) { _%>
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -80,7 +85,11 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 <%_ } else { _%>
 
 interface <%= entityClass %>SearchRepositoryInternal {
-  Stream<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+  <%_ if (paginationNo) { _%>
+    Stream<<%= entityClass %>> search(String query);
+  <%_ } else { _%>
+    Page<<%= entityClass %>> search(String query, Pageable pageable);
+  <%_ } _%>
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
@@ -91,16 +100,26 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         this.elasticsearchTemplate = elasticsearchTemplate;
     }
 
+  <%_ if (paginationNo) { _%>
     @Override
-    public Stream<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
-      StringQuery stringQuery = new StringQuery(query);
-  <%_ if (!paginationNo) { _%>
-    stringQuery.setPageable(pageable);
-  <%_ } _%>
+    public Stream<<%= entityClass %>> search(String query) {
+        StringQuery stringQuery = new StringQuery(query);
         return elasticsearchTemplate
             .search(stringQuery, <%= entityClass %>.class)
             .map(SearchHit::getContent)
             .stream();
     }
+  <%_ } else { _%>
+    @Override
+    public Page<<%= entityClass %>> search(String query, Pageable pageable) {
+        StringQuery stringQuery = new StringQuery(query);
+        stringQuery.setPageable(pageable);
+        List<<%= entityClass %>> hits = elasticsearchTemplate.search(stringQuery, <%= entityClass %>.class).map(SearchHit::getContent)
+            .stream()
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(hits, pageable, hits.size());
+    }
+  <%_ } _%>
 }
 <%_ } _%>
