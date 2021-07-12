@@ -59,7 +59,9 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     @Override
     public Flux<User> search(String query) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        return reactiveElasticsearchTemplate.find(nativeSearchQuery, User.class);
+        return reactiveElasticsearchTemplate
+            .search(nativeSearchQuery, User.class)
+            .map(SearchHit::getContent);
     }
 }
 <%_ } _%>
