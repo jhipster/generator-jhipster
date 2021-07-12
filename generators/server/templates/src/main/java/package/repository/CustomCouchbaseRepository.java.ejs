@@ -67,7 +67,7 @@ public class CustomCouchbaseRepository<T, ID extends Serializable> extends Simpl
 
     @Override
     public <S extends T> S save(S entity) {
-        return super.save(populateIdIfNecessary(entity));
+        return super.save(entity);
     }
 <%_ if (searchEngine === 'couchbase') { _%>
 
@@ -120,21 +120,4 @@ public class CustomCouchbaseRepository<T, ID extends Serializable> extends Simpl
     }
 <%_ } _%>
 
-    /**
-     * Add generated ID to entity if not already set.
-     *
-     * @param entity the entity to update.
-     * @return entity with ID set.
-     */
-    private <S extends T> S populateIdIfNecessary(S entity) {
-        if (getEntityInformation().getId(entity) != null) {
-            return entity;
-        }
-        //setId(entity, getCouchbaseOperations().getGeneratedId(entity));
-        return entity;
-    }
-
-    private <S extends T> void setId(S entity, String generatedId) {
-        persistentEntity.getPropertyAccessor(entity).setProperty(persistentEntity.getIdProperty(), generatedId);
-    }
 }
