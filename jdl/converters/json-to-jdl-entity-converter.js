@@ -144,6 +144,7 @@ function addEnumsToJDL(entity) {
         new JDLEnum({
           name: field.fieldType,
           values: getEnumValuesFromString(field.fieldValues),
+          comment: field.fieldTypeJavadoc,
         })
       );
     }

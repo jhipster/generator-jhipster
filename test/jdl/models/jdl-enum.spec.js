@@ -55,6 +55,27 @@ describe('JDLEnum', () => {
       expect(result).to.equal('A (aaaa),B');
     });
   });
+  describe('getValueJavadocs', () => {
+    let result;
+
+    before(() => {
+      const jdlEnum = new JDLEnum({
+        name: 'Toto',
+        values: [
+          { key: 'A', value: 'aaaa', comment: 'first comment' },
+          { key: 'B', comment: 'second comment' },
+        ],
+      });
+      result = jdlEnum.getValueJavadocs();
+    });
+
+    it('should return the value javadocs object', () => {
+      expect(result).to.deep.equal({
+        A: 'first comment',
+        B: 'second comment',
+      });
+    });
+  });
   describe('toString', () => {
     context('with simple enum values', () => {
       let values = [];
