@@ -59,6 +59,9 @@ const defaultCommands = {
   gae: {
     desc: 'Deploy the current application to Google App Engine',
   },
+  gradle: {
+    desc: 'Create Gradle project (alpha)',
+  },
   heroku: {
     desc: 'Deploy the current application to Heroku',
   },
@@ -68,8 +71,8 @@ const defaultCommands = {
   init: {
     desc: 'Init project (alpha)',
   },
-  'java-package-name': {
-    desc: 'Configure Java package name (alpha)',
+  java: {
+    desc: 'Run java generator (alpha)',
   },
   jdl: {
     alias: 'import-jdl',

@@ -16,18 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { BUILD_TOOL, BUILD_TOOL_DESCRIPTION, PACKAGE_NAME, PACKAGE_NAME_DESCRIPTION } = require('./constants.cjs');
 
-module.exports.files = {
-  maven: [
-    {
-      templates: [
-        { file: 'mvnw', method: 'copy', noEjs: true },
-        { file: 'mvnw.cmd', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/MavenWrapperDownloader.java', method: 'copy', noEjs: true },
-        { file: 'pom.xml' },
-      ],
-    },
-  ],
+module.exports.options = {
+  [PACKAGE_NAME]: {
+    desc: PACKAGE_NAME_DESCRIPTION,
+    type: String,
+    scope: 'storage',
+  },
+  [BUILD_TOOL]: {
+    desc: BUILD_TOOL_DESCRIPTION,
+    type: String,
+    scope: 'storage',
+  },
 };

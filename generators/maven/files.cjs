@@ -16,16 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 
-/** Config required at .yo-rc.json */
-const requiredConfig = {};
-
-/** Default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-  [PRETTIER_DEFAULT_INDENT]: 2,
-  [SKIP_COMMIT_HOOK]: false,
+module.exports.files = {
+  maven: [
+    {
+      templates: [
+        '.eslintignore.jhi.maven',
+        '.gitignore.jhi.maven',
+        '.prettierignore.jhi.maven',
+        { file: 'mvnw', method: 'copy', noEjs: true },
+        { file: 'mvnw.cmd', method: 'copy', noEjs: true },
+        { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
+        { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
+        { file: '.mvn/wrapper/MavenWrapperDownloader.java', method: 'copy', noEjs: true },
+        'pom.xml.jhi',
+      ],
+    },
+  ],
 };
-
-module.exports = { requiredConfig, defaultConfig };

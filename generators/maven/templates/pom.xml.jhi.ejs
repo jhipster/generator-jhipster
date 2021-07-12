@@ -16,6 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<&_
+  // Register sections and max allowed fragments, 0 for unlimited.
+  fragments.registerSections({
+    parentSection: 1,
+    repositoriesSection: 0,
+    pluginRepositoriesSection: 0,
+    propertiesSection: 0,
+    dependenciesSection: 0,
+    buildPluginsSection: 0,
+    buildPluginManagementPluginsSection: 0,
+  });
+-&>
+
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -24,55 +37,34 @@
 
     <groupId><%= packageName %></groupId>
     <artifactId><%= dasherizedBaseName %></artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version><%= JAVA_APP_VERSION %></version>
     <name><%= humanizedBaseName %></name>
     <description><%= projectName %> generated with generator-jhipster@<%= jhipsterVersion %></description>
     <packaging>jar</packaging>
 
-    <!-- jhipster-needle-maven-parent -->
-
+<&- fragments.parentSection('\n\n') -&>
+<&_ if (fragments.repositoriesSection()) { -&>
     <repositories>
-        <!-- jhipster-needle-maven-repository -->
+<&- fragments.repositoriesSection() -&>
     </repositories>
 
+<&_ } -&>
+<&_ if (fragments.pluginRepositoriesSection()) { -&>
     <pluginRepositories>
-        <!-- jhipster-needle-maven-plugin-repository -->
+<&- fragments.pluginRepositoriesSection() -&>
     </pluginRepositories>
 
+<&_ } -&>
     <properties>
-        <java.version>11</java.version>
+        <java.version><%= JAVA_VERSION %></java.version>
 
-        <!-- properties used by maven sub generator -->
-        <junit.version>5.7.0</junit.version>
-        <assertj.version>3.18.1</assertj.version>
-        <mockito.version>3.6.28</mockito.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-
-        <!-- jhipster-needle-maven-property -->
+<&- fragments.propertiesSection() -&>
     </properties>
 
     <dependencies>
-        <!-- properties used by maven sub generator -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- jhipster-needle-maven-add-dependency -->
+<&- fragments.dependenciesSection() -&>
     </dependencies>
 
     <build>
@@ -90,11 +82,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
             </plugin>
-            <!-- jhipster-needle-maven-add-plugin -->
+<&- fragments.buildPluginsSection() -&>
         </plugins>
         <pluginManagement>
             <plugins>
-                <!-- jhipster-needle-maven-add-plugin-management -->
+<&- fragments.buildPluginManagementPluginsSection() -&>
             </plugins>
         </pluginManagement>
     </build>

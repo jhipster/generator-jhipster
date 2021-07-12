@@ -16,16 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 
-/** Config required at .yo-rc.json */
-const requiredConfig = {};
-
-/** Default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-  [PRETTIER_DEFAULT_INDENT]: 2,
-  [SKIP_COMMIT_HOOK]: false,
+/**
+ * The default is to use a file path string. It implies use of the template method.
+ * For any other config an object { file:.., method:.., template:.. } can be used
+ */
+module.exports.files = {
+  javaProject: [
+    {
+      templates: ['.prettierrc.yml.jhi.java', '.editorconfig.jhi.java', '.gitignore.jhi.java'],
+    },
+  ],
 };
-
-module.exports = { requiredConfig, defaultConfig };

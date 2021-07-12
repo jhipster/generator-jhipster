@@ -18,10 +18,6 @@
  */
 const { requiredConfig: initRequiredConfig, defaultConfig: initDefaultConfig } = require('./init/config');
 const {
-  requiredConfig: javaPackageNameRequiredConfig,
-  defaultConfig: javaPackageNameDefaultConfig,
-} = require('./java-package-name/config');
-const {
   requiredConfig: projectNameRequiredConfig,
   defaultConfig: projectNameDefaultConfig,
   reproducibleConfigForTests: projectNameReproducibleConfigForTests,
@@ -30,8 +26,6 @@ const {
 module.exports = {
   initDefaultConfig,
   initRequiredConfig,
-  javaPackageNameDefaultConfig,
-  javaPackageNameRequiredConfig,
   projectNameDefaultConfig,
   projectNameReproducibleConfigForTests,
   projectNameRequiredConfig,

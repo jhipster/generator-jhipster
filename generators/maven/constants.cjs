@@ -16,16 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
-
-/** Config required at .yo-rc.json */
-const requiredConfig = {};
-
-/** Default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-  [PRETTIER_DEFAULT_INDENT]: 2,
-  [SKIP_COMMIT_HOOK]: false,
+module.exports = {
+  MAVEN: 'maven',
+  MAVEN_DESCRIPTION: 'Maven',
 };
-
-module.exports = { requiredConfig, defaultConfig };

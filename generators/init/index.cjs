@@ -88,13 +88,6 @@ module.exports = class extends MixedGenerator {
               message: 'What is the default indentation?',
               default: defaultConfig.prettierDefaultIndent,
             },
-            {
-              name: 'prettierJavaIndent',
-              when: () => !this.abort,
-              type: 'input',
-              message: 'What is the Java indentation?',
-              default: defaultConfig.prettierJavaIndent,
-            },
           ],
           this.config
         );

@@ -18,32 +18,45 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const { mixBlueprintGenerator } = require('generator-jhipster/support');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { GENERATOR_MAVEN, GENERATOR_PROJECT_NAME, GENERATOR_JAVA_PACKAGE_NAME } = require('../generator-list');
-const { files } = require('./files');
+const { GENERATOR_PROJECT_NAME, GENERATOR_JAVA, GENERATOR_GRADLE } = require('../generator-list');
+const { files } = require('./files.cjs');
+const { GRADLE, GRADLE_VERSION } = require('./constants.cjs');
+const { BUILD_TOOL } = require('../java/constants.cjs');
 
-module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+const MixedGenerator = mixBlueprintGenerator(GENERATOR_PROJECT_NAME, GENERATOR_JAVA);
 
-    this.registerCommonOptions();
-    this.registerProjectNameOptions();
-    this.registerJavaPackageNameOptions();
+module.exports = class extends MixedGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+
+    // Register options available to cli.
+    if (!this.fromBlueprint) {
+      this.registerCommonOptions();
+      this.registerProjectNameOptions();
+    }
 
     if (this.options.help) return;
 
+    this.config.defaults({
+      [BUILD_TOOL]: GRADLE,
+    });
+
     if (this.options.defaults) {
       this.configureProjectName();
-      this.configureJavaPackageName();
+      this.configureJava();
     }
+
+    // Fallback to server templates to avoid duplications.
+    // TODO v8 move sources from server templates to gradle templates.
+    this.jhipsterTemplatesFolders.push(this.fetchFromInstalledJHipster('server', 'templates'));
   }
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
-      await this.dependsOnJHipster(GENERATOR_JAVA_PACKAGE_NAME);
-      await this.composeWithBlueprints(GENERATOR_MAVEN);
+      await this.dependsOnJHipster(GENERATOR_JAVA, [], { configure: true });
+      await this.composeWithBlueprints(GENERATOR_GRADLE);
     }
   }
 
@@ -54,10 +67,13 @@ module.exports = class extends BaseBlueprintGenerator {
       },
       sayHello() {
         if (!this.showHello()) return;
-        this.log(chalk.white('⬢ Welcome to the JHipster Maven ⬢'));
+        this.log(chalk.white('⬢ Welcome to the JHipster Gradle ⬢'));
       },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
+      },
+      loadConstants() {
+        this.loadJavaConstants();
       },
     };
   }
@@ -71,7 +87,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       configure() {
         this.configureProjectName();
-        this.configureJavaPackageName();
+        this.configureJava();
       },
     };
   }
@@ -83,13 +99,17 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _loading() {
     return {
+      loadConstants() {
+        this.GRADLE_VERSION = GRADLE_VERSION;
+        this.loadJavaConstants();
+      },
       loadConfig() {
         this.loadProjectNameConfig();
-        this.loadJavaPackageNameConfig();
+        this.loadJavaConfig();
       },
       loadDerivedConfig() {
         this.loadDerivedProjectNameConfig();
-        this.loadDerivedJavaPackageNameConfig();
+        this.loadDerivedJavaConfig();
       },
     };
   }
@@ -102,6 +122,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _writing() {
     return {
       async writeFiles() {
+        if (this.shouldSkipFiles()) return;
         await this.writeFilesToDisk(files);
       },
     };

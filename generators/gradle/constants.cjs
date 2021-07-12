@@ -16,14 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** Required config to be skipped */
-const requiredConfig = {
-  packageName: 'com.mycompany.myapp',
-};
+const GRADLE_VERSION = '7.0.2';
 
-/** Init default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
+module.exports = {
+  GRADLE: 'gradle',
+  GRADLE_DESCRIPTION: 'Gradle',
+  GRADLE_VERSION,
 };
-
-module.exports = { requiredConfig, defaultConfig };

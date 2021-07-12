@@ -16,11 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { PACKAGE_NAME, BUILD_TOOL, PRETTIER_JAVA_INDENT, BUILD_TOOL_DEFAULT } = require('./constants.cjs');
 
-module.exports.options = {
-  'package-name': {
-    desc: 'Application package name',
-    type: String,
-    scope: 'storage',
-  },
+/** Config required at .yo-rc.json */
+const requiredConfig = {
+  [PACKAGE_NAME]: 'com.mycompany.myapp',
+  [BUILD_TOOL]: BUILD_TOOL_DEFAULT,
 };
+
+/** Default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+  [PRETTIER_JAVA_INDENT]: 4,
+};
+
+module.exports = { requiredConfig, defaultConfig };

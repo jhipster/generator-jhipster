@@ -34,8 +34,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
-const { javaPackageNameDefaultConfig, javaPackageNameRequiredConfig } = require('./config');
-const { commonOptions, javaPackageNameOptions } = require('./options');
+const { commonOptions } = require('./options');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -2513,39 +2512,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   registerCommonOptions() {
     this.jhipsterOptions(commonOptions);
   }
-
-  /**
-   * Register and parse java-package-name options.
-   */
-  registerJavaPackageNameOptions() {
-    this.jhipsterOptions(javaPackageNameOptions);
-  }
-
-  /**
-   * Load required java-package-name configs into config.
-   */
-  configureJavaPackageName() {
-    this.config.defaults(javaPackageNameRequiredConfig);
-  }
-
-  /**
-   * Load java-package-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
-   */
-  loadJavaPackageNameConfig(config = _.defaults({}, this.jhipsterConfig, javaPackageNameDefaultConfig), dest = this) {
-    dest.packageName = config.packageName;
-  }
-
-  /**
-   * Load derived java-package-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} dest - source/destination context
-   */
-  loadDerivedJavaPackageNameConfig(dest = this) {}
 
   /**
    * Load app configs into dest.
