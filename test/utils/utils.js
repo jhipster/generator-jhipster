@@ -19,9 +19,9 @@ const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 module.exports = {
   DEFAULT_TEST_OPTIONS,
   basicHelpers: createTestHelpers(),
-  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true, jhipsterVersion: '0.0.0' } }),
+  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true, reproducible: true } }),
   dryRunHelpers: createTestHelpers({
-    generatorOptions: { skipPrettier: true, jhipsterVersion: '0.0.0' },
+    generatorOptions: { skipPrettier: true, reproducible: true },
     environmentOptions: { dryRun: true },
   }),
   createTestHelpers,

@@ -124,6 +124,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
+   * @deprecated
    * Execute custom priorities if they are not declared
    * Should be used by jhipster official generators only.
    * @returns {Object} tasks
@@ -167,6 +168,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
+   * @deprecated
    * Execute custom priorities if they are not declared
    * Should be used by jhipster official generators only.
    * @returns {Object} tasks
@@ -205,6 +207,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
+   * @deprecated
    * Detect if a priority is implemented in the super class but missing in current one.
    * That indicates the blueprint was not updated with the custom priorities.
    * @param {string} priorityName - Priority to be checked.
@@ -225,6 +228,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
+   * @deprecated
    * Instantiates the blueprint generators, if any.
    * @param {string} subGen - sub generator
    * @param {any} extraOptions - extra options to pass to blueprint generator
@@ -258,6 +262,37 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       });
     }
     return useBlueprints;
+  }
+
+  /**
+   * @private
+   * Composes with blueprint generators, if any.
+   * @param {String} subGen - sub generator
+   * @param {Object} extraOptions - extra options to pass to blueprint generator
+   */
+  async composeWithBlueprints(subGen, extraOptions) {
+    this.delegateToBlueprint = false;
+
+    if (!this.configOptions.blueprintConfigured) {
+      this.configOptions.blueprintConfigured = true;
+      this._configureBlueprints();
+    }
+
+    const blueprints = this.jhipsterConfig.blueprints || [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const blueprint of blueprints) {
+      // eslint-disable-next-line no-await-in-loop
+      const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
+      if (blueprintGenerator) {
+        if (blueprintGenerator.sbsBlueprint) {
+          // If sbsBlueprint, add templatePath to the original generator templatesFolder.
+          this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
+        } else {
+          // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
+          this.delegateToBlueprint = true;
+        }
+      }
+    }
   }
 
   /**

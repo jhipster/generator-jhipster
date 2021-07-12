@@ -1,90 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster init generator with custom prompt values and askAnswered option on an existing project should write custom prompt values 1`] = `
-Object {
-  ".yo-rc.json": Object {
-    "contents": "{
-  \\"generator-jhipster\\": {
-    \\"baseName\\": \\"existing\\",
-    \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"projectName\\": \\"JHipster project\\",
-    \\"prettierDefaultIndent\\": 4,
-    \\"prettierJavaIndent\\": 2
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster init generator with custom prompt values and default options should write custom config to .yo-rc.json 1`] = `
-Object {
-  ".yo-rc.json": Object {
-    "contents": "{
-  \\"generator-jhipster\\": {
-    \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"baseName\\": \\"jhipster\\",
-    \\"projectName\\": \\"JHipster project\\",
-    \\"prettierDefaultIndent\\": 4,
-    \\"prettierJavaIndent\\": 2
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster init generator with custom prompt values and defaults option should not write custom config to .yo-rc.json 1`] = `
-Object {
-  ".yo-rc.json": Object {
-    "contents": "{
-  \\"generator-jhipster\\": {
-    \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"baseName\\": \\"jhipster\\",
-    \\"projectName\\": \\"JHipster project\\"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster init generator with custom prompt values and existing config should not write custom prompt values 1`] = `
-Object {
-  ".yo-rc.json": Object {
-    "contents": "{
-  \\"generator-jhipster\\": {
-    \\"baseName\\": \\"existing\\",
-    \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"projectName\\": \\"JHipster project\\"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster init generator with custom prompt values and skipPrompts option should write default values to .yo-rc.json 1`] = `
-Object {
-  ".yo-rc.json": Object {
-    "contents": "{
-  \\"generator-jhipster\\": {
-    \\"jhipsterVersion\\": \\"0.0.0\\",
-    \\"baseName\\": \\"jhipster\\",
-    \\"projectName\\": \\"JHipster project\\"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`JHipster init generator with custom skipCommitHook option should create expected files 1`] = `
+exports[`JHipster init generator with default config should write files and match snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -93,6 +9,12 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".huskyrc": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
@@ -113,7 +35,7 @@ Object {
 }
 `;
 
-exports[`JHipster init generator with default options should create expected files 1`] = `
+exports[`JHipster init generator with skipCommitHook option should not create husky files and match snapshot 1`] = `
 Object {
   ".editorconfig": Object {
     "stateCleared": "modified",
@@ -122,12 +44,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".huskyrc": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {

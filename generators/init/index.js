@@ -40,11 +40,12 @@ module.exports = class extends BaseBlueprintGenerator {
       this.configureProjectName();
       this.configureInit();
     }
+  }
 
-    this.composeWithJHipster(GENERATOR_PROJECT_NAME);
-
+  async _beforeQueue() {
     if (!this.fromBlueprint) {
-      this.instantiateBlueprints(GENERATOR_INIT);
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+      await this.composeWithBlueprints(GENERATOR_INIT);
     }
   }
 
@@ -64,14 +65,14 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._initializing();
   }
 
   _prompting() {
     return {
       async showPrompts() {
-        if (this.options.defaults || this.options.skipPrompts || (this.existingModularProject && !this.options.askAnswered)) return;
+        if (this.skipPrompts()) return;
         await this.prompt(
           [
             {
@@ -96,7 +97,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._prompting();
   }
 
@@ -110,7 +111,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._configuring();
   }
 
@@ -134,7 +135,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._loading();
   }
 
@@ -147,7 +148,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._writing();
   }
 
@@ -172,7 +173,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get install() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._install();
   }
 
@@ -217,7 +218,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._end();
   }
 

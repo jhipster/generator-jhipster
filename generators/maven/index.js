@@ -22,7 +22,6 @@ const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { GENERATOR_MAVEN, GENERATOR_PROJECT_NAME, GENERATOR_JAVA_PACKAGE_NAME } = require('../generator-list');
 const { files } = require('./files');
-const constants = require('../generator-constants');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, opts) {
@@ -38,12 +37,13 @@ module.exports = class extends BaseBlueprintGenerator {
       this.configureProjectName();
       this.configureJavaPackageName();
     }
+  }
 
-    this.composeWithJHipster(GENERATOR_PROJECT_NAME);
-    this.composeWithJHipster(GENERATOR_JAVA_PACKAGE_NAME);
-
+  async _beforeQueue() {
     if (!this.fromBlueprint) {
-      this.instantiateBlueprints(GENERATOR_MAVEN);
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+      await this.dependsOnJHipster(GENERATOR_JAVA_PACKAGE_NAME);
+      await this.composeWithBlueprints(GENERATOR_MAVEN);
     }
   }
 
@@ -63,7 +63,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._initializing();
   }
 
@@ -77,7 +77,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._configuring();
   }
 
@@ -91,14 +91,11 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadDerivedProjectNameConfig();
         this.loadDerivedJavaPackageNameConfig();
       },
-      loadConstant() {
-        this.NODE_VERSION = constants.NODE_VERSION;
-      },
     };
   }
 
   get loading() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._loading();
   }
 
@@ -111,7 +108,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (this.fromBlueprint) return;
+    if (this.delegateToBlueprint) return;
     return this._writing();
   }
 };
