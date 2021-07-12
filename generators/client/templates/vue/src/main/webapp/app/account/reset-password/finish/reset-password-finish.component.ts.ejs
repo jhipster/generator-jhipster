@@ -37,7 +37,7 @@ export default class ResetPasswordFinish extends Vue {
   };
 
   created(): void {
-    if (this.$route !== undefined && this.$route.query !== undefined && this.$route.query.key !== undefined) {
+    if (this.$route?.query?.key !== undefined) {
       this.key = this.$route.query.key;
     }
     this.keyMissing = !this.key;
