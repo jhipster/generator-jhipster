@@ -37,7 +37,7 @@ const {
 const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
-const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
 const {
   GENERATOR_ENTITIES,
@@ -45,8 +45,10 @@ const {
   GENERATOR_ENTITY_CLIENT,
   GENERATOR_ENTITY_I18N,
   GENERATOR_ENTITY_SERVER,
+  GENERATOR_ENTITY_GATLING,
 } = require('../generator-list');
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
+const { GATLING } = require('../../jdl/jhipster/test-framework-types');
 
 const { BIG_DECIMAL, BOOLEAN, DURATION, INSTANT, LOCAL_DATE, UUID, ZONED_DATE_TIME } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -540,6 +542,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
               skipInstall: this.options.skipInstall,
             });
           }
+        }
+        const gatlingTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes(GATLING);
+        if (gatlingTests && (this.jhipsterConfig.applicationType === GATEWAY || this.jhipsterConfig.applicationType === MONOLITH)) {
+          this.composeWithJHipster(GENERATOR_ENTITY_GATLING, this.arguments, {
+            context,
+          });
         }
       },
     };

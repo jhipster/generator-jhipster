@@ -49,6 +49,7 @@ const Generators = {
   GENERATOR_PAGE: 'page',
   GENERATOR_PROJECT_NAME: 'project-name',
   GENERATOR_SERVER: 'server',
+  GENERATOR_ENTITY_GATLING: 'entity-gatling',
 };
 
 module.exports = Generators;
