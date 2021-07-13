@@ -356,14 +356,6 @@ describe('JHipster generator', () => {
         assert.file(expectedFiles.mssql);
         assert.file(expectedFiles.hibernateTimeZoneConfig);
         assert.fileContent('pom.xml', /mssql-jdbc/);
-        assert.fileContent(
-          `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
-          /SET IDENTITY_INSERT jhi_user ON;/
-        );
-        assert.fileContent(
-          `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
-          /SET IDENTITY_INSERT jhi_user OFF;/
-        );
       });
       shouldBeV3DockerfileCompatible('mssql');
     });
