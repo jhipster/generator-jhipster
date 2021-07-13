@@ -26,7 +26,7 @@
               <div class="row" v-for="key in keys(entry.properties)" :key="key">
                 <div class="col-md-4">{{ key }}</div>
                 <div class="col-md-8">
-                  <span class="float-right badge-secondary break">{{ entry.properties[key] }}</span>
+                  <span class="float-end bg-secondary break">{{ entry.properties[key] }}</span>
                 </div>
               </div>
             </td>
@@ -48,7 +48,7 @@
             <tr v-for="item of allConfiguration[key]" :key="item.key">
               <td class="break">{{ item.key }}</td>
               <td class="break">
-                <span class="float-right badge-secondary break">{{ item.val }}</span>
+                <span class="float-end bg-secondary break">{{ item.val }}</span>
               </td>
             </tr>
           </tbody>

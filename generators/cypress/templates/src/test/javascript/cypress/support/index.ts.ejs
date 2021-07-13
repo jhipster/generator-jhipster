@@ -52,6 +52,10 @@ preserve: ['XSRF-TOKEN','SESSION', 'JSESSIONID']
 Cypress.on('uncaught:exception', (err, runnable) => {
   // returning false here prevents Cypress from
   // failing the test
-  return false
+  if (promise) {
+    // returning false here prevents Cypress from
+    // failing the test
+    return false;
+  }
 });
 <%_ } _%>

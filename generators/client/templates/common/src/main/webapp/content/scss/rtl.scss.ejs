@@ -124,8 +124,8 @@ html[dir='rtl'] {
   .input-group-btn:not(:last-child) > .dropdown-toggle,
   .input-group-btn:not(:first-child) > .btn:not(:last-child):not(.dropdown-toggle),
   .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .btn {
-    @include border-right-radius($border-radius);
-    @include border-left-radius(0);
+    @include border-end-radius($border-radius);
+    @include border-start-radius(0);
   }
   .input-group-prepend {
     border-left: 0;
@@ -138,8 +138,8 @@ html[dir='rtl'] {
   .input-group-btn:not(:first-child) > .dropdown-toggle,
   .input-group-btn:not(:last-child) > .btn:not(:first-child),
   .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .btn {
-    @include border-left-radius($border-radius);
-    @include border-right-radius(0);
+    @include border-start-radius($border-radius);
+    @include border-end-radius(0);
   }
   .form-control + .input-group-append {
     border-right: 0;
@@ -152,28 +152,28 @@ html[dir='rtl'] {
   .btn-group > .btn:first-child {
     margin-right: 0;
     &:not(:last-child):not(.dropdown-toggle) {
-      @include border-right-radius($border-radius);
-      @include border-left-radius(0);
+      @include border-end-radius($border-radius);
+      @include border-start-radius(0);
     }
   }
   .btn-group > .btn:last-child:not(:first-child),
   .btn-group > .dropdown-toggle:not(:first-child) {
-    @include border-left-radius($border-radius);
-    @include border-right-radius(0);
+    @include border-start-radius($border-radius);
+    @include border-end-radius(0);
   }
   .page-item {
     &:first-child {
       .page-link {
         margin-right: 0;
         margin-left: -1px;
-        @include border-left-radius(0);
-        @include border-right-radius($border-radius);
+        @include border-start-radius(0);
+        @include border-end-radius($border-radius);
       }
     }
     &:last-child {
       .page-link {
-        @include border-right-radius(0);
-        @include border-left-radius($border-radius);
+        @include border-end-radius(0);
+        @include border-start-radius($border-radius);
       }
     }
   }

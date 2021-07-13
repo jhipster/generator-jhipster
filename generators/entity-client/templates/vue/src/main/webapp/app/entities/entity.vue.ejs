@@ -3,7 +3,7 @@
         <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
             <span v-text="$t('<%= i18nKeyPrefix %>.home.title')" id="<%= entityFileName %>-heading"><%= entityClassPluralHumanized %></span>
             <div class="d-flex justify-content-end">
-                <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
+                <button class="btn btn-info me-2" v-on:click="handleSyncList" :disabled="isFetching">
                     <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="$t('<%= i18nKeyPrefix %>.home.refreshListLabel')">Refresh List</span>
                 </button>
 <%_ if (!readOnly) { _%>
@@ -19,9 +19,8 @@
             </div>
         </h2>
 <%_ if (searchEngine) { _%>
-        <div class="row">
+        <form name="searchForm" class="row row-cols-md-auto align-items-center" v-on:submit.prevent="search(currentSearch)">
             <div class="col-sm-12">
-                <form name="searchForm" class="form-inline" v-on:submit.prevent="search(currentSearch)">
                     <div class="input-group w-100 mt-3">
                         <input type="text" class="form-control" name="currentSearch" id="currentSearch"
                             v-bind:placeholder="$t('<%= i18nKeyPrefix %>.home.search')"
@@ -34,9 +33,8 @@
                             <font-awesome-icon icon="trash"></font-awesome-icon>
                         </button>
                     </div>
-                </form>
             </div>
-        </div>
+        </form>
 <%_ } _%>
         <br/>
         <div class="alert alert-warning" v-if="!isFetching && <%= entityInstancePlural %> && <%= entityInstancePlural %>.length === 0">
@@ -129,7 +127,7 @@
                     </td>
   <%_ } _%>
 <%_ } _%>
-                    <td class="text-right">
+                    <td class="text-end">
                         <div class="btn-group">
                             <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
                                 <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">

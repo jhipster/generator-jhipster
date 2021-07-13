@@ -4,7 +4,7 @@
       <span id="user-management-page-heading" v-text="$t('userManagement.home.title')" data-cy="userManagementPageHeading">Users</span>
 
       <div class="d-flex justify-content-end">
-        <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isLoading">
+        <button class="btn btn-info me-2" v-on:click="handleSyncList" :disabled="isLoading">
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span v-text="$t('userManagement.home.refreshListLabel')">Refresh List</span>
         </button>
         <router-link custom v-slot="{ navigate }" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
@@ -49,7 +49,7 @@
             <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
             <td>
               <div v-for="authority of user.authorities" :key="authority">
-                  <span class="badge badge-info">{{ authority }}</span>
+                  <span class="badge bg-info">{{ authority }}</span>
               </div>
             </td>
 <%_ if (!databaseTypeCassandra) { _%>
@@ -63,7 +63,7 @@
             <td>{{user.lastModifiedDate | formatDate}}</td>
   <%_ } _%>
 <%_ } _%>
-            <td class="text-right">
+            <td class="text-end">
               <div class="btn-group">
                 <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-info btn-sm details">

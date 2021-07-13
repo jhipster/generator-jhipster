@@ -42,7 +42,7 @@
           <div class="row" *ngFor="let property of bean.properties | keyvalue">
             <div class="col-md-4">{{ property.key }}</div>
             <div class="col-md-8">
-              <span class="float-right badge-secondary break">{{ property.value | json }}</span>
+              <span class="float-end bg-secondary break">{{ property.value | json }}</span>
             </div>
           </div>
         </td>
@@ -66,7 +66,7 @@
         <tr *ngFor="let property of propertySource.properties | keyvalue">
           <td class="break">{{ property.key }}</td>
           <td class="break">
-            <span class="float-right badge-secondary break">{{ property.value.value }}</span>
+            <span class="float-end bg-secondary break">{{ property.value.value }}</span>
           </td>
         </tr>
       </tbody>

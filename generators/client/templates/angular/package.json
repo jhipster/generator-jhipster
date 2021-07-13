@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "@angular/common": "12.1.1",
-    "bootstrap": "4.6.0",
+    "bootstrap": "5.0.2",
+    "bootswatch": "5.0.2",
     "@fortawesome/angular-fontawesome": "0.9.0",
     "@fortawesome/fontawesome-svg-core": "1.2.35",
     "@fortawesome/free-solid-svg-icons": "5.15.3",
-    "@ng-bootstrap/ng-bootstrap": "10.0.0",
+    "@ng-bootstrap/ng-bootstrap": "11.0.0-beta.2",
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
     "ngx-cookie-service": "12.0.0",
