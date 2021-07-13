@@ -54,6 +54,9 @@ export default class JhiNavbar extends Vue {
       // if Keycloak, uri has protocol/openid-connect/token
       if (logoutUrl.indexOf('/protocol') > -1) {
         logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+      } else if(logoutUrl.includes('auth0.com')) {
+        // Auth0
+        logoutUrl = `${logoutUrl}?client_id=${data.clientId}&returnTo=${window.location.origin}`
       } else {
         // Okta
         logoutUrl = logoutUrl + '?id_token_hint=' +

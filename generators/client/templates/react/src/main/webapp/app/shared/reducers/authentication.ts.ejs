@@ -43,6 +43,7 @@ export const initialState = {
   redirectMessage: null as unknown as string,
   sessionHasBeenFetched: false,
   idToken: null as unknown as string,
+  clientId: null as unknown as string,
   logoutUrl: null as unknown as string,
 };
 
@@ -219,6 +220,7 @@ export const AuthenticationSlice = createSlice({
         showModalLogin: true
         <%_ } else { _%>
         idToken: action.payload.data.idToken,
+        clientId: action.payload.data.clientId,
         logoutUrl: action.payload.data.logoutUrl
         <%_ } _%>
       }))
