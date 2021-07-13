@@ -21,12 +21,10 @@ package <%= packageName %>.repository.search;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 <%_ } else { _%>
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.query.StringQuery;
 <%_ } _%>
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
 
@@ -39,11 +37,8 @@ import java.util.stream.Stream;
 
 import java.util.UUID;
 <%_ } _%>
-<%_ if (reactive) { _%>
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-<%_ } _%>
-
 
 /**
  * Spring Data Elasticsearch repository for the User entity.
@@ -86,9 +81,9 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     @Override
     public Stream<User> search(String query) {
-        StringQuery stringQuery = new StringQuery(query);
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         return elasticsearchTemplate
-            .search(stringQuery, User.class)
+            .search(nativeSearchQuery, User.class)
             .map(SearchHit::getContent)
             .stream();
     }

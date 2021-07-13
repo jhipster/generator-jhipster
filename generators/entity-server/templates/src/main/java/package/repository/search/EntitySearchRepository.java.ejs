@@ -30,11 +30,10 @@ import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 <%_ } else { _%>
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.query.StringQuery;
 <%_ } _%>
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
 
@@ -47,10 +46,8 @@ import java.util.stream.Stream;
 
 import java.util.UUID;
 <% } %>
-<%_ if (reactive) { _%>
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-<%_ } _%>
 
 /**
  * Spring Data Elasticsearch repository for the {@link <%= persistClass %>} entity.
@@ -103,18 +100,18 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
   <%_ if (paginationNo) { _%>
     @Override
     public Stream<<%= entityClass %>> search(String query) {
-        StringQuery stringQuery = new StringQuery(query);
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         return elasticsearchTemplate
-            .search(stringQuery, <%= entityClass %>.class)
+            .search(nativeSearchQuery, <%= entityClass %>.class)
             .map(SearchHit::getContent)
             .stream();
     }
   <%_ } else { _%>
     @Override
     public Page<<%= entityClass %>> search(String query, Pageable pageable) {
-        StringQuery stringQuery = new StringQuery(query);
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         stringQuery.setPageable(pageable);
-        List<<%= entityClass %>> hits = elasticsearchTemplate.search(stringQuery, <%= entityClass %>.class).map(SearchHit::getContent)
+        List<<%= entityClass %>> hits = elasticsearchTemplate.search(nativeSearchQuery, <%= entityClass %>.class).map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
 
