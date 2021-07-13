@@ -417,7 +417,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         }
         if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
-          dockerAwaitScripts.push('echo "Waiting for Elasticsearch to start" && wait-on tcp:9200 && echo "Elasticsearch started"');
+          dockerAwaitScripts.push('echo "Waiting for Elasticsearch to start" && wait-on "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"');
         }
 
         const dockerOthersUp = [];
