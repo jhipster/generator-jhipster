@@ -110,7 +110,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     @Override
     public Page<<%= entityClass %>> search(String query, Pageable pageable) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        stringQuery.setPageable(pageable);
+        nativeSearchQuery.setPageable(pageable);
         List<<%= entityClass %>> hits = elasticsearchTemplate.search(nativeSearchQuery, <%= entityClass %>.class).map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
