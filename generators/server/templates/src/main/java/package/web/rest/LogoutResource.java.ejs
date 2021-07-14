@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 <%_ if (!reactive) { _%>
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 <%_ } else { _%>
 import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
 <%_ } _%>
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -81,13 +81,14 @@ public class LogoutResource {
 <%_ } else { _%>
     public Mono<Map<String, String>> logout(@AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken, WebSession session) {
         return session.invalidate().then(
-            this.registration.map(oidc -> oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString())
-                .map(logoutUrl -> {
-                    Map<String, String> logoutDetails = new HashMap<>();
-                    logoutDetails.put("logoutUrl", logoutUrl);
-                    logoutDetails.put("idToken", idToken.getTokenValue());
-                    return logoutDetails;
-                })
+            this.registration
+                .map(oidc -> Map.of(
+                    "clientId", oidc.getClientId(),
+                    "logoutUrl", oidc.getProviderDetails().getIssuerUri().contains("auth0.com")
+                        ? oidc.getProviderDetails().getIssuerUri() + "v2/logout"
+                        : oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString(),
+                    "idToken", idToken.getTokenValue())
+                )
         );
     }
 <%_ } _%>
