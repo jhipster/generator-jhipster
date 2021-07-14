@@ -26,11 +26,9 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-<%_ } if (buildToolUnknown) { _%>
-
-const packageJson = require('./../package.json');
 <%_ } _%>
 const utils = require('./utils.js');
+const environment = require('./environment');
 
 const getTsLoaderRule = env => {
   const rules = [
@@ -60,6 +58,7 @@ const getTsLoaderRule = env => {
 };
 
 module.exports = async options => {
+  const development = options.env === 'development';
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '../<%= MAIN_SRC_DIR %>i18n'), {
     algo: 'md5',
@@ -78,7 +77,8 @@ return merge(
       // 2. Add your config as buildDependency to get cache invalidation on config change
       config: [
         __filename,
-        path.resolve(__dirname, `webpack.${options.env == 'development' ? 'dev' : 'prod'}.js`),
+        path.resolve(__dirname, `webpack.${development ? 'dev' : 'prod'}.js`),
+        path.resolve(__dirname, 'environment.js'),
         path.resolve(__dirname, 'utils.js'),
         path.resolve(__dirname, '../postcss.config.js'),
         path.resolve(__dirname, '../tsconfig.json')
@@ -134,25 +134,17 @@ return merge(
     }
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      // react-jhipster requires LOG_LEVEL config.
+      LOG_LEVEL: development ? 'info' : 'error',
+    }),
     new webpack.DefinePlugin({
 <%_ if (enableTranslation) { _%>
       I18N_HASH: JSON.stringify(languagesHash.hash),
 <%_ } _%>
-      'process.env': {
-        NODE_ENV: `'${options.env}'`,
-<%_ if (buildToolUnknown) { _%>
-        VERSION: `'${packageJson.version}'`,
-<%_ } else { _%>
-        // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
-        VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
-<%_ } _%>
-        DEBUG_INFO_ENABLED: options.env === 'development',
-        // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
-        // If this URL is left empty (""), then it will be relative to the current context.
-        // If you use an API server, in `prod` mode, you will need to enable CORS
-        // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-        SERVER_API_URL: `''`
-      }
+      DEVELOPMENT: JSON.stringify(development),
+      VERSION: JSON.stringify(environment.VERSION),
+      SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
     }),
     new ESLintPlugin({
       extensions: ['js', 'ts', 'jsx', 'tsx']
