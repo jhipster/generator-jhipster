@@ -29,6 +29,7 @@ const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
 const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 
 let useBlueprints;
 
@@ -414,6 +415,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           } else {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`);
           }
+        }
+        if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
+          dockerAwaitScripts.push(
+            'echo "Waiting for Elasticsearch to start" && wait-on "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"'
+          );
         }
 
         const dockerOthersUp = [];

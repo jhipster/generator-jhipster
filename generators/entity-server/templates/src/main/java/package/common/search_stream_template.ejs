@@ -23,7 +23,7 @@ const entityToDtoReference = mapper + '::' + 'toDto'; %>
   <%_ if (!reactive) { _%>
     <%_ if (searchEngineElasticsearch) { _%>
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .stream(<%= entityInstance %>SearchRepository.search(query).spliterator(), false)
     <%_ } else { _%>
             return <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
     <%_ } _%>

@@ -35,7 +35,7 @@ const JIB_VERSION = '3.1.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.1.1-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.4.7';
+const SPRING_BOOT_VERSION = '2.5.2';
 const LIQUIBASE_VERSION = '4.3.5';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.32.Final';
@@ -61,7 +61,7 @@ const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.2021.0
 const DOCKER_MEMCACHED = 'memcached:1.6.9-alpine';
 const DOCKER_REDIS = 'redis:6.2.4';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:14.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
-const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.9.3'; // The version should be coherent with the one from spring-data-elasticsearch project
+const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:8.9.1-community';
