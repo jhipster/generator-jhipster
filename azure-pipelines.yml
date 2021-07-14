@@ -27,8 +27,8 @@ jobs:
       vmImage: 'ubuntu-20.04'
     variables:
       # if JHI_LIB_BRANCH value is release, use the release from Maven
-      JHI_LIB_REPO: https://github.com/jdubois/jhipster-bom.git
-      JHI_LIB_BRANCH: patch-spring-boot-2.5.2
+      JHI_LIB_REPO: https://github.com/jhipster/jhipster-bom.git
+      JHI_LIB_BRANCH: main
       # if JHI_GEN_BRANCH value is release, use the release from NPM
       JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
       JHI_GEN_BRANCH: main
