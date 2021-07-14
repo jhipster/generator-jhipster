@@ -129,6 +129,8 @@ test {
 }
 
 task integrationTest(type: Test) {
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
@@ -502,8 +504,8 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"
-    implementation "com.couchbase.client:java-client"
-    implementation "com.couchbase.client:encryption"
+    implementation group: 'com.couchbase.client', name: 'java-client', version: '3.1.4'
+    implementation group: 'com.couchbase.client', name: 'encryption', version: '2.0.1'
     <%_ } _%>
     implementation ("io.springfox:springfox-oas")
     implementation ("io.springfox:springfox-swagger2")

@@ -8,6 +8,7 @@
             "type_field": "_class"
         },
         "mapping": {
+            "analysis": {},
             "default_analyzer": "standard",
             "default_datetime_parser": "dateTimeOptional",
             "default_field": "_all",
@@ -29,9 +30,11 @@
         },
         "store": {
             "indexType": "scorch",
-            "kvStoreName": ""
+            "segmentVersion": 15
         }
     },
     "sourceType": "couchbase",
-    "sourceName": "${bucket}"
+    "sourceName": "${bucket}",
+    "uuid": "",
+    "name": "<%= entityClass.toLowerCase() %>"
 }

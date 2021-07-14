@@ -22,7 +22,7 @@ const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
 const entityToDtoReference = mapper + '::' + 'toDto';
-const returnPrefix = (returnDirectly && !searchEngine) ? 'return' : instanceType + ' result =';
+const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'return' : instanceType + ' result =';
 let resultEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
@@ -56,7 +56,7 @@ if (isUsingMapsId) {
     <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
   <%_ } _%>
-  <%_ if (searchEngine) { _%>
+  <%_ if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
     <%_ if (returnDirectly) { _%>
         return result;

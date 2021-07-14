@@ -1,0 +1,55 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>;
+
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.testcontainers.couchbase.BucketDefinition;
+import org.testcontainers.couchbase.CouchbaseContainer;
+import org.testcontainers.utility.DockerImageName;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class CouchbaseTestContainerExtension implements BeforeAllCallback {
+
+    private static AtomicBoolean started = new AtomicBoolean(false);
+
+    private static CouchbaseContainer couchbase;
+
+    private String getBucketName() {
+        return "testBucket";
+    }
+
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) throws Exception {
+        if (!started.get()) {
+            DockerImageName dockerImage = DockerImageName.parse("<%= DOCKER_COUCHBASE %>")
+                .asCompatibleSubstituteFor("couchbase/server");
+            couchbase = new CouchbaseContainer(dockerImage)
+                .withBucket(new BucketDefinition(getBucketName()).withQuota(100))
+                .withCredentials("user", "secret");
+            couchbase.start();
+            System.setProperty("spring.couchbase.connection-string", couchbase.getConnectionString());
+            System.setProperty("spring.couchbase.username", couchbase.getUsername());
+            System.setProperty("spring.couchbase.password", couchbase.getPassword());
+            System.setProperty("jhipster.database.couchbase.bucket-name", getBucketName());
+            started.set(true);
+        }
+    }
+}

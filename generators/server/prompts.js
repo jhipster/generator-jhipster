@@ -127,6 +127,10 @@ function askForServerSideOpts() {
             value: 'sql',
             name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
           });
+          opts.push({
+            value: 'couchbase',
+            name: 'Couchbase',
+          });
         } else {
           opts.push({
             value: 'sql',
@@ -143,11 +147,6 @@ function askForServerSideOpts() {
             name: 'Cassandra',
           });
         }
-        // Couchbase is broken, see https://github.com/jhipster/generator-jhipster/pull/14184 for more information.
-        /* opts.push({
-          value: 'couchbase',
-          name: 'Couchbase',
-        }); */
         opts.push({
           value: 'neo4j',
           name: '[BETA] Neo4j',
