@@ -68,9 +68,19 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+<%_ if (applicationType === 'gateway') { _%>
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+<%_ } _%>
 import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
+<%_ if (applicationType === 'gateway') { _%>
+import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
+<%_ } _%>
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+<%_ if (applicationType === 'gateway') { _%>
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+<%_ } _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
@@ -119,6 +129,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.Set;
+<%_ if (applicationType === 'gateway') { _%>
+import java.util.function.Consumer;
+<%_ } _%>
 <%_ } _%>
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
@@ -141,10 +154,17 @@ public class SecurityConfiguration {
     <%_ if (authenticationType === 'oauth2') { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
+    <%_ if (applicationType === 'gateway') { _%>
+
+    private final ReactiveClientRegistrationRepository clientRegistrationRepository;
+    <%_ } _%>
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %> JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'oauth2' && applicationType === 'gateway') { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+        <%_ if (authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
+        this.clientRegistrationRepository = clientRegistrationRepository;
+        <%_ } _%>
         <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
@@ -267,9 +287,10 @@ public class SecurityConfiguration {
             .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
         <%_ if (authenticationType === 'oauth2') { _%>
 
-        http<%_ if (['monolith', 'gateway'].includes(applicationType)) { _%>.oauth2Login()
-            .and()
-            <% } %>.oauth2ResourceServer()
+        http<%_ if (['monolith', 'gateway'].includes(applicationType)) { _%><%_ if (applicationType === 'gateway') { _%>.oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))<%_ } else { _%>.oauth2Login()
+            .and()<%_ } _%>
+            <% } %>
+            .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
         http.oauth2Client();
@@ -278,6 +299,25 @@ public class SecurityConfiguration {
         return http.build();
     }
     <%_ if (authenticationType === 'oauth2') { _%>
+
+    <%_ if (applicationType === 'gateway') { _%>
+    private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
+        ReactiveClientRegistrationRepository clientRegistrationRepository) {
+        DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
+            new DefaultServerOAuth2AuthorizationRequestResolver(clientRegistrationRepository);
+        if(this.issuerUri.contains("auth0.com")) {
+            authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
+        }
+        return  authorizationRequestResolver;
+    }
+
+    private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
+        return customizer -> customizer
+            .authorizationRequestUri(uriBuilder ->
+                uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience())
+                    .build());
+    }
+    <%_ } _%>
 
     Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();

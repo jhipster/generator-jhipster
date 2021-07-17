@@ -62,8 +62,9 @@ public class LogoutResource {
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
         String logoutUrl;
-        if(this.registration.getProviderDetails().getIssuerUri().contains("auth0.com")) {
-            logoutUrl = this.registration.getProviderDetails().getIssuerUri() + "v2/logout";
+        String issuerUri = this.registration.getProviderDetails().getIssuerUri();
+        if(issuerUri.contains("auth0.com")) {
+            logoutUrl = issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
         } else {
             logoutUrl = this.registration.getProviderDetails()
                 .getConfigurationMetadata()
@@ -84,12 +85,20 @@ public class LogoutResource {
             this.registration
                 .map(oidc -> Map.of(
                     "clientId", oidc.getClientId(),
-                    "logoutUrl", oidc.getProviderDetails().getIssuerUri().contains("auth0.com")
-                        ? oidc.getProviderDetails().getIssuerUri() + "v2/logout"
-                        : oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString(),
+                    "logoutUrl", prepareLogoutUri(oidc.getProviderDetails()),
                     "idToken", idToken.getTokenValue())
                 )
         );
     }
+
+    private String prepareLogoutUri(ClientRegistration.ProviderDetails providerDetails) {
+        if(providerDetails.getIssuerUri().contains("auth0.com")) {
+            String issuerUri = providerDetails.getIssuerUri();
+            return issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
+        } else {
+            return providerDetails.getConfigurationMetadata().get("end_session_endpoint").toString();
+        }
+    }
+
 <%_ } _%>
 }
