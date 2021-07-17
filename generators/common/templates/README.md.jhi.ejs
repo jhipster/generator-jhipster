@@ -194,6 +194,8 @@ jhipster:
         - https://{your-auth0-domain}/api/v2/
 ```
 - Before running `Cypress` tests, specify `Auth0` user details by overriding `E2E_USERNAME`, and `E2E_PASSWORD` cypress environment variables. Refer cypress documentation to provide OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting)
+
+**Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
 <%_ } _%>
 
 <%_ if (enableSwaggerCodegen) { _%>
