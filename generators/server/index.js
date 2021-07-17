@@ -29,6 +29,7 @@ const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
 const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 
 let useBlueprints;
 
@@ -258,6 +259,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadDerivedClientConfig();
         this.loadServerConfig();
         this.loadDerivedServerConfig();
+        this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
     };
@@ -414,6 +416,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`);
           }
         }
+        if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
+          dockerAwaitScripts.push(
+            'echo "Waiting for Elasticsearch to start" && wait-on "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"'
+          );
+        }
 
         const dockerOthersUp = [];
         const dockerOthersDown = [];
@@ -427,6 +434,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             } else if (dockerConfig === 'jhipster-registry') {
               dockerAwaitScripts.push(
                 'echo "Waiting for jhipster-registry to start" && wait-on http-get://localhost:8761/management/health && echo "jhipster-registry started"'
+              );
+            } else if (dockerConfig === 'keycloak') {
+              dockerAwaitScripts.push(
+                'echo "Waiting for keycloak to start" && wait-on http-get://localhost:9080/auth/realms/jhipster -t 30000 && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"'
               );
             }
 

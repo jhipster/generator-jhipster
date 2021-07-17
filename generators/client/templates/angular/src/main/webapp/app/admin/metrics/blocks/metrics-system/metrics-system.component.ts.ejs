@@ -52,7 +52,7 @@ export class MetricsSystemComponent {
         if (Math.floor(ms / value) > 1) {
           plural = 's';
         }
-        timeString += Math.floor(ms / value).toString() + ' ' + key.toString() + plural + ' ';
+        timeString += `${Math.floor(ms / value).toString()} ${key.toString()}${plural} `;
         ms = ms - value * Math.floor(ms / value);
       }
     }

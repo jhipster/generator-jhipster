@@ -110,7 +110,7 @@ class JHipsterCommand extends Command {
    */
   addCommandArguments(args) {
     if (Array.isArray(args)) {
-      this.arguments(`${args.join(' ')}`);
+      args.forEach(arg => this.argument(arg));
     }
     return this;
   }
@@ -137,13 +137,11 @@ class JHipsterCommand extends Command {
    */
   addGeneratorArguments(generatorArgs = []) {
     if (!generatorArgs) return this;
-    const args = generatorArgs
-      .map(argument => {
-        const argName = argument.type === Array ? `${argument.name}...` : argument.name;
-        return argument.required ? `<${argName}>` : `[${argName}]`;
-      })
-      .join(' ');
-    this.arguments(args);
+    generatorArgs.forEach(argument => {
+      let argName = argument.type === Array ? `${argument.name}...` : argument.name;
+      argName = argument.required ? `<${argName}>` : `[${argName}]`;
+      this.argument(argName, argument.description);
+    });
     return this;
   }
 
@@ -185,20 +183,6 @@ class JHipsterCommand extends Command {
         .default(optionDefinition.default)
         .hideHelp(optionDefinition.hide)
     );
-  }
-
-  /**
-   * Override to reject errors instead of throwing and add command to error.
-   * @return promise this
-   */
-  parseAsync(argv, parseOptions) {
-    try {
-      this.parse(argv, parseOptions);
-    } catch (commanderError) {
-      commanderError.command = this;
-      return Promise.reject(commanderError);
-    }
-    return Promise.all(this._actionResults).then(() => this);
   }
 }
 

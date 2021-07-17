@@ -28,6 +28,7 @@ on:
       - 'dependabot/**'
       - 'skip_ci*'
     paths-ignore:
+      - 'package*.json'
       - 'generators/*client/templates/react/**'
       - 'generators/*client/templates/vue/**'
   pull_request:
@@ -163,7 +164,7 @@ jobs:
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/setup-node@v2.2.0
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2

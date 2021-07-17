@@ -495,6 +495,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.loadDerivedAppConfig(this.context);
         this.loadDerivedClientConfig(this.context);
         this.loadDerivedServerConfig(this.context);
+        this.loadDerivedPlatformConfig(this.context);
         loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
         if (this.context.fields) {
           this.context.fields
@@ -967,9 +968,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _setupEntityOptions(generator, context = generator, dest = context) {
     dest.regenerate = context.options.regenerate;
 
-    if (context.options.fluentMethods !== undefined) {
-      this.entityConfig.fluentMethods = context.options.fluentMethods;
-    }
     if (context.options.skipCheckLengthOfIdentifier !== undefined) {
       this.entityConfig.skipCheckLengthOfIdentifier = context.options.skipCheckLengthOfIdentifier;
     }

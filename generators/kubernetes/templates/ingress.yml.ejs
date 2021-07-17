@@ -30,13 +30,13 @@ spec:
   - http:
   <%_ } _%>
       paths:
-      - path: /<%= ingressType === "nginx" ? "" : "*" %>
+      - path: /<%= ingressTypeNginx ? "" : "*" %>
         backend:
           serviceName: <%= app.baseName.toLowerCase() %>
           servicePort: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryType) { _%>
         <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
-      - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressType === "nginx" ? "" : "*" %>
+      - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressTypeNginx ? "" : "*" %>
         backend:
           serviceName: <%= config.baseName.toLowerCase() %>
           servicePort: <%= config.serverPort %>

@@ -8,6 +8,10 @@ updates:
     labels:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
+    ignore:
+      # ESM only version
+      - dependency-name: 'p-queue'
+        versions: '>=7'
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'

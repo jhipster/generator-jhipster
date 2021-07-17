@@ -32,6 +32,7 @@ import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPe
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.model.Property;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
+import org.springframework.data.mapping.model.PropertyNameFieldNamingStrategy;
 import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentEntity;
 <%_ } _%>
 
@@ -153,7 +154,7 @@ class CustomElasticsearchPersistentProperty extends SimpleElasticsearchPersisten
 
     @SuppressWarnings({"unchecked"})
     public CustomElasticsearchPersistentProperty(Property property, PersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
-        super(property, owner, simpleTypeHolder);
+        super(property, owner, simpleTypeHolder, PropertyNameFieldNamingStrategy.INSTANCE);
     }
 
     @Override

@@ -77,9 +77,13 @@ const SQL = databaseTypes.SQL;
 function rewriteFile(args, generator) {
   let fullPath;
   if (args.path) {
-    fullPath = path.join(args.path, args.file);
+    fullPath = generator.destinationPath(path.join(args.path, args.file));
+  } else {
+    fullPath = generator.destinationPath(args.file);
   }
-  fullPath = generator.destinationPath(args.file);
+  if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
+    fullPath = `${fullPath}.jhi`;
+  }
 
   args.haystack = generator.fs.read(fullPath);
   const body = rewrite(args);
@@ -93,7 +97,10 @@ function rewriteFile(args, generator) {
  * @param {object} generator reference to the generator
  */
 function replaceContent(args, generator) {
-  const fullPath = generator.destinationPath(args.file);
+  let fullPath = generator.destinationPath(args.file);
+  if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
+    fullPath = `${fullPath}.jhi`;
+  }
 
   const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 

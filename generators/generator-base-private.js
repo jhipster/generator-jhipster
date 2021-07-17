@@ -26,6 +26,7 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
 
+const { projectNameReproducibleConfigForTests } = require('./config');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -516,6 +517,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    * @returns default app name
    */
   getDefaultAppName() {
+    if (this.options.reproducible) {
+      return projectNameReproducibleConfigForTests.baseName;
+    }
     return /^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())) ? path.basename(process.cwd()) : 'jhipster';
   }
 
@@ -819,10 +823,16 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       this.debug(`File ${destination} ignored`);
       return Promise.resolved();
     }
-    return jhipsterUtils.renderContent(source, _this, _context, options).then(res => {
-      _this.fs.write(customDestination, res);
-      return customDestination;
-    });
+    return jhipsterUtils
+      .renderContent(source, _this, _context, options)
+      .then(res => {
+        _this.fs.write(customDestination, res);
+        return customDestination;
+      })
+      .catch(error => {
+        this.warning(source);
+        throw error;
+      });
   }
 
   /**

@@ -1,20 +1,20 @@
 const path = require('path');
+const expect = require('expect');
 const assert = require('yeoman-assert');
 
-const { skipPrettierHelpers: helpers, getFilesForOptions, shouldBeV3DockerfileCompatible } = require('./utils/utils');
+const { skipPrettierHelpers: helpers, shouldBeV3DockerfileCompatible } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
 const constants = require('../generators/generator-constants');
-const angularFiles = require('../generators/client/files-angular').files;
-const reactFiles = require('../generators/client/files-react').files;
 
 const { ANGULAR, REACT } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
-const { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, TEST_DIR } = constants;
+const { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = constants;
 
 describe('JHipster generator', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
+      let runResult;
       before(async () => {
-        await helpers
+        runResult = await helpers
           .create(path.join(__dirname, '../generators/app'))
           .withOptions({ jhiPrefix: 'test', withGeneratedFlag: true })
           .withPrompts({
@@ -42,22 +42,7 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected default files for angularX', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.jwtServer);
-        assert.file(expectedFiles.maven);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('contains clientFramework with angularX value', () => {
         assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
@@ -83,9 +68,10 @@ describe('JHipster generator', () => {
     });
 
     describe('React', () => {
+      let runResult;
       before(async () => {
-        await helpers
-          .run(path.join(__dirname, '../generators/app'))
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
           .withOptions({
             jhiPrefix: 'test',
           })
@@ -109,26 +95,12 @@ describe('JHipster generator', () => {
             skipClient: false,
             skipUserManagement: false,
             serverSideOptions: [],
-          });
+          })
+          .run();
       });
 
       it('creates expected default files for react', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.jwtServer);
-        assert.file(expectedFiles.maven);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(
-          getFilesForOptions(reactFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('contains clientFramework with react value', () => {
         assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
@@ -141,47 +113,36 @@ describe('JHipster generator', () => {
     });
 
     describe('using npm flag', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
-          baseName: 'jhipster',
-          packageName: 'com.mycompany.myapp',
-          packageFolder: 'com/mycompany/myapp',
-          clientFramework: ANGULAR,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
-          enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'postgresql',
-          enableTranslation: true,
-          nativeLanguage: 'en',
-          languages: ['fr'],
-          buildTool: 'maven',
-          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-          skipClient: false,
-          skipUserManagement: false,
-          serverSideOptions: [],
-        });
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withPrompts({
+            baseName: 'jhipster',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            clientFramework: ANGULAR,
+            serviceDiscoveryType: false,
+            authenticationType: 'jwt',
+            cacheProvider: 'ehcache',
+            enableHibernateCache: true,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Memory',
+            prodDatabaseType: 'postgresql',
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['fr'],
+            buildTool: 'maven',
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            skipClient: false,
+            skipUserManagement: false,
+            serverSideOptions: [],
+          })
+          .run();
       });
 
       it('creates expected default files', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.jwtServer);
-        assert.file(expectedFiles.maven);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('contains clientPackageManager with npm value', () => {
         assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
@@ -192,8 +153,9 @@ describe('JHipster generator', () => {
     });
 
     describe('Gradle', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+        runResult = await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
@@ -215,100 +177,78 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected default files for gradle', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.jwtServer);
-        assert.file(expectedFiles.gradle);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
   });
 
   context('Application with DB option', () => {
     describe('mariadb', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
-          baseName: 'jhipster',
-          packageName: 'com.mycompany.myapp',
-          packageFolder: 'com/mycompany/myapp',
-          clientFramework: ANGULAR,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
-          enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Disk',
-          prodDatabaseType: 'mariadb',
-          enableTranslation: true,
-          nativeLanguage: 'en',
-          languages: ['fr'],
-          buildTool: 'maven',
-          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-          skipClient: false,
-          skipUserManagement: false,
-          serverSideOptions: [],
-        });
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withPrompts({
+            baseName: 'jhipster',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            clientFramework: ANGULAR,
+            serviceDiscoveryType: false,
+            authenticationType: 'jwt',
+            cacheProvider: 'ehcache',
+            enableHibernateCache: true,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mariadb',
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['fr'],
+            buildTool: 'maven',
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            skipClient: false,
+            skipUserManagement: false,
+            serverSideOptions: [],
+          })
+          .run();
       });
 
       it('creates expected default files', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.jwtServer);
-        assert.file(expectedFiles.maven);
-        assert.file(expectedFiles.dockerServices);
-        assert.file(expectedFiles.mariadb);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       shouldBeV3DockerfileCompatible('mariadb');
     });
 
     describe('mongodb', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
-          baseName: 'jhipster',
-          packageName: 'com.mycompany.myapp',
-          packageFolder: 'com/mycompany/myapp',
-          clientFramework: ANGULAR,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'no',
-          enableHibernateCache: false,
-          databaseType: 'mongodb',
-          devDatabaseType: 'mongodb',
-          prodDatabaseType: 'mongodb',
-          enableTranslation: true,
-          nativeLanguage: 'en',
-          languages: ['fr'],
-          buildTool: 'maven',
-          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-          skipClient: false,
-          skipUserManagement: false,
-          serverSideOptions: [],
-        });
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withPrompts({
+            baseName: 'jhipster',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            clientFramework: ANGULAR,
+            serviceDiscoveryType: false,
+            authenticationType: 'jwt',
+            cacheProvider: 'no',
+            enableHibernateCache: false,
+            databaseType: 'mongodb',
+            devDatabaseType: 'mongodb',
+            prodDatabaseType: 'mongodb',
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['fr'],
+            buildTool: 'maven',
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            skipClient: false,
+            skipUserManagement: false,
+            serverSideOptions: [],
+          })
+          .run();
       });
 
       it('creates expected files with "MongoDB"', () => {
-        assert.file(expectedFiles.mongodb);
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it("doesn't setup liquibase", () => {
         assert.noFileContent('pom.xml', 'liquibase');
@@ -1100,40 +1040,36 @@ describe('JHipster generator', () => {
     });
 
     describe('with RTL support', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
-          baseName: 'jhipster',
-          clientFramework: ANGULAR,
-          packageName: 'com.mycompany.myapp',
-          packageFolder: 'com/mycompany/myapp',
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
-          enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'postgresql',
-          enableTranslation: true,
-          nativeLanguage: 'en',
-          languages: ['ar-ly', 'en'],
-          buildTool: 'maven',
-          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-          skipClient: false,
-          skipUserManagement: false,
-          serverSideOptions: [],
-        });
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withPrompts({
+            baseName: 'jhipster',
+            clientFramework: ANGULAR,
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            serviceDiscoveryType: false,
+            authenticationType: 'jwt',
+            cacheProvider: 'ehcache',
+            enableHibernateCache: true,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Memory',
+            prodDatabaseType: 'postgresql',
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['ar-ly', 'en'],
+            buildTool: 'maven',
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            skipClient: false,
+            skipUserManagement: false,
+            serverSideOptions: [],
+          })
+          .run();
       });
 
       it('creates expected default files for i18n with RTL support', () => {
-        assert.file(expectedFiles.i18nRtl);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('contains updatePageDirection in main component', () => {
         assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/layouts/main/main.component.ts`, /private updatePageDirection/);
@@ -1143,44 +1079,41 @@ describe('JHipster generator', () => {
 
   context('Auth options', () => {
     describe('JWT authentication', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
-          baseName: 'jhipster',
-          packageName: 'com.mycompany.myapp',
-          packageFolder: 'com/mycompany/myapp',
-          clientFramework: ANGULAR,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
-          enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'postgresql',
-          enableTranslation: true,
-          nativeLanguage: 'en',
-          languages: ['fr', 'en'],
-          buildTool: 'maven',
-          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-          serverSideOptions: [],
-        });
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
+          .withPrompts({
+            baseName: 'jhipster',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            clientFramework: ANGULAR,
+            serviceDiscoveryType: false,
+            authenticationType: 'jwt',
+            cacheProvider: 'ehcache',
+            enableHibernateCache: true,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Memory',
+            prodDatabaseType: 'postgresql',
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['fr', 'en'],
+            buildTool: 'maven',
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            serverSideOptions: [],
+          })
+          .run();
       });
 
       it('creates expected files with JWT authentication', () => {
-        assert.file(expectedFiles.jwtServer);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
 
     describe('HTTP session authentication', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+        runResult = await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
@@ -1202,23 +1135,16 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with HTTP session authentication', () => {
-        assert.file(expectedFiles.session);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'session',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
   });
 
   context('Testing options', () => {
     describe('Protractor tests', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+        runResult = await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
@@ -1245,26 +1171,14 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with Protractor enabled', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: ['protractor'],
-          })
-        );
-        assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
 
     describe('Cucumber tests', () => {
+      let runResult;
       before(async () => {
-        await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
+        runResult = await helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
           baseName: 'jhipster',
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
@@ -1291,21 +1205,16 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files with Cucumber enabled', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.file(expectedFiles.cucumber);
-        assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
   });
 
   context('App with skip server', () => {
+    let runResult;
     before(async () => {
-      await helpers
-        .run(path.join(__dirname, '../generators/app'))
+      runResult = await helpers
+        .create(path.join(__dirname, '../generators/app'))
         .withOptions({ skipServer: true, db: 'postgresql', auth: 'jwt' })
         .withPrompts({
           baseName: 'jhipster',
@@ -1318,24 +1227,12 @@ describe('JHipster generator', () => {
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
           rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-        });
+        })
+        .run();
     });
 
     it('creates expected files for default configuration with skip server option enabled', () => {
-      assert.file(expectedFiles.common);
-      assert.noFile(expectedFiles.server);
-      assert.noFile(expectedFiles.userManagementServer);
-      assert.noFile(expectedFiles.maven);
-      assert.noFile(expectedFiles.postgresql);
-      assert.noFile(expectedFiles.hibernateTimeZoneConfig);
-      assert.file(
-        getFilesForOptions(angularFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          testFrameworks: [],
-        })
-      );
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('generates a README with no undefined value', () => {
       assert.noFileContent('README.md', /undefined/);
@@ -1347,8 +1244,9 @@ describe('JHipster generator', () => {
 
   context('App with skip client', () => {
     describe('Maven', () => {
+      let runResult;
       before(async () => {
-        await helpers
+        runResult = await helpers
           .run(path.join(__dirname, '../generators/app'))
           .withOptions({ skipClient: true })
           .withPrompts({
@@ -1372,25 +1270,7 @@ describe('JHipster generator', () => {
       });
 
       it('creates expected files for default configuration with skip client option enabled', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.maven);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.noFile(
-          getFilesForOptions(
-            angularFiles,
-            {
-              enableTranslation: true,
-              serviceDiscoveryType: false,
-              authenticationType: 'session',
-              testFrameworks: [],
-            },
-            '',
-            ['package.json']
-          )
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('generates a README with no undefined value', () => {
         assert.noFileContent('README.md', /undefined/);
@@ -1413,9 +1293,10 @@ describe('JHipster generator', () => {
     });
 
     describe('Gradle', () => {
+      let runResult;
       before(async () => {
-        await helpers
-          .run(path.join(__dirname, '../generators/app'))
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
           .withOptions({ skipClient: true })
           .withPrompts({
             baseName: 'jhipster',
@@ -1434,29 +1315,12 @@ describe('JHipster generator', () => {
             languages: ['fr', 'en'],
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             serverSideOptions: [],
-          });
+          })
+          .run();
       });
 
       it('creates expected files for default configuration with skip client option enabled', () => {
-        assert.file(expectedFiles.common);
-        assert.file(expectedFiles.server);
-        assert.file(expectedFiles.userManagementServer);
-        assert.file(expectedFiles.gradle);
-        assert.file(expectedFiles.postgresql);
-        assert.file(expectedFiles.hibernateTimeZoneConfig);
-        assert.noFile(
-          getFilesForOptions(
-            angularFiles,
-            {
-              enableTranslation: true,
-              serviceDiscoveryType: false,
-              authenticationType: 'jwt',
-              testFrameworks: [],
-            },
-            '',
-            ['package.json']
-          )
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('generates README with instructions for Gradle', () => {
         assert.fileContent('README.md', './gradlew');

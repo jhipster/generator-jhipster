@@ -390,8 +390,10 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -1058,7 +1060,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
           env:
             - name: discovery.type
               value: single-node
@@ -1647,8 +1649,10 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -2319,6 +2323,7 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"example.com\\",
     \\"monitoring\\": \\"no\\",
     \\"istio\\": true
@@ -3053,8 +3058,10 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -3566,7 +3573,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
@@ -4296,7 +4303,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
           env:
             - name: discovery.type
               value: single-node
@@ -4658,7 +4665,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
           env:
             - name: discovery.type
               value: single-node
@@ -4744,8 +4751,10 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"prometheus\\"
+    \\"monitoring\\": \\"prometheus\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -7578,8 +7587,10 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",
@@ -8073,8 +8084,10 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"\\",
-    \\"monitoring\\": \\"no\\"
+    \\"monitoring\\": \\"no\\",
+    \\"istio\\": false
   }
 }
 ",

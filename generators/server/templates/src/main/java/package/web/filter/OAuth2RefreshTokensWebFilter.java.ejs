@@ -30,6 +30,14 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,16 +48,39 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class OAuth2RefreshTokensWebFilter extends OncePerRequestFilter {
 
     private final OAuth2AuthorizedClientManager clientManager;
+    private final OAuth2AuthorizedClientRepository authorizedClientRepository;
+    private final OAuth2AuthorizationRequestResolver authorizationRequestResolver;
+    private final RedirectStrategy authorizationRedirectStrategy = new DefaultRedirectStrategy();
 
-    public OAuth2RefreshTokensWebFilter(OAuth2AuthorizedClientManager clientManager) {
+    public OAuth2RefreshTokensWebFilter(
+        OAuth2AuthorizedClientManager clientManager,
+        OAuth2AuthorizedClientRepository authorizedClientRepository,
+        ClientRegistrationRepository clientRegistrationRepository
+    ) {
         this.clientManager = clientManager;
+        this.authorizedClientRepository = authorizedClientRepository;
+        this.authorizationRequestResolver =
+            new DefaultOAuth2AuthorizationRequestResolver(
+                clientRegistrationRepository,
+                OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
+            );
     }
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws IOException, ServletException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if ((authentication instanceof OAuth2AuthenticationToken)) {
-            authorizedClient((OAuth2AuthenticationToken) authentication);
+            try {
+                OAuth2AuthorizedClient authorizedClient = authorizedClient((OAuth2AuthenticationToken) authentication);
+                this.authorizedClientRepository.saveAuthorizedClient(authorizedClient, authentication, request, response);
+            } catch (Exception e) {
+                OAuth2AuthorizationRequest authorizationRequest = this.authorizationRequestResolver.resolve(request);
+                if (authorizationRequest != null) {
+                    this.authorizationRedirectStrategy.sendRedirect(request, response, authorizationRequest.getAuthorizationRequestUri());
+                    return;
+                }
+            }
         }
 
         filterChain.doFilter(request, response);

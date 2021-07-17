@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
+const jestExpect = require('expect');
 const sinon = require('sinon');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const Environment = require('yeoman-environment');
 
-const expectedFiles = require('./utils/expected-files');
 const Base = require('../generators/generator-base');
 const { testInTempDir, revertTempDir } = require('./utils/utils');
 const { parseLiquibaseChangelogDate } = require('../utils/liquibase');
@@ -302,11 +302,8 @@ describe('Generator Base', () => {
           authenticationType: 'jwt',
           testFrameworks: [],
         };
-        let filesToAssert = expectedFiles.client;
-        filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
-        filesToAssert = filesToAssert.concat(expectedFiles.userManagementClient).sort();
         const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-        expect(out).to.eql(filesToAssert);
+        jestExpect(out).toMatchSnapshot();
       });
     });
     describe('when called with default angular client options skipping user-management', () => {
@@ -319,11 +316,8 @@ describe('Generator Base', () => {
           skipUserManagement: true,
           testFrameworks: [],
         };
-        let filesToAssert = expectedFiles.client;
-        filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
-        filesToAssert = filesToAssert.sort();
         const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-        expect(out).to.eql(filesToAssert);
+        jestExpect(out).toMatchSnapshot();
       });
     });
     describe('when called without jhipsterTemplatesFolders and without rootTemplatesPath', () => {
@@ -350,7 +344,7 @@ describe('Generator Base', () => {
           jhipsterTemplatesFolders: [path.join(fixturesPath, 'templates', 'specific'), path.join(fixturesPath, 'templates', 'common')],
         });
       });
-      describe('exiting file in templates/specific and templates/common folders', () => {
+      describe('existing file in templates/specific and templates/common folders', () => {
         const templates = ['all'];
         const files = { files: [{ templates }] };
         let out;
@@ -369,7 +363,7 @@ describe('Generator Base', () => {
           expect(generator.template.getCall(0).args[3].root).to.be.eql(generator.jhipsterTemplatesFolders);
         });
       });
-      describe('exiting file only in templates/common folder', () => {
+      describe('existing file only in templates/common folder', () => {
         const templates = ['common'];
         const files = { files: [{ templates }] };
         let out;
@@ -398,7 +392,7 @@ describe('Generator Base', () => {
           jhipsterTemplatesFolders: [path.join(fixturesPath, 'templates_override'), path.join(fixturesPath, 'templates')],
         });
       });
-      describe('exiting file in templates_override/specific, templates/specific, templates/common folders', () => {
+      describe('existing file in templates_override/specific, templates/specific, templates/common folders', () => {
         const templates = ['all'];
         const files = { files: [{ templates }] };
         let out;
@@ -424,7 +418,7 @@ describe('Generator Base', () => {
           ]);
         });
       });
-      describe('exiting file only templates/specific folder', () => {
+      describe('existing file only templates/specific folder', () => {
         const templates = ['specific'];
         const files = { files: [{ templates }] };
         let out;
@@ -448,7 +442,7 @@ describe('Generator Base', () => {
           ]);
         });
       });
-      describe('exiting file only templates/common folder', () => {
+      describe('existing file only templates/common folder', () => {
         const templates = ['common'];
         const files = { files: [{ templates }] };
         let out;

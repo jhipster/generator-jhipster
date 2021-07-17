@@ -18,6 +18,10 @@
  */
 const execSync = require('child_process').execSync;
 const dockerPrompts = require('../docker-prompts');
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+
+const NO_DATABASE = databaseTypes.NO;
 
 module.exports = {
   askForKubernetesNamespace,
@@ -177,7 +181,7 @@ async function askForIngressDomain() {
 
 async function askForIstioSupport() {
   if (this.regenerate) return;
-  if (this.deploymentApplicationType === 'monolith') {
+  if (this.deploymentApplicationType === MONOLITH) {
     this.istio = false;
     return;
   }
@@ -209,7 +213,7 @@ async function askForPersistentStorage() {
   if (this.regenerate) return;
   let usingDataBase = false;
   this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.prodDatabaseType !== 'no') {
+    if (appConfig.prodDatabaseType !== NO_DATABASE) {
       usingDataBase = true;
     }
   });

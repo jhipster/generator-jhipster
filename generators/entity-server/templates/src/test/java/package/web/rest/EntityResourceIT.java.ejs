@@ -175,6 +175,9 @@ import java.util.ArrayList;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.Collections;
+  <%_ if (paginationNo) { _%>
+import java.util.stream.Stream;
+  <%_ } _%>
 <%_ } _%>
 import java.util.List;
 <%_ if (fieldsContainUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
@@ -192,9 +195,6 @@ import static <%= packageName %>.web.rest.TestUtil.sameNumber;
 import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (searchEngineElasticsearch && !reactive) { _%>
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-<%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
@@ -1154,7 +1154,18 @@ _%>
     <%_ } else { _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+    <%_ if (databaseTypeSql && !reactive) { _%>
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %>;
+    if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
+        <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        em.persist(<%= relationship.relationshipFieldName %>);
+        em.flush();
+    } else {
+        <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
+    }
+    <%_ } else { _%>
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);        
+    <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
@@ -1718,11 +1729,11 @@ _%>
             .thenReturn(Flux.just(<%= persistInstance %>));
     <%_ } else { _%>
       <%_ if (!paginationNo) { _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()), PageRequest.of(0, 20)))
+        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>(), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(<%= persistInstance %>), PageRequest.of(0, 1), 1));
       <%_ } else { _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())))
-            .thenReturn(Collections.singletonList(<%= persistInstance %>));
+        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
+            .thenReturn(Stream.of(<%= persistInstance %>));
       <%_ } _%>
     <%_ } _%>
   <%_ } else if (searchEngineCouchbase) { _%>
