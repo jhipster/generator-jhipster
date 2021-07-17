@@ -11,8 +11,4 @@ arrowParens: avoid
 # jsx and tsx rules:
 jsxBracketSameLine: false
 
-# java rules:
-overrides:
-  - files: "*.java"
-    options:
-      tabWidth: <%= prettierJavaIndent %>
+<&- fragments.render({ join: '\n\n' }) &>

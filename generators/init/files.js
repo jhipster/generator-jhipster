@@ -24,17 +24,17 @@
 module.exports.files = {
   prettier: [
     {
-      templates: ['.prettierrc', '.prettierignore'],
+      templates: ['.prettierrc.yml.jhi', '.prettierignore.jhi'],
     },
   ],
   git: [
     {
-      templates: ['.gitignore', '.gitattributes'],
+      templates: ['.gitignore.jhi', '.gitattributes.jhi'],
     },
   ],
   global: [
     {
-      templates: ['README.md', 'package.json', '.editorconfig'],
+      templates: ['README.md', 'package.json', '.editorconfig.jhi'],
     },
   ],
   commitHooks: [
