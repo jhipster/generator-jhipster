@@ -22,6 +22,7 @@ const { MONOLITH } = require('../../jdl/jhipster/application-types');
 const { IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 
 const databaseTypes = require('../../jdl/jhipster/database-types');
+const { defaultKubernetesConfig, ingressDefaultConfig } = require('./kubernetes-constants');
 
 const NO_DATABASE = databaseTypes.NO;
 const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;
@@ -46,7 +47,7 @@ async function askForKubernetesNamespace() {
       type: 'input',
       name: 'kubernetesNamespace',
       message: 'What should we use for the Kubernetes namespace?',
-      default: this.kubernetesNamespace ? this.kubernetesNamespace : 'default',
+      default: this.kubernetesNamespace ? this.kubernetesNamespace : defaultKubernetesConfig.kubernetesNamespace,
     },
   ];
 
@@ -79,7 +80,7 @@ async function askForKubernetesServiceType() {
           name: 'Ingress - create ingresses for your services. Requires a running ingress controller',
         },
       ],
-      default: this.kubernetesServiceType ? this.kubernetesServiceType : 'LoadBalancer',
+      default: this.kubernetesServiceType ? this.kubernetesServiceType : defaultKubernetesConfig.kubernetesServiceType,
     },
   ];
 
@@ -107,7 +108,7 @@ async function askForIngressType() {
           name: 'Google Kubernetes Engine Ingress - choose this if you are running on GKE',
         },
       ],
-      default: this.ingressType ? this.ingressType : NGINX,
+      default: this.ingressType ? this.ingressType : ingressDefaultConfig.ingressType,
     },
   ];
 

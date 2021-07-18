@@ -18,12 +18,25 @@
  */
 
 const { NO } = require('../../jdl/jhipster/monitoring-types');
-const { LOAD_BALANCER } = require('../../jdl/jhipster/kubernetes-platform-types');
+const { ServiceTypes, IngressTypes, GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+
+const { LOAD_BALANCER } = ServiceTypes;
+const { NGINX } = IngressTypes;
+const { K8S } = GeneratorTypes;
 
 const kubernetesDefaultConfig = {
+  kubernetesNamespace: 'default',
   kubernetesServiceType: LOAD_BALANCER,
   monitoring: NO,
   istio: false,
+};
+
+const ingressDefaultConfig = {
+  ingressType: NGINX,
+};
+
+const generatorDefaultConfig = {
+  generatorType: K8S,
 };
 
 const defaultKubernetesConfig = {
@@ -32,4 +45,6 @@ const defaultKubernetesConfig = {
 
 module.exports = {
   defaultKubernetesConfig,
+  ingressDefaultConfig,
+  generatorDefaultConfig,
 };
