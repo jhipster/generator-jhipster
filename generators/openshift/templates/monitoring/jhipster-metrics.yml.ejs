@@ -73,7 +73,7 @@ parameters:
     value: 1Gi
     required: true
 objects:
-  <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
@@ -107,7 +107,7 @@ objects:
       resources:
         requests:
           storage: "${VOLUME_CAPACITY}"
-  <%_ } _%>
+<%_ } _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: ConfigMap
@@ -223,13 +223,13 @@ objects:
         spec:
           volumes:
           - name: ${PT_APP_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${PT_APP_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           - name: ${PT_APP_NAME}-config
             configMap:
               name: metrics-config
@@ -319,13 +319,13 @@ objects:
         spec:
           volumes:
           - name: ${AM_APP_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${AM_APP_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           - name: ${AM_APP_NAME}-config
             configMap:
               name: metrics-config
@@ -406,13 +406,13 @@ objects:
         spec:
           volumes:
           - name: ${GF_APP_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${GF_APP_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           containers:
           - name: ${GF_APP_NAME}
             image: <%= DOCKER_GRAFANA %>

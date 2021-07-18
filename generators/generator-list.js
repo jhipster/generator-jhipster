@@ -49,6 +49,8 @@ const Generators = {
   GENERATOR_PAGE: 'page',
   GENERATOR_PROJECT_NAME: 'project-name',
   GENERATOR_SERVER: 'server',
+  GENERATOR_OPENAPI: 'openapi-client',
+  GENERATOR_OPENSHIFT: 'openshift',
 };
 
 module.exports = Generators;

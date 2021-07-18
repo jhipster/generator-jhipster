@@ -19,14 +19,30 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const prompts = require('./prompts');
+const { GENERATOR_OPENSHIFT } = require('../generator-list');
+const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const { setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
+const NO_DATABASE = databaseTypes.NO;
+
+let useBlueprints;
+
+/* eslint-disable consistent-return */
 module.exports = class extends BaseDockerGenerator {
-  get initializing() {
+  constructor(args, options) {
+    super(args, options);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENSHIFT);
+  }
+
+  _initializing() {
     return {
       sayHello() {
         this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
@@ -39,7 +55,7 @@ module.exports = class extends BaseDockerGenerator {
         );
       },
 
-      ...super.initializing,
+      ...super._initializing(),
 
       checkOpenShift() {
         if (this.skipChecks) return;
@@ -68,7 +84,12 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get prompting() {
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
     return {
       askForApplicationType: prompts.askForApplicationType,
       askForPath: prompts.askForPath,
@@ -83,10 +104,15 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'openshift');
+        statistics.sendSubGenEvent('generator', GENERATOR_OPENSHIFT);
       },
 
       checkImages,
@@ -101,7 +127,7 @@ module.exports = class extends BaseDockerGenerator {
 
       setPostPromptProp() {
         this.appConfigs.some(element => {
-          if (element.messageBroker === 'kafka') {
+          if (element.messageBroker === KAFKA) {
             this.useKafka = true;
             return true;
           }
@@ -127,73 +153,110 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get writing() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.appConfigs.forEach(element => {
+          this.loadServerConfig(element);
+          this.loadDerivedServerConfig(element);
+          this.loadDerivedAppConfig(element);
+        });
+        this.loadDeploymentConfig(this);
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
+
+  _writing() {
     return writeFiles();
   }
 
-  end() {
-    if (this.hasWarning) {
-      this.log(`\n${chalk.yellow.bold('WARNING!')} OpenShift configuration generated, but no Jib cache found`);
-      this.log('If you forgot to generate the Docker image for this application, please run:');
-      this.log(this.warningMessage);
-    } else {
-      this.log(`\n${chalk.bold.green('OpenShift configuration successfully generated!')}`);
-    }
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
 
-    this.log(
-      `${chalk.yellow.bold(
-        'WARNING!'
-      )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
-    );
-    for (let i = 0; i < this.appsFolders.length; i++) {
-      const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-      const targetImageName = this.appConfigs[i].targetImageName;
-      if (originalImageName !== targetImageName) {
-        this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
-      }
-      this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
-    }
-
-    this.log('\nYou can deploy all your apps by running: ');
-    this.log(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
-    this.log('OR');
-    this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
-    if (this.monitoring === 'prometheus') {
-      this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
-    }
-    if (this.useKafka === true) {
-      this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
-    }
-    for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
-      const app = this.appConfigs[i];
-      const appName = app.baseName.toLowerCase();
-      if (app.searchEngine === 'elasticsearch') {
-        this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`);
-      }
-      if (app.serviceDiscoveryType !== false && regIndex++ === 0) {
-        this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`);
-        if (app.serviceDiscoveryType === 'eureka') {
-          this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`);
+  _end() {
+    return {
+      displayOpenshiftDeploymentProcedure() {
+        if (this.hasWarning) {
+          this.log(`\n${chalk.yellow.bold('WARNING!')} OpenShift configuration generated, but no Jib cache found`);
+          this.log('If you forgot to generate the Docker image for this application, please run:');
+          this.log(this.warningMessage);
         } else {
-          this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
+          this.log(`\n${chalk.bold.green('OpenShift configuration successfully generated!')}`);
         }
-      }
-      if (app.prodDatabaseType !== 'no') {
-        this.log(
-          `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`
-        );
-      }
-      this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`);
-    }
 
-    if (this.gatewayNb + this.monolithicNb >= 1) {
-      this.log("\nUse these commands to find your application's IP addresses:");
-      for (let i = 0; i < this.appsFolders.length; i++) {
-        if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-          this.log(`  ${chalk.cyan(`oc get svc ${this.appConfigs[i].baseName}`)}`);
+        this.log(
+          `${chalk.yellow.bold(
+            'WARNING!'
+          )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        );
+        for (let i = 0; i < this.appsFolders.length; i++) {
+          const originalImageName = this.appConfigs[i].baseName.toLowerCase();
+          const targetImageName = this.appConfigs[i].targetImageName;
+          if (originalImageName !== targetImageName) {
+            this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
+          }
+          this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
-      }
-      this.log();
-    }
+
+        this.log('\nYou can deploy all your apps by running: ');
+        this.log(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
+        this.log('OR');
+        this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
+        if (this.monitoring === PROMETHEUS) {
+          this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
+        }
+        if (this.useKafka === true) {
+          this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
+        }
+        for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
+          const app = this.appConfigs[i];
+          const appName = app.baseName.toLowerCase();
+          if (app.searchEngine === ELASTICSEARCH) {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`);
+          }
+          if (app.serviceDiscoveryType !== false && regIndex++ === 0) {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`);
+            if (app.serviceDiscoveryType === 'eureka') {
+              this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`);
+            } else {
+              this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
+            }
+          }
+          if (app.prodDatabaseType !== NO_DATABASE) {
+            this.log(
+              `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`
+            );
+          }
+          this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`);
+        }
+
+        if (this.gatewayNb + this.monolithicNb >= 1) {
+          this.log("\nUse these commands to find your application's IP addresses:");
+          for (let i = 0; i < this.appsFolders.length; i++) {
+            if (this.appConfigs[i].applicationType === GATEWAY || this.appConfigs[i].applicationType === MONOLITH) {
+              this.log(`  ${chalk.cyan(`oc get svc ${this.appConfigs[i].baseName}`)}`);
+            }
+          }
+          this.log();
+        }
+      },
+    };
+  }
+
+  end() {
+    if (useBlueprints) return;
+    return this._end();
   }
 };

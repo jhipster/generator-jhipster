@@ -32,6 +32,8 @@ const {
   H2_DISK,
   H2_MEMORY,
 } = require('./database-types');
+const { KAFKA } = require('./message-broker-types');
+const messageBrokerTypes = require('./message-broker-types');
 const databaseTypes = require('./database-types');
 
 const NO_DATABASE = databaseTypes.NO;
@@ -47,6 +49,7 @@ const { ANGULAR_X, ANGULAR, REACT, VUE, SVELTE } = require('./client-framework-t
 const { ELASTICSEARCH } = require('./search-engine-types');
 const searchEngines = require('./search-engine-types');
 
+const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_SEARCH_ENGINE = searchEngines.FALSE;
 const COUCHBASE_SEARCH_ENGINE = searchEngines.COUCHBASE;
 
@@ -120,6 +123,7 @@ const optionNames = {
 };
 
 const optionValues = {
+  // TODO refactor it mixes default values (e.g. BaseName=Jhipster) and element list (e.g. application types)
   [optionNames.APPLICATION_TYPE]: {
     [MONOLITH]: MONOLITH,
     [MICROSERVICE]: MICROSERVICE,
@@ -185,8 +189,8 @@ const optionValues = {
   [optionNames.JWT_SECRET_KEY]: '',
   [optionNames.LANGUAGES]: [],
   [optionNames.MESSAGE_BROKER]: {
-    kafka: 'kafka',
-    false: false,
+    kafka: KAFKA,
+    false: NO_MESSAGE_BROKER,
   },
   [optionNames.NPM]: true,
   [optionNames.OTHER_MODULES]: [],
