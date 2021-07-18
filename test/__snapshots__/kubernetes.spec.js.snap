@@ -2663,7 +2663,6 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
     \\"ingressDomain\\": \\"example.com\\",
