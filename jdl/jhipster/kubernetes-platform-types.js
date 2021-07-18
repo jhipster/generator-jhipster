@@ -17,19 +17,18 @@
  * limitations under the License.
  */
 
-const { NO } = require('../../jdl/jhipster/monitoring-types');
-const { LOAD_BALANCER } = require('../../jdl/jhipster/kubernetes-platform-types');
-
-const kubernetesDefaultConfig = {
-  kubernetesServiceType: LOAD_BALANCER,
-  monitoring: NO,
-  istio: false,
+const ServiceTypes = {
+  LOAD_BALANCER: 'LoadBalancer',
+  INGRESS: 'Ingress',
+  NODE_PORT: 'NodePort',
 };
 
-const defaultKubernetesConfig = {
-  ...kubernetesDefaultConfig,
+const IngressTypes = {
+  NGINX: 'nginx',
+  GKE: 'gke',
 };
 
 module.exports = {
-  defaultKubernetesConfig,
+  ServiceTypes,
+  IngressTypes,
 };

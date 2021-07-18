@@ -25,6 +25,10 @@ const { defaultKubernetesConfig } = require('./kubernetes/kubernetes-constants')
 const { loadFromYoRc } = require('./docker-base');
 const constants = require('./generator-constants');
 const { MICROSERVICE } = require('../jdl/jhipster/application-types');
+const { IngressTypes, ServiceTypes } = require('../jdl/jhipster/kubernetes-platform-types');
+
+const { INGRESS } = ServiceTypes;
+const { GKE, NGINX } = IngressTypes;
 
 module.exports = {
   checkKubernetes,
@@ -122,9 +126,9 @@ function setupKubernetesConstants() {
 
 function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
   dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
-  dest.ingressTypeNginx = dest.ingressType === 'nginx';
-  dest.ingressTypeGke = dest.ingressType === 'gke';
-  dest.kubernetesServiceTypeIngress = dest.kubernetesServiceType === 'Ingress';
+  dest.ingressTypeNginx = dest.ingressType === NGINX;
+  dest.ingressTypeGke = dest.ingressType === GKE;
+  dest.kubernetesServiceTypeIngress = dest.kubernetesServiceType === INGRESS;
   dest.kubernetesNamespaceDefault = dest.kubernetesNamespace === 'default';
 }
 

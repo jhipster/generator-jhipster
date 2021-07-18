@@ -16,6 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const { COUCHBASE } = require('../../jdl/jhipster/database-types');
+const databaseType = require('../../jdl/jhipster/database-types');
+
+const NO_DATABASE_TYPE = databaseType.NO;
 
 module.exports = {
   writeFiles,
@@ -39,19 +48,19 @@ function writeFiles() {
 
           this.template('service.yml.ejs', `${appOut}/${appName}-service.yml`);
           // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
-          if (this.app.prodDatabaseType !== 'no') {
+          if (this.app.prodDatabaseType !== NO_DATABASE_TYPE) {
             this.template(`${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`, `${appOut}/${appName}-${this.app.prodDatabaseType}.yml`);
           }
-          if (this.app.searchEngine === 'elasticsearch') {
+          if (this.app.searchEngine === ELASTICSEARCH) {
             this.template(`${k8s}/db/elasticsearch.yml.ejs`, `${appOut}/${appName}-elasticsearch.yml`);
           }
-          if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+          if (this.app.applicationType === GATEWAY || this.app.applicationType === MONOLITH) {
             this.template('istio/gateway.yml.ejs', `${appOut}/${appName}-gateway.yml`);
           }
-          if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+          if (!this.app.serviceDiscoveryType && this.app.authenticationType === JWT) {
             this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appOut}/jwt-secret.yml`);
           }
-          if (this.monitoring === 'prometheus') {
+          if (this.monitoring === PROMETHEUS) {
             this.template(`${k8s}/monitoring/jhipster-prometheus-sm.yml.ejs`, `${appOut}/${appName}-prometheus-sm.yml`);
           }
           this.template('istio/destination-rule.yml.ejs', `${appOut}/${appName}-destination-rule.yml`);
@@ -62,7 +71,7 @@ function writeFiles() {
           this.template(`${k8s}/messagebroker/kafka.yml.ejs`, `messagebroker-${suffix}/kafka.yml`);
         }
 
-        if (this.monitoring === 'prometheus') {
+        if (this.monitoring === PROMETHEUS) {
           const monitOut = 'monitoring'.concat('-', suffix);
           this.template(`${k8s}/monitoring/jhipster-prometheus-crd.yml.ejs`, `${monitOut}/jhipster-prometheus-crd.yml`);
           this.template(`${k8s}/monitoring/jhipster-prometheus-cr.yml.ejs`, `${monitOut}/jhipster-prometheus-cr.yml`);
@@ -72,10 +81,10 @@ function writeFiles() {
         }
 
         const registryOut = 'registry'.concat('-', suffix);
-        if (this.serviceDiscoveryType === 'eureka') {
+        if (this.serviceDiscoveryType === EUREKA) {
           this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, `${registryOut}/jhipster-registry.yml`);
           this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${registryOut}/application-configmap.yml`);
-        } else if (this.serviceDiscoveryType === 'consul') {
+        } else if (this.serviceDiscoveryType === CONSUL) {
           this.template(`${k8s}/registry/consul.yml.ejs`, `${registryOut}/consul.yml`);
           this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, `${registryOut}/consul-config-loader.yml`);
           this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${registryOut}/application-configmap.yml`);
@@ -98,20 +107,20 @@ function writeFiles() {
           this.template(`${helm}/app/requirements.yml.ejs`, `${appOut}/requirements.yml`);
           this.template(`${helm}/app/helpers.tpl.ejs`, `${appOut}/templates/_helpers.tpl`);
 
-          if (this.app.prodDatabaseType === 'couchbase') {
+          if (this.app.prodDatabaseType === COUCHBASE) {
             this.template(
               `${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`,
               `${appOut}/templates/${appName}-${this.app.prodDatabaseType}.yml`
             );
           }
 
-          if (this.app.searchEngine === 'elasticsearch') {
+          if (this.app.searchEngine === ELASTICSEARCH) {
             this.template(`${k8s}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
           }
-          if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+          if (this.app.applicationType === GATEWAY || this.app.applicationType === MONOLITH) {
             this.template('istio/gateway.yml.ejs', `${appOut}/templates/${appName}-gateway.yml`);
           }
-          if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+          if (!this.app.serviceDiscoveryType && this.app.authenticationType === JWT) {
             this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
           }
           this.template('istio/destination-rule.yml.ejs', `${appOut}/templates/${appName}-destination-rule.yml`);
@@ -121,23 +130,23 @@ function writeFiles() {
         const csOut = 'csvc'.concat('-', suffix);
         if (
           this.useKafka ||
-          this.monitoring === 'prometheus' ||
-          this.serviceDiscoveryType === 'eureka' ||
-          this.serviceDiscoveryType === 'consul'
+          this.monitoring === PROMETHEUS ||
+          this.serviceDiscoveryType === EUREKA ||
+          this.serviceDiscoveryType === CONSUL
         ) {
           this.template(`${helm}/csvc/values.yml.ejs`, `${csOut}/values.yml`);
           this.template(`${helm}/csvc/Chart.yml.ejs`, `${csOut}/Chart.yaml`);
           this.template(`${helm}/csvc/requirements.yml.ejs`, `${csOut}/requirements.yml`);
           this.template(`${helm}/csvc/helpers.tpl.ejs`, `${csOut}/templates/_helpers.tpl`);
         }
-        if (this.monitoring === 'prometheus') {
+        if (this.monitoring === PROMETHEUS) {
           this.template(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${csOut}/templates/jhipster-grafana-gateway.yml`);
         }
-        if (this.serviceDiscoveryType === 'eureka') {
+        if (this.serviceDiscoveryType === EUREKA) {
           this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, `${csOut}/templates/jhipster-registry.yml`);
           this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
         }
-        if (this.serviceDiscoveryType === 'consul') {
+        if (this.serviceDiscoveryType === CONSUL) {
           this.template(`${k8s}/registry/consul.yml.ejs`, `${csOut}/templates/consul.yml`);
           this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, `${csOut}/templates/consul-config-loader.yml`);
           this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);

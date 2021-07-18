@@ -6,9 +6,9 @@ You will need to push your image to a registry. If you have not done so, use the
 
 ```
 <%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-    <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
+  <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
 $ docker image tag <%= appConfigs[i].baseName.toLowerCase() %> <%= appConfigs[i].targetImageName %>
-    <%_ } _%>
+  <%_ } _%>
 $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 <%_ } _%>
 ```
@@ -40,11 +40,11 @@ skaffold run [or] skaffold deploy
 Use these commands to find your application's IP addresses:
 
 ```
-<%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-<%_ if (appConfigs[i].applicationType === 'gateway' || appConfigs[i].applicationType === 'monolith') { _%>
+  <%_ for (let i = 0; i < appsFolders.length; i++) { _%>
+    <%_ if (appConfigs[i].applicationTypeGateway || appConfigs[i].applicationTypeMonolith) { _%>
 $ kubectl get svc <%= appConfigs[i].baseName.toLowerCase() %><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
-        <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 ```
 
@@ -67,7 +67,7 @@ $ kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kuberne
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availablity of your services. You will need minimum 2 replicas for every application deployment if you want to have zero-downtime deployed.
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
-<%_ if (monitoring === 'prometheus') { _%>
+<%_ if (monitoringPrometheus) { _%>
 ## Monitoring tools
 
 ### Prometheus metrics
@@ -93,7 +93,7 @@ $ kubectl get svc jhipster-grafana<%= kubernetesNamespace === 'default' ? '' : `
 
 <%_ } _%>
 
-<%_ if (app.serviceDiscoveryType === 'eureka') { _%>
+<%_ if (app.serviceDiscoveryEureka) { _%>
 ## JHipster registry
 
 The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
@@ -129,4 +129,3 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the `i
 > my applications are starting very slow, despite I have a cluster with many resources
 
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
-

@@ -57,10 +57,10 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-couchbase
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>-couchbase
