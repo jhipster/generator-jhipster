@@ -2323,6 +2323,7 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"example.com\\",
     \\"monitoring\\": \\"no\\",
     \\"istio\\": true
