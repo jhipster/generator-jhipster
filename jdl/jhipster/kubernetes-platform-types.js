@@ -28,7 +28,13 @@ const IngressTypes = {
   GKE: 'gke',
 };
 
+const GeneratorTypes = {
+  K8S: 'k8s',
+  HELM: 'helm',
+};
+
 module.exports = {
-  ServiceTypes,
+  GeneratorTypes,
   IngressTypes,
+  ServiceTypes,
 };

@@ -23,8 +23,10 @@ const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const { COUCHBASE } = require('../../jdl/jhipster/database-types');
 const databaseType = require('../../jdl/jhipster/database-types');
+const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
 
 const NO_DATABASE_TYPE = databaseType.NO;
+const { K8S } = GeneratorTypes;
 
 module.exports = {
   writeFiles,
@@ -40,7 +42,7 @@ function writeFiles() {
         this.template(`${k8s}/namespace.yml.ejs`, 'namespace.yml');
       }
       this.template('README-KUBERNETES-KNATIVE.md.ejs', 'KNATIVE-README.md');
-      if (this.generatorType === 'k8s') {
+      if (this.generatorType === K8S) {
         for (let i = 0; i < this.appConfigs.length; i++) {
           this.app = this.appConfigs[i];
           const appName = this.app.baseName.toLowerCase();

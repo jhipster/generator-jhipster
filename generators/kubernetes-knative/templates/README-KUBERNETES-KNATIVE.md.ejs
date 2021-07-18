@@ -20,12 +20,12 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 ## Deployment
 
 You can deploy all your apps by running the below terminal command:
-<%_ if (generatorType === 'k8s') { _%>
+<%_ if (generatorTypeK8s) { _%>
 ```
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
 ```
 <%_ } _%>
-<%_ if (generatorType === 'helm') { _%>
+<%_ if (generatorTypeHelm) { _%>
 ```
 bash helm-knative-apply.sh (or) ./helm-knative-apply.sh
 ```

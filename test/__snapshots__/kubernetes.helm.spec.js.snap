@@ -2119,7 +2119,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
@@ -2323,7 +2323,6 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"ingressDomain\\": \\"example.com\\",
     \\"monitoring\\": \\"no\\",
     \\"istio\\": true
@@ -8540,7 +8539,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080

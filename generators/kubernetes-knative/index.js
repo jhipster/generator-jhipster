@@ -37,6 +37,9 @@ const {
   derivedKubernetesPlatformProperties,
 } = require('../kubernetes-base');
 const statistics = require('../statistics');
+const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+
+const { K8S } = GeneratorTypes;
 
 let useBlueprints;
 module.exports = class extends BaseDockerGenerator {
@@ -200,7 +203,7 @@ module.exports = class extends BaseDockerGenerator {
           });
         }
         this.log('\nYou can deploy all your apps by running the following script:');
-        if (this.generatorType === 'k8s') {
+        if (this.generatorType === K8S) {
           this.log(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
           // Make the apply script executable
           try {

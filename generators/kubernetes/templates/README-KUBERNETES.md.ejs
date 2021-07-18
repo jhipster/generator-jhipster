@@ -79,12 +79,12 @@ Generator is also packaged with [Prometheus operator by CoreOS](https://github.c
 Application metrics can be explored in Prometheus through,
 
 ```
-$ kubectl get svc jhipster-prometheus<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl get svc jhipster-prometheus<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 Also the visualisation can be explored in Grafana which is pre-configured with a dashboard view. You can find the service details by
 ```
-$ kubectl get svc jhipster-grafana<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 * If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain.
@@ -99,19 +99,19 @@ $ kubectl get svc jhipster-grafana<%= kubernetesNamespace === 'default' ? '' : `
 The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
 
 ```
-$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 and explore the details using
 
 ```
-$ kubectl get svc exposed-registry<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl get svc exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 For scaling the JHipster registry, use
 
 ```
-$ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 <%_ } _%>
 

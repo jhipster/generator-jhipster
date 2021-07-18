@@ -61,7 +61,7 @@ async function askForKubernetesServiceType() {
 
   const prompts = [
     {
-      when: () => istio === false,
+      when: () => !istio,
       type: 'list',
       name: 'kubernetesServiceType',
       message: 'Choose the Kubernetes service type for your edge services',
