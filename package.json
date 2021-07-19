@@ -62,7 +62,7 @@
     "update-snapshots": "mocha --no-insight --parallel --updateSnapshot"
   },
   "dependencies": {
-    "aws-sdk": "2.943.0",
+    "aws-sdk": "2.948.0",
     "axios": "0.21.1",
     "chalk": "4.1.1",
     "chevrotain": "9.0.2",
