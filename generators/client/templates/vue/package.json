@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.24",
-    "@types/node": "16.3.2",
+    "@types/node": "16.3.3",
     "@types/sinon": "10.0.2",
     "@types/vuelidate": "0.7.15",
     "@typescript-eslint/eslint-plugin": "4.28.3",
@@ -37,7 +37,7 @@
     "browser-sync": "2.27.4",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "9.0.1",
-    "css-loader": "6.0.0",
+    "css-loader": "6.1.0",
     "css-minimizer-webpack-plugin": "3.0.2",
     "file-loader": "6.2.0",
     "folder-hash": "4.0.1",
