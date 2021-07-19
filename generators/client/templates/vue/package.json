@@ -77,6 +77,6 @@
     "workbox-webpack-plugin": "6.1.5",
     "vue-jest": "3.0.7",
     "vue-template-compiler": "2.6.12",
-    "vue-loader": "15.9.7"
+    "vue-loader": "16.3.1"
   }
 }
