@@ -178,6 +178,9 @@ const defaultCommands = {
     desc: 'Run a module or custom generator',
     argument: ['[generator]'],
   },
+  'spring-boot': {
+    desc: 'Create a Spring Boot application (alpha)',
+  },
   'spring-service': {
     alias: 'service',
     desc: 'Create a new Spring service bean',

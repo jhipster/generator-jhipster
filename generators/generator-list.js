@@ -51,6 +51,7 @@ const Generators = {
   GENERATOR_PAGE: 'page',
   GENERATOR_PROJECT_NAME: 'project-name',
   GENERATOR_SERVER: 'server',
+  GENERATOR_SPRING_BOOT: 'spring-boot',
 };
 
 module.exports = Generators;
