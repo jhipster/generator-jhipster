@@ -27,7 +27,7 @@ _%>
 <%_ if(viaService) { _%>
   <%_ if(!reactive) { _%>
     Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
-<%_ } else { _%>
+  <%_ } else { _%>
     Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
 <%_ } _%>
 <%_ } else { %>
