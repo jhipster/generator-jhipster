@@ -39,12 +39,12 @@ _%>
     <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
         if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>() != null) {
         existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
-        }
-        <%_ if (field.fieldWithContentType) { _%>
-            if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType() != null) {
+    }
+      <%_ if (field.fieldWithContentType) { _%>
+        if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType() != null) {
             existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType());
-            }
-        <%_ } _%>
+        }
+      <%_ } _%>
     <%_ } %>
     <%_ } _%>
     return existing<%= entityClass %>;
