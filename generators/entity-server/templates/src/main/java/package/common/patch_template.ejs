@@ -58,9 +58,11 @@ _%>
         saved<%= entityClass %> -> {
         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
         return saved<%= entityClass %>;
-        }<% } %>)
-    <%_ } _%>
-    <%_ if (dtoMapstruct) { _%>
+        }
+    <% } %>
+    )
+  <%_ } _%>
+  <%_ if (dtoMapstruct) { _%>
         .map(<%= mapper %>::toDto)
-    <%_ } _%>;
+  <%_ } _%>;
 <%_ } %>
