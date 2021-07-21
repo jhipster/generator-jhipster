@@ -50,8 +50,12 @@ _%>
     return existing<%= entityClass %>;
     })
     .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
-    <%_ if (searchEngineElasticsearch) { _%>
-        .<%= mapOrFlatMap %>(<% if(reactive) { %>sqlResult -> <%= entityInstance %>SearchRepository.save(sqlResult).then(Mono.just(sqlResult))<% } else { %>saved<%= entityClass %> -> {
+  <%_ if (searchEngineElasticsearch) { _%>
+    .<%= mapOrFlatMap %>(
+    <%_ if(reactive) { _%>
+        sqlResult -> <%= entityInstance %>SearchRepository.save(sqlResult).then(Mono.just(sqlResult))
+    <%_ } else {_ %>
+        saved<%= entityClass %> -> {
         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
         return saved<%= entityClass %>;
         }<% } %>)
