@@ -32,10 +32,10 @@ _%>
   <%_ } _%>
 <%_ } else { %>
     <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
-    .map(existing<%= entityClass %> -> {
-    <%_ if(dtoMapstruct) { _%>
+        .map(existing<%= entityClass %> -> {
+  <%_ if(dtoMapstruct) { _%>
         <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
-    <%_ } else { _%>
+  <%_ } else { _%>
     <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
         if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>() != null) {
         existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
