@@ -2930,9 +2930,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Check if prompts must be skipped.
    * @return {Boolean}
    */
-  skipPrompts() {
+  shouldSkipPrompts() {
     return (
-      this.options.defaults || this.options.skipPrompts || (!this.options.add && this.existingModularProject && !this.options.askAnswered)
+      this.options.defaults ||
+      this.options.skipPrompts ||
+      this.options.regenerate ||
+      (!this.options.add && this.existingModularProject && !this.options.askAnswered)
     );
   }
 
