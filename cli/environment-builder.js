@@ -90,7 +90,7 @@ module.exports = class EnvironmentBuilder {
    */
   _lookupJHipster() {
     // Register jhipster generators.
-    this.env.lookup({ packagePaths: [path.join(__dirname, '..')] }).forEach(generator => {
+    this.env.lookup({ packagePaths: [path.join(__dirname, '..')], lookups: ['generators'] }).forEach(generator => {
       // Verify jhipster generators namespace.
       assert(
         generator.namespace.startsWith(`${CLI_NAME}:`),
