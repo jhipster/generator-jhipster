@@ -41,11 +41,12 @@ describe('Data Utils Service Test', () => {
       const newWindow = { ...window };
       newWindow.document.write = jest.fn();
       window.open = jest.fn(() => newWindow);
+      window.URL.createObjectURL = jest.fn();
       // 'JHipster' in base64 is 'SkhpcHN0ZXI='
       const data = 'SkhpcHN0ZXI=';
       const contentType = 'text/plain';
       service.openFile(data, contentType);
-      expect(newWindow.document.write).toHaveBeenCalledWith(expect.stringContaining('src="data:text/plain;base64,SkhpcHN0ZXI="'));
+      expect(window.open).toHaveBeenCalledTimes(1);
     });
   });
 });
