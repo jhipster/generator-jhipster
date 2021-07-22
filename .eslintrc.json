@@ -6,6 +6,9 @@
   },
   "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "plugins": ["mocha", "prettier", "chai-friendly"],
+  "settings": {
+    "import/core-modules": ["generator-jhipster", "generator-jhipster/support"]
+  },
   "rules": {
     "prettier/prettier": "error",
     "linebreak-style": 0,

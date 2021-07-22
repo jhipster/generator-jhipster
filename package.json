@@ -34,6 +34,10 @@
     "email": "",
     "url": "https://github.com/jdubois"
   },
+  "exports": {
+    ".": "./lib/index.js",
+    "./support": "./lib/support/index.cjs"
+  },
   "main": "lib/index.js",
   "bin": {
     "jhipster": "cli/jhipster.js"
