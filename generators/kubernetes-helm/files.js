@@ -16,6 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { COUCHBASE } = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const { ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+
+const { INGRESS } = ServiceTypes;
 
 module.exports = {
   writeFiles,
@@ -41,24 +50,24 @@ function writeFiles() {
         this.template('app/requirements.yml.ejs', `${appOut}/requirements.yaml`);
         this.template('app/helpers.tpl.ejs', `${appOut}/templates/_helpers.tpl`);
 
-        if (this.app.prodDatabaseType === 'couchbase') {
+        if (this.app.prodDatabaseType === COUCHBASE) {
           this.template(
             `${kubernetesSubgenPath}/db/${this.app.prodDatabaseType}.yml.ejs`,
             `${appOut}/templates/${appName}-${this.app.prodDatabaseType}.yml`
           );
         }
 
-        if (this.app.searchEngine === 'elasticsearch') {
+        if (this.app.searchEngine === ELASTICSEARCH) {
           this.template(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
         }
-        if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+        if (this.app.applicationType === GATEWAY || this.app.applicationType === MONOLITH) {
           if (this.istio) {
             this.template(`${kubernetesSubgenPath}/istio/gateway.yml.ejs`, `${appOut}/templates/${appName}-gateway.yml`);
-          } else if (this.kubernetesServiceType === 'Ingress') {
+          } else if (this.kubernetesServiceType === INGRESS) {
             this.template(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appOut}/templates/${appName}-ingress.yml`);
           }
         }
-        if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+        if (!this.app.serviceDiscoveryType && this.app.authenticationType === JWT) {
           this.template(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
         }
         if (this.istio) {
@@ -71,27 +80,22 @@ function writeFiles() {
     writeCommonServiceChart() {
       const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
       const csOut = 'csvc'.concat('-', suffix);
-      if (
-        this.useKafka ||
-        this.monitoring === 'prometheus' ||
-        this.serviceDiscoveryType === 'eureka' ||
-        this.serviceDiscoveryType === 'consul'
-      ) {
+      if (this.useKafka || this.monitoring === PROMETHEUS || this.serviceDiscoveryType === EUREKA || this.serviceDiscoveryType === CONSUL) {
         this.template('csvc/values.yml.ejs', `${csOut}/values.yaml`);
         this.template('csvc/Chart.yml.ejs', `${csOut}/Chart.yaml`);
         this.template('csvc/requirements.yml.ejs', `${csOut}/requirements.yaml`);
         this.template('csvc/helpers.tpl.ejs', `${csOut}/templates/_helpers.tpl`);
       }
-      if (this.monitoring === 'prometheus') {
-        if (this.istio && this.kubernetesServiceType === 'Ingress') {
+      if (this.monitoring === PROMETHEUS) {
+        if (this.istio && this.kubernetesServiceType === INGRESS) {
           this.template(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, `${csOut}/templates/jhipster-grafana-gateway.yml`);
         }
       }
-      if (this.serviceDiscoveryType === 'eureka') {
+      if (this.serviceDiscoveryType === EUREKA) {
         this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, `${csOut}/templates/jhipster-registry.yml`);
         this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);
       }
-      if (this.serviceDiscoveryType === 'consul') {
+      if (this.serviceDiscoveryType === CONSUL) {
         this.template(`${k8s}/registry/consul.yml.ejs`, `${csOut}/templates/consul.yml`);
         this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, `${csOut}/templates/consul-config-loader.yml`);
         this.template(`${k8s}/registry/application-configmap.yml.ejs`, `${csOut}/templates/application-configmap.yml`);

@@ -17,6 +17,10 @@
  * limitations under the License.
  */
 const k8sPrompts = require('../kubernetes/prompts');
+const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+const { generatorDefaultConfig } = require('../kubernetes/kubernetes-constants');
+
+const { HELM, K8S } = GeneratorTypes;
 
 module.exports = {
   askForGeneratorType,
@@ -33,15 +37,15 @@ async function askForGeneratorType() {
       message: 'Which *type* of generator would you like to base this on?',
       choices: [
         {
-          value: 'k8s',
+          value: K8S,
           name: 'Kubernetes generator',
         },
         {
-          value: 'helm',
+          value: HELM,
           name: 'Helm Kubernetes generator',
         },
       ],
-      default: this.generatorType ? this.generatorType : 'k8s',
+      default: this.generatorType ? this.generatorType : generatorDefaultConfig.generatorType,
     },
   ];
 

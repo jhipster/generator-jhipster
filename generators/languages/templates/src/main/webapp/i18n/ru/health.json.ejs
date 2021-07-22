@@ -29,30 +29,32 @@
             "error": "Ошибка"
         },
         "indicator": {
-            <%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
             "binders": "Брокер сообщений",
-            <%_ } _%>
-            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Область обновления микросервиса",
             "clientConfigServer": "Сервер конфигурации микросервиса",
-            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } %>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hystrix": "Hystrix",
+  <%_ if (serviceDiscoveryConsul) { _%>
+            "consul": "Consul",
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
             "hazelcast": "Hazelcast",
-            <%_ } _%>
+<%_ } _%>
             "diskSpace": "Место на диске",
             "mail": "Эл. почта",
             "livenessState": "Живой",
             "readinessState": "Готово",
-            "ping": "Приложение"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql' && !reactive) { %>,
-            "db": "База данных"<% } %><% if (databaseType === 'sql' && reactive) { %>,
-            "r2dbc": "База данных"<% } %><% if (databaseType === 'mongodb') { %>,
-            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
-            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "ping": "Приложение"<% if (searchEngineElasticsearch) { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
+            "db": "База данных"<% } %><% if (databaseTypeSql && reactive) { %>,
+            "r2dbc": "База данных"<% } %><% if (databaseTypeMongodb) { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseTypeCouchbase) { %>,
+            "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
             "neo4j": "Neo4j"<% } %>
         },
         "table": {

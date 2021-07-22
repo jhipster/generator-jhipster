@@ -21,7 +21,7 @@
 # Usage: bash helm-apply.sh
 cs=csvc
 suffix=knative
-<%_ if (kubernetesNamespace !== 'default') { _%>
+<%_ if (!kubernetesNamespaceDefault) { _%>
 kubectl apply -f namespace.yml
 <%_ } _%>
 <%_ if (istio) { _%>

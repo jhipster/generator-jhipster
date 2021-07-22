@@ -29,30 +29,32 @@
             "error": "錯誤"
         },
         "indicator": {
-            <%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
             "binders": "Message Broker",
-            <%_ } _%>
-            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "clientConfigServer": "Microservice 設定伺服器",
-            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } %>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hystrix": "Hystrix",
+  <%_ if (serviceDiscoveryConsul) { _%>
+            "consul": "Consul",
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
             "hazelcast": "Hazelcast",
-            <%_ } _%>
+<%_ } _%>
             "diskSpace": "硬碟空間",
             "mail": "電子郵件",
             "livenessState": "Liveness state",
             "readinessState": "Readiness state",
-            "ping": "應用程式"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql' && !reactive) { %>,
-            "db": "資料庫"<% } %><% if (databaseType === 'sql' && reactive) { %>,
-            "r2dbc": "資料庫"<% } %><% if (databaseType === 'mongodb') { %>,
-            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
-            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "ping": "應用程式"<% if (searchEngineElasticsearch) { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
+            "db": "資料庫"<% } %><% if (databaseTypeSql && reactive) { %>,
+            "r2dbc": "資料庫"<% } %><% if (databaseTypeMongodb) { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseTypeCouchbase) { %>,
+            "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
             "neo4j": "Neo4j"<% } %>
         },
         "table": {

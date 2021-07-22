@@ -2119,7 +2119,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
@@ -8540,7 +8540,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080

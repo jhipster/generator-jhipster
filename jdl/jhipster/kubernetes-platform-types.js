@@ -17,34 +17,24 @@
  * limitations under the License.
  */
 
-const { NO } = require('../../jdl/jhipster/monitoring-types');
-const { ServiceTypes, IngressTypes, GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
-
-const { LOAD_BALANCER } = ServiceTypes;
-const { NGINX } = IngressTypes;
-const { K8S } = GeneratorTypes;
-
-const kubernetesDefaultConfig = {
-  kubernetesNamespace: 'default',
-  kubernetesServiceType: LOAD_BALANCER,
-  monitoring: NO,
-  istio: false,
+const ServiceTypes = {
+  LOAD_BALANCER: 'LoadBalancer',
+  INGRESS: 'Ingress',
+  NODE_PORT: 'NodePort',
 };
 
-const ingressDefaultConfig = {
-  ingressType: NGINX,
+const IngressTypes = {
+  NGINX: 'nginx',
+  GKE: 'gke',
 };
 
-const generatorDefaultConfig = {
-  generatorType: K8S,
-};
-
-const defaultKubernetesConfig = {
-  ...kubernetesDefaultConfig,
+const GeneratorTypes = {
+  K8S: 'k8s',
+  HELM: 'helm',
 };
 
 module.exports = {
-  defaultKubernetesConfig,
-  ingressDefaultConfig,
-  generatorDefaultConfig,
+  GeneratorTypes,
+  IngressTypes,
+  ServiceTypes,
 };

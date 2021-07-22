@@ -6,9 +6,9 @@ You will need to push your image to a registry. If you have not done so, use the
 
 ```
 <%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-    <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
+  <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
 $ docker image tag <%= appConfigs[i].baseName.toLowerCase() %> <%= appConfigs[i].targetImageName %>
-    <%_ } _%>
+  <%_ } _%>
 $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 <%_ } _%>
 ```
