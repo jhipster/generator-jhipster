@@ -123,28 +123,30 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   constructor(args, opts, features) {
     super(args, opts, features);
 
-    // This adds support for a `--from-cli` flag
-    this.option('from-cli', {
-      desc: 'Indicates the command is run from JHipster CLI',
-      type: Boolean,
-      hide: true,
-    });
+    if (!this.features.jhipsterModular) {
+      // This adds support for a `--from-cli` flag
+      this.option('from-cli', {
+        desc: 'Indicates the command is run from JHipster CLI',
+        type: Boolean,
+        hide: true,
+      });
 
-    this.option('with-generated-flag', {
-      desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-      type: Boolean,
-    });
+      this.option('with-generated-flag', {
+        desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+        type: Boolean,
+      });
 
-    this.option('skip-prompts', {
-      desc: 'Skip prompts',
-      type: Boolean,
-    });
+      this.option('skip-prompts', {
+        desc: 'Skip prompts',
+        type: Boolean,
+      });
 
-    this.option('skip-prettier', {
-      desc: 'Skip prettier',
-      type: Boolean,
-      hide: true,
-    });
+      this.option('skip-prettier', {
+        desc: 'Skip prettier',
+        type: Boolean,
+        hide: true,
+      });
+    }
 
     if (this.options.help) {
       return;
