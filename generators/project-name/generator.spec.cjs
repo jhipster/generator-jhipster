@@ -16,23 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { version: jhipsterVersion } = require('../../package.json');
+const path = require('path');
 
-/** Reproducible config */
-const reproducibleConfigForTests = {
-  jhipsterVersion: '0.0.0',
-  baseName: 'jhipster',
-};
+const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
+const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('./config.cjs');
 
-/** Required config */
-const requiredConfig = {
-  jhipsterVersion,
-  projectName: 'JHipster project',
-};
+const generatorPath = path.join(__dirname, 'index.cjs');
 
-/** Init default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-};
-
-module.exports = { requiredConfig, defaultConfig, reproducibleConfigForTests };
+describe('JHipster project-name generator', () => {
+  basicTests({
+    requiredConfig: { ...requiredConfig, ...reproducibleConfigForTests },
+    defaultConfig: { ...defaultConfig, ...reproducibleConfigForTests },
+    customPrompts: {
+      projectName: 'Beautiful Project',
+      baseName: 'BeautifulProject',
+    },
+    generatorPath,
+  });
+  describe('blueprint support', () => testBlueprintSupport('project-name'));
+});

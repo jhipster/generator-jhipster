@@ -34,16 +34,8 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
-const {
-  initDefaultConfig,
-  initRequiredConfig,
-  javaPackageNameDefaultConfig,
-  javaPackageNameRequiredConfig,
-  projectNameDefaultConfig,
-  projectNameReproducibleConfigForTests,
-  projectNameRequiredConfig,
-} = require('./config');
-const { commonOptions, initOptions, javaPackageNameOptions, projectNameOptions } = require('./options');
+const { javaPackageNameDefaultConfig, javaPackageNameRequiredConfig } = require('./config');
+const { commonOptions, javaPackageNameOptions } = require('./options');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -2523,41 +2515,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Register and parse init options.
-   */
-  registerInitOptions() {
-    this.jhipsterOptions(initOptions);
-  }
-
-  /**
-   * Load required init configs into config.
-   */
-  configureInit() {
-    this.config.defaults(initRequiredConfig);
-  }
-
-  /**
-   * Load init configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
-   */
-  loadInitConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
-    dest.prettierDefaultIndent = config.prettierDefaultIndent;
-    dest.prettierJavaIndent = config.prettierJavaIndent;
-    dest.skipCommitHook = config.skipCommitHook;
-  }
-
-  /**
-   * Load derived init configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} dest - source/destination context
-   */
-  loadDerivedInitConfig(dest = this) {}
-
-  /**
    * Register and parse java-package-name options.
    */
   registerJavaPackageNameOptions() {
@@ -2589,50 +2546,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} dest - source/destination context
    */
   loadDerivedJavaPackageNameConfig(dest = this) {}
-
-  /**
-   * Register and parse project-name options.
-   */
-  registerProjectNameOptions() {
-    this.jhipsterOptions(projectNameOptions);
-  }
-
-  /**
-   * Load required project-name configs into config.
-   */
-  configureProjectName() {
-    if (this.options.reproducible) {
-      this.config.defaults(projectNameReproducibleConfigForTests);
-    }
-    this.config.defaults({
-      ...projectNameRequiredConfig,
-      baseName: this.getDefaultAppName(),
-    });
-  }
-
-  /**
-   * Load project-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
-   */
-  loadProjectNameConfig(config = _.defaults({}, this.jhipsterConfig, projectNameDefaultConfig), dest = this) {
-    dest.jhipsterVersion = config.jhipsterVersion;
-    dest.baseName = config.baseName;
-    dest.projectName = config.projectName;
-  }
-
-  /**
-   * Load derived project-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} dest - source/destination context
-   */
-  loadDerivedProjectNameConfig(dest = this) {
-    dest.dasherizedBaseName = _.kebabCase(dest.baseName);
-    dest.humanizedBaseName = _.startCase(dest.baseName);
-  }
 
   /**
    * Load app configs into dest.

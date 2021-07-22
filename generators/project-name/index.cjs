@@ -18,17 +18,23 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const { mixBlueprintGenerator } = require('generator-jhipster/support');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
-const { defaultConfig } = require('./config');
+const { defaultConfig } = require('./config.cjs');
+const { BASE_NAME, PROJECT_NAME } = require('./constants.cjs');
 
-module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+const MixedGenerator = mixBlueprintGenerator(GENERATOR_PROJECT_NAME);
 
-    this.registerCommonOptions();
-    this.registerProjectNameOptions();
+module.exports = class extends MixedGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+
+    // Register options available to cli.
+    if (!this.fromBlueprint) {
+      this.registerCommonOptions();
+      this.registerProjectNameOptions();
+    }
 
     if (this.options.help) return;
 
@@ -37,9 +43,6 @@ module.exports = class extends BaseBlueprintGenerator {
     }
   }
 
-  /**
-   * Async initialization before queueing.
-   */
   async _beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
@@ -69,19 +72,17 @@ module.exports = class extends BaseBlueprintGenerator {
   _prompting() {
     return {
       async showPrompts() {
-        if (this.skipPrompts()) return;
+        if (this.shouldSkipPrompts()) return;
         await this.prompt(
           [
             {
-              name: 'projectName',
-              when: () => !this.abort,
+              name: PROJECT_NAME,
               type: 'input',
               message: 'What is the project name of your application?',
               default: () => this._getDefaultProjectName(),
             },
             {
-              name: 'baseName',
-              when: () => !this.abort,
+              name: BASE_NAME,
               type: 'input',
               validate: input => this._validateBaseName(input),
               message: 'What is the base name of your application?',

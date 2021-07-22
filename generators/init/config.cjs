@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 
-module.exports.options = {
-  'jhipster-version': {
-    desc: 'Force jhipsterVersion for reproducibility',
-    type: String,
-    hide: true,
-    scope: 'storage',
-  },
-  'base-name': {
-    desc: 'Application base name',
-    type: String,
-    scope: 'storage',
-  },
+/** Config required at .yo-rc.json */
+const requiredConfig = {};
+
+/** Default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+  [PRETTIER_DEFAULT_INDENT]: 2,
+  [SKIP_COMMIT_HOOK]: false,
+  prettierJavaIndent: 4,
 };
+
+module.exports = { requiredConfig, defaultConfig };

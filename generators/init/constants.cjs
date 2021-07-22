@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** Required config to be skipped */
-const requiredConfig = {};
+const PRETTIER_DEFAULT_INDENT = 'prettierDefaultIndent';
+const PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE = 2;
+const SKIP_COMMIT_HOOK = 'skipCommitHook';
+const SKIP_COMMIT_HOOK_DEFAULT_VALUE = false;
 
-/** Init default config for templates */
-const defaultConfig = {
-  ...requiredConfig,
-  prettierDefaultIndent: 2,
-  prettierJavaIndent: 4,
-  skipCommitHook: false,
+module.exports = {
+  PRETTIER_DEFAULT_INDENT,
+  PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE,
+  SKIP_COMMIT_HOOK,
+  SKIP_COMMIT_HOOK_DESCRIPTION: 'Skip adding husky commit hooks',
+  SKIP_COMMIT_HOOK_DEFAULT_VALUE,
 };
-
-module.exports = { requiredConfig, defaultConfig };

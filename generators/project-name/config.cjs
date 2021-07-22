@@ -16,31 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { version: jhipsterVersion } = require('../../package.json');
 
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-module.exports.files = {
-  prettier: [
-    {
-      templates: ['.prettierrc.yml.jhi', '.prettierignore.jhi'],
-    },
-  ],
-  git: [
-    {
-      templates: ['.gitignore.jhi', '.gitattributes.jhi'],
-    },
-  ],
-  global: [
-    {
-      templates: ['README.md', 'package.json', '.editorconfig.jhi'],
-    },
-  ],
-  commitHooks: [
-    {
-      condition: generator => !generator.skipCommitHook,
-      templates: ['.huskyrc', '.lintstagedrc.js'],
-    },
-  ],
+const { BASE_NAME, JHIPSTER_VERSION, PROJECT_NAME, PROJECT_NAME_DEFAULT_VALUE } = require('./constants.cjs');
+
+/** Reproducible config */
+const reproducibleConfigForTests = {
+  [JHIPSTER_VERSION]: '0.0.0',
+  [BASE_NAME]: 'jhipster',
 };
+
+/** Required config */
+const requiredConfig = {
+  [JHIPSTER_VERSION]: jhipsterVersion,
+  [PROJECT_NAME]: PROJECT_NAME_DEFAULT_VALUE,
+};
+
+/** Default config for templates */
+const defaultConfig = {
+  ...requiredConfig,
+};
+
+module.exports = { requiredConfig, defaultConfig, reproducibleConfigForTests };

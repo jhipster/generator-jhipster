@@ -19,20 +19,26 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const simpleGit = require('simple-git');
+const { mixBlueprintGenerator } = require('generator-jhipster/support');
 
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { GENERATOR_INIT, GENERATOR_PROJECT_NAME } = require('../generator-list');
-const { files } = require('./files');
+const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = require('../generator-list');
+const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
+const { files, commitHooksFiles } = require('./files.cjs');
 const constants = require('../generator-constants');
-const { defaultConfig } = require('./config');
+const { defaultConfig } = require('./config.cjs');
 
-module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+const MixedGenerator = mixBlueprintGenerator(GENERATOR_PROJECT_NAME, GENERATOR_INIT);
 
-    this.registerCommonOptions();
-    this.registerProjectNameOptions();
-    this.registerInitOptions();
+module.exports = class extends MixedGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+
+    // Register options available to cli.
+    if (!this.fromBlueprint) {
+      this.registerCommonOptions();
+      this.registerProjectNameOptions();
+      this.registerInitOptions();
+    }
 
     if (this.options.help) return;
 
@@ -72,7 +78,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _prompting() {
     return {
       async showPrompts() {
-        if (this.skipPrompts()) return;
+        if (this.shouldSkipPrompts()) return;
         await this.prompt(
           [
             {
@@ -142,7 +148,12 @@ module.exports = class extends BaseBlueprintGenerator {
   _writing() {
     return {
       async writeFiles() {
+        if (this.shouldSkipFiles()) return;
         await this.writeFilesToDisk(files);
+      },
+      async writeCommitHookFiles() {
+        if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
+        await this.writeFilesToDisk(commitHooksFiles);
       },
     };
   }
@@ -152,11 +163,30 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._writing();
   }
 
+  _postWriting() {
+    return {
+      addCommitHookDependencies() {
+        if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
+        this.packageJson.merge({
+          devDependencies: {
+            husky: this.dependabotDependencies.husky,
+            'lint-staged': this.dependabotDependencies['lint-staged'],
+          },
+        });
+      },
+    };
+  }
+
+  get postWriting() {
+    if (this.delegateToBlueprint) return;
+    return this._postWriting();
+  }
+
   _install() {
     return {
       // Initialize git repository before package manager install for commit hooks
       async initGitRepo() {
-        if (this.options.skipGit) return;
+        if (this.shouldSkipFiles() || this.options.skipGit) return;
         if (!this.isGitInstalled()) {
           this.warning('Git repository could not be initialized, as Git is not installed on your system');
           return;
@@ -181,7 +211,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
-        if (this.options.skipGit || !this.isGitInstalled()) return;
+        if (this.shouldSkipFiles() || this.options.skipGit || !this.isGitInstalled()) return;
         if (!this.gitInitialized) {
           this.warning('The generated application could not be committed to Git, as a Git repository could not be initialized.');
           return;

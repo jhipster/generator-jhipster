@@ -17,10 +17,32 @@
  * limitations under the License.
  */
 
-module.exports.options = {
-  'skip-commit-hook': {
-    desc: 'Skip adding husky commit hooks',
-    type: Boolean,
-    scope: 'storage',
-  },
+/**
+ * The default is to use a file path string. It implies use of the template method.
+ * For any other config an object { file:.., method:.., template:.. } can be used
+ */
+module.exports.files = {
+  prettier: [
+    {
+      templates: ['.prettierrc.yml.jhi', '.prettierignore.jhi'],
+    },
+  ],
+  git: [
+    {
+      templates: ['.gitignore.jhi', '.gitattributes.jhi'],
+    },
+  ],
+  global: [
+    {
+      templates: ['README.md', 'package.json', '.editorconfig.jhi'],
+    },
+  ],
+};
+
+module.exports.commitHooksFiles = {
+  commitHooks: [
+    {
+      templates: ['.huskyrc', '.lintstagedrc.js'],
+    },
+  ],
 };

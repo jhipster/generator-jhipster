@@ -20,7 +20,7 @@ Object {
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
-  ".prettierrc": Object {
+  ".prettierrc.yml": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
@@ -49,7 +49,7 @@ Object {
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
-  ".prettierrc": Object {
+  ".prettierrc.yml": Object {
     "stateCleared": "modified",
   },
   ".yo-rc.json": Object {
