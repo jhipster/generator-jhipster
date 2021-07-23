@@ -87,17 +87,15 @@ export default class HealthService {
   }
 
   public getModuleName(path: any, name: string) {
-    let result;
     if (path && name) {
-      result = path + this.separator + name;
+      return path + this.separator + name;
     } else if (path) {
-      result = path;
+      return path;
     } else if (name) {
-      result = name;
+      return name;
     } else {
-      result = '';
+      return '';
     }
-    return result;
   }
 
   public hasSubSystem(healthObject: any): any {
