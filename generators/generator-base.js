@@ -19,6 +19,7 @@
 
 const path = require('path');
 const _ = require('lodash');
+const { kebabCase } = require('lodash');
 const chalk = require('chalk');
 const fs = require('fs');
 const shelljs = require('shelljs');
@@ -2994,19 +2995,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   jhipsterOptions(options = {}) {
     Object.entries(options).forEach(([optionName, optionDesc]) => {
-      this.option(optionName, optionDesc);
+      this.option(kebabCase(optionName), optionDesc);
       if (!optionDesc.scope) return;
-      const camelCaseName = _.camelCase(optionName);
-      const optionValue = this.options[camelCaseName];
+      const optionValue = this.options[optionName];
       if (optionValue !== undefined) {
         if (optionDesc.scope === 'storage') {
-          this.config.set(camelCaseName, optionValue);
+          this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'runtime') {
-          this.configOptions[camelCaseName] = optionValue;
+          this.configOptions[optionName] = optionValue;
         } else {
           throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
-        delete this.options[camelCaseName];
+        delete this.options[optionName];
       }
     });
   }
