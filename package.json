@@ -62,8 +62,8 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
     "pretest": "npm run lint",
-    "test": "mocha --no-insight --forbid-only --parallel",
-    "update-snapshots": "mocha --no-insight --parallel --updateSnapshot"
+    "test": "mocha test \"generators/**/*.spec.js\" --no-insight --forbid-only --parallel",
+    "update-snapshots": "mocha test \"generators/**/*.spec.js\" --no-insight --parallel --updateSnapshot"
   },
   "dependencies": {
     "aws-sdk": "2.943.0",
