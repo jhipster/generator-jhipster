@@ -16,9 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { options: initOptions } = require('./init/options');
-const { options: projectNameOptions } = require('./project-name/options');
-
 const commonOptions = {
   'from-cli': {
     desc: 'Indicates the command is run from JHipster CLI',
@@ -59,6 +56,4 @@ const commonOptions = {
 
 module.exports = {
   commonOptions,
-  initOptions,
-  projectNameOptions,
 };
