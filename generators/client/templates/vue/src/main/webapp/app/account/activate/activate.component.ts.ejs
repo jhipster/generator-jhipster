@@ -22,10 +22,10 @@ export default class Activate extends Vue {
 
   public init(key: string): void {
     this.activateService().activateAccount(key)
-      .then(res => {
+      .then(() => {
         this.success = true;
         this.error = false;
-      }, err => {
+      }, () => {
         this.error = true;
         this.success = false;
       });
