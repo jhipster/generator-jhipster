@@ -44,6 +44,19 @@ const basicTests = data => {
       expect(runResult.generator).toMatchObject(requiredConfig);
     });
   });
+  describe('with configure option', () => {
+    let runResult;
+    before(async () => {
+      runResult = await contextBuilder().withOptions({ configure: true }).run();
+    });
+    it('should write .yo-rc.json only', () => {
+      expect(runResult.getStateSnapshot()).toEqual({
+        '.yo-rc.json': {
+          stateCleared: 'modified',
+        },
+      });
+    });
+  });
   describe('with custom prompt values', () => {
     let runResult;
     describe('and default options', () => {
