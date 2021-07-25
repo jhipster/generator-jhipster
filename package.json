@@ -59,8 +59,8 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejs-lint",
     "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
-    "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
-    "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
+    "prettier:check": "prettier --check \"{,**/}*.{js,cjs,json,md,yml,java}\"",
+    "prettier:format": "prettier --write \"{,**/}*.{js,cjs,json,md,yml,java}\"",
     "pretest": "npm run lint",
     "test": "mocha test \"generators/**/*.spec.js\" --no-insight --forbid-only --parallel",
     "update-snapshots": "mocha test \"generators/**/*.spec.js\" --no-insight --parallel --updateSnapshot"
