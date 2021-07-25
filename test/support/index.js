@@ -156,7 +156,7 @@ const testBlueprintSupport = generatorName => {
     let spy;
     before(async () => {
       result = await helpers
-        .run(path.join(__dirname, `../../generators/${generatorName}`))
+        .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withOptions({ blueprint: 'foo', skipChecks: true })
         .on('ready', generator => {
@@ -175,7 +175,7 @@ const testBlueprintSupport = generatorName => {
     let spy;
     before(async () => {
       const context = helpers
-        .run(path.join(__dirname, `../../generators/${generatorName}`))
+        .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withOptions({ blueprint: 'foo-sbs', skipChecks: true })
         .on('ready', generator => {
