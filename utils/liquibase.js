@@ -18,11 +18,13 @@
  */
 
 const _ = require('lodash');
+
+const { MYSQL, MARIADB, POSTGRESQL } = require('../jdl/jhipster/database-types');
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../jdl/jhipster/field-types');
+
 const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, INSTANT, DURATION } = CommonDBTypes;
 const { BYTES } = RelationalOnlyDBTypes;
 const { TEXT } = BlobTypes;
-const { MYSQL, MARIADB, POSTGRESQL } = require('../jdl/jhipster/database-types');
 
 module.exports = {
   parseLiquibaseChangelogDate,
