@@ -33,6 +33,7 @@
     "prefer-destructuring": "off",
     "no-multi-assign": "off",
     "no-param-reassign": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "no-shadow": "off"
   }
 }

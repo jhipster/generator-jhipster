@@ -90,6 +90,7 @@ module.exports = class extends MixedChain {
   _composing() {
     return {
       async compose() {
+        // eslint-disable-next-line no-useless-return
         if (!this.shouldComposeModular()) return;
       },
     };

@@ -53,7 +53,7 @@
     "completion": "tabtab install --name jhipster --auto",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
-    "eslint": "eslint .",
+    "eslint": "eslint . --ext .js,.cjs",
     "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
