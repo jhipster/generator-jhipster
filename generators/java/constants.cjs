@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { MAVEN: BUILD_TOOL_MAVEN, MAVEN_DESCRIPTION } = require('../maven/constants.cjs');
+const { MAVEN: BUILD_TOOL_MAVEN, MAVEN_DESCRIPTION, BUILD_DESTINATION_VALUE } = require('../maven/constants.cjs');
 const { GRADLE: BUILD_TOOL_GRADLE, GRADLE_DESCRIPTION } = require('../gradle/constants.cjs');
 
 const JAVA_VERSION = '11';
@@ -28,11 +28,16 @@ const SRC_MAIN_JAVA_DIR = 'src/main/java/';
 const SRC_MAIN_RESOURCES_DIR = 'src/main/resources/';
 const SRC_TEST_JAVA_DIR = 'src/test/java/';
 
-const BUILD_TOOL = 'buildTool';
 const PACKAGE_NAME = 'packageName';
-const PRETTIER_JAVA_INDENT = 'prettierJavaIndent';
+const PACKAGE_NAME_DEFAULT_VALUE = 'com.mycompany.myapp';
 
-const BUILD_TOOL_DEFAULT = BUILD_TOOL_MAVEN;
+const PRETTIER_JAVA_INDENT = 'prettierJavaIndent';
+const PRETTIER_JAVA_INDENT_DEFAULT_VALUE = 4;
+
+const BUILD_TOOL = 'buildTool';
+const BUILD_TOOL_DEFAULT_VALUE = BUILD_TOOL_MAVEN;
+const BUILD_DESTINATION = 'buildDestination';
+const BUILD_DESTINATION_DEFAULT_VALUE = BUILD_DESTINATION_VALUE;
 
 const SUPPORTED_BUILD_TOOLS = [BUILD_TOOL_MAVEN, BUILD_TOOL_GRADLE];
 
@@ -47,14 +52,18 @@ module.exports = {
   JAVA_APP_VERSION,
   JHIPSTER_BOM_VERSION,
   BUILD_TOOL,
-  BUILD_TOOL_DEFAULT,
+  BUILD_TOOL_DEFAULT_VALUE,
   BUILD_TOOL_DESCRIPTION: 'Build tool',
   BUILD_TOOL_MAVEN,
   BUILD_TOOL_GRADLE,
   BUILD_TOOL_PROMPT_CHOICES,
+  BUILD_DESTINATION,
+  BUILD_DESTINATION_DEFAULT_VALUE,
   PACKAGE_NAME,
   PACKAGE_NAME_DESCRIPTION: 'Application package name',
+  PACKAGE_NAME_DEFAULT_VALUE,
   PRETTIER_JAVA_INDENT,
+  PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
   SRC_MAIN_JAVA_DIR,
   SRC_MAIN_RESOURCES_DIR,
   SRC_TEST_JAVA_DIR,

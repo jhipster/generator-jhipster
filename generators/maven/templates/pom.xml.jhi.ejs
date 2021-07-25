@@ -26,6 +26,7 @@
     dependenciesSection: 0,
     buildPluginsSection: 0,
     buildPluginManagementPluginsSection: 0,
+    profilesSection: 0,
   });
 -&>
 
@@ -90,4 +91,8 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencies>
+<&- fragments.profilesSection() -&>
+    </dependencies>
 </project>

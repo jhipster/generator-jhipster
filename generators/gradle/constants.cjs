@@ -22,4 +22,5 @@ module.exports = {
   GRADLE: 'gradle',
   GRADLE_DESCRIPTION: 'Gradle',
   GRADLE_VERSION,
+  BUILD_DESTINATION_VALUE: 'build',
 };

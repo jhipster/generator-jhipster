@@ -95,7 +95,7 @@ module.exports = class extends MixedChain {
               type: 'list',
               choices: () => this.BUILD_TOOL_PROMPT_CHOICES,
               message: 'What tool do you want to use to build backend?',
-              default: () => this.BUILD_TOOL_DEFAULT,
+              default: () => this.BUILD_TOOL_DEFAULT_VALUE,
             },
             {
               name: PRETTIER_JAVA_INDENT,

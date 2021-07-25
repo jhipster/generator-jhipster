@@ -27,10 +27,11 @@ const {
   JAVA_COMPATIBLE_VERSIONS,
   JHIPSTER_BOM_VERSION,
   BUILD_TOOL,
-  BUILD_TOOL_DEFAULT,
+  BUILD_TOOL_DEFAULT_VALUE,
   BUILD_TOOL_MAVEN,
   BUILD_TOOL_GRADLE,
   BUILD_TOOL_PROMPT_CHOICES,
+  BUILD_DESTINATION,
   PACKAGE_NAME,
   PRETTIER_JAVA_INDENT,
 } = require('./constants.cjs');
@@ -41,7 +42,7 @@ module.exports.mixin = parent =>
      * Load java options constants.
      */
     loadJavaOptionsConstants(into = this) {
-      into.BUILD_TOOL_DEFAULT = BUILD_TOOL_DEFAULT;
+      into.BUILD_TOOL_DEFAULT_VALUE = BUILD_TOOL_DEFAULT_VALUE;
       into.BUILD_TOOL_PROMPT_CHOICES = BUILD_TOOL_PROMPT_CHOICES;
     }
 
@@ -71,6 +72,7 @@ module.exports.mixin = parent =>
       into[PACKAGE_NAME] = config[PACKAGE_NAME];
       into[BUILD_TOOL] = config[BUILD_TOOL];
       into[PRETTIER_JAVA_INDENT] = config[PRETTIER_JAVA_INDENT];
+      into[BUILD_DESTINATION] = config[BUILD_DESTINATION];
     }
 
     /**
@@ -83,6 +85,7 @@ module.exports.mixin = parent =>
 
       fromInto.buildToolMaven = fromInto.buildTool === BUILD_TOOL_MAVEN;
       fromInto.buildToolGradle = fromInto.buildTool === BUILD_TOOL_GRADLE;
+      fromInto.buildToolUnknown = !fromInto.buildToolMaven && !fromInto.buildToolGradle;
     }
 
     /**

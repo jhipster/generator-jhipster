@@ -22,8 +22,8 @@ const { generateMixedChain } = require('generator-jhipster/support');
 
 const { GENERATOR_PROJECT_NAME, GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list');
 const { files } = require('./files.cjs');
-const { MAVEN } = require('./constants.cjs');
-const { BUILD_TOOL } = require('../java/constants.cjs');
+const { MAVEN, BUILD_DESTINATION_VALUE } = require('./constants.cjs');
+const { BUILD_TOOL, BUILD_DESTINATION } = require('../java/constants.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME, GENERATOR_JAVA);
 
@@ -41,6 +41,7 @@ module.exports = class extends MixedChain {
 
     this.config.defaults({
       [BUILD_TOOL]: MAVEN,
+      [BUILD_DESTINATION]: BUILD_DESTINATION_VALUE,
     });
 
     if (this.options.defaults) {

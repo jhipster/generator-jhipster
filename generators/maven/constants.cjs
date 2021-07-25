@@ -19,4 +19,5 @@
 module.exports = {
   MAVEN: 'maven',
   MAVEN_DESCRIPTION: 'Maven',
+  BUILD_DESTINATION_VALUE: 'target',
 };
