@@ -2931,6 +2931,22 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Check if modular generators should be composed.
+   * @return {Boolean}
+   */
+  shouldComposeModular() {
+    return !this.options.add && !this.options.regenerate;
+  }
+
+  /**
+   * Check if modular generators should skip write files.
+   * @return {Boolean}
+   */
+  shouldSkipFiles() {
+    return this.options.configure;
+  }
+
+  /**
    * Check if prompts must be skipped.
    * @return {Boolean}
    */
