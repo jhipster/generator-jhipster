@@ -19,7 +19,7 @@
 const { defaults, merge } = require('lodash');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
+const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK, NODE_VERSION } = require('./constants.cjs');
 
 module.exports.mixin = parent =>
   class extends parent {
@@ -66,5 +66,7 @@ module.exports.mixin = parent =>
      * Load derived init configs into 'into'.
      * @param {Object} into - destination context
      */
-    loadInitConstants(into = this) {}
+    loadInitConstants(into = this) {
+      this.NODE_VERSION = NODE_VERSION;
+    }
   };

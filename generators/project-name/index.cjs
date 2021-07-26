@@ -33,13 +33,13 @@ module.exports = class extends MixedGenerator {
     // Register options available to cli.
     if (!this.fromBlueprint) {
       this.registerCommonOptions();
-      this.registerProjectNameOptions();
+      this.registerChainOptions();
     }
 
     if (this.options.help) return;
 
     if (this.options.defaults) {
-      this.configureProjectName();
+      this.configureChain();
     }
   }
 
@@ -60,6 +60,9 @@ module.exports = class extends MixedGenerator {
       },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
+      },
+      loadOptionsConstants() {
+        this.loadChainOptionsConstants();
       },
     };
   }
@@ -103,7 +106,7 @@ module.exports = class extends MixedGenerator {
   _configuring() {
     return {
       configure() {
-        this.configureProjectName();
+        this.configureChain();
       },
     };
   }
@@ -115,8 +118,14 @@ module.exports = class extends MixedGenerator {
 
   _loading() {
     return {
+      loadConstants() {
+        this.loadChainConstants();
+      },
       loadConfig() {
-        this.loadProjectNameConfig();
+        this.loadChainConfig();
+      },
+      loadDerivedConfig() {
+        this.loadDerivedChainConfig();
       },
     };
   }

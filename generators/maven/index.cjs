@@ -34,8 +34,7 @@ module.exports = class extends MixedGenerator {
     // Register options available to cli.
     if (!this.fromBlueprint) {
       this.registerCommonOptions();
-      this.registerProjectNameOptions();
-      this.registerJavaOptions();
+      this.registerChainOptions();
     }
 
     if (this.options.help) return;
@@ -45,8 +44,7 @@ module.exports = class extends MixedGenerator {
     });
 
     if (this.options.defaults) {
-      this.configureProjectName();
-      this.configureJava();
+      this.configureChain();
     }
   }
 
@@ -69,8 +67,8 @@ module.exports = class extends MixedGenerator {
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
       },
-      loadConstants() {
-        this.loadJavaConstants();
+      loadOptionsConstants() {
+        this.loadChainOptionsConstants();
       },
     };
   }
@@ -83,8 +81,7 @@ module.exports = class extends MixedGenerator {
   _configuring() {
     return {
       configure() {
-        this.configureProjectName();
-        this.configureJava();
+        this.configureChain();
       },
     };
   }
@@ -96,13 +93,14 @@ module.exports = class extends MixedGenerator {
 
   _loading() {
     return {
+      loadConstants() {
+        this.loadChainConstants();
+      },
       loadConfig() {
-        this.loadProjectNameConfig();
-        this.loadJavaConfig();
+        this.loadChainConfig();
       },
       loadDerivedConfig() {
-        this.loadDerivedProjectNameConfig();
-        this.loadDerivedJavaConfig();
+        this.loadDerivedChainConfig();
       },
     };
   }

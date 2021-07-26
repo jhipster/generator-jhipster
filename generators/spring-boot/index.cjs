@@ -32,19 +32,13 @@ module.exports = class extends MixedGenerator {
     // Register options available to cli.
     if (!this.fromBlueprint) {
       this.registerCommonOptions();
-      this.registerProjectNameOptions();
-      this.registerInitOptions();
-      this.registerJavaOptions();
-      this.registerSpringBootOptions();
+      this.registerChainOptions();
     }
 
     if (this.options.help) return;
 
     if (this.options.defaults) {
-      this.configureProjectName();
-      this.configureInit();
-      this.configureJava();
-      this.configureSpringBoot();
+      this.configureChain();
     }
   }
 
@@ -70,7 +64,7 @@ module.exports = class extends MixedGenerator {
         this.loadRuntimeOptions();
       },
       loadOptionsConstants() {
-        this.loadSpringBootOptionsConstants();
+        this.loadChainOptionsConstants();
       },
     };
   }
@@ -83,10 +77,7 @@ module.exports = class extends MixedGenerator {
   _configuring() {
     return {
       configure() {
-        this.configureProjectName();
-        this.configureInit();
-        this.configureJava();
-        this.configureSpringBoot();
+        this.configureChain();
       },
     };
   }
@@ -112,22 +103,13 @@ module.exports = class extends MixedGenerator {
   _loading() {
     return {
       loadConstants() {
-        this.loadProjectNameConstants();
-        this.loadInitConstants();
-        this.loadJavaConstants();
-        this.loadSpringBootConstants();
+        this.loadChainConstants();
       },
       loadConfig() {
-        this.loadProjectNameConfig();
-        this.loadInitConfig();
-        this.loadJavaConfig();
-        this.loadSpringBootConfig();
+        this.loadChainConfig();
       },
       loadDerivedConfig() {
-        this.loadDerivedProjectNameConfig();
-        this.loadDerivedInitConfig();
-        this.loadDerivedJavaConfig();
-        this.loadDerivedSpringBootConfig();
+        this.loadDerivedChainConfig();
       },
     };
   }

@@ -24,7 +24,6 @@ const { mixBlueprintGenerator } = require('generator-jhipster/support');
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = require('../generator-list');
 const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
-const constants = require('../generator-constants');
 const { defaultConfig } = require('./config.cjs');
 
 const MixedGenerator = mixBlueprintGenerator(GENERATOR_PROJECT_NAME, GENERATOR_INIT);
@@ -36,15 +35,13 @@ module.exports = class extends MixedGenerator {
     // Register options available to cli.
     if (!this.fromBlueprint) {
       this.registerCommonOptions();
-      this.registerProjectNameOptions();
-      this.registerInitOptions();
+      this.registerChainOptions();
     }
 
     if (this.options.help) return;
 
     if (this.options.defaults) {
-      this.configureProjectName();
-      this.configureInit();
+      this.configureChain();
     }
   }
 
@@ -66,6 +63,9 @@ module.exports = class extends MixedGenerator {
       },
       loadRuntimeOptions() {
         this.loadRuntimeOptions();
+      },
+      loadOptionsConstants() {
+        this.loadChainOptionsConstants();
       },
     };
   }
@@ -103,8 +103,7 @@ module.exports = class extends MixedGenerator {
   _configuring() {
     return {
       configure() {
-        this.configureProjectName();
-        this.configureInit();
+        this.configureChain();
       },
     };
   }
@@ -116,16 +115,14 @@ module.exports = class extends MixedGenerator {
 
   _loading() {
     return {
+      loadConstants() {
+        this.loadChainConstants();
+      },
       loadConfig() {
-        this.loadProjectNameConfig();
-        this.loadInitConfig();
+        this.loadChainConfig();
       },
       loadDerivedConfig() {
-        this.loadDerivedProjectNameConfig();
-        this.loadDerivedInitConfig();
-      },
-      loadConstant() {
-        this.NODE_VERSION = constants.NODE_VERSION;
+        this.loadDerivedChainConfig();
       },
       loadDependabotDependencies() {
         this.loadDependabotDependencies(this.fetchFromInstalledJHipster(GENERATOR_INIT, 'templates', 'package.json'));
