@@ -23,7 +23,7 @@ const basicTests = data => {
   describe('with default options', () => {
     let runResult;
     before(async () => {
-      runResult = await contextBuilder().run();
+      runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true }).run();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -35,7 +35,7 @@ const basicTests = data => {
   describe('with defaults option', () => {
     let runResult;
     before(async () => {
-      runResult = await contextBuilder().withOptions({ defaults: true }).run();
+      runResult = await contextBuilder().withOptions({ defaults: true, configure: true }).run();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -61,7 +61,7 @@ const basicTests = data => {
     let runResult;
     describe('and default options', () => {
       before(async () => {
-        runResult = await contextBuilder().withPrompts(customPrompts).run();
+        runResult = await contextBuilder().withOptions({ configure: true }).withPrompts(customPrompts).run();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
@@ -84,7 +84,7 @@ const basicTests = data => {
     describe('and skipPrompts option', () => {
       let runResult;
       before(async () => {
-        runResult = await contextBuilder().withOptions({ skipPrompts: true }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder().withOptions({ skipPrompts: true, configure: true }).withPrompts(customPrompts).run();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -97,7 +97,7 @@ const basicTests = data => {
       let runResult;
       const existing = { baseName: 'existing' };
       before(async () => {
-        runResult = await contextBuilder().withOptions({ localConfig: existing }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder().withOptions({ localConfig: existing, configure: true }).withPrompts(customPrompts).run();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
@@ -110,7 +110,7 @@ const basicTests = data => {
       let runResult;
       before(async () => {
         runResult = await contextBuilder()
-          .withOptions({ askAnswered: true, localConfig: { baseName: 'existing' } })
+          .withOptions({ askAnswered: true, configure: true, localConfig: { baseName: 'existing' } })
           .withPrompts(customPrompts)
           .run();
       });
@@ -125,7 +125,10 @@ const basicTests = data => {
       let runResult;
       const existingConfig = { baseName: 'existing' };
       before(async () => {
-        runResult = await contextBuilder().withOptions({ add: true, localConfig: existingConfig }).withPrompts(customPrompts).run();
+        runResult = await contextBuilder()
+          .withOptions({ add: true, configure: true, localConfig: existingConfig })
+          .withPrompts(customPrompts)
+          .run();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
