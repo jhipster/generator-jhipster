@@ -18,16 +18,16 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { mixBlueprintGenerator } = require('generator-jhipster/support');
+const { generateMixedChain } = require('generator-jhipster/support');
 
 const { GENERATOR_PROJECT_NAME, GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list');
 const { files } = require('./files.cjs');
 const { MAVEN } = require('./constants.cjs');
 const { BUILD_TOOL } = require('../java/constants.cjs');
 
-const MixedGenerator = mixBlueprintGenerator(GENERATOR_PROJECT_NAME, GENERATOR_JAVA);
+const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME, GENERATOR_JAVA);
 
-module.exports = class extends MixedGenerator {
+module.exports = class extends MixedChain {
   constructor(args, opts, features) {
     super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
 
