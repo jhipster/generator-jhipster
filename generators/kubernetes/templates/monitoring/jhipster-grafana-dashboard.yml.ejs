@@ -2311,10 +2311,10 @@ spec:
     metadata:
       labels:
         job: jhipster-grafana-dashboard
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+ <%_ } _%>
     spec:
       initContainers:
         - name: init-dependent-services-check

@@ -39,10 +39,10 @@ spec:
     metadata:
       labels:
         app: jhipster-grafana
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       containers:
       - name: jhipster-grafana

@@ -54,8 +54,8 @@ spec:
   gateways:
   - <%= app.baseName.toLowerCase() %>-gateway
   http:
-  <%_ if (!app.serviceDiscoveryType) { _%>
-    <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
+<%_ if (!app.serviceDiscoveryType) { _%>
+  <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
         prefix: /services/<%= config.baseName.toLowerCase() %>/
@@ -67,8 +67,8 @@ spec:
           add:
             Knative-Serving-Namespace: <%= kubernetesNamespace %>
             Knative-Serving-Revision: <%= config.baseName.toLowerCase() %>-knative
-    <%_ }); _%>
-  <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
   - match:
     - uri:
         prefix: /

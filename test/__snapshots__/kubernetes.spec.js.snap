@@ -607,7 +607,6 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the \`
 > my applications are starting very slow, despite I have a cluster with many resources
 
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
-
 \`\`\`
 ",
     "stateCleared": "modified",
@@ -1350,10 +1349,11 @@ Object {
     \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"dockerPushCommand\\": \\"docker push\\",
     \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"kubernetesServiceType\\": \\"Ingress\\",
     \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"ingressType\\": \\"nginx\\",
+    \\"ingressDomain\\": \\"example.com\\",
     \\"monitoring\\": \\"no\\",
     \\"istio\\": false
   }
@@ -1553,6 +1553,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "jhgate-k8s/jhgate-ingress.yml": Object {
+    "contents": "apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: jhgate
+  namespace: default
+spec:
+  rules:
+    - host: jhgate.default.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: jhgate
+              servicePort: 8080
+",
+    "stateCleared": "modified",
+  },
   "jhgate-k8s/jhgate-mysql.yml": Object {
     "contents": "apiVersion: v1
 kind: PersistentVolumeClaim
@@ -1635,7 +1653,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: ClusterIP
   ports:
     - name: http
       port: 8080
@@ -1665,6 +1683,10 @@ exit 0
 
 logSummary() {
     echo \\"\\"
+        echo \\"#####################################################\\"
+        echo \\"Please find the below useful endpoints,\\"
+        echo \\"Gateway - http://jhgate.default.example.com\\"
+        echo \\"#####################################################\\"
 }
 
 default() {
@@ -1708,6 +1730,7 @@ resources:
   - jhgate-k8s/jhgate-deployment.yml
   - jhgate-k8s/jhgate-service.yml
   - jhgate-k8s/jhgate-mysql.yml
+  - jhgate-k8s/jhgate-ingress.yml
   # service discovery eureka/consul
   - registry-k8s/jhipster-registry.yml
   - registry-k8s/application-configmap.yml
@@ -2185,7 +2208,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
@@ -3781,7 +3804,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
@@ -6020,7 +6043,6 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the \`
 > my applications are starting very slow, despite I have a cluster with many resources
 
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
-
 \`\`\`
 ",
     "stateCleared": "modified",
@@ -8542,7 +8564,7 @@ spec:
     - name: http
       port: 3000
       targetPort: 3000
-  type:
+  type: LoadBalancer
   selector:
     app: jhipster-grafana
 ---
@@ -9238,7 +9260,6 @@ This can occur if your cluster has low resource (e.g. Minikube). Increase the \`
 > my applications are starting very slow, despite I have a cluster with many resources
 
 The default setting are optimized for middle-scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
-
 \`\`\`
 ",
     "stateCleared": "modified",
@@ -9978,7 +9999,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
@@ -11911,7 +11932,7 @@ metadata:
 spec:
   selector:
     app: jhgate
-  type:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080

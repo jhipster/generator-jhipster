@@ -18,27 +18,26 @@ const appName = appConfig.baseName.toLowerCase();
 const appOut = appName.concat('-', suffix); _%>
 - <%= appOut %>/<%= appName %>-deployment.yml
 - <%= appOut %>/<%= appName %>-service.yml
-  <%_
-  if (!appConfig.databaseTypeNo) { _%>
+  <%_ if (!appConfig.databaseTypeNo) { _%>
 - <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType %>.yml
-  <%_  }
-  if (appConfig.searchEngineElasticsearch) { _%>
+  <%_ } _%>
+  <%_ if (appConfig.searchEngineElasticsearch) { _%>
 - <%= appOut %>/<%= appName %>-elasticsearch.yml
-  <%_  }
-  if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) {
-    if (istio) { _%>
+  <%_ } _%>
+  <%_ if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) { _%>
+    <%_ if (istio) { _%>
 - <%= appOut %>/<%= appName %>-gateway.yml
     <%_ } else if (kubernetesServiceTypeIngress) { _%>
 - <%= appOut %>/<%= appName %>-ingress.yml
-    <%_ }
-  }
-  if (!appConfig.serviceDiscoveryType && appConfig.authenticationTypeJwt) { _%>
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (!appConfig.serviceDiscoveryType && appConfig.authenticationTypeJwt) { _%>
 - <%= appOut %>/jwt-secret.yml
-  <%_ }
-  if (monitoringPrometheus) { _%>
+  <%_ } _%>
+  <%_ if (monitoringPrometheus) { _%>
 - <%= appOut %>/<%= appName %>-prometheus-sm.yml
-  <%_ }
-  if (istio) { _%>
+  <%_ } _%>
+  <%_ if (istio) { _%>
 - <%= appOut %>/<%= appName %>-destination-rule.yml
 - <%= appOut %>/<%= appName %>-virtual-service.yml
   <%_  } _%>
