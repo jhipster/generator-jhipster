@@ -22,7 +22,6 @@ const { GRADLE: BUILD_TOOL_GRADLE, GRADLE_DESCRIPTION } = require('../gradle/con
 const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['1.8', '1.9', '10', '11', '12', '13', '14', '15', '16'];
 const JAVA_APP_VERSION = '0.0.1-SNAPSHOT';
-const JHIPSTER_BOM_VERSION = '7.1.1-SNAPSHOT';
 
 const SRC_MAIN_JAVA_DIR = 'src/main/java/';
 const SRC_MAIN_RESOURCES_DIR = 'src/main/resources/';
@@ -50,7 +49,6 @@ module.exports = {
   JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
   JAVA_APP_VERSION,
-  JHIPSTER_BOM_VERSION,
   BUILD_TOOL,
   BUILD_TOOL_DEFAULT_VALUE,
   BUILD_TOOL_DESCRIPTION: 'Build tool',
