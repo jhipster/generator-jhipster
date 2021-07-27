@@ -21,7 +21,7 @@ const { SRC_MAIN_JAVA_DIR, SRC_MAIN_RESOURCES_DIR, SRC_TEST_JAVA_DIR } = require
 module.exports.files = {
   springBootProject: [
     {
-      templates: ['pom.xml.jhi.spring-boot'],
+      templates: ['pom.xml.jhi.spring-boot', 'build.gradle.jhi.spring-boot'],
     },
     {
       path: SRC_MAIN_RESOURCES_DIR,
