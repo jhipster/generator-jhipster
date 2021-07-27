@@ -16,14 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<&_
+  // Register sections and max allowed fragments, 0 for unlimited.
+  fragments.registerSections({
+    propertiesSection: 0,
+  });
+-&>
 rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
-# Dependency versions
-jhipsterBomVersion=<%= JHIPSTER_BOM_VERSION %>
-
-# jhipster-needle-gradle-property - JHipster will add additional properties here
-
+<&- fragments.propertiesSection({join: '/n/n'}) -&>
 ## below are some of the gradle performance improvement settings that can be used as required, these are not enabled by default
 
 ## The Gradle daemon aims to improve the startup and execution time of Gradle.
