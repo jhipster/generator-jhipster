@@ -29,7 +29,7 @@ const basicTests = data => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
     it('should load default config into the generator', () => {
-      expect(runResult.generator).toMatchObject(defaultConfig);
+      expect(runResult.generator).toEqual(expect.objectContaining(defaultConfig));
     });
   });
   describe('with defaults option', () => {
@@ -41,7 +41,7 @@ const basicTests = data => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
     it('should load default config into the generator', () => {
-      expect(runResult.generator).toMatchObject(requiredConfig);
+      expect(runResult.generator).toEqual(expect.objectContaining(requiredConfig));
     });
   });
   describe('with configure option', () => {
@@ -67,7 +67,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
       it('should load default config with prompt values into the generator', () => {
-        expect(runResult.generator).toMatchObject({ ...defaultConfig, ...customPrompts });
+        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and defaults option', () => {
@@ -78,7 +78,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
       it('should load default config into the generator', () => {
-        expect(runResult.generator).toMatchObject({ ...defaultConfig, ...requiredConfig });
+        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and skipPrompts option', () => {
@@ -90,7 +90,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
       it('should load default config and required config into the generator', () => {
-        expect(runResult.generator).toMatchObject({ ...defaultConfig, ...requiredConfig });
+        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and existing config', () => {
@@ -103,7 +103,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
       });
       it('should load default config and required config into the generator', () => {
-        expect(runResult.generator).toMatchObject({ ...defaultConfig, ...requiredConfig, ...existing });
+        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
       });
     });
     describe('and askAnswered option on an existing project', () => {
@@ -118,7 +118,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
       it('should load default config and prompt values into the generator', () => {
-        expect(runResult.generator).toMatchObject({ ...defaultConfig, ...customPrompts });
+        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and add option on an existing project', () => {
@@ -134,7 +134,7 @@ const basicTests = data => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
       });
       it('should load default config and prompt values into the generator', () => {
-        expect(runResult.generator).toMatchObject({ ...defaultConfig, ...customPrompts, ...existingConfig });
+        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }));
       });
     });
   });
