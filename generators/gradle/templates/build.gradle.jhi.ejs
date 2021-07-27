@@ -26,8 +26,6 @@
   });
 -&>
 plugins {
-  id 'org.springframework.boot' version '2.5.2'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'java'
 <&- fragments.pluginsSection() -&>
 }
@@ -42,12 +40,9 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.springframework.boot:spring-boot-starter'
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
 <&- fragments.dependenciesSection() -&>
 }
 
 test {
-  useJUnitPlatform()
 <&- fragments.testSection() -&>
 }
