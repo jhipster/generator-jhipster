@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 const SPRING_BOOT_VERSION = '2.5.2';
+const SPRING_BOOT_PARENT_BOM = 'springBootParentBom';
+const SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE = true;
 
 module.exports = {
   SPRING_BOOT_VERSION,
+  SPRING_BOOT_PARENT_BOM,
+  SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE,
 };

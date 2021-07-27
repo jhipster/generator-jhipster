@@ -16,12 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { SPRING_BOOT_PARENT_BOM, SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE } = require('./constants.cjs');
+
 /** Config required at .yo-rc.json */
 const requiredConfig = {};
 
 /** Default config for templates */
 const defaultConfig = {
   ...requiredConfig,
+  [SPRING_BOOT_PARENT_BOM]: SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE,
 };
 
 module.exports = { requiredConfig, defaultConfig };

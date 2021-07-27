@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (springBootParentBom) { -%>
 <&_ if (fragment.parentSection) { -&>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,6 +25,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 <&_ } -&>
+<%_ } -%>
 <&_ if (fragment.dependenciesSection) { -&>
         <dependency>
             <groupId>org.springframework.boot</groupId>

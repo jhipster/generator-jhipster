@@ -19,7 +19,7 @@
 const { defaults } = require('lodash');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
-const { SPRING_BOOT_VERSION } = require('./constants.cjs');
+const { SPRING_BOOT_VERSION, SPRING_BOOT_PARENT_BOM } = require('./constants.cjs');
 
 module.exports.mixin = parent =>
   class extends parent {
@@ -46,6 +46,7 @@ module.exports.mixin = parent =>
      */
     loadSpringBootConfig(config = this.jhipsterConfig, into = this) {
       config = defaults({}, config, defaultConfig);
+      into[SPRING_BOOT_PARENT_BOM] = config[SPRING_BOOT_PARENT_BOM];
     }
 
     /**
