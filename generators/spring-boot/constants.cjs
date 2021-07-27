@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const SPRING_BOOT_VERSION = '2.5.2';
+const { SPRING_BOOT_VERSION } = require('../generator-constants');
+
 const SPRING_BOOT_PARENT_BOM = 'springBootParentBom';
 const SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE = true;
 
