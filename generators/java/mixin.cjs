@@ -35,6 +35,10 @@ const {
   PRETTIER_JAVA_INDENT,
 } = require('./constants.cjs');
 
+const { GENERATOR_INIT } = require('../generator-list');
+
+module.exports.dependencyChain = [GENERATOR_INIT];
+
 module.exports.mixin = parent =>
   class extends parent {
     /**

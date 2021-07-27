@@ -26,7 +26,7 @@ const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
 const { defaultConfig } = require('./config.cjs');
 
-const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME, GENERATOR_INIT);
+const MixedChain = generateMixedChain(GENERATOR_INIT);
 
 module.exports = class extends MixedChain {
   constructor(args, opts, features) {

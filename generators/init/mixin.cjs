@@ -17,9 +17,14 @@
  * limitations under the License.
  */
 const { defaults, merge } = require('lodash');
+
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
 const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK, NODE_VERSION } = require('./constants.cjs');
+
+const { GENERATOR_PROJECT_NAME } = require('../generator-list');
+
+module.exports.dependencyChain = [GENERATOR_PROJECT_NAME];
 
 module.exports.mixin = parent =>
   class extends parent {

@@ -25,7 +25,7 @@ const { PACKAGE_NAME, BUILD_TOOL, PRETTIER_JAVA_INDENT } = require('./constants.
 const { files } = require('./files.cjs');
 const { defaultConfig } = require('./config.cjs');
 
-const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_JAVA);
+const MixedChain = generateMixedChain(GENERATOR_JAVA);
 
 module.exports = class extends MixedChain {
   constructor(args, opts, features) {

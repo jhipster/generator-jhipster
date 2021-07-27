@@ -22,6 +22,8 @@ const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('.
 const { options } = require('./options.cjs');
 const { BASE_NAME, JHIPSTER_VERSION, PROJECT_NAME } = require('./constants.cjs');
 
+module.exports.dependencyChain = [];
+
 module.exports.mixin = parent =>
   class extends parent {
     /**

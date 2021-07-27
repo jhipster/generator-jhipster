@@ -20,10 +20,10 @@
 const chalk = require('chalk');
 const { generateMixedChain } = require('generator-jhipster/support');
 
-const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_JAVA, GENERATOR_SPRING_BOOT } = require('../generator-list');
+const { GENERATOR_JAVA, GENERATOR_SPRING_BOOT } = require('../generator-list');
 const { files } = require('./files.cjs');
 
-const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_JAVA, GENERATOR_SPRING_BOOT);
+const MixedChain = generateMixedChain(GENERATOR_SPRING_BOOT);
 
 module.exports = class extends MixedChain {
   constructor(args, opts, features) {
