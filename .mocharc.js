@@ -6,4 +6,5 @@ module.exports = {
   ui: 'bdd',
   extension: ['js', 'cjs'],
   require: 'mocha-expect-snapshot',
+  parallel: true,
 };
