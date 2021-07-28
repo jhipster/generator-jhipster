@@ -58,9 +58,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _composing() {
     return {
       async composing() {
-        // eslint-disable-next-line no-restricted-syntax
         for (const generator of this.arguments) {
-          // eslint-disable-next-line no-await-in-loop
           await this.composeWithJHipster(generator, [], { add: true });
         }
       },

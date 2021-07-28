@@ -89,7 +89,6 @@ module.exports = class extends BaseBlueprintGenerator {
               }
             }
           }
-          // eslint-disable-next-line no-await-in-loop
           dirent = await dir.read();
         }
         dir.closeSync();

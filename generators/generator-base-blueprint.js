@@ -279,9 +279,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     }
 
     const blueprints = this.jhipsterConfig.blueprints || [];
-    // eslint-disable-next-line no-restricted-syntax
     for (const blueprint of blueprints) {
-      // eslint-disable-next-line no-await-in-loop
       const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, extraOptions);
       if (blueprintGenerator) {
         if (blueprintGenerator.sbsBlueprint) {
