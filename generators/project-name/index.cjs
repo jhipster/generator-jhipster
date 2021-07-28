@@ -23,6 +23,7 @@ const { generateMixedChain } = require('generator-jhipster/support');
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config.cjs');
 const { BASE_NAME, PROJECT_NAME } = require('./constants.cjs');
+const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME);
 
@@ -45,6 +46,12 @@ module.exports = class extends MixedChain {
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
+      const configure = this.options.configure || !this.shouldComposeModular();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const generator of dependencyChain) {
+        // eslint-disable-next-line no-await-in-loop
+        await this.dependsOnJHipster(generator, [], { configure });
+      }
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
     }
   }

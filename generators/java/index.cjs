@@ -20,10 +20,11 @@
 const chalk = require('chalk');
 const { generateMixedChain } = require('generator-jhipster/support');
 
-const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_JAVA } = require('../generator-list');
+const { GENERATOR_JAVA } = require('../generator-list');
 const { PACKAGE_NAME, BUILD_TOOL, PRETTIER_JAVA_INDENT } = require('./constants.cjs');
 const { files } = require('./files.cjs');
 const { defaultConfig } = require('./config.cjs');
+const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_JAVA);
 
@@ -46,9 +47,11 @@ module.exports = class extends MixedChain {
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
-      if (this.shouldComposeModular()) {
-        await this.dependsOnJHipster(GENERATOR_INIT);
+      const configure = this.options.configure || !this.shouldComposeModular();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const generator of dependencyChain) {
+        // eslint-disable-next-line no-await-in-loop
+        await this.dependsOnJHipster(generator, [], { configure });
       }
       await this.composeWithBlueprints(GENERATOR_JAVA);
     }
