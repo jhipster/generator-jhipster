@@ -24,7 +24,7 @@
     "@types/node": "16.4.3",
     "@types/jest": "26.0.24",
     "@typescript-eslint/eslint-plugin": "4.28.5",
-    "browser-sync": "2.27.4",
+    "browser-sync": "2.27.5",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "9.0.1",
     "eslint": "7.31.0",
