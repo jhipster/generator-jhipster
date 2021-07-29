@@ -23,9 +23,9 @@ const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['1.8', '1.9', '10', '11', '12', '13', '14', '15', '16'];
 const JAVA_APP_VERSION = '0.0.1-SNAPSHOT';
 
-const SRC_MAIN_JAVA_DIR = 'src/main/java/';
-const SRC_MAIN_RESOURCES_DIR = 'src/main/resources/';
-const SRC_TEST_JAVA_DIR = 'src/test/java/';
+const JAVA_SOURCE_DIR = 'src/main/java/';
+const JAVA_RESOURCE_DIR = 'src/main/resources/';
+const JAVA_TEST_DIR = 'src/test/java/';
 
 const PACKAGE_NAME = 'packageName';
 const PACKAGE_NAME_DEFAULT_VALUE = 'com.mycompany.myapp';
@@ -62,8 +62,8 @@ module.exports = {
   PACKAGE_NAME_DEFAULT_VALUE,
   PRETTIER_JAVA_INDENT,
   PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
-  SRC_MAIN_JAVA_DIR,
-  SRC_MAIN_RESOURCES_DIR,
-  SRC_TEST_JAVA_DIR,
+  JAVA_SOURCE_DIR,
+  JAVA_RESOURCE_DIR,
+  JAVA_TEST_DIR,
   SUPPORTED_BUILD_TOOLS,
 };

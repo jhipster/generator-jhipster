@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { SRC_MAIN_JAVA_DIR, SRC_MAIN_RESOURCES_DIR, SRC_TEST_JAVA_DIR } = require('../java/constants.cjs');
+const { JAVA_SOURCE_DIR, JAVA_RESOURCE_DIR, JAVA_TEST_DIR } = require('../java/constants.cjs');
 
 module.exports.files = {
   springBootProject: [
@@ -24,17 +24,17 @@ module.exports.files = {
       templates: ['pom.xml.jhi.spring-boot', 'build.gradle.jhi.spring-boot'],
     },
     {
-      path: SRC_MAIN_RESOURCES_DIR,
+      path: JAVA_RESOURCE_DIR,
       templates: ['application.properties.jhi'],
     },
     {
-      path: SRC_MAIN_JAVA_DIR,
+      path: JAVA_SOURCE_DIR,
       templates: [
         { file: 'package/Application.java.jhi', renameTo: generator => `${generator.packageFolder}/${generator.javaMainClass}.java.jhi` },
       ],
     },
     {
-      path: SRC_TEST_JAVA_DIR,
+      path: JAVA_TEST_DIR,
       templates: [
         {
           file: 'package/ApplicationTests.java.jhi',
