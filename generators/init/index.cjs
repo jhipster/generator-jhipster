@@ -88,7 +88,7 @@ module.exports = class extends MixedChain {
             {
               name: 'prettierDefaultIndent',
               when: () => !this.abort,
-              type: 'input',
+              type: 'number',
               message: 'What is the default indentation?',
               default: defaultConfig.prettierDefaultIndent,
             },
