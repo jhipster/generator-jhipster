@@ -52,6 +52,10 @@ const commonOptions = {
     desc: 'Configure the generator',
     type: Boolean,
   },
+  'skip-jhipster-dependencies': {
+    desc: "Don't add generator-jhipster and blueprints to package.json.",
+    type: Boolean,
+  },
 };
 
 module.exports = {
