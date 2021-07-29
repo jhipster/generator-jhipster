@@ -79,21 +79,11 @@ module.exports = class extends MixedChain {
     return this._initializing();
   }
 
-  _configuring() {
-    return {
-      configure() {
-        this.configureChain();
-      },
-    };
-  }
-
-  get configuring() {
-    if (this.delegateToBlueprint) return;
-    return this._configuring();
-  }
-
   _loading() {
     return {
+      configureChain() {
+        this.configureChain();
+      },
       loadConstants() {
         this.loadChainConstants();
       },

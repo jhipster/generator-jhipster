@@ -79,7 +79,7 @@ module.exports = class extends MixedChain {
   _configuring() {
     return {
       configure() {
-        this.configureChain();
+        this.configureSpringBoot();
       },
     };
   }
@@ -105,6 +105,9 @@ module.exports = class extends MixedChain {
 
   _loading() {
     return {
+      configureChain() {
+        this.configureChain();
+      },
       loadConstants() {
         this.loadChainConstants();
       },
