@@ -1682,8 +1682,12 @@ const serverFiles = {
       templates: [
         /* User management java test files */
         'templates/mail/testEmail.html',
-        'i18n/messages_en.properties',
       ],
+    },
+    {
+      condition: generator => !generator.skipUserManagement && !generator.enableTranslation,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['i18n/messages_en.properties'],
     },
     {
       condition: generator => !generator.skipUserManagement,
