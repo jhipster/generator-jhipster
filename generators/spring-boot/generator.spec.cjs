@@ -22,10 +22,15 @@ const path = require('path');
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
+const { GENERATOR_SPRING_BOOT } = require('../generator-list');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
+const generator = path.basename(__dirname);
 
-describe('JHipster spring-boot generator', () => {
+describe(`JHipster ${generator} generator`, () => {
+  it('generator-list constant matches folder name', () => {
+    expect(GENERATOR_SPRING_BOOT).toBe(generator);
+  });
   basicTests({
     requiredConfig,
     defaultConfig,

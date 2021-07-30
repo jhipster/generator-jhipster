@@ -21,10 +21,15 @@ const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
+const { GENERATOR_GRADLE } = require('../generator-list');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
+const generator = path.basename(__dirname);
 
-describe('JHipster gradle generator', () => {
+describe(`JHipster ${generator} generator`, () => {
+  it('generator-list constant matches folder name', () => {
+    expect(GENERATOR_GRADLE).toBe(generator);
+  });
   basicTests({
     requiredConfig: {},
     defaultConfig: {},

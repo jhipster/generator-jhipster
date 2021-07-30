@@ -16,14 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const expect = require('expect');
 const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('./config.cjs');
+const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
+const generator = path.basename(__dirname);
 
-describe('JHipster project-name generator', () => {
+describe(`JHipster ${generator} generator`, () => {
+  it('generator-list constant matches folder name', () => {
+    expect(GENERATOR_PROJECT_NAME).toBe(generator);
+  });
   basicTests({
     requiredConfig: { ...requiredConfig, ...reproducibleConfigForTests },
     defaultConfig: { ...defaultConfig, ...reproducibleConfigForTests },

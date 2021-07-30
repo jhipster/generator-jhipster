@@ -24,11 +24,16 @@ const { basicTests, testBlueprintSupport } = require('../../test/support/index.c
 const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
 const { defaultConfig, requiredConfig } = require('./config.cjs');
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
+const { GENERATOR_INIT } = require('../generator-list');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
+const generator = path.basename(__dirname);
 const contextBuilder = () => helpers.create(generatorPath).withOptions({ skipGit: true });
 
-describe('JHipster init generator', () => {
+describe(`JHipster ${generator} generator`, () => {
+  it('generator-list constant matches folder name', () => {
+    expect(GENERATOR_INIT).toBe(generator);
+  });
   basicTests({
     requiredConfig,
     defaultConfig,
