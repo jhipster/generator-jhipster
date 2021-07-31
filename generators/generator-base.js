@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const assert = require('assert');
 const path = require('path');
 const _ = require('lodash');
 const { kebabCase } = require('lodash');
@@ -1478,6 +1478,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @return {object} the composed generator
    */
   composeWithJHipster(generator, args, options, once = false) {
+    assert(typeof generator === 'string', 'generator should to be a string');
     const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
     let immediately = false;
     if (typeof once === 'object') {
@@ -2797,6 +2798,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return this.getDBCUrl(databaseType, 'r2dbc', options);
   }
 
+  /**
+   * @experimental
+   */
   showHello() {
     if (this.configOptions.showHello === false) return false;
     this.configOptions.showHello = false;
@@ -2804,15 +2808,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
    * @param String dependabotFile - package.json path
    */
   loadDependabotDependencies(dependabotFile) {
-    _.merge(this.configOptions.dependabotDependencies, this.fs.readJSON(dependabotFile).dependencies);
+    const { dependencies, devDependencies } = this.fs.readJSON(dependabotFile);
+    _.merge(this.configOptions.dependabotDependencies, dependencies, devDependencies);
   }
 
   /**
+   * @experimental
    * Check if modular generators should be composed.
    * @return {Boolean}
    */
@@ -2821,6 +2828,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @experimental
    * Check if modular generators should skip write files.
    * @return {Boolean}
    */
@@ -2829,6 +2837,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @experimental
    * Check if prompts must be skipped.
    * @return {Boolean}
    */
@@ -2868,6 +2877,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
    * @param String options - Object containing options.
