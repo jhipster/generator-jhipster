@@ -34,6 +34,10 @@
     "email": "",
     "url": "https://github.com/jdubois"
   },
+  "exports": {
+    ".": "./lib/index.js",
+    "./support": "./lib/support/index.cjs"
+  },
   "main": "lib/index.js",
   "bin": {
     "jhipster": "cli/jhipster.js"
@@ -49,17 +53,17 @@
     "completion": "tabtab install --name jhipster --auto",
     "ejs-lint": "mocha test/ejslint.js",
     "ejslint": "ejslint",
-    "eslint": "eslint .",
+    "eslint": "eslint . --ext .js,.cjs",
     "jdl:test": "mocha test/jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejs-lint",
     "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
-    "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
-    "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
+    "prettier:check": "prettier --check \"{,**/}*.{js,cjs,json,md,yml,java}\"",
+    "prettier:format": "prettier --write \"{,**/}*.{js,cjs,json,md,yml,java}\"",
     "pretest": "npm run lint",
-    "test": "mocha --no-insight --forbid-only --parallel",
-    "update-snapshots": "mocha --no-insight --parallel --updateSnapshot"
+    "test": "mocha test \"generators/**/*.spec.js\" --no-insight --forbid-only --parallel",
+    "update-snapshots": "mocha test \"generators/**/*.spec.js\" --no-insight --parallel --updateSnapshot"
   },
   "dependencies": {
     "aws-sdk": "2.953.0",

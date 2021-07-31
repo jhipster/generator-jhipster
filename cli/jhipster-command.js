@@ -178,11 +178,13 @@ class JHipsterCommand extends Command {
     } else if (optionDefinition.type === Array) {
       cmdString = optionDefinition.required !== false ? `${cmdString} <value...>` : `${cmdString} [value...]`;
     }
-    return this.addOption(
-      new Option(cmdString, optionDefinition.description + additionalDescription)
-        .default(optionDefinition.default)
-        .hideHelp(optionDefinition.hide)
-    );
+    const option = new Option(cmdString, optionDefinition.description + additionalDescription)
+      .default(optionDefinition.default)
+      .hideHelp(optionDefinition.hide);
+    if (optionDefinition.choices && optionDefinition.choices.length > 0) {
+      option.choices(optionDefinition.choices);
+    }
+    return this.addOption(option);
   }
 }
 

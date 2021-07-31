@@ -18,6 +18,9 @@
  */
 
 const defaultCommands = {
+  add: {
+    desc: 'Add a feature to current project',
+  },
   app: {
     desc: '[Default] Create a new JHipster application based on the selected options',
   },
@@ -56,6 +59,9 @@ const defaultCommands = {
   gae: {
     desc: 'Deploy the current application to Google App Engine',
   },
+  gradle: {
+    desc: 'Create Gradle project (alpha)',
+  },
   heroku: {
     desc: 'Deploy the current application to Heroku',
   },
@@ -65,8 +71,8 @@ const defaultCommands = {
   init: {
     desc: 'Init project (alpha)',
   },
-  'java-package-name': {
-    desc: 'Configure Java package name (alpha)',
+  java: {
+    desc: 'Run java generator (alpha)',
   },
   jdl: {
     alias: 'import-jdl',
@@ -171,6 +177,9 @@ const defaultCommands = {
   run: {
     desc: 'Run a module or custom generator',
     argument: ['[generator]'],
+  },
+  'spring-boot': {
+    desc: 'Create a Spring Boot application (alpha)',
   },
   'spring-service': {
     alias: 'service',

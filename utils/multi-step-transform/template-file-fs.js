@@ -20,7 +20,7 @@ module.exports.TemplateFileFs = class TemplateFileFs {
   }
 
   isDerivedTemplate(filePath) {
-    return minimatch(filePath, `**/*.${this.extension}.*`);
+    return minimatch(filePath, `**/*.${this.extension}.*`, { dot: true });
   }
 
   add(filePath, contents) {
