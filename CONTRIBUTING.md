@@ -232,16 +232,10 @@ Also add the option `--skip-jhipster-dependencies` to generate the application i
 
 To put it in a nutshell, you need to:
 
-1.  run `npm link` on the `generator-jhipster` project
-2.  run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
-3.  run `jhipster --skip-jhipster-dependencies` on the generated application folder
+1.  run `npm link` on the `generator-jhipster` project (link globally)
+2.  run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
-Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command:
-
-```shell
-➜  ~ ll $(which jhipster)
-lrwxr-xr-x  1 username  admin    63B May 15 11:03 /usr/local/bin/jhipster -> ../../../Users/username/github/generator-jhipster/cli/jhipster.js
-```
+You can execute `jhipster --install-path` to check where jhipster is been executed from.
 
 You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
@@ -285,7 +279,30 @@ To start debugging JHipster with **VSCode**, open the generator code in your wor
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
-## Local Build
+## Generator tests and snapshots.
+
+Run every test with lint/prettier
+`npm test`
+
+Run every test without lint/prettier
+`npx mocha`
+
+Update every test snapshot
+`npm run update-snapshots`
+
+Run specific tests
+`npx mocha <path>`
+
+Run specific tests in series (improved error reporting)
+`npx mocha <path> --no-parallel`
+
+Update specific test snapshot
+`npm run update-snapshot -- <path>` or `npx mocha <path> --no-parallel --updateSnapshot`
+
+Fixing lint and prettier errors
+`npm run lint-fix`
+
+## Running integration tests locally
 
 You can run the builds locally by following below commands
 
