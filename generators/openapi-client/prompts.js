@@ -24,7 +24,6 @@ const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 
 const { REACTIVE, SERVICE_DISCOVERY_TYPE } = OptionNames;
 
-
 module.exports = {
   askActionType,
   askExistingAvailableDocs,
