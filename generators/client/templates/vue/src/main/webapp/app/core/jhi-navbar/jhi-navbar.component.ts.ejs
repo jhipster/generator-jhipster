@@ -47,7 +47,7 @@ export default class JhiNavbar extends Vue {
 <%_ if (!authenticationTypeJwt) { _%>
     this.loginService().logout().then(response => {
       this.$store.commit('logout');
-      this.$router.push('/', () => {});
+      this.$router.push('/');
   <%_ if (authenticationTypeOauth2) { _%>
       const data = response.data;
       let logoutUrl = data.logoutUrl;
@@ -66,7 +66,7 @@ export default class JhiNavbar extends Vue {
     localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     this.$store.commit('logout');
-    this.$router.push('/', () => {});
+    this.$router.push('/');
 <%_ } _%>
   }
 
