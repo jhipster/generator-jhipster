@@ -65,7 +65,7 @@ export default class AccountService {
 <%_ } _%>
         } else {
           this.store.commit('logout');
-          this.router.push('/', () => {});
+          this.router.push('/');
           sessionStorage.removeItem("requested-url");
         }
 <%_ if (enableTranslation) { _%>
