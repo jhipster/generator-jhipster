@@ -26,7 +26,7 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
 
-const { projectNameReproducibleConfigForTests } = require('./config');
+const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('./project-name/config.cjs');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');

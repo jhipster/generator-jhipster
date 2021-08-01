@@ -16,10 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { options: initOptions } = require('./init/options');
-const { options: projectNameOptions } = require('./project-name/options');
-
 const commonOptions = {
+  'from-cli': {
+    desc: 'Indicates the command is run from JHipster CLI',
+    type: Boolean,
+    hide: true,
+  },
+  'skip-prettier': {
+    desc: 'Skip prettier',
+    type: Boolean,
+    hide: true,
+  },
+  'skip-prompts': {
+    desc: 'Skip prompts',
+    type: Boolean,
+  },
   defaults: {
     desc: 'Use default config',
     type: Boolean,
@@ -33,10 +44,20 @@ const commonOptions = {
     desc: 'Compose with a generator at current project',
     type: Boolean,
   },
+  regenerate: {
+    desc: 'Regenerate a generator at current project',
+    type: Boolean,
+  },
+  configure: {
+    desc: 'Configure the generator',
+    type: Boolean,
+  },
+  'skip-jhipster-dependencies': {
+    desc: "Don't add generator-jhipster and blueprints to package.json.",
+    type: Boolean,
+  },
 };
 
 module.exports = {
   commonOptions,
-  initOptions,
-  projectNameOptions,
 };

@@ -52,6 +52,7 @@ const createProgram = () => {
       .option('--dry-run', 'Print conflicts', false)
       .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
       .option('--bail', 'Fail on first conflict', false)
+      .option('--install-path', 'Show jhipster install path', false)
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp())
@@ -166,6 +167,11 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
           ...program.opts(),
           ...cmdOptions,
         };
+        if (options.installPath) {
+          // eslint-disable-next-line no-console
+          console.log(`Using jhipster at ${path.dirname(__dirname)}`);
+          return undefined;
+        }
 
         if (opts.cliOnly) {
           logger.debug('Executing CLI only script');

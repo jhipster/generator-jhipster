@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const assert = require('assert');
 const path = require('path');
 const _ = require('lodash');
+const { kebabCase } = require('lodash');
 const chalk = require('chalk');
 const fs = require('fs');
 const shelljs = require('shelljs');
@@ -33,16 +34,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 const { defaultConfig, defaultConfigMicroservice } = require('./generator-defaults');
-const {
-  initDefaultConfig,
-  initRequiredConfig,
-  javaPackageNameDefaultConfig,
-  javaPackageNameRequiredConfig,
-  projectNameDefaultConfig,
-  projectNameReproducibleConfigForTests,
-  projectNameRequiredConfig,
-} = require('./config');
-const { commonOptions, initOptions, javaPackageNameOptions, projectNameOptions } = require('./options');
+const { commonOptions } = require('./options');
 const { detectLanguage } = require('../utils/language');
 const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
@@ -123,28 +115,30 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   constructor(args, opts, features) {
     super(args, opts, features);
 
-    // This adds support for a `--from-cli` flag
-    this.option('from-cli', {
-      desc: 'Indicates the command is run from JHipster CLI',
-      type: Boolean,
-      hide: true,
-    });
+    if (!this.features.jhipsterModular) {
+      // This adds support for a `--from-cli` flag
+      this.option('from-cli', {
+        desc: 'Indicates the command is run from JHipster CLI',
+        type: Boolean,
+        hide: true,
+      });
 
-    this.option('with-generated-flag', {
-      desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-      type: Boolean,
-    });
+      this.option('with-generated-flag', {
+        desc: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+        type: Boolean,
+      });
 
-    this.option('skip-prompts', {
-      desc: 'Skip prompts',
-      type: Boolean,
-    });
+      this.option('skip-prompts', {
+        desc: 'Skip prompts',
+        type: Boolean,
+      });
 
-    this.option('skip-prettier', {
-      desc: 'Skip prettier',
-      type: Boolean,
-      hide: true,
-    });
+      this.option('skip-prettier', {
+        desc: 'Skip prettier',
+        type: Boolean,
+        hide: true,
+      });
+    }
 
     if (this.options.help) {
       return;
@@ -1484,6 +1478,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @return {object} the composed generator
    */
   composeWithJHipster(generator, args, options, once = false) {
+    assert(typeof generator === 'string', 'generator should to be a string');
     const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
     let immediately = false;
     if (typeof once === 'object') {
@@ -1515,7 +1510,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       try {
         generator = require.resolve(`./${generator}`);
       } catch (e) {
-        throw new Error(`Generator ${generator} was not found`);
+        try {
+          generator = require.resolve(`./${generator}/index.cjs`);
+        } catch (e) {
+          throw new Error(`Generator ${generator} was not found`);
+        }
       }
     }
 
@@ -2516,118 +2515,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Register and parse init options.
-   */
-  registerInitOptions() {
-    this.jhipsterOptions(initOptions);
-  }
-
-  /**
-   * Load required init configs into config.
-   */
-  configureInit() {
-    this.config.defaults(initRequiredConfig);
-  }
-
-  /**
-   * Load init configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
-   */
-  loadInitConfig(config = _.defaults({}, this.jhipsterConfig, initDefaultConfig), dest = this) {
-    dest.prettierDefaultIndent = config.prettierDefaultIndent;
-    dest.prettierJavaIndent = config.prettierJavaIndent;
-    dest.skipCommitHook = config.skipCommitHook;
-  }
-
-  /**
-   * Load derived init configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} dest - source/destination context
-   */
-  loadDerivedInitConfig(dest = this) {}
-
-  /**
-   * Register and parse java-package-name options.
-   */
-  registerJavaPackageNameOptions() {
-    this.jhipsterOptions(javaPackageNameOptions);
-  }
-
-  /**
-   * Load required java-package-name configs into config.
-   */
-  configureJavaPackageName() {
-    this.config.defaults(javaPackageNameRequiredConfig);
-  }
-
-  /**
-   * Load java-package-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
-   */
-  loadJavaPackageNameConfig(config = _.defaults({}, this.jhipsterConfig, javaPackageNameDefaultConfig), dest = this) {
-    dest.packageName = config.packageName;
-  }
-
-  /**
-   * Load derived java-package-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} dest - source/destination context
-   */
-  loadDerivedJavaPackageNameConfig(dest = this) {}
-
-  /**
-   * Register and parse project-name options.
-   */
-  registerProjectNameOptions() {
-    this.jhipsterOptions(projectNameOptions);
-  }
-
-  /**
-   * Load required project-name configs into config.
-   */
-  configureProjectName() {
-    if (this.options.reproducible) {
-      this.config.defaults(projectNameReproducibleConfigForTests);
-    }
-    this.config.defaults({
-      ...projectNameRequiredConfig,
-      baseName: this.getDefaultAppName(),
-    });
-  }
-
-  /**
-   * Load project-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} config - config to load config from
-   * @param {any} dest - destination context to use default is context
-   */
-  loadProjectNameConfig(config = _.defaults({}, this.jhipsterConfig, projectNameDefaultConfig), dest = this) {
-    dest.jhipsterVersion = config.jhipsterVersion;
-    dest.baseName = config.baseName;
-    dest.projectName = config.projectName;
-  }
-
-  /**
-   * Load derived project-name configs into dest.
-   * all variables should be set to dest,
-   * all variables should be referred from config,
-   * @param {any} dest - source/destination context
-   */
-  loadDerivedProjectNameConfig(dest = this) {
-    dest.dasherizedBaseName = _.kebabCase(dest.baseName);
-    dest.humanizedBaseName = _.startCase(dest.baseName);
-  }
-
-  /**
    * Load app configs into dest.
    * all variables should be set to dest,
    * all variables should be referred from config,
@@ -2911,6 +2798,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return this.getDBCUrl(databaseType, 'r2dbc', options);
   }
 
+  /**
+   * @experimental
+   */
   showHello() {
     if (this.configOptions.showHello === false) return false;
     this.configOptions.showHello = false;
@@ -2918,21 +2808,45 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @experimental
    * Load dependabot package.json into shared dependabot dependencies.
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
    * @param String dependabotFile - package.json path
    */
   loadDependabotDependencies(dependabotFile) {
-    _.merge(this.configOptions.dependabotDependencies, this.fs.readJSON(dependabotFile).dependencies);
+    const { dependencies, devDependencies } = this.fs.readJSON(dependabotFile);
+    _.merge(this.configOptions.dependabotDependencies, dependencies, devDependencies);
   }
 
   /**
+   * @experimental
+   * Check if modular generators should be composed.
+   * @return {Boolean}
+   */
+  shouldComposeModular() {
+    return !this.options.add && !this.options.regenerate;
+  }
+
+  /**
+   * @experimental
+   * Check if modular generators should skip write files.
+   * @return {Boolean}
+   */
+  shouldSkipFiles() {
+    return this.options.configure;
+  }
+
+  /**
+   * @experimental
    * Check if prompts must be skipped.
    * @return {Boolean}
    */
-  skipPrompts() {
+  shouldSkipPrompts() {
     return (
-      this.options.defaults || this.options.skipPrompts || (!this.options.add && this.existingModularProject && !this.options.askAnswered)
+      this.options.defaults ||
+      this.options.skipPrompts ||
+      this.options.regenerate ||
+      (!this.options.add && this.existingModularProject && !this.options.askAnswered)
     );
   }
 
@@ -2963,25 +2877,25 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @experimental
    * Load options from an object.
    * When composing, we need to load options from others generators, externalising options allow to easily load them.
    * @param String options - Object containing options.
    */
   jhipsterOptions(options = {}) {
     Object.entries(options).forEach(([optionName, optionDesc]) => {
-      this.option(optionName, optionDesc);
+      this.option(kebabCase(optionName), optionDesc);
       if (!optionDesc.scope) return;
-      const camelCaseName = _.camelCase(optionName);
-      const optionValue = this.options[camelCaseName];
+      const optionValue = this.options[optionName];
       if (optionValue !== undefined) {
         if (optionDesc.scope === 'storage') {
-          this.config.set(camelCaseName, optionValue);
+          this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'runtime') {
-          this.configOptions[camelCaseName] = optionValue;
+          this.configOptions[optionName] = optionValue;
         } else {
           throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
-        delete this.options[camelCaseName];
+        delete this.options[optionName];
       }
     });
   }

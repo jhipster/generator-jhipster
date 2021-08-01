@@ -25,9 +25,8 @@ const formatDiskSpaceOutput = rawValue => {
   if (val > 1) {
     // Value
     return val.toFixed(2) + ' GB';
-  } else {
-    return (rawValue / 1048576).toFixed(2) + ' MB';
   }
+  return (rawValue / 1048576).toFixed(2) + ' MB';
 };
 
 const HealthModal = ({ handleClose, healthObject, showModal }) => {

@@ -32,6 +32,7 @@ module.exports.TemplateData = class TemplateData {
    * Render fragments using default join and suffix.
    */
   render(fragmentData = {}, suffix = '\n') {
+    const { join = '\n' } = fragmentData;
     const renderedFragments = this.renderFragments(fragmentData).filter(fragment => fragment);
     const section = fragmentData.section || this._defaultData.section;
     if (section) {
@@ -40,7 +41,7 @@ module.exports.TemplateData = class TemplateData {
         throw new Error(`${section} must have at most ${limit} fragments`);
       }
     }
-    const rendered = renderedFragments.join('\n');
+    const rendered = renderedFragments.join(join);
     this.last = rendered;
     return rendered && suffix ? `${rendered}${suffix}` : rendered;
   }

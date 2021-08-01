@@ -99,7 +99,7 @@ module.exports = class extends BaseGenerator {
           this.debug('Skipping commit prettier');
           return;
         }
-        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc', '.prettierignore'])));
+        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc**', '.prettierignore'])), true);
       },
       async commitFiles() {
         if (this.options.skipCommit) {
@@ -145,7 +145,7 @@ module.exports = class extends BaseGenerator {
    * @param {Stream} [stream] - files stream, defaults to this.sharedFs.stream().
    * @return {Promise}
    */
-  _commitSharedFs(stream = this.env.sharedFs.stream()) {
+  _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
     return new Promise((resolve, reject) => {
       this.env.sharedFs.each(file => {
         if (
@@ -175,7 +175,7 @@ module.exports = class extends BaseGenerator {
         transformStreams.push(generatedAnnotationTransform(this));
       }
 
-      if (!this.options.skipPrettier) {
+      if (!skipPrettier) {
         const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;

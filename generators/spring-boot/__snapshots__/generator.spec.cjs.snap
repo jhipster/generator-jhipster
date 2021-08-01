@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster spring-boot generator with add option and default config should write only spring-boot files and match snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/application.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/JhipsterAppTests.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster spring-boot generator with default config should write java files and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".huskyrc": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/MavenWrapperDownloader.java": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/JhipsterApp.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/application.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/JhipsterAppTests.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

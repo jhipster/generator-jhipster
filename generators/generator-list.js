@@ -18,6 +18,7 @@
  */
 
 const Generators = {
+  GENERATOR_ADD: 'add',
   GENERATOR_AWS: 'aws',
   GENERATOR_BOOTSTRAP: 'bootstrap',
   GENERATOR_AZURE_APP_SERVICE: 'azure-app-service',
@@ -38,12 +39,13 @@ const Generators = {
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
+  GENERATOR_GRADLE: 'gradle',
   GENERATOR_HEROKU: 'heroku',
   GENERATOR_KUBERNETES: 'kubernetes',
   GENERATOR_KUBERNETES_HELM: 'kubernetes-helm',
   GENERATOR_KUBERNETES_KNATIVE: 'kubernetes-knative',
   GENERATOR_INIT: 'init',
-  GENERATOR_JAVA_PACKAGE_NAME: 'java-package-name',
+  GENERATOR_JAVA: 'java',
   GENERATOR_MAVEN: 'maven',
   GENERATOR_LANGUAGES: 'languages',
   GENERATOR_PAGE: 'page',
@@ -51,6 +53,7 @@ const Generators = {
   GENERATOR_SERVER: 'server',
   GENERATOR_OPENAPI: 'openapi-client',
   GENERATOR_OPENSHIFT: 'openshift',
+  GENERATOR_SPRING_BOOT: 'spring-boot',
 };
 
 module.exports = Generators;

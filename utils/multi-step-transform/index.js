@@ -26,7 +26,7 @@ module.exports.MultiStepTransform = class MultiStepTransform extends OOOTransfor
               return;
             }
             file.path = templateFile.basePath;
-            file.contents = Buffer.from(templateFile.render());
+            file.contents = Buffer.from(templateFile.render().concat('\n'));
             this.push(file);
           });
         } else {
