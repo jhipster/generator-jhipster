@@ -83,7 +83,7 @@
     "insight": "0.10.3",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
-    "mem-fs-editor": "9.0.1",
+    "mem-fs-editor": "9.1.0",
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
     "ora": "5.4.1",
