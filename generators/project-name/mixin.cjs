@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { defaults, merge, kebabCase, startCase } = require('lodash');
+const { defaults, kebabCase, startCase } = require('lodash');
 
 const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('./config.cjs');
 const { options } = require('./options.cjs');
@@ -34,8 +34,8 @@ module.exports.mixin = parent =>
     /**
      * Register and parse project-name options.
      */
-    registerProjectNameOptions(customOptions) {
-      this.jhipsterOptions(merge({}, options, customOptions));
+    getProjectNameOptions() {
+      return options;
     }
 
     /**

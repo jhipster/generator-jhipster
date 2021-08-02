@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { defaults, merge } = require('lodash');
+const { defaults } = require('lodash');
 
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
@@ -36,8 +36,8 @@ module.exports.mixin = parent =>
     /**
      * Register and parse init options.
      */
-    registerInitOptions(customOptions) {
-      this.jhipsterOptions(merge({}, options, customOptions));
+    getInitOptions() {
+      return options;
     }
 
     /**
