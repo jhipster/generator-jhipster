@@ -87,7 +87,7 @@
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
     "ora": "5.4.1",
-    "os-locale": "5.0.0",
+    "os-locale": "6.0.0",
     "p-queue": "6.6.2",
     "parse-gitignore": "1.0.1",
     "pluralize": "8.0.0",
