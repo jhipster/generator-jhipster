@@ -64,45 +64,7 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
-
-// Reverse order.
-const CUSTOM_PRIORITIES = [
-  {
-    priorityName: 'preConflicts',
-    queueName: 'jhipster:preConflicts',
-    before: 'conflicts',
-  },
-  {
-    priorityName: 'postWriting',
-    queueName: 'jhipster:postWriting',
-    before: 'preConflicts',
-  },
-  {
-    priorityName: 'preparingRelationships',
-    queueName: 'jhipster:preparingRelationships',
-    before: 'default',
-  },
-  {
-    priorityName: 'preparingFields',
-    queueName: 'jhipster:preparingFields',
-    before: 'preparingRelationships',
-  },
-  {
-    priorityName: 'preparing',
-    queueName: 'jhipster:preparing',
-    before: 'preparingFields',
-  },
-  {
-    priorityName: 'loading',
-    queueName: 'jhipster:loading',
-    before: 'preparing',
-  },
-  {
-    priorityName: 'composing',
-    queueName: 'jhipster:composing',
-    before: 'loading',
-  },
-];
+const { CUSTOM_PRIORITIES } = require('../lib/support/priorities.cjs');
 
 /**
  * This is the Generator base class.

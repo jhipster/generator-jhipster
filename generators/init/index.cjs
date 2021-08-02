@@ -19,7 +19,18 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const simpleGit = require('simple-git');
-const { generateMixedChain } = require('generator-jhipster/support');
+const {
+  generateMixedChain,
+  Priorities: {
+    INITIALIZING_PRIORITY,
+    PROMPTING_PRIORITY,
+    LOADING_PRIORITY,
+    WRITING_PRIORITY,
+    POST_WRITING_PRIORITY,
+    INSTALL_PRIORITY,
+    END_PRIORITY,
+  },
+} = require('generator-jhipster/support');
 
 const { GENERATOR_INIT } = require('../generator-list');
 const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
@@ -74,7 +85,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._initializing();
   }
@@ -99,7 +110,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._prompting();
   }
@@ -137,7 +148,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._loading();
   }
@@ -155,7 +166,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._writing();
   }
@@ -174,7 +185,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._postWriting();
   }
@@ -199,7 +210,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get install() {
+  get [INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._install();
   }
@@ -244,7 +255,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._end();
   }

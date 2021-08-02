@@ -18,7 +18,10 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { generateMixedChain } = require('generator-jhipster/support');
+const {
+  generateMixedChain,
+  Priorities: { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY },
+} = require('generator-jhipster/support');
 
 const { GENERATOR_JAVA } = require('../generator-list');
 const { PACKAGE_NAME, BUILD_TOOL, PRETTIER_JAVA_INDENT } = require('./constants.cjs');
@@ -73,7 +76,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._initializing();
   }
@@ -111,7 +114,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._prompting();
   }
@@ -138,7 +141,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get composing() {
+  get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._composing();
   }
@@ -160,7 +163,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._loading();
   }
@@ -174,7 +177,7 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._writing();
   }
