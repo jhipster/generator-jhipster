@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-const osLocale = require('os-locale');
+import osLocale from '../node_modules/os-locale';
+
 const { LANGUAGES } = require('../generators/generator-constants');
 
 function detectLanguage() {

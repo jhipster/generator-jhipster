@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import osLocale from '../node_modules/os-locale';
+
 const { v4: uuid } = require('uuid');
 const Config = require('conf');
-const osLocale = require('os-locale');
 const axios = require('axios');
 const os = require('os');
 const Insight = require('insight');
