@@ -30,8 +30,8 @@ module.exports.mixin = parent =>
     /**
      * Register and parse spring-boot options.
      */
-    registerSpringBootOptions() {
-      this.jhipsterOptions(options);
+    getSpringBootOptions() {
+      return options;
     }
 
     /**

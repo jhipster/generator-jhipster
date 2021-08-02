@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { defaults, merge } = require('lodash');
+const { defaults } = require('lodash');
 
 const { GENERATOR_MAVEN, GENERATOR_GRADLE } = require('../generator-list');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
@@ -52,8 +52,8 @@ module.exports.mixin = parent =>
     /**
      * Register and parse java options.
      */
-    registerJavaOptions(customOptions) {
-      this.jhipsterOptions(merge({}, options, customOptions));
+    getJavaOptions() {
+      return options;
     }
 
     /**
