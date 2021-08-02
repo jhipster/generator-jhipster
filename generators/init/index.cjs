@@ -200,7 +200,7 @@ module.exports = class extends MixedChain {
           return;
         }
         try {
-          const git = this._createGit();
+          const git = this.createGit();
           this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
           this.log(chalk.green.bold('Git repository initialized.'));
         } catch (error) {
@@ -225,7 +225,7 @@ module.exports = class extends MixedChain {
           return;
         }
         this.debug('Committing files to git');
-        const git = this._createGit();
+        const git = this.createGit();
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         let result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
@@ -264,7 +264,7 @@ module.exports = class extends MixedChain {
    * Start of local public API, blueprints may override to customize the generator behavior.
    */
 
-  _createGit() {
+  createGit() {
     return simpleGit({ baseDir: this.destinationPath() }).env({
       ...process.env,
       LANG: 'en',

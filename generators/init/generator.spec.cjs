@@ -76,7 +76,7 @@ describe(`JHipster ${generator} generator`, () => {
         await expect(access(path.resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
       });
       it('should create 1 commit', async () => {
-        const git = runResult.generator._createGit();
+        const git = runResult.generator.createGit();
         await expect(git.log()).resolves.toMatchObject({
           total: 1,
           latest: { message: expect.stringMatching(/^Initial version of/) },
@@ -99,11 +99,11 @@ describe(`JHipster ${generator} generator`, () => {
         runResult = await runResult.create(generatorPath).withOptions({ skipPrettier: true, jhipsterVersion: '1.0.0' }).run();
       });
       it('should have 1 commit', async () => {
-        const git = runResult.generator._createGit();
+        const git = runResult.generator.createGit();
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
       it('should have uncommited files', async () => {
-        const git = runResult.generator._createGit();
+        const git = runResult.generator.createGit();
         await expect(git.diff()).resolves.toMatch(/\+ {4}"jhipsterVersion": "1\.0\.0"/);
       });
     });

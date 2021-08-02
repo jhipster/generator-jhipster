@@ -90,9 +90,9 @@ module.exports = class extends MixedChain {
             {
               name: PACKAGE_NAME,
               type: 'input',
-              validate: input => this._validatePackageName(input),
+              validate: input => this.validatePackageName(input),
               message: 'What is your default Java package name?',
-              default: () => this._getDefaultPackageName(),
+              default: () => this.getDefaultPackageName(),
             },
             {
               name: BUILD_TOOL,
@@ -191,7 +191,7 @@ module.exports = class extends MixedChain {
    * @param String input - Package name to be checked
    * @returns Boolean
    */
-  _validatePackageName(input) {
+  validatePackageName(input) {
     if (!/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) {
       return 'The package name you have provided is not a valid Java package name.';
     }
@@ -201,7 +201,7 @@ module.exports = class extends MixedChain {
   /**
    * @returns default package name
    */
-  _getDefaultPackageName() {
+  getDefaultPackageName() {
     return defaultConfig.packageName;
   }
 };
