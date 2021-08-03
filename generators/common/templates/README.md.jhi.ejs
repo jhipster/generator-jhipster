@@ -141,9 +141,9 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 ### Auth0
 
-If you'd like to use [`Auth0`](https://auth0.com/) instead of `Keycloak`, you can follow the below configuration steps:
+If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the below configuration steps:
 
-- Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account shall be associated with a unique domain like `dev-xxx.us.auth0.com`
+- Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
 - Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
     - Allowed Callback URLs: `http://localhost:8080/login/oauth2/code/oidc`
     - Allowed Logout URLs: `http://localhost:8080/`
@@ -161,18 +161,18 @@ function (user, context, callback) {
 
   const rolesClaim = prepareCustomClaimKey('roles');
 
-  if(context.idToken) {
+  if (context.idToken) {
   	context.idToken[rolesClaim] = roles;
   }
 
-  if(context.accessToken) {
+  if (context.accessToken) {
   	context.accessToken[rolesClaim] = roles;
   }
 
   callback(null, user, context);
 }
 ```
-- In your `JHipster` application, modify `src/main/resources/config/application.yml` to use `Auth0` application configurations:
+- In your `JHipster` application, modify `src/main/resources/config/application.yml` to use your Auth0 application settings:
 ```yaml
 spring:
   ...
@@ -193,9 +193,9 @@ jhipster:
       audience:
         - https://{your-auth0-domain}/api/v2/
 ```
-- Before running `Cypress` tests, specify `Auth0` user details by overriding `E2E_USERNAME`, and `E2E_PASSWORD` cypress environment variables. Refer cypress documentation to provide OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting)
+- Before running Cypress tests, specify Auth0 user credentials by overriding the `E2E_USERNAME` and `E2E_PASSWORD` environment variables. See Cypress' documentation for setting OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting) to learn more.
 
-**Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
+**Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the Cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
 <%_ } _%>
 
 <%_ if (enableSwaggerCodegen) { _%>

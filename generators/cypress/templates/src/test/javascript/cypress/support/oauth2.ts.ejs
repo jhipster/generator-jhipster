@@ -33,9 +33,9 @@ Cypress.Commands.add('getOauth2Data', () => {
 
 Cypress.Commands.add('oauthLogin', (oauth2Data: any, username: string, password: string) => {
   const url = new URL(oauth2Data.url);
-  if(url.origin.includes('okta')) {
+  if (url.origin.includes('okta')) {
     cy.oktaLogin(oauth2Data, username, password);
-  } else if (url.origin.includes('auth0.com')) {
+  } else if (url.origin.includes('auth0')) {
     cy.auth0Login(oauth2Data, username, password);
   } else {
     cy.keycloakLogin(oauth2Data, username, password);

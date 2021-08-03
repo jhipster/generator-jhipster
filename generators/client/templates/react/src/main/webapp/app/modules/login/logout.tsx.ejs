@@ -34,7 +34,7 @@ export const Logout = () => {
       if (logoutUrl.includes('/protocol')) {
         window.location.href = `${logoutUrl}?redirect_uri=${window.location.origin}`;
       } else if(logoutUrl.includes('auth0.com')) {
-        window.location.href = `${logoutUrl}?client_id=${clientId}&returnTo=${window.location.origin}`
+        window.location.href = `${logoutUrl}?client_id=${clientId}&returnTo=${window.location.origin}`;
       } else {
         window.location.href = `${logoutUrl}?id_token_hint=${idToken}&post_logout_redirect_uri=${window.location.origin}`;
       }
@@ -49,4 +49,3 @@ export const Logout = () => {
 };
 
 export default Logout;
-

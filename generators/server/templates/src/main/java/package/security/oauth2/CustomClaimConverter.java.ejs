@@ -77,10 +77,10 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             // Add custom claims
             if (user != null) {
                 convertedClaims.put("preferred_username", user.get("preferred_username").asText());
-                if(user.has("given_name")) {
+                if (user.has("given_name")) {
                     convertedClaims.put("given_name", user.get("given_name").asText());
                 }
-                if(user.has("family_name")) {
+                if (user.has("family_name")) {
                     convertedClaims.put("family_name", user.get("family_name").asText());
                 }
                 if (user.has("groups")) {

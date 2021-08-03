@@ -305,7 +305,7 @@ public class SecurityConfiguration {
         ReactiveClientRegistrationRepository clientRegistrationRepository) {
         DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
             new DefaultServerOAuth2AuthorizationRequestResolver(clientRegistrationRepository);
-        if(this.issuerUri.contains("auth0.com")) {
+        if (this.issuerUri.contains("auth0.com")) {
             authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
         }
         return  authorizationRequestResolver;

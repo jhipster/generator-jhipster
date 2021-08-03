@@ -63,7 +63,7 @@ public class LogoutResource {
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
         String logoutUrl;
         String issuerUri = this.registration.getProviderDetails().getIssuerUri();
-        if(issuerUri.contains("auth0.com")) {
+        if (issuerUri.contains("auth0.com")) {
             logoutUrl = issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
         } else {
             logoutUrl = this.registration.getProviderDetails()
@@ -92,7 +92,7 @@ public class LogoutResource {
     }
 
     private String prepareLogoutUri(ClientRegistration.ProviderDetails providerDetails) {
-        if(providerDetails.getIssuerUri().contains("auth0.com")) {
+        if (providerDetails.getIssuerUri().contains("auth0.com")) {
             String issuerUri = providerDetails.getIssuerUri();
             return issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
         } else {

@@ -56,7 +56,7 @@ export default class JhiNavbar extends Vue {
         logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
       } else if(logoutUrl.includes('auth0.com')) {
         // Auth0
-        logoutUrl = `${logoutUrl}?client_id=${data.clientId}&returnTo=${window.location.origin}`
+        logoutUrl = `${logoutUrl}?client_id=${data.clientId}&returnTo=${window.location.origin}`;
       } else {
         // Okta
         logoutUrl = logoutUrl + '?id_token_hint=' +
