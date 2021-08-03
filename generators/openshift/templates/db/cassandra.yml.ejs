@@ -120,13 +120,13 @@ objects:
         spec:
           volumes:
           - name: ${APPLICATION_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${APPLICATION_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
             image: <%= DOCKER_CASSANDRA %>

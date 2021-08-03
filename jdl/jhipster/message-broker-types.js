@@ -19,6 +19,7 @@
 
 const MessageBrokerTypes = {
   KAFKA: 'kafka',
+  NO: false,
 };
 
 module.exports = MessageBrokerTypes;

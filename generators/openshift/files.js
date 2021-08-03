@@ -16,6 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+
+const NO_DATABASE = databaseTypes.NO;
+
 module.exports = {
   writeFiles,
 };
@@ -28,13 +35,13 @@ function writeFiles() {
         this.app = this.appConfigs[i];
         this.template('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
 
-        if (this.app.prodDatabaseType !== 'no') {
+        if (this.app.prodDatabaseType !== NO_DATABASE) {
           this.template(
             `db/${this.app.prodDatabaseType}.yml.ejs`,
             `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`
           );
         }
-        if (this.app.searchEngine === 'elasticsearch') {
+        if (this.app.searchEngine === ELASTICSEARCH) {
           this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);
         }
       }
@@ -47,17 +54,17 @@ function writeFiles() {
 
     writeRegistryFiles() {
       this.template('scc/scc-config.yml.ejs', `${this.directoryPath}/ocp/registry/scc-config.yml`);
-      if (this.serviceDiscoveryType === 'eureka') {
+      if (this.serviceDiscoveryType === EUREKA) {
         this.template('registry/jhipster-registry.yml.ejs', `${this.directoryPath}/ocp/registry/jhipster-registry.yml`);
         this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
-      } else if (this.serviceDiscoveryType === 'consul') {
+      } else if (this.serviceDiscoveryType === CONSUL) {
         this.template('registry/consul.yml.ejs', `${this.directoryPath}/ocp/registry/consul.yml`);
         this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
       }
     },
 
     writePrometheusFiles() {
-      if (this.monitoring !== 'prometheus') return;
+      if (this.monitoring !== PROMETHEUS) return;
 
       const appsToMonitor = [];
       for (let i = 0; i < this.appConfigs.length; i++) {

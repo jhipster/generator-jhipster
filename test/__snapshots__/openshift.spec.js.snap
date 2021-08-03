@@ -1532,8 +1532,15 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
                 - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
                   value: \${APPLICATION_NAME}-cassandra
               ports:
@@ -1660,8 +1667,15 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
                 - name: SPRING_DATASOURCE_URL
                   value: jdbc:mariadb://\${APPLICATION_NAME}-mariadb:3306/msmariadb?useLegacyDatetimeCode=false&serverTimezone=UTC
                 - name: SPRING_DATASOURCE_USERNAME
@@ -1976,8 +1990,15 @@ objects:
               env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: prod,api-docs
-                - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-                  value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+                - name: SPRING_CLOUD_CONFIG_URI
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/config
+                - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+                  value: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+                - name: JHIPSTER_REGISTRY_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: \${REG_SECRET_REF}
+                      key: registry-admin-password
                 - name: SPRING_DATA_MONGODB_URI
                   value: mongodb://\${APPLICATION_NAME}-mongodb
                 - name: SPRING_DATA_MONGODB_DATABASE

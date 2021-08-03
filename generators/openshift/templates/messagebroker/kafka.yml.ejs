@@ -124,13 +124,13 @@ objects:
         spec:
           volumes:
           - name: ${ZK_APPLICATION_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${ZK_APPLICATION_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           containers:
           - name: ${ZK_APPLICATION_NAME}
             image: <%= DOCKER_ZOOKEEPER %>

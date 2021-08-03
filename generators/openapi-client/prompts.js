@@ -19,6 +19,10 @@
 const path = require('path');
 const shelljs = require('shelljs');
 const request = require('then-request');
+const OptionNames = require('../../jdl/jhipster/application-options');
+const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+
+const { REACTIVE, SERVICE_DISCOVERY_TYPE } = OptionNames;
 
 module.exports = {
   askActionType,
@@ -155,7 +159,7 @@ function askActionType() {
       props.action = 'new';
     }
 
-    props.generatorName = this.config.get('reactive') ? 'java' : 'spring';
+    props.generatorName = this.config.get(REACTIVE) ? 'java' : 'spring';
 
     this.props = props;
     if (props.jhipsterEndpoint !== undefined) {
@@ -204,7 +208,7 @@ function askGenerationInfos() {
     {
       when:
         this.props.specOrigin === 'jhipster-endpoint' &&
-        this.config.get('serviceDiscoveryType') === 'eureka' &&
+        this.config.get(SERVICE_DISCOVERY_TYPE) === EUREKA &&
         this.props.generatorName === 'spring',
       type: 'confirm',
       name: 'useServiceDiscovery',
