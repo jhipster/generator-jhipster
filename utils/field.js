@@ -19,6 +19,7 @@
 
 const assert = require('assert');
 const _ = require('lodash');
+const chalk = require('chalk');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = require('../jdl/jhipster/field-types');
 const { MIN, MINLENGTH, MINBYTES, MAX, MAXBYTES, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../jdl/jhipster/validations');
@@ -98,6 +99,19 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
+    // check if regex is valid. If not, issue warning and we skip fake data generation.
+    try {
+      // eslint-disable-next-line no-new
+      new RegExp(field.fieldValidateRulesPattern);
+    } catch (e) {
+      console.log(
+        `${chalk.yellowBright('WARNING!')} ${field.fieldName} pattern is not valid: ${
+          field.fieldValidateRulesPattern
+        }. Skipping generating fake data. `
+      );
+      return undefined;
+    }
+
     const generated = field.createRandexp().gen();
     if (type === 'csv' || type === 'cypress') {
       data = generated.replace(/"/g, '');
