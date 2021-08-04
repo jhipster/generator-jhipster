@@ -111,7 +111,7 @@ function loadConfigs() {
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
       _.defaults(config, defaultConfig);
-      this.loadServerConfig(config);
+      this.loadServerConfig(config, config);
       this.loadDerivedPlatformConfig(config);
       this.loadDerivedAppConfig(config);
 
