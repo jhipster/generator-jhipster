@@ -45,7 +45,7 @@ jobs:
         with:
           jdl-sample: cache
           generator-jhipster-branch: local
-      - uses: actions/setup-node@v2.3.0
+      - uses: actions/setup-node@v2.3.2
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - name: 'SETUP: load npm cache'

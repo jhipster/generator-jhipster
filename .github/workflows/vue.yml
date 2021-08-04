@@ -138,7 +138,7 @@ jobs:
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
-      - uses: actions/setup-node@v2.3.0
+      - uses: actions/setup-node@v2.3.2
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
