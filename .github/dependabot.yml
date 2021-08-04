@@ -24,6 +24,9 @@ updates:
     labels:
       - 'theme: angular'
       - 'theme: dependencies'
+    ignore:
+      # Must match @angular-devkit/build-webpack dependency https://github.com/angular/angular-cli/blob/master/packages/angular_devkit/build_webpack/package.json#L16
+      - dependency-name: 'webpack'
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/templates/'
