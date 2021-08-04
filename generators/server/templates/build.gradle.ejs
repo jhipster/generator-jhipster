@@ -34,15 +34,15 @@ plugins {
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
-    <%_ if (enableSwaggerCodegen) { _%>
+<%_ if (enableSwaggerCodegen) { _%>
     id "org.openapi.generator"
-    <%_ } _%>
-    <%_ if (!skipClient) { _%>
+<%_ } _%>
+<%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     id "org.liquibase.gradle"
-    <%_ } _%>
+<%_ } _%>
     id "org.sonarqube"
     id "io.spring.nohttp"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here

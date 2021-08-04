@@ -112,7 +112,6 @@ function loadConfigs() {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
       _.defaults(config, defaultConfig);
       this.loadServerConfig(config);
-      this.loadDerivedServerConfig(config);
       this.loadDerivedPlatformConfig(config);
       this.loadDerivedAppConfig(config);
 

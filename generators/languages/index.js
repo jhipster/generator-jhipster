@@ -24,6 +24,7 @@ const prompts = require('./prompts');
 const statistics = require('../statistics');
 const constants = require('../generator-constants');
 const { translationDefaultConfig } = require('../generator-defaults');
+const { GENERATOR_LANGUAGES } = require('../generator-list');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -182,7 +183,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadDerivedClientConfig();
         this.loadPlatformConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
       },
     };
@@ -221,7 +221,7 @@ module.exports = class extends BaseBlueprintGenerator {
       ...super._missingPreDefault(),
 
       insight() {
-        statistics.sendSubGenEvent('generator', 'languages');
+        statistics.sendSubGenEvent('generator', GENERATOR_LANGUAGES);
       },
     };
   }
