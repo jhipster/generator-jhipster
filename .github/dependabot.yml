@@ -11,7 +11,9 @@ updates:
     ignore:
       # ESM only version
       - dependency-name: 'p-queue'
-        versions: '>=7'
+        versions: ['>=7']
+      - dependency-name: 'os-locale'
+        versions: ['>=6']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'
