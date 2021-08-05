@@ -20,7 +20,14 @@
 const Validator = require('./validator');
 const UnaryOptionValidator = require('./unary-option-validator');
 const BinaryOptionValidator = require('./binary-option-validator');
-const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = require('../jhipster/application-options');
+const {
+  OptionTypes,
+  OptionNames,
+  OptionValues,
+  getTypeForOption,
+  doesOptionExist,
+  doesOptionValueExist,
+} = require('../jhipster/application-options');
 const { MICROSERVICE } = require('../jhipster/application-types');
 const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../jhipster/database-types');
 const { Options } = require('../jhipster/binary-options');
@@ -100,7 +107,7 @@ function checkForUnknownApplicationOption(option) {
 }
 
 function checkForBooleanValue(option) {
-  if (getTypeForOption(option.name) === 'boolean' && typeof option.getValue() !== 'boolean') {
+  if (getTypeForOption(option.name) === OptionTypes.BOOLEAN && typeof option.getValue() !== 'boolean') {
     throw new Error(`Expected a boolean value for option '${option.name}'`);
   }
 }

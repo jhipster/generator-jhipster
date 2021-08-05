@@ -35,6 +35,10 @@ const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { isReservedTableName } = require('../jhipster/reserved-keywords');
 const { isReservedPaginationWords } = require('../jhipster/reserved-keywords');
 
+const USER = 'user';
+const AUTHORITY = 'authority';
+const builtInEntities = new Set([USER, AUTHORITY]);
+
 module.exports = {
   createValidator,
 };
@@ -107,7 +111,7 @@ function createValidator(jdlObject, logger = console, options = {}) {
   function checkForFieldErrors(entityName, jdlFields, jdlApplication) {
     const validator = new FieldValidator();
     const filtering =
-      jdlApplication.getConfigurationOptionValue('databaseType') === 'sql' &&
+      jdlApplication.getConfigurationOptionValue('databaseType') === DatabaseTypes.SQL &&
       jdlApplication.getConfigurationOptionValue('reactive') === false;
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
@@ -230,7 +234,7 @@ function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserM
 }
 
 function isUserManagementEntity(entityName) {
-  return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
+  return builtInEntities.has(entityName.toLowerCase());
 }
 
 function isTableNameReserved(tableName, jdlApplication = []) {

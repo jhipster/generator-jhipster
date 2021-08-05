@@ -35,6 +35,10 @@ const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { isReservedTableName } = require('../jhipster/reserved-keywords');
 const { isReservedPaginationWords } = require('../jhipster/reserved-keywords');
 
+const USER = 'user';
+const AUTHORITY = 'authority';
+const builtInEntities = new Set([USER, AUTHORITY]);
+
 module.exports = {
   createValidator,
 };
@@ -93,7 +97,7 @@ function createValidator(jdlObject, applicationSettings = {}, logger = console, 
 
   function checkForFieldErrors(entityName, jdlFields) {
     const validator = new FieldValidator();
-    const filtering = applicationSettings.databaseType === 'sql';
+    const filtering = applicationSettings.databaseType === DatabaseTypes.SQL;
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
@@ -202,7 +206,7 @@ function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserM
   }
 }
 function isUserManagementEntity(entityName) {
-  return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
+  return builtInEntities.has(entityName.toLowerCase());
 }
 function checkForPaginationInAppWithCassandra(jdlOption, applicationSettings) {
   if (applicationSettings.databaseType === DatabaseTypes.CASSANDRA && jdlOption.name === BinaryOptions.Options.PAGINATION) {
