@@ -28,7 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
-const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 
 let useBlueprints;
@@ -58,23 +58,26 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     // Not using normal blueprints or this is a normal blueprint.
     if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
       this.setFeatures({
-        customInstallTask: function customInstallTask(preferredPm, defaultInstallTask) {
-          if ((preferredPm && preferredPm !== 'npm') || this.skipClient || this.jhipsterConfig.skipClient) {
+        customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
+          const buildTool = this.jhipsterConfig.buildTool;
+          if (
+            (preferredPm && preferredPm !== 'npm') ||
+            this.skipClient ||
+            this.jhipsterConfig.skipClient ||
+            (buildTool !== GRADLE && buildTool !== MAVEN)
+          ) {
             return defaultInstallTask();
           }
-          const gradle = this.jhipsterConfig.buildTool === GRADLE;
+          const gradle = buildTool === GRADLE;
           const command = gradle ? './gradlew' : './npmw';
           const args = gradle ? ['npmInstall'] : ['install'];
 
-          const failureCallback = error => {
+          try {
+            await this.spawnCommand(command, args, { preferLocal: true });
+          } catch (error) {
             this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
-            return true;
-          };
-
-          return this.spawnCommand(command, args, { preferLocal: true }).then(
-            () => true,
-            error => failureCallback(error)
-          );
+          }
+          return true;
         }.bind(this),
       });
     }
