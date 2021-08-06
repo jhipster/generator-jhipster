@@ -163,11 +163,6 @@ module.exports = class extends BaseDockerGenerator {
     return this._configuring();
   }
 
-  _loadDerivedOpenshiftConfig(dest = this) {
-    dest.storageTypeEphemeral = dest.storageType === EPHEMERAL;
-    dest.storageTypePersistent = dest.storageType === PERSISTENT;
-  }
-
   _loading() {
     return {
       loadSharedConfig() {
@@ -269,5 +264,10 @@ module.exports = class extends BaseDockerGenerator {
   end() {
     if (useBlueprints) return;
     return this._end();
+  }
+
+  _loadDerivedOpenshiftConfig(dest = this) {
+    dest.storageTypeEphemeral = dest.storageType === EPHEMERAL;
+    dest.storageTypePersistent = dest.storageType === PERSISTENT;
   }
 };
