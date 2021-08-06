@@ -25,14 +25,16 @@ const {
   JAVA_VERSION,
   JAVA_APP_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
+  PACKAGE_NAME,
+  PACKAGE_NAME_DEFAULT_VALUE,
+  PRETTIER_JAVA_INDENT,
+  PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
   BUILD_TOOL,
   BUILD_TOOL_DEFAULT_VALUE,
   BUILD_TOOL_MAVEN,
   BUILD_TOOL_GRADLE,
   BUILD_TOOL_PROMPT_CHOICES,
   BUILD_DESTINATION,
-  PACKAGE_NAME,
-  PRETTIER_JAVA_INDENT,
 } = require('./constants.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
@@ -45,6 +47,8 @@ module.exports.mixin = parent =>
      * Load java options constants.
      */
     loadJavaOptionsConstants(into = this) {
+      into.PACKAGE_NAME_DEFAULT_VALUE = PACKAGE_NAME_DEFAULT_VALUE;
+      into.PRETTIER_JAVA_INDENT_DEFAULT_VALUE = PRETTIER_JAVA_INDENT_DEFAULT_VALUE;
       into.BUILD_TOOL_DEFAULT_VALUE = BUILD_TOOL_DEFAULT_VALUE;
       into.BUILD_TOOL_PROMPT_CHOICES = BUILD_TOOL_PROMPT_CHOICES;
     }
@@ -73,13 +77,13 @@ module.exports.mixin = parent =>
     loadJavaConfig(config = this.jhipsterConfig, into = this) {
       config = defaults({}, config, defaultConfig);
       into[PACKAGE_NAME] = config[PACKAGE_NAME];
-      into[BUILD_TOOL] = config[BUILD_TOOL];
       into[PRETTIER_JAVA_INDENT] = config[PRETTIER_JAVA_INDENT];
+      into[BUILD_TOOL] = config[BUILD_TOOL];
       into[BUILD_DESTINATION] = config[BUILD_DESTINATION];
     }
 
     /**
-     * Load derived java configs into fromInto.
+     * Prepare derived java properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
     prepareDerivedJavaProperties(fromInto = this) {
@@ -92,7 +96,7 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived java configs into 'into'.
+     * Load java constants into 'into'.
      * @param {Object} into - destination context
      */
     loadJavaConstants(into = this) {
@@ -102,7 +106,7 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Compose with selected java.
+     * Compose with selected java configuration.
      */
     async composeWithJavaDependencies(config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);

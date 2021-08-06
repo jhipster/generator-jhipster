@@ -20,7 +20,7 @@ const expect = require('expect');
 const path = require('path');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
-const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('./config.cjs');
+const { defaultConfig, requiredConfig, reproducibleConfigForTests } = require('./config.cjs');
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
@@ -39,5 +39,5 @@ describe(`JHipster ${generator} generator`, () => {
     },
     generatorPath,
   });
-  describe('blueprint support', () => testBlueprintSupport('project-name'));
+  describe('blueprint support', () => testBlueprintSupport(generator));
 });

@@ -61,7 +61,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -81,10 +81,10 @@ module.exports = class extends MixedChain {
 
   get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       configure() {
         this.configureSpringBoot();
@@ -94,24 +94,24 @@ module.exports = class extends MixedChain {
 
   get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _composing() {
+  get composing() {
     return {
       async compose() {
-        // eslint-disable-next-line no-useless-return
         if (!this.shouldComposeModular()) return;
+        await this.composeWithSpringBootConfig();
       },
     };
   }
 
   get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._composing();
+    return this.composing;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
@@ -127,7 +127,7 @@ module.exports = class extends MixedChain {
 
   get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.loading;
   }
 
   get preparing() {
@@ -143,7 +143,7 @@ module.exports = class extends MixedChain {
     return this.preparing;
   }
 
-  _writing() {
+  get writing() {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
@@ -154,6 +154,6 @@ module.exports = class extends MixedChain {
 
   get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 };

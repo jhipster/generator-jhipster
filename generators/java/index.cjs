@@ -22,6 +22,7 @@ const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const {
   INITIALIZING_PRIORITY,
   PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
   COMPOSING_PRIORITY,
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
@@ -29,7 +30,7 @@ const {
 } = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_JAVA } = require('../generator-list');
-const { PACKAGE_NAME, BUILD_TOOL, PRETTIER_JAVA_INDENT } = require('./constants.cjs');
+const { PACKAGE_NAME, PRETTIER_JAVA_INDENT, BUILD_TOOL } = require('./constants.cjs');
 const { files } = require('./files.cjs');
 const { defaultConfig } = require('./config.cjs');
 const { dependencyChain } = require('./mixin.cjs');
@@ -63,7 +64,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -83,10 +84,10 @@ module.exports = class extends MixedChain {
 
   get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       async showPrompts() {
         if (this.shouldSkipPrompts()) return;
@@ -100,17 +101,17 @@ module.exports = class extends MixedChain {
               default: () => this.getDefaultPackageName(),
             },
             {
+              name: PRETTIER_JAVA_INDENT,
+              type: 'input',
+              message: 'What is the Java indentation?',
+              default: () => this.PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
+            },
+            {
               name: BUILD_TOOL,
               type: 'list',
               choices: () => this.BUILD_TOOL_PROMPT_CHOICES,
               message: 'What tool do you want to use to build backend?',
               default: () => this.BUILD_TOOL_DEFAULT_VALUE,
-            },
-            {
-              name: PRETTIER_JAVA_INDENT,
-              type: 'input',
-              message: 'What is the Java indentation?',
-              default: defaultConfig[PRETTIER_JAVA_INDENT],
             },
           ],
           this.config
@@ -121,10 +122,10 @@ module.exports = class extends MixedChain {
 
   get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       configure() {
         this.configureJava();
@@ -132,12 +133,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _composing() {
+  get composing() {
     return {
       async compose() {
         if (!this.shouldComposeModular()) return;
@@ -148,10 +149,10 @@ module.exports = class extends MixedChain {
 
   get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._composing();
+    return this.composing;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
@@ -167,7 +168,7 @@ module.exports = class extends MixedChain {
 
   get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.loading;
   }
 
   get preparing() {
@@ -183,7 +184,7 @@ module.exports = class extends MixedChain {
     return this.preparing;
   }
 
-  _writing() {
+  get writing() {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
@@ -194,7 +195,7 @@ module.exports = class extends MixedChain {
 
   get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 
   /*

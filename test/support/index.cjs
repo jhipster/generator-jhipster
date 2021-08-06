@@ -155,10 +155,9 @@ const testBlueprintSupport = generatorName => {
           throw new Error(`${priority} should not be called`);
         };
       }
-      generator[`_${priority}`] = callback;
       Object.defineProperty(generator, priority, {
         get() {
-          generator[`_${priority}`]();
+          callback();
           return {};
         },
         enumerable: true,
@@ -193,7 +192,7 @@ const testBlueprintSupport = generatorName => {
       const context = helpers
         .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
-        .withOptions({ blueprint: 'foo-sbs', skipChecks: true })
+        .withOptions({ blueprint: 'foo-sbs', skipChecks: true, configure: true })
         .on('ready', generator => {
           spy = addSpies(generator);
         });

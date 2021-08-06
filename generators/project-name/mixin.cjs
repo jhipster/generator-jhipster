@@ -66,17 +66,16 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived project-name configs into fromInto.
+     * Prepare derived project-name properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    // eslint-disable-next-line no-empty-pattern
     prepareDerivedProjectNameProperties(fromInto = this) {
       fromInto.dasherizedBaseName = kebabCase(fromInto[BASE_NAME]);
       fromInto.humanizedBaseName = startCase(fromInto[BASE_NAME]);
     }
 
     /**
-     * Load derived project-name configs into 'into'.
+     * Load project-name constants into 'into'.
      * @param {Object} into - destination context
      */
     loadProjectNameConstants(into = this) {}
