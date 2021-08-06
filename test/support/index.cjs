@@ -146,12 +146,26 @@ const testBlueprintSupport = generatorName => {
     const prioritiesSpy = sinon.spy();
     let prioritiesCount = 0;
     PRIORITIES.forEach(priority => {
+      let callback;
       if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${PRIORITY_PREFIX}${priority}`)) {
         prioritiesCount++;
+        callback = prioritiesSpy;
+      } else {
+        callback = () => {
+          throw new Error(`${priority} should not be called`);
+        };
       }
-      generator[`_${priority}`] = prioritiesSpy;
+      generator[`_${priority}`] = callback;
+      Object.defineProperty(generator, priority, {
+        get() {
+          generator[`_${priority}`]();
+          return {};
+        },
+        enumerable: true,
+        configurable: true,
+      });
     });
-    return [prioritiesSpy, prioritiesCount];
+    return { prioritiesSpy, prioritiesCount };
   };
   describe('with blueprint', () => {
     let result;
@@ -169,7 +183,7 @@ const testBlueprintSupport = generatorName => {
       expect(result.mockedGenerators[`jhipster-foo:${generatorName}`].callCount).toBe(1);
     });
     it('should not call any priority', () => {
-      expect(spy[0].callCount).toBe(0);
+      expect(spy.prioritiesSpy.callCount).toBe(0);
     });
   });
   describe('with sbs blueprint', () => {
@@ -199,7 +213,7 @@ const testBlueprintSupport = generatorName => {
       expect(result.mockedGenerators[`jhipster-foo-sbs:${generatorName}`].callCount).toBe(1);
     });
     it('should call every priority', () => {
-      expect(spy[0].callCount).toBe(spy[1]);
+      expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
     });
   });
 };

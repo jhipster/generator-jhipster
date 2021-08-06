@@ -82,7 +82,7 @@ module.exports.mixin = parent =>
      * Load derived java configs into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    loadDerivedJavaConfig(fromInto = this) {
+    prepareDerivedJavaProperties(fromInto = this) {
       fromInto.javaMainClass = fromInto.getMainClassName(fromInto.baseName);
       fromInto.packageFolder = fromInto[PACKAGE_NAME].replace(/\./g, '/');
 

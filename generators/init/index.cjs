@@ -19,18 +19,17 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const simpleGit = require('simple-git');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const {
-  generateMixedChain,
-  Priorities: {
-    INITIALIZING_PRIORITY,
-    PROMPTING_PRIORITY,
-    LOADING_PRIORITY,
-    WRITING_PRIORITY,
-    POST_WRITING_PRIORITY,
-    INSTALL_PRIORITY,
-    END_PRIORITY,
-  },
-} = require('generator-jhipster/support');
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+  INSTALL_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
 const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
@@ -139,9 +138,6 @@ module.exports = class extends MixedChain {
       loadConfig() {
         this.loadChainConfig();
       },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
-      },
       loadDependabotDependencies() {
         this.loadDependabotDependencies(this.fetchFromInstalledJHipster(GENERATOR_INIT, 'templates', 'package.json'));
       },
@@ -151,6 +147,19 @@ module.exports = class extends MixedChain {
   get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._loading();
+  }
+
+  get preparing() {
+    return {
+      prepareDerivedProperties() {
+        this.prepareDerivedChainProperties();
+      },
+    };
+  }
+
+  get [PREPARING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.preparing;
   }
 
   _writing() {

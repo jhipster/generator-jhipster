@@ -65,7 +65,7 @@ module.exports.mixin = parent =>
      * @param {any} fromInto - source/destination context
      */
     // eslint-disable-next-line no-empty-pattern
-    loadDerivedInitConfig(fromInto = this) {}
+    prepareDerivedInitProperties(fromInto = this) {}
 
     /**
      * Load derived init configs into 'into'.

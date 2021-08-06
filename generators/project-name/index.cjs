@@ -18,10 +18,14 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const {
-  generateMixedChain,
-  Priorities: { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY },
-} = require('generator-jhipster/support');
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+} = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config.cjs');
@@ -135,15 +139,25 @@ module.exports = class extends MixedChain {
       loadConfig() {
         this.loadChainConfig();
       },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
-      },
     };
   }
 
   get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this._loading();
+  }
+
+  get preparing() {
+    return {
+      prepareDerivedProperties() {
+        this.prepareDerivedChainProperties();
+      },
+    };
+  }
+
+  get [PREPARING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.preparing;
   }
 
   /*

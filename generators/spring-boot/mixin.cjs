@@ -57,7 +57,7 @@ module.exports.mixin = parent =>
      * Load derived spring-boot configs into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    loadDerivedSpringBootConfig(fromInto = this) {}
+    prepareDerivedSpringBootProperties(fromInto = this) {}
 
     /**
      * Load derived spring-boot configs into 'into'.
