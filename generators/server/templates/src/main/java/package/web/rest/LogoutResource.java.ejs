@@ -27,11 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 <%_ if (!reactive) { _%>
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 <%_ } else { _%>
 import org.springframework.web.server.WebSession;
 import reactor.core.publisher.Mono;
 <%_ } _%>
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -61,26 +61,44 @@ public class LogoutResource {
 <%_ if (!reactive) { _%>
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
-        String logoutUrl = this.registration.getProviderDetails()
-            .getConfigurationMetadata().get("end_session_endpoint").toString();
+        String logoutUrl;
+        String issuerUri = this.registration.getProviderDetails().getIssuerUri();
+        if (issuerUri.contains("auth0.com")) {
+            logoutUrl = issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
+        } else {
+            logoutUrl = this.registration.getProviderDetails()
+                .getConfigurationMetadata()
+                .get("end_session_endpoint")
+                .toString();
+        }
 
         Map<String, String> logoutDetails = new HashMap<>();
         logoutDetails.put("logoutUrl", logoutUrl);
         logoutDetails.put("idToken", idToken.getTokenValue());
+        logoutDetails.put("clientId", this.registration.getClientId());
         request.getSession().invalidate();
         return ResponseEntity.ok().body(logoutDetails);
     }
 <%_ } else { _%>
     public Mono<Map<String, String>> logout(@AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken, WebSession session) {
         return session.invalidate().then(
-            this.registration.map(oidc -> oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString())
-                .map(logoutUrl -> {
-                    Map<String, String> logoutDetails = new HashMap<>();
-                    logoutDetails.put("logoutUrl", logoutUrl);
-                    logoutDetails.put("idToken", idToken.getTokenValue());
-                    return logoutDetails;
-                })
+            this.registration
+                .map(oidc -> Map.of(
+                    "clientId", oidc.getClientId(),
+                    "logoutUrl", prepareLogoutUri(oidc.getProviderDetails()),
+                    "idToken", idToken.getTokenValue())
+                )
         );
     }
+
+    private String prepareLogoutUri(ClientRegistration.ProviderDetails providerDetails) {
+        if (providerDetails.getIssuerUri().contains("auth0.com")) {
+            String issuerUri = providerDetails.getIssuerUri();
+            return issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
+        } else {
+            return providerDetails.getConfigurationMetadata().get("end_session_endpoint").toString();
+        }
+    }
+
 <%_ } _%>
 }

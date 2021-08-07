@@ -138,6 +138,64 @@ Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e 
 Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
 After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".
+
+### Auth0
+
+If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the below configuration steps:
+
+- Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
+- Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
+    - Allowed Callback URLs: `http://localhost:8080/login/oauth2/code/oidc`
+    - Allowed Logout URLs: `http://localhost:8080/`
+- Navigate to **User Management** > **Roles** and create new roles named `ROLE_ADMIN`, and `ROLE_USER`.
+- Navigate to **User Management** > **Users** and create a new user account. Click on the **Role** tab to assign roles to the newly created user account.
+- Navigate to **Auth Pipeline** > **Rules** and create a new Rule. Choose `Empty rule` template. Provide a meaningful name like `JHipster claims` and replace `Script` content with the following and Save.
+```javascript
+function (user, context, callback) {
+  user.preferred_username = user.email;
+  const roles = (context.authorization || {}).roles;
+
+  function prepareCustomClaimKey(claim) {
+    return `https://www.jhipster.tech/${claim}`;
+  }
+
+  const rolesClaim = prepareCustomClaimKey('roles');
+
+  if (context.idToken) {
+  	context.idToken[rolesClaim] = roles;
+  }
+
+  if (context.accessToken) {
+  	context.accessToken[rolesClaim] = roles;
+  }
+
+  callback(null, user, context);
+}
+```
+- In your `JHipster` application, modify `src/main/resources/config/application.yml` to use your Auth0 application settings:
+```yaml
+spring:
+  ...
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: https://{your-auth0-domain}/
+        registration:
+          oidc:
+            client-id: {clientId}
+            client-secret: {clientSecret}
+jhipster:
+  ...
+  security:
+    oauth2:
+      audience:
+        - https://{your-auth0-domain}/api/v2/
+```
+- Before running Cypress tests, specify Auth0 user credentials by overriding the `E2E_USERNAME` and `E2E_PASSWORD` environment variables. See Cypress' documentation for setting OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting) to learn more.
+
+**Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the Cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
 <%_ } _%>
 
 <%_ if (enableSwaggerCodegen) { _%>
