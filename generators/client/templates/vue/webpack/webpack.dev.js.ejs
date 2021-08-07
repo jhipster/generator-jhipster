@@ -1,4 +1,5 @@
 'use strict';
+const path = require('path');
 const utils = require('./vue.utils');
 const webpack = require('webpack');
 const config = require('../config');
@@ -7,7 +8,6 @@ const path = require('path');
 const baseWebpackConfig = require('./webpack.common');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
-const jhiUtils = require('./utils.js');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
@@ -24,7 +24,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
     main: './<%= MAIN_SRC_DIR %>app/main'
   },
   output: {
-    path: jhiUtils.root('<%= DIST_DIR %>'),
+    path: path.resolve('<%= DIST_DIR %>'),
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },

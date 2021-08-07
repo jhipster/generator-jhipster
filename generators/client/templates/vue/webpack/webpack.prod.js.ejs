@@ -1,4 +1,5 @@
 'use strict';
+const path = require('path');
 const utils = require('./vue.utils');
 const webpack = require('webpack');
 const config = require('../config');
@@ -9,7 +10,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const jhiUtils = require('./utils.js');
 
 const env = require('../config/prod.env');
 
@@ -28,7 +28,7 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
     main: './<%= MAIN_SRC_DIR %>app/main'
   },
   output: {
-    path: jhiUtils.root('<%= DIST_DIR %>'),
+    path: path.resolve('<%= DIST_DIR %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[id].[hash].chunk.js'
   },
