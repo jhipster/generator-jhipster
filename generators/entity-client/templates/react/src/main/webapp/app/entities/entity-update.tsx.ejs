@@ -191,6 +191,7 @@ _%>
   if (field.fieldIsEnum) {
     const enumValues = field.enumValues;_%>
 <%= fieldName %>: '<%= enumValues[0].name %>',
+  <%_ } _%>
 <%_ } _%>
           ...<%= entityInstance %>Entity,
 <%_ for (field of fields.filter(field => !field.id)) {
