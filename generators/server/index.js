@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { stat } = require('fs').promises;
 const _ = require('lodash');
 const os = require('os');
 const prompts = require('./prompts');
@@ -69,25 +68,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           ) {
             return defaultInstallTask();
           }
-          const newInstall = await stat(this.destinationPath('package-lock.json'))
-            .then(
-              () => false,
-              () => stat(this.destinationPath('node_modules'))
-            )
-            .then(
-              () => false,
-              () => true
-            );
           const gradle = buildTool === GRADLE;
           const command = gradle ? './gradlew' : './npmw';
-          let args;
-          if (gradle) {
-            args = ['npmInstall'];
-          } else if (newInstall) {
-            args = ['dedupe'];
-          } else {
-            args = ['install'];
-          }
+          const args = gradle ? ['npmInstall'] : ['install'];
 
           try {
             await this.spawnCommand(command, args, { preferLocal: true });
