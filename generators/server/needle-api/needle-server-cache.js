@@ -19,6 +19,7 @@
 const chalk = require('chalk');
 const needleServer = require('./needle-server');
 const constants = require('../../generator-constants');
+const { CAFFEINE, EHCACHE, REDIS } = require('../../../jdl/jhipster/cache-types');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
@@ -42,12 +43,12 @@ module.exports = class extends needleServer {
     const errorMessage = chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.`);
     const cachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
 
-    if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') {
+    if (cacheProvider === EHCACHE || cacheProvider === CAFFEINE) {
       const needle = `jhipster-needle-${cacheProvider}-add-entry`;
       const content = `createCache(cm, ${entry});`;
 
       this._doAddBlockContentToFile(cachePath, needle, content, errorMessage);
-    } else if (cacheProvider === 'redis') {
+    } else if (cacheProvider === REDIS) {
       const needle = 'jhipster-needle-redis-add-entry';
       const content = `createCache(cm, ${entry}, jcacheConfiguration);`;
 

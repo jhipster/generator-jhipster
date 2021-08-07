@@ -20,6 +20,9 @@ const dockerPrompts = require('../docker-prompts');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
+
+const { EPHEMERAL, PERSISTENT } = StorageTypes;
 
 const NO_DATABASE = databaseTypes.NO;
 
@@ -69,15 +72,15 @@ async function askForStorageType() {
       message: 'Which *type* of database storage would you like to use?',
       choices: [
         {
-          value: 'persistent',
+          value: PERSISTENT,
           name: 'Persistent Storage',
         },
         {
-          value: 'ephemeral',
+          value: EPHEMERAL,
           name: 'Ephemeral Storage',
         },
       ],
-      default: 'ephemeral',
+      default: EPHEMERAL,
     },
   ];
 

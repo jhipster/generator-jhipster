@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.36",
-    "@fortawesome/free-solid-svg-icons": "5.15.3",
+    "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/vue-fontawesome": "2.0.2",
     "axios": "0.21.1",
     "bootstrap": "4.6.0",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.24",
-    "@types/node": "16.4.10",
+    "@types/node": "16.4.13",
     "@types/sinon": "10.0.2",
     "@types/vuelidate": "0.7.15",
     "@typescript-eslint/eslint-plugin": "4.29.0",
@@ -74,7 +74,7 @@
     "webpack-cli": "4.7.2",
     "webpack-dev-server": "3.11.2",
     "webpack-merge": "5.8.0",
-    "workbox-webpack-plugin": "6.1.5",
+    "workbox-webpack-plugin": "6.2.0",
     "vue-jest": "3.0.7",
     "vue-template-compiler": "2.6.12",
     "vue-loader": "15.9.8"

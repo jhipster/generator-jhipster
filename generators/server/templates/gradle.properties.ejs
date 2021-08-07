@@ -32,16 +32,16 @@ archunitJunit5Version=0.19.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
-<%_ if (cacheProvider === 'caffeine') { _%>
+<%_ if (cacheProviderCaffeine) { _%>
 caffeineVersion=3.0.2
 typesafeConfigVersion=1.4.1
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 liquibaseHibernate5Version=4.4.2
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=1.9.4
 <%_ } _%>
 
@@ -50,10 +50,10 @@ blockhoundJunitPlatformVersion=1.0.6.RELEASE
 junitPlatformLauncherVersion=1.7.2
 <%_ } _%>
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 jaxbRuntimeVersion=2.3.3
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
 cassandraDriverVersion=4.11.2
@@ -65,7 +65,7 @@ gitPropertiesPluginVersion=2.3.1
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=3.1.0
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 liquibasePluginVersion=2.0.4
 <%_ } _%>
 sonarqubePluginVersion=3.3

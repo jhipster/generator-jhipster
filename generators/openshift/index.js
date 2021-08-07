@@ -24,6 +24,9 @@ const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
+const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
+const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
@@ -32,6 +35,8 @@ const { setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 const NO_DATABASE = databaseTypes.NO;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+const { EPHEMERAL, PERSISTENT } = StorageTypes;
 
 let useBlueprints;
 
@@ -167,6 +172,7 @@ module.exports = class extends BaseDockerGenerator {
           this.loadDerivedAppConfig(element);
         });
         this.loadDeploymentConfig(this);
+        this._loadDerivedOpenshiftConfig(this);
       },
     };
   }
@@ -217,7 +223,7 @@ module.exports = class extends BaseDockerGenerator {
         if (this.monitoring === PROMETHEUS) {
           this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
         }
-        if (this.useKafka === true) {
+        if (this.useKafka) {
           this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
         }
         for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
@@ -226,9 +232,9 @@ module.exports = class extends BaseDockerGenerator {
           if (app.searchEngine === ELASTICSEARCH) {
             this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`);
           }
-          if (app.serviceDiscoveryType !== false && regIndex++ === 0) {
+          if (app.serviceDiscoveryType !== NO_SERVICE_DISCOVERY && regIndex++ === 0) {
             this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`);
-            if (app.serviceDiscoveryType === 'eureka') {
+            if (app.serviceDiscoveryType === EUREKA) {
               this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`);
             } else {
               this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
@@ -258,5 +264,10 @@ module.exports = class extends BaseDockerGenerator {
   end() {
     if (useBlueprints) return;
     return this._end();
+  }
+
+  _loadDerivedOpenshiftConfig(dest = this) {
+    dest.storageTypeEphemeral = dest.storageType === EPHEMERAL;
+    dest.storageTypePersistent = dest.storageType === PERSISTENT;
   }
 };

@@ -21,15 +21,21 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const os = require('os');
 const prompts = require('./prompts');
+const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { CASSANDRA, COUCHBASE, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../../jdl/jhipster/database-types');
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
-const { getBase64Secret, getRandomHex } = require('../utils');
 const { defaultConfig } = require('../generator-defaults');
-const { GRADLE } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+
+const NO_DATABASE = databaseTypes.NO;
 
 let useBlueprints;
 
@@ -53,7 +59,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_SERVER);
 
     // Not using normal blueprints or this is a normal blueprint.
     if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
@@ -218,9 +224,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
         }
       },
-      validateConfig() {
-        this._validateServerConfiguration();
-      },
     };
   }
 
@@ -233,13 +236,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   _composing() {
     return {
       composeCommon() {
-        this.composeWithJHipster('common', true);
+        this.composeWithJHipster(GENERATOR_COMMON, true);
       },
 
       composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
-        this.composeWithJHipster('languages', true);
+        this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
     };
   }
@@ -258,7 +261,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
@@ -281,30 +283,28 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.lowercaseBaseName = this.baseName.toLowerCase();
         this.humanizedBaseName = _.startCase(this.baseName);
         this.mainClass = this.getMainClassName();
-        this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
-          this.cacheProvider
-        );
-        this.testsNeedCsrf = ['oauth2', 'session'].includes(this.authenticationType);
+        this.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(this.cacheProvider);
+        this.testsNeedCsrf = [OAUTH2, SESSION].includes(this.authenticationType);
 
         this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
-        if (this.jhipsterConfig.databaseType === 'sql') {
+        if (this.jhipsterConfig.databaseType === SQL) {
           // sql
           let dbContainer;
           switch (this.jhipsterConfig.prodDatabaseType) {
-            case 'mysql':
+            case MYSQL:
               dbContainer = this.DOCKER_MYSQL;
               break;
-            case 'mariadb':
+            case MARIADB:
               dbContainer = this.DOCKER_MARIADB;
               break;
-            case 'postgresql':
+            case POSTGRESQL:
               dbContainer = this.DOCKER_POSTGRESQL;
               break;
-            case 'mssql':
+            case MSSQL:
               dbContainer = this.DOCKER_MSSQL;
               break;
-            case 'oracle':
+            case ORACLE:
             default:
               dbContainer = null;
           }
@@ -335,7 +335,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       },
 
       insight() {
-        statistics.sendSubGenEvent('generator', 'server', {
+        statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
           app: {
             authenticationType: this.authenticationType,
             cacheProvider: this.cacheProvider,
@@ -384,9 +384,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const databaseType = this.jhipsterConfig.databaseType;
         const dockerAwaitScripts = [];
-        if (databaseType === 'sql') {
+        if (databaseType === SQL) {
           const prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
-          if (prodDatabaseType === 'no' || prodDatabaseType === 'oracle') {
+          if (prodDatabaseType === NO_DATABASE || prodDatabaseType === ORACLE) {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${prodDatabaseType} not configured for application ${this.baseName}"`);
           } else {
             scriptsStorage.set({
@@ -396,12 +396,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         } else {
           const dockerFile = `src/main/docker/${databaseType}.yml`;
-          if (databaseType === 'cassandra') {
+          if (databaseType === CASSANDRA) {
             scriptsStorage.set({
               'docker:db:await': 'wait-on tcp:9042 && sleep 20',
             });
           }
-          if (databaseType === 'couchbase' || databaseType === 'cassandra') {
+          if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
             scriptsStorage.set({
               'docker:db:build': `docker-compose -f ${dockerFile} build`,
               'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
@@ -466,7 +466,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         const buildTool = this.jhipsterConfig.buildTool;
         let e2ePackage = 'target/e2e';
-        if (buildTool === 'maven') {
+        if (buildTool === MAVEN) {
           scriptsStorage.set({
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
@@ -479,7 +479,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:build-cache': './mvnw dependency:go-offline',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
-        } else if (buildTool === 'gradle') {
+        } else if (buildTool === GRADLE) {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
           e2ePackage = 'e2e';
           scriptsStorage.set({
@@ -513,7 +513,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       },
       packageJsonE2eScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = this.jhipsterConfig.buildTool === 'gradle' ? 'gradlew' : 'mvnw';
+        const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
           scriptsStorage.set({
             'ci:server:await':
@@ -539,7 +539,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
         let executable = 'mvnw';
-        if (this.buildTool === 'gradle') {
+        if (this.buildTool === GRADLE) {
           executable = 'gradlew';
         }
         let logMsgComment = '';
@@ -554,73 +554,5 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   get end() {
     if (useBlueprints) return;
     return this._end();
-  }
-
-  _validateServerConfiguration(config = this.jhipsterConfig) {
-    if (!config.packageFolder) {
-      config.packageFolder = config.packageName.replace(/\./g, '/');
-    }
-
-    // JWT authentication is mandatory with Eureka, so the JHipster Registry
-    // can control the applications
-    if (config.serviceDiscoveryType === 'eureka' && config.authenticationType !== 'oauth2') {
-      config.authenticationType = 'jwt';
-    }
-
-    // Generate JWT secret key if key does not already exist in config
-    if ((config.authenticationType === 'jwt' || config.applicationType === 'microservice') && config.jwtSecretKey === undefined) {
-      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
-    }
-    // Generate remember me key if key does not already exist in config
-    if (config.authenticationType === 'session' && !config.rememberMeKey) {
-      config.rememberMeKey = getRandomHex();
-    }
-
-    if (config.authenticationType === 'oauth2') {
-      config.skipUserManagement = true;
-    }
-
-    if (config.enableHibernateCache && ['no', 'memcached'].includes(config.cacheProvider)) {
-      this.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
-      config.enableHibernateCache = false;
-    }
-
-    // Convert to false for templates.
-    if (config.serviceDiscoveryType === 'no' || !config.serviceDiscoveryType) {
-      config.serviceDiscoveryType = false;
-    }
-    if (config.websocket === 'no' || !config.websocket) {
-      config.websocket = false;
-    }
-    if (config.searchEngine === 'no' || !config.searchEngine) {
-      config.searchEngine = false;
-    }
-    if (config.messageBroker === 'no' || !config.messageBroker) {
-      config.messageBroker = false;
-    }
-
-    if (!config.databaseType && config.prodDatabaseType) {
-      config.databaseType = this.getDBTypeFromDBValue(config.prodDatabaseType);
-    }
-    if (!config.devDatabaseType && config.prodDatabaseType) {
-      config.devDatabaseType = config.prodDatabaseType;
-    }
-
-    // force variables unused by microservice applications
-    if (config.applicationType === 'microservice') {
-      config.websocket = false;
-    }
-
-    const databaseType = config.databaseType;
-    if (databaseType === 'no') {
-      config.devDatabaseType = 'no';
-      config.prodDatabaseType = 'no';
-      config.enableHibernateCache = false;
-      config.skipUserManagement = true;
-    } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(databaseType)) {
-      config.devDatabaseType = databaseType;
-      config.prodDatabaseType = databaseType;
-      config.enableHibernateCache = false;
-    }
   }
 };

@@ -18,9 +18,9 @@
 -%>
 dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory) { _%>
     implementation "com.h2database:h2"
-    <%_ } _%>
+<%_ } _%>
 }
 
 def profiles = "dev"
@@ -41,7 +41,7 @@ springBoot {
 
 bootRun {
     args = []
-<%_ if (cacheProvider === 'infinispan') { _%>
+<%_ if (cacheProviderInfinispan) { _%>
     jvmArgs = ["-Djgroups.tcp.address=NON_LOOPBACK", "-Djava.net.preferIPv4Stack=true"]
 <%_ } _%>
 }
@@ -55,7 +55,7 @@ task webapp(type: NpmTask) {
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ if (clientFramework === ANGULAR) { _%>
+  <%_ if (clientFrameworkAngular) { _%>
     inputs.files("angular.json")
         .withPropertyName('angular.json')
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -65,11 +65,11 @@ task webapp(type: NpmTask) {
     inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
         .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
+  <%_ } _%>
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
         .withPropertyName("webapp-source-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ if (clientFramework !== ANGULAR) { _%>
+  <%_ if (!clientFrameworkAngular) { _%>
     inputs.files("tsconfig.json")
         .withPropertyName("tsconfig")
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -79,12 +79,12 @@ task webapp(type: NpmTask) {
     inputs.files(webpackDevFiles)
         .withPropertyName("webpack-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
-    <%_ if (clientFramework === VUE) { _%>
+  <%_ } _%>
+  <%_ if (clientFrameworkVue) { _%>
     inputs.files(".postcssrc")
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
+  <%_ } _%>
     outputs.dir("<%= CLIENT_DIST_DIR %>")
         .withPropertyName("webapp-build-dir")
 
@@ -102,19 +102,19 @@ processResources {
         filter {
             it.replace("#project.version#", version)
         }
-        <%_ if (!serviceDiscoveryType) { _%>
+<%_ if (!serviceDiscoveryType) { _%>
         filter {
             it.replace("#spring.profiles.active#", profiles)
         }
-        <%_ } _%>
+<%_ } _%>
     }
-    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     filesMatching("**/bootstrap.yml") {
         filter {
             it.replace("#spring.profiles.active#", profiles)
         }
     }
-    <%_ } _%>
+<%_ } _%>
 }
 
 <%_ if (!skipClient) { _%>
