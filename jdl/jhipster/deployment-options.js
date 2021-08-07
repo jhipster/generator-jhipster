@@ -16,6 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { IngressTypes, ServiceTypes } = require('./kubernetes-platform-types');
+const { StorageTypes } = require('./openshift-platform-types');
+const { EUREKA, CONSUL } = require('./service-discovery-types');
+const { PROMETHEUS } = require('./monitoring-types');
+const monitoringTypes = require('./monitoring-types');
+const serviceDiscoveryTypes = require('./service-discovery-types');
+
+const { EPHEMERAL, PERSISTENT } = StorageTypes;
+const { LOAD_BALANCER, NODE_PORT, INGRESS } = ServiceTypes;
+const { NGINX, GKE } = IngressTypes;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+const NO_MONITORING = monitoringTypes.NO;
+
 const DeploymentTypes = {
   DOCKERCOMPOSE: 'docker-compose',
   KUBERNETES: 'kubernetes',
@@ -26,9 +39,9 @@ const DeploymentTypes = {
 const kubernetesRelatedOptions = {
   kubernetesNamespace: 'default',
   kubernetesServiceType: {
-    loadBalancer: 'LoadBalancer',
-    nodePort: 'NodePort',
-    ingress: 'Ingress',
+    loadBalancer: LOAD_BALANCER,
+    nodePort: NODE_PORT,
+    ingress: INGRESS,
   },
   kubernetesStorageClassName: '',
   kubernetesUseDynamicStorage: {
@@ -37,8 +50,8 @@ const kubernetesRelatedOptions = {
   },
   ingressDomain: '',
   ingressType: {
-    nginx: 'nginx',
-    gke: 'gke',
+    nginx: NGINX,
+    gke: GKE,
   },
   istio: {
     false: false,
@@ -52,8 +65,8 @@ const openshiftRelatedOptions = {
     two: 2,
   },
   storageType: {
-    ephemeral: 'ephemeral',
-    persistent: 'persistent',
+    ephemeral: EPHEMERAL,
+    persistent: PERSISTENT,
   },
 };
 
@@ -68,13 +81,13 @@ const baseOptions = {
   clusteredDbApps: [],
   directoryPath: '../',
   monitoring: {
-    no: 'no',
-    prometheus: 'prometheus',
+    no: NO_MONITORING,
+    prometheus: PROMETHEUS,
   },
   serviceDiscoveryType: {
-    eureka: 'eureka',
-    consul: 'consul',
-    no: 'no',
+    eureka: EUREKA,
+    consul: CONSUL,
+    no: NO_SERVICE_DISCOVERY,
   },
 };
 

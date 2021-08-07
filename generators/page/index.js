@@ -22,6 +22,8 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const constants = require('../generator-constants');
+const { GENERATOR_PAGE } = require('../generator-list');
+const { PROTRACTOR } = require('../../jdl/jhipster/test-framework-types');
 
 const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 
@@ -60,7 +62,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     this.rootGenerator = this.env.rootGenerator() === this;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('page');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_PAGE);
   }
 
   _initializing() {
@@ -72,7 +74,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.skipClient = this.jhipsterConfig.skipClient;
         this.clientPackageManager = this.jhipsterConfig.clientPackageManager;
         this.enableTranslation = this.jhipsterConfig.enableTranslation;
-        this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes('protractor');
+        this.protractorTests = this.jhipsterConfig.testFrameworks && this.jhipsterConfig.testFrameworks.includes(PROTRACTOR);
         this.clientFramework = this.jhipsterConfig.clientFramework;
       },
     };

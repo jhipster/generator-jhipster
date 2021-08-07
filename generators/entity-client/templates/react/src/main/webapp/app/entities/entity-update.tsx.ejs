@@ -186,25 +186,25 @@ _%>
 <%_ } _%>
         }
       : {
+<%_ for (field of fields.filter(field => !field.id)) {
+    const fieldName = field.fieldName;
+  if (field.fieldIsEnum) {
+    const enumValues = field.enumValues;_%>
+<%= fieldName %>: '<%= enumValues[0].name %>',
+  <%_ } _%>
+<%_ } _%>
           ...<%= entityInstance %>Entity,
 <%_ for (field of fields.filter(field => !field.id)) {
-    const fieldType = field.fieldType;
     const fieldName = field.fieldName;
-    const fieldNameHumanized = field.fieldNameHumanized;
-
-    if (field.fieldTypeTimed) { _%>
+  if (field.fieldTypeTimed) { _%>
           <%= fieldName %>: convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>),
-  <%_ } else if (field.fieldIsEnum) {
-      const enumValues = field.enumValues;
-  _%>
-          <%= fieldName %>: '<%= enumValues[0].name %>',
   <%_ } _%>
 <%_ } _%>
 <%_ relationships.forEach(rel => {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-    if (rel.relationshipManyToOne || (rel.relationshipOneToOne && rel.ownerSide)) { _%>
+  if (rel.relationshipManyToOne || (rel.relationshipOneToOne && rel.ownerSide)) { _%>
           <%= relationshipFieldName %>Id: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.id,
   <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
           <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
