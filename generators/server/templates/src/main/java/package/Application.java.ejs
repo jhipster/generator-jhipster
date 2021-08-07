@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -42,7 +42,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @SpringBootApplication
-@EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
+@EnableConfigurationProperties({<% if (databaseTypeSql) { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);
@@ -110,7 +110,7 @@ public class <%= mainClass %> {
             contextPath,
             env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
         );
-        <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway')) { _%>
+<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {
@@ -118,6 +118,6 @@ public class <%= mainClass %> {
         }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
-        <%_ } _%>
+<%_ } _%>
     }
 }

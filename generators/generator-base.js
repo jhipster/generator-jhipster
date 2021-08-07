@@ -2714,6 +2714,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.prodDatabaseType = databaseType;
       dest.enableHibernateCache = false;
     }
+
+    dest.authenticationTypeSession = dest.authenticationType === SESSION;
+    dest.authenticationTypeJwt = dest.authenticationType === JWT;
+    dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
+
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
@@ -2757,10 +2762,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.databaseTypeMariadb = dest.databaseType === SQL && (dest.devDatabaseType === MARIADB || dest.prodDatabaseType === MARIADB);
     dest.databaseTypePostgres = dest.databaseType === SQL && (dest.devDatabaseType === POSTGRESQL || dest.prodDatabaseType === POSTGRESQL);
 
-    dest.authenticationTypeSession = dest.authenticationType === SESSION;
-    dest.authenticationTypeJwt = dest.authenticationType === JWT;
-    dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
-
     dest.communicationSpringWebsocket = dest.websocket === SPRING_WEBSOCKET;
 
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
@@ -2783,6 +2784,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDerivedPlatformConfig(dest = this) {
     dest.serviceDiscoveryConsul = dest.serviceDiscoveryType === CONSUL;
     dest.serviceDiscoveryEureka = dest.serviceDiscoveryType === EUREKA;
+    dest.serviceDiscoveryAny = dest.serviceDiscoveryConsul || dest.serviceDiscoveryEureka;
     dest.monitoringELK = dest.monitoring === ELK;
     dest.monitoringPrometheus = dest.monitoring === PROMETHEUS;
   }

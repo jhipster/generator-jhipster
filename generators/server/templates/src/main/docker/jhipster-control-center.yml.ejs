@@ -60,26 +60,26 @@ services:
       - echo "`ip route | grep default | cut -d ' ' -f3` host.docker.internal" | tee -a /etc/hosts > /dev/null && java -jar /jhipster-control-center.jar
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,api-docs,<%= discoveryProfile %><% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
+      - SPRING_PROFILES_ACTIVE=prod,api-docs,<%= discoveryProfile %><% if (authenticationTypeOauth2) { %>,oauth2<% } %>
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-      <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
       - SPRING_SECURITY_USER_PASSWORD=admin
       # The token should have the same value than the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry
       - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=<%= jwtSecretKey %>
-      <%_ } else if (authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
       # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-control-center
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-control-center
-      <%_ } _%>
-      <%_ if (discoveryProfile === 'eureka') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@host.docker.internal:8761/eureka/
-      <%_ } else if (discoveryProfile === 'consul') { _%>
+<%_ } else if (serviceDiscoveryConsul) { _%>
       - SPRING_CLOUD_CONSUL_HOST=host.docker.internal
       - SPRING_CLOUD_CONSUL_PORT=8500
-      <%_ } else { _%>
+<%_ } else { _%>
       - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_<%= baseName.toUpperCase() %>_0_URI=http://host.docker.internal:<%= serverPort %>
-      <%_ } _%>
+<%_ } _%>
       - LOGGING_FILE_NAME=/tmp/jhipster-control-center.log
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix

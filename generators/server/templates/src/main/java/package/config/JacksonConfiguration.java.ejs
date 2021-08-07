@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.config;
 
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 <%_ } _%>
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -45,7 +45,7 @@ public class JacksonConfiguration {
     public Jdk8Module jdk8TimeModule() {
         return new Jdk8Module();
     }
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 
     /*
      * Support for Hibernate types in Jackson.
