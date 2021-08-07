@@ -56,7 +56,7 @@ const NO_DATABASE = databaseTypes.NO;
 const { GENERATOR_BOOTSTRAP } = require('./generator-list');
 const { PROMETHEUS, ELK } = require('../jdl/jhipster/monitoring-types');
 const { JWT, OAUTH2, SESSION } = require('../jdl/jhipster/authentication-types');
-const { EHCACHE, REDIS, HAZELCAST, MEMCACHED } = require('../jdl/jhipster/cache-types');
+const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = require('../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../jdl/jhipster/build-tool-types');
 const { SPRING_WEBSOCKET } = require('../jdl/jhipster/websocket-types');
 const { KAFKA } = require('../jdl/jhipster/message-broker-types');
@@ -64,7 +64,18 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
+const { getBase64Secret, getRandomHex } = require('./utils');
+const cacheTypes = require('../jdl/jhipster/cache-types');
+const serviceDiscoveryTypes = require('../jdl/jhipster/service-discovery-types');
+const searchEngineTypes = require('../jdl/jhipster/search-engine-types');
+const messageBrokerTypes = require('../jdl/jhipster/message-broker-types');
+const websocketTypes = require('../jdl/jhipster/websocket-types');
 
+const NO_CACHE = cacheTypes.NO;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
+const NO_WEBSOCKET = websocketTypes.FALSE;
 // Reverse order.
 const CUSTOM_PRIORITIES = [
   {
@@ -2638,19 +2649,93 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   loadDerivedServerConfig(dest = this) {
+    if (!dest.packageFolder) {
+      dest.packageFolder = dest.packageName.replace(/\./g, '/');
+    }
+
+    // JWT authentication is mandatory with Eureka, so the JHipster Registry
+    // can control the applications
+    if (dest.serviceDiscoveryType === EUREKA && dest.authenticationType !== OAUTH2) {
+      dest.authenticationType = JWT;
+    }
+
+    // Generate JWT secret key if key does not already exist in config
+    if ((dest.authenticationType === JWT || dest.applicationType === MICROSERVICE) && dest.jwtSecretKey === undefined) {
+      dest.jwtSecretKey = getBase64Secret.call(this, null, 64);
+    }
+    // Generate remember me key if key does not already exist in config
+    if (dest.authenticationType === SESSION && !dest.rememberMeKey) {
+      dest.rememberMeKey = getRandomHex();
+    }
+
+    if (dest.authenticationType === OAUTH2) {
+      dest.skipUserManagement = true;
+    }
+
+    if (dest.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(dest.cacheProvider)) {
+      this.info(`Disabling hibernate cache for cache provider ${dest.cacheProvider}`);
+      dest.enableHibernateCache = false;
+    }
+
+    // Convert to false for templates.
+    if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = false;
+    }
+    if (dest.websocket === NO_WEBSOCKET || !dest.websocket) {
+      dest.websocket = false;
+    }
+    if (dest.searchEngine === NO_SEARCH_ENGINE || !dest.searchEngine) {
+      dest.searchEngine = false;
+    }
+    if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
+      dest.messageBroker = false;
+    }
+
+    if (!dest.databaseType && dest.prodDatabaseType) {
+      dest.databaseType = this.getDBTypeFromDBValue(dest.prodDatabaseType);
+    }
+    if (!dest.devDatabaseType && dest.prodDatabaseType) {
+      dest.devDatabaseType = dest.prodDatabaseType;
+    }
+
+    // force variables unused by microservice applications
+    if (dest.applicationType === MICROSERVICE) {
+      dest.websocket = false;
+    }
+
+    const databaseType = dest.databaseType;
+    if (databaseType === NO_DATABASE) {
+      dest.devDatabaseType = NO_DATABASE;
+      dest.prodDatabaseType = NO_DATABASE;
+      dest.enableHibernateCache = false;
+      dest.skipUserManagement = true;
+    } else if ([MONGODB, NEO4J, COUCHBASE, CASSANDRA].includes(databaseType)) {
+      dest.devDatabaseType = databaseType;
+      dest.prodDatabaseType = databaseType;
+      dest.enableHibernateCache = false;
+    }
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
     dest.buildToolUnknown = !dest.buildToolGradle && !dest.buildToolMaven;
     dest.buildDir = this.getBuildDirectoryForBuildTool(dest.buildTool);
 
-    dest.cacheProviderRedis = dest.cacheProvider === REDIS;
+    dest.cacheProviderNo = dest.cacheProvider === NO_CACHE;
+    dest.cacheProviderCaffeine = dest.cacheProvider === CAFFEINE;
+    dest.cacheProviderEhCache = dest.cacheProvider === EHCACHE;
     dest.cacheProviderHazelcast = dest.cacheProvider === HAZELCAST;
+    dest.cacheProviderInfinispan = dest.cacheProvider === INFINISPAN;
     dest.cacheProviderMemcached = dest.cacheProvider === MEMCACHED;
+    dest.cacheProviderRedis = dest.cacheProvider === REDIS;
 
     dest.devDatabaseTypeH2Disk = dest.devDatabaseType === H2_DISK;
     dest.devDatabaseTypeH2Memory = dest.devDatabaseType === H2_MEMORY;
     dest.devDatabaseTypeH2Any = dest.devDatabaseTypeH2Disk || dest.devDatabaseTypeH2Memory;
     dest.devDatabaseTypeCouchbase = dest.devDatabaseType === COUCHBASE;
+    dest.devDatabaseTypeMariadb = dest.devDatabaseType === MARIADB;
+    dest.devDatabaseTypeMssql = dest.devDatabaseType === MSSQL;
+    dest.devDatabaseTypeMysql = dest.devDatabaseType === MYSQL;
+    dest.devDatabaseTypeOracle = dest.devDatabaseType === ORACLE;
+    dest.devDatabaseTypePostgres = dest.devDatabaseType === POSTGRESQL;
 
     dest.prodDatabaseTypeCouchbase = dest.prodDatabaseType === COUCHBASE;
     dest.prodDatabaseTypeH2Disk = dest.prodDatabaseType === H2_DISK;

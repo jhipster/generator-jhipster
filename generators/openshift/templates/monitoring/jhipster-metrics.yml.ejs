@@ -30,13 +30,13 @@ metadata:
   namespace: <%= openshiftNamespace %>
   annotations:
     description: This template defines objects that are required to spin up metrics monitoring pod
-    tags: prometheus, alertmanager, grafana, jhipster-metrics<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
+    tags: prometheus, alertmanager, grafana, jhipster-metrics<% if (storageTypePersistent) { %> ,persistent <% } %> <% if (storageTypeEphemeral) { %> ,ephemeral <% } %>
     openshift.io/display-name: jhipster-metrics-monitoring-template
     openshift.io/long-description: >-
         This template provides objects that are required to spin up a metrics monitoring pod. It contains
-        prometheus for metrics aggregation, and grafana for visualization .<% if (storageType =='persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+        prometheus for metrics aggregation, and grafana for visualization .<% if (storageTypePersistent) { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
         Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %>
-        <% if (storageType === 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
+        <% if (storageTypeEphemeral) { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
   app: jhipster-metrics
@@ -73,7 +73,7 @@ parameters:
     value: 1Gi
     required: true
 objects:
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
@@ -223,11 +223,11 @@ objects:
         spec:
           volumes:
           - name: ${PT_APP_NAME}-data
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
             persistentVolumeClaim:
               claimName: ${PT_APP_NAME}
 <%_ } _%>
-<%_ if (storageType === 'ephemeral') { _%>
+<%_ if (storageTypeEphemeral) { _%>
             emptyDir: {}
 <%_ } _%>
           - name: ${PT_APP_NAME}-config
@@ -319,11 +319,11 @@ objects:
         spec:
           volumes:
           - name: ${AM_APP_NAME}-data
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
             persistentVolumeClaim:
               claimName: ${AM_APP_NAME}
 <%_ } _%>
-<%_ if (storageType === 'ephemeral') { _%>
+<%_ if (storageTypeEphemeral) { _%>
             emptyDir: {}
 <%_ } _%>
           - name: ${AM_APP_NAME}-config
@@ -406,11 +406,11 @@ objects:
         spec:
           volumes:
           - name: ${GF_APP_NAME}-data
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
             persistentVolumeClaim:
               claimName: ${GF_APP_NAME}
 <%_ } _%>
-<%_ if (storageType === 'ephemeral') { _%>
+<%_ if (storageTypeEphemeral) { _%>
             emptyDir: {}
 <%_ } _%>
           containers:
