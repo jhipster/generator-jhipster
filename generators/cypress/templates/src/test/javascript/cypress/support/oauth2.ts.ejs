@@ -33,8 +33,10 @@ Cypress.Commands.add('getOauth2Data', () => {
 
 Cypress.Commands.add('oauthLogin', (oauth2Data: any, username: string, password: string) => {
   const url = new URL(oauth2Data.url);
-  if(url.origin.includes('okta')) {
+  if (url.origin.includes('okta')) {
     cy.oktaLogin(oauth2Data, username, password);
+  } else if (url.origin.includes('auth0')) {
+    cy.auth0Login(oauth2Data, username, password);
   } else {
     cy.keycloakLogin(oauth2Data, username, password);
   }
@@ -71,6 +73,38 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data: any, username: string, passwo
       cy.visit('/');
     });
   })
+});
+
+Cypress.Commands.add('auth0Login', (oauth2Data: any, username: string, password: string) => {
+  cy.request({
+    url: `${oauth2Data.url}`,
+    followRedirect: true,
+  })
+    .then(response => {
+      const html = document.createElement('html');
+      html.innerHTML = response.body;
+      const state = html.querySelector('input[name="state"]').value;
+      return cy.request({
+        method: 'POST',
+        url: `${new URL(oauth2Data.url).origin}/u/login`,
+        followRedirect: true,
+        form: true,
+        body: {
+          state: state,
+          action: 'default',
+          username: username,
+          password: password,
+        },
+      });
+    })
+    .then(() => {
+      cy.request({
+        url: '/oauth2/authorization/oidc',
+        followRedirect: true,
+      }).then(() => {
+        cy.visit('/');
+      });
+    });
 });
 
 Cypress.Commands.add('oktaLogin', (oauth2Data: any, username, password) => {
@@ -117,6 +151,9 @@ Cypress.Commands.add('oauthLogout', () => {
       // Keycloak: uri has protocol/openid-connect/token
       if (logoutUrl.includes('/protocol')) {
         logoutUrl = `${logoutUrl}?redirect_uri=${redirectUri}`
+      } else if (logoutUrl.includes('auth0.com')) {
+        // Auth0
+        logoutUrl = `${logoutUrl}?client_id=${res.body.clientId}&returnTo=${window.location.origin}`;
       } else {
         // Else, Okta
         logoutUrl = `${logoutUrl}?id_token_hint=${res.body.idToken}&post_logout_redirect_uri=${redirectUri}`
@@ -147,6 +184,7 @@ declare global {
       getOauth2Data(): Cypress.Chainable;
       oauthLogin(oauth2Data: any, username: string, password: string): Cypress.Chainable;
       keycloakLogin(oauth2Data: any, username: string, password: string): Cypress.Chainable;
+      auth0Login(oauth2Data: any, username: string, password: string): Cypress.Chainable;
       oktaLogin(oauth2Data: any, username: string, password: string): Cypress.Chainable;
       oauthLogout(): Cypress.Chainable;
       clearCache(): Cypress.Chainable;
