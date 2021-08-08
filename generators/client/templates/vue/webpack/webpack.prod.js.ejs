@@ -28,7 +28,6 @@ const webpackConfig = webpackMerge(baseWebpackConfig, {
     main: './<%= MAIN_SRC_DIR %>app/main'
   },
   output: {
-    path: path.resolve('<%= DIST_DIR %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[id].[hash].chunk.js'
   },

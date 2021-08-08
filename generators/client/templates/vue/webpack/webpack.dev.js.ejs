@@ -1,10 +1,8 @@
 'use strict';
-const path = require('path');
 const utils = require('./vue.utils');
 const webpack = require('webpack');
 const config = require('../config');
 const webpackMerge = require('webpack-merge').merge;
-const path = require('path');
 const baseWebpackConfig = require('./webpack.common');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
@@ -24,7 +22,6 @@ module.exports = webpackMerge(baseWebpackConfig, {
     main: './<%= MAIN_SRC_DIR %>app/main'
   },
   output: {
-    path: path.resolve('<%= DIST_DIR %>'),
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },

@@ -18,6 +18,9 @@ module.exports = {
   entry: {
     app: './<%= CLIENT_MAIN_SRC_DIR %>app/main.ts'
   },
+  output: {
+    path: resolve('<%= DIST_DIR %>'),
+  },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
