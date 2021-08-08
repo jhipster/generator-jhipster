@@ -23,20 +23,20 @@ package <%= packageName %>.config;
  */
 public final class Constants {
 
-    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
     // Regex for acceptable logins
     public static final String LOGIN_REGEX = "<%- LOGIN_REGEX %>";
 
-    <%_ } _%>
-    <%_ if (!skipUserManagement || authenticationType === 'oauth2' || ['sql','mongodb','couchbase'].includes(databaseType)) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement || authenticationTypeOauth2 || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
     public static final String SYSTEM = "system";
-    <%_ } _%>
-    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
     public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
     public static final String ID_DELIMITER = "__";
-    <%_ } _%>
+<%_ } _%>
 
     private Constants() {
     }

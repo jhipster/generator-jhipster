@@ -18,30 +18,30 @@
 -%>
 package <%= packageName %>.config;
 
-<%_ if (cacheProvider === 'ehcache') { _%>
+<%_ if (cacheProviderEhCache) { _%>
 import java.time.Duration;
 
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
-    <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
-    <%_ } _%>
+  <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 
 <%_ } _%>
-<%_ if (cacheProvider === 'caffeine') { _%>
+<%_ if (cacheProviderCaffeine) { _%>
 import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
 
-<%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
-<%_ } _%>
+  <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 
 <%_ } _%>
-<%_ if (cacheProvider === 'hazelcast') { _%>
+<%_ if (cacheProviderHazelcast) { _%>
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 
@@ -53,24 +53,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 <%_ } _%>
-<%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
+<%_ if (cacheProviderEhCache || cacheProviderCaffeine) { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
-    <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProvider === 'hazelcast') { _%>
-    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+<%_ if (cacheProviderHazelcast) { _%>
+  <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-    <%_ } _%>
+  <%_ } _%>
 
 import org.springframework.cache.CacheManager;
 
 <%_ } _%>
-<%_ if (cacheProvider === 'memcached') { _%>
-    <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+<%_ if (cacheProviderMemcached) { _%>
+  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
 import <%= packageName %>.repository.UserRepository;
-    <%_ } _%>
+  <%_ } _%>
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +78,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 <%_ } _%>
-<%_ if (cacheProvider !== 'no') { _%>
+<%_ if (!cacheProviderNo) { _%>
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -86,24 +86,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if (cacheProvider !== 'memcached') { _%>
-    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+<%_ if (!cacheProviderMemcached) { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProvider === 'memcached') { _%>
+<%_ if (cacheProviderMemcached) { _%>
 import org.springframework.cache.support.NoOpCacheManager;
 <%_ } _%>
 import org.springframework.context.annotation.*;
-<%_ if (cacheProvider === 'hazelcast') { _%>
+<%_ if (cacheProviderHazelcast) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
-<%_ if (cacheProvider === 'infinispan') { _%>
+<%_ if (cacheProviderInfinispan) { _%>
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
@@ -118,7 +118,7 @@ import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import java.util.stream.Stream;
-    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
 import org.jgroups.Channel;
 import org.jgroups.JChannel;
@@ -134,9 +134,9 @@ import java.net.InetSocketAddress;
 import org.springframework.beans.factory.BeanInitializationException;
 import java.util.ArrayList;
 import java.util.List;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProvider === 'memcached') { _%>
+<%_ if (cacheProviderMemcached) { _%>
 import java.util.HashMap;
 import java.util.Map;
 import java.net.InetSocketAddress;
@@ -151,7 +151,7 @@ import com.google.code.ssm.spring.SSMCacheManager;
 
 import tech.jhipster.config.JHipsterProperties;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
+<%_ if (cacheProviderRedis) { _%>
 import java.net.URI;
 import org.redisson.Redisson;
 import org.redisson.config.Config;
@@ -161,10 +161,10 @@ import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-    <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.hibernate.cache.jcache.ConfigSettings;
-    <%_ } _%>
+  <%_ } _%>
 
 import java.util.concurrent.TimeUnit;
 
@@ -178,15 +178,15 @@ import tech.jhipster.config.JHipsterProperties;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-    <%_ if (cacheProvider !== 'no') { _%>
+<%_ if (!cacheProviderNo) { _%>
     private GitProperties gitProperties;
     private BuildProperties buildProperties;
-    <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
+<%_ } _%>
+<%_ if (cacheProviderEhCache || cacheProviderCaffeine) { _%>
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        <%_ if (cacheProvider === 'ehcache') { _%>
+  <%_ if (cacheProviderEhCache) { _%>
         JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
 
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
@@ -194,7 +194,7 @@ public class CacheConfiguration {
                 ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
                 .build());
-        <%_ } else { _%>
+  <%_ } else { _%>
         JHipsterProperties.Cache.Caffeine caffeine = jHipsterProperties.getCache().getCaffeine();
 
         CaffeineConfiguration<Object, Object> caffeineConfiguration = new CaffeineConfiguration<>();
@@ -202,41 +202,41 @@ public class CacheConfiguration {
         caffeineConfiguration.setExpireAfterWrite(OptionalLong.of(TimeUnit.SECONDS.toNanos(caffeine.getTimeToLiveSeconds())));
         caffeineConfiguration.setStatisticsEnabled(true);
         jcacheConfiguration = caffeineConfiguration;
-        <%_ } _%>
+  <%_ } _%>
     }
 
-        <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     @Bean
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
         return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
     }
-        <%_ } _%>
+  <%_ } _%>
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+  <%_ if (authenticationTypeOauth2 && applicationTypeMicroservice) { _%>
             createCache(cm, "oAuth2Authentication");
-            <%_ } _%>
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+  <%_ } _%>
+  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-                <%_ if (enableHibernateCache) { _%>
+    <%_ if (enableHibernateCache) { _%>
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName());
             createCache(cm, <%= packageName %>.domain.Authority.class.getName());
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
-                    <%_ if (authenticationType === 'session') { _%>
+      <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName());
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
-                    <%_ } _%>
-                <%_ } _%>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'ehcache') { _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (cacheProviderEhCache) { _%>
             // jhipster-needle-ehcache-add-entry
-            <%_ } _%>
-            <%_ if (cacheProvider === 'caffeine') { _%>
+  <%_ } _%>
+  <%_ if (cacheProviderCaffeine) { _%>
             // jhipster-needle-caffeine-add-entry
-            <%_ } _%>
+  <%_ } _%>
         };
     }
 
@@ -248,35 +248,35 @@ public class CacheConfiguration {
             cm.createCache(cacheName, jcacheConfiguration);
         }
     }
-    <%_ } _%>
-    <%_ if (cacheProvider === 'hazelcast') { _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
     private final Environment env;
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 
     private final ServerProperties serverProperties;
 
     private final DiscoveryClient discoveryClient;
 
     private Registration registration;
-        <%_ } _%>
+  <%_ } _%>
 
-    public CacheConfiguration(<% if (cacheProvider === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (cacheProviderHazelcast) { %>Environment env<% if (serviceDiscoveryAny) { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
         this.serverProperties = serverProperties;
         this.discoveryClient = discoveryClient;
-        <%_ } _%>
+  <%_ } _%>
     }
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 
     @Autowired(required = false)
     public void setRegistration(Registration registration) {
         this.registration = registration;
     }
-        <%_ } _%>
+  <%_ } _%>
 
     @PreDestroy
     public void destroy() {
@@ -300,7 +300,7 @@ public class CacheConfiguration {
         }
         Config config = new Config();
         config.setInstanceName("<%= baseName %>");
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         if (this.registration == null) {
             log.warn("No discovery service is set up, Hazelcast cannot create a cluster.");
@@ -331,7 +331,7 @@ public class CacheConfiguration {
                 }
             }
         }
-        <%_ } else { _%>
+  <%_ } else { _%>
         config.getNetworkConfig().setPort(5701);
         config.getNetworkConfig().setPortAutoIncrement(true);
 
@@ -346,9 +346,9 @@ public class CacheConfiguration {
         <%_ } _%>
         config.setManagementCenterConfig(new ManagementCenterConfig());
         config.addMapConfig(initializeDefaultMapConfig(jHipsterProperties));
-        <%_ if (enableHibernateCache) { _%>
+    <%_ if (enableHibernateCache) { _%>
         config.addMapConfig(initializeDomainMapConfig(jHipsterProperties));
-        <%_ } _%>
+    <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
 
@@ -381,20 +381,18 @@ public class CacheConfiguration {
 
         return mapConfig;
     }
-    <%_ if (cacheProvider === 'hazelcast') { _%>
 
     private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig("<%= packageName %>.domain.*");
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
-    <%_ } _%>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') { _%>
+<%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 
     private DiscoveryClient discoveryClient;
 
@@ -409,7 +407,7 @@ public class CacheConfiguration {
     public void setDiscoveryClient(DiscoveryClient discoveryClient) {
         this.discoveryClient = discoveryClient;
     }
-        <%_ } _%>
+  <%_ } _%>
 
     /**
      * Inject a {@link org.infinispan.configuration.global.GlobalConfiguration GlobalConfiguration} for Infinispan cache.
@@ -435,7 +433,7 @@ public class CacheConfiguration {
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
         log.info("Defining Infinispan Global Configuration");
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
             if (this.registration == null) { // if registry is not defined, use native discovery
                 log.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
@@ -462,7 +460,7 @@ public class CacheConfiguration {
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
             }
-        <%_ } else { _%>
+  <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
@@ -470,7 +468,7 @@ public class CacheConfiguration {
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
-        <%_ } _%>
+  <%_ } _%>
     }
 
     /**
@@ -552,7 +550,7 @@ public class CacheConfiguration {
                 .statistics().enabled(cacheInfo.isStatsEnabled())
                 .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).template(true).build());
 
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
             Stream.of(<%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
                 .forEach(cacheName -> manager.defineConfiguration(cacheName, new ConfigurationBuilder().clustering()
                     .cacheMode(CacheMode.INVALIDATION_SYNC)
@@ -562,18 +560,18 @@ public class CacheConfiguration {
                     .concurrencyLevel(1000)
                     .lockAcquisitionTimeout(15000)
                     .build()));
-            <%_ } _%>
-            <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+  <%_ } _%>
+  <%_ if (authenticationTypeOauth2 && applicationTypeMicroservice) { _%>
             manager.defineConfiguration("oAuth2Authentication", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.LOCAL)
                 .statistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().maxCount(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
-            <%_ } _%>
+  <%_ } _%>
 
         };
     }
-        <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     /**
     * Hibernate properties customizer.
     * This component ensures that Hibernate L2 cache region factory uses, as cache manager, the
@@ -586,9 +584,9 @@ public class CacheConfiguration {
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(CacheFactoryConfiguration cacheFactoryConfiguration) {
         return hibernateProperties -> hibernateProperties.put(AvailableSettings.CACHE_REGION_FACTORY, cacheFactoryConfiguration);
     }
-    <%_ } _%>
+  <%_ } _%>
 
-        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
     /**
      * TCP channel with the host details populated from the service discovery
      * (JHipster Registry or Consul).
@@ -653,9 +651,9 @@ public class CacheConfiguration {
         }
         return channel;
     }
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderMemcached) { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -687,7 +685,7 @@ public class CacheConfiguration {
     CacheFactory defaultCacheFactory(JHipsterProperties jHipsterProperties) {
         return createCache("default", jHipsterProperties);
     }
-    <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
 
     @Bean
     public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
@@ -698,7 +696,7 @@ public class CacheConfiguration {
     public CacheFactory usersByEmailCache(JHipsterProperties jHipsterProperties) {
         return this.createCache(UserRepository.USERS_BY_EMAIL_CACHE, jHipsterProperties);
     }
-    <%_ } _%>
+  <%_ } _%>
 
     private CacheFactory createCache(String cacheName, JHipsterProperties jHipsterProperties) {
         if (!jHipsterProperties.getCache().getMemcached().isEnabled()) {
@@ -735,9 +733,9 @@ public class CacheConfiguration {
 
         return defaultCache;
     }
-    <%_ } _%>
+<%_ } _%>
 
-    <%_ if (cacheProvider === 'redis') { _%>
+<%_ if (cacheProviderRedis) { _%>
     @Bean
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
@@ -773,29 +771,29 @@ public class CacheConfiguration {
         return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
     }
 
-    <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     @Bean
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cm) {
         return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cm);
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+  <%_ if (!skipUserManagement || (authenticationTypeOauth2 && !databaseTypeNo)) { _%>
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
-                <%_ if (enableHibernateCache) { _%>
+    <%_ if (enableHibernateCache) { _%>
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
-                    <%_ if (authenticationType === 'session') { _%>
+      <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
-                    <%_ } _%>
-                <%_ } _%>
-            <%_ } _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
             // jhipster-needle-redis-add-entry
         };
     }
@@ -809,8 +807,8 @@ public class CacheConfiguration {
         }
     }
 
-    <%_ } _%>
-    <%_ if (cacheProvider !== 'no') { _%>
+<%_ } _%>
+<%_ if (!cacheProviderNo) { _%>
     @Autowired(required = false)
     public void setGitProperties(GitProperties gitProperties) {
         this.gitProperties = gitProperties;
@@ -825,5 +823,5 @@ public class CacheConfiguration {
     public KeyGenerator keyGenerator() {
         return new PrefixedKeyGenerator(this.gitProperties, this.buildProperties);
     }
-    <%_ } _%>
+<%_ } _%>
 }

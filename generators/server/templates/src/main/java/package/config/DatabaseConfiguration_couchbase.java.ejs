@@ -24,7 +24,7 @@ import tech.jhipster.config.JHipsterConstants;
 import com.couchbase.client.java.Bucket;
 import com.github.couchmove.Couchmove;
 import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
 <%_ } _%>
 import org.apache.commons.codec.binary.Base64;
@@ -35,13 +35,13 @@ import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
 import org.springframework.data.convert.ReadingConverter;
@@ -66,7 +66,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Configuration
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)

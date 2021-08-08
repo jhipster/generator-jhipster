@@ -44,7 +44,7 @@ public class InitialSetupMigration {
         mongoTemplate.save(adminAuthority);
         mongoTemplate.save(userAuthority);
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")
     public void addUsers(MongockTemplate mongoTemplate) {
@@ -56,9 +56,7 @@ public class InitialSetupMigration {
         <%= asEntity('User') %> adminUser = new <%= asEntity('User') %>();
         adminUser.setId("user-1");
         adminUser.setLogin("admin");
-        <%_ if (authenticationType !== 'oauth2') { _%>
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
-        <%_ } _%>
         adminUser.setFirstName("admin");
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@localhost");
@@ -73,9 +71,7 @@ public class InitialSetupMigration {
         <%= asEntity('User') %> userUser = new <%= asEntity('User') %>();
         userUser.setId("user-2");
         userUser.setLogin("user");
-        <%_ if (authenticationType !== 'oauth2') { _%>
         userUser.setPassword("$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K");
-        <%_ } _%>
         userUser.setFirstName("");
         userUser.setLastName("User");
         userUser.setEmail("user@localhost");
@@ -86,5 +82,5 @@ public class InitialSetupMigration {
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
-    <%_ } _%>
+<%_ } _%>
 }
