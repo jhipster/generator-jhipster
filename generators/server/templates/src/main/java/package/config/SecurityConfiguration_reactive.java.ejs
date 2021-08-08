@@ -52,7 +52,7 @@ import org.springframework.http.HttpMethod;
 <%_ if (authenticationTypeSession) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 <%_ } _%>
