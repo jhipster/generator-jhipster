@@ -191,7 +191,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http
             .csrf()
-<%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && ! applicationTypeMicroservice) { _%>
+<%_ if ((authenticationTypeOauth2 || authenticationTypeSession) && !applicationTypeMicroservice) { _%>
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
 <%_ } else { _%>
@@ -266,7 +266,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationType === 'session') { %>;<% } %>
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationTypeSession) { %>;<% } %>
 <%_ if (authenticationTypeJwt) { _%>
   <%_ if (applicationTypeMonolith) { _%>
         .and()

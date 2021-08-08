@@ -33,7 +33,7 @@ import reactor.core.publisher.Flux;
 <%_ } else { _%>
 import java.util.stream.Stream;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 
 import java.util.UUID;
 <%_ } _%>
@@ -43,7 +43,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity('User') %>, <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } %><% if (['cassandra', 'mongodb', 'neo4j'].includes(databaseType) || authenticationType === 'oauth2') { %>String<% } %>>, UserSearchRepositoryInternal {
+public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity('User') %>, <% if (databaseTypeSql && !authenticationTypeOauth2) { %>Long<% } %><% if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { %>String<% } %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 

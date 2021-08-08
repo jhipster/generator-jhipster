@@ -19,7 +19,7 @@
 package <%= packageName %>.web.rest.vm;
 
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import javax.validation.constraints.Size;
 <%_ } _%>
 
@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
  * View Model extending the <%= asDto('AdminUser') %>, which is meant to be used in the user management UI.
  */
 public class ManagedUserVM extends <%= asDto('AdminUser') %> {
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     public static final int PASSWORD_MIN_LENGTH = 4;
 
@@ -40,7 +40,7 @@ public class ManagedUserVM extends <%= asDto('AdminUser') %> {
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     public String getPassword() {
         return password;
@@ -49,7 +49,7 @@ public class ManagedUserVM extends <%= asDto('AdminUser') %> {
     public void setPassword(String password) {
         this.password = password;
     }
-    <%_ } _%>
+<%_ } _%>
 
     // prettier-ignore
     @Override
