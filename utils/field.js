@@ -19,7 +19,6 @@
 
 const assert = require('assert');
 const _ = require('lodash');
-const chalk = require('chalk');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = require('../jdl/jhipster/field-types');
 const { MIN, MINLENGTH, MINBYTES, MAX, MAXBYTES, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../jdl/jhipster/validations');
