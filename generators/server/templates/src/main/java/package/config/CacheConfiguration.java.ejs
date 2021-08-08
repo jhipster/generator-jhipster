@@ -87,7 +87,7 @@ import tech.jhipster.config.cache.PrefixedKeyGenerator;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
 <%_ if (!cacheProviderMemcached) { _%>
-  <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
@@ -118,7 +118,7 @@ import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import java.util.stream.Stream;
-  <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
 import org.jgroups.Channel;
 import org.jgroups.JChannel;
@@ -808,7 +808,7 @@ public class CacheConfiguration {
     }
 
 <%_ } _%>
-<%_ if (!databaseTypeNo) { _%>
+<%_ if (!cacheProviderNo) { _%>
     @Autowired(required = false)
     public void setGitProperties(GitProperties gitProperties) {
         this.gitProperties = gitProperties;
