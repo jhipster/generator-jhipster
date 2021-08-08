@@ -20,7 +20,7 @@ package <%= packageName %>.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -31,7 +31,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } _%>
@@ -39,14 +39,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import java.util.*;
 import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (!reactive) { _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
 import java.util.Optional;
-    <%_ } _%>
+  <%_ } _%>
 import java.util.stream.Stream;
 <%_ } _%>
 
@@ -54,7 +54,7 @@ import java.util.stream.Stream;
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
 <%_ } _%>
 
@@ -83,7 +83,7 @@ public final class SecurityUtils {
         } else if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
             return springSecurityUser.getUsername();
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
         } else if (authentication instanceof JwtAuthenticationToken) {
             return (String) ((JwtAuthenticationToken)authentication).getToken().getClaims().get("preferred_username");
         } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
@@ -98,7 +98,7 @@ public final class SecurityUtils {
         return null;
     }
 
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 
     /**
      * Get the JWT of the current user.
@@ -106,13 +106,13 @@ public final class SecurityUtils {
      * @return the JWT of the current user.
      */
     public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserJWT() {
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-        <%_ } else { _%>
+  <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
-        <%_ } _%>
+  <%_ } _%>
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
     }
@@ -163,19 +163,19 @@ public final class SecurityUtils {
 
 <%_ if (!reactive) { _%>
     private static Stream<String> getAuthorities(Authentication authentication) {
-        <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
         Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken ?
             extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
             : authentication.getAuthorities();
         return authorities.stream()
-        <%_ } else { _%>
+  <%_ } else { _%>
         return authentication.getAuthorities().stream()
-        <%_ } _%>
+  <%_ } _%>
             .map(GrantedAuthority::getAuthority);
     }
 
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
         return mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
     }

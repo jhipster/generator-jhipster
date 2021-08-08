@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.BatchStatement;
@@ -36,19 +36,19 @@ import com.datastax.oss.driver.api.mapper.annotations.Select;
 <%_ } _%>
 import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-<%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import org.springframework.data.jpa.repository.JpaRepository;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.stereotype.Repository;
 
@@ -59,31 +59,31 @@ import javax.validation.Validator;
 import java.util.ArrayList;
 <%_ } _%>
 import java.util.List;
-<%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import java.util.Set;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <%_ } _%>
 
 /**
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
  * Spring Data JPA repository for the {@link PersistentToken} entity.
-<%_ } else if (databaseType === 'mongodb') { _%>
+<%_ } else if (databaseTypeMongodb) { _%>
  * Spring Data MongoDB repository for the {@link PersistentToken} entity.
-<%_ } else if (databaseType === 'couchbase') { _%>
+<%_ } else if (databaseTypeCouchbase) { _%>
  * Spring Data Couchbase repository for the {@link PersistentToken} entity.
-<%_ } else if (databaseType === 'cassandra') { _%>
+<%_ } else if (databaseTypeCassandra) { _%>
  * Cassandra repository for the {@link PersistentToken} entity.
 <%_ } _%>
  */
-<%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
-public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+public interface PersistentTokenRepository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
+  <%_ if (databaseTypeCouchbase) { _%>
 
     default Optional<PersistentToken> findBySeries(String series) {
         return findById(PersistentToken.PREFIX + ID_DELIMITER + series);
@@ -98,14 +98,14 @@ public interface PersistentTokenRepository extends <% if (databaseType === 'sql'
     }
 
     List<PersistentToken> findByLogin(String login);
-    <%_ } else { _%>
+  <%_ } else { _%>
     List<PersistentToken> findByUser(<%= asEntity('User') %> user);
-    <%_ } _%>
+  <%_ } _%>
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 
 }
-<%_ } else if (databaseType === 'cassandra') { _%>
+<%_ } else if (databaseTypeCassandra) { _%>
 @Repository
 public class PersistentTokenRepository {
 

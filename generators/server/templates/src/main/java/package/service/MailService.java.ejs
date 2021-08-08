@@ -103,7 +103,7 @@ public class MailService {
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     @Async
     public void sendActivationEmail(<%= asEntity('User') %> user) {
@@ -122,5 +122,5 @@ public class MailService {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
-    <%_ } _%>
+<%_ } _%>
 }

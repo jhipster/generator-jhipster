@@ -51,10 +51,10 @@ import java.io.IOException;
 public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else { %>implements WebFilter<% } %> {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 
     public static final String AUTHORIZATION_TOKEN = "access_token";
-    <%_ } _%>
+<%_ } _%>
 
     private final TokenProvider tokenProvider;
 
@@ -63,26 +63,26 @@ public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else 
     }
 
     @Override
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
         throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
-    <%_ } else { _%>
+<%_ } else { _%>
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String jwt = resolveToken(exchange.getRequest());
-    <%_ } _%>
+<%_ } _%>
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
-        <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
             return chain.filter(exchange).subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
         }
         return chain.filter(exchange);
-        <%_ } else { _%>
+<%_ } else { _%>
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(servletRequest, servletResponse);
-        <%_ } _%>
+<%_ } _%>
     }
 
     private String resolveToken(<% if (!reactive) { %>HttpServletRequest<% } else { %>ServerHttpRequest<% } %> request) {
@@ -90,12 +90,12 @@ public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-        <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
         String jwt = request.getParameter(AUTHORIZATION_TOKEN);
         if (StringUtils.hasText(jwt)) {
             return jwt;
         }
-        <%_ } _%>
+<%_ } _%>
         return null;
     }
 }
