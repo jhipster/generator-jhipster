@@ -30,7 +30,14 @@ const {
 } = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_JAVA } = require('../generator-list');
-const { PACKAGE_NAME, PRETTIER_JAVA_INDENT, BUILD_TOOL } = require('./constants.cjs');
+const {
+  PACKAGE_NAME,
+  PRETTIER_JAVA_INDENT,
+  PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
+  BUILD_TOOL,
+  BUILD_TOOL_DEFAULT_VALUE,
+  BUILD_TOOL_PROMPT_CHOICES,
+} = require('./constants.cjs');
 const { files } = require('./files.cjs');
 const { defaultConfig } = require('./config.cjs');
 const { dependencyChain } = require('./mixin.cjs');
@@ -104,14 +111,14 @@ module.exports = class extends MixedChain {
               name: PRETTIER_JAVA_INDENT,
               type: 'input',
               message: 'What is the Java indentation?',
-              default: () => this.PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
+              default: () => this.sharedData.getConfigDefaultValue(PRETTIER_JAVA_INDENT, PRETTIER_JAVA_INDENT_DEFAULT_VALUE),
             },
             {
               name: BUILD_TOOL,
               type: 'list',
-              choices: () => this.BUILD_TOOL_PROMPT_CHOICES,
+              choices: () => this.sharedData.getConfigChoices(BUILD_TOOL, BUILD_TOOL_PROMPT_CHOICES),
               message: 'What tool do you want to use to build backend?',
-              default: () => this.BUILD_TOOL_DEFAULT_VALUE,
+              default: () => this.sharedData.getConfigDefaultValue(BUILD_TOOL, BUILD_TOOL_DEFAULT_VALUE),
             },
           ],
           this.config

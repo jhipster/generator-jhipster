@@ -123,6 +123,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // JHipster runtime config that should not be stored to .yo-rc.json.
     this.configOptions = this.options.configOptions || { sharedEntities: {} };
     this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+    this._sharedData = this.options.jhipsterSharedData;
 
     /* Force config to use 'generator-jhipster' namespace. */
     this._config = this._getStorage('generator-jhipster');
@@ -152,6 +153,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       */
       this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions }, true);
     }
+  }
+
+  /**
+   * Shared Data
+   */
+  get sharedData() {
+    if (!this._sharedData) {
+      throw new Error("Shared data doesn't exists it should be provided by the cli");
+    }
+    return this._sharedData;
   }
 
   /**

@@ -26,14 +26,10 @@ const {
   JAVA_APP_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
   PACKAGE_NAME,
-  PACKAGE_NAME_DEFAULT_VALUE,
   PRETTIER_JAVA_INDENT,
-  PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
   BUILD_TOOL,
-  BUILD_TOOL_DEFAULT_VALUE,
   BUILD_TOOL_MAVEN,
   BUILD_TOOL_GRADLE,
-  BUILD_TOOL_PROMPT_CHOICES,
   BUILD_DESTINATION,
 } = require('./constants.cjs');
 
@@ -46,12 +42,7 @@ module.exports.mixin = parent =>
     /**
      * Load java options constants.
      */
-    loadJavaOptionsConstants(into = this) {
-      into.PACKAGE_NAME_DEFAULT_VALUE = PACKAGE_NAME_DEFAULT_VALUE;
-      into.PRETTIER_JAVA_INDENT_DEFAULT_VALUE = PRETTIER_JAVA_INDENT_DEFAULT_VALUE;
-      into.BUILD_TOOL_DEFAULT_VALUE = BUILD_TOOL_DEFAULT_VALUE;
-      into.BUILD_TOOL_PROMPT_CHOICES = BUILD_TOOL_PROMPT_CHOICES;
-    }
+    loadJavaOptionsConstants(into = this) {}
 
     /**
      * Register and parse java options.

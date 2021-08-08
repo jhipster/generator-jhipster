@@ -20,7 +20,7 @@ const { defaults } = require('lodash');
 
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
-const { SPRING_BOOT_VERSION, SPRING_BOOT_PARENT_BOM, SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE } = require('./constants.cjs');
+const { SPRING_BOOT_VERSION, SPRING_BOOT_PARENT_BOM } = require('./constants.cjs');
 
 const { GENERATOR_JAVA } = require('../generator-list');
 
@@ -31,9 +31,7 @@ module.exports.mixin = parent =>
     /**
      * Load spring-boot options constants.
      */
-    loadSpringBootOptionsConstants(into = this) {
-      into.SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE = SPRING_BOOT_PARENT_BOM_DEFAULT_VALUE;
-    }
+    loadSpringBootOptionsConstants(into = this) {}
 
     /**
      * Register and parse spring-boot options.
