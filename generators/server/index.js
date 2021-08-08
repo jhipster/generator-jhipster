@@ -24,7 +24,6 @@ const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { CASSANDRA, COUCHBASE, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
