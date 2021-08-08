@@ -32,12 +32,12 @@ import org.springframework.context.annotation.Import;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice || applicationTypeMicroservice) { _%>
+<%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-<%_ if (!applicationTypeMicroservice || applicationTypeMicroservice) { _%>
+<%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 <%_ } else { _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
