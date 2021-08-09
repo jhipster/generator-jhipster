@@ -17,10 +17,13 @@
  * limitations under the License.
  */
 const GRADLE_VERSION = '7.0.2';
+const GRADLE = 'gradle';
+const GRADLE_DESCRIPTION = 'Gradle';
+const BUILD_DESTINATION_VALUE = 'build';
 
 module.exports = {
-  GRADLE: 'gradle',
-  GRADLE_DESCRIPTION: 'Gradle',
   GRADLE_VERSION,
-  BUILD_DESTINATION_VALUE: 'build',
+  GRADLE,
+  GRADLE_DESCRIPTION,
+  BUILD_DESTINATION_VALUE,
 };

@@ -16,7 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
+const {
+  PRETTIER_DEFAULT_INDENT,
+  PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE,
+  SKIP_COMMIT_HOOK,
+  SKIP_COMMIT_HOOK_DEFAULT_VALUE,
+} = require('./constants.cjs');
 
 /** Config required at .yo-rc.json */
 const requiredConfig = {};
@@ -24,8 +29,8 @@ const requiredConfig = {};
 /** Default config for templates */
 const defaultConfig = {
   ...requiredConfig,
-  [PRETTIER_DEFAULT_INDENT]: 2,
-  [SKIP_COMMIT_HOOK]: false,
+  [PRETTIER_DEFAULT_INDENT]: PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE,
+  [SKIP_COMMIT_HOOK]: SKIP_COMMIT_HOOK_DEFAULT_VALUE,
 };
 
 module.exports = { requiredConfig, defaultConfig };

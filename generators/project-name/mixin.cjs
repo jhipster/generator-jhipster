@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { defaults, merge, kebabCase, startCase } = require('lodash');
+const { defaults, kebabCase, startCase } = require('lodash');
 
 const { requiredConfig, defaultConfig, reproducibleConfigForTests } = require('./config.cjs');
 const { options } = require('./options.cjs');
@@ -34,8 +34,8 @@ module.exports.mixin = parent =>
     /**
      * Register and parse project-name options.
      */
-    registerProjectNameOptions(customOptions) {
-      this.jhipsterOptions(merge({}, options, customOptions));
+    getProjectNameOptions() {
+      return options;
     }
 
     /**
@@ -66,17 +66,16 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived project-name configs into fromInto.
+     * Prepare derived project-name properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    // eslint-disable-next-line no-empty-pattern
-    loadDerivedProjectNameConfig(fromInto = this) {
+    prepareDerivedProjectNameProperties(fromInto = this) {
       fromInto.dasherizedBaseName = kebabCase(fromInto[BASE_NAME]);
       fromInto.humanizedBaseName = startCase(fromInto[BASE_NAME]);
     }
 
     /**
-     * Load derived project-name configs into 'into'.
+     * Load project-name constants into 'into'.
      * @param {Object} into - destination context
      */
     loadProjectNameConstants(into = this) {}

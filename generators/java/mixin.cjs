@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { defaults, merge } = require('lodash');
+const { defaults } = require('lodash');
 
 const { GENERATOR_MAVEN, GENERATOR_GRADLE } = require('../generator-list');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
@@ -25,14 +25,12 @@ const {
   JAVA_VERSION,
   JAVA_APP_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
-  BUILD_TOOL,
-  BUILD_TOOL_DEFAULT_VALUE,
-  BUILD_TOOL_MAVEN,
-  BUILD_TOOL_GRADLE,
-  BUILD_TOOL_PROMPT_CHOICES,
-  BUILD_DESTINATION,
   PACKAGE_NAME,
   PRETTIER_JAVA_INDENT,
+  BUILD_TOOL,
+  BUILD_TOOL_MAVEN,
+  BUILD_TOOL_GRADLE,
+  BUILD_DESTINATION,
 } = require('./constants.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
@@ -44,16 +42,13 @@ module.exports.mixin = parent =>
     /**
      * Load java options constants.
      */
-    loadJavaOptionsConstants(into = this) {
-      into.BUILD_TOOL_DEFAULT_VALUE = BUILD_TOOL_DEFAULT_VALUE;
-      into.BUILD_TOOL_PROMPT_CHOICES = BUILD_TOOL_PROMPT_CHOICES;
-    }
+    loadJavaOptionsConstants(into = this) {}
 
     /**
      * Register and parse java options.
      */
-    registerJavaOptions(customOptions) {
-      this.jhipsterOptions(merge({}, options, customOptions));
+    getJavaOptions() {
+      return options;
     }
 
     /**
@@ -73,16 +68,16 @@ module.exports.mixin = parent =>
     loadJavaConfig(config = this.jhipsterConfig, into = this) {
       config = defaults({}, config, defaultConfig);
       into[PACKAGE_NAME] = config[PACKAGE_NAME];
-      into[BUILD_TOOL] = config[BUILD_TOOL];
       into[PRETTIER_JAVA_INDENT] = config[PRETTIER_JAVA_INDENT];
+      into[BUILD_TOOL] = config[BUILD_TOOL];
       into[BUILD_DESTINATION] = config[BUILD_DESTINATION];
     }
 
     /**
-     * Load derived java configs into fromInto.
+     * Prepare derived java properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    loadDerivedJavaConfig(fromInto = this) {
+    prepareDerivedJavaProperties(fromInto = this) {
       fromInto.javaMainClass = fromInto.getMainClassName(fromInto.baseName);
       fromInto.packageFolder = fromInto[PACKAGE_NAME].replace(/\./g, '/');
 
@@ -92,7 +87,7 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived java configs into 'into'.
+     * Load java constants into 'into'.
      * @param {Object} into - destination context
      */
     loadJavaConstants(into = this) {
@@ -102,7 +97,7 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Compose with selected java.
+     * Compose with selected java configuration.
      */
     async composeWithJavaDependencies(config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);

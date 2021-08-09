@@ -17,17 +17,21 @@
  * limitations under the License.
  */
 const BASE_NAME = 'baseName';
-const BASE_NAME_DESC = 'Application base name';
+const BASE_NAME_DESCRIPTION = 'Application base name';
+
 const JHIPSTER_VERSION = 'jhipsterVersion';
-const JHIPSTER_VERSION_DESC = 'Force jhipsterVersion for reproducibility';
+const JHIPSTER_VERSION_DESCRIPTION = 'Force jhipsterVersion for reproducibility';
+
 const PROJECT_NAME = 'projectName';
+const PROJECT_NAME_DESCRIPTION = 'Project name';
 const PROJECT_NAME_DEFAULT_VALUE = 'JHipster project';
 
 module.exports = {
   BASE_NAME,
-  BASE_NAME_DESC,
+  BASE_NAME_DESCRIPTION,
   JHIPSTER_VERSION,
-  JHIPSTER_VERSION_DESC,
+  JHIPSTER_VERSION_DESCRIPTION,
   PROJECT_NAME,
+  PROJECT_NAME_DESCRIPTION,
   PROJECT_NAME_DEFAULT_VALUE,
 };

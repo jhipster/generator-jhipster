@@ -17,9 +17,12 @@
  * limitations under the License.
  */
 const NODE_VERSION = '14.17.1';
+
 const PRETTIER_DEFAULT_INDENT = 'prettierDefaultIndent';
 const PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE = 2;
+
 const SKIP_COMMIT_HOOK = 'skipCommitHook';
+const SKIP_COMMIT_HOOK_DESCRIPTION = 'Skip adding husky commit hooks';
 const SKIP_COMMIT_HOOK_DEFAULT_VALUE = false;
 
 module.exports = {
@@ -27,6 +30,6 @@ module.exports = {
   PRETTIER_DEFAULT_INDENT,
   PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE,
   SKIP_COMMIT_HOOK,
-  SKIP_COMMIT_HOOK_DESCRIPTION: 'Skip adding husky commit hooks',
+  SKIP_COMMIT_HOOK_DESCRIPTION,
   SKIP_COMMIT_HOOK_DEFAULT_VALUE,
 };

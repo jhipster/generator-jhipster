@@ -19,10 +19,21 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const simpleGit = require('simple-git');
-const { generateMixedChain } = require('generator-jhipster/support');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+  INSTALL_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
-const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
+const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
 const { defaultConfig } = require('./config.cjs');
 const { dependencyChain } = require('./mixin.cjs');
@@ -56,7 +67,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -74,21 +85,20 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       async showPrompts() {
         if (this.shouldSkipPrompts()) return;
         await this.prompt(
           [
             {
-              name: 'prettierDefaultIndent',
-              when: () => !this.abort,
-              type: 'number',
+              name: PRETTIER_DEFAULT_INDENT,
+              type: 'input',
               message: 'What is the default indentation?',
               default: defaultConfig.prettierDefaultIndent,
             },
@@ -99,12 +109,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       configure() {
         this.configureInit();
@@ -112,12 +122,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
@@ -128,21 +138,31 @@ module.exports = class extends MixedChain {
       loadConfig() {
         this.loadChainConfig();
       },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
-      },
       loadDependabotDependencies() {
         this.loadDependabotDependencies(this.fetchFromInstalledJHipster(GENERATOR_INIT, 'templates', 'package.json'));
       },
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get preparing() {
+    return {
+      prepareDerivedProperties() {
+        this.prepareDerivedChainProperties();
+      },
+    };
+  }
+
+  get [PREPARING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.preparing;
+  }
+
+  get writing() {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
@@ -155,12 +175,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 
-  _postWriting() {
+  get postWriting() {
     return {
       addCommitHookDependencies() {
         if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
@@ -174,12 +194,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._postWriting();
+    return this.postWriting;
   }
 
-  _install() {
+  get install() {
     return {
       // Initialize git repository before package manager install for commit hooks
       async initGitRepo() {
@@ -189,7 +209,7 @@ module.exports = class extends MixedChain {
           return;
         }
         try {
-          const git = this._createGit();
+          const git = this.createGit();
           this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
           this.log(chalk.green.bold('Git repository initialized.'));
         } catch (error) {
@@ -199,12 +219,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get install() {
+  get [INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._install();
+    return this.install;
   }
 
-  _end() {
+  get end() {
     return {
       /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
@@ -214,7 +234,7 @@ module.exports = class extends MixedChain {
           return;
         }
         this.debug('Committing files to git');
-        const git = this._createGit();
+        const git = this.createGit();
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         let result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
@@ -244,16 +264,16 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._end();
+    return this.end;
   }
 
   /*
    * Start of local public API, blueprints may override to customize the generator behavior.
    */
 
-  _createGit() {
+  createGit() {
     return simpleGit({ baseDir: this.destinationPath() }).env({
       ...process.env,
       LANG: 'en',

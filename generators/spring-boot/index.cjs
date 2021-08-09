@@ -18,7 +18,15 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { generateMixedChain } = require('generator-jhipster/support');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const {
+  INITIALIZING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  COMPOSING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  WRITING_PRIORITY,
+} = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_SPRING_BOOT } = require('../generator-list');
 const { files } = require('./files.cjs');
@@ -53,7 +61,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -71,12 +79,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       configure() {
         this.configureSpringBoot();
@@ -84,26 +92,26 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _composing() {
+  get composing() {
     return {
       async compose() {
-        // eslint-disable-next-line no-useless-return
         if (!this.shouldComposeModular()) return;
+        await this.composeWithSpringBootConfig();
       },
     };
   }
 
-  get composing() {
+  get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._composing();
+    return this.composing;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
@@ -114,18 +122,28 @@ module.exports = class extends MixedChain {
       loadConfig() {
         this.loadChainConfig();
       },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
+    };
+  }
+
+  get [LOADING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.loading;
+  }
+
+  get preparing() {
+    return {
+      prepareDerivedProperties() {
+        this.prepareDerivedChainProperties();
       },
     };
   }
 
-  get loading() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.preparing;
   }
 
-  _writing() {
+  get writing() {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
@@ -134,8 +152,8 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 };
