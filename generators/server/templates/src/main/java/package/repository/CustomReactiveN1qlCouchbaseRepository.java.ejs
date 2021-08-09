@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import com.couchbase.client.java.search.SearchQuery;
 import com.couchbase.client.java.search.queries.AbstractFtsQuery;
 import com.couchbase.client.java.search.queries.DocIdQuery;
@@ -33,13 +33,13 @@ import org.springframework.data.couchbase.core.RxJavaCouchbaseOperations;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
 import org.springframework.data.couchbase.repository.support.ReactiveN1qlCouchbaseRepository;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 import org.springframework.data.repository.util.QueryExecutionConverters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import rx.Observable;
 import rx.RxReactiveStreams;
 <%_ } _%>
@@ -47,7 +47,7 @@ import rx.RxReactiveStreams;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Set;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import java.util.LinkedList;
 import java.util.List;
 <%_ } _%>
@@ -55,7 +55,7 @@ import java.util.List;
 /**
  * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomReactiveN1qlCouchbaseRepository<T, ID extends Serializable> extends ReactiveN1qlCouchbaseRepository<T, ID><%if (searchEngine === 'couchbase') { %> implements SearchCouchbaseRepository<T, ID><% } %> {
+public class CustomReactiveN1qlCouchbaseRepository<T, ID extends Serializable> extends ReactiveN1qlCouchbaseRepository<T, ID><%if (searchEngineCouchbase) { %> implements SearchCouchbaseRepository<T, ID><% } %> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
 
@@ -92,7 +92,7 @@ public class CustomReactiveN1qlCouchbaseRepository<T, ID extends Serializable> e
     public <S extends T> Mono<S> save(S entity) {
         return super.save(populateIdIfNecessary(entity));
     }
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 
     public Flux<T> search(String indexName, String request, Pageable pageable) {
         SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))

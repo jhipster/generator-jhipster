@@ -60,7 +60,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomi
   <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
-  <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
+  <%_ if (serviceDiscoveryAny) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
   <%_ } _%>
 

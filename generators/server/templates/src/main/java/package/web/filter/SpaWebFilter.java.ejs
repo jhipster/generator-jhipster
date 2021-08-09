@@ -33,10 +33,10 @@ public class SpaWebFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationType === 'oauth2') { %> && !path.startsWith("/login")<% } %>
-            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+        if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login")<% } %>
+<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
             && !path.startsWith("/services") && !path.startsWith("/swagger") && !path.startsWith("/v2/api-docs") && !path.startsWith("/v3/api-docs")
-            <%_ } _%>
+<%_ } _%>
             && path.matches("[^\\\\.]*")) {
             return chain.filter(
                 exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build()

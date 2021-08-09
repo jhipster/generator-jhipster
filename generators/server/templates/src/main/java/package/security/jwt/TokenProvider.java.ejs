@@ -95,9 +95,9 @@ public class TokenProvider {
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
-            <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
             .serializeToJsonWith(new JacksonSerializer())
-            <%_ } _%>
+<%_ } _%>
             .compact();
     }
 
