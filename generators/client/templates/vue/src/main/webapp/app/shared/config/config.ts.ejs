@@ -65,7 +65,7 @@ export function initVueApp(vue) {
   vue.use(Vuelidate);
   vue.use(Vue2Filters);
   setupAxiosInterceptors(
-    () => console.log('Unauthorized!')),
+    () => console.log('Unauthorized!'),
     () => console.log('Server error!'));
   filters.initFilters();
 }
