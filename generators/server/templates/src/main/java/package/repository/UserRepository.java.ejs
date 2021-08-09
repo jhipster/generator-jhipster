@@ -353,7 +353,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
                 .then());
     }
 
-  <%_ } else if (authenticationTypeOauth2) { _%>
+  <%_ } else { _%>
     @Override
     public Mono<<%= asEntity('User') %>> create(<%= asEntity('User') %> user) {
         return r2dbcEntityTemplate.insert(<%= asEntity('User') %>.class).using(user).defaultIfEmpty(user);
