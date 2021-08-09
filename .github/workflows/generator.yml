@@ -45,7 +45,7 @@ jobs:
         cache: [other]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.3.2
+      - uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node_version }}
       - name: 'SETUP: load npm cache'
