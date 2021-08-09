@@ -35,13 +35,13 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
-    <%_ if (packageName !== 'tech.jhipster') { _%>
+<%_ if (packageName !== 'tech.jhipster') { _%>
     <%= packageName %>: INFO
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
     org.neo4j.driver: WARN
-    <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 
 eureka:
   instance:
@@ -51,7 +51,7 @@ eureka:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 org:
   neo4j:
     driver:
@@ -74,7 +74,7 @@ spring:
       enabled: false
     livereload:
       enabled: false
-  <%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
   neo4j:
     pool:
       metrics-enabled: true
@@ -83,8 +83,8 @@ spring:
     # authentication:
     #   username: neo4j
     #   password: secret
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
   cloud:
     config:
       retry:
@@ -97,130 +97,126 @@ spring:
       profile: prod
       label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
   cloud:
     consul:
       discovery:
         prefer-ip-address: true
       host: localhost
       port: 8500
-  <%_ } _%>
-  <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: root
     password:
-    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+  <%_ } else if (prodDatabaseTypePostgres) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: <%= baseName %>
     password:
-    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+  <%_ } else if (prodDatabaseTypeMssql) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
-    <%_ } else if (prodDatabaseType === 'oracle') { _%>
+  <%_ } else if (prodDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     username: system
     password: oracle
-    <%_ } _%>
+  <%_ } _%>
     hikari:
       poolName: Hikari
       auto-commit: false
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql) { _%>
       data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-    <%_ } _%>
+  <%_ } _%>
   jpa:
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
+  <%_ if (prodDatabaseTypePostgres) { _%>
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-    <%_ } _%>
   <%_ } _%>
-  <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || (searchEngine === 'elasticsearch' && reactive)) { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>
   data:
-  <%_ } _%>
-  <%_ if (databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
     mongodb:
       uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
       database: <%= baseName %>
-  <%_ } _%>
-  <%_ if (databaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
     cassandra:
       contact-points: localhost
       compression: LZ4
       keyspace-name: <%= baseName %>
       local-datacenter: datacenter1
-  <%_ } _%>
-  <%_ if (searchEngine === 'elasticsearch') { _%>
-    <%_ if (reactive) { _%>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+  <%_ if (reactive) { _%>
     elasticsearch:
       client:
         reactive:
           endpoints: localhost:9200
-    <%_ } else { _%>
+  <%_ } else { _%>
   elasticsearch:
     rest:
       uris: http://localhost:9200
-    <%_ } _%>
   <%_ } _%>
-  <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
   couchbase:
     bootstrap-hosts: localhost
     bucket:
       name: <%= baseName %>
       password: password
-  <%_ } _%>
-  <%_ if (databaseType === 'sql') { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
-    <%_ if (reactive) { _%>
-      <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
+  <%_ if (reactive) { _%>
+    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-      <%_ } else if (prodDatabaseType === 'oracle') { _%>
+    <%_ } else if (prodDatabaseTypeOracle) { _%>
     url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
   mail:
     host: localhost
     port: 25
     username:
     password:
-  <%_ } _%>
-  <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
-    <%_ if (prodDatabaseType === 'mysql') { _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
     url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: root
     password:
-    <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-    username: root
-    password:
-    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+  <%_ } else if (prodDatabaseTypePostgres) { _%>
     url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: <%= baseName %>
     password:
-    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+  <%_ } else if (prodDatabaseTypeMssql) { _%>
     url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
     username: SA
     password: yourStrong(!)Password
-    <%_ } else if (prodDatabaseType === 'oracle') { _%>
+  <%_ } else if (prodDatabaseTypeOracle) { _%>
     url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     username: system
     password: oracle
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   thymeleaf:
     cache: true
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
+<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
   sleuth:
     sampler:
       probability: 1 # report 100% of traces
@@ -266,36 +262,36 @@ server:
 # ===================================================================
 
 jhipster:
-  <%_ if (applicationType === 'gateway' && cacheProvider === 'hazelcast' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && cacheProviderHazelcast && serviceDiscoveryType) { _%>
   gateway:
     rate-limiting:
       enabled: false
-    <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
       app1: /api # recommended prod configuration
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
-  <%_ if (cacheProvider !== 'no') { _%>
+<%_ if (!cacheProviderNo) { _%>
   cache: # Cache configuration
-    <%_ if (cacheProvider === 'hazelcast') { _%>
+  <%_ if (cacheProviderHazelcast) { _%>
     hazelcast: # Hazelcast distributed cache
       time-to-live-seconds: 3600
       backup-count: 1
-    <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache') { _%>
+  <%_ } _%>
+  <%_ if (cacheProviderEhCache) { _%>
     ehcache: # Ehcache configuration
       time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
       max-entries: 1000 # Number of objects in each cache entry
-    <%_ } _%>
-    <%_ if (cacheProvider === 'caffeine') { _%>
+  <%_ } _%>
+  <%_ if (cacheProviderCaffeine) { _%>
     caffeine: # Caffeine configuration
       time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
       max-entries: 1000 # Number of objects in each cache entry
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') { _%>
+  <%_ } _%>
+  <%_ if (cacheProviderInfinispan) { _%>
     infinispan:
       config-file: default-configs/default-jgroups-tcp.xml
       statsEnabled: true
@@ -312,28 +308,28 @@ jhipster:
       replicated:
         time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
         max-entries: 1000 # Number of objects in each cache entry
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
+  <%_ } _%>
+  <%_ if (cacheProviderMemcached) { _%>
     memcached:
       enabled: true
       servers: localhost:11211
       expiration: 300
       use-binary-protocol: true
-    <%_ } _%>
-    <%_ if (cacheProvider === 'redis') { _%>
+  <%_ } _%>
+  <%_ if (cacheProviderRedis) { _%>
     redis: # Redis configuration
       expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
       server: redis://localhost:6379
       cluster: false
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
       # cluster: true
-    <%_ } _%>
   <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
   registry:
     password: admin
-  <%_ } _%>
-  <%_ if (authenticationType === 'jwt') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
   security:
     authentication:
       jwt:
@@ -346,8 +342,8 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-  <%_ } _%>
-<%_ if (authenticationType === 'session' && !reactive) { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)

@@ -18,14 +18,14 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
 <%_ if (!skipUserManagement) { _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
-    <%_ } _%>
+  <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
@@ -46,11 +46,11 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
-    <%_ if (databaseType === 'sql') { _%>
+  <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 
 import java.util.UUID;
 <%_ } _%>
@@ -75,42 +75,42 @@ import static org.hamcrest.Matchers.not;
 @AutoConfigureWebTestClient
 <%_ } _%>
 @IntegrationTest
-class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
-    <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    <%_ }  _%>
+<%_ } _%>
     @Autowired
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
     private WebTestClient webTestClient;
-    <%_ } else { _%>
+<%_ } else { _%>
     private MockMvc mockMvc;
-    <%_ }  _%>
+<%_ } _%>
 
     @Test
 <%_ if (!skipUserManagement) { _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     void testAuthorize() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+  <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
-        <%_ } _%>
+  <%_ } _%>
         user.setLogin("user-jwt-controller");
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
-        <%_ } _%>
+  <%_ } _%>
 
-        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller");
@@ -120,7 +120,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
         login.setUsername("test");
 <%_ } _%>
         login.setPassword("test");
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
@@ -129,7 +129,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
             .andExpect(jsonPath("$.id_token").isNotEmpty())
             .andExpect(header().string("Authorization", not(nullValue())))
             .andExpect(header().string("Authorization", not(is(emptyString()))));
-        <%_ } else { _%>
+<%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(login))
@@ -138,28 +138,28 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
             .expectHeader().valueMatches("Authorization", "Bearer .+")
             .expectBody()
             .jsonPath("$.id_token").isNotEmpty();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
 <%_ if (!skipUserManagement) { _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     void testAuthorizeWithRememberMe() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+  <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
-        <%_ } _%>
+  <%_ } _%>
         user.setLogin("user-jwt-controller-remember-me");
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
-        <%_ } _%>
+  <%_ } _%>
 
-        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller-remember-me");
@@ -170,7 +170,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
 <%_ } _%>
         login.setPassword("test");
         login.setRememberMe(true);
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
@@ -179,7 +179,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
             .andExpect(jsonPath("$.id_token").isNotEmpty())
             .andExpect(header().string("Authorization", not(nullValue())))
             .andExpect(header().string("Authorization", not(is(emptyString()))));
-        <%_ } else { _%>
+<%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(login))
@@ -188,7 +188,7 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
             .expectHeader().valueMatches("Authorization", "Bearer .+")
             .expectBody()
             .jsonPath("$.id_token").isNotEmpty();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
@@ -196,14 +196,14 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
         LoginVM login = new LoginVM();
         login.setUsername("wrong-user");
         login.setPassword("wrong password");
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));
-        <%_ } else { _%>
+<%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(login))
@@ -212,6 +212,6 @@ class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends Abstr
             .expectHeader().doesNotExist("Authorization")
             .expectBody()
             .jsonPath("$.id_token").doesNotExist();
-        <%_ } _%>
+<%_ } _%>
     }
 }
