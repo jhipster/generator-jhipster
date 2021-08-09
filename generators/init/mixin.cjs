@@ -20,13 +20,7 @@ const { defaults } = require('lodash');
 
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
-const {
-  NODE_VERSION,
-  PRETTIER_DEFAULT_INDENT,
-  PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE,
-  SKIP_COMMIT_HOOK,
-  SKIP_COMMIT_HOOK_DEFAULT_VALUE,
-} = require('./constants.cjs');
+const { NODE_VERSION, PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 
@@ -37,10 +31,7 @@ module.exports.mixin = parent =>
     /**
      * Load init options constants.
      */
-    loadInitOptionsConstants(into = this) {
-      into.PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE = PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE;
-      into.SKIP_COMMIT_HOOK_DEFAULT_VALUE = SKIP_COMMIT_HOOK_DEFAULT_VALUE;
-    }
+    loadInitOptionsConstants(into = this) {}
 
     /**
      * Register and parse init options.
