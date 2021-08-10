@@ -20,11 +20,7 @@ const constants = require('../generator-constants');
 
 const { CLIENT_MAIN_SRC_DIR } = constants;
 
-module.exports = {
-  writeFiles,
-};
-
-const commonFiles = {
+const files = {
   common: [
     {
       templates: ['.eslintignore', 'README.md.jhi.client', `${CLIENT_MAIN_SRC_DIR}manifest.webapp`],
@@ -81,5 +77,10 @@ const commonFiles = {
 };
 
 function writeFiles() {
-  return this.writeFilesToDisk(commonFiles, 'common');
+  return this.writeFilesToDisk(files, 'common');
 }
+
+module.exports = {
+  files,
+  writeFiles,
+};

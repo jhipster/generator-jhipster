@@ -157,6 +157,9 @@ const testBlueprintSupport = (generatorName, skipSbsBlueprint = false) => {
   if (!existsSync(generatorPath)) {
     generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
   }
+  if (!existsSync(generatorPath)) {
+    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.mjs`);
+  }
   const addSpies = generator => {
     const { taskPrefix = '' } = generator.features;
     const apiPrefix = taskPrefix ? '' : '_';

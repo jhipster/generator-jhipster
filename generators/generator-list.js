@@ -45,6 +45,7 @@ const Generators = {
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
+  GENERATOR_GENERATE_BLUEPRINT: 'generate-blueprint',
   GENERATOR_GRADLE: 'gradle',
   GENERATOR_HEROKU: 'heroku',
   GENERATOR_INFO: 'info',

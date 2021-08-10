@@ -35,14 +35,17 @@
     "url": "https://github.com/jdubois"
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
     "./cli/": "./cli/",
     "./generators/": "./generators/",
     "./jdl/": "./jdl/",
     "./lib/": "./lib/",
     "./utils/": "./utils/",
     "./package.json": "./package.json",
-    "./esm/cli": "./cli/program.js",
+    "./esm/cli": "./cli/index.mjs",
     "./esm/generators/*": "./generators/*/esm.mjs",
     "./esm/generators": "./lib/constants/generators.mjs",
     "./esm/priorities": "./lib/constants/priorities.mjs",
@@ -58,9 +61,9 @@
     "jdl",
     "lib",
     "utils",
-    "!__*",
-    "!*.snap",
-    "!*.spec.?(c|m)js"
+    "!**/__*",
+    "!**/*.snap",
+    "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
     "completion": "tabtab install --name jhipster --auto",

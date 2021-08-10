@@ -161,6 +161,9 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     commandName: undefined,
     fromJdl: true,
   };
+  if (!generatorOptions.blueprints) {
+    delete generatorOptions.blueprints;
+  }
 
   if (!fork) {
     const oldCwd = process.cwd();

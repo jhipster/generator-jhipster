@@ -168,6 +168,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Get generator dependencies for building help
+   * This is a stub and should be overwritten by the generator.
+   *
+   * @returns {string[]}
+   */
+  getPossibleDependencies() {
+    return [];
+  }
+
+  /**
    * Shared Data
    */
   get sharedData() {
@@ -2330,7 +2340,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         return val;
       }
       if (typeof val === 'function') {
-        return val(context, this);
+        return val.call(this, context, this);
       }
       throw new Error(`Type not supported ${val}`);
     };
@@ -3167,6 +3177,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param String options - Object containing options.
    */
   jhipsterOptions(options = {}) {
+    options = _.cloneDeep(options);
     Object.entries(options).forEach(([optionName, optionDesc]) => {
       this.option(kebabCase(optionName), optionDesc);
       if (!optionDesc.scope) return;
@@ -3176,6 +3187,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           this.config.set(optionName, optionValue);
         } else if (optionDesc.scope === 'runtime') {
           this.configOptions[optionName] = optionValue;
+        } else if (optionDesc.scope === 'generator') {
+          this[optionName] = optionValue;
         } else {
           throw new Error(`Scope ${optionDesc.scope} not supported`);
         }
