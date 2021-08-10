@@ -36,26 +36,26 @@ components:
         "application/problem+json":
           schema:
             $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
-<% if (authenticationType === 'jwt') { %>
+<% if (authenticationTypeJwt) { %>
   securitySchemes:
     jwt:
       type: http
       description: JWT Authentication
       scheme: bearer
       bearerFormat: JWT
-    <%_ if (applicationType === 'monolith') { _%>
+  <%_ if (applicationTypeMonolith) { _%>
     basic:
       type: http
       description: Basic Authentication
       scheme: basic
-    <%_ } _%>
+  <%_ } _%>
 security:
   - jwt: []
-  <%_ if (applicationType === 'monolith') { _%>
+  <%_ if (applicationTypeMonolith) { _%>
   - basic: []
   <%_ } _%>
 <% } %>
-<% if (authenticationType === 'oauth2') { %>
+<% if (authenticationTypeOauth2) { %>
   securitySchemes:
     oauth:
       type: oauth2
@@ -76,7 +76,7 @@ security:
   - oauth: [jhipster, email, profile]
   - openId: [jhipster, email, profile]
 <% } %>
-<% if (authenticationType === 'session') { %>
+<% if (authenticationTypeSession) { %>
   securitySchemes:
     sessionId:
       type: apiKey

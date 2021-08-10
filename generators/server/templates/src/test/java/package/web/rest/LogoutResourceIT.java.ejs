@@ -85,7 +85,7 @@ class LogoutResourceIT {
         claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
         claims.put("sub", 123);
 
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         SecurityContextHolder
             .getContext()
             .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)));
@@ -93,17 +93,17 @@ class LogoutResourceIT {
         authInjector.afterPropertiesSet();
 
         this.restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-    <%_ } else { _%>
+<%_ } else { _%>
         this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
             .apply(springSecurity())
             .configureClient()
             .build();
-    <%_ } _%>
+<%_ } _%>
     }
 
     @Test
     void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
             .getConfigurationMetadata().get("end_session_endpoint").toString();
         restLogoutMockMvc.perform(post("/api/logout"))
@@ -111,7 +111,7 @@ class LogoutResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
             .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
-    <%_ } else { _%>
+<%_ } else { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc")
             .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata()
                 .get("end_session_endpoint").toString()).block();
@@ -124,6 +124,6 @@ class LogoutResourceIT {
             .expectBody()
             .jsonPath("$.logoutUrl").isEqualTo(logoutUrl.toString())
             .jsonPath("$.idToken").isEqualTo(ID_TOKEN);
-    <%_ } _%>
+<%_ } _%>
     }
 }

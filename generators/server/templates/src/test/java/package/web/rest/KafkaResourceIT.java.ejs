@@ -56,11 +56,11 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     private static boolean started = false;
     private static KafkaContainer kafkaContainer;
 
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     private MockMvc restMockMvc;
-    <%_ } else { _%>
+<%_ } else { _%>
     private WebTestClient client;
-    <%_ } _%>
+<%_ } _%>
 
     @BeforeAll
     static void startServer() {
@@ -89,25 +89,25 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
         <%= upperFirstCamelCase(baseName) %>KafkaResource kafkaResource = new <%= upperFirstCamelCase(baseName) %>KafkaResource(kafkaProperties);
 
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
-        <%_ } else { _%>
+<%_ } else { _%>
         client = WebTestClient.bindToController(kafkaResource).build();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
     void producesMessages()<% if (!reactive) { %> throws Exception<% } %> {
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-        <%_ } else { _%>
+<%_ } else { _%>
         client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce")
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON);
-        <%_ } _%>
+<%_ } _%>
 
         Map<String, Object> consumerProps = new HashMap<>(getConsumerProps("group-produce"));
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
@@ -126,7 +126,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
         producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
 
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         MvcResult mvcResult = restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume"))
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
@@ -140,7 +140,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             }
         }
         fail("Expected content data:value-consume not received");
-        <%_ } else { _%>
+<%_ } else { _%>
         String value = client.get().uri("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume")
             .accept(MediaType.TEXT_EVENT_STREAM)
             .exchange()
@@ -150,7 +150,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             .getResponseBody().blockFirst(Duration.ofSeconds(10));
 
         assertThat(value).isEqualTo("value-consume");
-        <%_ } _%>
+<%_ } _%>
     }
 
     private Map<String, String> getProducerProps() {

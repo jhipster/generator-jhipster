@@ -31,7 +31,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 org:
   neo4j:
     migrations:
@@ -40,7 +40,7 @@ org:
       installed-by: <%= baseName %>
 <%_ } _%>
 
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 eureka:
   client:
     enabled: false
@@ -49,7 +49,7 @@ eureka:
     instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
 <%_ } _%>
 
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 mongock:
   change-logs-scan-package:
     - <%= packageName %>.config.dbmigrations
@@ -60,24 +60,24 @@ mongock:
 
 <%_ } _%>
 spring:
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
 <%_ } _%>
   application:
     name: <%= baseName %>
-  <%_ if (applicationType === 'gateway' && reactive) { _%>
+<%_ if (applicationTypeGateway && reactive) { _%>
   autoconfigure:
     exclude:
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
   cloud:
     config:
       enabled: false
-  <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
   cloud:
     consul:
       discovery:
@@ -86,8 +86,8 @@ spring:
       config:
         enabled: false
       enabled: false
-  <%_ } _%>
-  <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
@@ -96,11 +96,11 @@ spring:
     password:
     hikari:
       auto-commit: false
-  <%_ } _%>
+<%_ } _%>
   jackson:
     serialization:
       write-durations-as-timestamps: false
-  <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
   jpa:
     database-platform: tech.jhipster.domain.util.FixedH2Dialect
     open-in-view: false
@@ -118,54 +118,54 @@ spring:
       hibernate.hbm2ddl.auto: validate
       hibernate.jdbc.time_zone: UTC
       hibernate.query.fail_on_pagination_over_collection_fetch: true
-  <%_ } _%>
-  <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
   data:
-  <%_ } _%>
-  <%_ if (databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
     mongodb:
       host: localhost
       port: 0
       database: <%= baseName %>
-  <%_ } _%>
-  <%_ if (databaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
     cassandra:
       contact-points: localhost
       compression: NONE
       keyspace-name: cassandra_unit_keyspace
       local-datacenter: datacenter1
-  <%_ } _%>
-  <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
   couchbase:
     bucket:
       name: jhipster
       password: password
-  <%_ } _%>
-  <%_ if (databaseType === 'sql') { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
   liquibase:
     contexts: test
-    <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     url: <%- getJDBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-  <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
     url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
     username: r2dbc
     password:
-  <%_ } _%>
-  <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
+<%_ } _%>
+<%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && authenticationTypeJwt) { _%>
   security:
     user:
       name: test
       password: test
-  <%_ } _%>
+<%_ } _%>
   task:
     execution:
       thread-name-prefix: <%= dasherizedBaseName %>-task-
@@ -179,7 +179,7 @@ spring:
         size: 1
   thymeleaf:
     mode: HTML
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
   security:
     oauth2:
@@ -210,29 +210,27 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
   mail:
     from: test@localhost
     base-url: http://127.0.0.1:8080
 <%_ } _%>
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   security:
     authentication:
-  <%_ if (authenticationType === 'jwt') { _%>
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
         base64-secret: <%= jwtSecretKey %>
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
-  <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'session' && !reactive) { _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
 <%_ } _%>
-<%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
 kafka:
   bootstrap-servers: localhost:9092
   consumer:

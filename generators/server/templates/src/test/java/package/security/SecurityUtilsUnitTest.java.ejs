@@ -30,15 +30,15 @@ import reactor.util.context.Context;
 <%_ } else { _%>
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-    <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import java.time.Instant;
 import java.util.*;
 <%_ } else { _%>
@@ -50,7 +50,7 @@ import java.util.Optional;
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
 <%_ } _%>
 
@@ -74,7 +74,7 @@ class SecurityUtilsUnitTest {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
         assertThat(login).contains("admin");
     }
-    <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
 
     @Test
     void testGetCurrentUserLoginForOAuth2() {
@@ -123,8 +123,8 @@ class SecurityUtilsUnitTest {
             .containsAll(expectedAuthorities);
     }
 
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt) { _%>
 
     @Test
     void testGetCurrentUserJWT() {
@@ -134,7 +134,7 @@ class SecurityUtilsUnitTest {
         Optional<String> jwt = SecurityUtils.getCurrentUserJWT();
         assertThat(jwt).contains("token");
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Test
     void testIsAuthenticated() {
@@ -180,7 +180,7 @@ class SecurityUtilsUnitTest {
             .block();
         assertThat(login).isEqualTo("admin");
     }
-    <%_ if (authenticationType === 'jwt') { _%>
+  <%_ if (authenticationTypeJwt) { _%>
 
     @Test
     void testgetCurrentUserJWT() {
@@ -193,7 +193,7 @@ class SecurityUtilsUnitTest {
             .block();
         assertThat(jwt).isEqualTo("token");
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Test
     void testIsAuthenticated() {

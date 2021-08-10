@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import com.couchbase.client.core.time.Delay;
 import com.couchbase.client.java.util.retry.Retry;
 <%_ } _%>
@@ -34,11 +34,11 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import rx.Observable;
 import rx.internal.util.UtilityFunctions;
 <%_ } _%>
@@ -47,7 +47,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -56,7 +56,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 <%_ } _%>
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +70,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class TestUtil {
 
     private static final ObjectMapper mapper = createObjectMapper();
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
     private static final int MAX_ATTEMPTS = 3;
     private static final Delay DEFAULT_DELAY = Delay.exponential(TimeUnit.SECONDS);
 <%_ } _%>
@@ -108,7 +108,7 @@ public final class TestUtil {
         }
         return byteArray;
     }
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 
     /**
      * Mock user authentication for Spring SpEL expression used in {@link <%= packageName %>.repository.N1qlCouchbaseRepository}.
@@ -116,7 +116,7 @@ public final class TestUtil {
     public static void mockAuthentication() {
         TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));
     }
-    <%_ } _%>
+<%_ } _%>
 
     /**
      * A matcher that tests that the examined string represents the same instant as the reference datetime.
@@ -226,10 +226,10 @@ public final class TestUtil {
         // Test with an instance of the same class
         T domainObject2 = clazz.getConstructor().newInstance();
         assertThat(domainObject1).isNotEqualTo(domainObject2);
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
         // HashCodes are equals because the objects are not persisted yet
         assertThat(domainObject1).hasSameHashCodeAs(domainObject2);
-        <%_ } _%>
+<%_ } _%>
     }
 <%_ if (!reactive) { _%>
 
@@ -245,7 +245,7 @@ public final class TestUtil {
         return dfcs;
     }
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 
     /**
      * Makes a an executes a query to the EntityManager finding all stored objects.
@@ -263,7 +263,7 @@ public final class TestUtil {
         return allQuery.getResultList();
     }
 <%_ } _%>
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 
     public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
         Retry.wrapForRetry(
