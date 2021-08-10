@@ -58,7 +58,7 @@ module.exports.mixin = parent =>
      * @param {any} config - config to load config from
      * @param {any} into - destination context to use default is context
      */
-    loadProjectNameConfig(config = this.jhipsterConfig, into = this) {
+    loadProjectNameConfig(into = this, config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);
       into[BASE_NAME] = config[BASE_NAME];
       into[JHIPSTER_VERSION] = config[JHIPSTER_VERSION];
@@ -69,7 +69,7 @@ module.exports.mixin = parent =>
      * Prepare derived project-name properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    prepareDerivedProjectNameProperties(fromInto = this) {
+    prepareProjectNameDerivedProperties(fromInto = this) {
       fromInto.dasherizedBaseName = kebabCase(fromInto[BASE_NAME]);
       fromInto.humanizedBaseName = startCase(fromInto[BASE_NAME]);
     }

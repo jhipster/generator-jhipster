@@ -54,7 +54,7 @@ module.exports.mixin = parent =>
      * @param {any} config - config to load config from
      * @param {any} into - destination context to use default is context
      */
-    loadSpringBootConfig(config = this.jhipsterConfig, into = this) {
+    loadSpringBootConfig(into = this, config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);
       into[SPRING_BOOT_PARENT_BOM] = config[SPRING_BOOT_PARENT_BOM];
     }
@@ -63,7 +63,7 @@ module.exports.mixin = parent =>
      * Prepare derived spring-boot properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    prepareDerivedSpringBootProperties(fromInto = this) {}
+    prepareSpringBootDerivedProperties(fromInto = this) {}
 
     /**
      * Load spring-boot constants into 'into'.

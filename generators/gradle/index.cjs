@@ -49,6 +49,9 @@ module.exports = class extends MixedChain {
       this.configureChain();
     }
 
+    // Application context for templates
+    this.application = {};
+
     // Fallback to server templates to avoid duplications.
     // TODO v8 move sources from server templates to gradle templates.
     this.jhipsterTemplatesFolders.push(this.fetchFromInstalledJHipster('server', 'templates'));
@@ -90,11 +93,11 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.GRADLE_VERSION = GRADLE_VERSION;
-        this.loadChainConstants();
+        this.application.GRADLE_VERSION = GRADLE_VERSION;
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
@@ -107,7 +110,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
@@ -121,7 +124,7 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+        await this.writeFiles({ files, context: this.application });
       },
     };
   }

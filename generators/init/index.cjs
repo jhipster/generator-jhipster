@@ -33,9 +33,8 @@ const {
 } = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
+const { PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
-const { defaultConfig } = require('./config.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_INIT);
@@ -51,6 +50,9 @@ module.exports = class extends MixedChain {
     }
 
     if (this.options.help) return;
+
+    // Application context for templates
+    this.application = {};
 
     if (this.options.defaults) {
       this.configureChain();
@@ -100,7 +102,7 @@ module.exports = class extends MixedChain {
               name: PRETTIER_DEFAULT_INDENT,
               type: 'input',
               message: 'What is the default indentation?',
-              default: defaultConfig.prettierDefaultIndent,
+              default: () => this.sharedData.getConfigDefaultValue(PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE),
             },
           ],
           this.config
@@ -133,10 +135,10 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
       loadDependabotDependencies() {
         this.loadDependabotDependencies(this.fetchFromInstalledJHipster(GENERATOR_INIT, 'templates', 'package.json'));
@@ -152,7 +154,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
@@ -166,11 +168,11 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+        await this.writeFiles({ files, context: this.application });
       },
       async writeCommitHookFiles() {
-        if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
-        await this.writeFilesToDisk(commitHooksFiles);
+        if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
+        await this.writeFiles({ files: commitHooksFiles, context: this.application });
       },
     };
   }
@@ -183,7 +185,7 @@ module.exports = class extends MixedChain {
   get postWriting() {
     return {
       addCommitHookDependencies() {
-        if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
+        if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
         this.packageJson.merge({
           devDependencies: {
             husky: this.dependabotDependencies.husky,
@@ -278,5 +280,9 @@ module.exports = class extends MixedChain {
       ...process.env,
       LANG: 'en',
     });
+  }
+
+  shouldSkipCommitHook() {
+    return this.application[SKIP_COMMIT_HOOK];
   }
 };

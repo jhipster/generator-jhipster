@@ -45,6 +45,9 @@ module.exports = class extends MixedChain {
       [BUILD_DESTINATION]: BUILD_DESTINATION_VALUE,
     });
 
+    // Application context for templates
+    this.application = {};
+
     if (this.options.defaults) {
       this.configureChain();
     }
@@ -86,10 +89,10 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
@@ -102,7 +105,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
@@ -116,7 +119,7 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+        await this.writeFiles({ files, context: this.application });
       },
     };
   }
