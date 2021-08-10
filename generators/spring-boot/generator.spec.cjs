@@ -19,8 +19,9 @@
 const expect = require('expect');
 const path = require('path');
 
-const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
+
+const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { GENERATOR_SPRING_BOOT } = require('../generator-list');
 
@@ -37,7 +38,7 @@ describe(`JHipster ${generator} generator`, () => {
     customPrompts: {},
     generatorPath,
   });
-  describe('blueprint support', () => testBlueprintSupport('spring-boot'));
+  describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
       let runResult;

@@ -16,8 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const MAVEN = 'maven';
+const MAVEN_DESCRIPTION = 'Maven';
+const BUILD_DESTINATION_VALUE = 'target';
+
 module.exports = {
-  MAVEN: 'maven',
-  MAVEN_DESCRIPTION: 'Maven',
-  BUILD_DESTINATION_VALUE: 'target',
+  MAVEN,
+  MAVEN_DESCRIPTION,
+  BUILD_DESTINATION_VALUE,
 };

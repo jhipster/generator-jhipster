@@ -64,6 +64,7 @@ const { CONSUL, EUREKA } = require('../jdl/jhipster/service-discovery-types');
 const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test-framework-types');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
+const { CUSTOM_PRIORITIES } = require('../lib/support/priorities.cjs');
 const { getBase64Secret, getRandomHex } = require('./utils');
 const cacheTypes = require('../jdl/jhipster/cache-types');
 const serviceDiscoveryTypes = require('../jdl/jhipster/service-discovery-types');
@@ -76,44 +77,6 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.FALSE;
-// Reverse order.
-const CUSTOM_PRIORITIES = [
-  {
-    priorityName: 'preConflicts',
-    queueName: 'jhipster:preConflicts',
-    before: 'conflicts',
-  },
-  {
-    priorityName: 'postWriting',
-    queueName: 'jhipster:postWriting',
-    before: 'preConflicts',
-  },
-  {
-    priorityName: 'preparingRelationships',
-    queueName: 'jhipster:preparingRelationships',
-    before: 'default',
-  },
-  {
-    priorityName: 'preparingFields',
-    queueName: 'jhipster:preparingFields',
-    before: 'preparingRelationships',
-  },
-  {
-    priorityName: 'preparing',
-    queueName: 'jhipster:preparing',
-    before: 'preparingFields',
-  },
-  {
-    priorityName: 'loading',
-    queueName: 'jhipster:loading',
-    before: 'preparing',
-  },
-  {
-    priorityName: 'composing',
-    queueName: 'jhipster:composing',
-    before: 'loading',
-  },
-];
 
 /**
  * This is the Generator base class.
@@ -160,6 +123,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // JHipster runtime config that should not be stored to .yo-rc.json.
     this.configOptions = this.options.configOptions || { sharedEntities: {} };
     this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
+    this._sharedData = this.options.jhipsterSharedData;
 
     /* Force config to use 'generator-jhipster' namespace. */
     this._config = this._getStorage('generator-jhipster');
@@ -189,6 +153,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       */
       this.composeWithJHipster(GENERATOR_BOOTSTRAP, { ...this.options, configOptions: this.configOptions }, true);
     }
+  }
+
+  /**
+   * Shared Data
+   */
+  get sharedData() {
+    if (!this._sharedData) {
+      throw new Error("Shared data doesn't exists it should be provided by the cli");
+    }
+    return this._sharedData;
   }
 
   /**

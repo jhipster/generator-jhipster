@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const path = require('path');
 const expect = require('expect');
+const path = require('path');
 const { access } = require('fs/promises');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
@@ -42,6 +42,7 @@ describe(`JHipster ${generator} generator`, () => {
     },
     contextBuilder,
   });
+  describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
       let runResult;
@@ -108,5 +109,4 @@ describe(`JHipster ${generator} generator`, () => {
       });
     });
   });
-  describe('blueprint support', () => testBlueprintSupport('init'));
 });

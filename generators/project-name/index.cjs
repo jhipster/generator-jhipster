@@ -18,7 +18,14 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { generateMixedChain } = require('generator-jhipster/support');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+} = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config.cjs');
@@ -54,7 +61,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -72,29 +79,29 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       async showPrompts() {
         if (this.shouldSkipPrompts()) return;
         await this.prompt(
           [
             {
-              name: PROJECT_NAME,
-              type: 'input',
-              message: 'What is the project name of your application?',
-              default: () => this._getDefaultProjectName(),
-            },
-            {
               name: BASE_NAME,
               type: 'input',
               validate: input => this._validateBaseName(input),
               message: 'What is the base name of your application?',
               default: () => this.getDefaultAppName(),
+            },
+            {
+              name: PROJECT_NAME,
+              type: 'input',
+              message: 'What is the project name of your application?',
+              default: () => this._getDefaultProjectName(),
             },
           ],
           this.config
@@ -103,12 +110,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       configure() {
         this.configureProjectName();
@@ -116,12 +123,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
@@ -132,15 +139,25 @@ module.exports = class extends MixedChain {
       loadConfig() {
         this.loadChainConfig();
       },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
+    };
+  }
+
+  get [LOADING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.loading;
+  }
+
+  get preparing() {
+    return {
+      prepareDerivedProperties() {
+        this.prepareDerivedChainProperties();
       },
     };
   }
 
-  get loading() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.preparing;
   }
 
   /*

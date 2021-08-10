@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const { defaults } = require('lodash');
+
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
 const { SPRING_BOOT_VERSION, SPRING_BOOT_PARENT_BOM } = require('./constants.cjs');
@@ -27,6 +28,11 @@ module.exports.dependencyChain = [GENERATOR_JAVA];
 
 module.exports.mixin = parent =>
   class extends parent {
+    /**
+     * Load spring-boot options constants.
+     */
+    loadSpringBootOptionsConstants(into = this) {}
+
     /**
      * Register and parse spring-boot options.
      */
@@ -54,13 +60,13 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived spring-boot configs into fromInto.
+     * Prepare derived spring-boot properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    loadDerivedSpringBootConfig(fromInto = this) {}
+    prepareDerivedSpringBootProperties(fromInto = this) {}
 
     /**
-     * Load derived spring-boot configs into 'into'.
+     * Load spring-boot constants into 'into'.
      * @param {Object} into - destination context
      */
     loadSpringBootConstants(into = this) {
@@ -68,15 +74,9 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived spring-boot configs into 'into'.
-     * @param {Object} into - destination context
+     * Compose with selected spring-boot configuration.
      */
-    loadSpringBootOptionsConstants(into = this) {}
-
-    /**
-     * Compose with selected spring-boot.
-     */
-    async composeWithSelectedSpringBoot(config = this.jhipsterConfig) {
+    async composeWithSpringBootConfig(config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);
     }
   };

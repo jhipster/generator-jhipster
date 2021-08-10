@@ -18,7 +18,8 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { generateMixedChain } = require('generator-jhipster/support');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/support/priorities.cjs');
 
 const { GENERATOR_JAVA, GENERATOR_GRADLE } = require('../generator-list');
 const { files } = require('./files.cjs');
@@ -60,7 +61,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -78,12 +79,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
@@ -95,18 +96,28 @@ module.exports = class extends MixedChain {
       loadConfig() {
         this.loadChainConfig();
       },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
+    };
+  }
+
+  get [LOADING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.loading;
+  }
+
+  get preparing() {
+    return {
+      prepareDerivedProperties() {
+        this.prepareDerivedChainProperties();
       },
     };
   }
 
-  get loading() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.preparing;
   }
 
-  _writing() {
+  get writing() {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
@@ -115,8 +126,8 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 };

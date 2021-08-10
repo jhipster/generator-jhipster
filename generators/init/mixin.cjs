@@ -20,7 +20,7 @@ const { defaults } = require('lodash');
 
 const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
-const { PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK, NODE_VERSION } = require('./constants.cjs');
+const { NODE_VERSION, PRETTIER_DEFAULT_INDENT, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 
@@ -61,17 +61,16 @@ module.exports.mixin = parent =>
     }
 
     /**
-     * Load derived init configs into fromInto.
+     * Prepare derived init properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    // eslint-disable-next-line no-empty-pattern
-    loadDerivedInitConfig(fromInto = this) {}
+    prepareDerivedInitProperties(fromInto = this) {}
 
     /**
-     * Load derived init configs into 'into'.
+     * Load init constants into 'into'.
      * @param {Object} into - destination context
      */
     loadInitConstants(into = this) {
-      this.NODE_VERSION = NODE_VERSION;
+      into.NODE_VERSION = NODE_VERSION;
     }
   };
