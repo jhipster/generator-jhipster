@@ -2268,6 +2268,153 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * write the given files using provided options.
+   *
+   * @param {object} options
+   * @param {object} options.files - files to write
+   * @param {object} [options.context] - context for templates
+   * @param {string|string[]} [options.rootTemplatesPath] - path(s) to look for templates.
+   *        Single absolute path or relative path(s) between the templates folder and template path.
+   * @return {string[]}
+   */
+  async writeFiles(options) {
+    const { files, context = this } = options;
+    assert(typeof files === 'object', 'files must be an object');
+    let { rootTemplatesPath } = options;
+    const startTime = new Date();
+
+    /* Build lookup order first has preference.
+     * Example
+     * rootTemplatesPath = ['reactive', 'common']
+     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
+     *
+     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
+     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
+     * /.../generator-jhispter/server/templates/reactive/templatePath
+     * /.../generator-jhispter/server/templates/common/templatePath
+     */
+    let rootTemplatesAbsolutePath;
+    if (!rootTemplatesPath) {
+      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders;
+    } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
+      rootTemplatesAbsolutePath = rootTemplatesPath;
+    } else {
+      rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
+      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders
+        .map(templateFolder =>
+          rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
+        )
+        .flat();
+    }
+    const normalizeEjs = file => file.replace('.ejs', '');
+    const normalizeCallback = async (val, fallback) => {
+      if (val === undefined) {
+        if (typeof fallback === 'function') {
+          return normalizeCallback(fallback);
+        }
+        return fallback;
+      }
+      if (typeof val === 'boolean') {
+        return val;
+      }
+      if (typeof val === 'string') {
+        return val;
+      }
+      if (typeof val === 'function') {
+        return val(context, this);
+      }
+      throw new Error(`Type not supported ${val}`);
+    };
+
+    const allBlocks = Object.entries(files).map(async ([key, section]) => {
+      assert(Array.isArray(section), `Section must be an array for ${key}`);
+      return section.map(async (block, idx) => {
+        assert(typeof block === 'object', `Block must be an object for ${key}[${idx}]`);
+        assert(Array.isArray(block.templates), `Block templates must be an array for ${key}[${idx}]`);
+        const { path: blockPathCallback = './', to: blockToCallback, condition: blockConditionCallback } = block;
+        const condition = await normalizeCallback(blockConditionCallback);
+        if (condition !== undefined && !condition) {
+          return undefined;
+        }
+        const blockPath = await normalizeCallback(blockPathCallback);
+        const blockTo = (await normalizeCallback(blockToCallback)) || blockPath;
+        return block.templates.map(async templateObj => {
+          let templateOptions;
+          let sourceFile;
+          let destinationFile;
+          if (typeof templateObj === 'string') {
+            sourceFile = path.join(blockPath, templateObj);
+            destinationFile = this.destinationPath(blockTo, normalizeEjs(templateObj));
+          } else {
+            const { file, renameTo, destinationFile: objDestinationFile } = templateObj;
+            templateOptions = templateObj.options;
+            const normalizedFile = await normalizeCallback(file);
+            sourceFile = path.join(blockPath, normalizedFile);
+            destinationFile = this.destinationPath(
+              blockTo,
+              path.join(await normalizeCallback(objDestinationFile || renameTo, () => normalizeEjs(normalizedFile)))
+            );
+
+            const override = await normalizeCallback(templateObj.override);
+            if (override !== undefined && !override && this.fs.exists(destinationFile)) {
+              this.debug(`skipping file ${destinationFile}`);
+              return undefined;
+            }
+          }
+
+          const extension = path.extname(sourceFile);
+          const appendEjs = !templateObj.noEjs && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+          const ejsFile = appendEjs || extension === '.ejs';
+
+          let sourceFileFrom;
+          if (Array.isArray(rootTemplatesAbsolutePath)) {
+            // Look for existing templates
+            const existingTemplates = rootTemplatesAbsolutePath
+              .map(rootPath => this.templatePath(rootPath, sourceFile))
+              .filter(templateFile => fs.existsSync(appendEjs ? `${templateFile}.ejs` : templateFile));
+
+            if (existingTemplates.length > 1) {
+              const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
+templates: ${JSON.stringify(existingTemplates, null, 2)}`;
+              if (existingTemplates.length > 2) {
+                this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+              } else {
+                this.debug(moreThanOneMessage);
+              }
+            }
+            sourceFileFrom = existingTemplates.shift();
+
+            if (sourceFileFrom === undefined) {
+              throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
+            }
+          } else if (typeof rootTemplatesAbsolutePath === 'string') {
+            sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
+          } else {
+            sourceFileFrom = this.templatePath(sourceFile);
+          }
+          if (appendEjs) {
+            sourceFileFrom = `${sourceFileFrom}.ejs`;
+          }
+
+          if (!ejsFile) {
+            return this.copyTemplateAsync(sourceFileFrom, destinationFile).then(() => destinationFile);
+          }
+          return this.renderTemplateAsync(sourceFileFrom, destinationFile, context, {
+            ...templateOptions,
+            // Set root for ejs to lookup for partials.
+            root: rootTemplatesAbsolutePath,
+          }).then(() => destinationFile);
+        });
+      });
+    });
+    const blocks = (await Promise.all(allBlocks)).flat();
+    const templateBlocks = (await Promise.all(blocks)).flat();
+    const templates = (await Promise.all(templateBlocks)).flat();
+    this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
+    return templates.filter(file => file);
+  }
+
+  /**
    * Parse runtime options.
    * @param {Object} [options] - object to load from.
    * @param {Object} [dest] - object to write to.
