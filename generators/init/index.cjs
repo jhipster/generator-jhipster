@@ -188,8 +188,8 @@ module.exports = class extends MixedChain {
         if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
         this.packageJson.merge({
           devDependencies: {
-            husky: this.dependabotDependencies.husky,
-            'lint-staged': this.dependabotDependencies['lint-staged'],
+            husky: this.nodeDependencies.husky,
+            'lint-staged': this.nodeDependencies['lint-staged'],
           },
         });
       },

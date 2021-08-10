@@ -2627,14 +2627,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     config.backendName = config.backendName || 'Java';
     dest.backendName = config.backendName;
 
-    config.dependabotDependencies = config.dependabotDependencies || {
+    config.nodeDependencies = config.nodeDependencies || {
       prettier: packagejs.dependencies.prettier,
       'prettier-plugin-java': packagejs.dependencies['prettier-plugin-java'],
       'prettier-plugin-packagejson': packagejs.dependencies['prettier-plugin-packagejson'],
     };
-    dest.dependabotDependencies = config.dependabotDependencies;
+    dest.nodeDependencies = config.nodeDependencies;
 
-    // Deprecated use dependabotDependencies instead
+    // Deprecated use nodeDependencies instead
     config.dependabotPackageJson = config.dependabotPackageJson || {};
     dest.dependabotPackageJson = config.dependabotPackageJson;
   }
@@ -3021,9 +3021,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @example this.loadDependabotDependencies(this.fetchFromInstalledJHipster('init', 'templates', 'package.json'));
    * @param String dependabotFile - package.json path
    */
-  loadDependabotDependencies(dependabotFile) {
-    const { dependencies, devDependencies } = this.fs.readJSON(dependabotFile);
-    _.merge(this.configOptions.dependabotDependencies, dependencies, devDependencies);
+  loadDependabotDependencies(packageJson) {
+    const { dependencies, devDependencies } = this.fs.readJSON(packageJson);
+    _.merge(this.configOptions.nodeDependencies, dependencies, devDependencies);
   }
 
   /**
