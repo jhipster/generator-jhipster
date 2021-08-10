@@ -45,8 +45,8 @@ const TYPE_UUID = CommonDBTypes.UUID;
 let useBlueprints;
 
 module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     // This adds support for a `--auth` flag
     this.option('auth', {

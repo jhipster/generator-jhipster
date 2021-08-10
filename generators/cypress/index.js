@@ -26,8 +26,8 @@ const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     if (this.options.help) {
       return;

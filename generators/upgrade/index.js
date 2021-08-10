@@ -40,8 +40,8 @@ const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI s
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = class extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     // This adds support for a `--target-version` flag
     this.option('target-version', {

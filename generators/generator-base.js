@@ -86,8 +86,8 @@ const NO_WEBSOCKET = websocketTypes.FALSE;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class JHipsterBaseGenerator extends PrivateBase {
-  constructor(args, opts, features) {
-    super(args, opts, features);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     if (!this.features.jhipsterModular) {
       // This adds support for a `--from-cli` flag

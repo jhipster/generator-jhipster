@@ -26,8 +26,8 @@ const { GENERATOR_ADD } = require('../generator-list');
  * @experimental
  */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     this.argument('generators', {
       type: Array,
