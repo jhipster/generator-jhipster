@@ -119,8 +119,7 @@ module.exports = class extends BaseDockerGenerator {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
-          this.loadServerConfig(element);
-          this.loadDerivedServerConfig(element);
+          this.loadServerConfig(element, element);
           this.loadDerivedAppConfig(element);
         });
         this.loadDeploymentConfig(this);

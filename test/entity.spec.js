@@ -16,7 +16,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
             })
             .withArguments(['foo'])
@@ -42,7 +42,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-couchbase-search'), dir);
             })
             .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
@@ -69,7 +69,7 @@ describe('JHipster generator for entity', () => {
         before(() =>
           helpers
             .create(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
             })
             .withArguments(['foo'])
@@ -114,7 +114,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
             })
             .withArguments(['foo'])
@@ -152,7 +152,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -177,7 +177,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -201,7 +201,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -225,7 +225,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -253,7 +253,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -282,7 +282,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -308,7 +308,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -334,7 +334,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             })
             .withArguments(['foo'])
@@ -362,7 +362,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/psql-with-no-fake-data'), dir);
             })
             .withArguments(['foo'])
@@ -386,7 +386,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir);
             })
             .withArguments(['foo'])
@@ -413,7 +413,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
             })
             .withArguments(['foo'])
@@ -437,7 +437,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
             })
             .withArguments(['foo'])
@@ -465,7 +465,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
             })
             .withArguments(['foo'])
@@ -490,7 +490,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
             })
             .withArguments(['foo'])
@@ -517,7 +517,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/mongodb-with-relations'), dir);
             })
             .withArguments(['foo'])
@@ -541,7 +541,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
             })
             .withPrompts({
@@ -593,7 +593,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
             })
             .withArguments(['baz'])
@@ -749,7 +749,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/compose/05-cassandra'), dir);
               fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
             })
@@ -772,7 +772,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
               fse.copySync(path.join(__dirname, 'templates/.jhipster/DtoServicePagination.json'), path.join(dir, '.jhipster/Foo.json'));
             })
@@ -801,7 +801,7 @@ describe('JHipster generator for entity', () => {
         before(async () => {
           await helpers
             .run(require.resolve('../generators/entity'))
-            .inTmpDir(dir => {
+            .doInDir(dir => {
               fse.copySync(path.join(__dirname, '../test/templates/reproducible'), dir);
             })
             .withArguments(['foo']);
@@ -842,7 +842,7 @@ describe('JHipster generator for entity', () => {
         enumWithOnlyCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumC.java`;
         await helpers
           .run(require.resolve('../generators/entity'))
-          .inTmpDir(dir => {
+          .doInDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/enums'), dir);
           })
           .withArguments(['A']);
@@ -906,7 +906,7 @@ describe('JHipster generator for entity', () => {
       before(async () => {
         await helpers
           .create(require.resolve('../generators/app'))
-          .inTmpDir(dir => {
+          .doInDir(dir => {
             fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
             const jhipsterFolder = path.join(dir, '.jhipster');
             fse.ensureDirSync(jhipsterFolder);

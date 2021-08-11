@@ -54,6 +54,8 @@ const Generators = {
   GENERATOR_OPENAPI: 'openapi-client',
   GENERATOR_OPENSHIFT: 'openshift',
   GENERATOR_SPRING_BOOT: 'spring-boot',
+  GENERATOR_SPRING_CONTROLLER: 'spring-controller',
+  GENERATOR_SPRING_SERVICE: 'spring-service',
 };
 
 module.exports = Generators;
