@@ -16,8 +16,8 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -50,8 +50,8 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -84,8 +84,8 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -113,8 +113,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -147,8 +148,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -183,8 +185,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -219,8 +222,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -255,8 +259,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -292,8 +297,12 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          fse.copySync(path.join(__dirname, './templates/compose/04-mongo'), path.join(dir, './04-mongo'));
+          fse.copySync(path.join(__dirname, './templates/compose/07-mariadb'), path.join(dir, './07-mariadb'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -325,8 +334,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          fse.copySync(path.join(__dirname, './templates/compose/04-mongo'), path.join(dir, './04-mongo'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -358,8 +370,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/05-cassandra'), path.join(dir, './05-cassandra'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -391,8 +404,8 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/08-monolith'), path.join(dir, './08-monolith'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -421,8 +434,12 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          fse.copySync(path.join(__dirname, './templates/compose/10-couchbase'), path.join(dir, './10-couchbase'));
+          fse.copySync(path.join(__dirname, './templates/compose/07-mariadb'), path.join(dir, './07-mariadb'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -454,8 +471,9 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/10-couchbase'), path.join(dir, './10-couchbase'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -487,8 +505,8 @@ describe('JHipster Docker Compose Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/docker-compose'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/12-oracle'), path.join(dir, './12-oracle'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({

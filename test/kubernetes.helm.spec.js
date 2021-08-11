@@ -78,8 +78,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -117,8 +117,9 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -158,8 +159,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -199,8 +200,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -245,8 +246,9 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -291,8 +293,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          fse.copySync(path.join(__dirname, './templates/compose/04-mongo'), path.join(dir, './04-mongo'));
+          fse.copySync(path.join(__dirname, './templates/compose/07-mariadb'), path.join(dir, './07-mariadb'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -346,8 +352,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/08-monolith'), path.join(dir, './08-monolith'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -383,8 +389,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/09-kafka'), path.join(dir, './09-kafka'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -419,8 +425,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
@@ -463,8 +469,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
     before(async () => {
       runResult = await helpers
         .create(require.resolve('../generators/kubernetes-helm'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({

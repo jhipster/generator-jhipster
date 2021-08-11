@@ -756,6 +756,19 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._configuring();
   }
 
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadDerivedAppConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
+
   _writing() {
     return {
       copyFiles() {

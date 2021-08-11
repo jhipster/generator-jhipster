@@ -48,7 +48,7 @@ class <%= controllerClass %>IT {
             .standaloneSetup(<%= controllerInstance %>)
             .build();
     }
-    <%_ for(let idx in controllerActions) { _%>
+<%_ for(let idx in controllerActions) { _%>
 
     /**
      * Test <%= controllerActions[idx].actionName %>
@@ -58,5 +58,5 @@ class <%= controllerClass %>IT {
         restMockMvc.perform(<%= controllerActions[idx].actionMethod.toLowerCase() %>("/api/<%= apiPrefix %>/<%= controllerActions[idx].actionPath %>"))
             .andExpect(status().isOk());
     }
-    <%_ } _%>
+<%_ } _%>
 }
