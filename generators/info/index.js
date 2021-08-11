@@ -34,6 +34,8 @@ module.exports = class extends BaseGenerator {
       defaults: true,
     });
 
+    if (this.options.help) return;
+
     this.env.options.skipInstall = true;
   }
 

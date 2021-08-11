@@ -69,6 +69,8 @@ module.exports = class extends BaseGenerator {
       this.jhipsterConfig.withGeneratedFlag = this.options.withGeneratedFlag;
     }
 
+    if (this.options.help) return;
+
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
   }

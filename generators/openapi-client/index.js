@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const { GENERATOR_OPENAPI } = require('../generator-list');
+const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list');
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
 const prompts = require('./prompts');
 const { writeFiles, customizeFiles } = require('./files');
@@ -35,7 +35,7 @@ module.exports = class extends BaseBlueprintGenerator {
       type: Boolean,
       defaults: OpenAPIDefaultValues.REGEN,
     });
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENAPI);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENAPI_CLIENT);
   }
 
   _initializing() {
