@@ -2271,16 +2271,21 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * write the given files using provided options.
    *
    * @param {object} options
-   * @param {object} options.files - files to write
+   * @param {object} [options.sections] - sections to write
+   * @param {object} [options.blocks] - blocks to write
+   * @param {object} [options.files] - files to write
    * @param {object} [options.context] - context for templates
    * @param {string|string[]} [options.rootTemplatesPath] - path(s) to look for templates.
    *        Single absolute path or relative path(s) between the templates folder and template path.
    * @return {string[]}
    */
   async writeFiles(options) {
-    const { files, context = this } = options;
-    assert(typeof files === 'object', 'files must be an object');
-    let { rootTemplatesPath } = options;
+    const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
+    assert(paramCount > 0, 'One of sections, blocks or files is required');
+    assert(paramCount === 1, 'Only one of sections, blocks or files must be provided');
+
+    const { sections, blocks, templates, rootTemplatesPath, context = this } = options;
+    assert(typeof sections === 'object', 'sections must be an object');
     const startTime = new Date();
 
     /* Build lookup order first has preference.
@@ -2299,25 +2304,20 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     } else if (typeof rootTemplatesPath === 'string' && path.isAbsolute(rootTemplatesPath)) {
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
-      rootTemplatesPath = Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath];
       rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders
-        .map(templateFolder =>
-          rootTemplatesPath.map(relativePath => (relativePath ? path.join(templateFolder, relativePath) : templateFolder))
-        )
+        .map(templateFolder => [].concat(rootTemplatesPath).map(relativePath => path.join(templateFolder, relativePath)))
         .flat();
     }
+
     const normalizeEjs = file => file.replace('.ejs', '');
-    const normalizeCallback = async (val, fallback) => {
+    const resolveCallback = (val, fallback) => {
       if (val === undefined) {
         if (typeof fallback === 'function') {
-          return normalizeCallback(fallback);
+          return resolveCallback(fallback);
         }
         return fallback;
       }
-      if (typeof val === 'boolean') {
-        return val;
-      }
-      if (typeof val === 'string') {
+      if (typeof val === 'boolean' || typeof val === 'string') {
         return val;
       }
       if (typeof val === 'function') {
@@ -2326,92 +2326,119 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       throw new Error(`Type not supported ${val}`);
     };
 
-    const allBlocks = Object.entries(files).map(async ([key, section]) => {
-      assert(Array.isArray(section), `Section must be an array for ${key}`);
-      return section.map(async (block, idx) => {
-        assert(typeof block === 'object', `Block must be an object for ${key}[${idx}]`);
-        assert(Array.isArray(block.templates), `Block templates must be an array for ${key}[${idx}]`);
-        const { path: blockPathCallback = './', to: blockToCallback, condition: blockConditionCallback } = block;
-        const condition = await normalizeCallback(blockConditionCallback);
-        if (condition !== undefined && !condition) {
-          return undefined;
-        }
-        const blockPath = await normalizeCallback(blockPathCallback);
-        const blockTo = (await normalizeCallback(blockToCallback)) || blockPath;
-        return block.templates.map(async templateObj => {
-          let templateOptions;
-          let sourceFile;
-          let destinationFile;
-          if (typeof templateObj === 'string') {
-            sourceFile = path.join(blockPath, templateObj);
-            destinationFile = this.destinationPath(blockTo, normalizeEjs(templateObj));
-          } else {
-            const { file, renameTo, destinationFile: objDestinationFile } = templateObj;
-            templateOptions = templateObj.options;
-            const normalizedFile = await normalizeCallback(file);
-            sourceFile = path.join(blockPath, normalizedFile);
-            destinationFile = this.destinationPath(
-              blockTo,
-              path.join(await normalizeCallback(objDestinationFile || renameTo, () => normalizeEjs(normalizedFile)))
-            );
+    const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs }) => {
+      const extension = path.extname(sourceFile);
+      const appendEjs = !noEjs && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      const ejsFile = appendEjs || extension === '.ejs';
+      destinationFile = noEjs ? destinationFile : normalizeEjs(destinationFile);
 
-            const override = await normalizeCallback(templateObj.override);
+      let sourceFileFrom;
+      if (Array.isArray(rootTemplatesAbsolutePath)) {
+        // Look for existing templates
+        const existingTemplates = rootTemplatesAbsolutePath
+          .map(rootPath => this.templatePath(rootPath, sourceFile))
+          .filter(templateFile => fs.existsSync(appendEjs ? `${templateFile}.ejs` : templateFile));
+
+        if (existingTemplates.length > 1) {
+          const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
+templates: ${JSON.stringify(existingTemplates, null, 2)}`;
+          if (existingTemplates.length > 2) {
+            this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
+          } else {
+            this.debug(moreThanOneMessage);
+          }
+        }
+        sourceFileFrom = existingTemplates.shift();
+
+        if (sourceFileFrom === undefined) {
+          throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
+        }
+      } else if (typeof rootTemplatesAbsolutePath === 'string') {
+        sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
+      } else {
+        sourceFileFrom = this.templatePath(sourceFile);
+      }
+      if (appendEjs) {
+        sourceFileFrom = `${sourceFileFrom}.ejs`;
+      }
+
+      if (!ejsFile) {
+        await this.copyTemplateAsync(sourceFileFrom, destinationFile);
+      } else {
+        await this.renderTemplateAsync(sourceFileFrom, destinationFile, context, {
+          ...options,
+          // Set root for ejs to lookup for partials.
+          root: rootTemplatesAbsolutePath,
+        });
+      }
+      return destinationFile;
+    };
+
+    let parsedBlocks = blocks;
+    if (sections) {
+      const parsedSections = Object.entries(sections).map(([sectionName, sectionBlocks]) => {
+        assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
+        return { sectionName, sectionBlocks };
+      });
+
+      parsedBlocks = parsedSections
+        .map(({ sectionName, sectionBlocks }) => {
+          return sectionBlocks.map((block, blockIdx) => {
+            const blockSpecPath = `${sectionName}[${blockIdx}]`;
+            assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
+            return { blockSpecPath, ...block };
+          });
+        })
+        .flat();
+    }
+
+    let parsedTemplates = templates;
+    if (parsedBlocks) {
+      parsedTemplates = parsedBlocks
+        .map((block, blockIdx) => {
+          const {
+            blockSpecPath = `${blockIdx}`,
+            path: blockPathCallback = './',
+            from: blockFromCallback,
+            to: blockToCallback,
+            condition: blockConditionCallback,
+          } = block;
+          assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
+          assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
+          const condition = resolveCallback(blockConditionCallback);
+          if (condition !== undefined && !condition) {
+            return undefined;
+          }
+          const blockPath = resolveCallback(blockFromCallback, blockPathCallback);
+          const blockTo = resolveCallback(blockToCallback, blockPathCallback) || blockPath;
+          return block.templates.map((fileSpec, fileIdx) => {
+            const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
+            assert(typeof fileSpec === 'object' || typeof fileSpec === 'string', `File must be an object or a string for ${fileSpecPath}`);
+            if (typeof fileSpec === 'string') {
+              const sourceFile = path.join(blockPath, fileSpec);
+              const destinationFile = this.destinationPath(blockTo, fileSpec);
+              return { sourceFile, destinationFile };
+            }
+            let { sourceFile, destinationFile } = fileSpec;
+            const { options, noEjs, file, renameTo } = fileSpec;
+            const normalizedFile = resolveCallback(sourceFile || file);
+            sourceFile = path.join(blockPath, normalizedFile);
+            destinationFile = this.destinationPath(blockTo, path.join(resolveCallback(destinationFile || renameTo, normalizedFile)));
+
+            const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && this.fs.exists(destinationFile)) {
               this.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
-          }
+            return { sourceFile, destinationFile, options, noEjs };
+          });
+        })
+        .flat();
+    }
 
-          const extension = path.extname(sourceFile);
-          const appendEjs = !templateObj.noEjs && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
-          const ejsFile = appendEjs || extension === '.ejs';
-
-          let sourceFileFrom;
-          if (Array.isArray(rootTemplatesAbsolutePath)) {
-            // Look for existing templates
-            const existingTemplates = rootTemplatesAbsolutePath
-              .map(rootPath => this.templatePath(rootPath, sourceFile))
-              .filter(templateFile => fs.existsSync(appendEjs ? `${templateFile}.ejs` : templateFile));
-
-            if (existingTemplates.length > 1) {
-              const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
-templates: ${JSON.stringify(existingTemplates, null, 2)}`;
-              if (existingTemplates.length > 2) {
-                this.warning(`Possible blueprint conflict detected: ${moreThanOneMessage}`);
-              } else {
-                this.debug(moreThanOneMessage);
-              }
-            }
-            sourceFileFrom = existingTemplates.shift();
-
-            if (sourceFileFrom === undefined) {
-              throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
-            }
-          } else if (typeof rootTemplatesAbsolutePath === 'string') {
-            sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
-          } else {
-            sourceFileFrom = this.templatePath(sourceFile);
-          }
-          if (appendEjs) {
-            sourceFileFrom = `${sourceFileFrom}.ejs`;
-          }
-
-          if (!ejsFile) {
-            return this.copyTemplateAsync(sourceFileFrom, destinationFile).then(() => destinationFile);
-          }
-          return this.renderTemplateAsync(sourceFileFrom, destinationFile, context, {
-            ...templateOptions,
-            // Set root for ejs to lookup for partials.
-            root: rootTemplatesAbsolutePath,
-          }).then(() => destinationFile);
-        });
-      });
-    });
-    const blocks = (await Promise.all(allBlocks)).flat();
-    const templateBlocks = (await Promise.all(blocks)).flat();
-    const templates = (await Promise.all(templateBlocks)).flat();
+    const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
     this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-    return templates.filter(file => file);
+    return files.filter(file => file);
   }
 
   /**

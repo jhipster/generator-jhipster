@@ -119,7 +119,7 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFiles({ files, context: this.application });
+        await this.writeFiles({ sections: files, context: this.application });
       },
     };
   }

@@ -168,11 +168,11 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFiles({ files, context: this.application });
+        await this.writeFiles({ sections: files, context: this.application });
       },
       async writeCommitHookFiles() {
         if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
-        await this.writeFiles({ files: commitHooksFiles, context: this.application });
+        await this.writeFiles({ sections: commitHooksFiles, context: this.application });
       },
     };
   }
