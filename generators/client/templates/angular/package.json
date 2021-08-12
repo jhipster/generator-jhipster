@@ -11,7 +11,7 @@
     "ngx-cookie-service": "12.0.2",
     "ngx-infinite-scroll": "10.0.1",
     "ngx-webstorage": "8.0.0",
-    "rxjs": "6.6.7",
+    "rxjs": "7.3.0",
     "swagger-ui-dist": "3.52.0",
     "tslib": "2.3.0",
     "zone.js": "0.11.4"
