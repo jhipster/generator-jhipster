@@ -47,7 +47,9 @@
     "generators",
     "jdl",
     "lib",
-    "utils"
+    "utils",
+    "!__snapshots__",
+    "!*.spec.?(c|m)js"
   ],
   "scripts": {
     "completion": "tabtab install --name jhipster --auto",
