@@ -8,7 +8,7 @@
     "@ng-bootstrap/ng-bootstrap": "10.0.0",
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
-    "ngx-cookie-service": "12.0.2",
+    "ngx-cookie-service": "12.0.3",
     "ngx-infinite-scroll": "10.0.1",
     "ngx-webstorage": "8.0.0",
     "rxjs": "6.6.7",
