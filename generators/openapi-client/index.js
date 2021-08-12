@@ -28,8 +28,8 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
     this.option(OpenAPIOptionsNames.REGEN, {
       desc: 'Regenerates all saved clients',
       type: Boolean,

@@ -32,8 +32,8 @@ const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, norma
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     if (this.options.help) {
       return;
@@ -49,7 +49,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator
-      this.jhipsterContext = opts.jhipsterContext;
+      this.jhipsterContext = this.options.jhipsterContext;
 
       if (this.jhipsterContext) {
         // Fallback to the original generator if the file does not exists in the blueprint.

@@ -32,8 +32,8 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     // Automatically configure Travis
     this.option('autoconfigure-travis', {

@@ -43,8 +43,8 @@ const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const { STRING: TYPE_STRING, LONG: TYPE_LONG } = CommonDBTypes;
 
 module.exports = class extends BaseGenerator {
-  constructor(args, options) {
-    super(args, options, { unique: 'namespace', customCommitTask: true });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
 
     /*
      * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the

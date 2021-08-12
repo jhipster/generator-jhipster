@@ -68,8 +68,8 @@ const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'argument' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'argument', ...features });
 
     // This makes `name` a required argument.
     this.argument('name', {

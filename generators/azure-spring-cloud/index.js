@@ -35,8 +35,8 @@ const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list');
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('skip-build', {
       desc: 'Skips building the application',

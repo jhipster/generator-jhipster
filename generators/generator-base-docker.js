@@ -32,8 +32,8 @@ const { Options: DeploymentOptions } = require('../jdl/jhipster/deployment-optio
 const { JWT_SECRET_KEY } = OptionNames;
 
 module.exports = class extends BlueprintBaseGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     // This adds support for a `--skip-checks` flag
     this.option('skip-checks', {

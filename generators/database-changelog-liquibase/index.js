@@ -38,8 +38,8 @@ const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options) {
-    super(args, options);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     assert(this.options.databaseChangelog, 'Changelog is required');
     this.databaseChangelog = this.options.databaseChangelog;

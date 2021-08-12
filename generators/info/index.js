@@ -24,8 +24,8 @@ const BaseGenerator = require('../generator-base');
 // stderr unlike yeoman's log() so that user can easily redirect output to a file.
 /* eslint-disable no-console */
 module.exports = class extends BaseGenerator {
-  constructor(args, options) {
-    super(args, options, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     this.option('skipCommit', {
       desc: 'Skip commit',

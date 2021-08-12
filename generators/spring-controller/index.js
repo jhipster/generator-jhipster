@@ -48,8 +48,8 @@ const NO_MESSAGE_BROKER = messageBrokers.NO;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.argument('name', { type: String, required: true });
     this.name = this.options.name;

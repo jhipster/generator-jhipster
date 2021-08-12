@@ -22,8 +22,8 @@ const { GENERATOR_ENTITIES_CLIENT } = require('../generator-list');
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
     if (this.options.help) return;
     this.clientEntities = this.options.clientEntities;
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITIES_CLIENT);

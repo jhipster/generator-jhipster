@@ -38,8 +38,8 @@ const exec = childProcess.exec;
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options) {
-    super(args, options);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLOUDFOUNDRY);
   }
 

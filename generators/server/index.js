@@ -40,8 +40,8 @@ const NO_DATABASE = databaseTypes.NO;
 let useBlueprints;
 
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {

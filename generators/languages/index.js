@@ -33,8 +33,8 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     this.option('skip-prompts', {
       desc: 'Skip prompts',

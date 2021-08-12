@@ -38,8 +38,8 @@ const statistics = require('../statistics');
 
 let useBlueprints;
 module.exports = class extends BaseDockerGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_KUBERNETES_HELM);
   }
 

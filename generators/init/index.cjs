@@ -40,8 +40,8 @@ const { dependencyChain } = require('./mixin.cjs');
 const MixedChain = generateMixedChain(GENERATOR_INIT);
 
 module.exports = class extends MixedChain {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+  constructor(args, options, features) {
+    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
