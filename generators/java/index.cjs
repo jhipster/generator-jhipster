@@ -32,6 +32,7 @@ const {
 const { GENERATOR_JAVA } = require('../generator-list');
 const {
   PACKAGE_NAME,
+  PACKAGE_NAME_DEFAULT_VALUE,
   PRETTIER_JAVA_INDENT,
   PRETTIER_JAVA_INDENT_DEFAULT_VALUE,
   BUILD_TOOL,
@@ -39,7 +40,6 @@ const {
   BUILD_TOOL_PROMPT_CHOICES,
 } = require('./constants.cjs');
 const { files } = require('./files.cjs');
-const { defaultConfig } = require('./config.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_JAVA);
@@ -53,6 +53,9 @@ module.exports = class extends MixedChain {
       this.registerCommonOptions();
       this.registerChainOptions();
     }
+
+    // Application context for templates
+    this.application = {};
 
     if (this.options.help) return;
 
@@ -105,7 +108,7 @@ module.exports = class extends MixedChain {
               type: 'input',
               validate: input => this.validatePackageName(input),
               message: 'What is your default Java package name?',
-              default: () => this.getDefaultPackageName(),
+              default: () => this.sharedData.getConfigDefaultValue(PACKAGE_NAME, PACKAGE_NAME_DEFAULT_VALUE),
             },
             {
               name: PRETTIER_JAVA_INDENT,
@@ -116,8 +119,8 @@ module.exports = class extends MixedChain {
             {
               name: BUILD_TOOL,
               type: 'list',
-              choices: () => this.sharedData.getConfigChoices(BUILD_TOOL, BUILD_TOOL_PROMPT_CHOICES),
               message: 'What tool do you want to use to build backend?',
+              choices: () => this.sharedData.getConfigChoices(BUILD_TOOL, BUILD_TOOL_PROMPT_CHOICES),
               default: () => this.sharedData.getConfigDefaultValue(BUILD_TOOL, BUILD_TOOL_DEFAULT_VALUE),
             },
           ],
@@ -149,7 +152,7 @@ module.exports = class extends MixedChain {
     return {
       async compose() {
         if (!this.shouldComposeModular()) return;
-        await this.composeWithJavaDependencies();
+        await this.composeWithJavaConfig();
       },
     };
   }
@@ -165,10 +168,10 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
@@ -181,7 +184,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
@@ -195,7 +198,7 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+        await this.writeFiles({ sections: files, context: this.application });
       },
     };
   }
@@ -219,12 +222,5 @@ module.exports = class extends MixedChain {
       return 'The package name you have provided is not a valid Java package name.';
     }
     return true;
-  }
-
-  /**
-   * @returns default package name
-   */
-  getDefaultPackageName() {
-    return defaultConfig.packageName;
   }
 };

@@ -4,7 +4,7 @@ const sinon = require('sinon');
 
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { PRIORITY_PREFIX, PRIORITIES } = require('../../lib/support/priorities.cjs');
+const { PRIORITY_PREFIX, PRIORITY_NAMES } = require('../../lib/support/priorities.cjs');
 
 const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
@@ -20,7 +20,17 @@ const testOptions = data => {
 };
 
 const basicTests = data => {
-  const { generatorPath, customPrompts, requiredConfig, defaultConfig, contextBuilder = () => helpers.create(generatorPath) } = data;
+  const {
+    generatorPath,
+    customPrompts,
+    requiredConfig,
+    defaultConfig,
+    templateContext = 'application',
+    contextBuilder = () => helpers.create(generatorPath),
+  } = data;
+  const getContext = generator => {
+    return templateContext ? generator[templateContext] : generator;
+  };
   describe('with default options', () => {
     let runResult;
     before(async () => {
@@ -29,8 +39,8 @@ const basicTests = data => {
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
-    it('should load default config into the generator', () => {
-      expect(runResult.generator).toEqual(expect.objectContaining(defaultConfig));
+    it('should load default config into the context', () => {
+      expect(getContext(runResult.generator)).toEqual(expect.objectContaining(defaultConfig));
     });
   });
   describe('with defaults option', () => {
@@ -41,8 +51,8 @@ const basicTests = data => {
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
-    it('should load default config into the generator', () => {
-      expect(runResult.generator).toEqual(expect.objectContaining(requiredConfig));
+    it('should load default config into the context', () => {
+      expect(getContext(runResult.generator)).toEqual(expect.objectContaining(requiredConfig));
     });
   });
   describe('with configure option', () => {
@@ -67,8 +77,8 @@ const basicTests = data => {
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
-      it('should load default config with prompt values into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
+      it('should load default config with prompt values into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and defaults option', () => {
@@ -78,8 +88,8 @@ const basicTests = data => {
       it('should not show prompts and write default config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
-      it('should load default config into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
+      it('should load default config into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and skipPrompts option', () => {
@@ -90,8 +100,8 @@ const basicTests = data => {
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
-      it('should load default config and required config into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
+      it('should load default config and required config into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and existing config', () => {
@@ -103,8 +113,8 @@ const basicTests = data => {
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
       });
-      it('should load default config and required config into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
+      it('should load default config and required config into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
       });
     });
     describe('and askAnswered option on an existing project', () => {
@@ -118,8 +128,8 @@ const basicTests = data => {
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
-      it('should load default config and prompt values into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
+      it('should load default config and prompt values into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and add option on an existing project', () => {
@@ -134,8 +144,8 @@ const basicTests = data => {
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
       });
-      it('should load default config and prompt values into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }));
+      it('should load default config and prompt values into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }));
       });
     });
   });
@@ -145,7 +155,7 @@ const testBlueprintSupport = generatorName => {
   const addSpies = generator => {
     const prioritiesSpy = sinon.spy();
     let prioritiesCount = 0;
-    PRIORITIES.forEach(priority => {
+    PRIORITY_NAMES.forEach(priority => {
       let callback;
       if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${PRIORITY_PREFIX}${priority}`)) {
         prioritiesCount++;

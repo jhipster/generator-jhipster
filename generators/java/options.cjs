@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { BUILD_TOOL, BUILD_TOOL_DESCRIPTION, PACKAGE_NAME, PACKAGE_NAME_DESCRIPTION } = require('./constants.cjs');
+const { PACKAGE_NAME, PACKAGE_NAME_DESCRIPTION, BUILD_TOOL, BUILD_TOOL_DESCRIPTION } = require('./constants.cjs');
 
 module.exports.options = {
   [PACKAGE_NAME]: {
