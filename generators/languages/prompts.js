@@ -38,7 +38,7 @@ function askI18n() {
         name: 'nativeLanguage',
         message: 'Please choose the native language of the application',
         choices: () => this.getAllSupportedLanguageOptions(),
-        default: () => detectLanguage(),
+        default: () => (this.options.reproducible ? 'en' : detectLanguage()),
         store: true,
       },
     ],
