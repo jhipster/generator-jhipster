@@ -2285,7 +2285,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     assert(paramCount === 1, 'Only one of sections, blocks or files must be provided');
 
     const { sections, blocks, templates, rootTemplatesPath, context = this } = options;
-    assert(typeof sections === 'object', 'sections must be an object');
     const startTime = new Date();
 
     /* Build lookup order first has preference.
@@ -2376,6 +2375,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let parsedBlocks = blocks;
     if (sections) {
+      assert(typeof sections === 'object', 'sections must be an object');
       const parsedSections = Object.entries(sections).map(([sectionName, sectionBlocks]) => {
         assert(Array.isArray(sectionBlocks), `Section must be an array for ${sectionName}`);
         return { sectionName, sectionBlocks };
@@ -2392,7 +2392,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         .flat();
     }
 
-    let parsedTemplates = templates;
+    let parsedTemplates;
     if (parsedBlocks) {
       parsedTemplates = parsedBlocks
         .map((block, blockIdx) => {
@@ -2433,7 +2433,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             return { sourceFile, destinationFile, options, noEjs };
           });
         })
-        .flat();
+        .flat()
+        .filter(template => template);
+    } else {
+      parsedTemplates = templates.map(template => {
+        if (typeof template === 'string') {
+          return { sourceFile: template, destinationFile: template };
+        }
+        return template;
+      });
     }
 
     const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
