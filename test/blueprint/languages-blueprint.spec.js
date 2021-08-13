@@ -37,6 +37,10 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
   get writing() {
     return super._writing();
   }
+
+  get postWriting() {
+    return super._postWriting();
+  }
 };
 
 describe('JHipster languages generator with blueprint', () => {

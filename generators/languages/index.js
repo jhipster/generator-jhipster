@@ -245,6 +245,18 @@ module.exports = class extends BaseBlueprintGenerator {
           statistics.sendSubGenEvent('languages/language', language);
         });
       },
+
+      ...super._missingPostWriting(),
+    };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _postWriting() {
+    return {
       write() {
         if (!this.skipClient) {
           this.updateLanguagesInDayjsConfiguation(this.languages);
@@ -272,8 +284,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get postWriting() {
     if (useBlueprints) return;
-    return this._writing();
+    return this._postWriting();
   }
 };
