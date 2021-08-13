@@ -43,7 +43,7 @@ const {
   GENERATOR_ENTITIES,
   GENERATOR_ENTITY,
   GENERATOR_ENTITY_CLIENT,
-  GENERATOR_ENTITY_I18N,
+  GENERATOR_ENTITY_I_18_N,
   GENERATOR_ENTITY_SERVER,
 } = require('../generator-list');
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
@@ -535,7 +535,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             skipInstall: this.options.skipInstall,
           });
           if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster(GENERATOR_ENTITY_I18N, this.arguments, {
+            this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
               context,
               skipInstall: this.options.skipInstall,
             });

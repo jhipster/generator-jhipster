@@ -611,10 +611,6 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._prompting();
   }
 
-  get default() {
-    return {};
-  }
-
   _configuring() {
     return {
       insight() {

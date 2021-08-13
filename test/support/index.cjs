@@ -1,10 +1,11 @@
 const expect = require('expect');
 const path = require('path');
 const sinon = require('sinon');
+const { existsSync } = require('fs');
 
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { PRIORITY_PREFIX, PRIORITY_NAMES } = require('../../lib/support/priorities.cjs');
+const { PRIORITY_NAMES } = require('../../lib/support/priorities.cjs');
 
 const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
@@ -151,28 +152,39 @@ const basicTests = data => {
   });
 };
 
-const testBlueprintSupport = generatorName => {
+const testBlueprintSupport = (generatorName, skipSbsBlueprint = false) => {
+  let generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.cjs`);
+  if (!existsSync(generatorPath)) {
+    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
+  }
   const addSpies = generator => {
+    const { taskPrefix = '' } = generator.features;
+    const apiPrefix = taskPrefix ? '' : '_';
     const prioritiesSpy = sinon.spy();
     let prioritiesCount = 0;
     PRIORITY_NAMES.forEach(priority => {
       let callback;
-      if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${PRIORITY_PREFIX}${priority}`)) {
+      if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${taskPrefix}${priority}`)) {
         prioritiesCount++;
         callback = prioritiesSpy;
       } else {
         callback = () => {
-          throw new Error(`${priority} should not be called`);
+          throw new Error(`${apiPrefix}${priority} should not be called`);
         };
       }
-      Object.defineProperty(generator, priority, {
-        get() {
-          callback();
-          return {};
-        },
-        enumerable: true,
-        configurable: true,
-      });
+      const property = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${apiPrefix}${priority}`);
+      if (property && property.value && typeof property.value === 'function') {
+        generator[`${apiPrefix}${priority}`] = callback;
+      } else {
+        Object.defineProperty(generator, `${apiPrefix}${priority}`, {
+          get() {
+            callback();
+            return {};
+          },
+          enumerable: true,
+          configurable: true,
+        });
+      }
     });
     return { prioritiesSpy, prioritiesCount };
   };
@@ -181,7 +193,7 @@ const testBlueprintSupport = generatorName => {
     let spy;
     before(async () => {
       result = await helpers
-        .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
+        .run(generatorPath)
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withOptions({ blueprint: 'foo', skipChecks: true })
         .on('ready', generator => {
@@ -198,11 +210,14 @@ const testBlueprintSupport = generatorName => {
   describe('with sbs blueprint', () => {
     let result;
     let spy;
-    before(async () => {
+    before(async function () {
+      if (skipSbsBlueprint) {
+        this.skip();
+      }
       const context = helpers
-        .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
+        .run(generatorPath)
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
-        .withOptions({ blueprint: 'foo-sbs', skipChecks: true, configure: true })
+        .withOptions({ blueprint: 'foo-sbs', skipChecks: true })
         .on('ready', generator => {
           spy = addSpies(generator);
         });

@@ -41,6 +41,8 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
+    if (this.options.help) return;
+
     assert(this.options.databaseChangelog, 'Changelog is required');
     this.databaseChangelog = this.options.databaseChangelog;
     if (!this.databaseChangelog.changelogDate) {
