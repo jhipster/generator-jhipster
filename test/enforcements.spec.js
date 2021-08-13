@@ -20,6 +20,7 @@ const assert = require('assert');
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
+const { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS, GENERATOR_ENTITY_I_18_N, GENERATOR_ENTITY_CLIENT, GENERATOR_ENTITIES_CLIENT } = require('../generators/generator-list');
 
 const readDir = dirPath => {
   const files = [];
@@ -41,12 +42,12 @@ const readDir = dirPath => {
 describe('Enforce some developments patterns', () => {
   describe('at client/common generators', () => {
     const filesToTest = [
-      ...readDir(path.join(__dirname, '..', 'generators', 'client')),
-      ...readDir(path.join(__dirname, '..', 'generators', 'common')),
-      ...readDir(path.join(__dirname, '..', 'generators', 'cypress')),
-      ...readDir(path.join(__dirname, '..', 'generators', 'entity-i18n')),
-      ...readDir(path.join(__dirname, '..', 'generators', 'entity-client')),
-      ...readDir(path.join(__dirname, '..', 'generators', 'entities-client')),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CLIENT)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_COMMON)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_CYPRESS)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ENTITY_I_18_N)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ENTITY_CLIENT)),
+      ...readDir(path.join(__dirname, '..', 'generators', GENERATOR_ENTITIES_CLIENT)),
     ];
     filesToTest.forEach(file => {
       describe(`file ${path.basename(file)}`, () => {

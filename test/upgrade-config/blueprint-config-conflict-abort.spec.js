@@ -6,20 +6,21 @@ const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expect = require('chai').expect;
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
 
 const yoRc = {
   'generator-jhipster-myblueprint': {
-    applicationType: 'monolith',
+    applicationType: MONOLITH,
     languages: ['fr'],
     baseName: 'myblueprint',
   },
   'generator-jhipster-myblueprint2': {
-    applicationType: 'monolith',
+    applicationType: MONOLITH,
     languages: ['en'],
     baseName: 'myblueprint2',
   },
   'generator-jhipster': {
-    applicationType: 'monolith',
+    applicationType: MONOLITH,
     baseName: 'jhipster',
     jhipsterVersion: '6.6.0',
     blueprints: [
@@ -78,7 +79,7 @@ describe('JHipster blueprint config migration with abort option', () => {
             baseName: 'myblueprint2',
           },
           'generator-jhipster': {
-            applicationType: 'monolith',
+            applicationType: MONOLITH,
             baseName: 'jhipster',
             jhipsterVersion: '6.6.0',
             blueprints: [

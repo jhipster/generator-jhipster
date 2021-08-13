@@ -2,6 +2,9 @@ const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
+const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
+const { MapperTypes } = require('../jdl/jhipster/entity-options');
+const NO_DTO = MapperTypes.NO;
 
 BaseGenerator.log = msg => {
   // eslint-disable-next-line no-console
@@ -45,17 +48,17 @@ export * from './entityFolderName/entityFileName.state';`;
   describe('getDBTypeFromDBValue', () => {
     describe('when called with sql DB name', () => {
       it('return SQL', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue('mysql')).to.equal('sql');
+        expect(BaseGenerator.getDBTypeFromDBValue(MYSQL)).to.equal(SQL);
       });
     });
     describe('when called with mongo DB', () => {
       it('return mongodb', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue('mongodb')).to.equal('mongodb');
+        expect(BaseGenerator.getDBTypeFromDBValue(MONGODB)).to.equal(MONGODB);
       });
     });
     describe('when called with cassandra', () => {
       it('return cassandra', () => {
-        expect(BaseGenerator.getDBTypeFromDBValue('cassandra')).to.equal('cassandra');
+        expect(BaseGenerator.getDBTypeFromDBValue(CASSANDRA)).to.equal(CASSANDRA);
       });
     });
   });
@@ -72,7 +75,7 @@ export * from './entityFolderName/entityFileName.state';`;
       ];
       describe('when called with 2 distinct relationships without dto option', () => {
         it('return a Map with 2 imports', () => {
-          const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+          const imports = BaseGenerator.generateEntityClientImports(relationships, NO_DTO);
           expect(imports).to.have.all.keys('IUser', 'IAnEntity');
           expect(imports.size).to.eql(relationships.length);
         });
@@ -87,7 +90,7 @@ export * from './entityFolderName/entityFileName.state';`;
           },
         ];
         it('return a Map with 1 import', () => {
-          const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+          const imports = BaseGenerator.generateEntityClientImports(relationships, NO_DTO);
           expect(imports).to.have.key('IUser');
           expect(imports.size).to.eql(1);
         });
