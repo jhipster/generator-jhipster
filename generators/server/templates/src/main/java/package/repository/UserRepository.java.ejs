@@ -95,7 +95,7 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
-<%_ } if (databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ScanConsistency;

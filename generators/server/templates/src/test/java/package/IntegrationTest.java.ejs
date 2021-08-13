@@ -60,6 +60,7 @@ import java.lang.annotation.Target;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @ExtendWith(CouchbaseTestContainerExtension.class)
+<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
