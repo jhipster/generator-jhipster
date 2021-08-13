@@ -70,8 +70,7 @@ public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (
     <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('Authority') %>> findAll();
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-    @Override
-    @Query("SELECT META(`<%= baseName %>`).id AS __id, META(`<%= baseName %>`).cas AS __cas FROM `<%= baseName %>` WHERE `_class` = \"<%= packageName %>.domain.Authority\"")
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     List<<%= asEntity('Authority') %>> findAll();
 <%_ } _%>
