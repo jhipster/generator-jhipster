@@ -51,10 +51,8 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       // jhipsterContext is the original generator
       this.jhipsterContext = this.options.jhipsterContext;
 
-      if (this.jhipsterContext) {
-        // Fallback to the original generator if the file does not exists in the blueprint.
-        this.jhipsterTemplatesFolders.push(this.jhipsterContext.templatePath());
-      }
+      // Fallback to the original generator if the file does not exists in the blueprint.
+      this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
     }
   }
 
