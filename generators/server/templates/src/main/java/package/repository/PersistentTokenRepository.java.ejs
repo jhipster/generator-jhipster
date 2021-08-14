@@ -48,10 +48,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ if (databaseTypeNeo4j) { _%>
 import org.neo4j.springframework.data.repository.Neo4jRepository;
 <%_ } _%>
-<%_ } if (databaseTypeCoucbase) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
 <%_ } _%>
-<%_ } if (databaseTypeCassandra) { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.stereotype.Repository;
 
