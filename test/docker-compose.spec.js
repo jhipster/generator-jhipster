@@ -3,6 +3,11 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const expect = require('expect');
+const monitoringTypes = require('../jdl/jhipster/monitoring-types');
+const { MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
+const { PROMETHEUS } = require('../jdl/jhipster/monitoring-types');
+
+const NO_MONITORING = monitoringTypes.NO;
 
 const expectedFiles = {
   dockercompose: ['docker-compose.yml', 'central-server-config/application.yml'],
@@ -21,11 +26,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway'],
           clusteredDbApps: [],
-          monitoring: 'no',
+          monitoring: NO_MONITORING,
         })
         .run();
     });
@@ -55,11 +60,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['02-mysql'],
           clusteredDbApps: [],
-          monitoring: 'no',
+          monitoring: NO_MONITORING,
         })
         .run();
     });
@@ -89,11 +94,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: '.',
           chosenApps: ['02-mysql'],
           clusteredDbApps: [],
-          monitoring: 'no',
+          monitoring: NO_MONITORING,
         })
         .run();
     });
@@ -119,11 +124,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
           clusteredDbApps: [],
-          monitoring: 'no',
+          monitoring: NO_MONITORING,
         })
         .run();
     });
@@ -154,7 +159,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
           clusteredDbApps: [],
@@ -191,7 +196,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
           clusteredDbApps: [],
@@ -228,7 +233,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
           clusteredDbApps: [],
@@ -265,11 +270,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql'],
           clusteredDbApps: [],
-          monitoring: 'prometheus',
+          monitoring: PROMETHEUS,
         })
         .run();
     });
@@ -306,7 +311,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
           clusteredDbApps: [],
@@ -342,7 +347,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo'],
           clusteredDbApps: ['04-mongo'],
@@ -376,7 +381,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '05-cassandra'],
           clusteredDbApps: [],
@@ -409,7 +414,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'monolith',
+          deploymentApplicationType: MONOLITH,
           directoryPath: './',
           chosenApps: ['08-monolith'],
           clusteredDbApps: [],
@@ -443,7 +448,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'],
           clusteredDbApps: [],
@@ -477,7 +482,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'microservice',
+          deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
           chosenApps: ['01-gateway', '10-couchbase'],
           clusteredDbApps: ['10-couchbase'],
@@ -510,11 +515,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
         })
         .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
-          deploymentApplicationType: 'monolith',
+          deploymentApplicationType: MONOLITH,
           directoryPath: './',
           chosenApps: ['12-oracle'],
           clusteredDbApps: [],
-          monitoring: 'no',
+          monitoring: NO_MONITORING,
         })
         .run();
     });

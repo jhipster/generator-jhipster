@@ -23,6 +23,11 @@ const JDLBinaryOption = require('../../../../jdl/models/jdl-binary-option');
 const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
 const { convertOptions } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter');
+const { MapperTypes, PaginationTypes } = require('../../../../jdl/jhipster/entity-options');
+const { COUCHBASE } = require('../../../../jdl/jhipster/search-engine-types');
+
+const { MAPSTRUCT } = MapperTypes;
+const { PAGINATION } = PaginationTypes;
 
 describe('OptionConverter', () => {
   describe('convertOptions', () => {
@@ -104,12 +109,12 @@ describe('OptionConverter', () => {
         before(() => {
           convertedOptions = convertOptions({}, [
             {
-              optionValues: ['mapstruct', 'couchbase'],
+              optionValues: [MAPSTRUCT, COUCHBASE],
               list: ['*'],
               excluded: ['B'],
             },
             {
-              optionValues: ['pagination'],
+              optionValues: [PAGINATION],
               list: ['A', 'C'],
               excluded: [],
             },
@@ -144,7 +149,7 @@ describe('OptionConverter', () => {
         before(() => {
           convertedOptions = convertOptions({}, [
             {
-              optionValues: ['mapstruct'],
+              optionValues: [MAPSTRUCT],
               list: ['*'],
               excluded: ['B'],
             },

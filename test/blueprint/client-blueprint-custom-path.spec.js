@@ -3,6 +3,10 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ClientGenerator = require('../../generators/client');
+const { MYSQL } = require('../../jdl/jhipster/database-types');
+const { ANGULAR_X } = require('../../jdl/jhipster/client-framework-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
 const mockBlueprintSubGen = class extends ClientGenerator {
   constructor(args, opts) {
@@ -62,9 +66,9 @@ describe('JHipster client generator with blueprint with path customizer', () => 
           .run(path.join(__dirname, '../../generators/client'))
           .withOptions({
             fromCli: true,
-            build: 'maven',
-            auth: 'jwt',
-            db: 'mysql',
+            build: MAVEN,
+            auth: JWT,
+            db: MYSQL,
             skipInstall: true,
             blueprint: blueprintName,
             skipChecks: true,
@@ -72,7 +76,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
           .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: 'angularX',
+            clientFramework: ANGULAR_X,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['en', 'fr'],

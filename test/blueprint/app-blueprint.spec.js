@@ -6,10 +6,11 @@ const fse = require('fs-extra');
 const jestExpect = require('expect');
 const expect = require('chai').expect;
 const jhipsterVersion = require('../../package.json').version;
-const constants = require('../../generators/generator-constants');
 const EnvironmentBuilder = require('../../cli/environment-builder');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const { SQL, H2_MEMORY, MYSQL } = require('../../jdl/jhipster/database-types');
+const { ANGULAR_X } = require('../../jdl/jhipster/client-framework-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
 describe('JHipster application generator with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {
@@ -82,16 +83,16 @@ describe('JHipster application generator with blueprint', () => {
         })
         .withPrompts({
           baseName: 'jhipster',
-          clientFramework: ANGULAR,
+          clientFramework: ANGULAR_X,
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
           serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
+          authenticationType: JWT,
+          cacheProvider: EHCACHE,
           enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'mysql',
+          databaseType: SQL,
+          devDatabaseType: H2_MEMORY,
+          prodDatabaseType: MYSQL,
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr'],
@@ -177,16 +178,16 @@ describe('JHipster application generator with blueprint', () => {
         })
         .withPrompts({
           baseName: 'jhipster',
-          clientFramework: ANGULAR,
+          clientFramework: ANGULAR_X,
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
           serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
+          authenticationType: JWT,
+          cacheProvider: EHCACHE,
           enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'mysql',
+          databaseType: SQL,
+          devDatabaseType: H2_MEMORY,
+          prodDatabaseType: MYSQL,
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr'],

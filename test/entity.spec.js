@@ -6,6 +6,14 @@ const { skipPrettierHelpers: helpers } = require('./utils/utils');
 
 const constants = require('../generators/generator-constants');
 const expectedFiles = require('./utils/expected-files').entity;
+const { MapperTypes, ServiceTypes, PaginationTypes } = require('../jdl/jhipster/entity-options');
+
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const { MAPSTRUCT } = MapperTypes;
+const { SERVICE_IMPL, SERVICE_CLASS } = ServiceTypes;
+const NO_SERVICE = ServiceTypes.NO;
+const NO_PAGINATION = PaginationTypes.NO;
+const NO_DTO = MapperTypes.NO;
 
 const { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR } = constants;
 
@@ -23,9 +31,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -50,9 +58,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -76,8 +84,8 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'mapstruct',
-              service: 'serviceImpl',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
             })
             .run()
         );
@@ -121,8 +129,8 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'serviceImpl',
+              dto: NO_DTO,
+              service: SERVICE_IMPL,
             });
         });
 
@@ -159,9 +167,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -184,9 +192,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'pagination',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: PAGINATION,
             });
         });
 
@@ -208,9 +216,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'infinite-scroll',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: INFINITE_SCROLL,
             });
         });
 
@@ -232,9 +240,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'serviceImpl',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: SERVICE_IMPL,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -260,9 +268,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'mapstruct',
-              service: 'serviceClass',
-              pagination: 'no',
+              dto: MAPSTRUCT,
+              service: SERVICE_CLASS,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -290,9 +298,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'infinite-scroll',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: INFINITE_SCROLL,
             });
         });
 
@@ -316,9 +324,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'infinite-scroll',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: INFINITE_SCROLL,
             });
         });
 
@@ -342,9 +350,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'infinite-scroll',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: INFINITE_SCROLL,
             });
         });
 
@@ -369,9 +377,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -393,9 +401,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'infinite-scroll',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: INFINITE_SCROLL,
             });
         });
 
@@ -420,9 +428,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -445,9 +453,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'no',
-              service: 'no',
-              pagination: 'no',
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: NO_PAGINATION,
             });
         });
 
@@ -473,9 +481,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'infinite-scroll',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: INFINITE_SCROLL,
             });
         });
 
@@ -497,9 +505,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'pagination',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: PAGINATION,
             });
         });
 
@@ -524,9 +532,9 @@ describe('JHipster generator for entity', () => {
             .withPrompts({
               fieldAdd: false,
               relationshipAdd: false,
-              dto: 'yes',
-              service: 'serviceImpl',
-              pagination: 'pagination',
+              dto: MAPSTRUCT,
+              service: SERVICE_IMPL,
+              pagination: PAGINATION,
             });
         });
 
@@ -627,9 +635,9 @@ describe('JHipster generator for entity', () => {
           .withPrompts({
             fieldAdd: false,
             relationshipAdd: false,
-            dto: 'no',
-            service: 'no',
-            pagination: 'pagination',
+            dto: NO_DTO,
+            service: NO_SERVICE,
+            pagination: NO_PAGINATION,
           });
       });
 
@@ -653,9 +661,9 @@ describe('JHipster generator for entity', () => {
           .withPrompts({
             fieldAdd: false,
             relationshipAdd: false,
-            dto: 'no',
-            service: 'no',
-            pagination: 'pagination',
+            dto: NO_DTO,
+            service: NO_SERVICE,
+            pagination: NO_PAGINATION,
           });
       });
 
@@ -679,9 +687,9 @@ describe('JHipster generator for entity', () => {
           .withPrompts({
             fieldAdd: false,
             relationshipAdd: false,
-            dto: 'no',
-            service: 'no',
-            pagination: 'pagination',
+            dto: NO_DTO,
+            service: NO_SERVICE,
+            pagination: PAGINATION,
           });
       });
 
