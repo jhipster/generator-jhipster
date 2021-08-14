@@ -504,8 +504,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"
-    implementation group: 'com.couchbase.client', name: 'java-client', version: '3.1.4'
-    implementation group: 'com.couchbase.client', name: 'encryption', version: '2.0.1'
+    implementation "com.couchbase.client:java-client"
     <%_ } _%>
     implementation ("io.springfox:springfox-oas")
     implementation ("io.springfox:springfox-swagger2")
