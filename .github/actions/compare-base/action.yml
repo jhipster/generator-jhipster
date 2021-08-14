@@ -37,12 +37,12 @@ runs:
   steps:
     - name: 'MERGE: Install base generator-jhipster'
       run: |
-        mkdir -p ${{ github.workspace }}/base/generator-jhipster
-        cd ${{ github.workspace }}/base/generator-jhipster
-        git clone "$JHI_HOME" .
+        mkdir -p "${{ github.workspace }}/base/$JHI_CLI_PACKAGE"
+        cd "${{ github.workspace }}/base/$JHI_CLI_PACKAGE"
+        git clone "${{ github.workspace }}/$JHI_CLI_PACKAGE" .
         git checkout @~1
         git log
-        npm uninstall -g generator-jhipster
+        npm uninstall -g $JHI_CLI_PACKAGE
         npm install
         npm install -g .
       shell: bash
@@ -64,7 +64,7 @@ runs:
     - name: 'MERGE: merge base project'
       id: base
       run: |
-        $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git ${{ inputs.extra-args }}
+        $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --skip-git ${{ inputs.extra-args }}
         echo "::set-output name=application-path::${{inputs.application-path}}"
       env:
         JHI_FOLDER_APP: ${{ inputs.application-path }}

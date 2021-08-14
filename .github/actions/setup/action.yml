@@ -76,6 +76,14 @@ inputs:
     description: 'JHipster BOM path'
     required: false
     default: ${{ github.workspace }}/jhipster-bom
+  package-with-executable:
+    description: 'Package which contains the executable'
+    required: false
+    default: ''
+  executable:
+    description: 'Executable'
+    required: false
+    default: jhipster
 outputs:
   java-version:
     description: 'Java version'
@@ -99,10 +107,14 @@ runs:
       id: variables
       run: |
         JHI_HOME="${{ inputs.generator-jhipster-directory }}"
+        JHI_WORKSPACE="${{ github.workspace }}"
+        JHI_CLI_PACKAGE="${{inputs.package-with-executable}}"
         source "$JHI_HOME/test-integration/scripts/00-init-env.sh"
 
         echo "JHI_HOME=$JHI_HOME" >> $GITHUB_ENV
         echo "JHI_SCRIPTS=$JHI_SCRIPTS" >> $GITHUB_ENV
+        echo "JHI_CLI_PACKAGE_PATH=$JHI_CLI_PACKAGE_PATH" >> $GITHUB_ENV
+        echo "JHI_CLI_PACKAGE=$JHI_CLI_PACKAGE" >> $GITHUB_ENV
 
         echo "JHI_LIB_REPO=${{inputs.jhipster-bom-repository}}" >> $GITHUB_ENV
         echo "JHI_LIB_BRANCH=${{inputs.jhipster-bom-branch}}" >> $GITHUB_ENV
@@ -115,6 +127,7 @@ runs:
         echo "JHI_APP=${{inputs.application-sample}}" >> $GITHUB_ENV
         echo "JHI_ENTITY=${{inputs.entities-sample}}" >> $GITHUB_ENV
         echo "JHI_JDL_ENTITY=${{inputs.jdl-entities-sample}}" >> $GITHUB_ENV
+        echo "JHI_CLI=${{inputs.executable}}" >> $GITHUB_ENV
 
         echo "JHI_PROFILE=${{inputs.application-environment}}" >> $GITHUB_ENV
         test ${{inputs.application-packaging}} != war || echo "JHI_WAR=1" >> $GITHUB_ENV
@@ -151,4 +164,7 @@ runs:
       shell: bash
     - name: 'SETUP: Create required structure'
       run: mkdir -p $JHI_FOLDER_APP
+      shell: bash
+    - name: 'SETUP: configure git'
+      run: $JHI_SCRIPTS/04-git-config.sh
       shell: bash
