@@ -332,7 +332,7 @@ function askForOptionalItems() {
       value: 'searchEngine:elasticsearch',
     });
   }
-  if (databaseTypeCouchbase) {
+  if (databaseType == COUCHBASE) {
     choices.push({
       name: 'Couchbase FTS as search engine',
       value: 'searchEngine:couchbase',
