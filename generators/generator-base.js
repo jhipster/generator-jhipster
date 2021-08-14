@@ -2325,11 +2325,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       throw new Error(`Type not supported ${val}`);
     };
 
-    const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs }) => {
+    const renderTemplate = async ({ sourceFile, destinationFile, options, transform = true }) => {
       const extension = path.extname(sourceFile);
-      const appendEjs = !noEjs && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
+      const appendEjs = transform && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const ejsFile = appendEjs || extension === '.ejs';
-      destinationFile = noEjs ? destinationFile : normalizeEjs(destinationFile);
+
+      if (!typeof transform === 'boolean') {
+        throw new Error(`Transform ${transform} value is not supported`);
+      }
+      destinationFile = transform ? normalizeEjs(destinationFile) : destinationFile;
 
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
@@ -2402,6 +2406,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             from: blockFromCallback,
             to: blockToCallback,
             condition: blockConditionCallback,
+            transform: blockTransform,
           } = block;
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
@@ -2417,10 +2422,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             if (typeof fileSpec === 'string') {
               const sourceFile = path.join(blockPath, fileSpec);
               const destinationFile = this.destinationPath(blockTo, fileSpec);
-              return { sourceFile, destinationFile };
+              return { sourceFile, destinationFile, transform: blockTransform };
             }
             let { sourceFile, destinationFile } = fileSpec;
-            const { options, noEjs, file, renameTo } = fileSpec;
+            const { options, file, renameTo } = fileSpec;
             const normalizedFile = resolveCallback(sourceFile || file);
             sourceFile = path.join(blockPath, normalizedFile);
             destinationFile = this.destinationPath(blockTo, path.join(resolveCallback(destinationFile || renameTo, normalizedFile)));
@@ -2430,7 +2435,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               this.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
-            return { sourceFile, destinationFile, options, noEjs };
+            let { transform } = fileSpec;
+            if (transform === undefined) {
+              // TODO remove for jhipster 8
+              const { noEjs, method } = fileSpec;
+              transform = noEjs || method === 'copy' ? false : undefined;
+            }
+            if (transform === undefined) {
+              transform = blockTransform;
+            }
+            return { sourceFile, destinationFile, options, transform };
           });
         })
         .flat()
