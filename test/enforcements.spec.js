@@ -20,7 +20,14 @@ const assert = require('assert');
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
-const { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS, GENERATOR_ENTITY_I_18_N, GENERATOR_ENTITY_CLIENT, GENERATOR_ENTITIES_CLIENT } = require('../generators/generator-list');
+const {
+  GENERATOR_CLIENT,
+  GENERATOR_COMMON,
+  GENERATOR_CYPRESS,
+  GENERATOR_ENTITY_I_18_N,
+  GENERATOR_ENTITY_CLIENT,
+  GENERATOR_ENTITIES_CLIENT,
+} = require('../generators/generator-list');
 
 const readDir = dirPath => {
   const files = [];

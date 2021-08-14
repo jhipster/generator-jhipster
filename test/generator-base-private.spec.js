@@ -4,6 +4,7 @@ const expect = require('chai').expect;
 const BaseGenerator = require('../generators/generator-base').prototype;
 const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
+
 const NO_DTO = MapperTypes.NO;
 
 BaseGenerator.log = msg => {

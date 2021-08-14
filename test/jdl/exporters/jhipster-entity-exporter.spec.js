@@ -26,11 +26,8 @@ const ApplicationTypes = require('../../../jdl/jhipster/application-types');
 const JHipsterEntityExporter = require('../../../jdl/exporters/jhipster-entity-exporter');
 const FileUtils = require('../../../jdl/utils/file-utils');
 const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../jdl/jhipster/entity-options');
-const { COUCHBASE } = require('../../../jdl/jhipster/search-engine-types');
 
-const { MAPSTRUCT } = MapperTypes;
-const { PAGINATION } = PaginationTypes;
-const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
+const { SERVICE_CLASS } = ServiceTypes;
 const NO_DTO = MapperTypes.NO;
 const NO_PAGINATION = PaginationTypes.NO;
 const NO_SERVICE = ServiceTypes.NO;

@@ -136,9 +136,9 @@ describe('Generator Base', () => {
     });
     describe('when called with a long name that is near limit and postgresql', () => {
       it('returns a proper constraint name', () => {
-        expect(
-          BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', POSTGRESQL).length
-        ).to.be.lessThan(64);
+        expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', POSTGRESQL).length).to.be.lessThan(
+          64
+        );
         expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', POSTGRESQL)).to.equal(
           'fk_test_custom_table_name__user_many_to_many_user_many_to_8c_id'
         );
@@ -152,9 +152,7 @@ describe('Generator Base', () => {
     });
     describe('when called with a long name that is equal to limit and postgresql', () => {
       it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.have.length(
-          63
-        );
+        expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.have.length(63);
         expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.equal(
           'fk_test_custom_table_names__user_many_to_many_user_many_t_50_id'
         );
@@ -342,7 +340,7 @@ describe('Generator Base', () => {
         generator = fakeGenerator({
           jhipsterTemplatesFolders: [
             path.join(fixturesPath, 'templates', 'specific'),
-            path.join(fixturesPath, 'templates', GENERATOR_COMMON)
+            path.join(fixturesPath, 'templates', GENERATOR_COMMON),
           ],
         });
       });
