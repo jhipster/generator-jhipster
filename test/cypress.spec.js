@@ -58,7 +58,7 @@ describe('jhipster:cypress', () => {
   });
 
   describe('generate cypress with Angular client with JWT', () => {
-    const options = { testFrameworks: ['cypress'], clientFramework: ANGULAR_X, authenticationType: JWT };
+    const options = { testFrameworks: [CYPRESS], clientFramework: ANGULAR_X, authenticationType: JWT };
     before(() => {
       return helpers
         .create(path.join(__dirname, '../generators/cypress'))
