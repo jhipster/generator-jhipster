@@ -273,7 +273,7 @@ jhipster:
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
-<%_ if (databaseTypeCouchbase { _%>
+<%_ if (databaseTypeCouchbase) { _%>
   database:
     couchbase:
       bucket-name: <%= baseName %>
