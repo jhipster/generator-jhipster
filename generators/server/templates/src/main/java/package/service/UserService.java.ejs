@@ -56,7 +56,7 @@ import org.springframework.cache.CacheManager;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-    <%_ if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.domain.PageImpl;
     <%_ } _%>
   <%_ } _%>
