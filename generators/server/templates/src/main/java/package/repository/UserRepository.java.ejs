@@ -281,7 +281,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
     Mono<Long> count();
   <% } else { %>
-    <%_ if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
     <%_ } _%>
