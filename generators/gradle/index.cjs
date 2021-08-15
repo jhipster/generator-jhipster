@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/support/priorities.cjs');
+const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_JAVA, GENERATOR_GRADLE } = require('../generator-list');
 const { files } = require('./files.cjs');

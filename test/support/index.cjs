@@ -5,7 +5,7 @@ const { existsSync } = require('fs');
 
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-const { PRIORITY_NAMES } = require('../../lib/support/priorities.cjs');
+const { PRIORITY_NAMES } = require('../../lib/constants/priorities.cjs');
 
 const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;

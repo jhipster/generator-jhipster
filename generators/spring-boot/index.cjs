@@ -26,7 +26,7 @@ const {
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
   WRITING_PRIORITY,
-} = require('../../lib/support/priorities.cjs');
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_SPRING_BOOT } = require('../generator-list');
 const { files } = require('./files.cjs');

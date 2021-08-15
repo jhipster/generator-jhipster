@@ -25,7 +25,7 @@ const {
   CONFIGURING_PRIORITY,
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
-} = require('../../lib/support/priorities.cjs');
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config.cjs');

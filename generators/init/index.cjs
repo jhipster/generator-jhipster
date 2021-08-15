@@ -30,7 +30,7 @@ const {
   POST_WRITING_PRIORITY,
   INSTALL_PRIORITY,
   END_PRIORITY,
-} = require('../../lib/support/priorities.cjs');
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
 const { PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE, SKIP_COMMIT_HOOK } = require('./constants.cjs');
