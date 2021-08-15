@@ -27,7 +27,7 @@ import com.couchbase.client.java.Cluster;
 import com.github.couchmove.Couchmove;
 <%_ if (searchEngineCouchbase) { _%>
 import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
-<%_ } else if (searchEngine === 'elasticsearch') { _%>
+<%_ } else if (searchEngineElasticsearch) { _%>
 import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
 <%_ } _%>
 
