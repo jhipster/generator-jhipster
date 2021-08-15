@@ -27,18 +27,19 @@ const EnvironmentBuilder = require('./environment-builder');
 const SUB_GENERATORS = require('./commands');
 const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
-const { version } = require('../package.json');
+const { version: JHIPSTER_VERSION } = require('../package.json');
 const { packageNameToNamespace } = require('../generators/utils');
 
 const JHIPSTER_NS = CLI_NAME;
 
 const moreInfo = `\n  For more info visit ${chalk.blue('https://www.jhipster.tech')}\n`;
 
-const createProgram = () => {
+const createProgram = ({ executableName = CLI_NAME, executableVersion = JHIPSTER_VERSION } = {}) => {
   return (
     new JHipsterCommand()
+      .name(executableName)
       .storeOptionsAsProperties(false)
-      .version(version)
+      .version(executableVersion)
       .addHelpText('after', moreInfo)
       // JHipster common options
       .option(
@@ -61,12 +62,14 @@ const createProgram = () => {
   );
 };
 
-const rejectExtraArgs = (program, cmd, extraArgs) => {
+const rejectExtraArgs = ({ program, command, extraArgs }) => {
   // if extraArgs exists: Unknown commands or unknown argument.
   const first = extraArgs[0];
-  if (cmd !== 'app') {
+  if (command.name() !== 'app') {
     logger.fatal(
-      `${chalk.yellow(cmd)} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(`${CLI_NAME} ${cmd} --help`)}'.`
+      `${chalk.yellow(command.name())} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(
+        `${program.name()} ${command.name()} --help`
+      )}'.`
     );
   }
   const availableCommands = program.commands.map(c => c._name);
@@ -80,18 +83,18 @@ const rejectExtraArgs = (program, cmd, extraArgs) => {
   logger.fatal(message);
 };
 
-const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand }) => {
+const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand, defaultCommand = 'app' }) => {
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
     program
-      .command(cmdName, '', { isDefault: cmdName === 'app' })
+      .command(cmdName, '', { isDefault: cmdName === defaultCommand })
       .description(opts.desc + (opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : ''))
       .addCommandArguments(opts.argument)
       .addCommandOptions(opts.options)
       .addHelpText('after', opts.help)
       .addAlias(opts.alias)
       .excessArgumentsCallback(function (receivedArgs) {
-        rejectExtraArgs(program, this.name(), receivedArgs);
+        rejectExtraArgs({ program, command: this, extraArgs: receivedArgs });
       })
       .lazyBuildCommand(async function (operands) {
         logger.debug(`cmd: lazyBuildCommand ${cmdName} ${operands}`);
@@ -169,6 +172,7 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
           ...program.opts(),
           ...cmdOptions,
           commandName: cmdName,
+          blueprints: envBuilder.getBlueprintsOption(),
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console
@@ -196,17 +200,22 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
 };
 
 const buildJHipster = ({
-  program = createProgram(),
-  envBuilder = EnvironmentBuilder.createDefaultBuilder(),
+  executableName,
+  executableVersion,
+  program = createProgram({ executableName, executableVersion }),
+  blueprints,
+  lookups,
+  envBuilder = EnvironmentBuilder.create().prepare({ blueprints, lookups }),
   commands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() },
   env = envBuilder.getEnvironment(),
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   loadCommand = key => require(`./${key}`),
+  defaultCommand,
 } = {}) => {
   /* setup debugging */
   logger.init(program);
 
-  buildCommands({ program, commands, envBuilder, env, loadCommand });
+  buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand });
 
   return program;
 };
@@ -221,4 +230,6 @@ module.exports = {
   buildCommands,
   buildJHipster,
   runJHipster,
+  done,
+  logger,
 };

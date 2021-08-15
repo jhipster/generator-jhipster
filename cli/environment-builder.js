@@ -26,6 +26,18 @@ const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
 const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
 const SharedData = require('../lib/support/shared-data.cjs');
 
+const createEnvironment = (args, options = {}, adapter) => {
+  // Remove after migration to environment 3.
+  const sharedOptions = {
+    fromCli: true,
+    localConfigOnly: true,
+    ...options.sharedOptions,
+    configOptions: { sharedEntities: {} },
+    jhipsterSharedData: new SharedData(),
+  };
+  return Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
+};
+
 module.exports = class EnvironmentBuilder {
   /**
    * Creates a new EnvironmentBuilder with a new Environment.
@@ -34,15 +46,7 @@ module.exports = class EnvironmentBuilder {
    * @return {EnvironmentBuilder} envBuilder
    */
   static create(args, options = {}, adapter) {
-    // Remove after migration to environment 3.
-    const sharedOptions = {
-      fromCli: true,
-      localConfigOnly: true,
-      ...options.sharedOptions,
-      configOptions: { sharedEntities: {} },
-      jhipsterSharedData: new SharedData(),
-    };
-    const env = Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
+    const env = createEnvironment(args, options, adapter);
     env.setMaxListeners(0);
     return new EnvironmentBuilder(env);
   }
@@ -68,11 +72,7 @@ module.exports = class EnvironmentBuilder {
    * @return {EnvironmentBuilder} envBuilder
    */
   static createDefaultBuilder(...args) {
-    return EnvironmentBuilder.create(...args)
-      ._lookupJHipster()
-      ._loadBlueprints()
-      ._lookupBlueprints()
-      ._loadSharedOptions();
+    return EnvironmentBuilder.create(...args).prepare();
   }
 
   /**
@@ -86,8 +86,24 @@ module.exports = class EnvironmentBuilder {
     this.env = env;
   }
 
+  prepare({ blueprints, lookups } = {}) {
+    this._lookupJHipster()._loadBlueprints(blueprints)._lookups(lookups)._lookupBlueprints()._loadSharedOptions();
+    return this;
+  }
+
   getBlueprintsNamespaces() {
     return Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName));
+  }
+
+  /**
+   * Construct blueprint option value.
+   *
+   * @return {String}
+   */
+  getBlueprintsOption() {
+    return Object.entries(this._blueprintsWithVersion)
+      .map(([packageName, packageVersion]) => (packageVersion ? `${packageName}@packageVersion` : packageName))
+      .join(',');
   }
 
   /**
@@ -108,14 +124,25 @@ module.exports = class EnvironmentBuilder {
     return this;
   }
 
+  _lookups(lookups = []) {
+    lookups = [].concat(lookups);
+    lookups.forEach(lookup => {
+      this.env.lookup(lookup);
+    });
+    return this;
+  }
+
   /**
    * @private
    * Load blueprints from argv, .yo-rc.json.
    *
    * @return {EnvironmentBuilder} this for chaining.
    */
-  _loadBlueprints() {
-    this._blueprintsWithVersion = this._getAllBlueprintsWithVersion();
+  _loadBlueprints(blueprints) {
+    this._blueprintsWithVersion = {
+      ...this._getAllBlueprintsWithVersion(),
+      ...blueprints,
+    };
     return this;
   }
 
@@ -284,7 +311,10 @@ module.exports = class EnvironmentBuilder {
       /* eslint-disable import/no-dynamic-require */
       /* eslint-disable global-require */
       try {
-        const blueprintCommands = require(`${packagePath}/cli/commands`);
+        const blueprintCommands = _.cloneDeep(require(`${packagePath}/cli/commands`));
+        Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
+          commandSpec.blueprint = commandSpec.blueprint || blueprint;
+        });
         result = { ...result, ...blueprintCommands };
       } catch (e) {
         const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
