@@ -244,7 +244,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%= listOrFlux %><<%= asEntity('User') %>> findAll();
 
   <%_ } _%>
-  <%_ if (databaseType === 'couchbase') { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
     @Override
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><<%= asEntity('User') %>> findAll(Sort sort);
