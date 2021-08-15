@@ -466,7 +466,7 @@ entity A`);
           expect(parsedEntity).to.deep.equal({
             annotations: [],
             body: [],
-            javadoc: ' A comment ',
+            javadoc: 'A comment',
             name: 'A',
             tableName: 'A',
           });
@@ -488,7 +488,7 @@ entity A`);
           expect(parsedEntity).to.deep.equal({
             annotations: [],
             body: [],
-            javadoc: '\n * Big\n * comment.\n ',
+            javadoc: '\n * Big\n * comment.\n',
             name: 'A',
             tableName: 'A',
           });
@@ -518,7 +518,7 @@ entity A`);
               },
             ],
             body: [],
-            javadoc: ' A comment ',
+            javadoc: 'A comment',
             name: 'A',
             tableName: 'A',
           });
@@ -565,7 +565,7 @@ entity A`);
                       type: 'UNARY',
                     },
                   ],
-                  javadoc: ' field comment ',
+                  javadoc: 'field comment',
                   name: 'name',
                   type: 'String',
                   validations: [],
@@ -1086,31 +1086,31 @@ entity A {
 
       it('should parse it', () => {
         expect(parsedEnum).to.deep.equal({
-          javadoc: ' country enum ',
+          javadoc: 'country enum',
           name: 'MyEnum',
           values: [
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'FRANCE',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ITALY',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ENGLAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ICELAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'IRELAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'CANADA',
             },
           ],
@@ -1139,33 +1139,33 @@ entity A {
 
       it('should parse it', () => {
         expect(parsedEnum).to.deep.equal({
-          javadoc: ' country enum ',
+          javadoc: 'country enum',
           name: 'MyEnum',
           values: [
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'FRANCE',
               value: 'cheese and wine country',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ITALY',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ENGLAND',
               value: 'not a tea country',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ICELAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'IRELAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'CANADA',
             },
           ],
@@ -1197,29 +1197,29 @@ entity A {
           name: 'MyEnum',
           values: [
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'FRANCE',
               value: 'cheese_and_wine_country',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ITALY',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ENGLAND',
               value: 'not_a_tea_country',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'ICELAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'IRELAND',
             },
             {
-              comment: ' some comment ',
+              comment: 'some comment',
               key: 'CANADA',
             },
           ],

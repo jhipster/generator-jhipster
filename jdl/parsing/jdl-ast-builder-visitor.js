@@ -652,5 +652,5 @@ function getSpecialUnaryOptionDeclaration(context, visitor) {
 }
 
 function trimComment(comment) {
-  return comment.replace(/^\/[*]+/, '').replace(/[*]+\/$/, '');
+  return comment.replace(/^\/[*]+[ ]*/, '').replace(/[ ]*[*]+\/$/, '');
 }
