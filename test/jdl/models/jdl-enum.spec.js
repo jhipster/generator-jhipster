@@ -69,7 +69,7 @@ describe('JDLEnum', () => {
       result = jdlEnum.getValueJavadocs();
     });
 
-    it('should return the value javadocs object', () => {
+    it('returns the comments by enum value', () => {
       expect(result).to.deep.equal({
         A: 'first comment',
         B: 'second comment',
