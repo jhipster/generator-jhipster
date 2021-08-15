@@ -268,7 +268,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <% if (reactive) { %>
-    <%_ if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%_ } _%>
     Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
