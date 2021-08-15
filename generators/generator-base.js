@@ -156,6 +156,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
+   */
+  jhipsterTemplatePath(...args) {
+    this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
+  }
+
+  /**
    * Shared Data
    */
   get sharedData() {
