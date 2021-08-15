@@ -29,6 +29,7 @@ const JHipsterCommand = require('./jhipster-command');
 const { CLI_NAME, logger, getCommand, done } = require('./utils');
 const { version: JHIPSTER_VERSION } = require('../package.json');
 const { packageNameToNamespace } = require('../generators/utils');
+const { logo } = require('../lib/constants/logo.cjs');
 
 const JHIPSTER_NS = CLI_NAME;
 
@@ -83,7 +84,7 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
   logger.fatal(message);
 };
 
-const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand, defaultCommand = 'app' }) => {
+const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand, defaultCommand = 'app', printBlueprintLogo = () => {} }) => {
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
     program
@@ -180,6 +181,12 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand, d
           return undefined;
         }
 
+        // eslint-disable-next-line no-console
+        console.log();
+        // eslint-disable-next-line no-console
+        console.log(logo);
+        printBlueprintLogo();
+
         if (opts.cliOnly) {
           logger.debug('Executing CLI only script');
           return loadCommand(cmdName)(args, options, env, envBuilder);
@@ -207,6 +214,7 @@ const buildJHipster = ({
   lookups,
   envBuilder = EnvironmentBuilder.create().prepare({ blueprints, lookups }),
   commands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() },
+  printBlueprintLogo,
   env = envBuilder.getEnvironment(),
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   loadCommand = key => require(`./${key}`),
@@ -215,7 +223,7 @@ const buildJHipster = ({
   /* setup debugging */
   logger.init(program);
 
-  buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand });
+  buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printBlueprintLogo });
 
   return program;
 };

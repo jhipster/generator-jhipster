@@ -1919,15 +1919,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * Prints a JHipster logo.
    */
   printJHipsterLogo() {
-    this.log('\n');
-    this.log(`${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}`);
-    this.log(`${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}`);
-    this.log(`${chalk.green('        ██║')}${chalk.red(' ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝')}`);
-    this.log(`${chalk.green('  ██╗   ██║')}${chalk.red(' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║')}`);
-    this.log(`${chalk.green('  ╚██████╔╝')}${chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗')}`);
-    this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}\n`);
-    this.log(chalk.white.bold('                            https://www.jhipster.tech\n'));
-    this.log(chalk.white('Welcome to JHipster ') + chalk.yellow(`v${packagejs.version}`));
     this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     if (process.cwd() === this.getUserHome()) {
       this.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
