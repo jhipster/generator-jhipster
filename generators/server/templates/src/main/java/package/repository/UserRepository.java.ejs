@@ -177,7 +177,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
-  <%_ if (databaseType === 'couchbase') { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
     // @ScanConsistency is to fix index issues with Spring Data Couchbase
     // https://github.com/spring-projects/spring-data-couchbase/issues/897
   <%_ } _%>
