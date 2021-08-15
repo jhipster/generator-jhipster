@@ -27,7 +27,7 @@ package <%= packageName %>.domain.enumeration;
 <%_ } _%>
 public enum <%= enumName %> {
 <%_ if (withoutCustomValues) { _%>
-    <%= enumValues.map(enumValue => `${enumValue.comment && '\n'+enumValue.comment+'\n' || ''}${enumValue.name}`).join(', ') %>
+    <%= enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}${enumValue.name}`).join(', ') %>
 <%_ } else {
   enumValues.forEach((enumWithCustomValue, index) => {
     if (enumWithCustomValue.comment){  _%>
