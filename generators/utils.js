@@ -480,10 +480,10 @@ function deepFind(obj, path, placeholder) {
  * Convert passed block of string to javadoc formatted string.
  *
  * @param {string} text text to convert to javadoc format
- * @param {number} indentSize indent size
+ * @param {number} indentSize indent size (default 0)
  * @returns javadoc formatted string
  */
-function getJavadoc(text, indentSize) {
+function getJavadoc(text, indentSize = 0) {
   if (!text) {
     text = '';
   }
@@ -513,7 +513,7 @@ function getEnumInfo(field, clientRootFolder) {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: fieldType,
-    javadoc: field.fieldTypeJavadoc && this.getJavadoc(field.fieldTypeJavadoc, 0),
+    javadoc: field.fieldTypeJavadoc && this.getJavadoc(field.fieldTypeJavadoc),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,
@@ -591,7 +591,7 @@ function getEnums(enums, customValuesState, comments) {
     return enums.map(enumValue => ({
       name: enumValue,
       value: enumValue,
-      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 0),
+      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
     }));
   }
   return enums.map(enumValue => {
@@ -599,7 +599,7 @@ function getEnums(enums, customValuesState, comments) {
       return {
         name: enumValue.trim(),
         value: enumValue.trim(),
-        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 0),
+        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
       };
     }
     // eslint-disable-next-line no-unused-vars
@@ -607,7 +607,7 @@ function getEnums(enums, customValuesState, comments) {
     return {
       name: matched[1],
       value: matched[2],
-      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 0),
+      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 4),
     };
   });
 }
