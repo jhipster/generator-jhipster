@@ -27,7 +27,7 @@ const {
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
   WRITING_PRIORITY,
-} = require('../../lib/support/priorities.cjs');
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_JAVA } = require('../generator-list');
 const {
