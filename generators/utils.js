@@ -63,6 +63,8 @@ module.exports = {
   vueAddPageProtractorConf,
   languageSnakeCase,
   languageToJavaLanguage,
+  addSectionsCondition,
+  mergeSections,
 };
 
 const databaseTypes = require('../jdl/jhipster/database-types');
@@ -884,4 +886,39 @@ function languageToJavaLanguage(language) {
   const langProp = languageSnakeCase(language);
   // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
   return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+}
+
+function addSectionsCondition(files, commonCondition) {
+  return Object.fromEntries(
+    Object.entries(files).map(([sectionName, sectionValue]) => {
+      sectionValue = sectionValue.map(block => {
+        const { condition } = block;
+        let newCondition = commonCondition;
+        if (typeof condition === 'function') {
+          newCondition = (...args) => {
+            return commonCondition(...args) && condition(...args);
+          };
+        } else if (condition !== undefined) {
+          newCondition = (...args) => commonCondition(...args) && condition;
+        }
+        block = {
+          ...block,
+          condition: newCondition,
+        };
+        return block;
+      });
+      return [sectionName, sectionValue];
+    })
+  );
+}
+
+function mergeSections(...allFiles) {
+  const generated = {};
+  for (const files of allFiles) {
+    for (const [sectionName, sectionValue] of Object.entries(files)) {
+      generated[sectionName] = generated[sectionName] || [];
+      generated[sectionName].push(...sectionValue);
+    }
+  }
+  return generated;
 }

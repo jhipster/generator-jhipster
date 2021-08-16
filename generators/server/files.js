@@ -23,11 +23,12 @@ const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-type
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const { CASSANDRA, COUCHBASE, H2_DISK, H2_MEMORY, MARIADB, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
+const { COUCHBASE, MARIADB, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const { addSectionsCondition, mergeSections } = require('../utils');
 
 /* Constants use throughout */
 const NO_DATABASE = databaseTypes.NO;
@@ -43,11 +44,255 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 const shouldSkipUserManagement = generator =>
   generator.skipUserManagement && (generator.applicationType !== MONOLITH || generator.authenticationType !== OAUTH2);
+
+const h2Files = {
+  serverResource: [
+    {
+      condition: generator => generator.devDatabaseTypeH2Any,
+      path: SERVER_MAIN_RES_DIR,
+      templates: [{ file: 'h2.server.properties', renameTo: () => '.h2.server.properties' }],
+    },
+  ],
+};
+
+const sqlFiles = {
+  serverResource: [
+    {
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        {
+          override: generator => !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
+          file: 'config/liquibase/changelog/initial_schema.xml',
+          renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
+          options: { interpolate: INTERPOLATE_REGEX },
+        },
+        {
+          override: generator => !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
+          file: 'config/liquibase/master.xml',
+        },
+      ],
+    },
+  ],
+};
+
+const mongoDbFiles = {
+  docker: [
+    {
+      path: DOCKER_DIR,
+      templates: ['mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
+    },
+  ],
+  serverResource: [
+    {
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/dbmigrations/package-info.java',
+          renameTo: generator => `${generator.javaDir}config/dbmigrations/package-info.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => !generator.skipUserManagement || (generator.skipUserManagement && generator.authenticationType === OAUTH2),
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/dbmigrations/InitialSetupMigration.java',
+          renameTo: generator => `${generator.javaDir}config/dbmigrations/InitialSetupMigration.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const couchBaseFiles = {
+  docker: [
+    {
+      path: DOCKER_DIR,
+      templates: ['couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
+    },
+  ],
+  serverJavaConfig: [
+    {
+      condition: generator => !generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/N1qlCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
+        },
+        {
+          file: 'package/repository/CustomN1qlCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CustomN1qlCouchbaseRepository.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngine === COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/search/SearchCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/search/SearchCouchbaseRepository.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/CustomN1qlCouchbaseRepositoryTest.java',
+          renameTo: generator => `${generator.testDir}repository/CustomN1qlCouchbaseRepositoryTest.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/ReactiveN1qlCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
+        },
+        {
+          file: 'package/repository/CustomReactiveN1qlCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`,
+        },
+      ],
+    },
+  ],
+  serverResource: [
+    {
+      condition: generator => generator.databaseTypeCouchbase,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['config/couchmove/changelog/V0__create_indexes.n1ql'],
+    },
+    {
+      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        'config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json',
+        'config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json',
+        'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
+        'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
+      ],
+    },
+  ],
+  serverTestFw: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/DatabaseConfigurationIT.java',
+          renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const neo4jFiles = {
+  serverResource: [
+    {
+      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/neo4j/Neo4jMigrations.java',
+          renameTo: generator => `${generator.javaDir}config/neo4j/Neo4jMigrations.java`,
+        },
+        {
+          file: 'package/config/neo4j/package-info.java',
+          renameTo: generator => `${generator.javaDir}config/neo4j/package-info.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        {
+          file: 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
+          renameTo: () => 'config/neo4j/migrations/user__admin.json',
+        },
+        {
+          file: 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
+          renameTo: () => 'config/neo4j/migrations/user__user.json',
+        },
+      ],
+    },
+  ],
+  serverTestFw: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/AbstractNeo4jIT.java',
+          renameTo: generator => `${generator.testDir}/AbstractNeo4jIT.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const cassandraFiles = {
+  docker: [
+    {
+      path: DOCKER_DIR,
+      templates: [
+        // docker-compose files
+        'cassandra-cluster.yml',
+        'cassandra-migration.yml',
+        // dockerfiles
+        'cassandra/Cassandra-Migration.Dockerfile',
+        // scripts
+        'cassandra/scripts/autoMigrate.sh',
+        'cassandra/scripts/execute-cql.sh',
+      ],
+    },
+  ],
+  serverResource: [
+    {
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        'config/cql/create-keyspace-prod.cql',
+        'config/cql/create-keyspace.cql',
+        'config/cql/drop-keyspace.cql',
+        { file: 'config/cql/changelog/README.md', method: 'copy' },
+      ],
+    },
+    {
+      condition: generator =>
+        generator.applicationType !== MICROSERVICE && (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        { file: 'config/cql/changelog/create-tables.cql', renameTo: () => 'config/cql/changelog/00000000000000_create-tables.cql' },
+        {
+          file: 'config/cql/changelog/insert_default_users.cql',
+          renameTo: () => 'config/cql/changelog/00000000000001_insert_default_users.cql',
+        },
+      ],
+    },
+  ],
+  serverTestFw: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/CassandraKeyspaceIT.java',
+          renameTo: generator => `${generator.testDir}CassandraKeyspaceIT.java`,
+        },
+        { file: 'package/AbstractCassandraTest.java', renameTo: generator => `${generator.testDir}AbstractCassandraTest.java` },
+      ],
+    },
+  ],
+};
+
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-const serverFiles = {
+const baseServerFiles = {
   jib: [
     {
       path: 'src/main/docker/jib/',
@@ -78,30 +323,6 @@ const serverFiles = {
       condition: generator => generator.prodDatabaseType !== NO_DATABASE && generator.prodDatabaseType !== ORACLE,
       path: DOCKER_DIR,
       templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }],
-    },
-    {
-      condition: generator => generator.databaseType === MONGODB,
-      path: DOCKER_DIR,
-      templates: ['mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
-    },
-    {
-      condition: generator => generator.databaseType === COUCHBASE,
-      path: DOCKER_DIR,
-      templates: ['couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
-    },
-    {
-      condition: generator => generator.databaseType === CASSANDRA,
-      path: DOCKER_DIR,
-      templates: [
-        // docker-compose files
-        'cassandra-cluster.yml',
-        'cassandra-migration.yml',
-        // dockerfiles
-        'cassandra/Cassandra-Migration.Dockerfile',
-        // scripts
-        'cassandra/scripts/autoMigrate.sh',
-        'cassandra/scripts/execute-cql.sh',
-      ],
     },
     {
       condition: generator => generator.cacheProvider === HAZELCAST,
@@ -248,11 +469,6 @@ const serverFiles = {
       templates: [{ file: 'banner.txt', method: 'copy', noEjs: true }],
     },
     {
-      condition: generator => generator.devDatabaseType === H2_DISK || generator.devDatabaseType === H2_MEMORY,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [{ file: 'h2.server.properties', renameTo: () => '.h2.server.properties' }],
-    },
-    {
       condition: generator => !!generator.enableSwaggerCodegen,
       path: SERVER_MAIN_RES_DIR,
       templates: ['swagger/api.yml'],
@@ -268,114 +484,6 @@ const serverFiles = {
         'config/application-tls.yml',
         'config/application-prod.yml',
         'i18n/messages.properties',
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === SQL,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          override: generator => !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
-          file: 'config/liquibase/changelog/initial_schema.xml',
-          renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
-          options: { interpolate: INTERPOLATE_REGEX },
-        },
-        {
-          override: generator => !generator.jhipsterConfig.incrementalChangelog || generator.configOptions.recreateInitialChangelog,
-          file: 'config/liquibase/master.xml',
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === MONGODB,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/dbmigrations/package-info.java',
-          renameTo: generator => `${generator.javaDir}config/dbmigrations/package-info.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.databaseType === MONGODB &&
-        (!generator.skipUserManagement || (generator.skipUserManagement && generator.authenticationType === OAUTH2)),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/dbmigrations/InitialSetupMigration.java',
-          renameTo: generator => `${generator.javaDir}config/dbmigrations/InitialSetupMigration.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === COUCHBASE,
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/couchmove/changelog/V0__create_indexes.n1ql'],
-    },
-    {
-      condition: generator =>
-        generator.databaseType === COUCHBASE && (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        'config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json',
-        'config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json',
-        'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
-        'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
-      ],
-    },
-    {
-      condition: generator =>
-        generator.databaseType === NEO4J && (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/neo4j/Neo4jMigrations.java',
-          renameTo: generator => `${generator.javaDir}config/neo4j/Neo4jMigrations.java`,
-        },
-        {
-          file: 'package/config/neo4j/package-info.java',
-          renameTo: generator => `${generator.javaDir}config/neo4j/package-info.java`,
-        },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.databaseType === NEO4J && (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
-          renameTo: () => 'config/neo4j/migrations/user__admin.json',
-        },
-        {
-          file: 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
-          renameTo: () => 'config/neo4j/migrations/user__user.json',
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === CASSANDRA,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        'config/cql/create-keyspace-prod.cql',
-        'config/cql/create-keyspace.cql',
-        'config/cql/drop-keyspace.cql',
-        { file: 'config/cql/changelog/README.md', method: 'copy' },
-      ],
-    },
-    {
-      condition: generator =>
-        generator.databaseType === CASSANDRA &&
-        generator.applicationType !== MICROSERVICE &&
-        (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        { file: 'config/cql/changelog/create-tables.cql', renameTo: () => 'config/cql/changelog/00000000000000_create-tables.cql' },
-        {
-          file: 'config/cql/changelog/insert_default_users.cql',
-          renameTo: () => 'config/cql/changelog/00000000000001_insert_default_users.cql',
-        },
       ],
     },
   ],
@@ -901,54 +1009,6 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.databaseType === COUCHBASE,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/N1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
-        },
-        {
-          file: 'package/repository/CustomN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomN1qlCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.searchEngine === COUCHBASE,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/SearchCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/search/SearchCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.searchEngine === COUCHBASE,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/CustomN1qlCouchbaseRepositoryTest.java',
-          renameTo: generator => `${generator.testDir}repository/CustomN1qlCouchbaseRepositoryTest.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive && generator.databaseType === COUCHBASE,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/ReactiveN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
-        },
-        {
-          file: 'package/repository/CustomReactiveN1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -1204,37 +1264,6 @@ const serverFiles = {
     },
   ],
   serverTestFw: [
-    {
-      condition: generator => generator.databaseType === CASSANDRA,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/CassandraKeyspaceIT.java',
-          renameTo: generator => `${generator.testDir}CassandraKeyspaceIT.java`,
-        },
-        { file: 'package/AbstractCassandraTest.java', renameTo: generator => `${generator.testDir}AbstractCassandraTest.java` },
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === COUCHBASE,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/DatabaseConfigurationIT.java',
-          renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === NEO4J,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/AbstractNeo4jIT.java',
-          renameTo: generator => `${generator.testDir}/AbstractNeo4jIT.java`,
-        },
-      ],
-    },
     {
       path: SERVER_TEST_SRC_DIR,
       templates: [
@@ -1751,6 +1780,16 @@ const serverFiles = {
   ],
 };
 
+const serverFiles = mergeSections(
+  baseServerFiles,
+  addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
+  addSectionsCondition(sqlFiles, context => context.databaseTypeSql),
+  addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
+  addSectionsCondition(couchBaseFiles, context => context.databaseTypeCouchbase),
+  addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
+  addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra)
+);
+
 function writeFiles() {
   return {
     setUp() {
@@ -1779,4 +1818,10 @@ function writeFiles() {
 module.exports = {
   writeFiles,
   serverFiles,
+  h2Files,
+  sqlFiles,
+  mongoDbFiles,
+  couchBaseFiles,
+  neo4jFiles,
+  cassandraFiles,
 };

@@ -29,35 +29,6 @@ Object {
       "condition": [Function],
       "path": "src/main/docker/",
       "templates": Array [
-        "mongodb-cluster.yml",
-        "mongodb/MongoDB.Dockerfile",
-        "mongodb/scripts/init_replicaset.js",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/docker/",
-      "templates": Array [
-        "couchbase-cluster.yml",
-        "couchbase/Couchbase.Dockerfile",
-        "couchbase/scripts/configure-node.sh",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/docker/",
-      "templates": Array [
-        "cassandra-cluster.yml",
-        "cassandra-migration.yml",
-        "cassandra/Cassandra-Migration.Dockerfile",
-        "cassandra/scripts/autoMigrate.sh",
-        "cassandra/scripts/execute-cql.sh",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/docker/",
-      "templates": Array [
         "hazelcast-management-center.yml",
       ],
     },
@@ -153,6 +124,35 @@ Object {
           "method": "copy",
           "renameTo": [Function],
         },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "mongodb-cluster.yml",
+        "mongodb/MongoDB.Dockerfile",
+        "mongodb/scripts/init_replicaset.js",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "couchbase-cluster.yml",
+        "couchbase/Couchbase.Dockerfile",
+        "couchbase/scripts/configure-node.sh",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "cassandra-cluster.yml",
+        "cassandra-migration.yml",
+        "cassandra/Cassandra-Migration.Dockerfile",
+        "cassandra/scripts/autoMigrate.sh",
+        "cassandra/scripts/execute-cql.sh",
       ],
     },
   ],
@@ -694,6 +694,30 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
+          "file": "package/config/WebsocketConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/WebsocketSecurityConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/ElasticsearchConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
           "file": "package/repository/N1qlCouchbaseRepository.java",
           "renameTo": [Function],
         },
@@ -733,30 +757,6 @@ Object {
         },
         Object {
           "file": "package/repository/CustomReactiveN1qlCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/WebsocketConfiguration.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/WebsocketSecurityConfiguration.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/ElasticsearchConfiguration.java",
           "renameTo": [Function],
         },
       ],
@@ -1503,16 +1503,6 @@ Object {
       "condition": [Function],
       "path": "src/main/resources/",
       "templates": Array [
-        Object {
-          "file": "h2.server.properties",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
         "swagger/api.yml",
       ],
     },
@@ -1529,6 +1519,16 @@ Object {
         "config/application-tls.yml",
         "config/application-prod.yml",
         "i18n/messages.properties",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "h2.server.properties",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1643,40 +1643,6 @@ Object {
     },
   ],
   "serverTestFw": Array [
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/CassandraKeyspaceIT.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/AbstractCassandraTest.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/DatabaseConfigurationIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/AbstractNeo4jIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
     Object {
       "path": "src/test/java/",
       "templates": Array [
@@ -1851,6 +1817,40 @@ Object {
       "templates": Array [
         Object {
           "file": "package/web/rest/KafkaResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/DatabaseConfigurationIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/AbstractNeo4jIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/CassandraKeyspaceIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/AbstractCassandraTest.java",
           "renameTo": [Function],
         },
       ],
