@@ -52,6 +52,9 @@ import javax.persistence.criteria.Root;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.time.Duration;
+import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -256,16 +259,18 @@ public final class TestUtil {
     }
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
+    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
+        Mono.defer(
+                () -> Mono.fromCallable(iterableCallable)
+                    .flatMapIterable(Function.identity())
+                    .next()
+                    .switchIfEmpty(Mono.error(new NoSuchElementException()))
+            )
+            .retry()
+            .timeout(Duration.ofSeconds(5))
+            .block();
+    }
 
-//    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
-//        Retry.wrapForRetry(
-//            Observable.fromCallable(iterableCallable)
-//                .flatMapIterable(UtilityFunctions.identity())
-//                .switchIfEmpty(Observable.error(new NoSuchElementException())),
-//            MAX_ATTEMPTS, DEFAULT_DELAY)
-//            .toBlocking()
-//            .subscribe();
-//    }
 <%_ } _%>
 
     private TestUtil() {}
