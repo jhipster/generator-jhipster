@@ -194,9 +194,9 @@ describe('JHipster Utils', () => {
             {
               name: 'AAA',
               value: 'aaa',
-              comment: '/**\n * first comment\n */',
+              comment: '    /**\n     * first comment\n     */',
             },
-            { name: 'BBB', value: 'bbb and b', comment: '/**\n * second comment\n */' },
+            { name: 'BBB', value: 'bbb and b', comment: '    /**\n     * second comment\n     */' },
           ]);
         });
       });
