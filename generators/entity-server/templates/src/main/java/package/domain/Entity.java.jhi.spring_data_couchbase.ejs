@@ -174,7 +174,7 @@ import java.util.stream.Collectors;
         this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
         <%_ if (!relationship.otherEntity.embedded) { _%>
-        this.<%= relationship.relationshipFieldName %>Ids.add(<%= relationship.otherEntityName %>.getId());
+        this.<%= relationship.relationshipFieldName %>Ids.add(<%= relationship.otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>());
         <%_ } _%>
         <%_ if (relationship.otherRelationship) { _%>
           <%_ if (!relationship.otherRelationship.collection) { _%>
@@ -195,7 +195,7 @@ import java.util.stream.Collectors;
         this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
         <%_ if (!relationship.otherEntity.embedded) { _%>
-        this.<%= relationship.relationshipFieldName %>Ids.remove(<%= relationship.otherEntityName %>.getId());
+        this.<%= relationship.relationshipFieldName %>Ids.remove(<%= relationship.otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>());
         <%_ } _%>
         <%_ if (relationship.otherRelationship) { _%>
           <%_ if (!relationship.otherRelationship.collection) { _%>
