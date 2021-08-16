@@ -207,7 +207,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   isUsingBuiltInUser() {
     return (
       !this.jhipsterConfig ||
-      !this.jhipsterConfig.skipUserManagement ||
+      (!this.jhipsterConfig.skipUserManagement && this.jhipsterConfig.databaseType !== NO_DATABASE) ||
       (this.jhipsterConfig.authenticationType === OAUTH2 && this.jhipsterConfig.databaseType !== NO_DATABASE)
     );
   }
