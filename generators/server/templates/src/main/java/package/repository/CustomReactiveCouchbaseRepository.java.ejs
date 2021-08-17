@@ -37,7 +37,7 @@ import org.springframework.data.couchbase.repository.support.SimpleReactiveCouch
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 import reactor.core.publisher.Mono;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import rx.Observable;
 import rx.RxReactiveStreams;
 <%_ } _%>
