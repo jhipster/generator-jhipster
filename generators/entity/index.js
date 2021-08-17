@@ -984,6 +984,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.entityConfig.clientRootFolder = context.options.clientRootFolder;
       }
     }
+    if (context.options.skipClient !== undefined) {
+      this.entityConfig.skipClient = context.options.skipClient;
+    }
+    if (context.options.skipServer !== undefined) {
+      this.entityConfig.skipServer = context.options.skipServer;
+    }
     dest.experimental = context.options.experimental;
 
     dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
