@@ -22,7 +22,7 @@ const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
 const entityToDtoReference = mapper + '::' + 'toDto';
-const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'return' : instanceType + ' result =';
+const returnPrefix = (returnDirectly && !searchEngineElasticsearch) ? 'return' : instanceType + ' result =';
 let resultEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
