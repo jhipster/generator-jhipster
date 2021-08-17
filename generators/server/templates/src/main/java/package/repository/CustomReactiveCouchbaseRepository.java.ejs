@@ -76,7 +76,7 @@ public class CustomReactiveCouchbaseRepository<T, ID extends Serializable> exten
     public <S extends T> Mono<S> save(S entity) {
         return super.save(populateIdIfNecessary(entity));
     }
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 
     public Flux<T> search(String indexName, String request, Pageable pageable) {
         SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))
