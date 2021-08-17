@@ -36,8 +36,7 @@ import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
   <%_ if (relationships.length > 0) { _%>
-import org.springframework.data.couchbase.core.query.FetchType;
-import org.springframework.data.couchbase.core.query.N1qlJoin;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.stream.Collectors;
   <%_ } _%>
 <&_ } -&>
@@ -104,12 +103,14 @@ import java.util.stream.Collectors;
 
 <&_ if (fragment.classAdditionalRelationshipsSection) { -&>
     <%_ for (const relationship of relationships) { _%>
-      <%_ if (!relationship.id) { _%>
+      <%_ if (!relationship.id && !relationship.otherEntity.embedded) { _%>
         <%_ if (relationship.collection) { _%>
-    @Field
+    @JsonIgnore
+    @Field("<%= relationship.relationshipFieldNamePlural %>")
     private Set<String> <%= relationship.relationshipFieldName %>Ids = new HashSet<>();
         <%_ } else if (relationship.ownerSide) { _%>
-    @Field
+    @JsonIgnore
+    @Field("<%= relationship.relationshipFieldName %>")
     private <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id;
         <%_ } _%>
       <%_ } _%>
