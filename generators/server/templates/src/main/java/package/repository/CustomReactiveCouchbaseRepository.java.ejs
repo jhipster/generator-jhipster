@@ -33,7 +33,7 @@ import org.springframework.data.couchbase.core.ReactiveCouchbaseTemplate;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
 import org.springframework.data.couchbase.repository.support.SimpleReactiveCouchbaseRepository;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 import reactor.core.publisher.Mono;
