@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import com.couchbase.client.java.search.SearchOptions;
 import com.couchbase.client.java.search.SearchQuery;
 import com.couchbase.client.java.search.queries.DocIdQuery;
