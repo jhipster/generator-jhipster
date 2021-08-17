@@ -105,7 +105,7 @@ const mongoDbFiles = {
   ],
 };
 
-const couchBaseFiles = {
+const couchbaseFiles = {
   docker: [
     {
       path: DOCKER_DIR,
@@ -1785,7 +1785,7 @@ const serverFiles = mergeSections(
   addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
   addSectionsCondition(sqlFiles, context => context.databaseTypeSql),
   addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
-  addSectionsCondition(couchBaseFiles, context => context.databaseTypeCouchbase),
+  addSectionsCondition(couchbaseFiles, context => context.databaseTypeCouchbase),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
   addSectionsCondition(cassandraFiles, context => context.databaseTypeCassandra)
 );
@@ -1821,7 +1821,7 @@ module.exports = {
   h2Files,
   sqlFiles,
   mongoDbFiles,
-  couchBaseFiles,
+  couchbaseFiles,
   neo4jFiles,
   cassandraFiles,
 };
