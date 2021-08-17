@@ -23,7 +23,7 @@ inputs:
   application-path:
     description: 'Application path'
     required: false
-    default: ${{ github.workspace }}/app
+    default: ${{ github.workspace }}/base/app
 outputs:
   equals:
     description: "Generated source didn't changed"
