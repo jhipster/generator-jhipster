@@ -52,7 +52,7 @@ import java.util.List;
 /**
  * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomReactiveCouchbaseRepository<T, ID extends Serializable> extends SimpleReactiveCouchbaseRepository<T, ID><%if (searchEngine === 'couchbase') { %> implements SearchCouchbaseRepository<T, ID><% } %> {
+public class CustomReactiveCouchbaseRepository<T, ID extends Serializable> extends SimpleReactiveCouchbaseRepository<T, ID><%if (searchEngineCouchbase) { %> implements SearchCouchbaseRepository<T, ID><% } %> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
 
