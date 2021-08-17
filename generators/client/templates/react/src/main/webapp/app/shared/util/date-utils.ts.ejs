@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 import dayjs from 'dayjs';
 
-import { APP_LOCAL_DATETIME_FORMAT, APP_LOCAL_DATETIME_FORMAT_Z } from 'app/config/constants';
+import { APP_LOCAL_DATETIME_FORMAT } from 'app/config/constants';
 
 export const convertDateTimeFromServer = date =>
   date ? dayjs(date).format(APP_LOCAL_DATETIME_FORMAT) : null;

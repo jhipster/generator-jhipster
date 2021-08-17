@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 // eslint-disable-next-line spaced-comment
@@ -28,7 +46,7 @@ export const loginItemSelector = '[data-cy="login"]';
 export const logoutItemSelector = '[data-cy="logout"]';
 export const entityItemSelector = '[data-cy="entity"]';
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 // Login
 export const titleLoginSelector = '[data-cy="loginTitle"]';
 export const errorLoginSelector = '[data-cy="loginError"]';
@@ -65,6 +83,8 @@ export const submitInitResetPasswordSelector = '[data-cy="submit"]';
 
 // Administration
 export const userManagementPageHeadingSelector = '[data-cy="userManagementPageHeading"]';
+export const swaggerFrameSelector = 'iframe[data-cy="swagger-frame"]';
+export const swaggerPageSelector = '[id="swagger-ui"]';
 <%_ if (withAdminUi) { _%>
 export const metricsPageHeadingSelector = '[data-cy="metricsPageHeading"]';
 export const healthPageHeadingSelector = '[data-cy="healthPageHeading"]';
@@ -76,15 +96,15 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-export const classInvalid = <%_ if (clientFramework === 'angularX') { _%>'ng-invalid';
-<%_ } else if (clientFramework === 'react') { _%>'av-invalid';
+export const classInvalid = <%_ if (clientFrameworkAngular) { _%>'ng-invalid';
+<%_ } else if (clientFrameworkReact) { _%>'is-invalid';
 <%_ } else { _%>'invalid';<%_ } _%>
 
-export const classValid = <%_ if (clientFramework === 'angularX') { _%>'ng-valid';
-<%_ } else if (clientFramework === 'react') { _%>'av-valid';
+export const classValid = <%_ if (clientFrameworkAngular) { _%>'ng-valid';
+<%_ } else if (clientFrameworkReact) { _%>'is-valid';
 <%_ } else { _%>'valid';<%_ } _%>
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.clickOnLoginItem();
   cy.get(usernameLoginSelector).type(username);
@@ -101,5 +121,6 @@ declare global {
 }
 <%_ } _%>
 
+import 'cypress-audit/commands';
 // Convert this to a module instead of script (allows import/export)
 export {};

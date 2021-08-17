@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,167 +24,167 @@ const { readFileSync, unlinkSync, writeFileSync } = require('fs');
 const { writeConfigFile } = require('../../../jdl/exporters/export-utils');
 
 describe('ExportUtils', () => {
-    describe('writeConfigFile', () => {
-        context('when there is no .yo-rc.json file present', () => {
-            let exportedConfig;
-            let expectedConfig;
+  describe('writeConfigFile', () => {
+    context('when there is no .yo-rc.json file present', () => {
+      let exportedConfig;
+      let expectedConfig;
 
-            before(() => {
-                const config = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                    },
-                };
-                writeConfigFile(config, path.join(__dirname, '.yo-rc.json'));
-                exportedConfig = JSON.parse(readFileSync(path.join(__dirname, '.yo-rc.json'), { encoding: 'utf-8' }));
-                expectedConfig = config;
-            });
-            after(() => {
-                unlinkSync(path.join(__dirname, '.yo-rc.json'));
-            });
+      before(() => {
+        const config = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+          },
+        };
+        writeConfigFile(config, path.join(__dirname, '.yo-rc.json'));
+        exportedConfig = JSON.parse(readFileSync(path.join(__dirname, '.yo-rc.json'), { encoding: 'utf-8' }));
+        expectedConfig = config;
+      });
+      after(() => {
+        unlinkSync(path.join(__dirname, '.yo-rc.json'));
+      });
 
-            it('should export the config', () => {
-                expect(exportedConfig).to.deep.equal(expectedConfig);
-            });
-        });
-        context('when there is a .yo-rc.json file present', () => {
-            let exportedConfig;
-            let expectedConfig;
-
-            before(() => {
-                const existingConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '6.5.4',
-                    },
-                    somethingElse: {
-                        answer: 42,
-                    },
-                };
-                writeFileSync('.yo-rc.json', JSON.stringify(existingConfig, null, 2));
-                const newConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                    },
-                    somethingNew: {
-                        question: 'No comment',
-                    },
-                };
-                writeConfigFile(newConfig);
-                exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-                expectedConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                    },
-                    somethingElse: {
-                        answer: 42,
-                    },
-                    somethingNew: {
-                        question: 'No comment',
-                    },
-                };
-            });
-            after(() => {
-                unlinkSync('.yo-rc.json');
-            });
-
-            it('should export the config', () => {
-                expect(exportedConfig).to.deep.equal(expectedConfig);
-            });
-        });
-
-        context('when there is a .yo-rc.json file present with creationTimestamp', () => {
-            let exportedConfig;
-            let expectedConfig;
-
-            before(() => {
-                const existingConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '6.5.4',
-                        creationTimestamp: 'old',
-                    },
-                    somethingElse: {
-                        answer: 42,
-                    },
-                };
-                writeFileSync('.yo-rc.json', JSON.stringify(existingConfig, null, 2));
-                const newConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                        creationTimestamp: 'new',
-                    },
-                    somethingNew: {
-                        question: 'No comment',
-                    },
-                };
-                writeConfigFile(newConfig);
-                exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-                expectedConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                        creationTimestamp: 'old',
-                    },
-                    somethingElse: {
-                        answer: 42,
-                    },
-                    somethingNew: {
-                        question: 'No comment',
-                    },
-                };
-            });
-            after(() => {
-                unlinkSync('.yo-rc.json');
-            });
-
-            it('should export the config', () => {
-                expect(exportedConfig).to.deep.equal(expectedConfig);
-            });
-        });
-
-        context('when there is a .yo-rc.json file present without creationTimestamp', () => {
-            let exportedConfig;
-            let expectedConfig;
-
-            before(() => {
-                const existingConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '6.5.4',
-                    },
-                    somethingElse: {
-                        answer: 42,
-                    },
-                };
-                writeFileSync('.yo-rc.json', JSON.stringify(existingConfig, null, 2));
-                const newConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                        creationTimestamp: 'new',
-                    },
-                    somethingNew: {
-                        question: 'No comment',
-                    },
-                };
-                writeConfigFile(newConfig);
-                exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-                expectedConfig = {
-                    'generator-jhipster': {
-                        jhipsterVersion: '7.0.0',
-                        creationTimestamp: 'new',
-                    },
-                    somethingElse: {
-                        answer: 42,
-                    },
-                    somethingNew: {
-                        question: 'No comment',
-                    },
-                };
-            });
-            after(() => {
-                unlinkSync('.yo-rc.json');
-            });
-
-            it('should export the config with new creationTimestamp', () => {
-                expect(exportedConfig).to.deep.equal(expectedConfig);
-            });
-        });
+      it('should export the config', () => {
+        expect(exportedConfig).to.deep.equal(expectedConfig);
+      });
     });
+    context('when there is a .yo-rc.json file present', () => {
+      let exportedConfig;
+      let expectedConfig;
+
+      before(() => {
+        const existingConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '6.5.4',
+          },
+          somethingElse: {
+            answer: 42,
+          },
+        };
+        writeFileSync('.yo-rc.json', JSON.stringify(existingConfig, null, 2));
+        const newConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+          },
+          somethingNew: {
+            question: 'No comment',
+          },
+        };
+        writeConfigFile(newConfig);
+        exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+        expectedConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+          },
+          somethingElse: {
+            answer: 42,
+          },
+          somethingNew: {
+            question: 'No comment',
+          },
+        };
+      });
+      after(() => {
+        unlinkSync('.yo-rc.json');
+      });
+
+      it('should export the config', () => {
+        expect(exportedConfig).to.deep.equal(expectedConfig);
+      });
+    });
+
+    context('when there is a .yo-rc.json file present with creationTimestamp', () => {
+      let exportedConfig;
+      let expectedConfig;
+
+      before(() => {
+        const existingConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '6.5.4',
+            creationTimestamp: 'old',
+          },
+          somethingElse: {
+            answer: 42,
+          },
+        };
+        writeFileSync('.yo-rc.json', JSON.stringify(existingConfig, null, 2));
+        const newConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+            creationTimestamp: 'new',
+          },
+          somethingNew: {
+            question: 'No comment',
+          },
+        };
+        writeConfigFile(newConfig);
+        exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+        expectedConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+            creationTimestamp: 'old',
+          },
+          somethingElse: {
+            answer: 42,
+          },
+          somethingNew: {
+            question: 'No comment',
+          },
+        };
+      });
+      after(() => {
+        unlinkSync('.yo-rc.json');
+      });
+
+      it('should export the config', () => {
+        expect(exportedConfig).to.deep.equal(expectedConfig);
+      });
+    });
+
+    context('when there is a .yo-rc.json file present without creationTimestamp', () => {
+      let exportedConfig;
+      let expectedConfig;
+
+      before(() => {
+        const existingConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '6.5.4',
+          },
+          somethingElse: {
+            answer: 42,
+          },
+        };
+        writeFileSync('.yo-rc.json', JSON.stringify(existingConfig, null, 2));
+        const newConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+            creationTimestamp: 'new',
+          },
+          somethingNew: {
+            question: 'No comment',
+          },
+        };
+        writeConfigFile(newConfig);
+        exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+        expectedConfig = {
+          'generator-jhipster': {
+            jhipsterVersion: '7.0.0',
+            creationTimestamp: 'new',
+          },
+          somethingElse: {
+            answer: 42,
+          },
+          somethingNew: {
+            question: 'No comment',
+          },
+        };
+      });
+      after(() => {
+        unlinkSync('.yo-rc.json');
+      });
+
+      it('should export the config with new creationTimestamp', () => {
+        expect(exportedConfig).to.deep.equal(expectedConfig);
+      });
+    });
+  });
 });

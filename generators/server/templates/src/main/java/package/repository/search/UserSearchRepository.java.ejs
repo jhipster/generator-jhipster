@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,26 +21,29 @@ package <%= packageName %>.repository.search;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+<%_ } else { _%>
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 <%_ } _%>
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
+<%_ } else { _%>
+import java.util.stream.Stream;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 
 import java.util.UUID;
 <%_ } _%>
-<%_ if (reactive) { _%>
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-<%_ } _%>
-
 
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity('User') %>, <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } %><% if (['cassandra', 'mongodb', 'neo4j'].includes(databaseType) || authenticationType === 'oauth2') { %>String<% } %>><% if (reactive) {%>, UserSearchRepositoryInternal<% } %> {
+public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity('User') %>, <% if (databaseTypeSql && !authenticationTypeOauth2) { %>Long<% } %><% if ((databaseTypeCassandra || databaseTypeMongodb || databaseTypeNeo4j) || authenticationTypeOauth2) { %>String<% } %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 
@@ -59,7 +62,30 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     @Override
     public Flux<User> search(String query) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-        return reactiveElasticsearchTemplate.find(nativeSearchQuery, User.class);
+        return reactiveElasticsearchTemplate.search(nativeSearchQuery, User.class).map(SearchHit::getContent);
+    }
+}
+<%_ } else { _%>
+
+interface UserSearchRepositoryInternal {
+    Stream<User> search(String query);
+}
+
+class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
+
+    private final ElasticsearchRestTemplate elasticsearchTemplate;
+
+    UserSearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
+        this.elasticsearchTemplate = elasticsearchTemplate;
+    }
+
+    @Override
+    public Stream<User> search(String query) {
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+        return elasticsearchTemplate
+            .search(nativeSearchQuery, User.class)
+            .map(SearchHit::getContent)
+            .stream();
     }
 }
 <%_ } _%>

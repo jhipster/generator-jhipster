@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,20 +23,28 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
+<%_ if (!readOnly) { _%>
                 "createLabel": "Krijo një të ri <%= entityClassHumanized %>",
-                "createOrEditLabel": "Krijo ose përpuno një <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
-                "search": "Kërko për <%= entityClassHumanized %>"<% } %>,
+                "createOrEditLabel": "Krijo ose përpuno një <%= entityClassHumanized %>",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "Kërko për <%= entityClassHumanized %>",
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
-            },<% if (!microserviceAppName) { %>
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Një <%= entityClassHumanized %> i ri u krijua me identifikues {{ param }}",
             "updated": "Një <%= entityClassHumanized %> u përpunua me identifikues {{ param }}",
-            "deleted": "Një <%= entityClassHumanized %> u fshi me identifikues {{ param }}",<% } %>
+            "deleted": "Një <%= entityClassHumanized %> u fshi me identifikues {{ param }}",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Jeni i sigurtë që doni të fshini <%= entityClassHumanized %> {{ id }}?"
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
-            }<% for (idx in fields) {
+            }<%for (idx in fields) {
             if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
             "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
             "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "Një <%= entityClassHumanized %> i ri u krijua me identifikues {{ param }}",
             "updated": "Një <%= entityClassHumanized %> u përpunua me identifikues {{ param }}",
             "deleted": "Një <%= entityClassHumanized %> u fshi me identifikues {{ param }}"
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

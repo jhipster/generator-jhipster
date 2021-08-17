@@ -4,83 +4,76 @@
             <div v-if="<%= entityInstance %>">
                 <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="$t('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
                 <dl class="row jh-entity-details">
-                    <%_ for (field of fields.filter(field => !field.id)) {
-                        const fieldName = field.fieldName;
-                        const fieldType = field.fieldType;
-                        const fieldTypeBlobContent = field.fieldTypeBlobContent; _%>
+<%_ for (field of fields.filter(field => !field.id)) {
+    const fieldName = field.fieldName;
+    const fieldType = field.fieldType;_%>
                     <dt>
                         <span v-text="$t('<%= i18nKeyPrefix %>.<%= fieldName %>')"><%= field.fieldNameHumanized %></span>
                     </dt>
                     <dd>
-                        <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.fieldIsEnum) { _%>
                         <span v-text="$t('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
-                        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
                                 <img v-bind:src="'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%=entityInstance %> image"/>
                             </a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
-                        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
-                        <%_ } else if (['Duration'].includes(fieldType)) { _%>
+  <%_ } else if (field.fieldTypeDuration) { _%>
                         <span>{{<%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %>}})</span>
-                        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                        <%_ if (enableTranslation) { _%>
+  <%_ } else if (field.fieldTypeTimed) { _%>
+    <%_ if (enableTranslation) { _%>
                         <span v-if="<%= entityInstance %>.<%=fieldName %>">{{$d(Date.parse(<%= entityInstance %>.<%=fieldName %>), 'long') }}</span>
-                        <%_ } else { _%>
+    <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%=fieldName %> | formatDate}}</span>
-                        <%_ } _%>
-                        <%_ } else { _%>
+    <%_ } _%>
+  <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%= fieldName %>}}</span>
-                        <%_ } _%>
+  <%_ } _%>
                     </dd>
-                    <%_ } _%>
-                    <%_ for (relationship of relationships) {
-                        const relationshipType = relationship.relationshipType;
-                        const ownerSide = relationship.ownerSide;
-                        const relationshipName = relationship.relationshipName;
-                        const relationshipFieldName = relationship.relationshipFieldName;
-                        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-                        const relationshipNameHumanized = relationship.relationshipNameHumanized;
-                        const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
-                        const otherEntityName = relationship.otherEntityName;
-                        const otherEntityStateName = relationship.otherEntityStateName;
-                        const otherEntityField = relationship.otherEntityField;
-                        const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
-                        const otherEntityAngularName = relationship.otherEntityAngularName;
-                        if (relationshipType === 'many-to-one'
-                        || (relationshipType === 'one-to-one' && ownerSide === true)
-                        || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+<%_ } _%>
+<%_ for (relationship of relationships) {
+    const ownerSide = relationship.ownerSide;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const relationshipNameHumanized = relationship.relationshipNameHumanized;
+    const otherEntityName = relationship.otherEntityName;
+    const otherEntityField = relationship.otherEntityField;
+    const otherEntityAngularName = relationship.otherEntityAngularName; _%>
+  <%_ if (ownerSide) { _%>
                     <dt>
                         <span v-text="$t('<%= i18nKeyPrefix %>.<%= relationshipName %>')"><%= relationshipNameHumanized %></span>
                     </dt>
                     <dd>
-                            <%_ if (otherEntityName === 'user') { _%>
-                                <%_ if (relationshipType === 'many-to-many') { _%>
+    <%_ if (relationship.otherEntityUser) { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
-                                <%_ } else { _%>
+      <%_ } else { _%>
                         {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
-                                <%_ } _%>
-                            <%_ } else { _%>
-                                <%_ if (relationshipType === 'many-to-many') { _%>
+      <%_ } _%>
+    <%_ } else { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
                             <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
-                                <%_ } else { _%>
+      <%_ } else { _%>
                         <div v-if="<%= entityInstance + '.' + relationshipFieldName %>">
                             <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
-                                <%_ } _%>
-                            <%_ } _%>
+      <%_ } _%>
+    <%_ } _%>
                     </dd>
-                        <%_ } _%>
-                    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"
@@ -88,11 +81,13 @@
                         data-cy="entityDetailsBackButton">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
-                <%_ if (!readOnly) { _%>
-                <router-link v-if="<%= entityInstance %>.id" :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-primary">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
-                </router-link>
-                <%_ } _%>
+<%_ if (!readOnly) { _%>
+                <router-link v-if="<%= entityInstance %>.id" :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
+                    <button @click="navigate" class="btn btn-primary">
+                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
+                    </button>
+                    </router-link>
+<%_ } _%>
             </div>
         </div>
     </div>

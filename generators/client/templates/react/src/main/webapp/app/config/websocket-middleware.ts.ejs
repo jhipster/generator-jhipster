@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,14 +20,13 @@ import SockJS from 'sockjs-client';
 
 import Stomp from 'webstomp-client';
 import { Observable } from 'rxjs';
-<%_ if (authenticationType !== 'session') { _%>
+<%_ if (!authenticationTypeSession) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
-import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
-import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
-import { SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-<%_ if (authenticationType === 'session') { _%>
+import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
+import { getAccount<% if (authenticationTypeJwt) { %>, logoutSession<% } else { %>,logoutServer<% } %> } from 'app/shared/reducers/authentication';
+<%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
 
@@ -40,7 +39,7 @@ let listener: Observable<any>;
 let listenerObserver: any;
 let alreadyConnectedOnce = false;
 
-const createConnection = (): Promise<any> => new Promise((resolve, reject) => (connectedPromise = resolve));
+const createConnection = (): Promise<any> => new Promise((resolve) => (connectedPromise = resolve));
 
 const createListener = (): Observable<any> =>
   new Observable(observer => {
@@ -78,7 +77,7 @@ const connect = () => {
   const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
   const headers = {};
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
   const url = '//' + loc.host + baseHref + '/websocket/tracker';
   headers['X-XSRF-TOKEN'] = cookie.read('XSRF-TOKEN');
 <%_ } else { _%>
@@ -119,19 +118,16 @@ const unsubscribe = () => {
 };
 
 export default store => next => action => {
-  if (action.type === SUCCESS(AUTH_ACTIONS.GET_SESSION)) {
+  if (getAccount.fulfilled.match(action)) {
     connect();
     const isAdmin = action.payload.data.authorities.includes('ROLE_ADMIN');
     if (!alreadyConnectedOnce && isAdmin) {
       subscribe();
       receive().subscribe(activity => {
-        return store.dispatch({
-          type: ADMIN_ACTIONS.WEBSOCKET_ACTIVITY_MESSAGE,
-          payload: activity,
-        });
+        return store.dispatch(websocketActivityMessage(activity));
       });
     }
-  } else if (action.type === FAILURE(AUTH_ACTIONS.GET_SESSION) || action.type === AUTH_ACTIONS.LOGOUT) {
+  } else if (getAccount.rejected.match(action) || <% if (authenticationTypeJwt) { %>action.type === logoutSession().type<% } else { %>logoutServer.pending.match(action)<% } %>) {
     unsubscribe();
     disconnect();
   }

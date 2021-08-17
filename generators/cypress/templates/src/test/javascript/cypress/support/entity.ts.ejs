@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 // eslint-disable-next-line spaced-comment
@@ -11,6 +29,7 @@
 export const entityTableSelector = '[data-cy="entityTable"]';
 export const entityCreateButtonSelector = '[data-cy="entityCreateButton"]';
 export const entityCreateSaveButtonSelector = '[data-cy="entityCreateSaveButton"]';
+export const entityCreateCancelButtonSelector = '[data-cy="entityCreateCancelButton"]';
 export const entityDetailsButtonSelector = '[data-cy="entityDetailsButton"]'; // can return multiple elements
 export const entityDetailsBackButtonSelector = '[data-cy="entityDetailsBackButton"]';
 export const entityEditButtonSelector = '[data-cy="entityEditButton"]';
@@ -47,14 +66,14 @@ Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileNam
       const list = new DataTransfer();
       list.items.add(file);
       const myFileList = list.files;
-      el[0].files = myFileList;
+      (el[0] as HTMLInputElement).files = myFileList;
       el[0].dispatchEvent(new Event('change', {bubbles: true}));
     });
 });
 
 Cypress.Commands.add('setFieldSelectToLastOfEntity', (fieldName: string) => {
   return cy.get(`[data-cy="${fieldName}"]`).then(select => {
-    const selectSize = Number(select.attr("size"));
+    const selectSize = (select[0] as HTMLSelectElement)?.options?.length || Number(select.attr('size')) || 0;
     if (selectSize > 0) {
       return cy.get(`[data-cy="${fieldName}"] option`).then((options: any) => {
         const elements = [...options].map(o => o.label);

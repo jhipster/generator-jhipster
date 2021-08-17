@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,47 +24,47 @@ const JDLObject = require('../../../jdl/models/jdl-object');
 const { MONOLITH } = require('../../../jdl/jhipster/application-types');
 
 describe('JSONToJDLApplicationConverter', () => {
-    describe('convert', () => {
-        context('when not passing any argument', () => {
-            let jdlObject;
+  describe('convert', () => {
+    context('when not passing any argument', () => {
+      let jdlObject;
 
-            before(() => {
-                jdlObject = convertApplicationsToJDL();
-            });
+      before(() => {
+        jdlObject = convertApplicationsToJDL();
+      });
 
-            it('should return an empty jdl object', () => {
-                expect(jdlObject.getApplicationQuantity()).to.equal(0);
-            });
-        });
-        context('when not passing a jdl object', () => {
-            let jdlObject;
-
-            before(() => {
-                jdlObject = convertApplicationsToJDL({
-                    applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
-                });
-            });
-
-            it('should return the converted applications', () => {
-                expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
-            });
-        });
-        context('when passing a jdl object', () => {
-            let jdlObject;
-
-            before(() => {
-                const previousJDLObject = new JDLObject();
-                previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: MONOLITH }));
-                jdlObject = convertApplicationsToJDL({
-                    applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
-                    jdl: previousJDLObject,
-                });
-            });
-
-            it('should add the converted applications', () => {
-                expect(jdlObject.applications.tata).to.deep.equal(createJDLApplication({ baseName: 'tata' }));
-                expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
-            });
-        });
+      it('should return an empty jdl object', () => {
+        expect(jdlObject.getApplicationQuantity()).to.equal(0);
+      });
     });
+    context('when not passing a jdl object', () => {
+      let jdlObject;
+
+      before(() => {
+        jdlObject = convertApplicationsToJDL({
+          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
+        });
+      });
+
+      it('should return the converted applications', () => {
+        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
+      });
+    });
+    context('when passing a jdl object', () => {
+      let jdlObject;
+
+      before(() => {
+        const previousJDLObject = new JDLObject();
+        previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: MONOLITH }));
+        jdlObject = convertApplicationsToJDL({
+          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
+          jdl: previousJDLObject,
+        });
+      });
+
+      it('should add the converted applications', () => {
+        expect(jdlObject.applications.tata).to.deep.equal(createJDLApplication({ baseName: 'tata' }));
+        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
+      });
+    });
+  });
 });

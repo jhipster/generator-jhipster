@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,121 +24,129 @@ const fs = require('fs');
 const path = require('path');
 const JHipsterDeploymentExporter = require('../../../jdl/exporters/jhipster-deployment-exporter');
 const JDLDeployment = require('../../../jdl/models/jdl-deployment');
+const { DeploymentTypes } = require('../../../jdl/jhipster/deployment-options');
+const { ServiceTypes } = require('../../../jdl/jhipster/kubernetes-platform-types');
+const { EUREKA } = require('../../../jdl/jhipster/service-discovery-types');
+const monitoringTypes = require('../../../jdl/jhipster/monitoring-types');
+
+const { DOCKERCOMPOSE, KUBERNETES } = DeploymentTypes;
+const NO_MONITORING = monitoringTypes.NO;
+const { LOAD_BALANCER } = ServiceTypes;
 
 describe('JHipsterDeploymentExporter', () => {
-    describe('exportDeployments', () => {
-        context('when passing invalid parameters', () => {
-            context('such as undefined', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JHipsterDeploymentExporter.exportDeployments();
-                    }).to.throw(/^Deployments have to be passed to be exported\.$/);
-                });
-            });
+  describe('exportDeployments', () => {
+    context('when passing invalid parameters', () => {
+      context('such as undefined', () => {
+        it('should fail', () => {
+          expect(() => {
+            JHipsterDeploymentExporter.exportDeployments();
+          }).to.throw(/^Deployments have to be passed to be exported\.$/);
         });
-        context('when passing valid arguments', () => {
-            context('when exporting deployments to JSON', () => {
-                let returned;
-
-                before('common setup for both deployments', () => {
-                    returned = JHipsterDeploymentExporter.exportDeployments({
-                        'docker-compose': new JDLDeployment({
-                            deploymentType: 'docker-compose',
-                            appsFolders: ['tata', 'titi'],
-                            dockerRepositoryName: 'test',
-                        }),
-                        kubernetes: new JDLDeployment({
-                            deploymentType: 'kubernetes',
-                            appsFolders: ['tata', 'titi'],
-                            dockerRepositoryName: 'test',
-                        }),
-                    });
-                });
-
-                it('should return the exported deployments', () => {
-                    expect(returned).to.have.lengthOf(2);
-                });
-                context('for the first deployment', () => {
-                    let content;
-
-                    before('setup for the first deployment', done => {
-                        fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-                            if (err) {
-                                return done(err);
-                            }
-                            content = JSON.parse(data);
-                            return done();
-                        });
-                    });
-
-                    after('cleanup for the fist deployment', () => {
-                        fs.unlinkSync(path.join('docker-compose', '.yo-rc.json'));
-                        fs.rmdirSync('docker-compose');
-                    });
-
-                    it('should exports it', done => {
-                        fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, done);
-                    });
-
-                    it('should format it', () => {
-                        expect(content['generator-jhipster']).not.to.be.undefined;
-                        const config = content['generator-jhipster'];
-                        expect(config).to.deep.equal({
-                            deploymentType: 'docker-compose',
-                            appsFolders: ['tata', 'titi'],
-                            clusteredDbApps: [],
-                            directoryPath: '../',
-                            dockerPushCommand: 'docker push',
-                            dockerRepositoryName: 'test',
-                            gatewayType: 'zuul',
-                            monitoring: 'no',
-                            serviceDiscoveryType: 'eureka',
-                        });
-                    });
-                });
-                context('for the second deployment', () => {
-                    let content;
-
-                    before('setup for the first deployment', done => {
-                        fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-                            if (err) {
-                                return done(err);
-                            }
-                            content = JSON.parse(data);
-                            return done();
-                        });
-                    });
-
-                    after('cleanup for the fist deployment', () => {
-                        fs.unlinkSync(path.join('kubernetes', '.yo-rc.json'));
-                        fs.rmdirSync('kubernetes');
-                    });
-
-                    it('should exports it', done => {
-                        fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, done);
-                    });
-
-                    it('should format it', () => {
-                        expect(content['generator-jhipster']).not.to.be.undefined;
-                        const config = content['generator-jhipster'];
-                        expect(config).to.deep.equal({
-                            deploymentType: 'kubernetes',
-                            appsFolders: ['tata', 'titi'],
-                            clusteredDbApps: [],
-                            directoryPath: '../',
-                            dockerPushCommand: 'docker push',
-                            dockerRepositoryName: 'test',
-                            gatewayType: 'zuul',
-                            ingressDomain: '',
-                            istio: false,
-                            kubernetesNamespace: 'default',
-                            kubernetesServiceType: 'LoadBalancer',
-                            monitoring: 'no',
-                            serviceDiscoveryType: 'eureka',
-                        });
-                    });
-                });
-            });
-        });
+      });
     });
+    context('when passing valid arguments', () => {
+      context('when exporting deployments to JSON', () => {
+        let returned;
+
+        before('common setup for both deployments', () => {
+          returned = JHipsterDeploymentExporter.exportDeployments({
+            'docker-compose': new JDLDeployment({
+              deploymentType: DOCKERCOMPOSE,
+              appsFolders: ['tata', 'titi'],
+              dockerRepositoryName: 'test',
+            }),
+            kubernetes: new JDLDeployment({
+              deploymentType: KUBERNETES,
+              appsFolders: ['tata', 'titi'],
+              dockerRepositoryName: 'test',
+            }),
+          });
+        });
+
+        it('should return the exported deployments', () => {
+          expect(returned).to.have.lengthOf(2);
+        });
+        context('for the first deployment', () => {
+          let content;
+
+          before('setup for the first deployment', done => {
+            fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
+              if (err) {
+                return done(err);
+              }
+              content = JSON.parse(data);
+              return done();
+            });
+          });
+
+          after('cleanup for the fist deployment', () => {
+            fs.unlinkSync(path.join('docker-compose', '.yo-rc.json'));
+            fs.rmdirSync('docker-compose');
+          });
+
+          it('should exports it', done => {
+            fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, done);
+          });
+
+          it('should format it', () => {
+            expect(content['generator-jhipster']).not.to.be.undefined;
+            const config = content['generator-jhipster'];
+            expect(config).to.deep.equal({
+              deploymentType: 'docker-compose',
+              appsFolders: ['tata', 'titi'],
+              clusteredDbApps: [],
+              directoryPath: '../',
+              dockerRepositoryName: 'test',
+              gatewayType: 'SpringCloudGateway',
+              monitoring: NO_MONITORING,
+              serviceDiscoveryType: EUREKA,
+            });
+          });
+        });
+        context('for the second deployment', () => {
+          let content;
+
+          before('setup for the first deployment', done => {
+            fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
+              if (err) {
+                return done(err);
+              }
+              content = JSON.parse(data);
+              return done();
+            });
+          });
+
+          after('cleanup for the fist deployment', () => {
+            fs.unlinkSync(path.join('kubernetes', '.yo-rc.json'));
+            fs.rmdirSync('kubernetes');
+          });
+
+          it('should exports it', done => {
+            fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, done);
+          });
+
+          it('should format it', () => {
+            expect(content['generator-jhipster']).not.to.be.undefined;
+            const config = content['generator-jhipster'];
+            expect(config).to.deep.equal({
+              deploymentType: 'kubernetes',
+              appsFolders: ['tata', 'titi'],
+              clusteredDbApps: [],
+              directoryPath: '../',
+              dockerPushCommand: 'docker push',
+              dockerRepositoryName: 'test',
+              ingressDomain: '',
+              istio: false,
+              kubernetesNamespace: 'default',
+              kubernetesServiceType: LOAD_BALANCER,
+              monitoring: NO_MONITORING,
+              kubernetesUseDynamicStorage: false,
+              kubernetesStorageClassName: '',
+              serviceDiscoveryType: EUREKA,
+            });
+          });
+        });
+      });
+    });
+  });
 });

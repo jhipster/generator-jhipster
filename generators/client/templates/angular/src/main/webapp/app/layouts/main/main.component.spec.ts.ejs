@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -38,9 +38,12 @@ describe('Component Tests', () => {
     let comp: MainComponent;
     let fixture: ComponentFixture<MainComponent>;
     let titleService: Title;
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     let translateService: TranslateService;
-    <%_ } _%>
+  <%_ if (enableI18nRTL) { _%>
+    let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
+  <%_ } _%>
+<%_ } _%>
     let mockAccountService: AccountService;
     const routerEventsSubject = new Subject<RouterEvent>();
     const routerState: any = { snapshot: { root: { data: {} } } };
@@ -52,15 +55,15 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           imports: [TranslateModule.forRoot()],
-          <%_ } _%>
+<%_ } _%>
           declarations: [MainComponent],
           providers: [
             Title,
-            <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
             FindLanguageFromKeyPipe,
-            <%_ } _%>
+<%_ } _%>
             AccountService,
             {
               provide: Router,
@@ -77,30 +80,34 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(MainComponent);
       comp = fixture.componentInstance;
       titleService = TestBed.inject(Title);
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       translateService = TestBed.inject(TranslateService);
-      <%_ } _%>
+  <%_ if (enableI18nRTL) { _%>
+      findLanguageFromKeyPipe = TestBed.inject(FindLanguageFromKeyPipe);
+  <%_ } _%>
+<%_ } _%>
       mockAccountService = TestBed.inject(AccountService);
       mockAccountService.identity = jest.fn(() => of(null));
       mockAccountService.getAuthenticationState = jest.fn(() => of(null));
     });
 
     describe('page title', () => {
-      const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
+      const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
-      <%_ if (enableTranslation) { _%>
+      const navigationStart = new NavigationStart(1, '');
+<%_ if (enableTranslation) { _%>
       const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: null };
-      <%_ } _%>
+<%_ } _%>
 
       beforeEach(() => {
         routerState.snapshot.root = { data: {} };
-        <%_ if (enableTranslation) { _%>
-        spyOn(translateService, 'get').and.callFake((key: string) => of(key + ' translated'));
+<%_ if (enableTranslation) { _%>
+        jest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
         translateService.currentLang = '<%= nativeLanguage %>';
-        <%_ } _%>
-        spyOn(titleService, 'setTitle');
+<%_ } _%>
+        jest.spyOn(titleService, 'setTitle');
         comp.ngOnInit();
       });
 
@@ -110,9 +117,9 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(defaultPageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(defaultPageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
 
@@ -124,9 +131,9 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
 
@@ -139,9 +146,9 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(childRoutePageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(childRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
 
@@ -154,14 +161,24 @@ describe('Component Tests', () => {
           routerEventsSubject.next(navigationEnd);
 
           // THEN
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          <%_ } _%>
+<%_ } _%>
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
       });
 
-      <%_ if (enableTranslation) { _%>
+      describe('navigation start', () => {
+        it('should not set page title on navigation start', () => {
+          // WHEN
+          routerEventsSubject.next(navigationStart);
+
+          // THEN
+          expect(titleService.setTitle).not.toHaveBeenCalled();
+        });
+      });
+
+<%_ if (enableTranslation) { _%>
       describe('language change', () => {
         it('should set page title to default title if pageTitle is missing on routes', () => {
           // WHEN
@@ -210,7 +227,40 @@ describe('Component Tests', () => {
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
         });
       });
-      <%_ } _%>
+<%_ } _%>
     });
+<%_ if (enableTranslation) { _%>
+
+    describe('page language attribute', () => {
+      it('should change page language attribute on language change', () => {
+        // GIVEN
+        comp.ngOnInit();
+
+        // WHEN
+  <%_ if (enableI18nRTL) { _%>
+        findLanguageFromKeyPipe.isRTL = jest.fn(() => false);
+  <%_ } _%>
+        translateService.onLangChange.emit({ lang: 'lang1', translations: null });
+
+        // THEN
+        expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang1');
+  <%_ if (enableI18nRTL) { _%>
+        expect(document.querySelector('html')?.getAttribute('dir')).toEqual('ltr');
+  <%_ } _%>
+
+        // WHEN
+  <%_ if (enableI18nRTL) { _%>
+        findLanguageFromKeyPipe.isRTL = jest.fn(() => true);
+  <%_ } _%>
+        translateService.onLangChange.emit({ lang: 'lang2', translations: null });
+
+        // THEN
+        expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang2');
+  <%_ if (enableI18nRTL) { _%>
+        expect(document.querySelector('html')?.getAttribute('dir')).toEqual('rtl');
+  <%_ } _%>
+      });
+    });
+<%_ } _%>
   });
 });

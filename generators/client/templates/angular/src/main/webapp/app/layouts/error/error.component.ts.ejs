@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,33 +29,33 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
   errorMessage?: string;
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   errorKey?: string;
   langChangeSubscription?: Subscription;
-  <%_ } _%>
+<%_ } _%>
 
   constructor(
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    <%_ } _%>
+<%_ } _%>
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {
       if (routeData.errorMessage) {
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         this.errorKey = routeData.errorMessage;
         this.getErrorMessageTranslation();
         this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.getErrorMessageTranslation());
-        <%_ } else { _%>
+<%_ } else { _%>
         this.errorMessage = routeData.errorMessage;
-        <%_ } _%>
+<%_ } _%>
       }
     });
   }
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   ngOnDestroy(): void {
     if (this.langChangeSubscription) {
       this.langChangeSubscription.unsubscribe();
@@ -70,5 +70,5 @@ export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnD
       });
     }
   }
-  <%_ } _%>
+<%_ } _%>
 }

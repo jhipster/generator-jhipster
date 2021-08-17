@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,7 +21,7 @@ const webpackMerge = require('webpack-merge').merge;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const sass = require('sass');
 
 const utils = require('./utils.js');
@@ -29,7 +29,7 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = async () => webpackMerge(await commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
   entry: {
@@ -37,8 +37,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
   },
   output: {
     path: utils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].[hash].bundle.js',
-    chunkFilename: 'app/[name].[hash].chunk.js'
+    filename: 'app/[name].[contenthash].bundle.js',
+    chunkFilename: 'app/[name].[chunkhash].chunk.js'
   },
   module: {
     rules: [
@@ -70,15 +70,12 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     runtimeChunk: false,
     minimizer: [
       new TerserPlugin({
-        cache: true,
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
           ecma: 6,
           toplevel: true,
           module: true,
-          beautify: false,
-          comments: false,
           compress: {
             warnings: false,
             ecma: 6,
@@ -98,14 +95,16 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           }
         }
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new CssMinimizerPlugin({
+        parallel: true,
+      })
     ]
   },
   plugins: [
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
-      filename: 'content/[name].[hash].css',
-      chunkFilename: 'content/[name].[hash].css'
+      filename: 'content/[name].[contenthash].css',
+      chunkFilename: 'content/[name].[chunkhash].css'
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,

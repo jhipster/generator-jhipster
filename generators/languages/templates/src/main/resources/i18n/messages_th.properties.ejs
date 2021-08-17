@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=ขออภัย, เกิดความผิดพลาด
 error.status=สถานะ:
 error.message=ข้อความ:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> account activation
 email.activation.greeting=เรียน {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> รีเซตรหัสผ่าน
 email.reset.greeting=Dear {0}
 email.reset.text1=สำหรับบัญชี <%= baseName %> รหัสผ่านได้รับการร้องขอเพื่อทำการรีเซต, กรุณาคลิ๊ก URL ข้างล่างเพื่อทำการรีเซต:
 email.reset.text2=ขอแสดงความนับถือ,
+<%_ } _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,35 +17,19 @@
  limitations under the License.
 -%>
 import axios from 'axios';
+import { createAsyncThunk, createSlice, isPending, isRejected } from '@reduxjs/toolkit';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-
-export const ACTION_TYPES = {
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-  FETCH_GATEWAY_ROUTE: 'administration/FETCH_GATEWAY_ROUTE',
-  <%_ } _%>
-<%_ if (withAdminUi) { _%>
-  FETCH_LOGS: 'administration/FETCH_LOGS',
-  FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',
-  FETCH_HEALTH: 'administration/FETCH_HEALTH',
-  FETCH_METRICS: 'administration/FETCH_METRICS',
-  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',
-  FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',
-  FETCH_ENV: 'administration/FETCH_ENV',
-<%_ } _%>
-  <%_ if (websocket === 'spring-websocket') { _%>
-  WEBSOCKET_ACTIVITY_MESSAGE: 'administration/WEBSOCKET_ACTIVITY_MESSAGE'
-  <%_ } _%>
-};
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import { AppThunk } from 'app/config/store';
 
 const initialState = {
   loading: false,
   errorMessage: null,
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   gateway: {
     routes: []
   },
-  <%_ } _%>
+<%_ } _%>
 <%_ if (withAdminUi) { _%>
   logs: {
     loggers: [] as any[]
@@ -58,176 +42,167 @@ const initialState = {
     env: {} as any
   },
 <%_ } _%>
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
   tracker: {
     activities: []
   },
-  <%_ } _%>
+<%_ } _%>
   totalItems: 0
 };
 
 export type AdministrationState =  Readonly<typeof initialState>;
 
-// Reducer
-
-export default (state: AdministrationState = initialState, action): AdministrationState => {
-  switch (action.type) {
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    case REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
-    <%_ } _%>
-  <%_ if (withAdminUi) { _%>
-    case REQUEST(ACTION_TYPES.FETCH_METRICS):
-    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):
-    case REQUEST(ACTION_TYPES.FETCH_LOGS):
-    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):
-    case REQUEST(ACTION_TYPES.FETCH_ENV):
-    case REQUEST(ACTION_TYPES.FETCH_HEALTH):
-  <%_ } _%>
-  <%_ if (withAdminUi || (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
-      return {
-        ...state,
-        errorMessage: null,
-        loading: true
-      };
-  <%_ } _%>
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    case FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
-    <%_ } _%>
-  <%_ if (withAdminUi) { _%>
-    case FAILURE(ACTION_TYPES.FETCH_METRICS):
-    case FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP):
-    case FAILURE(ACTION_TYPES.FETCH_LOGS):
-    case FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS):
-    case FAILURE(ACTION_TYPES.FETCH_ENV):
-    case FAILURE(ACTION_TYPES.FETCH_HEALTH):
-  <%_ } _%>
-  <%_ if (withAdminUi || (applicationType === 'gateway' && serviceDiscoveryType)) { _%>
-      return {
-        ...state,
-        loading: false,
-        errorMessage: action.payload
-      };
-  <%_ } _%>
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    case SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
-      return {
-        ...state,
-        loading: false,
-        gateway: {
-          routes: action.payload.data
-        }
-      };
-    <%_ } _%>
-  <%_ if (withAdminUi) { _%>
-    case SUCCESS(ACTION_TYPES.FETCH_METRICS):
-      return {
-        ...state,
-        loading: false,
-        metrics: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_THREAD_DUMP):
-      return {
-        ...state,
-        loading: false,
-        threadDump: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_LOGS):
-      return {
-        ...state,
-        loading: false,
-        logs: {
-          loggers: action.payload.data.loggers
-        }
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_CONFIGURATIONS):
-      return {
-        ...state,
-        loading: false,
-        configuration: {
-          ...state.configuration,
-          configProps: action.payload.data
-        }
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_ENV):
-      return {
-        ...state,
-        loading: false,
-        configuration: {
-          ...state.configuration,
-          env: action.payload.data
-        }
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_HEALTH):
-      return {
-        ...state,
-        loading: false,
-        health: action.payload.data
-      };
-  <%_ } _%>
-     <%_ if (websocket === 'spring-websocket') { _%>
-     case ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE: {
-       // filter out activities from the same session
-       const uniqueActivities = state.tracker.activities.filter(activity => activity.sessionId !== action.payload.sessionId);
-       // remove any activities with the page of logout
-       const activities = [...uniqueActivities, action.payload].filter(activity => activity.page !== 'logout' );
-       return {
-         ...state,
-         tracker: { activities }
-       };
-    }
-     <%_ } _%>
-    default:
-      return state;
-  }
-};
-
 // Actions
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-export const gatewayRoutes = () => ({
-  type: ACTION_TYPES.FETCH_GATEWAY_ROUTE,
-  payload: axios.get('api/gateway/routes')
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+export const getGatewayRoutes = createAsyncThunk('administration/fetch_gateway_route', async () => axios.get<any>('api/gateway/routes'), {
+  serializeError: serializeAxiosError,
 });
 <%_ } _%>
 
 <%_ if (withAdminUi) { _%>
-export const systemHealth = () => ({
-  type: ACTION_TYPES.FETCH_HEALTH,
-  payload: axios.get('management/health')
+export const getSystemHealth = createAsyncThunk('administration/fetch_health', async () => axios.get<any>('management/health'), {
+  serializeError: serializeAxiosError,
 });
 
-export const systemMetrics = () => ({
-  type: ACTION_TYPES.FETCH_METRICS,
-  payload: axios.get('management/jhimetrics')
+export const getSystemMetrics = createAsyncThunk('administration/fetch_metrics', async () => axios.get<any>('management/jhimetrics'), {
+  serializeError: serializeAxiosError,
 });
 
-export const systemThreadDump = () => ({
-  type: ACTION_TYPES.FETCH_THREAD_DUMP,
-  payload: axios.get('management/threaddump')
+export const getSystemThreadDump = createAsyncThunk('administration/fetch_thread_dump', async () => axios.get<any>('management/threaddump'), {
+  serializeError: serializeAxiosError,
 });
 
-export const getLoggers = () => ({
-  type: ACTION_TYPES.FETCH_LOGS,
-  payload: axios.get('management/loggers')
+export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<any>('management/loggers'), {
+  serializeError: serializeAxiosError,
 });
 
-export const changeLogLevel: (name, configuredLevel) => void = (name, configuredLevel) => {
-  const body = { configuredLevel };
-  return async dispatch => {
-    await dispatch({
-      type: ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL,
-      payload: axios.post('management/loggers/' + name, body)
-    });
-    dispatch(getLoggers());
-  };
+export const setLoggers = createAsyncThunk(
+  'administration/fetch_logs_change_level',
+  async ({ name, configuredLevel }: any) => axios.post(`management/loggers/${name}`, { configuredLevel }),
+  {
+    serializeError: serializeAxiosError,
+  }
+);
+
+export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, configuredLevel) => async dispatch => {
+  await dispatch(setLoggers({ name, configuredLevel }));
+  dispatch(getLoggers());
 };
 
-export const getConfigurations = () => ({
-  type: ACTION_TYPES.FETCH_CONFIGURATIONS,
-  payload: axios.get('management/configprops')
+export const getConfigurations = createAsyncThunk('administration/fetch_configurations', async () => axios.get<any>('management/configprops'), {
+  serializeError: serializeAxiosError,
 });
 
-export const getEnv = () => ({
-  type: ACTION_TYPES.FETCH_ENV,
-  payload: axios.get('management/env')
+export const getEnv = createAsyncThunk('administration/fetch_env', async () => axios.get<any>('management/env'), {
+  serializeError: serializeAxiosError,
 });
 <%_ } _%>
+
+export const AdministrationSlice = createSlice({
+  name: 'administration',
+  initialState: initialState as AdministrationState,
+  reducers: {
+    <%_ if (communicationSpringWebsocket) { _%>
+    websocketActivityMessage(state, action) {
+      // filter out activities from the same session
+      const uniqueActivities = state.tracker.activities.filter(activity => activity.sessionId !== action.payload.sessionId);
+      // remove any activities with the page of logout
+      const activities = [...uniqueActivities, action.payload].filter(activity => activity.page !== 'logout');
+      state.tracker = { activities };
+    },
+    <%_ } _%>
+  },
+  extraReducers(builder) {
+      <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+    builder.addCase(getGatewayRoutes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.gateway = {
+          routes: action.payload.data
+        };
+      });
+      <%_ } _%>
+      <%_ if (withAdminUi) { _%>
+    builder.addCase(getSystemHealth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.health = action.payload.data;
+      })
+      .addCase(getSystemMetrics.fulfilled, (state, action) => {
+        state.loading = false;
+        state.metrics = action.payload.data;
+      })
+      .addCase(getSystemThreadDump.fulfilled, (state, action) => {
+        state.loading = false;
+        state.threadDump = action.payload.data;
+      })
+      .addCase(getLoggers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.logs = {
+          loggers: action.payload.data.loggers,
+        };
+      })
+      .addCase(getConfigurations.fulfilled, (state, action) => {
+        state.loading = false;
+        state.configuration = {
+          ...state.configuration,
+          configProps: action.payload.data,
+        };
+      })
+      .addCase(getEnv.fulfilled, (state, action) => {
+        state.loading = false;
+        state.configuration = {
+          ...state.configuration,
+          env: action.payload.data,
+        };
+      })
+      <%_ } _%>
+      <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
+      .addMatcher(
+        isPending(
+          <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+          getGatewayRoutes,
+          <%_ } _%>
+          <%_ if (withAdminUi) { _%>
+          getSystemHealth,
+          getSystemMetrics,
+          getSystemThreadDump,
+          getLoggers,
+          getConfigurations,
+          getEnv
+          <%_ } _%>
+        ),
+        state => {
+          state.errorMessage = null;
+          state.loading = true;
+        }
+      )
+      <%_ } _%>
+      <%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryType)) { _%>
+      .addMatcher(
+        isRejected(
+          <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+          getGatewayRoutes,
+          <%_ } _%>
+          <%_ if (withAdminUi) { _%>
+          getSystemHealth,
+          getSystemMetrics,
+          getSystemThreadDump,
+          getLoggers,
+          getConfigurations,
+          getEnv
+          <%_ } _%>
+        ),
+        (state, action) => {
+          state.errorMessage = action.error.message;
+          state.loading = false;
+        }
+      );
+      <%_ } _%>
+  },
+});
+
+<%_ if (communicationSpringWebsocket) { _%>
+export const { websocketActivityMessage } = AdministrationSlice.actions;
+<%_ } _%>
+
+// Reducer
+export default AdministrationSlice.reducer;

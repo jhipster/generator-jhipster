@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,38 +20,33 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.SpringDataMongo3Driver;
-import com.github.cloudyrock.spring.v5.MongockSpring5;
-import com.github.cloudyrock.spring.v5.MongockSpring5.MongockInitializingBeanRunner;
+import com.github.cloudyrock.spring.v5.EnableMongock;
 import tech.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import tech.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.context.ApplicationContext;
 <%_ if (reactive) { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 <%_ } _%>
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
 import org.springframework.data.mongodb.repository.config.Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories;
@@ -60,10 +55,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-<%_ if (searchEngine === 'elasticsearch') { _%>
+@EnableMongock
+<%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
-<%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
 <%_ } else { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
@@ -76,8 +70,6 @@ import java.util.List;
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 public class DatabaseConfiguration {
-
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener() {
@@ -97,17 +89,4 @@ public class DatabaseConfiguration {
         return new MongoCustomConversions(converters);
     }
 
-    @Bean
-    public MongockInitializingBeanRunner mongockInitializingBeanRunner(ApplicationContext springContext,
-              MongoTemplate mongoTemplate,
-              @Value("${mongock.lockAcquiredForMinutes:5}") long lockAcquiredForMinutes,
-              @Value("${mongock.maxWaitingForLockMinutes:3}") long maxWaitingForLockMinutes,
-              @Value("${mongock.maxTries:3}") int maxTries) {
-        SpringDataMongo3Driver driver = SpringDataMongo3Driver.withLockSetting(mongoTemplate, lockAcquiredForMinutes, maxWaitingForLockMinutes, maxTries);
-        return MongockSpring5.builder()
-            .setDriver(driver)
-            .addChangeLogsScanPackage("<%= packageName %>.config.dbmigrations")
-            .setSpringContext(springContext)
-            .buildInitializingBeanRunner();
-    }
 }

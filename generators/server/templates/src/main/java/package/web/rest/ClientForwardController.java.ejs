@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,11 +28,11 @@ public class ClientForwardController {
      * Forwards any unmapped paths (except those containing a period) to the client {@code index.html}.
      * @return forward to client {@code index.html}.
      */
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     @GetMapping(value = {"/{path:[^\\.]*}", "/{path:^(?!websocket).*}/**/{path:[^\\.]*}"})
-    <%_ } else { _%>
+<%_ } else { _%>
     @GetMapping(value = "/**/{path:[^\\.]*}")
-    <%_ } _%>
+<%_ } _%>
     public String forward() {
         return "forward:/";
     }

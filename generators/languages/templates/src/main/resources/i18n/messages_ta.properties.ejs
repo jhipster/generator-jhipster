@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=மனிக்கவும், ஒரு தவறு ஏற்�
 error.status=நிலை:
 error.message=தகவல்:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> கணக்கு உருவாக்கப்பட்டது.
 email.activation.greeting=அன்பிற்குரிய {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> கடவுச்சொல் மாற்ற
 email.reset.greeting=அன்பிற்குரிய {0}
 email.reset.text1=உங்கள் <%= baseName %> கணக்கின் கடவுச்சொல் மாற்ற கோரிக்கை செய்யப்பட்டது, கடவுச்சொல்லை மாற்ற கீழே உள்ள முகவரியை அழுத்தவும்:
 email.reset.text2=நன்றி,
+<%_ } _%>

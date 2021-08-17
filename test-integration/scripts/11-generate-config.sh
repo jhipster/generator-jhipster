@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #-------------------------------------------------------------------------------
 # Eg: 11-generate-config.sh ./ ngx-default sqlfull
@@ -27,10 +27,11 @@ fi
 #-------------------------------------------------------------------------------
 moveEntity() {
     local entity="$1"
-    cp "$JHI_SAMPLES"/.jhipster/"$entity".json "$JHI_FOLDER_APP"/.jhipster/
+    cp "$JHI_ENTITY_SAMPLES"/"$entity".json "$JHI_FOLDER_APP"/.jhipster/
 }
 
 prepareFolder() {
+    cd "$JHI_HOME"
     rm -rf "$JHI_FOLDER_APP"
 }
 #-------------------------------------------------------------------------------
@@ -44,11 +45,18 @@ fi
 mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 cd "$JHI_FOLDER_APP"
 
-if [[ "$JHI_ENTITY" != "jdl" ]]; then
+if [[ "$JHI_ENTITY" != "jdl" && "$JHI_APP" != "jdl" ]]; then
     #-------------------------------------------------------------------------------
     # Copy jhipster config
     #-------------------------------------------------------------------------------
-    cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
+    if [[ -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json ]]; then
+        JHI_APP_SAMPLE_DIR="$JHI_SAMPLES"/"$JHI_APP"
+    else
+        JHI_APP_SAMPLE_DIR="$JHI_HOME"/test-integration/samples/"$JHI_APP"
+    fi
+    cp -f "$JHI_APP_SAMPLE_DIR"/.yo-rc.json "$JHI_FOLDER_APP"/
+    echo "$JHI_APP: ($JHI_APP_SAMPLE_DIR)"
+    ls -al "$JHI_FOLDER_APP"/
 fi
 
 if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
@@ -81,24 +89,16 @@ elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
 
-    moveEntity CassTestEntity
-    moveEntity CassTestMapstructEntity
-    moveEntity CassTestServiceClassEntity
-    moveEntity CassTestServiceImplEntity
+    moveEntity FieldTestEntity
+    moveEntity FieldTestServiceImplEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "micro" ]]; then
     moveEntity MicroserviceBankAccount
     moveEntity MicroserviceOperation
     moveEntity MicroserviceLabel
 
-    moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructAndServiceClassEntity
-    moveEntity FieldTestServiceClassAndJpaFilteringEntity
-    moveEntity FieldTestServiceImplEntity
-    moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPaginationEntity
-
-elif [[ "$JHI_ENTITY" == "uaa" ]]; then
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructAndServiceClassEntity
     moveEntity FieldTestServiceClassAndJpaFilteringEntity

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,29 +29,32 @@
             "error": "Error"
         },
         "indicator": {
-            <%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
             "binders": "Message broker",
-            <%_ } _%>
-            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "clientConfigServer": "Microservice Config Server",
-            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } %>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hystrix": "Hystrix",
+  <%_ if (serviceDiscoveryConsul) { _%>
+            "consul": "Consul",
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
             "hazelcast": "Hazelcast",
-            <%_ } _%>
+<%_ } _%>
             "diskSpace": "Disk space",
             "mail": "Email",
             "livenessState": "Liveness state",
             "readinessState": "Readiness state",
-            "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
-            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
-            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "ping": "Application"<% if (searchEngineElasticsearch) { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
+            "db": "Database"<% } %><% if (databaseTypeSql && reactive) { %>,
+            "r2dbc": "Database"<% } %><% if (databaseTypeMongodb) { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseTypeCouchbase) { %>,
+            "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
             "neo4j": "Neo4j"<% } %>
         },
         "table": {

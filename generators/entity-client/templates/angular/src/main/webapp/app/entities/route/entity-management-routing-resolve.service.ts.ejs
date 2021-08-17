@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,10 +27,10 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>RoutingResolveService implements Resolve<I<%= entityAngularName %>> {
-    constructor(private service: <%= entityAngularName %>Service, private router: Router) {}
+    constructor(protected service: <%= entityAngularName %>Service, protected router: Router) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %>> | Observable<never> {
-        const id = route.params['id'];
+        const id = route.params['<%= primaryKey.name %>'];
         if (id) {
             return this.service.find(id).pipe(
                 mergeMap((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => {

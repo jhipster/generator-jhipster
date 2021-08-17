@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,20 +21,20 @@ const BinaryOptions = require('../jhipster/binary-options');
 const OptionValidator = require('./option-validator');
 
 class BinaryOptionValidator extends OptionValidator {
-    constructor() {
-        super('binary', 'value');
-    }
+  constructor() {
+    super('binary', 'value');
+  }
 
-    validate(jdlOption) {
-        super.validate(jdlOption);
-        checkForInvalidValue(jdlOption);
-    }
+  validate(jdlOption) {
+    super.validate(jdlOption);
+    checkForInvalidValue(jdlOption);
+  }
 }
 
 module.exports = BinaryOptionValidator;
 
 function checkForInvalidValue(jdlOption) {
-    if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
-        throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
-    }
+  if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
+    throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
+  }
 }

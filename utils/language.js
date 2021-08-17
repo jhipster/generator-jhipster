@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,15 +21,15 @@ const osLocale = require('os-locale');
 const { LANGUAGES } = require('../generators/generator-constants');
 
 function detectLanguage() {
-    const locale = osLocale.sync();
-    if (locale) {
-        const language =
-            LANGUAGES.find(lang => lang.value === locale.toLowerCase()) || LANGUAGES.find(lang => lang.value === locale.split('-')[0]);
-        if (language) {
-            return language.value;
-        }
+  const locale = osLocale.sync();
+  if (locale) {
+    const language =
+      LANGUAGES.find(lang => lang.value === locale.toLowerCase()) || LANGUAGES.find(lang => lang.value === locale.split('-')[0]);
+    if (language) {
+      return language.value;
     }
-    return 'en';
+  }
+  return 'en';
 }
 
 module.exports = { detectLanguage };

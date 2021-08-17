@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
@@ -46,11 +46,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
-class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class ExceptionTranslatorIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private MockMvc mockMvc;
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 
     @Test
     void testConcurrencyFailure() throws Exception {
@@ -59,7 +59,7 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
     }
-    <%_ } _%>
+<%_ } _%>
 
     @Test
     void testMethodArgumentNotValid() throws Exception {
@@ -137,18 +137,18 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
 }
 <%_ } _%>
 <%_ if (reactive) { _%>
-<%_ if (testsNeedCsrf) { _%>
+  <%_ if (testsNeedCsrf) { _%>
 import org.junit.jupiter.api.BeforeEach;
 
-<%_ } _%>
+  <%_ } _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ if (testsNeedCsrf) { _%>
+  <%_ if (testsNeedCsrf) { _%>
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
-<%_ } _%>
+  <%_ } _%>
 
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
@@ -156,18 +156,18 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @WithMockUser
 @AutoConfigureWebTestClient
 @IntegrationTest
-class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class ExceptionTranslatorIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private WebTestClient webTestClient;
-    <%_ if (testsNeedCsrf) { _%>
+  <%_ if (testsNeedCsrf) { _%>
 
     @BeforeEach
     public void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
     }
-    <%_ } _%>
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+  <%_ } _%>
+  <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 
     @Test
     void testConcurrencyFailure() {
@@ -178,7 +178,7 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
             .expectBody()
             .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Test
     void testMethodArgumentNotValid() {

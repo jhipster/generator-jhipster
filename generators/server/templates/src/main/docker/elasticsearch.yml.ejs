@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,15 +19,26 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%= baseName.toLowerCase() %>-elasticsearch:
-        image: <%= DOCKER_ELASTICSEARCH %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
-        # If you want to expose these ports outside your dev PC, 
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:9200:9200
-            - 127.0.0.1:9300:9300
-        environment:
-            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
-            - "discovery.type=single-node"
+  <%= baseName.toLowerCase() %>-elasticsearch:
+    image: <%= DOCKER_ELASTICSEARCH %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
+    environment:
+      - "xpack.security.enabled=false"
+      - "discovery.type=single-node"
+      - "bootstrap.memory_lock=true"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Administracija",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Gateway",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "Upravljanje korisnicima",
                 "tracker": "Korisničke aktivnosti",
                 "metrics": "Metrika",
@@ -151,6 +151,8 @@
         "emailexists": "Adresa e-pošte se već koristi!",
         "idexists": "Novi entitet {{ entityName }} ne može imati taj ID",
         "idnull": "Neispravan ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Nije moguće izdvojiti datoteku.",
             "not.image": "Očekivano je da datoteka bude slika ali je prepoznato \"{{ fileType }}\""

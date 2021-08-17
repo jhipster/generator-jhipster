@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -54,16 +54,16 @@ spec:
   gateways:
   - <%= app.baseName.toLowerCase() %>-gateway
   http:
-  <%_ if (!app.serviceDiscoveryType) { _%>
-    <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
+<%_ if (!app.serviceDiscoveryType) { _%>
+  <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
         prefix: /<%= config.baseName.toLowerCase() %>/
     route:
     - destination:
         host: <%= config.baseName.toLowerCase() %>
-    <%_ }); _%>
-  <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
   - match:
     - uri:
         prefix: /

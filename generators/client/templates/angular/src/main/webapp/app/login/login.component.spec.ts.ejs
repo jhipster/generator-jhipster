@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,10 +20,11 @@ jest.mock('@angular/router');
 jest.mock('app/core/auth/account.service');
 jest.mock('app/login/login.service');
 
-import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ElementRef } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { Router, Navigation } from '@angular/router';
+import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 
@@ -67,45 +68,62 @@ describe('Component Tests', () => {
       mockAccountService = TestBed.inject(AccountService);
     });
 
-    it('Should call accountService.identity on Init', () => {
-      // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
-      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+    describe('ngOnInit', () => {
+      it('Should call accountService.identity on Init', () => {
+        // GIVEN
+        mockAccountService.identity = jest.fn(() => of(null));
+        mockAccountService.getAuthenticationState = jest.fn(() => of(null));
 
-      // WHEN
-      comp.ngOnInit();
+        // WHEN
+        comp.ngOnInit();
 
-      // THEN
-      expect(mockAccountService.identity).toHaveBeenCalled();
+        // THEN
+        expect(mockAccountService.identity).toHaveBeenCalled();
+      });
+
+      it('Should call accountService.isAuthenticated on Init', () => {
+        // GIVEN
+        mockAccountService.identity = jest.fn(() => of(null));
+
+        // WHEN
+        comp.ngOnInit();
+
+        // THEN
+        expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
+      });
+
+      it('should navigate to home page on Init if authenticated=true', () => {
+        // GIVEN
+        mockAccountService.identity = jest.fn(() => of(null));
+        mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+        mockAccountService.isAuthenticated = () => true;
+
+        // WHEN
+        comp.ngOnInit();
+
+        // THEN
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+      });
     });
 
-    it('Should call accountService.isAuthenticated on Init', () => {
-      // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+    describe('ngAfterViewInit', () => {
+      it('shoult set focus to username input after the view has been initialized', () => {
+        // GIVEN
+        const node = {
+          focus: jest.fn(),
+        };
+        comp.username = new ElementRef(node);
 
-      // WHEN
-      comp.ngOnInit();
+        // WHEN
+        comp.ngAfterViewInit();
 
-      // THEN
-      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
+        // THEN
+        expect(node.focus).toHaveBeenCalled();
+      });
     });
 
-    it('should navigate to home page on Init if authenticated=true', () => {
-      // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
-      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
-      mockAccountService.isAuthenticated = () => true;
-
-      // WHEN
-      comp.ngOnInit();
-
-      // THEN
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
-    });
-
-    it('should authenticate the user and navigate to home page', inject(
-      [],
-      fakeAsync(() => {
+    describe('login', () => {
+      it('should authenticate the user and navigate to home page', () => {
         // GIVEN
         const credentials = {
           username: 'admin',
@@ -119,15 +137,38 @@ describe('Component Tests', () => {
           rememberMe: true,
         });
 
-        // WHEN/
+        // WHEN
         comp.login();
-        tick(); // simulate async
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
         expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
         expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
-      })
-    ));
+      });
+
+      it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
+        // GIVEN
+        jest.spyOn(mockRouter, 'getCurrentNavigation').mockReturnValue({} as Navigation);
+
+        // WHEN
+        comp.login();
+
+        // THEN
+        expect(comp.authenticationError).toEqual(false);
+        expect(mockRouter.navigate).not.toHaveBeenCalled();
+      });
+
+      it('should stay on login form and show error message on login error', () => {
+        // GIVEN
+        mockLoginService.login = jest.fn(() => throwError({}));
+
+        // WHEN
+        comp.login();
+
+        // THEN
+        expect(comp.authenticationError).toEqual(true);
+        expect(mockRouter.navigate).not.toHaveBeenCalled();
+      });
+    });
   });
 });

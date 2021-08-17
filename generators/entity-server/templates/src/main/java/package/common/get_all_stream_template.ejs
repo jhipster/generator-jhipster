@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,31 +19,34 @@
 <%
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto';
-const reactiveSql = (databaseType === 'sql' && reactive);
+const reactiveSql = (databaseTypeSql && reactive);
 let toResponseEntityPrefix = '';
 let toResponseEntityPostfix = '';
-if (pagination !== 'no') {
-    if (reactiveSql) {
-        toResponseEntityPostfix = '.map(ResponseEntity::ok)';
-    } else {
-        toResponseEntityPrefix = 'new ResponseEntity<>(';
-        toResponseEntityPostfix = ', HttpStatus.OK)';
-    }
+if (!paginationNo) {
+  if (reactiveSql) {
+    toResponseEntityPostfix = '.map(ResponseEntity::ok)';
+  } else {
+    toResponseEntityPrefix = 'new ResponseEntity<>(';
+    toResponseEntityPostfix = ', HttpStatus.OK)';
+  }
 }
-for (const relationship of relationships) { if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide !== true) { %>
+for (const relationship of relationships) {
+  if (relationship.relationshipOneToOne && !relationship.ownerSide) { %>
         if ("<%= relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationship.relationshipName %> is null");
-            <%_ if (viaService) { _%>
+    <%_ if (viaService) { _%>
             return <%- toResponseEntityPrefix %><%= entityInstance %>Service.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<% if (reactiveSql) { %>.collectList()<% } %><%= toResponseEntityPostfix %>;
-            <%_ } else { _%>
-            return <%- toResponseEntityPrefix %><% if (reactiveSql) { %><%= entityInstance %>Repository.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<% if (dto === 'mapstruct') { %>.map(<%= entityToDtoReference %>)<% } %>.collectList()<%= toResponseEntityPostfix %>;
+    <%_ } else { _%>
+            return <%- toResponseEntityPrefix %><% if (reactiveSql) { %><%= entityInstance %>Repository.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<% if (dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>.collectList()<%= toResponseEntityPostfix %>;
                 <%_ } else { _%>StreamSupport
                 .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)<% if (dto === 'mapstruct') { %>
-                .map(<%= entityToDtoReference %>)<% } if (pagination !== 'no') { %>
-                .collect(Collectors.toList()), HttpStatus.OK);<% } else { if (dto === 'mapstruct') { %>
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)<% if (dtoMapstruct) { %>
+                .map(<%= entityToDtoReference %>)<% } if (!paginationNo) { %>
+                .collect(Collectors.toList()), HttpStatus.OK);<% } else { if (dtoMapstruct) { %>
                 .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
                 .collect(Collectors.toList());<% }} %>
                 <%_ } _%>
-            <%_ } _%>
-        }<% } } %>
+    <%_ } _%>
+        }
+  <%_ } _%>
+<%_ } _%>

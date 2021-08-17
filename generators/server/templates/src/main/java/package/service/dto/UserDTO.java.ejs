@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,11 +18,11 @@
 -%>
 package <%= packageName %>.service.dto;
 
-<%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
-<%_ if (user.primaryKey.type === 'UUID') { _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -35,18 +35,25 @@ public class <%= asDto('User') %> {
 
     private String login;
 
-    <%_ if (databaseType !== 'no') { _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    private String <%= field.fieldName %>;
+<%_ } _%>
+
+<%_ if (!databaseTypeNo) { _%>
     public <%= asDto('User') %>() {
         // Empty constructor needed for Jackson.
     }
 
     public <%= asDto('User') %>(<%= asEntity('User') %> user) {
         this.id = user.getId();
-        // Customize it here if you need firstName/lastName/etc
+        // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
+  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+        this.<%= field.fieldName %> = user.get<%= javaBeanCase(field.fieldName) %>();
+  <%_ } _%>
     }
 
-    <%_ } _%>
+<%_ } _%>
     public <%= user.primaryKey.type %> getId() {
         return id;
     }
@@ -63,12 +70,24 @@ public class <%= asDto('User') %> {
         this.login = login;
     }
 
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+        public String get<%= javaBeanCase(field.fieldName) %>() {
+            return <%= field.fieldName %>;
+        }
+        public void set<%= javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
+            this.<%= field.fieldName %> = <%= field.fieldName %>;
+        }
+<%_ } _%>
+
     // prettier-ignore
     @Override
     public String toString() {
         return "<%= asDto('User') %>{" +
             "id='" + id + '\'' +
             ", login='" + login + '\'' +
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+            ", <%= field.fieldName %>='" + <%= field.fieldName %> + '\'' +
+<%_ } _%>
             "}";
     }
 

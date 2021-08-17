@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -44,8 +44,10 @@ export class ConfigurationComponent implements OnInit {
   }
 
   filterAndSortBeans(): void {
+    const beansAscendingValue = this.beansAscending ? -1 : 1;
+    const beansAscendingValueReverse = this.beansAscending ? 1 : -1;
     this.beans = this.allBeans
       .filter(bean => !this.beansFilter || bean.prefix.toLowerCase().includes(this.beansFilter.toLowerCase()))
-      .sort((a, b) => (a.prefix < b.prefix ? (this.beansAscending ? -1 : 1) : this.beansAscending ? 1 : -1));
+      .sort((a, b) => (a.prefix < b.prefix ? beansAscendingValue : beansAscendingValueReverse));
   }
 }

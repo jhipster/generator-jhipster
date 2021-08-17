@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -37,9 +37,9 @@ jobs:
             # Download and cache dependencies
             - restore_cache:
                 keys:
-                    <%_ if (buildTool === 'maven') { _%>
+                    <%_ if (buildToolMaven) { _%>
                     - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
-                    <%_ } else if (buildTool === 'gradle') { _%>
+                    <%_ } else if (buildToolGradle) { _%>
                     - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
                     <%_ } _%>
                     # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
@@ -56,7 +56,7 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
-            <%_ if (cicdIntegrations.includes('snyk')) { _%>
+            <%_ if (cicdIntegrationsSnyk) { _%>
             - run:
                 name: Install Snyk CLI
                 command: |
@@ -73,22 +73,22 @@ jobs:
                 paths:
                     - node
                     - node_modules
-                    <%_ if (buildTool === 'maven') { _%>
+                    <%_ if (buildToolMaven) { _%>
                     - ~/.m2
-                    <%_ } else if (buildTool === 'gradle') { _%>
+                    <%_ } else if (buildToolGradle) { _%>
                     - ~/.gradle
                     <%_ } _%>
-                    <%_ if (buildTool === 'maven') { _%>
+                    <%_ if (buildToolMaven) { _%>
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
-                    <%_ } else if (buildTool === 'gradle') { _%>
+                    <%_ } else if (buildToolGradle) { _%>
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
                     <%_ } _%>
 
             - run:
                 name: Give Executable Power
-            <%_ if (buildTool === 'maven') { _%>
+            <%_ if (buildToolMaven) { _%>
                 command: 'chmod +x mvnw'
-            <%_ } else if (buildTool === 'gradle') { _%>
+            <%_ } else if (buildToolGradle) { _%>
                 command: 'chmod +x gradlew'
             <%_ } _%>
             - run:
@@ -99,20 +99,20 @@ jobs:
                 name: Run Front End Tests
                 command: <%= clientPackageManager %> run ci:frontend:test
             <%_ } _%>
-            <%_ if (buildTool === 'maven') { _%>
-                <%_ if (cicdIntegrations.includes('heroku')) { _%>
+            <%_ if (buildToolMaven) { _%>
+                <%_ if (cicdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
                 command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
                 <%_ } _%>
-            <%_ } else if (buildTool === 'gradle') { _%>
-                <%_ if (cicdIntegrations.includes('heroku')) { _%>
+            <%_ } else if (buildToolGradle) { _%>
+                <%_ if (cicdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
                 command: './gradlew deployHeroku --no-daemon'
                 <%_ } _%>
             <%_ } _%>
-            <%_ if (testFrameworks.includes('cypress') || testFrameworks.includes('protractor')) {
+            <%_ if (cypressTests || protractorTests) {
                 const commented = '# '; _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Package'
@@ -123,6 +123,10 @@ jobs:
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Run'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:run
+            <%_ if(cypressTests) { _%>
+            <%= commented %>    environment:
+            <%= commented %>      CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
+            <%_ } _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Teardown'
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:teardown

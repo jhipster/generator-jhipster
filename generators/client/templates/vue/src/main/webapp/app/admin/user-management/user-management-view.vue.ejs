@@ -18,10 +18,10 @@
           <dd>{{user.lastName}}</dd>
           <dt><span v-text="$t('userManagement.email')">Email</span></dt>
           <dd>{{user.email}}</dd>
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           <dt><span v-text="$t('userManagement.langKey')">Lang Key</span></dt>
           <dd>{{user.langKey}}</dd>
-          <%_ } _%>
+<%_ } _%>
           <dt><span v-text="$t('userManagement.createdBy')">Created By</span></dt>
           <dd>{{user.createdBy}}</dd>
           <dt><span v-text="$t('userManagement.createdDate')">Created Date</span></dt>
@@ -29,9 +29,9 @@
             <span v-if="user.createdDate">
               {{$d(Date.parse(user.createdDate), 'long') }}
             </span>
-            <%_ } else { _%>
+<%_ } else { _%>
             {{user.createdDate | formatDate }}
-            <%_ } _%>
+<%_ } _%>
           </dd>
           <dt><span v-text="$t('userManagement.lastModifiedBy')">Last Modified By</span></dt>
           <dd>{{user.lastModifiedBy}}</dd>
@@ -40,9 +40,9 @@
             <span v-if="user.lastModifiedDate">
                 {{$d(Date.parse(user.lastModifiedDate), 'long') }}
             </span>
-            <%_ } else { _%>
+<%_ } else { _%>
             {{user.lastModifiedDate | formatDate }}
-            <%_ } _%>
+<%_ } _%>
           </dd>
           <dt><span v-text="$t('userManagement.profiles')">Profiles</span></dt>
           <dd>
@@ -53,10 +53,11 @@
             </ul>
           </dd>
         </dl>
-        <router-link tag="button" type="submit"
-                :to="{name: '<%= jhiPrefixCapitalized %>User'}"
-                class="btn btn-info">
+        <router-link custom v-slot="{ navigate }"
+                :to="{name: '<%= jhiPrefixCapitalized %>User'}">
+          <button @click="navigate" class="btn btn-info">
             <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
+          </button>
         </router-link>
       </div>
     </div>

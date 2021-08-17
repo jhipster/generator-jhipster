@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,87 +20,87 @@
 const { isReservedFieldName } = require('../../jdl/jhipster/reserved-keywords');
 
 module.exports = {
-    askForControllerActions,
+  askForControllerActions,
 };
 
 function askForControllerActions() {
-    const askForControllerAction = done => {
-        const prompts = [
-            {
-                type: 'confirm',
-                name: 'actionAdd',
-                message: 'Do you want to add an action to your controller?',
-                default: true,
-            },
-            {
-                when: response => response.actionAdd === true,
-                type: 'input',
-                name: 'actionName',
-                validate: input => {
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your action name cannot contain special characters';
-                    }
-                    if (input === '') {
-                        return 'Your action name cannot be empty';
-                    }
-                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
-                        return 'Your action name cannot start with an upper case letter';
-                    }
-                    if (isReservedFieldName(input)) {
-                        return 'Your action name cannot contain a Java, Angular or React reserved keyword';
-                    }
+  const askForControllerAction = done => {
+    const prompts = [
+      {
+        type: 'confirm',
+        name: 'actionAdd',
+        message: 'Do you want to add an action to your controller?',
+        default: true,
+      },
+      {
+        when: response => response.actionAdd === true,
+        type: 'input',
+        name: 'actionName',
+        validate: input => {
+          if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+            return 'Your action name cannot contain special characters';
+          }
+          if (input === '') {
+            return 'Your action name cannot be empty';
+          }
+          if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+            return 'Your action name cannot start with an upper case letter';
+          }
+          if (isReservedFieldName(input)) {
+            return 'Your action name cannot contain a Java, Angular or React reserved keyword';
+          }
 
-                    return true;
-                },
-                message: 'What is the name of your action?',
-            },
-            {
-                when: response => response.actionAdd === true,
-                type: 'list',
-                name: 'actionMethod',
-                message: 'What is the HTTP method of your action?',
-                choices: [
-                    {
-                        name: 'POST',
-                        value: 'Post',
-                    },
-                    {
-                        name: 'GET',
-                        value: 'Get',
-                    },
-                    {
-                        name: 'PUT',
-                        value: 'Put',
-                    },
-                    {
-                        name: 'DELETE',
-                        value: 'Delete',
-                    },
-                ],
-                default: 1,
-            },
-        ];
+          return true;
+        },
+        message: 'What is the name of your action?',
+      },
+      {
+        when: response => response.actionAdd === true,
+        type: 'list',
+        name: 'actionMethod',
+        message: 'What is the HTTP method of your action?',
+        choices: [
+          {
+            name: 'POST',
+            value: 'Post',
+          },
+          {
+            name: 'GET',
+            value: 'Get',
+          },
+          {
+            name: 'PUT',
+            value: 'Put',
+          },
+          {
+            name: 'DELETE',
+            value: 'Delete',
+          },
+        ],
+        default: 1,
+      },
+    ];
 
-        if (!this.defaultOption) {
-            this.prompt(prompts).then(props => {
-                if (props.actionAdd) {
-                    const controllerAction = {
-                        actionName: props.actionName,
-                        actionMethod: props.actionMethod,
-                    };
+    if (!this.defaultOption) {
+      this.prompt(prompts).then(props => {
+        if (props.actionAdd) {
+          const controllerAction = {
+            actionName: props.actionName,
+            actionMethod: props.actionMethod,
+          };
 
-                    this.controllerActions.push(controllerAction);
+          this.controllerActions.push(controllerAction);
 
-                    askForControllerAction(done);
-                } else {
-                    done();
-                }
-            });
+          askForControllerAction(done);
         } else {
-            done();
+          done();
         }
-    };
+      });
+    } else {
+      done();
+    }
+  };
 
-    const done = this.async();
-    askForControllerAction(done);
+  const done = this.async();
+  askForControllerAction(done);
 }

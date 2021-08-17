@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,21 +19,21 @@
 package <%= packageName %>.service.dto;
 
 import <%= packageName %>.config.Constants;
-<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
+<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
 import <%= packageName %>.domain.Authority;<% } %>
-<%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
 import javax.validation.constraints.*;
-<%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
-<%_ if (user.primaryKey.type === 'UUID') { _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'sql') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeSql) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
 
@@ -58,17 +58,17 @@ public class <%= asDto('AdminUser') %> {
     @Email
     @Size(min = 5, max = 254)
     private String email;
-    <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
 
     @Size(max = 256)
     private String imageUrl;
-    <%_ } _%>
+<%_ } _%>
 
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
     private String langKey;
-    <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
 
     private String createdBy;
 
@@ -77,11 +77,11 @@ public class <%= asDto('AdminUser') %> {
     private String lastModifiedBy;
 
     private Instant lastModifiedDate;
-    <%_ } _%>
+<%_ } _%>
 
     private Set<String> authorities;
 
-    <%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
     public <%= asDto('AdminUser') %>() {
         // Empty constructor needed for Jackson.
     }
@@ -93,26 +93,26 @@ public class <%= asDto('AdminUser') %> {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.isActivated();
-        <%_ if (databaseType !== 'cassandra') { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
         this.imageUrl = user.getImageUrl();
-        <%_ } _%>
+  <%_ } _%>
         this.langKey = user.getLangKey();
-        <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+  <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        <%_ } _%>
-        <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'sql') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeSql) { _%>
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
-        <%_ } else { _%>
+  <%_ } else { _%>
         this.authorities = user.getAuthorities();
-        <%_ } _%>
+  <%_ } _%>
     }
 
-    <%_ } _%>
+<%_ } _%>
     public <%= user.primaryKey.type %> getId() {
         return id;
     }
@@ -152,7 +152,7 @@ public class <%= asDto('AdminUser') %> {
     public void setEmail(String email) {
         this.email = email;
     }
-    <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -161,7 +161,7 @@ public class <%= asDto('AdminUser') %> {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    <%_ } _%>
+<%_ } _%>
 
     public boolean isActivated() {
         return activated;
@@ -178,7 +178,7 @@ public class <%= asDto('AdminUser') %> {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
 
     public String getCreatedBy() {
         return createdBy;
@@ -211,7 +211,7 @@ public class <%= asDto('AdminUser') %> {
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
-    <%_ } _%>
+<%_ } _%>
 
     public Set<String> getAuthorities() {
         return authorities;
@@ -228,10 +228,10 @@ public class <%= asDto('AdminUser') %> {
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +<% if (databaseType !== 'cassandra') { %>
+            ", email='" + email + '\'' +<% if (!databaseTypeCassandra) { %>
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>
+            ", langKey='" + langKey + '\'' +<% if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeSql) { %>
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +

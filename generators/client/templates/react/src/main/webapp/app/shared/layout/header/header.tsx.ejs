@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,15 +26,17 @@ import {
   NavbarToggler,
   Collapse
 } from 'reactstrap';
-
 import LoadingBar from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation && enableI18nRTL) { _%>
 import { isRTL } from 'app/config/translation';
 <%_ } _%>
-
 import { Home, Brand } from './header-components';
 import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
+<%_ if (enableTranslation) { _%>
+import { useAppDispatch } from 'app/config/store';
+import { setLocale } from 'app/shared/reducers/locale';
+<%_ } _%>
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -44,36 +46,37 @@ export interface IHeaderProps {
   isOpenAPIEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
-  onLocaleChange: (langKey: string) => void;
 <%_ } _%>
 }
 
 
 const Header = (props: IHeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
   useEffect(() => document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr'));
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
+  const dispatch = useAppDispatch();
+
   const handleLocaleChange = event => {
     const langKey = event.target.value;
     Storage.session.set('locale', langKey);
-    props.onLocaleChange(langKey);
-    <%_ if (enableI18nRTL) { _%>
+    dispatch(setLocale(langKey));
+  <%_ if (enableI18nRTL) { _%>
     document.querySelector('html').setAttribute('dir', isRTL(langKey) ? 'rtl' : 'ltr');
-    <%_ } _%>
-  }
   <%_ } _%>
+  }
+<%_ } _%>
 
   const renderDevRibbon = () => props.isInProduction === false ? (
     <div className="ribbon dev">
       <a href="">
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
-        <%_ } else { _%>
+<%_ } else { _%>
         Development
-        <%_ } _%>
+<%_ } _%>
       </a>
     </div>
   ) : null;
@@ -86,7 +89,7 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar"/>
-      <Navbar data-cy="navbar" <% if (clientTheme === 'none' || clientThemeVariant !== 'light') { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeLight) { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
         <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
         <Brand />
         <Collapse isOpen={menuOpen} navbar>
@@ -94,7 +97,7 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!props.isInProduction} <%_ } _%> />}
+            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %> showDatabase={!props.isInProduction} <%_ } _%> />}
           <%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
           <%_ } _%>

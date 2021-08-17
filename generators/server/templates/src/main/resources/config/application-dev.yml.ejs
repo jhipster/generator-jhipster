@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,232 +32,250 @@
 # ===================================================================
 
 logging:
-    level:
-        ROOT: DEBUG
-        tech.jhipster: DEBUG
-        org.hibernate.SQL: DEBUG
-        <%_ if (packageName !== 'tech.jhipster') { _%>
-        <%= packageName %>: DEBUG
-        <%_ } _%>
-        <%_ if (databaseType === 'neo4j') { _%>
-        org.neo4j.driver: WARN
-        <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+  level:
+    ROOT: DEBUG
+    tech.jhipster: DEBUG
+    org.hibernate.SQL: DEBUG
+<%_ if (packageName !== 'tech.jhipster') { _%>
+    <%= packageName %>: DEBUG
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+    org.neo4j.driver: WARN
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 
 eureka:
-    instance:
-        prefer-ip-address: true
-    client:
-        <%_ if (applicationType === 'monolith') { _%>
-        enabled: false # By default, the JHipster Registry is not used in the "dev" profile
-        <%_ } _%>
-        service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+  client:
+  <%_ if (applicationTypeMonolith) { _%>
+    enabled: false # By default, the JHipster Registry is not used in the "dev" profile
+  <%_ } _%>
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 management:
-    health:
-        elasticsearch:
-            enabled: false
+  health:
+    elasticsearch:
+      enabled: false
 
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 org:
-    neo4j:
-        driver:
-            pool:
-                metrics-enabled: true
-            uri: bolt://localhost:7687
-            # Uncomment to use an authenticated connection
-            # authentication:
-            #     username: neo4j
-            #     password: secret
-        migrations:
-            locations-to-scan:
-            packages-to-scan: <%= packageName %>.config.neo4j
-            installed-by: <%= baseName %>
+  neo4j:
+    migrations:
+      locations-to-scan:
+      packages-to-scan: <%= packageName %>.config.neo4j
+      installed-by: <%= baseName %>
 <%_ } _%>
 spring:
-    profiles:
-        active: dev
-        include:
-            - api-docs
-            # Uncomment to activate TLS for the dev profile
-            #- tls
-    devtools:
-        restart:
-            enabled: true
-            additional-exclude: static/**<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,.h2.server.properties<% } %>
-        livereload:
-            enabled: false # we use Webpack dev server + BrowserSync for livereload
-    jackson:
-        serialization:
-            indent-output: true
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
-    cloud:
-        consul:
-            discovery:
-               prefer-ip-address: true
-            host: localhost
-            port: 8500
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        <%_ if (devDatabaseType === 'mysql') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } else if (devDatabaseType === 'oracle') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-        username: system
-        password: oracle
-        <%_ } else if (devDatabaseType === 'mssql') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: SA
-        password: yourStrong(!)Password
-        <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } _%>
-        hikari:
-            poolName: Hikari
-            auto-commit: false
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
-            data-source-properties:
-                cachePrepStmts: true
-                prepStmtCacheSize: 250
-                prepStmtCacheSqlLimit: 2048
-                useServerPrepStmts: true
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-    h2:
-        console:
-            enabled: false
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    jpa:
-        <%_ if (devDatabaseType === 'postgresql') { _%>
-        database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-        <%_ } else if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-        database-platform: tech.jhipster.domain.util.FixedH2Dialect
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
-    data:
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
-        mongodb:
-            uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
-            database: <%= baseName %>
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
-        cassandra:
-            contact-points: localhost
-            compression: LZ4
-            keyspace-name: <%= baseName %>
-            local-datacenter: datacenter1
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: static/**<% if (devDatabaseTypeH2Any) { %>,.h2.server.properties<% } %>
+    livereload:
+      enabled: false # we use Webpack dev server + BrowserSync for livereload
+  jackson:
+    serialization:
+      indent-output: true
+<%_ if (databaseTypeNeo4j) { _%>
+  neo4j:
+    pool:
+      metrics-enabled: true
+    uri: bolt://localhost:7687
+    # Uncomment to use an authenticated connection
+    # authentication:
+    #   username: neo4j
+    #   password: secret
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
+  cloud:
+    consul:
+      config:
+        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+        format: yaml
+        profile-separator: "-"
+      discovery:
+        prefer-ip-address: true
+        tags:
+          - profile=${spring.profiles.active}
+          - version=#project.version#
+          - git-version=${git.commit.id.describe:}
+          - git-commit=${git.commit.id.abbrev:}
+          - git-branch=${git.branch:}
+      host: localhost
+      port: 8500
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+  cloud:
+    config:
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: <%= baseName %>
+      profile: dev
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: root
+    password:
+  <%_ } else if (devDatabaseTypePostgres) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } else if (devDatabaseTypeOracle) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    username: system
+    password: oracle
+  <%_ } else if (devDatabaseTypeMssql) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: SA
+    password: yourStrong(!)Password
+  <%_ } else if (devDatabaseTypeH2Disk) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } else if (devDatabaseTypeH2Memory) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } _%>
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql) { _%>
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  <%_ } _%>
+<%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+  h2:
+    console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
+      enabled: false
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+  jpa:
+  <%_ if (devDatabaseTypePostgres) { _%>
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+  <%_ } else if (devDatabaseTypeH2Any) { _%>
+    database-platform: tech.jhipster.domain.util.FixedH2Dialect
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>
+  data:
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+    mongodb:
+      uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+      database: <%= baseName %>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+    cassandra:
+      contact-points: localhost
+      compression: LZ4
+      keyspace-name: <%= baseName %>
+      local-datacenter: datacenter1
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+  <%_ if (reactive) { _%>
     elasticsearch:
-        rest:
-            uris: http://localhost:9200
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
-    couchbase:
-        bootstrap-hosts: localhost
-        bucket:
-            name: <%= baseName %>
-            password: password
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
-    liquibase:
-        <%_ if (!skipFakeData) { _%>
-        # Remove 'faker' if you do not want the sample data to be loaded automatically
-        <%_ } _%>
-        contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
-        <%_ } _%>
-        <%_ if (reactive) { _%>
-            <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-            <%_ } else if (devDatabaseType === 'oracle') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-            <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
-            <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
-            <%_ } _%>
-        <%_ } _%>
-    mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-    messages:
-        cache-duration: PT1S # 1 second, see the ISO 8601 standard
-    <%_ if (databaseType === 'sql' && reactive) { _%>
-    r2dbc:
-        <%_ if (devDatabaseType === 'mysql') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } else if (devDatabaseType === 'oracle') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-        username: system
-        password: oracle
-        <%_ } else if (devDatabaseType === 'mssql') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: SA
-        password: yourStrong(!)Password
-        <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `././${BUILD_DIR}h2db/db` }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } _%>
-    <%_ } _%>
-    thymeleaf:
-        cache: false
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-    sleuth:
-        sampler:
-            probability: 1 # report 100% of traces
-    zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-        base-url: http://localhost:9411
-        enabled: false
-        locator:
-            discovery:
-                enabled: true
+      client:
+        reactive:
+          endpoints: localhost:9200
+  <%_ } else { _%>
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+  couchbase:
+    bootstrap-hosts: localhost
+    bucket:
+      name: <%= baseName %>
+      password: password
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+  liquibase:
+  <%_ if (!skipFakeData) { _%>
+    # Remove 'faker' if you do not want the sample data to be loaded automatically
+  <%_ } _%>
+    contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
+<%_ } _%>
+<%_ if (reactive) { _%>
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+  <%_ } else if (devDatabaseTypeOracle) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+  <%_ } else if (devDatabaseTypeH2Disk) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
+  <%_ } else if (devDatabaseTypeH2Memory) { _%>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+<%_ } _%>
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
+<%_ if (databaseTypeSql && reactive) { _%>
+  r2dbc:
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: root
+    password:
+  <%_ } else if (devDatabaseTypePostgres) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } else if (devDatabaseTypeOracle) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    username: system
+    password: oracle
+  <%_ } else if (devDatabaseTypeMssql) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: SA
+    password: yourStrong(!)Password
+  <%_ } else if (devDatabaseTypeH2Disk) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `././${BUILD_DIR}h2db/db` }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } else if (devDatabaseTypeH2Memory) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } _%>
+<%_ } _%>
+  thymeleaf:
+    cache: false
+<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
+  sleuth:
+    sampler:
+      probability: 1 # report 100% of traces
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    base-url: http://localhost:9411
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
 <%_ } _%>
 
 server:
-    port: <%= serverPort %>
+  port: <%= serverPort %>
 
 # ===================================================================
 # JHipster specific properties
@@ -266,157 +284,123 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (applicationType === 'gateway') { _%>
-    gateway:
-        rate-limiting:
-            enabled: false
-            limit: 100000
-            duration-in-seconds: 3600
-        <%_ if (!reactive) { _%>
-        authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-            app1: /api,/v3/api-docs # recommended dev configuration
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (cacheProvider !== 'no') { _%>
-    cache: # Cache configuration
-        <%_ if (cacheProvider === 'hazelcast') { _%>
-        hazelcast: # Hazelcast distributed cache
-            time-to-live-seconds: 3600
-            backup-count: 1
-        <%_ } _%>
-        <%_ if (cacheProvider === 'ehcache') { _%>
-        ehcache: # Ehcache configuration
-            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
-            max-entries: 100 # Number of objects in each cache entry
-        <%_ } _%>
-        <%_ if (cacheProvider === 'caffeine') { _%>
-        caffeine: # Caffeine configuration
-            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
-            max-entries: 100 # Number of objects in each cache entry
-        <%_ } _%>
-        <%_ if (cacheProvider === 'infinispan') { _%>
-        infinispan:
-            config-file: default-configs/default-jgroups-tcp.xml
-            statsEnabled: true
-            # local app cache
-            local:
-                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-                max-entries: 100 # Number of objects in each cache entry
-            # distributed app cache
-            distributed:
-                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-                max-entries: 100 # Number of objects in each cache entry
-                instance-count: 1
-            # replicated app cache
-            replicated:
-                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-                max-entries: 100 # Number of objects in each cache entry
-        <%_ } _%>
-        <%_ if (cacheProvider === 'memcached') { _%>
-        memcached: # Memcached configuration
-            # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
-            # If you want to use Memcached, you must also enable it in CacheConfiguration
-            enabled: false
-        <%_ } _%>
-        <%_ if (cacheProvider === 'redis') { _%>
-        redis: # Redis configuration
-            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-            server: redis://localhost:6379
-            cluster: false
-            # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
-            # cluster: true
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (applicationType !== 'microservice') { _%>
-    # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
-    cors:
-        allowed-origins: "*"
-        allowed-methods: "*"
-        allowed-headers: "*"
-        <%_ if (authenticationType === 'session') { _%>
-        exposed-headers: "Link,X-Total-Count"
-        <%_ } else { _%>
-        exposed-headers: "Authorization,Link,X-Total-Count"
-        <%_ } _%>
-        allow-credentials: true
-        max-age: 1800
-    <%_ } else { _%>
-    # CORS is disabled by default on microservices, as you should access them through a gateway.
-    # If you want to enable it, please uncomment the configuration below.
-    # cors:
-    #     allowed-origins: "*"
-    #     allowed-methods: "*"
-    #     allowed-headers: "*"
-    #     exposed-headers: "Authorization,Link,X-Total-Count"
-    #     allow-credentials: true
-    #     max-age: 1800
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
-    security:
-        authentication:
-            jwt:
-                # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-                base64-secret: <%= jwtSecretKey %>
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
-                token-validity-in-seconds-for-remember-me: 2592000
-    <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-    security:
-        client-authorization:
-            <%_ if (applicationType !== 'uaa') { _%>
-            access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-            token-service-id: <%= uaaBaseName.toLowerCase() %>
-            <%_ } _%>
-            client-id: internal
-            client-secret: internal
-    <%_ } _%>
-<%_ if (authenticationType === 'session' && !reactive) { _%>
-    security:
-        remember-me:
-            # security key (this key should be unique for your application, and kept secret)
-            key: <%= rememberMeKey %>
+<%_ if (applicationTypeGateway) { _%>
+  gateway:
+    rate-limiting:
+      enabled: false
+      limit: 100000
+      duration-in-seconds: 3600
+  <%_ if (!reactive) { _%>
+    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+      app1: /api,/v3/api-docs # recommended dev configuration
+  <%_ } _%>
 <%_ } _%>
-    mail: # specific JHipster mail property, for standard properties see MailProperties
-        base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 9000 %>
-    logging:
-        use-json-format: false # By default, logs are not in Json format
-        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
-<%_ if (applicationType === 'uaa') { _%>
-uaa:
-    key-store:
-        name: config/tls/keystore.p12
-        password: password
-        alias: selfsigned
-    web-client-configuration:
-        # Access Token is valid for 5 mins
-        access-token-validity-in-seconds: 300
-        # Refresh Token is valid for 7 days
-        refresh-token-validity-in-seconds-for-remember-me: 604800
-        client-id: web_app
-        secret: changeit
-<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-oauth2:
-    signature-verification:
-        public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
-        #ttl for public keys to verify JWT tokens (in ms)
-        ttl: 3600000
-        #max. rate at which public keys will be fetched (in ms)
-        public-key-refresh-rate-limit: 10000
-    web-client-configuration:
-        #keep in sync with UAA configuration
-        client-id: web_app
-        secret: changeit
-    <%_ if (applicationType === 'gateway') { _%>
-        # Controls session expiration due to inactivity (ignored for remember-me).
-        # Negative values disable session inactivity expiration.
-        session-timeout-in-seconds: 1800
-    <%_ } _%>
+<%_ if (!cacheProviderNo) { _%>
+  cache: # Cache configuration
+  <%_ if (cacheProviderHazelcast) { _%>
+    hazelcast: # Hazelcast distributed cache
+      time-to-live-seconds: 3600
+      backup-count: 1
+  <%_ } _%>
+  <%_ if (cacheProviderEhCache) { _%>
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
+  <%_ } _%>
+  <%_ if (cacheProviderCaffeine) { _%>
+    caffeine: # Caffeine configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
+      max-entries: 100 # Number of objects in each cache entry
+  <%_ } _%>
+  <%_ if (cacheProviderInfinispan) { _%>
+    infinispan:
+      config-file: default-configs/default-jgroups-tcp.xml
+      statsEnabled: true
+      # local app cache
+      local:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 100 # Number of objects in each cache entry
+      # distributed app cache
+      distributed:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 100 # Number of objects in each cache entry
+        instance-count: 1
+      # replicated app cache
+      replicated:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 100 # Number of objects in each cache entry
+  <%_ } _%>
+  <%_ if (cacheProviderMemcached) { _%>
+    memcached: # Memcached configuration
+      # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
+      # If you want to use Memcached, you must also enable it in CacheConfiguration
+      enabled: false
+  <%_ } _%>
+  <%_ if (cacheProviderRedis) { _%>
+    redis: # Redis configuration
+      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+      server: redis://localhost:6379
+      cluster: false
+      # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+      # cluster: true
+  <%_ } _%>
 <%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+  registry:
+    password: admin
+<%_ } _%>
+<%_ if (!applicationTypeMicroservice) { _%>
+  # CORS is only enabled by default with the "dev" profile
+  cors:
+    # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
+    allowed-origins: "http://localhost:8100,http://localhost:9000<%_ if (!skipClient) { _%>,http://localhost:<%= devServerPort %><%_ } _%>"
+    allowed-methods: "*"
+    allowed-headers: "*"
+  <%_ if (authenticationTypeSession) { _%>
+    exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+  <%_ } else { _%>
+    exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+  <%_ } _%>
+    allow-credentials: true
+    max-age: 1800
+<%_ } else { _%>
+  # CORS is disabled by default on microservices, as you should access them through a gateway.
+  # If you want to enable it, please uncomment the configuration below.
+  # cors:
+  #   allowed-origins: "http://localhost:9000"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  #   exposed-headers: "Authorization,Link,X-Total-Count"
+  #   allow-credentials: true
+  #   max-age: 1800
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: <%= jwtSecretKey %>
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+<%_ } _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: <%= rememberMeKey %>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1:<%= serverPort %>
+<%_ } _%>
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
 
 # ===================================================================
 # Application specific properties

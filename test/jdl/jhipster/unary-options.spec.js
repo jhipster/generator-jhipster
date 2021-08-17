@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,35 +22,35 @@ const { expect } = require('chai');
 const UnaryOptions = require('../../../jdl/jhipster/unary-options');
 
 describe('UnaryOptions', () => {
-    describe('exists', () => {
-        context('when checking for a valid unary option', () => {
-            it('should return true', () => {
-                expect(UnaryOptions.exists(UnaryOptions.SKIP_CLIENT)).to.be.true;
-            });
-        });
-        context('when checking for an invalid unary option', () => {
-            it('should return false', () => {
-                expect(UnaryOptions.exists('NOTHING')).to.be.false;
-            });
-        });
+  describe('exists', () => {
+    context('when checking for a valid unary option', () => {
+      it('should return true', () => {
+        expect(UnaryOptions.exists(UnaryOptions.SKIP_CLIENT)).to.be.true;
+      });
     });
-    describe('forEach', () => {
-        context('when not passing a function', () => {
-            it('should fail', () => {
-                expect(() => UnaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
-            });
-        });
-        context('when passing a function', () => {
-            let result;
-
-            before(() => {
-                result = [];
-                UnaryOptions.forEach(option => result.push(option));
-            });
-
-            it('should loop over the unary options', () => {
-                expect(result).to.deep.equal(['skipClient', 'skipServer', 'noFluentMethod', 'readOnly', 'filter', 'embedded']);
-            });
-        });
+    context('when checking for an invalid unary option', () => {
+      it('should return false', () => {
+        expect(UnaryOptions.exists('NOTHING')).to.be.false;
+      });
     });
+  });
+  describe('forEach', () => {
+    context('when not passing a function', () => {
+      it('should fail', () => {
+        expect(() => UnaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        result = [];
+        UnaryOptions.forEach(option => result.push(option));
+      });
+
+      it('should loop over the unary options', () => {
+        expect(result).to.deep.equal(['skipClient', 'skipServer', 'noFluentMethod', 'readOnly', 'filter', 'embedded']);
+      });
+    });
+  });
 });

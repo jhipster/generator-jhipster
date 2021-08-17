@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,49 +19,49 @@
 package <%= packageName %>.repository;
 
 import java.util.function.BiFunction;
-<%_ if (fieldsContainBigDecimal === true) { _%>
+<%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_} if (fieldsContainInstant === true) { _%>
+<%_} if (fieldsContainInstant) { _%>
 import java.time.Instant;
-<%_ } if (fieldsContainLocalDate === true) { _%>
+<%_ } if (fieldsContainLocalDate) { _%>
 import java.time.LocalDate;
-<%_ } if (fieldsContainZonedDateTime === true) { _%>
+<%_ } if (fieldsContainZonedDateTime) { _%>
 import java.time.ZonedDateTime;
-<%_ } if (fieldsContainDuration === true) { _%>
+<%_ } if (fieldsContainDuration) { _%>
 import java.time.Duration;
-<%_ } if (fieldsContainUUID === true) { _%>
+<%_ } if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 
-import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.data.r2dbc.core.DatabaseClient.GenericInsertSpec;
-import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
-import org.springframework.data.r2dbc.core.RowsFetchSpec;
-import org.springframework.data.r2dbc.mapping.OutboundRow;
-import org.springframework.data.r2dbc.mapping.SettableValue;
+import static org.springframework.data.relational.core.query.Criteria.where;
+import static org.springframework.data.relational.core.query.Query.query;
+
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.sql.Column;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %>;
 import org.springframework.data.relational.core.sql.Table;
+import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.r2dbc.core.RowsFetchSpec;
 <%_ } _%>
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <% relationships.forEach(function(rel) {
-    if (rel.relationshipType === 'many-to-many' && rel.ownerSide) { _%>
+  if (rel.relationshipManyToMany && rel.ownerSide) { _%>
 import <%= packageName %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>;
-    <%_ } _%>
-<%_ } ); _%>
+  <%_ } _%>
+<%_ }); _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 
 import <%= packageName %>.domain.enumeration.<%= element %>;
@@ -79,12 +79,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= persistClass %> entity.
  */
 @SuppressWarnings("unused")
 class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
     private final DatabaseClient db;
-    private final ReactiveDataAccessStrategy dataAccessStrategy;
+    private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
 
 <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
@@ -92,98 +92,103 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
 <%_ }); _%>
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
-        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
     private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= _generateSqlSafeName(rel.relationshipName) %>");
-        <%_ }); _%>
+<%_ }); _%>
 
-        <%_ relationships.forEach(function(rel) {
-            if (rel.shouldWriteJoinTable) {
-        _%>
+<%_ relationships.forEach(function(rel) {
+  if (rel.shouldWriteJoinTable) {
+_%>
     private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
-        <%_ }
-        }); _%>
+<%_ }
+}); _%>
 
-    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_ 
+    public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
-        this.db = db;
-        this.dataAccessStrategy = dataAccessStrategy;
+        this.db = template.getDatabaseClient();
+        this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
-        <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
+<%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
-        <%_ }); _%>
+<%_ }); _%>
     }
 
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable) {
+    public Flux<<%= persistClass %>> findAllBy(Pageable pageable) {
         return findAllBy(pageable, null);
     }
 
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria) {
+    public Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria) {
         return createQuery(pageable, criteria).all();
     }
 
-    RowsFetchSpec<<%= asEntity(entityClass) %>> createQuery(Pageable pageable, Criteria criteria) {
-        List<Expression> columns = <%= asEntity(entityClass) %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
-        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
+    RowsFetchSpec<<%= persistClass %>> createQuery(Pageable pageable, Criteria criteria) {
+        List<Expression> columns = <%= persistClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
-        <%_ }); _%>
-        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) { 
+<%_ }); _%>
+        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) {
             const colName = _getJoinColumnName(rel); %>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
 
-        String select = entityManager.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable/*, criteria */);
-        return db.execute(select)
-                .map(this::process);
+        String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
+<%_ if (databaseTypeSql) { _%>
+        String alias = entityTable.getReferenceName().getReference();
+        String selectWhere =
+            Optional.ofNullable(criteria).map(crit ->
+                new StringBuilder(select).append(" ").append("WHERE").append(" ").append(alias).append(".").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
+<%_ } _%>
+        return db.sql(select<% if (databaseTypeSql) { %>Where<% } %>).map(this::process);
     }
 
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findAll() {
+    public Flux<<%= persistClass %>> findAll() {
         return findAllBy(null, null);
     }
 
     @Override
-    public Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKey.type %> id) {
-        return createQuery(null, Criteria.where("id").is(id)).one();
+    public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
+        return createQuery(null, where("id").is(id)).one();
     }
 
-    <%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 
     @Override
-    public Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(Long id) {
+    public Mono<<%= persistClass %>> findOneWithEagerRelationships(Long id) {
         return findById(id);
     }
 
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships() {
+    public Flux<<%= persistClass %>> findAllWithEagerRelationships() {
         return findAll();
     }
 
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page) {
+    public Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page) {
         return findAllBy(page);
     }
 
-    <%_ } _%>
-    private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
-        <%= asEntity(entityClass) %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
-        <%_ reactiveEagerRelations.forEach(function(rel) { _%>
+<%_ } _%>
+    private <%= persistClass %> process(Row row, RowMetadata metadata) {
+        <%= persistClass %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
         entity.set<%= rel.relationshipNameCapitalized %>(<%= rel.otherEntityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%= rel.relationshipName %>"));
-        <%_ }); _%>
+<%_ }); _%>
         return entity;
     }
 
     @Override
-    public <S extends <%= asEntity(entityClass) %>> Mono<S> insert(S entity) {
+    public <S extends <%= persistClass %>> Mono<S> insert(S entity) {
         return entityManager.insert(entity);
     }
 
     @Override
-    public <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity) {
+    public <S extends <%= persistClass %>> Mono<S> save(S entity) {
         if (entity.get<%= primaryKey.nameCapitalized %>() == null) {
-            <%_ if (isUsingMapsId) { _%>
+<%_ if (isUsingMapsId) { _%>
             entity.set<%= primaryKey.nameCapitalized %>(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>());
-            <%_ } _%>
+<%_ } _%>
             return insert(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap(savedEntity -> updateRelations(savedEntity))<% } %>;
         } else {
             return update(entity).map(numberOfUpdates -> {
@@ -196,60 +201,61 @@ class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>Repo
     }
 
     @Override
-    public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
-        <%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
-        return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
-        <%_ } else { _%>
+    public Mono<Integer> update(<%= persistClass %> entity) {
+<%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
+        //fixme is this the proper way?
+        return r2dbcEntityTemplate.update(entity).thenReturn(1);
+<%_ } else { _%>
         // What can we update on this field?
         return Mono.just(1);
-        <%_ } _%>
+<%_ } _%>
     }
 
-    <%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 
     @Override
     public Mono<Void> deleteById(Long entityId) {
         return deleteRelations(entityId).then(
-             db.delete().from(<%= asEntity(entityClass) %>.class).matching(Criteria.from(Criteria.where("id").is(entityId))).then()
+             r2dbcEntityTemplate.delete(<%= persistClass %>.class).matching(query(where("id").is(entityId))).all().then()
         );
     }
 
-    protected <S extends <%= asEntity(entityClass) %>> Mono<S> updateRelations(S entity) {
-        <%_ relationships.filter(function(rel) {
-                return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
-            }).forEach(function(rel, idx) {
-                if (idx === 0) { _%>
+    protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
+  <%_ relationships.filter(function(rel) {
+          return (rel.relationshipManyToMany && rel.ownerSide);
+  }).forEach(function(rel, idx) {
+    if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
-        <%_     } else { _%>
+   <%_ } else { _%>
         result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
-        <%_
-                }
-            }); _%>
+   <%_
+       }
+  }); _%>
         return result.thenReturn(entity);
     }
 
     protected Mono<Void> deleteRelations(Long entityId) {
-        <%_ relationships.filter(function(rel) {
-                return (rel.relationshipType === 'many-to-many' && rel.ownerSide);
-            }).forEach(function(rel, idx) {
-                if (idx === 0) { _%>
-        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<% 
-                } else { %>
-                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% } 
-            }); %>;
+  <%_ relationships.filter(function(rel) {
+          return (rel.relationshipManyToMany && rel.ownerSide);
+  }).forEach(function(rel, idx) {
+    if (idx === 0) { _%>
+        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<%
+    } else { %>
+                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% }
+  }); %>;
     }
 
-    <%_ } _%>
+<%_ } _%>
 }
 
 class <%= entityClass %>SqlHelper {
     static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
-<%_ fields.forEach(function(field) { 
+<%_ fields.forEach(function(field) {
     let col = field.fieldNameAsDatabaseColumn;
     _%>
         columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
-   <%_  if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
+   <%_  if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
         columns.add(Column.aliased("<%= col %>_content_type", table, columnPrefix + "_<%= col %>_content_type"));
    <%_  } _%>
 <%_ }); _%>

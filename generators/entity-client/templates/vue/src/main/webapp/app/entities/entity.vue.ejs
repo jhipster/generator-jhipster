@@ -6,17 +6,19 @@
                 <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
                     <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span v-text="$t('<%= i18nKeyPrefix %>.home.refreshListLabel')">Refresh List</span>
                 </button>
-                <%_ if (!readOnly) { _%>
-                <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
-                    <font-awesome-icon icon="plus"></font-awesome-icon>
-                    <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
-                        Create a new <%= entityClassHumanized %>
-                    </span>
+<%_ if (!readOnly) { _%>
+                <router-link :to="{name: '<%= entityAngularName %>Create'}" custom v-slot="{ navigate }">
+                    <button @click="navigate" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>">
+                        <font-awesome-icon icon="plus"></font-awesome-icon>
+                        <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
+                            Create a new <%= entityClassHumanized %>
+                        </span>
+                    </button>
                 </router-link>
-                <%_ } _%>
+<%_ } _%>
             </div>
         </h2>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine) { _%>
         <div class="row">
             <div class="col-sm-12">
                 <form name="searchForm" class="form-inline" v-on:submit.prevent="search(currentSearch)">
@@ -35,7 +37,7 @@
                 </form>
             </div>
         </div>
-        <%_ } _%>
+<%_ } _%>
         <br/>
         <div class="alert alert-warning" v-if="!isFetching && <%= entityInstancePlural %> && <%= entityInstancePlural %>.length === 0">
             <span v-text="$t('<%= i18nKeyPrefix %>.home.notFound')">No <%=entityInstancePlural %> found</span>
@@ -44,18 +46,18 @@
             <table class="table table-striped" aria-describedby="<%= entityInstancePlural %>">
                 <thead>
                 <tr>
-                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
-                    <%_ for (field of fields.filter(field => !field.id)) { _%>
-                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
-                    <%_ } _%>
-                    <%_ for (relationship of relationships) { _%>
-                        <%_ if (relationship.relationshipType === 'many-to-one'
-                        || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true)
-                        || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true && pagination === 'no')) {
-                            const fieldName = "." + relationship.otherEntityField; _%>
-                    <th scope="row"<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
-                        <%_ } _%>
-                    <%_ } _%>
+                    <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+<%_ for (field of fields.filter(field => !field.id)) { _%>
+                    <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
+<%_ } _%>
+<%_ for (relationship of relationships) { _%>
+  <%_ if (relationship.relationshipManyToOne
+    || (relationship.relationshipOneToOne && relationship.ownerSide)
+    || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
+    const fieldName = "." + relationship.otherEntityField; _%>
+                    <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
+  <%_ } _%>
+<%_ } _%>
                     <th scope="row"></th>
                 </tr>
                 </thead>
@@ -65,84 +67,82 @@
                     <td>
                         <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link>
                     </td>
-                    <%_ for (field of fields.filter(field => !field.id)) {
-                        const fieldName = field.fieldName;
-                        const fieldNameCapitalized = field.fieldNameCapitalized;
-                        const fieldType = field.fieldType;
-                        const fieldTypeBlobContent = field.fieldTypeBlobContent; _%>
-                        <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
+<%_ for (field of fields.filter(field => !field.id)) {
+    const fieldName = field.fieldName;
+    const fieldType = field.fieldType; _%>
+  <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                         <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
                             <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %> image"/>
                         </a>
                         <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
-                        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
+  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
                         <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
                         <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
-                        <%_ } else if (field.fieldIsEnum) { _%>
+  <%_ } else if (field.fieldIsEnum) { _%>
                     <td v-text="$t('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
-                        <%_ } else if (['Duration'].includes(fieldType)) { _%>
+  <%_ } else if (field.fieldTypeDuration) { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | duration}}</td>
-                        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                        <%_ if (enableTranslation) { _%>
+  <%_ } else if (field.fieldTypeTimed) { _%>
+    <%_ if (enableTranslation) { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> ? $d(Date.parse(<%=entityInstance %>.<%=fieldName%>), 'short') : ''}}</td>
-                        <%_ } else { _%>
+    <%_ } else { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
-                        <%_ } _%>
-                        <%_ } else { _%>
+    <%_ } _%>
+  <%_ } else { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
-                        <%_ } _%>
-                    <%_ } _%>
-                    <%_ for (relationship of relationships) {
-                        const relationshipType = relationship.relationshipType;
-                        const ownerSide = relationship.ownerSide;
-                        const relationshipFieldName = relationship.relationshipFieldName;
-                        const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-                        const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
-                        const otherEntityName = relationship.otherEntityName;
-                        const otherEntityStateName = relationship.otherEntityStateName;
-                        const otherEntityField = relationship.otherEntityField;
-                        const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
-                        const otherEntityAngularName = relationship.otherEntityAngularName; _%>
-                        <%_ if (relationshipType === 'many-to-one'
-                        || (relationshipType === 'one-to-one' && ownerSide === true)
-                        || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ for (relationship of relationships) {
+    const ownerSide = relationship.ownerSide;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const otherEntityName = relationship.otherEntityName;
+    const otherEntityField = relationship.otherEntityField;
+    const otherEntityAngularName = relationship.otherEntityAngularName; _%>
+    <%_ if (relationship.relationshipManyToOne
+    || (relationship.relationshipOneToOne && ownerSide)
+    || (relationship.relationshipManyToMany && ownerSide && paginationNo)) { _%>
                     <td>
-                            <%_ if (otherEntityName === 'user') { _%>
-                                <%_ if (relationshipType === 'many-to-many') { _%>
+      <%_ if (relationship.otherEntityUser) { _%>
+        <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
-                                <%_ } else { _%>
+        <%_ } else { _%>
                         {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
-                                <%_ } _%>
-                            <%_ } else { _%>
-                                <%_ if (relationshipType === 'many-to-many') { _%>
+        <%_ } _%>
+      <%_ } else { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
                             <router-link class="form-control-static" :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
-                                <%_ } else { _%>
+      <%_ } else { _%>
                         <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
                             <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
-                                <%_ } _%>
-                            <%_ } _%>
+      <%_ } _%>
+    <%_ } _%>
                     </td>
-                        <%_ } _%>
-                    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
                     <td class="text-right">
                         <div class="btn-group">
-                            <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                                <font-awesome-icon icon="eye"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
+                            <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
+                                <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
+                                    <font-awesome-icon icon="eye"></font-awesome-icon>
+                                    <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
+                                </button>
                             </router-link>
-                            <%_ if (!readOnly) { _%>
-                            <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
+<%_ if (!readOnly) { _%>
+                            <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
+                                <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                                    <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
+                                </button>
                             </router-link>
                             <b-button v-on:click="prepareRemove(<%= entityInstance %>)"
                                    variant="danger"
@@ -152,13 +152,13 @@
                                 <font-awesome-icon icon="times"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.delete')">Delete</span>
                             </b-button>
-                            <%_ } _%>
+<%_ } _%>
                         </div>
                     </td>
                 </tr>
                 </tbody>
-                <%_ if (databaseType !== 'cassandra') { _%>
-                <%_ if (pagination === 'infinite-scroll') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
                 <infinite-loading
                     ref="infiniteLoading"
                     v-if="totalItems > itemsPerPage"
@@ -168,8 +168,8 @@
                     force-use-infinite-wrapper=".el-table__body-wrapper"
                     :distance='20'>
                 </infinite-loading>
-                <%_ } _%>
-                <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
             </table>
         </div>
         <b-modal ref="removeEntity" id="removeEntity" >
@@ -182,9 +182,8 @@
                 <button type="button" class="btn btn-primary" id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" data-cy="entityConfirmDeleteButton" v-text="$t('entity.action.delete')" v-on:click="remove<%= entityAngularName %>()">Delete</button>
             </div>
         </b-modal>
-        <%_ if (databaseType !== 'cassandra') { _%>
-        <%_ if (pagination === 'pager') { _%>
-        <!-- Pager is not implemented yet, so this is normal pagination instead -->
+<%_ if (!databaseTypeCassandra) { _%>
+  <%_ if (paginationPagination) { _%>
         <div v-show="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length > 0">
             <div class="row justify-content-center">
                 <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
@@ -193,17 +192,8 @@
                 <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
             </div>
         </div>
-        <%_ } else if (pagination === 'pagination') { _%>
-        <div v-show="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length > 0">
-            <div class="row justify-content-center">
-                <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
-            </div>
-            <div class="row justify-content-center">
-                <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
-            </div>
-        </div>
-        <%_ } _%>
-        <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
     </div>
 </template>
 

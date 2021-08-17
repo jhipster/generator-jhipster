@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,86 +16,140 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
+const { IngressTypes, ServiceTypes } = require('./kubernetes-platform-types');
+const { StorageTypes } = require('./openshift-platform-types');
+const { EUREKA, CONSUL } = require('./service-discovery-types');
+const { PROMETHEUS } = require('./monitoring-types');
+const monitoringTypes = require('./monitoring-types');
+const serviceDiscoveryTypes = require('./service-discovery-types');
+
+const { EPHEMERAL, PERSISTENT } = StorageTypes;
+const { LOAD_BALANCER, NODE_PORT, INGRESS } = ServiceTypes;
+const { NGINX, GKE } = IngressTypes;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+const NO_MONITORING = monitoringTypes.NO;
 
 const DeploymentTypes = {
-    DOCKERCOMPOSE: 'docker-compose',
-    KUBERNETES: 'kubernetes',
-    OPENSHIFT: 'openshift',
-    exists: deploymentType => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
+  DOCKERCOMPOSE: 'docker-compose',
+  KUBERNETES: 'kubernetes',
+  OPENSHIFT: 'openshift',
+  exists: deploymentType => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
+};
+
+const kubernetesRelatedOptions = {
+  kubernetesNamespace: 'default',
+  kubernetesServiceType: {
+    loadBalancer: LOAD_BALANCER,
+    nodePort: NODE_PORT,
+    ingress: INGRESS,
+  },
+  kubernetesStorageClassName: '',
+  kubernetesUseDynamicStorage: {
+    false: false,
+    true: true,
+  },
+  ingressDomain: '',
+  ingressType: {
+    nginx: NGINX,
+    gke: GKE,
+  },
+  istio: {
+    false: false,
+    true: true,
+  },
+};
+
+const openshiftRelatedOptions = {
+  openshiftNamespace: 'default',
+  registryReplicas: {
+    two: 2,
+  },
+  storageType: {
+    ephemeral: EPHEMERAL,
+    persistent: PERSISTENT,
+  },
+};
+
+const dockerComposeRelatedOptions = {
+  gatewayType: {
+    springCloudGateway: 'SpringCloudGateway',
+  },
+};
+
+const baseOptions = {
+  appsFolders: [],
+  clusteredDbApps: [],
+  directoryPath: '../',
+  monitoring: {
+    no: NO_MONITORING,
+    prometheus: PROMETHEUS,
+  },
+  serviceDiscoveryType: {
+    eureka: EUREKA,
+    consul: CONSUL,
+    no: NO_SERVICE_DISCOVERY,
+  },
 };
 
 const Options = {
-    deploymentType: {
-        dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
-        rancherCompose: DeploymentTypes.RANCHERCOMPOSE,
-        kubernetes: DeploymentTypes.KUBERNETES,
-        openshift: DeploymentTypes.OPENSHIFT,
-    },
-    gatewayType: {
-        zuul: 'zuul',
-        traefik: 'traefik',
-    },
-    monitoring: {
-        no: 'no',
-        prometheus: 'prometheus',
-    },
-    directoryPath: '../',
-    appsFolders: [],
-    clusteredDbApps: [],
-    // adminPassword: 'admin',
-    serviceDiscoveryType: {
-        eureka: 'eureka',
-        consul: 'consul',
-        no: 'no',
-    },
-    dockerRepositoryName: '',
-    dockerPushCommand: 'docker push',
-    // Kubernetes specific
-    kubernetesNamespace: 'default',
-    kubernetesServiceType: {
-        loadBalancer: 'LoadBalancer',
-        nodePort: 'NodePort',
-        ingress: 'Ingress',
-    },
-    ingressDomain: '',
-    istio: {
-        false: false,
-        true: true,
-    },
-    // openshift specific
-    openshiftNamespace: 'default',
-    storageType: {
-        ephemeral: 'ephemeral',
-        persistent: 'persistent',
-    },
+  ...baseOptions,
+  deploymentType: {
+    dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
+    kubernetes: DeploymentTypes.KUBERNETES,
+    openshift: DeploymentTypes.OPENSHIFT,
+  },
+  dockerPushCommand: 'docker push',
+  dockerRepositoryName: '',
+  ...dockerComposeRelatedOptions,
+  ...kubernetesRelatedOptions,
+  ...openshiftRelatedOptions,
 };
 
-Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) =>
-    _.omitBy(
-        {
-            deploymentType,
-            gatewayType: Options.gatewayType.zuul,
-            monitoring: Options.monitoring.no,
-            directoryPath: Options.directoryPath,
-            appsFolders: new Set(),
-            clusteredDbApps: new Set(),
-            adminPassword: Options.adminPassword,
-            serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-            dockerRepositoryName: Options.dockerRepositoryName,
-            dockerPushCommand: Options.dockerPushCommand,
-            kubernetesNamespace: deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesNamespace : undefined,
-            kubernetesServiceType:
-                deploymentType === Options.deploymentType.kubernetes ? Options.kubernetesServiceType.loadBalancer : undefined,
-            ingressDomain: deploymentType === Options.deploymentType.kubernetes ? Options.ingressDomain : undefined,
-            istio: deploymentType === Options.deploymentType.kubernetes ? Options.istio.false : undefined,
-            openshiftNamespace: deploymentType === Options.deploymentType.openshift ? Options.openshiftNamespace : undefined,
-            storageType: deploymentType === Options.deploymentType.openshift ? Options.storageType.ephemeral : undefined,
-        },
-        _.isUndefined
-    );
+Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
+  if (deploymentType === Options.deploymentType.kubernetes) {
+    return {
+      appsFolders: new Set(),
+      directoryPath: Options.directoryPath,
+      clusteredDbApps: new Set(),
+      serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+      dockerRepositoryName: Options.dockerRepositoryName,
+      dockerPushCommand: Options.dockerPushCommand,
+      kubernetesNamespace: Options.kubernetesNamespace,
+      kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+      kubernetesUseDynamicStorage: Options.kubernetesUseDynamicStorage.false,
+      kubernetesStorageClassName: Options.kubernetesStorageClassName,
+      ingressDomain: Options.ingressDomain,
+      monitoring: Options.monitoring.no,
+      istio: Options.istio.false,
+    };
+  }
+
+  if (deploymentType === Options.deploymentType.dockerCompose) {
+    return {
+      appsFolders: new Set(),
+      directoryPath: Options.directoryPath,
+      gatewayType: Options.gatewayType.springCloudGateway,
+      clusteredDbApps: new Set(),
+      monitoring: Options.monitoring.no,
+      serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+    };
+  }
+
+  return {
+    appsFolders: new Set(),
+    directoryPath: Options.directoryPath,
+    clusteredDbApps: new Set(),
+    serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+    monitoring: Options.monitoring.no,
+    dockerRepositoryName: Options.dockerRepositoryName,
+    dockerPushCommand: Options.dockerPushCommand,
+    openshiftNamespace: Options.openshiftNamespace,
+    storageType: Options.storageType.ephemeral,
+    registryReplicas: Options.registryReplicas.two,
+  };
+};
 
 module.exports = {
-    Options,
-    DeploymentTypes,
+  Options,
+  DeploymentTypes,
 };

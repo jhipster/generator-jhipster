@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -40,21 +40,18 @@ export class SortDirective<T> {
     this.ascendingChange.emit(ascending);
   }
 
-  @Input() callback?: () => void;
-
   @Output() predicateChange = new EventEmitter<T>();
   @Output() ascendingChange = new EventEmitter<boolean>();
+  @Output() sortChange = new EventEmitter<{ predicate: T; ascending: boolean }>();
 
   private _predicate?: T;
   private _ascending?: boolean;
 
-  sort(field?: T): void {
-    if (String(this.predicate) !== '_score') {
-      this.ascending = field !== this.predicate ? true : !this.ascending;
-      this.predicate = field;
-      this.predicateChange.emit(field);
-      this.ascendingChange.emit(this.ascending);
-      this.callback?.();
-    }
+  sort(field: T): void {
+    this.ascending = field !== this.predicate ? true : !this.ascending;
+    this.predicate = field;
+    this.predicateChange.emit(field);
+    this.ascendingChange.emit(this.ascending);
+    this.sortChange.emit({ predicate: this.predicate, ascending: this.ascending });
   }
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,9 +18,10 @@
 -%>
 import { Component, OnInit<% if (enableTranslation) { %>, RendererFactory2, Renderer2<% } %> } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import * as dayjs from 'dayjs';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -33,25 +34,25 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
   templateUrl: './main.component.html',
 })
 export class MainComponent implements OnInit {
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   private renderer: Renderer2;
-  <%_ } _%>
+<%_ } _%>
 
   constructor(
     private accountService: AccountService,
     private titleService: Title,
     private router: Router,
-    <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
     private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
-    <%_ } _%>
-    <%_ if (enableTranslation) { _%>
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
     rootRenderer: RendererFactory2
-    <%_ } _%>
+<%_ } _%>
   ) {
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
-    <%_ } _%>
+<%_ } _%>
   }
 
   ngOnInit(): void {
@@ -62,28 +63,25 @@ export class MainComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.updateTitle();
       }
-      if (event instanceof NavigationError && event.error.status === 404) {
-        this.router.navigate(['/404']);
-      }
     });
 
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
       this.updateTitle();
-
+      dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
 
-      <%_ if (enableI18nRTL) { _%>
+  <%_ if (enableI18nRTL) { _%>
       this.updatePageDirection();
-      <%_ } _%>
+  <%_ } _%>
     });
-    <%_ } _%>
+<%_ } _%>
   }
 
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
-    let title: string = routeSnapshot.data['pageTitle'] ?? '';
+    const title: string = routeSnapshot.data['pageTitle'] ?? '';
     if (routeSnapshot.firstChild) {
-      title = this.getPageTitle(routeSnapshot.firstChild) || title;
+      return this.getPageTitle(routeSnapshot.firstChild) || title;
     }
     return title;
   }
@@ -91,18 +89,18 @@ export class MainComponent implements OnInit {
   private updateTitle(): void {
     let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
     if (!pageTitle) {
-      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
+      pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
     }
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
-    <%_ } else { _%>
+<%_ } else { _%>
     this.titleService.setTitle(pageTitle);
-    <%_ } _%>
+<%_ } _%>
   }
 
-  <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
   private updatePageDirection(): void {
     this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
   }
-  <%_ } _%>
+<%_ } _%>
 }

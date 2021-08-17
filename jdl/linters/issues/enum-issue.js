@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,13 +20,13 @@
 const AbstractIssue = require('./abstract-issue');
 
 class EnumIssue extends AbstractIssue {
-    constructor(args) {
-        super(args);
-        if (!args.enumName) {
-            throw new Error('An enum name must be passed.');
-        }
-        this.enumName = args.enumName;
+  constructor(args) {
+    super(args);
+    if (!args.enumName) {
+      throw new Error('An enum name must be passed.');
     }
+    this.enumName = args.enumName;
+  }
 }
 
 module.exports = EnumIssue;

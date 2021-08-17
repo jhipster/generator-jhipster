@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,34 +17,38 @@
  * limitations under the License.
  */
 const k8sPrompts = require('../kubernetes/prompts');
+const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+const { generatorDefaultConfig } = require('../kubernetes/kubernetes-constants');
+
+const { HELM, K8S } = GeneratorTypes;
 
 module.exports = {
-    askForGeneratorType,
-    ...k8sPrompts,
+  askForGeneratorType,
+  ...k8sPrompts,
 };
 
 async function askForGeneratorType() {
-    if (this.regenerate) return;
+  if (this.regenerate) return;
 
-    const prompts = [
+  const prompts = [
+    {
+      type: 'list',
+      name: 'generatorType',
+      message: 'Which *type* of generator would you like to base this on?',
+      choices: [
         {
-            type: 'list',
-            name: 'generatorType',
-            message: 'Which *type* of generator would you like to base this on?',
-            choices: [
-                {
-                    value: 'k8s',
-                    name: 'Kubernetes generator',
-                },
-                {
-                    value: 'helm',
-                    name: 'Helm Kubernetes generator',
-                },
-            ],
-            default: this.generatorType ? this.generatorType : 'k8s',
+          value: K8S,
+          name: 'Kubernetes generator',
         },
-    ];
+        {
+          value: HELM,
+          name: 'Helm Kubernetes generator',
+        },
+      ],
+      default: this.generatorType ? this.generatorType : generatorDefaultConfig.generatorType,
+    },
+  ];
 
-    const props = await this.prompt(prompts);
-    this.generatorType = props.generatorType;
+  const props = await this.prompt(prompts);
+  this.generatorType = props.generatorType;
 }

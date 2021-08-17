@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Ndjesë, ka ndodhur një gabim.
 error.status=Statusi:
 error.message=Mesazhi:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> aktivizimi i kontos
 email.activation.greeting=I/E nderuar {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> rivendos fjalëkalimin
 email.reset.greeting=I/E nderuar {0}
 email.reset.text1=Për konton tuaj <%= baseName %> është kërkuar rivendosja e fjalëkalimit, klikoni mbi këtë URL që ta rivendosni:
 email.reset.text2=Me rrespekt,
+<%_ } _%>

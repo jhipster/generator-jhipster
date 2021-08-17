@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,7 +20,7 @@ package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +43,7 @@ import java.util.*;
 <%_ if (!skipClient) { _%>
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ } _%>
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -79,47 +80,43 @@ class WebConfigurerTest {
     }
 
     @Test
-    void testStartUpProdServletContext() throws ServletException {
+    void shouldStartUpProdServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-        webConfigurer.onStartup(servletContext);
 
-
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
+<%_ if (devDatabaseTypeH2Any) { _%>
         verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
-    void testStartUpDevServletContext() throws ServletException {
+    void shouldStartUpDevServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
-        webConfigurer.onStartup(servletContext);
 
-
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
+<%_ if (devDatabaseTypeH2Any) { _%>
         verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
-        <%_ } _%>
+<%_ } _%>
     }
 
 <%_ if (!skipClient) { _%>
     @Test
-    void testCustomizeServletContainer() {
+    void shouldCustomizeServletContainer() {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
         UndertowServletWebServerFactory container = new UndertowServletWebServerFactory();
         webConfigurer.customize(container);
         assertThat(container.getMimeMappings().get("abs")).isEqualTo("audio/x-mpeg");
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
-        <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
             assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= CLIENT_DIST_DIR %>"));
         }
-        <%_ } _%>
     }
 
 <%_ } _%>
     @Test
-    void testCorsFilterOnApiPath() throws Exception {
-        props.getCors().setAllowedOrigins(Collections.singletonList("*"));
+    void shouldCorsFilterOnApiPath() throws Exception {
+        props.getCors().setAllowedOrigins(Collections.singletonList("other.domain.com"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         props.getCors().setAllowedHeaders(Collections.singletonList("*"));
         props.getCors().setMaxAge(1800L);
@@ -140,58 +137,52 @@ class WebConfigurerTest {
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"))
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800"));
 
-        mockMvc.perform(
-            get("/api/test-cors")
-                .header(HttpHeaders.ORIGIN, "other.domain.com"))
+        mockMvc
+            .perform(get("/api/test-cors").header(HttpHeaders.ORIGIN, "other.domain.com"))
             .andExpect(status().isOk())
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "other.domain.com"));
     }
 
     @Test
-    void testCorsFilterOnOtherPath() throws Exception {
+    void shouldCorsFilterOnOtherPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("*"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         props.getCors().setAllowedHeaders(Collections.singletonList("*"));
         props.getCors().setMaxAge(1800L);
         props.getCors().setAllowCredentials(true);
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
-            .addFilters(webConfigurer.corsFilter())
-            .build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController()).addFilters(webConfigurer.corsFilter()).build();
 
-        mockMvc.perform(
-            get("/test/test-cors")
-                .header(HttpHeaders.ORIGIN, "other.domain.com"))
+        mockMvc
+            .perform(get("/test/test-cors").header(HttpHeaders.ORIGIN, "other.domain.com"))
             .andExpect(status().isOk())
             .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
     }
 
     @Test
-    void testCorsFilterDeactivated() throws Exception {
+    void shouldCorsFilterDeactivatedForNullAllowedOrigins() throws Exception {
         props.getCors().setAllowedOrigins(null);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
             .addFilters(webConfigurer.corsFilter())
             .build();
 
-        mockMvc.perform(
-            get("/api/test-cors")
-                .header(HttpHeaders.ORIGIN, "other.domain.com"))
+        mockMvc
+            .perform(get("/api/test-cors").header(HttpHeaders.ORIGIN, "other.domain.com"))
             .andExpect(status().isOk())
             .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
     }
 
     @Test
-    void testCorsFilterDeactivated2() throws Exception {
+    void shouldCorsFilterDeactivatedForEmptyAllowedOrigins() throws Exception {
         props.getCors().setAllowedOrigins(new ArrayList<>());
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
             .addFilters(webConfigurer.corsFilter())
             .build();
 
-        mockMvc.perform(
-            get("/api/test-cors")
-                .header(HttpHeaders.ORIGIN, "other.domain.com"))
+        mockMvc
+            .perform(get("/api/test-cors").header(HttpHeaders.ORIGIN, "other.domain.com"))
             .andExpect(status().isOk())
             .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
     }

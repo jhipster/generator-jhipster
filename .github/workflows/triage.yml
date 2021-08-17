@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2020 the original author or authors from the JHipster project.
+# Copyright 2013-2021 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -19,34 +19,34 @@
 
 name: Triage issues
 on:
-    issues: { types: opened }
+  issues: { types: [opened] }
 jobs:
-    apply-label:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/github-script@v3
-              with:
-                  github-token: ${{secrets.GITHUB_TOKEN}}
-                  script: |
-                      const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
-                      github.issues.listLabelsOnIssue({...issue}).then(response => {
-                        const labels = response.data
-                        let missingLabel = [], missingArea = true, missingTheme = true
-                        for (const label of labels) {
-                          if (label.name.includes('area: ')) {
-                            missingArea = false
-                          }
-                          if (label.name.includes('theme: ')) {
-                            missingTheme = false
-                          }
-                        }
-                        if (missingArea) {
-                          missingLabel.push('area: triage')
-                        }
-                        if (missingTheme) {
-                          missingLabel.push('theme: undefined')
-                        }
-                        if (missingArea || missingTheme) {
-                            github.issues.addLabels({...issue, labels: missingLabel})
-                        }
-                      })
+  apply-label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v4.0.2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
+            github.issues.listLabelsOnIssue({...issue}).then(response => {
+              const labels = response.data
+              let missingLabel = [], missingArea = true, missingTheme = true
+              for (const label of labels) {
+                if (label.name.includes('area: ')) {
+                  missingArea = false
+                }
+                if (label.name.includes('theme: ')) {
+                  missingTheme = false
+                }
+              }
+              if (missingArea) {
+                missingLabel.push('area: triage')
+              }
+              if (missingTheme) {
+                missingLabel.push('theme: undefined')
+              }
+              if (missingArea || missingTheme) {
+                  github.issues.addLabels({...issue, labels: missingLabel})
+              }
+            })

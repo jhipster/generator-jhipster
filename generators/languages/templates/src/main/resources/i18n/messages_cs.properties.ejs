@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Omlouváme se, vyskytla se chyba.
 error.status=Stav:
 error.message=Zpráva:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> aktivace účtu
 email.activation.greeting=Vážený/á {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> obnovení hesla
 email.reset.greeting=Vážený/á {0}
 email.reset.text1=Obdrželi jsme žádost o obnovení hesla pro vaše konto <%= baseName %>, pro obnovení prosím použijte níže uvedenou adresu URL:
 email.reset.text2=S pozdravem,
+<%_ } _%>

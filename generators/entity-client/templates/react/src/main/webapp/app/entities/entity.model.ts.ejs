@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%
-const variablesWithTypes = generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, 'string', embedded);
+const variablesWithTypes = generateEntityClientFields(primaryKey, fields, relationships, dto, 'string', embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields.filter(field => !field.id), 'react');
 const enumImports = generateEntityClientEnumImports(fields.filter(field => !field.id));

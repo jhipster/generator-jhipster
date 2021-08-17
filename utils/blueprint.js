@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,12 +18,12 @@
  */
 
 module.exports = {
-    mergeBlueprints,
-    loadBlueprintsFromConfiguration,
-    parseBluePrints,
-    removeBlueprintDuplicates,
-    normalizeBlueprintName,
-    parseBlueprintInfo,
+  mergeBlueprints,
+  loadBlueprintsFromConfiguration,
+  parseBluePrints,
+  removeBlueprintDuplicates,
+  normalizeBlueprintName,
+  parseBlueprintInfo,
 };
 
 /**
@@ -33,17 +33,17 @@ module.exports = {
  * @returns {Array} an array that contains the info for each blueprint
  */
 function loadBlueprintsFromConfiguration(config) {
-    // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
-    // load blueprints from config file
-    const blueprints = configuration.blueprints || [];
+  // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
+  const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
+  // load blueprints from config file
+  const blueprints = configuration.blueprints || [];
 
-    const oldBlueprintName = configuration.blueprint;
-    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
-        const version = configuration.blueprintVersion || 'latest';
-        blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
-    }
-    return blueprints;
+  const oldBlueprintName = configuration.blueprint;
+  if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
+    const version = configuration.blueprintVersion || 'latest';
+    blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
+  }
+  return blueprints;
 }
 
 /**
@@ -54,16 +54,16 @@ function loadBlueprintsFromConfiguration(config) {
  * @returns {Array} an array that contains the info for each blueprint
  */
 function parseBluePrints(blueprints) {
-    if (Array.isArray(blueprints)) {
-        return blueprints;
-    }
-    if (typeof blueprints === 'string') {
-        return blueprints
-            .split(',')
-            .filter(el => el != null && el.length > 0)
-            .map(blueprint => parseBlueprintInfo(blueprint));
-    }
-    return [];
+  if (Array.isArray(blueprints)) {
+    return blueprints;
+  }
+  if (typeof blueprints === 'string') {
+    return blueprints
+      .split(',')
+      .filter(el => el != null && el.length > 0)
+      .map(blueprint => parseBlueprintInfo(blueprint));
+  }
+  return [];
 }
 
 /**
@@ -73,15 +73,15 @@ function parseBluePrints(blueprints) {
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
 function mergeBlueprints(...blueprintsToMerge) {
-    if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
-        return [];
+  if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
+    return [];
+  }
+  blueprintsToMerge.forEach(blueprints => {
+    if (!Array.isArray(blueprints)) {
+      throw new Error('Only arrays are supported.');
     }
-    blueprintsToMerge.forEach(blueprints => {
-        if (!Array.isArray(blueprints)) {
-            throw new Error('Only arrays are supported.');
-        }
-    });
-    return removeBlueprintDuplicates(blueprintsToMerge.flat());
+  });
+  return removeBlueprintDuplicates(blueprintsToMerge.flat());
 }
 
 /**
@@ -91,16 +91,16 @@ function mergeBlueprints(...blueprintsToMerge) {
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
 function removeBlueprintDuplicates(blueprints) {
-    const uniqueBlueprints = new Map();
-    blueprints.forEach(blueprintToAdd => {
-        if (uniqueBlueprints.get(blueprintToAdd.name) === undefined) {
-            uniqueBlueprints.set(blueprintToAdd.name, blueprintToAdd.version);
-        }
-    });
-    return [...uniqueBlueprints].map(([name, version]) => {
-        if (version === undefined) return { name };
-        return { name, version };
-    });
+  const uniqueBlueprints = new Map();
+  blueprints.forEach(blueprintToAdd => {
+    if (uniqueBlueprints.get(blueprintToAdd.name) === undefined) {
+      uniqueBlueprints.set(blueprintToAdd.name, blueprintToAdd.version);
+    }
+  });
+  return [...uniqueBlueprints].map(([name, version]) => {
+    if (version === undefined) return { name };
+    return { name, version };
+  });
 }
 
 /**
@@ -111,20 +111,20 @@ function removeBlueprintDuplicates(blueprints) {
  * @returns {object} containing the name and version of the blueprint
  */
 function parseBlueprintInfo(blueprint) {
-    let bpName = normalizeBlueprintName(blueprint);
-    const idx = bpName.lastIndexOf('@');
-    if (idx > 0) {
-        // Not scope.
-        const version = bpName.slice(idx + 1);
-        bpName = bpName.slice(0, idx);
-        return {
-            name: bpName,
-            version,
-        };
-    }
+  let bpName = normalizeBlueprintName(blueprint);
+  const idx = bpName.lastIndexOf('@');
+  if (idx > 0) {
+    // Not scope.
+    const version = bpName.slice(idx + 1);
+    bpName = bpName.slice(0, idx);
     return {
-        name: bpName,
+      name: bpName,
+      version,
     };
+  }
+  return {
+    name: bpName,
+  };
 }
 
 /**
@@ -134,11 +134,11 @@ function parseBlueprintInfo(blueprint) {
  * @returns {string} the normalized blueprint name
  */
 function normalizeBlueprintName(blueprint) {
-    if (blueprint && blueprint.startsWith('@')) {
-        return blueprint;
-    }
-    if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-        return `generator-jhipster-${blueprint}`;
-    }
+  if (blueprint && blueprint.startsWith('@')) {
     return blueprint;
+  }
+  if (blueprint && !blueprint.startsWith('generator-jhipster')) {
+    return `generator-jhipster-${blueprint}`;
+  }
+  return blueprint;
 }

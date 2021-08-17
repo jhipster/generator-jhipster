@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,38 +21,38 @@ const { merge } = require('../utils/object-utils');
 const Validations = require('../jhipster/validations');
 
 module.exports = class JDLValidation {
-    constructor(args) {
-        const merged = merge(defaults(), args);
-        this.name = merged.name;
-        this.value = merged.value;
-    }
+  constructor(args) {
+    const merged = merge(defaults(), args);
+    this.name = merged.name;
+    this.value = merged.value;
+  }
 
-    toString() {
-        let string = `${this.name}`;
-        if (this.value || this.value === 0) {
-            string += `(${formatValidationValue(this.name, this.value)})`;
-        }
-        return string;
+  toString() {
+    let string = `${this.name}`;
+    if (this.value || this.value === 0) {
+      string += `(${formatValidationValue(this.name, this.value)})`;
     }
+    return string;
+  }
 };
 
 function defaults() {
-    return {
-        name: 'required',
-        value: '',
-    };
+  return {
+    name: Validations.REQUIRED,
+    value: '',
+  };
 }
 
 function formatValidationValue(name, value) {
-    if (name === Validations.PATTERN) {
-        return getPatternValidationValue(value);
-    }
-    return value;
+  if (name === Validations.PATTERN) {
+    return getPatternValidationValue(value);
+  }
+  return value;
 }
 
 function getPatternValidationValue(value) {
-    if (value instanceof RegExp) {
-        return value.toString();
-    }
-    return `/${value}/`;
+  if (value instanceof RegExp) {
+    return value.toString();
+  }
+  return `/${value}/`;
 }

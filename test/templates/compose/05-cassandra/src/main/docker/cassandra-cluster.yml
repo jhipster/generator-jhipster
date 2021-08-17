@@ -15,7 +15,7 @@ services:
             - 9042:9042
             - 9160:9160
     mscassandra-cassandra-node:
-        image: cassandra:2.2.5
+        image: cassandra:3.11.10
         environment:
             - CASSANDRA_SEEDS=mscassandra-cassandra
     mscassandra-cassandra-migration:

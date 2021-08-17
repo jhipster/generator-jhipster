@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,12 +17,12 @@
  limitations under the License.
 -%>
 <%_ if (reactive) { _%>
-        return <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id)<%_ if (!viaService && searchEngine === 'elasticsearch') { %>
+        return <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id)<%_ if (!viaService && searchEngineElasticsearch) { %>
             .then(<%= entityInstance %>SearchRepository.deleteById(id))<%_ } _%><%_ if (!fromResource) { _%>;
 <%_ } _%>
 <%_ } else { _%>
         <%= entityInstance %><%= viaService ? 'Service.delete' : 'Repository.deleteById' %>(id);
-        <%_ if (!viaService && searchEngine === 'elasticsearch') { _%>
+  <%_ if (!viaService && searchEngineElasticsearch) { _%>
         <%= entityInstance %>SearchRepository.deleteById(id);
-        <%_ } _%>
+  <%_ } _%>
 <%_ } _%>

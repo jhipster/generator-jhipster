@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,7 +20,7 @@
 const fs = require('fs');
 
 module.exports = {
-    exportToJDL,
+  exportToJDL,
 };
 
 /**
@@ -29,8 +29,8 @@ module.exports = {
  * @param path the path where the file will be written.
  */
 function exportToJDL(jdl, path = 'app.jdl') {
-    if (!jdl) {
-        throw new Error('A JDLObject has to be passed to be exported.');
-    }
-    fs.writeFileSync(path, jdl.toString());
+  if (!jdl) {
+    throw new Error('A JDLObject has to be passed to be exported.');
+  }
+  fs.writeFileSync(path, jdl.toString());
 }

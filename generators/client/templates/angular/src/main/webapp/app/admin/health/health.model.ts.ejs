@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,16 +19,16 @@
 export type HealthStatus = 'UP' | 'DOWN' | 'UNKNOWN' | 'OUT_OF_SERVICE';
 
 export type HealthKey =
-  <%_ if (messageBroker === 'kafka') { _%>
+  <%_ if (messageBrokerKafka) { _%>
   | 'binders'
   <%_ } _%>
-  <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+  <%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
   | 'discoveryComposite'
   | 'refreshScope'
   | 'clientConfigServer'
   | 'hystrix'
   <%_ } _%>
-  <%_ if (serviceDiscoveryType === 'consul') { _%>
+  <%_ if (serviceDiscoveryConsul) { _%>
   | 'consul'
   <%_ } _%>
   | 'diskSpace'
@@ -36,16 +36,16 @@ export type HealthKey =
   | 'ping'
   | 'livenessState'
   | 'readinessState'
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngineElasticsearch) { _%>
   | 'elasticsearch'
   <%_ } _%>
-  <%_ if (databaseType === 'sql') { _%>
+  <%_ if (databaseTypeSql) { _%>
   | 'db'
-  <%_ } else if (databaseType === 'mongodb') { _%>
+  <%_ } else if (databaseTypeMongodb) { _%>
   | 'mongo'
-  <%_ } else if (databaseType === 'cassandra') { _%>
+  <%_ } else if (databaseTypeCassandra) { _%>
   | 'cassandra'
-  <%_ } else if (databaseType === 'couchbase') { _%>
+  <%_ } else if (databaseTypeCouchbase) { _%>
   | 'couchbase'
   <%_ } _%>
   ;

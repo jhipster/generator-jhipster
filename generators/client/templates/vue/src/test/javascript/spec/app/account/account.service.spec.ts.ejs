@@ -7,7 +7,7 @@ import AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } %>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import TrackerService from '@/admin/tracker/tracker.service';
 <%_ } _%>
 import * as config from '@/shared/config/config';
@@ -16,7 +16,7 @@ const axiosStub = {
   get: sinon.stub(axios, 'get'),
   post: sinon.stub(axios, 'post'),
 };
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 const mockedCookie = { get: jest.fn(() => { return 'token'; }) };
 <%_ } %>
 const localVue = createLocalVue();
@@ -38,8 +38,8 @@ describe('Account Service test suite', () => {
 
   it('should init service and do not retrieve account', async () => {
     axiosStub.get.resolves({ data: { 'display-ribbon-on-profiles': 'dev', activeProfiles : ['dev', 'test']}});
-    <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>const cookie = {get: jest.fn()};<%_ } %>
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>cookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+    <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>const cookie = {get: jest.fn()};<%_ } %>
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>cookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>null,<%_ } %> router);
 
     expect(store.getters.logon).toBe(false);
     expect(accountService.authenticated).toBe(false);
@@ -51,11 +51,11 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and retrieve profiles if already logged in before but no account found', async () => {
-    <%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
-    <%_ } %>
+<%_ } %>
     axiosStub.get.resolves({});
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>null,<%_ } %> router);
 
     expect((<any>router).history.current.fullPath).toBe('/');
     expect(store.getters.logon).toBe(false);
@@ -65,12 +65,12 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and retrieve profiles if already logged in before but exception occurred and should be logged out', async () => {
-    <%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
-    <%_ } %>
+<%_ } %>
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('api/account').rejects();
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>null,<%_ } %> router);
 
     expect((<any>router).history.current.fullPath).toBe('/');
     expect(accountService.authenticated).toBe(false);
@@ -79,15 +79,15 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and check for authority after retrieving account but getAccount failed', async () => {
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     const trackerService = new TrackerService(null);
     trackerService.connect = jest.fn();
-    <%_ } _%>
-    <%_ if (authenticationType == 'jwt') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
-    <%_ } %>
+<%_ } %>
     axiosStub.get.rejects();
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>trackerService,<%_ } %> router);
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>trackerService,<%_ } %> router);
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
       expect(value).toBe(false);
@@ -95,15 +95,15 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and check for authority after retrieving account', async () => {
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     const trackerService = new TrackerService(null);
     trackerService.connect = jest.fn();
-    <%_ } _%>
-    <%_ if (authenticationType == 'jwt') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
-    <%_ } %>
+<%_ } %>
     axiosStub.get.resolves({ data: { authorities: ['USER'] } });
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>trackerService,<%_ } %> router);
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>trackerService,<%_ } %> router);
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
       expect(value).toBe(true);
@@ -113,7 +113,7 @@ describe('Account Service test suite', () => {
   it('should init service as not authentified and not return any authorities admin and not retrieve account', async () => {
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('api/account').rejects();
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>null,<%_ } %> router);
 
     return accountService.hasAnyAuthorityAndCheckAuth('ADMIN').then((value: boolean) => {
       expect(value).toBe(false);
@@ -123,7 +123,7 @@ describe('Account Service test suite', () => {
   it('should init service as not authentified and return authority user', async () => {
     axiosStub.get.resolves({});
     axiosStub.get.withArgs('api/account').rejects();
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>mockedCookie,<%_ } %><%_ if (communicationSpringWebsocket) { _%>null,<%_ } %> router);
 
     return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
       expect(value).toBe(true);

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
+<%_ if (!readOnly) { _%>
                 "createLabel": "නව <%= entityClassHumanized %> එකක් සාදන්න",
-                "createOrEditLabel": "<%= entityClassHumanized %> සාදන්න හෝ සංස්කරණය කරන්න"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "<%= entityClassHumanized %> සඳහා සොයන්න"<% } %>,
-                "notFound": "<%= entityClassPluralHumanized %> හමු නොවීය"<% %>
-            },<% if (!microserviceAppName) { %>
+                "createOrEditLabel": "<%= entityClassHumanized %> සාදන්න හෝ සංස්කරණය කරන්න",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "<%= entityClassHumanized %> සඳහා සොයන්න",
+<%_ } _%>
+                "notFound": "<%= entityClassPluralHumanized %> හමු නොවීය"
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "{{ param }} හඳුනාගැනීමෙන් නව <%= entityClassHumanized %> සාදනු ලැබේ",
             "updated": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> යාවත්කාලීන වේ",
-            "deleted": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> මකා දමනු ලැබේ",<% } %>
+            "deleted": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> මකා දමනු ලැබේ",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "<%= entityClassHumanized %> {{ id }} මකා දැමීමට ඔබට විශ්වාසද?"
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "{{ param }} හඳුනාගැනීමෙන් නව <%= entityClassHumanized %> සාදනු ලැබේ",
             "updated": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> යාවත්කාලීන වේ",
             "deleted": "{{ param }} හඳුනාගැනීමෙන් <%= entityClassHumanized %> මකා දමනු ලැබේ"
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

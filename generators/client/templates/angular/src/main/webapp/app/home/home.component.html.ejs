@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,48 +17,48 @@
  limitations under the License.
 -%>
 <div class="row">
-    <div class="col-md-3">
-        <span class="hipster img-fluid rounded"></span>
+  <div class="col-md-3">
+    <span class="hipster img-fluid rounded"></span>
+  </div>
+
+  <div class="col-md-9">
+    <h1 class="display-4"><span <%= jhiPrefix %>Translate="home.title">Welcome, <%= backendName %> Hipster!</span> (<%= humanizedBaseName %>)</h1>
+
+    <p class="lead" <%= jhiPrefix %>Translate="home.subtitle">This is your homepage</p>
+
+    <div [ngSwitch]="account !== null">
+      <div class="alert alert-success" *ngSwitchCase="true">
+        <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
+          [translateValues]="{ username: account.login }">You are logged in as user "{{ account.login }}".</span>
+      </div>
+
+      <div class="alert alert-warning" *ngSwitchCase="false">
+        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix">If you want to </span>
+        <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link">sign in</a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
+      </div>
+      <%_ if (!skipUserManagement) { _%>
+
+      <div class="alert alert-warning" *ngSwitchCase="false">
+        <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">You don't have an account yet?</span>&nbsp;
+        <a class="alert-link" routerLink="account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">Register a new account</a>
+      </div>
+      <%_ } _%>
     </div>
 
-    <div class="col-md-9">
-        <h1 class="display-4" <%= jhiPrefix %>Translate="home.title">Welcome, <%= backendName %> Hipster!</h1>
+    <p <%= jhiPrefix %>Translate="home.question">
+      If you have any question on JHipster:
+    </p>
 
-        <p class="lead" <%= jhiPrefix %>Translate="home.subtitle">This is your homepage</p>
+    <ul>
+      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.homepage">JHipster homepage</a></li>
+      <li><a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.stackoverflow">JHipster on Stack Overflow</a></li>
+      <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.bugtracker">JHipster bug tracker</a></li>
+      <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.chat">JHipster public chat room</a></li>
+      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.follow">follow @jhipster on Twitter</a></li>
+    </ul>
 
-        <div [ngSwitch]="isAuthenticated()">
-            <div class="alert alert-success" *ngSwitchCase="true">
-                <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
-                    [translateValues]="{ username: account.login }">You are logged in as user "{{ account.login }}".</span>
-            </div>
-
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix">If you want to </span>
-                <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link">sign in</a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
-            </div>
-            <%_ if (!skipUserManagement) { _%>
-
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">You don't have an account yet?</span>&nbsp;
-                <a class="alert-link" routerLink="account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">Register a new account</a>
-            </div>
-            <%_ } _%>
-        </div>
-
-        <p <%= jhiPrefix %>Translate="home.question">
-            If you have any question on JHipster:
-        </p>
-
-        <ul>
-            <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.homepage">JHipster homepage</a></li>
-            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.stackoverflow">JHipster on Stack Overflow</a></li>
-            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.bugtracker">JHipster bug tracker</a></li>
-            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.chat">JHipster public chat room</a></li>
-            <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.link.follow">follow @jhipster on Twitter</a></li>
-        </ul>
-
-        <p>
-            <span <%= jhiPrefix %>Translate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.github">GitHub</a>!
-        </p>
-    </div>
+    <p>
+      <span <%= jhiPrefix %>Translate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" <%= jhiPrefix %>Translate="home.github">GitHub</a>!
+    </p>
+  </div>
 </div>

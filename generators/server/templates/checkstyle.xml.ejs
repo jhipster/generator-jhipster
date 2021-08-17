@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,9 +27,9 @@
     <property name="fileExtensions" value=""/>
     <!-- For detailed checkstyle configuration, see https://github.com/spring-io/nohttp/tree/master/nohttp-checkstyle -->
     <module name="io.spring.nohttp.checkstyle.check.NoHttpCheck">
-        <%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
         <property name="allowlist" value="^\Qhttp://maven.apache.org/POM/4.0.0&#10;^\Qhttp://www.w3.org/2001/XMLSchema-instance"/>
-        <%_ } _%>
+<%_ } _%>
     </module>
     <!-- Allow suppression with comments
        // CHECKSTYLE:OFF

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,13 +20,23 @@
   const idType = getTypescriptKeyType(user.primaryKey.type);
 _%>
 export interface IUser {
-  id: <%= idType %>;
-  login: string;
+  id?: <%= idType %>;
+  login?: string;
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    <%= field.fieldName %>?: string;
+<%_ } _%>
 }
 
 export class User implements IUser {
   constructor(
     public id: <%= idType %>,
     public login: string,
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    public <%= field.fieldName %>?: string,
+<%_ } _%>
   ) {}
+}
+
+export function getUserIdentifier(user: IUser): <%= idType %> | undefined {
+  return user.id;
 }

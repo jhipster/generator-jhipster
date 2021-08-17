@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,12 +18,12 @@
 -%>
 <%_
 const tsKeyId = generateTestEntityId(primaryKey.type);
+const testEntity = generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { <%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (fieldsContainBlob) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
@@ -34,9 +34,9 @@ describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Detail Component', () => {
         let comp: <%= entityAngularName %>DetailComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         let dataUtils: DataUtils;
-        <%_ } _%>
+<%_ } _%>
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -44,7 +44,7 @@ describe('Component Tests', () => {
                 providers: [
                     {
                         provide: ActivatedRoute,
-                        useValue: { data: of({ <%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>) }) }
+                        useValue: { data: of({ <%= entityInstance %>: <%- testEntity %> }) }
                     }
                 ]
             })
@@ -52,9 +52,10 @@ describe('Component Tests', () => {
             .compileComponents();
             fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
-            <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
             dataUtils = TestBed.inject(DataUtils);
-            <%_ } _%>
+            jest.spyOn(window, 'open').mockImplementation(() => null);
+<%_ } _%>
         });
 
         describe('OnInit', () => {
@@ -63,15 +64,15 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
+                expect(comp.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
             });
         });
 
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         describe('byteSize', () => {
             it('Should call byteSize from DataUtils', () => {
                 // GIVEN
-                spyOn(dataUtils, 'byteSize');
+                jest.spyOn(dataUtils, 'byteSize');
                 const fakeBase64 = 'fake base64';
 
                 // WHEN
@@ -84,8 +85,13 @@ describe('Component Tests', () => {
 
         describe('openFile', () => {
             it('Should call openFile from DataUtils', () => {
+                const newWindow = { ...window };
+                newWindow.document.write = jest.fn();
+                window.open = jest.fn(() => newWindow);
+                window.onload = jest.fn(() => newWindow);
+                window.URL.createObjectURL = jest.fn();
                 // GIVEN
-                spyOn(dataUtils, 'openFile');
+                jest.spyOn(dataUtils, 'openFile');
                 const fakeContentType = 'fake content type';
                 const fakeBase64 = 'fake base64';
 
@@ -96,6 +102,6 @@ describe('Component Tests', () => {
                 expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
             });
         });
-        <%_ } _%>
+<%_ } _%>
     });
 });

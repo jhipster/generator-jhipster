@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,22 +31,22 @@ const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-        <%_ if (pagination === 'pagination') { _%>
+<%_ if (paginationPagination) { _%>
         data: {
             defaultSort: 'id,asc',
         },
-        <%_ } _%>
+<%_ } _%>
         canActivate: [UserRouteAccessService]
     },
     {
-        path: ':id/view',
+        path: ':<%= primaryKey.name %>/view',
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
         canActivate: [UserRouteAccessService]
     },
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     {
         path: 'new',
         component: <%= entityAngularName %>UpdateComponent,
@@ -56,14 +56,14 @@ const <%= entityInstance %>Route: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: ':id/edit',
+        path: ':<%= primaryKey.name %>/edit',
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>RoutingResolveService
         },
         canActivate: [UserRouteAccessService]
     },
-    <%_ } _%>
+<%_ } _%>
 ];
 
 @NgModule({

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,66 +26,64 @@ const JSONReader = require('../../../jdl/readers/json-reader');
 const { SKIP_CLIENT, SKIP_SERVER } = require('../../../jdl/jhipster/unary-options');
 
 describe('JSONReader', () => {
-    describe('parseFromDir', () => {
-        context('when passing invalid parameters', () => {
-            context('such as nil', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONReader.parseFromDir(null);
-                    }).to.throw(/^The app directory must be passed to read JSON files\.$/);
-                });
-            });
-            context('such as a file', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONReader.parseFromDir('../../test-files/invalid_file.txt');
-                    }).to.throw(
-                        new RegExp(
-                            "The passed directory '../../test-files/invalid_file.txt' must exist and must be a directory to read JSON files."
-                        )
-                    );
-                });
-            });
-            context('such as a dir that does not exist', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONReader.parseFromDir('nodir');
-                    }).to.throw(new RegExp("The passed directory 'nodir' must exist and must be a directory to read JSON files."));
-                });
-            });
+  describe('parseFromDir', () => {
+    context('when passing invalid parameters', () => {
+      context('such as nil', () => {
+        it('should fail', () => {
+          expect(() => {
+            JSONReader.parseFromDir(null);
+          }).to.throw(/^The app directory must be passed to read JSON files\.$/);
         });
-        context('when passing valid arguments', () => {
-            context('when reading a jhipster app dir', () => {
-                let content;
-
-                before(() => {
-                    renameSync(
-                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
-                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
-                    );
-                    content = JSONReader.parseFromDir(join(__dirname, '..', 'test-files', 'jhipster_app'));
-                });
-                after(() => {
-                    renameSync(
-                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
-                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
-                    );
-                });
-
-                it('should read it', () => {
-                    expect(content.entities.Country).not.to.be.undefined;
-                    expect(content.entities.Department).not.to.be.undefined;
-                    expect(content.entities.Employee).not.to.be.undefined;
-                    expect(content.entities.Job).not.to.be.undefined;
-                    expect(content.entities.JobHistory).not.to.be.undefined;
-                    expect(content.entities.Region).not.to.be.undefined;
-                    expect(content.entities.Task).not.to.be.undefined;
-                    expect(content.entities.NoEntity).to.be.undefined;
-                    expect(content.entities.BadEntity).to.be.undefined;
-                    expect(content.getOptions().filter(o => o.name === SKIP_CLIENT).length).eq(1);
-                    expect(content.getOptions().filter(o => o.name === SKIP_SERVER).length).eq(1);
-                });
-            });
+      });
+      context('such as a file', () => {
+        it('should fail', () => {
+          expect(() => {
+            JSONReader.parseFromDir('../../test-files/invalid_file.txt');
+          }).to.throw(
+            new RegExp("The passed directory '../../test-files/invalid_file.txt' must exist and must be a directory to read JSON files.")
+          );
         });
+      });
+      context('such as a dir that does not exist', () => {
+        it('should fail', () => {
+          expect(() => {
+            JSONReader.parseFromDir('nodir');
+          }).to.throw(new RegExp("The passed directory 'nodir' must exist and must be a directory to read JSON files."));
+        });
+      });
     });
+    context('when passing valid arguments', () => {
+      context('when reading a jhipster app dir', () => {
+        let content;
+
+        before(() => {
+          renameSync(
+            join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
+            join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
+          );
+          content = JSONReader.parseFromDir(join(__dirname, '..', 'test-files', 'jhipster_app'));
+        });
+        after(() => {
+          renameSync(
+            join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
+            join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
+          );
+        });
+
+        it('should read it', () => {
+          expect(content.entities.Country).not.to.be.undefined;
+          expect(content.entities.Department).not.to.be.undefined;
+          expect(content.entities.Employee).not.to.be.undefined;
+          expect(content.entities.Job).not.to.be.undefined;
+          expect(content.entities.JobHistory).not.to.be.undefined;
+          expect(content.entities.Region).not.to.be.undefined;
+          expect(content.entities.Task).not.to.be.undefined;
+          expect(content.entities.NoEntity).to.be.undefined;
+          expect(content.entities.BadEntity).to.be.undefined;
+          expect(content.getOptions().filter(o => o.name === SKIP_CLIENT).length).eq(1);
+          expect(content.getOptions().filter(o => o.name === SKIP_SERVER).length).eq(1);
+        });
+      });
+    });
+  });
 });

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -94,24 +94,24 @@ objects:
               - |
                   while true
                   do
-                  <%_ if (app.prodDatabaseType === 'mysql') { _%>
+<%_ if (app.prodDatabaseTypeMysql) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
-                  <%_ } _%>
-                  <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMariadb) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
-                  <%_ } _%>
-                  <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypePostgres) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
-                  <%_ } _%>
-                  <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMongodb) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
-                  <%_ } _%>
-                  <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (app.databaseTypeCassandra) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
-                  <%_ } _%>
-                  <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
                     rt=$(nc -z -w 1 ${APPLICATION_NAME}-couchbase 8091)
-                  <%_ } _%>
+<%_ } _%>
                     if [ $? -eq 0 ]; then
                       echo "DB is UP"
                       break
@@ -126,11 +126,11 @@ objects:
             env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod,api-docs
-            <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+<%_ if (!serviceDiscoveryType) { _%>
             - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
               value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
-            <%_ } _%>
-            <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
             - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
@@ -140,22 +140,22 @@ objects:
                 secretKeyRef:
                   name: ${REG_SECRET_REF}
                   key: registry-admin-password
-            <%_ } _%>
-            <%_ if (app.serviceDiscoveryType === 'consul') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
             - name: SPRING_CLOUD_CONSUL_HOST
               value: ${APPLICATION_NAME}-consul
             - name: SPRING_CLOUD_CONSUL_PORT
               value: 8500
-            <%_ } _%>
-            <%_ if (['mysql', 'mariadb', 'postgresql'].includes(app.prodDatabaseType)) { _%>
+<%_ } _%>
+<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgres) { _%>
             - name: SPRING_DATASOURCE_URL
-              <%_ if (app.prodDatabaseType === 'mysql') { _%>
+  <%_ if (app.prodDatabaseTypeMysql) { _%>
               value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: app.baseName.toLowerCase() }) %>
-              <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
+  <%_ } else if (app.prodDatabaseTypeMariadb) { _%>
               value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}`, databaseName: app.baseName.toLowerCase() }) %>
-              <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+  <%_ } else if (app.prodDatabaseTypePostgres) { _%>
               value: <%- getJDBCUrl(app.prodDatabaseType, { hostname: '${APPLICATION_NAME}'+`-${app.prodDatabaseType}db`, databaseName: '${APPLICATION_NAME}' }) %>
-              <%_ } _%>
+  <%_ } _%>
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -166,10 +166,10 @@ objects:
                 secretKeyRef:
                   name: ${SECRET_REF}
                   key: database-password
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (app.databaseTypeMongodb) { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://${APPLICATION_NAME}-mongodb<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+              value: mongodb://${APPLICATION_NAME}-mongodb<% if (app.reactive) { %>/?waitQueueMultiple=1000<% } %>
             - name: SPRING_DATA_MONGODB_DATABASE
               value: ${APPLICATION_NAME}
             - name: SPRING_DATASOURCE_USERNAME
@@ -182,22 +182,22 @@ objects:
                 secretKeyRef:
                   name: ${SECRET_REF}
                   key: database-password
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (app.databaseTypeCassandra) { _%>
             - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
               value: ${APPLICATION_NAME}-cassandra
-            <%_ } _%>
-            <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (app.databaseTypeCouchbase) { _%>
             - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
               value: ${APPLICATION_NAME}-couchbase
             - name: SPRING_COUCHBASE_BUCKET_NAME
               value: ${APPLICATION_NAME}
-            <%_ } _%>
-            <%_ if (app.searchEngine === 'elasticsearch') { _%>
+<%_ } _%>
+<%_ if (app.searchEngineElasticsearch) { _%>
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://${APPLICATION_NAME}-elasticsearch:9200
-            <%_ } _%>
-            <%_ if (app.messageBroker === 'kafka') { _%>
+<%_ } _%>
+<%_ if (app.messageBrokerKafka) { _%>
             - name: KAFKA_CONSUMER_KEY_DESERIALIZER
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
             - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
@@ -214,11 +214,11 @@ objects:
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
             - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
               value: 'org.apache.kafka.common.serialization.StringDeserializer'
-            <%_ } _%>
-            <%_ if (monitoring === 'prometheus') { _%>
+<%_ } _%>
+<%_ if (monitoringPrometheus) { _%>
             - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
               value: "true"
-            <%_ } _%>
+<%_ } _%>
             ports:
             - name: http
               containerPort: ${{APP_PORT}}
@@ -228,11 +228,11 @@ objects:
     metadata:
       annotations:
         service.alpha.openshift.io/dependencies: '[{
-          "name": <%_ if (app.prodDatabaseType === 'mysql') { _%>"${APPLICATION_NAME}-mysqldb"<%_ } _%>
-          <%_ if (app.prodDatabaseType === 'mariadb') { _%>"${APPLICATION_NAME}-mariadb"<%_ } _%>
-          <%_ if (app.prodDatabaseType === 'postgresql') { _%>"${APPLICATION_NAME}-postgresqldb"<%_ } _%>
-          <%_ if (app.prodDatabaseType === 'mongodb') { _%>"${APPLICATION_NAME}-mongodb"<%_ } _%>
-          <%_ if (app.prodDatabaseType === 'cassandra') { _%>"${APPLICATION_NAME}-cassandra" <%_ } _%>, "namespace": "", "kind": "Service"}]'
+          "name": <%_ if (app.prodDatabaseTypeMysql) { _%>"${APPLICATION_NAME}-mysqldb"<%_ } _%>
+          <%_ if (app.prodDatabaseTypeMariadb) { _%>"${APPLICATION_NAME}-mariadb"<%_ } _%>
+          <%_ if (app.prodDatabaseTypePostgres) { _%>"${APPLICATION_NAME}-postgresqldb"<%_ } _%>
+          <%_ if (app.databaseTypeMongodb) { _%>"${APPLICATION_NAME}-mongodb"<%_ } _%>
+          <%_ if (app.databaseTypeCassandra) { _%>"${APPLICATION_NAME}-cassandra" <%_ } _%>, "namespace": "", "kind": "Service"}]'
       labels:
         app: ${APPLICATION_NAME}
       name: ${APPLICATION_NAME}
@@ -242,12 +242,12 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-      <%_ if (!app.serviceDiscoveryType || app.applicationType === 'uaa') { _%>
+<%_ if (!app.serviceDiscoveryType) { _%>
         port: 80
         targetPort: ${{APP_PORT}}
-      <%_ } else { _%>
+<%_ } else { _%>
         port: ${{APP_PORT}}
-      <%_ } _%>
+<%_ } _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route

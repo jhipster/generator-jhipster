@@ -3,135 +3,139 @@ const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ServerGenerator = require('../../generators/server');
 const EnvironmentBuilder = require('../../cli/environment-builder');
+const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-        if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
-        }
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
+    if (!jhContext) {
+      this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
     }
+  }
 
-    get initializing() {
-        return super._initializing();
-    }
+  get initializing() {
+    return super._initializing();
+  }
 
-    get prompting() {
-        return super._prompting();
-    }
+  get prompting() {
+    return super._prompting();
+  }
 
-    get configuring() {
-        return super._configuring();
-    }
+  get configuring() {
+    return super._configuring();
+  }
 
-    get default() {
-        return super._default();
-    }
+  get default() {
+    return super._default();
+  }
 
-    get writing() {
-        const phaseFromJHipster = super._writing();
-        const customPhaseSteps = {
-            addDummyMavenProperty() {
-                this.addMavenProperty('dummy-blueprint-property', 'foo');
-            },
-        };
-        return { ...phaseFromJHipster, ...customPhaseSteps };
-    }
+  get writing() {
+    const phaseFromJHipster = super._writing();
+    const customPhaseSteps = {
+      addDummyMavenProperty() {
+        this.addMavenProperty('dummy-blueprint-property', 'foo');
+      },
+    };
+    return { ...phaseFromJHipster, ...customPhaseSteps };
+  }
 
-    get install() {
-        return super._install();
-    }
+  get install() {
+    return super._install();
+  }
 
-    get end() {
-        return super._end();
-    }
+  get end() {
+    return super._end();
+  }
 };
 
 describe('JHipster server generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
+  const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate server with blueprint option '${blueprintName}'`, () => {
-            before(() => {
-                return helpers
-                    .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
-                    .withOptions({
-                        fromCli: true,
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true,
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        packageName: 'com.mycompany.myapp',
-                        packageFolder: 'com/mycompany/myapp',
-                        serviceDiscoveryType: false,
-                        authenticationType: 'jwt',
-                        cacheProvider: 'ehcache',
-                        enableHibernateCache: true,
-                        databaseType: 'sql',
-                        devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['fr'],
-                        buildTool: 'maven',
-                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: [],
-                    })
-                    .run();
-            });
+  blueprintNames.forEach(blueprintName => {
+    describe(`generate server with blueprint option '${blueprintName}'`, () => {
+      before(() => {
+        return helpers
+          .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
+          .withOptions({
+            fromCli: true,
+            skipInstall: true,
+            blueprint: blueprintName,
+            skipChecks: true,
+          })
+          .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
+          .withPrompts({
+            baseName: 'jhipster',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            serviceDiscoveryType: false,
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
+            enableHibernateCache: true,
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: MYSQL,
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['fr'],
+            buildTool: MAVEN,
+            rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+            serverSideOptions: [],
+          })
+          .run();
+      });
 
-            it('creates expected files from jhipster server generator', () => {
-                assert.file(expectedFiles.server);
-                assert.file(expectedFiles.jwtServer);
-                assert.file(expectedFiles.maven);
-                assert.file(expectedFiles.mysql);
-                assert.file(expectedFiles.hibernateTimeZoneConfig);
-            });
+      it('creates expected files from jhipster server generator', () => {
+        assert.file(expectedFiles.server);
+        assert.file(expectedFiles.jwtServer);
+        assert.file(expectedFiles.maven);
+        assert.file(expectedFiles.mysql);
+        assert.file(expectedFiles.hibernateTimeZoneConfig);
+      });
 
-            it('contains the specific change added by the blueprint', () => {
-                assert.fileContent('pom.xml', /dummy-blueprint-property/);
-            });
-        });
+      it('contains the specific change added by the blueprint', () => {
+        assert.fileContent('pom.xml', /dummy-blueprint-property/);
+      });
+    });
+  });
+
+  describe('generate server with dummy blueprint overriding everything', () => {
+    before(() => {
+      return helpers
+        .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
+        .withOptions({
+          fromCli: true,
+          skipInstall: true,
+          blueprint: 'myblueprint',
+          skipChecks: true,
+        })
+        .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:server']])
+        .withPrompts({
+          baseName: 'jhipster',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          serviceDiscoveryType: false,
+          authenticationType: JWT,
+          cacheProvider: EHCACHE,
+          enableHibernateCache: true,
+          databaseType: SQL,
+          devDatabaseType: H2_MEMORY,
+          prodDatabaseType: MYSQL,
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr'],
+          buildTool: MAVEN,
+          rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+          serverSideOptions: [],
+        })
+        .run();
     });
 
-    describe('generate server with dummy blueprint overriding everything', () => {
-        before(() => {
-            return helpers
-                .create('jhipster:server', {}, { createEnv: EnvironmentBuilder.createEnv })
-                .withOptions({
-                    fromCli: true,
-                    skipInstall: true,
-                    blueprint: 'myblueprint',
-                    skipChecks: true,
-                })
-                .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:server']])
-                .withPrompts({
-                    baseName: 'jhipster',
-                    packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
-                    enableHibernateCache: true,
-                    databaseType: 'sql',
-                    devDatabaseType: 'h2Memory',
-                    prodDatabaseType: 'mysql',
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['fr'],
-                    buildTool: 'maven',
-                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: [],
-                })
-                .run();
-        });
-
-        it("doesn't create any expected files from jhipster server generator", () => {
-            assert.noFile(expectedFiles.server);
-        });
+    it("doesn't create any expected files from jhipster server generator", () => {
+      assert.noFile(expectedFiles.server);
     });
+  });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,15 +18,15 @@
  */
 
 const Options = {
-    JPA_DERIVED_IDENTIFIER: 'jpaDerivedIdentifier',
+  JPA_DERIVED_IDENTIFIER: 'jpaDerivedIdentifier',
 };
 
 function exists(option) {
-    return Object.values(Options).includes(option);
+  return Object.values(Options).includes(option);
 }
 
 module.exports = {
-    ...Options,
-    exists,
-    doesRelationshipOptionExist: exists,
+  ...Options,
+  exists,
+  doesRelationshipOptionExist: exists,
 };

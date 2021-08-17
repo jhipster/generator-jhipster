@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,9 +32,9 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
     constructor(
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         protected dataUtils: DataUtils,
-        <%_ } _%>
+<%_ } _%>
         protected activatedRoute: ActivatedRoute
     ) {}
 
@@ -44,7 +44,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
         });
     }
 
-    <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
     }
@@ -52,7 +52,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     openFile(base64String: string, contentType: string | null | undefined): void {
         this.dataUtils.openFile(base64String, contentType);
     }
-    <%_ } _%>
+<%_ } _%>
 
     previousState(): void {
         window.history.back();

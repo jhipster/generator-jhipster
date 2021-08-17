@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
+<%_ if (!readOnly) { _%>
                 "createLabel": "Створити новий <%= entityClassHumanized %>",
-                "createOrEditLabel": "Створити чи редагувати <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
-                "search": "Знайти <%= entityClassHumanized %>"<% } %>,
+                "createOrEditLabel": "Створити чи редагувати <%= entityClassHumanized %>",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "Знайти <%= entityClassHumanized %>",
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
-            },<% if (!microserviceAppName) { %>
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Новий <%= entityClassHumanized %> створений з ідентифікатором {{ param }}",
             "updated": "<%= entityClassHumanized %> оновлений з ідентифікатором {{ param }}",
-            "deleted": "<%= entityClassHumanized %> видалений з ідентифікатором {{ param }}",<% } %>
+            "deleted": "<%= entityClassHumanized %> видалений з ідентифікатором {{ param }}",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Ви впевнені, що хочете видалити <%= entityClassHumanized %> {{ id }}?"
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "Новий <%= entityClassHumanized %> створений з ідентифікатором {{ param }}",
             "updated": "<%= entityClassHumanized %> оновлений з ідентифікатором {{ param }}",
             "deleted": "<%= entityClassHumanized %> видалений з ідентифікатором {{ param }}"
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

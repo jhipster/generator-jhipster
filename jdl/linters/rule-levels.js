@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,10 +18,10 @@
  */
 
 module.exports = {
-    /** To inform of a better way to do things. */
-    INFO: { name: 'info', priority: 0 },
-    /** To warn there's something that can be improved (readability, etc.) */
-    WARNING: { name: 'warning', priority: 1 },
-    /** To tell there's a problem in the JDL (syntax error). */
-    ERROR: { name: 'error', priority: 2 },
+  /** To inform of a better way to do things. */
+  INFO: { name: 'info', priority: 0 },
+  /** To warn there's something that can be improved (readability, etc.) */
+  WARNING: { name: 'warning', priority: 1 },
+  /** To tell there's a problem in the JDL (syntax error). */
+  ERROR: { name: 'error', priority: 2 },
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,43 +20,43 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const {
-    isSql,
-    CASSANDRA,
-    COUCHBASE,
-    MARIADB,
-    MONGODB,
-    MSSQL,
-    MYSQL,
-    NO,
-    ORACLE,
-    POSTGRESQL,
-    SQL,
+  isSql,
+  CASSANDRA,
+  COUCHBASE,
+  MARIADB,
+  MONGODB,
+  MSSQL,
+  MYSQL,
+  NO,
+  ORACLE,
+  POSTGRESQL,
+  SQL,
 } = require('../../../jdl/jhipster/database-types');
 
 describe('DatabaseTypes', () => {
-    describe('isSql', () => {
-        context('when not passing anything', () => {
-            it('should return false', () => {
-                expect(isSql()).to.be.false;
-            });
-        });
-        context('when passing a SQL database type', () => {
-            [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL].forEach(databaseType => {
-                context(`such as ${databaseType}`, () => {
-                    it('should return true', () => {
-                        expect(isSql(databaseType)).to.be.true;
-                    });
-                });
-            });
-        });
-        context('when not passing a SQL database type', () => {
-            [MONGODB, CASSANDRA, COUCHBASE, NO].forEach(databaseType => {
-                context(`such as ${databaseType}`, () => {
-                    it('should return false', () => {
-                        expect(isSql(databaseType)).to.be.false;
-                    });
-                });
-            });
-        });
+  describe('isSql', () => {
+    context('when not passing anything', () => {
+      it('should return false', () => {
+        expect(isSql()).to.be.false;
+      });
     });
+    context('when passing a SQL database type', () => {
+      [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL].forEach(databaseType => {
+        context(`such as ${databaseType}`, () => {
+          it('should return true', () => {
+            expect(isSql(databaseType)).to.be.true;
+          });
+        });
+      });
+    });
+    context('when not passing a SQL database type', () => {
+      [MONGODB, CASSANDRA, COUCHBASE, NO].forEach(databaseType => {
+        context(`such as ${databaseType}`, () => {
+          it('should return false', () => {
+            expect(isSql(databaseType)).to.be.false;
+          });
+        });
+      });
+    });
+  });
 });

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,10 +20,10 @@
 const _ = require('lodash');
 
 const RelationshipTypes = {
-    ONE_TO_ONE: 'OneToOne',
-    ONE_TO_MANY: 'OneToMany',
-    MANY_TO_ONE: 'ManyToOne',
-    MANY_TO_MANY: 'ManyToMany',
+  ONE_TO_ONE: 'OneToOne',
+  ONE_TO_MANY: 'OneToMany',
+  MANY_TO_ONE: 'ManyToOne',
+  MANY_TO_MANY: 'ManyToMany',
 };
 
 RelationshipTypes.exists = relationship => Object.values(RelationshipTypes).includes(_.upperFirst(_.camelCase(relationship)));

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,29 +18,7 @@
 -%>
 package <%= packageName %>.client;
 
-<%_ if (authenticationType === 'uaa') { _%>
-import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
-
-import feign.RequestInterceptor;
-import tech.jhipster.security.uaa.LoadBalancedResourceDetails;
-
-public class OAuth2InterceptedFeignConfiguration {
-
-    private final LoadBalancedResourceDetails loadBalancedResourceDetails;
-
-    public OAuth2InterceptedFeignConfiguration(LoadBalancedResourceDetails loadBalancedResourceDetails) {
-        this.loadBalancedResourceDetails = loadBalancedResourceDetails;
-    }
-
-    @Bean(name = "oauth2RequestInterceptor")
-    public RequestInterceptor getOAuth2RequestInterceptor() {
-        return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), loadBalancedResourceDetails);
-    }
-}
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.context.annotation.Bean;
 
 import feign.RequestInterceptor;

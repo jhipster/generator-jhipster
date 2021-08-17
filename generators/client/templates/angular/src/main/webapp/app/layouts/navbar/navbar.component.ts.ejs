@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,6 +27,7 @@ import { VERSION } from 'app/app.constants';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
+import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
@@ -39,23 +40,26 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 export class NavbarComponent implements OnInit {
   inProduction?: boolean;
   isNavbarCollapsed = true;
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
-  <%_ } _%>
+<%_ } _%>
   openAPIEnabled?: boolean;
-  version: string;
+  version = '';
+  account: Account | null = null;
 
   constructor(
     private loginService: LoginService,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    private sessionStorage: SessionStorageService,
-    <%_ } _%>
+    private sessionStorageService: SessionStorageService,
+<%_ } _%>
     private accountService: AccountService,
     private profileService: ProfileService,
     private router: Router
   ) {
-    this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
+    if (VERSION) {
+      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
+    }
   }
 
   ngOnInit(): void {
@@ -63,29 +67,26 @@ export class NavbarComponent implements OnInit {
       this.inProduction = profileInfo.inProduction;
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
+    this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
   }
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   changeLanguage(languageKey: string): void {
-    this.sessionStorage.store('locale', languageKey);
+    this.sessionStorageService.store('locale', languageKey);
     this.translateService.use(languageKey);
   }
-  <%_ } _%>
+<%_ } _%>
 
   collapseNavbar(): void {
     this.isNavbarCollapsed = true;
   }
 
-  isAuthenticated(): boolean {
-    return this.accountService.isAuthenticated();
-  }
-
   login(): void {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     this.router.navigate(['/login']);
-    <%_ } else { _%>
+<%_ } else { _%>
     this.loginService.login();
-    <%_ } _%>
+<%_ } _%>
   }
 
   logout(): void {
@@ -96,9 +97,5 @@ export class NavbarComponent implements OnInit {
 
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
-  }
-
-  getImageUrl(): string {
-    return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
   }
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,297 +32,280 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 eureka:
-    client:
-        enabled: true
-        healthcheck:
-            enabled: true
-        fetch-registry: true
-        register-with-eureka: true
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
-    instance:
-        appname: <%= baseName.toLowerCase() %>
-        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
-        lease-renewal-interval-in-seconds: 5
-        lease-expiration-duration-in-seconds: 10
-        status-page-url-path: ${management.endpoints.web.base-path}/info
-        health-check-url-path: ${management.endpoints.web.base-path}/health
-        metadata-map:
-            zone: primary # This is needed for the load balancer
-            profile: ${spring.profiles.active}
-            version: #project.version#
-            git-version: ${git.commit.id.describe:}
-            git-commit: ${git.commit.id.abbrev:}
-            git-branch: ${git.branch:}
-ribbon:
-    eureka:
-        enabled: true
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+  instance:
+    appname: <%= baseName.toLowerCase() %>
+    instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    metadata-map:
+      zone: primary # This is needed for the load balancer
+      profile: ${spring.profiles.active}
+      version: #project.version#
+      git-version: ${git.commit.id.describe:}
+      git-commit: ${git.commit.id.abbrev:}
+      git-branch: ${git.branch:}
+      context-path: ${server.servlet.context-path:}
 <%_ } _%>
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
-zuul: # those values must be configured depending on the application specific needs
-    sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
-    host:
-        max-total-connections: 1000
-        max-per-route-connections: 100
-    prefix: /services
-    semaphore:
-        max-semaphores: 500
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
-    ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
-    <%_ } _%>
-<%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
-    command:
-        default:
-            execution:
-                isolation:
-                    thread:
-                        timeoutInMilliseconds: 10000
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
 
 <%_ } _%>
-<%_ if (applicationType === 'microservice') { _%>
+<%_ if (applicationTypeMicroservice) { _%>
 feign:
-    hystrix:
-        enabled: true
-    # client:
-    #     config:
-    #         default:
-    #             connectTimeout: 5000
-    #             readTimeout: 5000
+  hystrix:
+    enabled: true
+  # client:
+  #   config:
+  #     default:
+  #       connectTimeout: 5000
+  #       readTimeout: 5000
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
-    command:
-        default:
-            execution:
-                isolation:
-                    strategy: SEMAPHORE
-                    # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-                    # thread:
-                    #     timeoutInMilliseconds: 10000
-    shareSecurityContext: true
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
+          # thread:
+          #   timeoutInMilliseconds: 10000
+  shareSecurityContext: true
 
 <%_ } _%>
 management:
-    endpoints:
-        web:
-            base-path: /management
-            exposure:
-                include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
-    endpoint:
-        health:
-            show-details: when_authorized
-            roles: "ROLE_ADMIN"
-        jhimetrics:
-            enabled: true
-    info:
-        git:
-            mode: full
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ["configprops", "env", <% if (applicationTypeGateway && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable) { %>, "caches"<% } %><% if (databaseTypeSql) { %>, "liquibase"<% } %>]
+  endpoint:
     health:
-        group:
-            liveness:
-                include: livenessState
-            readiness:
-                include: readinessState<% if (databaseType === 'sql') { %>,datasource<% } %>
-        probes:
+      show-details: when_authorized
+      roles: "ROLE_ADMIN"
+      probes:
+        enabled: true
+    jhimetrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+  health:
+    group:
+      liveness:
+        include: livenessState
+      readiness:
+        include: readinessState<% if (databaseTypeSql) { %>,db<% } %>
+    mail:
+      enabled: false # When using the MailService, configure an SMTP server and set this to true
+  metrics:
+    export:
+      # Prometheus is the default metrics backend
+      prometheus:
+        enabled: true
+        step: 60
+    enable:
+      http: true
+      jvm: true
+      logback: true
+      process: true
+      system: true
+    distribution:
+      percentiles-histogram:
+        all: true
+      percentiles:
+        all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+    tags:
+      application: ${spring.application.name}
+    web:
+      server:
+        request:
+          autotime:
             enabled: true
-        mail:
-            enabled: false # When using the MailService, configure an SMTP server and set this to true
-    metrics:
-        export:
-            # Prometheus is the default metrics backend
-            prometheus:
-                enabled: true
-                step: 60
-        enable:
-            http: true
-            jvm: true
-            logback: true
-            process: true
-            system: true
-        distribution:
-            percentiles-histogram:
-                all: true
-            percentiles:
-                all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
-        tags:
-            application: ${spring.application.name}
-        web:
-            server:
-                request:
-                    autotime:
-                        enabled: true
 
+<%_ if (databaseTypeMongodb) { _%>
+mongock:
+  change-logs-scan-package:
+    - <%= packageName %>.config.dbmigrations
+
+<%_ } _%>
 spring:
-    <%_ if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
-    autoconfigure:
-        exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
-    <%_ } _%>
-    application:
-        name: <%= baseName %>
-    <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
-    cloud:
-        <%_ if (serviceDiscoveryType === 'consul') { _%>
-        consul:
-            discovery:
-                healthCheckPath: /management/health
-                instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
-                service-name: <%= baseName.toLowerCase() %>
-            config:
-                watch:
-                    enabled: false
-        <%_ } _%>
-        <%_ if (applicationType === 'gateway' && reactive) { _%>
-        gateway:
-            default-filters:
-                - <% if (authenticationType === 'jwt') { %>JWTRelay<% } else { %>TokenRelay<% } %>
-            discovery:
-                locator:
-                    enabled: true
-                    lower-case-service-id: true
-                    predicates:
-                        - name: Path
-                          args:
-                              pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
-                    filters:
-                        - name: RewritePath
-                          args:
-                              regexp: "'/services/' + serviceId.toLowerCase() + '/(?<remaining>.*)'"
-                              replacement: "'/${remaining}'"
-            httpclient:
-                pool:
-                    max-connections: 1000
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (!serviceDiscoveryType) { _%>
-    profiles:
-        # The commented value for `active` can be replaced with valid Spring profiles to load.
-        # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
-        # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
-        active: #spring.profiles.active#
-    <%_ } _%>
-    jmx:
-        enabled: false
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    data:
-        jpa:
-            repositories:
-                bootstrap-mode: deferred
+<%_ if (databaseTypeSql && messageBrokerKafka) { _%>
+  autoconfigure:
+    exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
+<%_ } _%>
+  application:
+    name: <%= baseName %>
+<%_ if (serviceDiscoveryConsul || (applicationTypeGateway && reactive)) { _%>
+  cloud:
+  <%_ if (serviceDiscoveryConsul) { _%>
+    consul:
+      discovery:
+        healthCheckPath: /management/health
+        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+        service-name: <%= baseName.toLowerCase() %>
+      config:
+        watch:
+          enabled: false
+  <%_ } _%>
+  <%_ if (applicationTypeGateway && reactive) { _%>
+    gateway:
+      default-filters:
+        - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          predicates:
+            - name: Path
+              args:
+                pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
+          filters:
+            - name: RewritePath
+              args:
+                regexp: "'/services/' + serviceId.toLowerCase() + '/(?<remaining>.*)'"
+                replacement: "'/${remaining}'"
+      httpclient:
+        pool:
+          max-connections: 1000
+  <%_ } _%>
+<%_ } _%>
+  profiles:
+    # The commented value for `active` can be replaced with valid Spring profiles to load.
+    # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
+    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+    active: #spring.profiles.active#
+    group:
+      dev:
+        - dev
+        - api-docs
+        # Uncomment to activate TLS for the dev profile
+        #- tls
+  jmx:
+    enabled: false
+<%_ if (databaseTypeSql && !reactive) { _%>
+  data:
     jpa:
-        open-in-view: false
-        properties:
-            hibernate.jdbc.time_zone: UTC
-            hibernate.id.new_generator_mappings: true
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
-            # modify batch size as necessary
-            hibernate.jdbc.batch_size: 25
-            hibernate.order_inserts: true
-            hibernate.order_updates: true
-            <%_ if (prodDatabaseType === 'mssql' || prodDatabaseType === 'oracle') { _%>
-            # modify fetch size as necessary
-            hibernate.jdbc.fetch_size: 150
-            hibernate.criteria.literal_handling_mode: BIND
-            <%_ } _%>
-            hibernate.query.fail_on_pagination_over_collection_fetch: true
-            hibernate.query.in_clause_parameter_padding: true
-            <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.instance_name: <%= baseName %>
-            hibernate.cache.hazelcast.use_lite_member: true
-                <%_ } else if (cacheProvider === 'infinispan') { _%>
-            hibernate.cache.infinispan.statistics: false
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.memory.size: 1000
-            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
-                <%_ } _%>
-            <%_ } _%>
-        hibernate:
-            ddl-auto: none
-            naming:
-                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+      repositories:
+        bootstrap-mode: deferred
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      # modify batch size as necessary
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+  <%_ if (prodDatabaseTypeMssql || prodDatabaseTypeOracle) { _%>
+      # modify fetch size as necessary
+      hibernate.jdbc.fetch_size: 150
+      hibernate.criteria.literal_handling_mode: BIND
+  <%_ } _%>
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+  <%_ if (enableHibernateCache) { _%>
+    <%_ if (cacheProviderHazelcast) { _%>
+      hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+      hibernate.cache.use_minimal_puts: true
+      hibernate.cache.hazelcast.instance_name: <%= baseName %>
+      hibernate.cache.hazelcast.use_lite_member: true
+    <%_ } else if (cacheProviderInfinispan) { _%>
+      hibernate.cache.infinispan.statistics: false
+      hibernate.cache.use_minimal_puts: true
+      hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
+      hibernate.cache.infinispan.entity.memory.size: 1000
+      hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
     <%_ } _%>
-    messages:
-        basename: i18n/messages
-    main:
-        allow-bean-definition-overriding: true
-    <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
-    security:
-        user:
-            name: admin
-            password: admin
-            roles:
-                - ADMIN
-                - USER
-    <%_ } _%>
-    task:
-        execution:
-            thread-name-prefix: <%= dasherizedBaseName %>-task-
-            pool:
-                core-size: 2
-                max-size: 50
-                queue-capacity: 10000
-        scheduling:
-            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
-            pool:
-                size: 2
-    thymeleaf:
-        mode: HTML
-    output:
-        ansi:
-          console-available: true
-<%_ if (authenticationType === 'oauth2') { _%>
-    security:
-        oauth2:
-            client:
-                provider:
-                    oidc:
-                        issuer-uri: http://localhost:9080/auth/realms/jhipster
-                registration:
-                    oidc:
-                    <%_ if (applicationType === 'microservice') { _%>
-                        client-id: internal
-                        client-secret: internal
-                    <%_ } else { _%>
-                        client-id: web_app
-                        client-secret: web_app
-                    <%_ } _%>
-<%_ } else if (authenticationType === 'uaa') { _%>
-security:
+  <%_ } _%>
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+<%_ } _%>
+  messages:
+    basename: i18n/messages
+  main:
+    allow-bean-definition-overriding: true
+<%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
+  security:
+    user:
+      name: admin
+      password: admin
+      roles:
+        - ADMIN
+        - USER
+<%_ } _%>
+  task:
+    execution:
+      thread-name-prefix: <%= dasherizedBaseName %>-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+      pool:
+        size: 2
+  thymeleaf:
+    mode: HTML
+  output:
+    ansi:
+      console-available: true
+<%_ if (authenticationTypeOauth2) { _%>
+  security:
     oauth2:
-        client:
-            access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
-            user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://localhost:9080/auth/realms/jhipster
+        registration:
+          oidc:
+  <%_ if (applicationTypeMicroservice) { _%>
+            client-id: internal
+            client-secret: internal
+  <%_ } else { _%>
             client-id: web_app
             client-secret: web_app
-            scope: openid profile email
-        resource:
-            filter-order: 3
-            user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+  <%_ } _%>
+            scope: openid,profile,email
 <%_ } _%>
 
 server:
-    servlet:
-        session:
-            cookie:
-                http-only: true
+  servlet:
+    session:
+      cookie:
+        http-only: true
 
 # Properties to be exposed on the /info management endpoint
 info:
-    # Comma separated list of profiles that will trigger the ribbon to show
-    display-ribbon-on-profiles: "dev"
+  # Comma separated list of profiles that will trigger the ribbon to show
+  display-ribbon-on-profiles: "dev"
 
 # ===================================================================
 # JHipster specific properties
@@ -331,40 +314,46 @@ info:
 # ===================================================================
 
 jhipster:
-    clientApp:
-        name: "<%= frontendAppName %>"
-    # By default CORS is disabled. Uncomment to enable.
-    # cors:
-    #     allowed-origins: "*"
-    #     allowed-methods: "*"
-    #     allowed-headers: "*"
-    <%_ if (authenticationType === 'session') { _%>
-    #     exposed-headers: "Link,X-Total-Count"
+  clientApp:
+    name: "<%= frontendAppName %>"
+  # By default CORS is disabled. Uncomment to enable.
+  # cors:
+  #   allowed-origins: "http://localhost:8100,http://localhost:9000"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  <%_ if (authenticationType === 'session') { _%>
+  #   exposed-headers: "Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+  <%_ } else { _%>
+  #   exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
+  <%_ } _%>
+  #   allow-credentials: true
+  #   max-age: 1800
+  mail:
+    from: <%= baseName %>@localhost
+  api-docs:
+    default-include-pattern: ${server.servlet.context-path:}/api/.*
+    management-include-pattern: ${server.servlet.context-path:}/management/.*
+    title: <%= baseName %> API
+    description: <%= baseName %> API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license: unlicensed
+    license-url:
+  security:
+    <%_ if (clientTheme !== 'none') { _%>
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
     <%_ } else { _%>
-    #     exposed-headers: "Authorization,Link,X-Total-Count"
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
     <%_ } _%>
-    #     allow-credentials: true
-    #     max-age: 1800
-    mail:
-        from: <%= baseName %>@localhost
-    api-docs:
-        default-include-pattern: /api/.*
-        title: <%= baseName %> API
-        description: <%= baseName %> API documentation
-        version: 0.0.1
-        terms-of-service-url:
-        contact-name:
-        contact-url:
-        contact-email:
-        license: unlicensed
-        license-url:
     <%_ if (authenticationType === 'oauth2') { _%>
-    security:
-        oauth2:
-            audience:
-                - account
-                - api://default
-    <%_ } _%>
+    oauth2:
+      audience:
+        - account
+        - api://default
+  <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
   bootstrap-servers: localhost:9092
@@ -377,6 +366,7 @@ kafka:
     key.serializer: org.apache.kafka.common.serialization.StringSerializer
     value.serializer: org.apache.kafka.common.serialization.StringSerializer
 <%_ } _%>
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

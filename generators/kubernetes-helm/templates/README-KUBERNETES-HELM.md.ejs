@@ -6,9 +6,9 @@ You will need to push your image to a registry. If you have not done so, use the
 
 ```
 <%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-    <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
+  <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
 $ docker image tag <%= appConfigs[i].baseName.toLowerCase() %> <%= appConfigs[i].targetImageName %>
-    <%_ } _%>
+  <%_ } _%>
 $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 <%_ } _%>
 ```
@@ -20,8 +20,8 @@ at [https://github.com/helm/helm](https://github.com/helm/helm)
 
 Once Helm is installed you need to add the below repositories:
 ```
-helm repo add stable https://kubernetes-charts.storage.googleapis.com
-helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+helm repo add stable https://charts.helm.sh/stable
+helm repo add incubator https://charts.helm.sh/incubator
 ```
 These repositories should be added to the local cache, because this sub-generator will pull some charts from them.
 

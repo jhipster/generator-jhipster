@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,14 +21,14 @@ package <%= packageName %>;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-<%_ if (prodDatabaseType === 'mysql') { _%>
+<%_ if (prodDatabaseTypeMysql) { _%>
 import org.testcontainers.containers.MySQLContainer;
-<%_ } else if (prodDatabaseType === 'mariadb') { _%>
+<%_ } else if (prodDatabaseTypeMariadb) { _%>
 import org.testcontainers.containers.MariaDBContainer;
-<%_ } else if (prodDatabaseType === 'postgresql') { _%>
+<%_ } else if (prodDatabaseTypePostgres) { _%>
 import org.testcontainers.containers.PostgreSQLContainer;
-<%_ } else if (prodDatabaseType === 'mssql') { _%>
-import org.testcontainers.containers.MSSQLServerContainer;      
+<%_ } else if (prodDatabaseTypeMssql) { _%>
+import org.testcontainers.containers.MSSQLServerContainer;
 <%_ } _%>
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,24 +36,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ReactiveSqlTestContainerExtension implements BeforeAllCallback {
 
     private static AtomicBoolean started = new AtomicBoolean(false);
-    
-    <%_ if (prodDatabaseType === 'mysql') { _%>
+
+<%_ if (prodDatabaseTypeMysql) { _%>
     private static MySQLContainer<?> container = new MySQLContainer<>("<%= DOCKER_MYSQL %>")
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
-    <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+<%_ } else if (prodDatabaseTypeMariadb) { _%>
     private static MariaDBContainer<?> container = new MariaDBContainer<>("<%= DOCKER_MARIADB %>")
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
-    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+<%_ } else if (prodDatabaseTypePostgres) { _%>
     private static PostgreSQLContainer<?> container = new PostgreSQLContainer<>("<%= DOCKER_POSTGRESQL %>")
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
-    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+<%_ } else if (prodDatabaseTypeMssql) { _%>
     private static MSSQLServerContainer<?> container =  new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
-    <%_ } _%>
-    
+<%_ } _%>
+
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
     if (!started.get() && useTestcontainers()) {

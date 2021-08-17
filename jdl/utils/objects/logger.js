@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,15 +18,15 @@
  */
 
 const {
-    transports: { Console },
-    format: { printf, combine },
-    createLogger,
+  transports: { Console },
+  format: { printf, combine },
+  createLogger,
 } = require('winston');
 
 const myFormat = printf(info => `${info.level}: ${info.message}`);
 
 module.exports = createLogger({
-    transports: [new Console()],
-    format: combine(myFormat),
-    handleExceptions: true,
+  transports: [new Console()],
+  format: combine(myFormat),
+  handleExceptions: true,
 });

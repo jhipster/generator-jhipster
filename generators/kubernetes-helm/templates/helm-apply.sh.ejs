@@ -1,6 +1,6 @@
 #!/bin/bash
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,7 +21,7 @@
 # Usage: bash helm-apply.sh
 cs=csvc
 suffix=helm
-<%_ if (kubernetesNamespace !== 'default') { _%>
+<%_ if (!kubernetesNamespaceDefault) { _%>
 kubectl apply -f namespace.yml
 <%_ } _%>
 <%_ if (istio) { _%>
@@ -55,7 +55,7 @@ helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.bas
   fi
 <%_ }) _%>
 
-<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+<%_ if (istio && kubernetesServiceTypeIngress) { _%>
 kubectl apply -f istio-${suffix}/
 <%_ } _%>
 

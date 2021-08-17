@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,6 +23,7 @@ import { NavDropdown } from './menu-components';
 
 export const EntitiesMenu = props => (
   <NavDropdown icon="th-list" name={translate('global.menu.entities.main')} id="entity-menu" data-cy="entity" style={{ maxHeight: '80vh', overflow: 'auto'}}  >
+    <>{/* to avoid warnings when empty */}</>
     {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
   </NavDropdown>
 );

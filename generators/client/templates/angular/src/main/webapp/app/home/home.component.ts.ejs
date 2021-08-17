@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,13 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit<% if (authenticationType !== 'oauth2') { %>, OnDestroy<% } %> } from '@angular/core';
-<%_ if (authenticationType !== 'oauth2') { _%>
+import { Component, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+<%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 <%_ } _%>
 
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
@@ -33,46 +34,45 @@ import { Account } from 'app/core/auth/account.model';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit<% if (authenticationType !== 'oauth2') { %>, OnDestroy<% } %> {
+export class HomeComponent implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
   account: Account | null = null;
-  <%_ if (authenticationType !== 'oauth2') { _%>
-  authSubscription?: Subscription;
-  <%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+
+  private readonly destroy$ = new Subject<void>();
+<%_ } _%>
 
   constructor(
     private accountService: AccountService,
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     private router: Router
-    <%_ } else { _%>
+<%_ } else { _%>
     private loginService: LoginService
-    <%_ } _%>
+<%_ } _%>
   ) {}
 
   ngOnInit(): void {
-    <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     this.accountService.identity().subscribe(account => (this.account = account));
-    <%_ } else { _%>
-    this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-    <%_ } _%>
-  }
-
-  isAuthenticated(): boolean {
-    return this.accountService.isAuthenticated();
+<%_ } else { _%>
+    this.accountService
+      .getAuthenticationState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(account => (this.account = account));
+<%_ } _%>
   }
 
   login(): void {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     this.router.navigate(['/login']);
-    <%_ } else { _%>
+<%_ } else { _%>
     this.loginService.login();
-    <%_ } _%>
+<%_ } _%>
   }
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
-  <%_ } _%>
+<%_ } _%>
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,42 +22,42 @@ const JDLEnum = require('../../../../jdl/models/jdl-enum');
 const { convertEnums } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
 
 describe('EnumConverter', () => {
-    describe('convertEnums', () => {
-        context('when not passing enumerations', () => {
-            it('should fail', () => {
-                expect(() => convertEnums()).to.throw(/^Enumerations have to be passed so as to be converted.$/);
-            });
-        });
-        context('when passing enumerations', () => {
-            let expectedEnums;
-            let convertedEnums;
-
-            before(() => {
-                expectedEnums = [
-                    new JDLEnum({
-                        name: 'Country',
-                        values: [
-                            { key: 'FRANCE', value: 'FRANCE' },
-                            { key: 'ITALY', value: 'ITALY' },
-                        ],
-                        comment: 'A comment',
-                    }),
-                ];
-                convertedEnums = convertEnums([
-                    {
-                        name: 'Country',
-                        values: [
-                            { key: 'FRANCE', value: 'FRANCE' },
-                            { key: 'ITALY', value: 'ITALY' },
-                        ],
-                        javadoc: 'A comment',
-                    },
-                ]);
-            });
-
-            it('should convert them', () => {
-                expect(convertedEnums).to.deep.equal(expectedEnums);
-            });
-        });
+  describe('convertEnums', () => {
+    context('when not passing enumerations', () => {
+      it('should fail', () => {
+        expect(() => convertEnums()).to.throw(/^Enumerations have to be passed so as to be converted.$/);
+      });
     });
+    context('when passing enumerations', () => {
+      let expectedEnums;
+      let convertedEnums;
+
+      before(() => {
+        expectedEnums = [
+          new JDLEnum({
+            name: 'Country',
+            values: [
+              { key: 'FRANCE', value: 'FRANCE' },
+              { key: 'ITALY', value: 'ITALY' },
+            ],
+            comment: 'A comment',
+          }),
+        ];
+        convertedEnums = convertEnums([
+          {
+            name: 'Country',
+            values: [
+              { key: 'FRANCE', value: 'FRANCE' },
+              { key: 'ITALY', value: 'ITALY' },
+            ],
+            javadoc: 'A comment',
+          },
+        ]);
+      });
+
+      it('should convert them', () => {
+        expect(convertedEnums).to.deep.equal(expectedEnums);
+      });
+    });
+  });
 });

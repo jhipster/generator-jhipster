@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,25 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* after changing this file run '<%= clientPackageManager %> run webpack:build' */
+/* after changing this file run '<%= clientPackageManager %> run webapp:build' */
 
 /***************************
 put Sass variables here:
 eg $input-color: red;
 ****************************/
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import '~bootswatch/dist/<%= clientTheme %>/variables';
 <%_ } _%>
 // Override Bootstrap variables
 @import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
 @import '~bootstrap/scss/bootstrap';
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import '~bootswatch/dist/<%= clientTheme %>/bootswatch';
 <%_ } _%>
 
 <%_ if (enableI18nRTL) { _%>
-@import '<%= CLIENT_MAIN_SRC_DIR %>content/scss/rtl.scss';
+@import 'content/scss/rtl.scss';
 <%_ } _%>
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */

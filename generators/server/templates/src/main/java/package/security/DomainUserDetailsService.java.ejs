@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,7 +34,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -59,26 +59,26 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
     }
 
     @Override
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     @Transactional
-    <%_ } _%>
+<%_ } _%>
     public <% if (!reactive) { %>UserDetails loadUserByUsername<% } else { %>Mono<UserDetails> findByUsername<% } %>(final String login) {
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
-            return userRepository.<% if (databaseType === 'sql') { %>findOneWithAuthoritiesByEmailIgnoreCase<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
-                <%_ if (reactive) { _%>
+            return userRepository.<% if (databaseTypeSql) { %>findOneWithAuthoritiesByEmailIgnoreCase<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
+<%_ if (reactive) { _%>
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User with email " + login + " was not found in the database")))
-                <%_ } _%>
+<%_ } _%>
                 .map(user -> createSpringSecurityUser(login, user))<% if (!reactive) { %>
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"))<% } %>;
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return userRepository.findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin(lowercaseLogin)
-            <%_ if (reactive) { _%>
+        return userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin(lowercaseLogin)
+<%_ if (reactive) { _%>
             .switchIfEmpty(Mono.error(new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database")))
-            <%_ } _%>
+<%_ } _%>
             .map(user -> createSpringSecurityUser(lowercaseLogin, user))<% if (!reactive) { %>
             .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"))<% } %>;
 
@@ -88,8 +88,8 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
-            .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
+        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
+            .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>
             .map(SimpleGrantedAuthority::new)<% } %>
             .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getLogin(),

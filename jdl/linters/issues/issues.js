@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,62 +18,59 @@
  */
 
 class Issues {
-    constructor() {
-        this.entityIssues = [];
-        this.fieldIssues = [];
-        this.enumIssues = [];
-        this.relationshipIssues = [];
-    }
+  constructor() {
+    this.entityIssues = [];
+    this.fieldIssues = [];
+    this.enumIssues = [];
+    this.relationshipIssues = [];
+  }
 
-    addEntityIssues(issues = []) {
-        this.entityIssues = this.entityIssues.concat(issues);
-    }
+  addEntityIssues(issues = []) {
+    this.entityIssues = this.entityIssues.concat(issues);
+  }
 
-    addFieldIssues(issues = []) {
-        this.fieldIssues = this.fieldIssues.concat(issues);
-    }
+  addFieldIssues(issues = []) {
+    this.fieldIssues = this.fieldIssues.concat(issues);
+  }
 
-    addEnumIssues(issues = []) {
-        this.enumIssues = this.enumIssues.concat(issues);
-    }
+  addEnumIssues(issues = []) {
+    this.enumIssues = this.enumIssues.concat(issues);
+  }
 
-    addRelationshipIssues(issues = []) {
-        this.relationshipIssues = this.relationshipIssues.concat(issues);
-    }
+  addRelationshipIssues(issues = []) {
+    this.relationshipIssues = this.relationshipIssues.concat(issues);
+  }
 
-    getNumberOfIssues() {
-        return (
-            this.getNumberOfEntityIssues() +
-            this.getNumberOfFieldIssues() +
-            this.getNumberOfEnumIssues() +
-            this.getNumberOfRelationshipIssues()
-        );
-    }
+  getNumberOfIssues() {
+    return (
+      this.getNumberOfEntityIssues() + this.getNumberOfFieldIssues() + this.getNumberOfEnumIssues() + this.getNumberOfRelationshipIssues()
+    );
+  }
 
-    getNumberOfEntityIssues() {
-        return this.entityIssues.length;
-    }
+  getNumberOfEntityIssues() {
+    return this.entityIssues.length;
+  }
 
-    getNumberOfFieldIssues() {
-        return this.fieldIssues.length;
-    }
+  getNumberOfFieldIssues() {
+    return this.fieldIssues.length;
+  }
 
-    getNumberOfEnumIssues() {
-        return this.enumIssues.length;
-    }
+  getNumberOfEnumIssues() {
+    return this.enumIssues.length;
+  }
 
-    getNumberOfRelationshipIssues() {
-        return this.relationshipIssues.length;
-    }
+  getNumberOfRelationshipIssues() {
+    return this.relationshipIssues.length;
+  }
 
-    getIssues() {
-        return {
-            entities: this.entityIssues,
-            enums: this.enumIssues,
-            fields: this.fieldIssues,
-            relationships: this.relationshipIssues,
-        };
-    }
+  getIssues() {
+    return {
+      entities: this.entityIssues,
+      enums: this.enumIssues,
+      fields: this.fieldIssues,
+      relationships: this.relationshipIssues,
+    };
+  }
 }
 
 module.exports = Issues;

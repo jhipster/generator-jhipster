@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -58,14 +58,15 @@ public class TokenProvider {
 
     public TokenProvider(JHipsterProperties jHipsterProperties) {
         byte[] keyBytes;
-        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
         if (!ObjectUtils.isEmpty(secret)) {
+            log.debug("Using a Base64-encoded JWT secret key");
+            keyBytes = Decoders.BASE64.decode(secret);
+        } else {
             log.warn("Warning: the JWT key used is not Base64-encoded. " +
                 "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
+            secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
             keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        } else {
-            log.debug("Using a Base64-encoded JWT secret key");
-            keyBytes = Decoders.BASE64.decode(jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret());
         }
         key = Keys.hmacShaKeyFor(keyBytes);
         jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
@@ -94,9 +95,9 @@ public class TokenProvider {
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
-            <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
             .serializeToJsonWith(new JacksonSerializer())
-            <%_ } _%>
+<%_ } _%>
             .compact();
     }
 
@@ -105,6 +106,7 @@ public class TokenProvider {
 
         Collection<? extends GrantedAuthority> authorities =
             Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .filter(auth -> !auth.trim().isEmpty())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 

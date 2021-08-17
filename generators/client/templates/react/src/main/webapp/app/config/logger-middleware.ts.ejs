@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,10 +19,13 @@
 /* eslint no-console: off */
 export default () => next => action => {
   if (process.env.NODE_ENV !== 'production') {
-    const { type, payload, meta } = action;
+    const { type, payload, meta, error } = action;
 
     console.groupCollapsed(type);
     console.log('Payload:', payload);
+    if (error) {
+      console.log('Error:', error);
+    }
     console.log('Meta:', meta);
     console.groupEnd();
   }

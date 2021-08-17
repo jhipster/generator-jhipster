@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,14 +21,9 @@ package <%= packageName %>.service.mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-<%_
-let id;
-if (!embedded) {
-    id = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
-    if (id.includes('UUID')) { _%>
+<%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
-    <%_ }
-} _%>
+<%_ } _%>
 
 class <%= entityClass %>MapperTest {
 

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -93,10 +93,10 @@ spec:
       name: consul
       labels:
         app: consul
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       securityContext:
         fsGroup: 1000

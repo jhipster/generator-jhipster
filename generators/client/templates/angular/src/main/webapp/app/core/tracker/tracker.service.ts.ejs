@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,10 +24,10 @@ import { filter } from 'rxjs/operators';
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
 
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import { CSRFService } from 'app/core/auth/csrf.service';
 <%_ } _%>
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } _%>
 import { TrackerActivity } from './tracker-activity.model';
@@ -43,12 +43,11 @@ export class TrackerService {
 
   constructor(
     private router: Router,
-    <%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
     private csrfService: CSRFService,
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ } else if (authenticationTypeJwt) { _%>
     private authServerProvider: AuthServerProvider,
-    <%_ } _%>
+<%_ } _%>
     private location: Location
   ) {}
 
@@ -60,18 +59,18 @@ export class TrackerService {
     // building absolute path so that websocket doesn't fail when deploying with a context path
     let url = '/websocket/tracker';
     url = this.location.prepareExternalUrl(url);
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     const authToken = this.authServerProvider.getToken();
     if (authToken) {
       url += '?access_token=' + authToken;
     }
-    <%_ } _%>
+<%_ } _%>
     const socket: WebSocket = new SockJS(url);
     this.stompClient = Stomp.over(socket, { protocols: ['v12.stomp'] });
     const headers: Stomp.ConnectionHeaders = {};
-    <%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
     headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
-    <%_ } _%>
+<%_ } _%>
     this.stompClient.connect(headers, () => {
       this.connectionSubject.next();
 

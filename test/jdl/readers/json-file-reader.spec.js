@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,32 +24,32 @@ const path = require('path');
 const JSONFileReader = require('../../../jdl/readers/json-file-reader');
 
 describe('JSONFileReader', () => {
-    describe('toFilePath', () => {
-        context('when converting an entity name to a path', () => {
-            context('with a nil entity name', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONFileReader.toFilePath();
-                    }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
-                });
-            });
-            context('with an empty entity name', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        JSONFileReader.toFilePath('');
-                    }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
-                });
-            });
-            context('with a valid entity name', () => {
-                it('should return the path', () => {
-                    expect(JSONFileReader.toFilePath('MyEntity')).to.equal(`.jhipster${path.sep}${'MyEntity'}.json`);
-                });
-            });
-            context('with a valid entity name with the first letter lowercase', () => {
-                it('should return the path, with the first letter upper-cased', () => {
-                    expect(JSONFileReader.toFilePath('myEntity')).to.equal(`.jhipster${path.sep}MyEntity.json`);
-                });
-            });
+  describe('toFilePath', () => {
+    context('when converting an entity name to a path', () => {
+      context('with a nil entity name', () => {
+        it('should fail', () => {
+          expect(() => {
+            JSONFileReader.toFilePath();
+          }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
         });
+      });
+      context('with an empty entity name', () => {
+        it('should fail', () => {
+          expect(() => {
+            JSONFileReader.toFilePath('');
+          }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
+        });
+      });
+      context('with a valid entity name', () => {
+        it('should return the path', () => {
+          expect(JSONFileReader.toFilePath('MyEntity')).to.equal(`.jhipster${path.sep}${'MyEntity'}.json`);
+        });
+      });
+      context('with a valid entity name with the first letter lowercase', () => {
+        it('should return the path, with the first letter upper-cased', () => {
+          expect(JSONFileReader.toFilePath('myEntity')).to.equal(`.jhipster${path.sep}MyEntity.json`);
+        });
+      });
     });
+  });
 });

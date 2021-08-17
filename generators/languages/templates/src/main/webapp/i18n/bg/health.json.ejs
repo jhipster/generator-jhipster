@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,30 +29,34 @@
             "error": "Грешка"
         },
         "indicator": {
-            <%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
             "binders": "Брокер за съобщения",
-            <%_ } _%>
-            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
             "discoveryComposite": "Компонент за търсене на услуги",
             "refreshScope": "Област за обновяване на микросървиси",
             "clientConfigServer": "Сървър за конфигурации на микросървиси",
-            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } else if (reactive) { %>
-            "reactiveDiscoveryClients": "Клиенти за откриване на микросървиси",<% } %>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hystrix": "Hystrix",
+  <%_ if (serviceDiscoveryConsul) { _%>
+            "consul": "Consul",
+  <%_ } else if (reactive) { _%>
+            "reactiveDiscoveryClients": "Клиенти за откриване на микросървиси",
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
             "hazelcast": "Hazelcast",
-            <%_ } _%>
+<%_ } _%>
             "diskSpace": "Място на диска",
             "mail": "Имейл",
             "livenessState": "Liveness state",
             "readinessState": "Readiness state",
-            "ping": "Приложение"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "База данни"<% } %><% if (databaseType === 'mongodb') { %>,
-            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
-            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "ping": "Приложение"<% if (searchEngineElasticsearch) { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
+            "db": "База данни"<% } %><% if (databaseTypeSql && reactive) { %>,
+            "r2dbc": "База данни"<% } %><% if (databaseTypeMongodb) { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseTypeCouchbase) { %>,
+            "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
             "neo4j": "Neo4j"<% } %>
         },
         "table": {

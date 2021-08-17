@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,14 +20,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { Session } from './session.model';
 
 @Injectable({ providedIn: 'root' })
 export class SessionsService {
-  public resourceUrl = SERVER_API_URL + 'api/account/sessions/';
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/account/sessions/');
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   findAll(): Observable<Session[]> {
     return this.http.get<Session[]>(this.resourceUrl);

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AccountService } from 'app/core/auth/account.service';
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { StateStorageService } from './state-storage.service';
@@ -31,9 +31,9 @@ import { StateStorageService } from './state-storage.service';
 export class UserRouteAccessService implements CanActivate {
   constructor(
     private router: Router,
-    <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     private loginService: LoginService,
-    <%_ } _%>
+<%_ } _%>
     private accountService: AccountService,
     private stateStorageService: StateStorageService
   ) {}
@@ -56,11 +56,11 @@ export class UserRouteAccessService implements CanActivate {
         }
 
         this.stateStorageService.storeUrl(state.url);
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         this.router.navigate(['/login']);
-        <%_ } else { _%>
+<%_ } else { _%>
         this.loginService.login();
-        <%_ } _%>
+<%_ } _%>
         return false;
       })
     );

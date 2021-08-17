@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,16 +21,16 @@ apply plugin: "war"
 bootWar {
     mainClassName = "<%= packageName %>.<%= mainClass %>"
     includes = ["WEB-INF/**", "META-INF/**"]
-    <%_ if (!skipClient) { _%>
+<%_ if (!skipClient) { _%>
     webXml = file("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
-    <%_ } _%>
+<%_ } _%>
 }
 
 war {
-    <%_ if (!skipClient) { _%>
+<%_ if (!skipClient) { _%>
     webAppDirName = "<%= CLIENT_DIST_DIR %>"
     webXml = file("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
-    <%_ } _%>
+<%_ } _%>
     enabled = true
     archiveExtension = "war.original"
     includes = ["WEB-INF/**", "META-INF/**"]

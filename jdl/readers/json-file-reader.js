@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,8 +22,8 @@ const FileReader = require('./file-reader');
 const { upperFirst } = require('../utils/string-utils');
 
 module.exports = {
-    readJSONFile,
-    toFilePath,
+  readJSONFile,
+  toFilePath,
 };
 
 /**
@@ -32,7 +32,7 @@ module.exports = {
  * @return its content
  */
 function readJSONFile(filePath) {
-    return JSON.parse(FileReader.readFile(filePath));
+  return JSON.parse(FileReader.readFile(filePath));
 }
 
 /**
@@ -41,8 +41,8 @@ function readJSONFile(filePath) {
  * @returns {string} the file's path.
  */
 function toFilePath(entityName) {
-    if (!entityName) {
-        throw new Error('The passed entity name must not be nil to be converted to file path.');
-    }
-    return path.join('.jhipster', `${upperFirst(entityName)}.json`);
+  if (!entityName) {
+    throw new Error('The passed entity name must not be nil to be converted to file path.');
+  }
+  return path.join('.jhipster', `${upperFirst(entityName)}.json`);
 }

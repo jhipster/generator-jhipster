@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,12 +19,12 @@
 <%# Returns a string of all validator annotations for the entity relationships. -%>
 <%
 let result = '';
-if (relationship.relationshipValidate === true) {
-    const validators = [];
-    if (relationship.relationshipRequired) {
-        validators.push('@NotNull');
-    }
-    result =  validators.join('\n    ');
-    result += '\n';
+if (relationship.relationshipValidate) {
+  const validators = [];
+  if (relationship.relationshipRequired) {
+    validators.push('@NotNull');
+  }
+  result =  validators.join('\n    ');
+  result += '\n';
 } -%>
 <%- result -%>

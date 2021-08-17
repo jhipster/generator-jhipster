@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=\uc8c4\uc1a1\ud569\ub2c8\ub2e4, \uc5d0\ub7ec\uac00 \ubc1c\uc0dd\u
 error.status=\uc0c1\ud0dc:
 error.message=\uba54\uc138\uc9c0:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> \uc778\uc99d
 email.activation.greeting={0}\ub2d8 \uc548\ub155\ud558\uc138\uc694
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> \ube44\ubc00\ubc88\ud638 \ubcc0\uacbd
 email.reset.greeting={0}\ub2d8 \uc548\ub155\ud558\uc138\uc694
 email.reset.text1=<%= baseName %> \uacc4\uc815 \ube44\ubc00\ubc88\ud638 \ubcc0\uacbd \uc694\uccad\uc744 \ud558\uc168\uc2b5\ub2c8\ub2e4. \uc544\ub798 URL\uc744 \ud074\ub9ad\ud574 \ube44\ubc00\ubc88\ud638\ub97c \ubcc0\uacbd\ud574 \uc8fc\uc138\uc694:
 email.reset.text2=\uac10\uc0ac\ud569\ub2c8\ub2e4.
+<%_ } _%>

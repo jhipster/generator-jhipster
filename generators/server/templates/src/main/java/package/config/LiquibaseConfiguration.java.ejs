@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -65,13 +65,13 @@ public class LiquibaseConfiguration {
             @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,<% } %> LiquibaseProperties liquibaseProperties,
             <% if (!reactive) { %>ObjectProvider<DataSource> dataSource, DataSource<% } else { %>R2dbc<% } %>Properties dataSourceProperties) {
 
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         // If you don't want Liquibase to start asynchronously, substitute by this:
         // SpringLiquibase liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(this.env, executor, liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
-        <%_ } else { _%>
+<%_ } else { _%>
         SpringLiquibase liquibase = createAsyncSpringLiquibase(this.env, executor, liquibaseProperties, dataSourceProperties);
-        <%_ } _%>
+<%_ } _%>
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
@@ -92,7 +92,7 @@ public class LiquibaseConfiguration {
         }
         return liquibase;
     }
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
 
     public static SpringLiquibase createAsyncSpringLiquibase(Environment env, Executor executor,
             LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
@@ -115,5 +115,5 @@ public class LiquibaseConfiguration {
         String value = property.get();
         return (value != null) ? value : defaultValue.get();
     }
-    <%_ } _%>
+<%_ } _%>
 }

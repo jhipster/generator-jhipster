@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,8 +21,8 @@ const fs = require('fs');
 const FileUtils = require('../utils/file-utils');
 
 module.exports = {
-    readFile,
-    readFiles,
+  readFile,
+  readFiles,
 };
 
 /**
@@ -31,10 +31,10 @@ module.exports = {
  * @returns an Iterable of the passed files' content.
  */
 function readFiles(iterable) {
-    if (!iterable) {
-        throw new Error('The passed files must not be nil.');
-    }
-    return iterable.map(path => readFile(path));
+  if (!iterable) {
+    throw new Error('The passed files must not be nil.');
+  }
+  return iterable.map(path => readFile(path));
 }
 
 /**
@@ -43,11 +43,11 @@ function readFiles(iterable) {
  * @returns {string} the file's content.
  */
 function readFile(path) {
-    if (!path) {
-        throw new Error('The passed file must not be nil to be read.');
-    }
-    if (!FileUtils.doesFileExist(path)) {
-        throw new Error(`The passed file '${path}' must exist and must not be a directory to be read.`);
-    }
-    return fs.readFileSync(path, 'utf-8').toString();
+  if (!path) {
+    throw new Error('The passed file must not be nil to be read.');
+  }
+  if (!FileUtils.doesFileExist(path)) {
+    throw new Error(`The passed file '${path}' must exist and must not be a directory to be read.`);
+  }
+  return fs.readFileSync(path, 'utf-8').toString();
 }

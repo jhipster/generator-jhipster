@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,44 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const tsconfig = require('./tsconfig.json');
+const { pathsToModuleNameMapper } = require('ts-jest/utils')
+
+const { compilerOptions: { paths = {}, baseUrl = './' } } = require('./tsconfig.json');
+const environment = require('./webpack/environment');
 
 module.exports = {
+  globals: {
+    ...environment,
+  },
+  roots: ['<rootDir>', `<rootDir>/${baseUrl}`],
+  modulePaths: [`<rootDir>/${baseUrl}`],
   setupFiles: ['jest-date-mock'],
   cacheDirectory: '<rootDir>/<%= BUILD_DIR %>jest-cache',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  moduleNameMapper: mapTypescriptAliasToJestAlias(),
-  reporters: ['default', ['jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }]],
+  moduleNameMapper: pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
+  reporters: ['default', ['jest-junit', { outputDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' }]],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/**/@(*.)@(spec.ts)'],
   testURL: 'http://localhost/',
 };
-
-function mapTypescriptAliasToJestAlias(alias = {}) {
-  const jestAliases = { ...alias };
-  if (!tsconfig.compilerOptions.paths) {
-    return jestAliases;
-  }
-  Object.entries(tsconfig.compilerOptions.paths)
-    .filter(([key, value]) => {
-      // use Typescript alias in Jest only if this has value
-      if (value.length) {
-        return true;
-      }
-      return false;
-    })
-    .map(([key, value]) => {
-      // if Typescript alias ends with /* then in Jest:
-      // - alias key must end with /(.*)
-      // - alias value must end with /$1
-      const regexToReplace = /(.*)\/\*$/;
-      const aliasKey = key.replace(regexToReplace, '$1/(.*)');
-      const aliasValue = value[0].replace(regexToReplace, '$1/$$1');
-      return [aliasKey, `<rootDir>/${aliasValue}`];
-    })
-    .reduce((aliases, [key, value]) => {
-      aliases[key] = value;
-      return aliases;
-    }, jestAliases);
-  return jestAliases;
-}

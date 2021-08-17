@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.jhipster.config.JHipsterProperties;
 import org.slf4j.LoggerFactory;
-<%_ if (serviceDiscoveryType === 'consul' || (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType))) { _%>
+<%_ if (serviceDiscoveryConsul || (serviceDiscoveryType && applicationTypeGateway || applicationTypeMicroservice)) { _%>
 import org.springframework.beans.factory.ObjectProvider;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
-<%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+<%_ if (serviceDiscoveryType && (applicationTypeGateway || applicationTypeMicroservice)) { _%>
 import org.springframework.boot.info.BuildProperties;
 <%_ } _%>
-<%_ if (serviceDiscoveryType === "consul") { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
 <%_ } _%>
-<%_ if (["eureka", "consul"].includes(serviceDiscoveryType)) { _%>
+<%_ if (serviceDiscoveryAny) { _%>
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +47,7 @@ import static tech.jhipster.config.logging.LoggingUtils.*;
  * Configures the console and Logstash log appenders from the app properties
  */
 @Configuration
-<%_ if (["eureka", "consul"].includes(serviceDiscoveryType)) { _%>
+<%_ if (serviceDiscoveryAny) { _%>
 @RefreshScope
 <%_ } _%>
 public class LoggingConfiguration {
@@ -55,12 +55,12 @@ public class LoggingConfiguration {
     public LoggingConfiguration(@Value("${spring.application.name}") String appName,
                                 @Value("${server.port}") String serverPort,
                                 JHipsterProperties jHipsterProperties,
-                                <%_ if (serviceDiscoveryType === "consul") { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
                                 ObjectProvider<ConsulRegistration> consulRegistration,
-                                <%_ } _%>
-                                <%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
                                 ObjectProvider<BuildProperties> buildProperties,
-                                <%_ } _%>
+<%_ } _%>
                                 ObjectMapper mapper) throws JsonProcessingException {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -68,12 +68,12 @@ public class LoggingConfiguration {
         Map<String, String> map = new HashMap<>();
         map.put("app_name", appName);
         map.put("app_port", serverPort);
-        <%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
         buildProperties.ifAvailable(it -> map.put("version", it.getVersion()));
-        <%_ } _%>
-        <%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
         consulRegistration.ifAvailable(it -> map.put("instance_id", it.getInstanceId()));
-        <%_ } _%>
+<%_ } _%>
         String customFields = mapper.writeValueAsString(map);
 
         JHipsterProperties.Logging loggingProperties = jHipsterProperties.getLogging();

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=抱歉,发生了一个错误.
 error.status=状态:
 error.message=消息:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> 激活账号
 email.activation.greeting=亲爱的 {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> 密码重置
 email.reset.greeting=亲爱的 {0}
 email.reset.text1=您的 <%= baseName %>账号密码重置请求已收到, 请点击以下链接重置密码:
 email.reset.text2=祝您使用愉快,
+<%_ } _%>

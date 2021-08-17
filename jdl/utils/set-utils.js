@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,24 +18,24 @@
  */
 
 module.exports = {
-    addAll,
-    join,
+  addAll,
+  join,
 };
 
 function addAll(set, elements) {
-    if (!set) {
-        throw new Error('A Set must be passed so as to insert elements.');
-    }
-    if (!elements || elements.length === 0) {
-        return set;
-    }
-    elements.forEach(element => set.add(element));
+  if (!set) {
+    throw new Error('A Set must be passed so as to insert elements.');
+  }
+  if (!elements || elements.length === 0) {
     return set;
+  }
+  elements.forEach(element => set.add(element));
+  return set;
 }
 
 function join(set, separator = ',') {
-    if (!set) {
-        throw new Error('A Set must be passed so as to join elements.');
-    }
-    return Array.from(set).join(separator);
+  if (!set) {
+    throw new Error('A Set must be passed so as to join elements.');
+  }
+  return Array.from(set).join(separator);
 }

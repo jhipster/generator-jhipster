@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,9 +28,9 @@ export class FindLanguageFromKeyPipe implements PipeTransform {
     return this.languages[lang].name;
   }
 
-  <%_ if (enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
   isRTL(lang: string): boolean {
     return Boolean(this.languages[lang].rtl);
   }
-  <%_ } _%>
+<%_ } _%>
 }

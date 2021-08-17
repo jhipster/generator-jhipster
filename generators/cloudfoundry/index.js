@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,169 +21,218 @@ const childProcess = require('child_process');
 const chalk = require('chalk');
 const glob = require('glob');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
-
+const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const cacheProviders = require('../../jdl/jhipster/cache-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
 const constants = require('../generator-constants');
+const { GENERATOR_CLOUDFOUNDRY } = require('../generator-list');
+
+const NO_CACHE_PROVIDER = cacheProviders.NO;
+const NO_DATABASE_TYPE = databaseTypes.NO;
 
 const exec = childProcess.exec;
 
-module.exports = class extends BaseGenerator {
-    initializing() {
+let useBlueprints;
+/* eslint-disable consistent-return */
+module.exports = class extends BaseBlueprintGenerator {
+  constructor(args, options, features) {
+    super(args, options, features);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLOUDFOUNDRY);
+  }
+
+  _initializing() {
+    return {
+      sayHello() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
+      },
+
+      getSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadPlatformConfig();
+      },
+      getConfig() {
         const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = configuration.get('baseName');
-        this.buildTool = configuration.get('buildTool');
-        this.packageName = configuration.get('packageName');
-        this.packageFolder = configuration.get('packageFolder');
-        this.cacheProvider = configuration.get('cacheProvider') || 'no';
-        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = configuration.get('databaseType');
-        this.devDatabaseType = configuration.get('devDatabaseType');
-        this.prodDatabaseType = configuration.get('prodDatabaseType');
+        this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
+        this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
         this.frontendAppName = this.getFrontendAppName();
-    }
+      },
+    };
+  }
 
-    get prompting() {
-        return prompts.prompting;
-    }
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
 
-    get configuring() {
-        return {
-            insight() {
-                statistics.sendSubGenEvent('generator', 'cloudfoundry');
-            },
+  _prompting() {
+    return prompts.prompting;
+  }
 
-            copyCloudFoundryFiles() {
-                if (this.abort) return;
-                this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-                this.template('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
-                this.template('application-cloudfoundry.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
-            },
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
 
-            checkInstallation() {
-                if (this.abort) return;
-                const done = this.async();
+  _configuring() {
+    return {
+      insight() {
+        statistics.sendSubGenEvent('generator', GENERATOR_CLOUDFOUNDRY);
+      },
 
-                exec('cf -v', err => {
-                    if (err) {
-                        this.log.error(
-                            "cloudfoundry's cf command line interface is not available. " +
-                                'You can install it via https://github.com/cloudfoundry/cli/releases'
-                        );
-                        this.abort = true;
-                    }
-                    done();
-                });
-            },
-        };
-    }
+      derivedProperties() {
+        this.databaseTypeNo = this.databaseType === NO_DATABASE_TYPE;
+      },
 
-    get default() {
-        return {
-            cloudfoundryAppShow() {
-                if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
-                const done = this.async();
+      copyCloudFoundryFiles() {
+        if (this.abort) return;
+        this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
+        this.template('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
+        this.template('application-cloudfoundry.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
+      },
 
-                this.log(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
-                exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (err, stdout, stderr) => {
-                    // Unauthenticated
-                    if (stdout.search('cf login') >= 0) {
-                        this.log.error("Error: Not authenticated. Run 'cf login' to login to your cloudfoundry account and try again.");
-                        this.abort = true;
-                    }
-                    done();
-                });
-            },
+      checkInstallation() {
+        if (this.abort) return;
+        const done = this.async();
 
-            cloudfoundryAppCreate() {
-                if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
-                const done = this.async();
+        exec('cf -v', err => {
+          if (err) {
+            this.log.error(
+              "cloudfoundry's cf command line interface is not available. " +
+                'You can install it via https://github.com/cloudfoundry/cli/releases'
+            );
+            this.abort = true;
+          }
+          done();
+        });
+      },
+    };
+  }
 
-                this.log(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
 
-                if (this.databaseType !== 'no') {
-                    this.log(chalk.bold('Creating the database'));
-                    const child = exec(
-                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
-                        {},
-                        (err, stdout, stderr) => {
-                            done();
-                        }
-                    );
-                    child.stdout.on('data', data => {
-                        this.log(data.toString());
-                    });
-                } else {
-                    done();
-                }
-            },
+  _default() {
+    return {
+      cloudfoundryAppShow() {
+        if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
+        const done = this.async();
 
-            productionBuild() {
-                if (this.abort) return;
-                const done = this.async();
+        this.log(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
+        exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (err, stdout, stderr) => {
+          // Unauthenticated
+          if (stdout.search('cf login') >= 0) {
+            this.log.error("Error: Not authenticated. Run 'cf login' to login to your cloudfoundry account and try again.");
+            this.abort = true;
+          }
+          done();
+        });
+      },
 
-                this.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
+      cloudfoundryAppCreate() {
+        if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
+        const done = this.async();
 
-                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
-                    if (err) {
-                        this.log.error(err);
-                    }
-                    done();
-                });
+        this.log(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
 
-                this.buildCmd = child.buildCmd;
+        if (this.databaseType !== 'no') {
+          this.log(chalk.bold('Creating the database'));
+          const child = exec(
+            `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
+            {},
+            (err, stdout, stderr) => {
+              done();
+            }
+          );
+          child.stdout.on('data', data => {
+            this.log(data.toString());
+          });
+        } else {
+          done();
+        }
+      },
 
-                child.stdout.on('data', data => {
-                    this.log(data.toString());
-                });
-            },
-        };
-    }
+      productionBuild() {
+        if (this.abort) return;
+        const done = this.async();
 
-    get end() {
-        return {
-            cloudfoundryPush() {
-                if (this.abort) return;
-                const done = this.async();
-                let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -t 120 -p';
-                let jarFolder = '';
-                if (this.buildTool === 'maven') {
-                    jarFolder = ' target/';
-                } else if (this.buildTool === 'gradle') {
-                    jarFolder = ' build/libs/';
-                }
-                if (os.platform() === 'win32') {
-                    cloudfoundryDeployCommand += ` ${glob.sync(`${jarFolder.trim()}*.jar`)[0]}`;
-                } else {
-                    cloudfoundryDeployCommand += `${jarFolder}*.jar`;
-                }
+        this.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
-                this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
-                const child = exec(cloudfoundryDeployCommand, err => {
-                    if (err) {
-                        this.log.error(err);
-                    }
-                    this.log(chalk.green('\nYour app should now be live'));
-                    this.log(chalk.yellow(`After application modification, repackage it with\n\t${chalk.bold(this.buildCmd)}`));
-                    this.log(chalk.yellow(`And then re-deploy it with\n\t${chalk.bold(cloudfoundryDeployCommand)}`));
-                    done();
-                });
+        const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
+          if (err) {
+            this.log.error(err);
+          }
+          done();
+        });
 
-                child.stdout.on('data', data => {
-                    this.log(data.toString());
-                });
-            },
+        this.buildCmd = child.buildCmd;
 
-            restartApp() {
-                if (this.abort || !this.cloudfoundry_remote_exists) return;
-                this.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
+        child.stdout.on('data', data => {
+          this.log(data.toString());
+        });
+      },
+    };
+  }
 
-                exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
-                    this.log(chalk.green('\nYour app should now be live'));
-                });
-            },
-        };
-    }
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  _end() {
+    return {
+      cloudfoundryPush() {
+        if (this.abort) return;
+        const done = this.async();
+        let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -t 120 -p';
+        let jarFolder = '';
+        if (this.buildTool === MAVEN) {
+          jarFolder = ' target/';
+        } else if (this.buildTool === GRADLE) {
+          jarFolder = ' build/libs/';
+        }
+        if (os.platform() === 'win32') {
+          cloudfoundryDeployCommand += ` ${glob.sync(`${jarFolder.trim()}*.jar`)[0]}`;
+        } else {
+          cloudfoundryDeployCommand += `${jarFolder}*.jar`;
+        }
+
+        this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
+        const child = exec(cloudfoundryDeployCommand, err => {
+          if (err) {
+            this.log.error(err);
+          }
+          this.log(chalk.green('\nYour app should now be live'));
+          this.log(chalk.yellow(`After application modification, repackage it with\n\t${chalk.bold(this.buildCmd)}`));
+          this.log(chalk.yellow(`And then re-deploy it with\n\t${chalk.bold(cloudfoundryDeployCommand)}`));
+          done();
+        });
+
+        child.stdout.on('data', data => {
+          this.log(data.toString());
+        });
+      },
+
+      restartApp() {
+        if (this.abort || !this.cloudfoundry_remote_exists) return;
+        this.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
+
+        exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
+          this.log(chalk.green('\nYour app should now be live'));
+        });
+      },
+    };
+  }
+
+  get end() {
+    if (useBlueprints) return;
+    return this._end();
+  }
 };

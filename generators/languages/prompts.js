@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,50 +19,50 @@
 const { detectLanguage } = require('../../utils/language');
 
 module.exports = {
-    askForLanguages,
-    askI18n,
+  askForLanguages,
+  askI18n,
 };
 
 function askI18n() {
-    if (this.options.skipPrompts) return undefined;
-    return this.prompt(
-        [
-            {
-                type: 'confirm',
-                name: 'enableTranslation',
-                message: 'Would you like to enable internationalization support?',
-                default: true,
-            },
-            {
-                type: 'list',
-                name: 'nativeLanguage',
-                message: 'Please choose the native language of the application',
-                choices: () => this.getAllSupportedLanguageOptions(),
-                default: () => detectLanguage(),
-                store: true,
-            },
-        ],
-        this.config
-    );
+  if (this.options.skipPrompts) return undefined;
+  return this.prompt(
+    [
+      {
+        type: 'confirm',
+        name: 'enableTranslation',
+        message: 'Would you like to enable internationalization support?',
+        default: true,
+      },
+      {
+        type: 'list',
+        name: 'nativeLanguage',
+        message: 'Please choose the native language of the application',
+        choices: () => this.getAllSupportedLanguageOptions(),
+        default: () => (this.options.reproducible ? 'en' : detectLanguage()),
+        store: true,
+      },
+    ],
+    this.config
+  );
 }
 
 function askForLanguages() {
-    if (this.options.skipPrompts || this.languagesToApply || !this.jhipsterConfig.enableTranslation) {
-        return undefined;
-    }
-    return this.prompt([
-        {
-            type: 'checkbox',
-            name: 'languages',
-            message: 'Please choose additional languages to install',
-            choices: () => {
-                const languageOptions = this.getAllSupportedLanguageOptions();
-                const nativeLanguage = this.jhipsterConfig.nativeLanguage;
-                const currentLanguages = this.jhipsterConfig.languages || [];
-                return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));
-            },
-        },
-    ]).then(answers => {
-        this.languagesToApply = answers.languages;
-    });
+  if (this.options.skipPrompts || this.languagesToApply || !this.jhipsterConfig.enableTranslation) {
+    return undefined;
+  }
+  return this.prompt([
+    {
+      type: 'checkbox',
+      name: 'languages',
+      message: 'Please choose additional languages to install',
+      choices: () => {
+        const languageOptions = this.getAllSupportedLanguageOptions();
+        const nativeLanguage = this.jhipsterConfig.nativeLanguage;
+        const currentLanguages = this.jhipsterConfig.languages || [];
+        return languageOptions.filter(l => l.value !== nativeLanguage && !currentLanguages.includes(l.value));
+      },
+    },
+  ]).then(answers => {
+    this.languagesToApply = answers.languages;
+  });
 }

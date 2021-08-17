@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,40 +18,40 @@
  */
 
 module.exports = {
-    camelCase,
-    upperFirst,
-    lowerFirst,
+  camelCase,
+  upperFirst,
+  lowerFirst,
 };
 
 function camelCase(string) {
-    checkStringIsValid(string);
-    if (string === '') {
-        return string;
-    }
-    const [firstLetter, ...rest] = string.replace(/[\W_]/g, '');
-    return `${firstLetter.toLowerCase()}${rest.join('')}`;
+  checkStringIsValid(string);
+  if (string === '') {
+    return string;
+  }
+  const [firstLetter, ...rest] = string.replace(/[\W_]/g, '');
+  return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
 function upperFirst(string) {
-    checkStringIsValid(string);
-    if (string === '') {
-        return string;
-    }
-    const [firstLetter, ...rest] = string;
-    return `${firstLetter.toUpperCase()}${rest.join('')}`;
+  checkStringIsValid(string);
+  if (string === '') {
+    return string;
+  }
+  const [firstLetter, ...rest] = string;
+  return `${firstLetter.toUpperCase()}${rest.join('')}`;
 }
 
 function lowerFirst(string) {
-    checkStringIsValid(string);
-    if (string === '') {
-        return string;
-    }
-    const [firstLetter, ...rest] = string;
-    return `${firstLetter.toLowerCase()}${rest.join('')}`;
+  checkStringIsValid(string);
+  if (string === '') {
+    return string;
+  }
+  const [firstLetter, ...rest] = string;
+  return `${firstLetter.toLowerCase()}${rest.join('')}`;
 }
 
 function checkStringIsValid(string) {
-    if (string === undefined || string === null) {
-        throw new Error('The passed string cannot be nil.');
-    }
+  if (string === undefined || string === null) {
+    throw new Error('The passed string cannot be nil.');
+  }
 }

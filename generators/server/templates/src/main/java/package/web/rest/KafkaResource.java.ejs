@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -63,35 +63,35 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
     private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaResource.class);
 
     private final KafkaProperties kafkaProperties;
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     private KafkaProducer<String, String> producer;
     private ExecutorService sseExecutorService = Executors.newCachedThreadPool();
-    <%_ } else { _%>
+<%_ } else { _%>
     private KafkaSender<String, String> sender;
-    <%_ }  _%>
+<%_ }  _%>
 
     public <%= upperFirstCamelCase(baseName) %>KafkaResource(KafkaProperties kafkaProperties) {
         this.kafkaProperties = kafkaProperties;
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         this.producer = new KafkaProducer<>(kafkaProperties.getProducerProps());
-        <%_ } else { _%>
+<%_ } else { _%>
         this.sender = KafkaSender.create(SenderOptions.create(kafkaProperties.getProducerProps()));
-        <%_ }  _%>
+<%_ }  _%>
     }
 
     @PostMapping("/publish/{topic}")
     public <% if (!reactive) { %>PublishResult<% } else { %>Mono<PublishResult><% }  %> publish(@PathVariable String topic, @RequestParam String message, @RequestParam(required = false) String key)<% if (!reactive) { %> throws ExecutionException, InterruptedException<% } %> {
         log.debug("REST request to send to Kafka topic {} with key {} the message : {}", topic, key, message);
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         RecordMetadata metadata = producer.send(new ProducerRecord<>(topic, key, message)).get();
         return new PublishResult(metadata.topic(), metadata.partition(), metadata.offset(), Instant.ofEpochMilli(metadata.timestamp()));
-        <%_ } else { _%>
+<%_ } else { _%>
         return Mono.just(SenderRecord.create(topic, null, null, key, message, null))
             .as(sender::send)
             .next()
             .map(SenderResult::recordMetadata)
             .map(metadata -> new PublishResult(metadata.topic(), metadata.partition(), metadata.offset(), Instant.ofEpochMilli(metadata.timestamp())));
-        <%_ }  _%>
+<%_ }  _%>
     }
 
     @GetMapping("/consume")
@@ -101,7 +101,7 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
         consumerProps.putAll(consumerParams);
         consumerProps.remove("topic");
 
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         SseEmitter emitter = new SseEmitter(0L);
         sseExecutorService.execute(() -> {
             KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
@@ -125,13 +125,13 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
             emitter.complete();
         });
         return emitter;
-        <%_ } else { _%>
+<%_ } else { _%>
         ReceiverOptions<String, String> receiverOptions = ReceiverOptions.<String, String>create(consumerProps)
             .subscription(topics);
         return KafkaReceiver.create(receiverOptions)
             .receive()
             .map(ConsumerRecord::value);
-        <%_ }  _%>
+<%_ }  _%>
     }
 
     private static class PublishResult {

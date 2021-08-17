@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,8 +20,18 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { EventManager, EventWithContent } from './event-manager.service';
 
-describe('Event Manager test', () => {
-  describe('Event Manager Test', () => {
+describe('Event Manager tests', () => {
+  describe('EventWithContent', () => {
+    it('should create correctly EventWithContent', () => {
+      // WHEN
+      const eventWithContent = new EventWithContent('name', 'content');
+
+      // THEN
+      expect(eventWithContent).toEqual({ name: 'name', content: 'content' });
+    });
+  });
+
+  describe('EventManager', () => {
     let recievedEvent: EventWithContent<unknown> | string | null;
 
     beforeEach(() => {

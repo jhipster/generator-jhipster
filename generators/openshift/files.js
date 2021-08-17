@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,61 +16,68 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+
+const NO_DATABASE = databaseTypes.NO;
+
 module.exports = {
-    writeFiles,
+  writeFiles,
 };
 
 function writeFiles() {
-    return {
-        writeDeployments() {
-            for (let i = 0; i < this.appConfigs.length; i++) {
-                const appName = this.appConfigs[i].baseName.toLowerCase();
-                this.app = this.appConfigs[i];
-                this.template('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
+  return {
+    writeDeployments() {
+      for (let i = 0; i < this.appConfigs.length; i++) {
+        const appName = this.appConfigs[i].baseName.toLowerCase();
+        this.app = this.appConfigs[i];
+        this.template('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
 
-                if (this.app.prodDatabaseType !== 'no') {
-                    this.template(
-                        `db/${this.app.prodDatabaseType}.yml.ejs`,
-                        `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`
-                    );
-                }
-                if (this.app.searchEngine === 'elasticsearch') {
-                    this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);
-                }
-            }
-        },
+        if (this.app.prodDatabaseType !== NO_DATABASE) {
+          this.template(
+            `db/${this.app.prodDatabaseType}.yml.ejs`,
+            `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`
+          );
+        }
+        if (this.app.searchEngine === ELASTICSEARCH) {
+          this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);
+        }
+      }
+    },
 
-        writeMessagingBroker() {
-            if (!this.useKafka) return;
-            this.template('messagebroker/kafka.yml.ejs', `${this.directoryPath}/ocp/messagebroker/kafka.yml`);
-        },
+    writeMessagingBroker() {
+      if (!this.useKafka) return;
+      this.template('messagebroker/kafka.yml.ejs', `${this.directoryPath}/ocp/messagebroker/kafka.yml`);
+    },
 
-        writeRegistryFiles() {
-            this.template('scc/scc-config.yml.ejs', `${this.directoryPath}/ocp/registry/scc-config.yml`);
-            if (this.serviceDiscoveryType === 'eureka') {
-                this.template('registry/jhipster-registry.yml.ejs', `${this.directoryPath}/ocp/registry/jhipster-registry.yml`);
-                this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
-            } else if (this.serviceDiscoveryType === 'consul') {
-                this.template('registry/consul.yml.ejs', `${this.directoryPath}/ocp/registry/consul.yml`);
-                this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
-            }
-        },
+    writeRegistryFiles() {
+      this.template('scc/scc-config.yml.ejs', `${this.directoryPath}/ocp/registry/scc-config.yml`);
+      if (this.serviceDiscoveryType === EUREKA) {
+        this.template('registry/jhipster-registry.yml.ejs', `${this.directoryPath}/ocp/registry/jhipster-registry.yml`);
+        this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
+      } else if (this.serviceDiscoveryType === CONSUL) {
+        this.template('registry/consul.yml.ejs', `${this.directoryPath}/ocp/registry/consul.yml`);
+        this.template('registry/application-configmap.yml.ejs', `${this.directoryPath}/ocp/registry/application-configmap.yml`);
+      }
+    },
 
-        writePrometheusFiles() {
-            if (this.monitoring !== 'prometheus') return;
+    writePrometheusFiles() {
+      if (this.monitoring !== PROMETHEUS) return;
 
-            const appsToMonitor = [];
-            for (let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push(`- ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
-            }
+      const appsToMonitor = [];
+      for (let i = 0; i < this.appConfigs.length; i++) {
+        appsToMonitor.push(`- ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
+      }
 
-            this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
+      this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
 
-            this.template('monitoring/jhipster-metrics.yml.ejs', `${this.directoryPath}/ocp/monitoring/jhipster-metrics.yml`);
-        },
+      this.template('monitoring/jhipster-metrics.yml.ejs', `${this.directoryPath}/ocp/monitoring/jhipster-metrics.yml`);
+    },
 
-        writeConfigRunFile() {
-            this.template('apply.sh.ejs', `${this.directoryPath}/ocp/ocp-apply.sh`);
-        },
-    };
+    writeConfigRunFile() {
+      this.template('apply.sh.ejs', `${this.directoryPath}/ocp/ocp-apply.sh`);
+    },
+  };
 }

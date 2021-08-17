@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,6 +18,8 @@
 -%>
 package <%= packageName %>.security;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,15 +30,15 @@ import reactor.util.context.Context;
 <%_ } else { _%>
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-    <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import java.time.Instant;
 import java.util.*;
 <%_ } else { _%>
@@ -48,7 +50,7 @@ import java.util.Optional;
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
 <%_ } _%>
 
@@ -58,6 +60,12 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
 class SecurityUtilsUnitTest {
 
 <%_ if (!reactive) { _%>
+    @BeforeEach
+    @AfterEach
+    void cleanup() {
+        SecurityContextHolder.clearContext();
+    }
+
     @Test
     void testGetCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
@@ -66,7 +74,7 @@ class SecurityUtilsUnitTest {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
         assertThat(login).contains("admin");
     }
-    <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
 
     @Test
     void testGetCurrentUserLoginForOAuth2() {
@@ -80,26 +88,53 @@ class SecurityUtilsUnitTest {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         OidcUser user = new DefaultOidcUser(authorities, idToken);
-        OAuth2AuthenticationToken bla = new OAuth2AuthenticationToken(user, authorities, "oidc");
-        securityContext.setAuthentication(bla);
+        OAuth2AuthenticationToken auth2AuthenticationToken = new OAuth2AuthenticationToken(user, authorities, "oidc");
+        securityContext.setAuthentication(auth2AuthenticationToken);
         SecurityContextHolder.setContext(securityContext);
 
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
         assertThat(login).contains("admin");
     }
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
-    void testgetCurrentUserJWT() {
+    void testExtractAuthorityFromClaims() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+
+        List<GrantedAuthority> expectedAuthorities = Arrays.asList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN), new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+
+        List<GrantedAuthority> authorities = SecurityUtils.extractAuthorityFromClaims(claims);
+
+        assertThat(authorities).isNotNull().isNotEmpty().hasSize(2)
+            .containsAll(expectedAuthorities);
+    }
+
+    @Test
+    void testExtractAuthorityFromClaims_NamespacedRoles() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(SecurityUtils.CLAIMS_NAMESPACE + "roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+
+        List<GrantedAuthority> expectedAuthorities = Arrays.asList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN), new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+
+        List<GrantedAuthority> authorities = SecurityUtils.extractAuthorityFromClaims(claims);
+
+        assertThat(authorities).isNotNull().isNotEmpty().hasSize(2)
+            .containsAll(expectedAuthorities);
+    }
+
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt) { _%>
+
+    @Test
+    void testGetCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
         SecurityContextHolder.setContext(securityContext);
         Optional<String> jwt = SecurityUtils.getCurrentUserJWT();
         assertThat(jwt).contains("token");
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Test
     void testIsAuthenticated() {
@@ -122,15 +157,15 @@ class SecurityUtilsUnitTest {
     }
 
     @Test
-    void testIsCurrentUserInRole() {
+    void testHasCurrentUserThisAuthority() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
         SecurityContextHolder.setContext(securityContext);
 
-        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)).isTrue();
-        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)).isFalse();
+        assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)).isTrue();
+        assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)).isFalse();
     }
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -145,7 +180,7 @@ class SecurityUtilsUnitTest {
             .block();
         assertThat(login).isEqualTo("admin");
     }
-    <%_ if (authenticationType === 'jwt') { _%>
+  <%_ if (authenticationTypeJwt) { _%>
 
     @Test
     void testgetCurrentUserJWT() {
@@ -158,7 +193,7 @@ class SecurityUtilsUnitTest {
             .block();
         assertThat(jwt).isEqualTo("token");
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Test
     void testIsAuthenticated() {
@@ -187,21 +222,21 @@ class SecurityUtilsUnitTest {
     }
 
     @Test
-    void testIsCurrentUserInRole() {
+    void testHasCurrentUserThisAuthority() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         Context context = ReactiveSecurityContextHolder.withAuthentication(
             new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
         );
-        Boolean isCurrentUserInRole = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)
+        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)
             .subscriberContext(context)
             .block();
-        assertThat(isCurrentUserInRole).isTrue();
+        assertThat(hasCurrentUserThisAuthority).isTrue();
 
-        isCurrentUserInRole = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)
+        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)
             .subscriberContext(context)
             .block();
-        assertThat(isCurrentUserInRole).isFalse();
+        assertThat(hasCurrentUserThisAuthority).isFalse();
     }
 <%_ } _%>
 

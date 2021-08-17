@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,134 +18,192 @@
  */
 /* eslint-disable consistent-return */
 const constants = require('../generator-constants');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { GENERATOR_ENTITY_SERVER } = require('../generator-list');
+const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
+const { SQL } = require('../../jdl/jhipster/database-types');
 const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 
 /* constants used throughout */
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-    constructor(args, opts) {
-        super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
-        this.entity = opts.context;
+    this.entity = this.options.context;
 
+    this.jhipsterContext = this.options.jhipsterContext || this.options.context;
+
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_SERVER, { context: this.options.context });
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _initializing() {
+    return {
+      setupConstants() {
+        // Make constants available in templates
+        this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+      },
+    };
+  }
+
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _preparing() {
+    return {
+      validateDatabaseSafety() {
+        const entity = this.entity;
+        if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType) && entity.jhiPrefix) {
+          entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
+        } else {
+          entity.entityInstanceDbSafe = entity.entityInstance;
+        }
+      },
+    };
+  }
+
+  get preparing() {
+    if (useBlueprints) return;
+    return this._preparing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _preparingFields() {
+    return {
+      processDerivedPrimaryKeyFields() {
+        const primaryKey = this.entity.primaryKey;
+        if (!primaryKey || primaryKey.composite || !primaryKey.derivedFields) {
+          return;
+        }
+        // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
+        const derivedFields = this.entity.primaryKey.derivedFields;
+        this.entity.fields.unshift(...derivedFields);
+      },
+      processFieldType() {
+        this.entity.fields.forEach(field => {
+          if (field.blobContentTypeText) {
+            field.javaFieldType = 'String';
+          } else {
+            field.javaFieldType = field.fieldType;
+          }
+        });
+      },
+    };
+  }
+
+  get preparingFields() {
+    if (useBlueprints) return;
+    return this._preparingFields();
+  }
+
+  _default() {
+    return {
+      ...super._missingPreDefault(),
+
+      loadConfigIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
-        this.jhipsterContext = opts.jhipsterContext || opts.context;
 
-        this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
-        this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.jhipsterContext.databaseType];
+        this.testsNeedCsrf = [OAUTH2, SESSION].includes(this.entity.authenticationType);
+        this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.entity.databaseType];
+      },
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-server', { context: opts.context });
-    }
+      /**
+       * Process json ignore references to prevent cyclic relationships.
+       */
+      processJsonIgnoreReferences() {
+        this.relationships
+          .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
+          .forEach(relationship => {
+            relationship.ignoreOtherSideProperty =
+              !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
+          });
+        this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
+      },
 
-    // Public API method used by the getter and also by Blueprints
-    _initializing() {
-        return {
-            setupConstants() {
-                // Make constants available in templates
-                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
-            },
-        };
-    }
+      processJavaEntityImports() {
+        this.importApiModelProperty =
+          this.relationships.some(relationship => relationship.javadoc) || this.fields.some(field => field.javadoc);
+      },
 
-    get initializing() {
-        if (useBlueprints) return;
-        return this._initializing();
-    }
+      processUniqueEnums() {
+        this.uniqueEnums = {};
 
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return super._missingPreDefault();
-    }
+        this.fields.forEach(field => {
+          if (
+            field.fieldIsEnum &&
+            (!this.uniqueEnums[field.fieldType] || (this.uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))
+          ) {
+            this.uniqueEnums[field.fieldType] = field.fieldType;
+          }
+        });
+      },
 
-    get default() {
-        if (useBlueprints) return;
-        return this._default();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _writing() {
-        return { ...writeFiles(), ...super._missingPostWriting() };
-    }
-
-    get writing() {
-        if (useBlueprints) return;
-        return this._writing();
-    }
-
-    _preparing() {
-        return {
-            /**
-             * Process json ignore references to prevent cyclic relationships.
-             */
-            processJsonIgnoreReferences() {
-                this.relationships
-                    .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
-                    .forEach(relationship => {
-                        relationship.ignoreOtherSideProperty =
-                            !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
-                    });
-                this.relationshipsContainOtherSideIgnore = this.relationships.some(relationship => relationship.ignoreOtherSideProperty);
-            },
-
-            processJavaEntityImports() {
-                this.importApiModelProperty =
-                    this.relationships.some(relationship => relationship.javadoc) || this.fields.some(field => field.javadoc);
-            },
-
-            processUniqueEnums() {
-                this.uniqueEnums = {};
-
-                this.fields.forEach(field => {
-                    if (
-                        field.fieldIsEnum &&
-                        (!this.uniqueEnums[field.fieldType] || (this.uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))
-                    ) {
-                        this.uniqueEnums[field.fieldType] = field.fieldType;
-                    }
-                });
-            },
-
-            useMapsIdRelation() {
-                const jpaDerivedRelation = this.relationships.find(rel => rel.useJPADerivedIdentifier === true);
-                if (jpaDerivedRelation) {
-                    this.isUsingMapsId = true;
-                    this.mapsIdAssoc = jpaDerivedRelation;
-                    this.hasOauthUser = this.mapsIdAssoc.otherEntityName === 'user' && this.authenticationType === 'oauth2';
-                } else {
-                    this.isUsingMapsId = false;
-                    this.mapsIdAssoc = null;
-                    this.hasOauthUser = false;
-                }
-            },
-
-            processUniqueEntityTypes() {
-                this.reactiveUniqueEntityTypes = new Set(this.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
-                this.reactiveUniqueEntityTypes.add(this.entityClass);
-            },
-        };
-    }
-
-    get preparing() {
-        if (useBlueprints) return;
-        return this._preparing();
-    }
-
-    /* Private methods used in templates */
-    _getJoinColumnName(relationship) {
-        if (relationship.useJPADerivedIdentifier === true) {
-            return 'id';
+      useMapsIdRelation() {
+        if (this.primaryKey && this.primaryKey.derived) {
+          this.isUsingMapsId = true;
+          this.mapsIdAssoc = this.relationships.find(rel => rel.id);
+          this.hasOauthUser = this.mapsIdAssoc.otherEntityName === 'user' && this.authenticationType === OAUTH2;
+        } else {
+          this.isUsingMapsId = false;
+          this.mapsIdAssoc = null;
+          this.hasOauthUser = false;
         }
-        return `${this.getColumnName(relationship.relationshipName)}_id`;
-    }
+      },
 
-    _generateSqlSafeName(name) {
-        if (isReservedTableName(name, 'sql')) {
-            return `e_${name}`;
-        }
-        return name;
+      processUniqueEntityTypes() {
+        this.reactiveUniqueEntityTypes = new Set(this.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
+        this.reactiveUniqueEntityTypes.add(this.entityClass);
+      },
+    };
+  }
+
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _writing() {
+    return { ...writeFiles(), ...super._missingPostWriting() };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  _postWriting() {
+    return {
+      customizeFiles() {
+        return customizeFiles.call(this);
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
+  }
+
+  /* Private methods used in templates */
+  _getJoinColumnName(relationship) {
+    if (relationship.id === true) {
+      return 'id';
     }
+    return `${this.getColumnName(relationship.relationshipName)}_id`;
+  }
+
+  _generateSqlSafeName(name) {
+    if (isReservedTableName(name, SQL)) {
+      return `e_${name}`;
+    }
+    return name;
+  }
 };

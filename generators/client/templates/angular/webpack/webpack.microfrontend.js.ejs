@@ -1,0 +1,149 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const packageJson = require('../package.json');
+const appVersion = packageJson.version;
+
+module.exports = (config, options, targetOptions) => {
+  return {
+    plugins: [
+      new ModuleFederationPlugin({
+<%_ if (applicationTypeMicroservice) { _%>
+        name: '<%= lowercaseBaseName %>',
+        filename: 'remoteEntry.js',
+        exposes: {
+    <%_ for (entity of Object.values(this.configOptions.sharedEntities || {}).filter(e => e.microserviceName)) { _%>
+          './<%= entity.entityFileName %>': 'app/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>.module.ts',
+    <%_ } _%>
+        },
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+        remotes: {
+          <%_ for ([microserviceName, microserviceConfig] of Object.entries(jhipsterConfig.applications || {})) { _%>
+          '<%= microserviceName %>': `<%= microserviceName %>@${targetOptions.target !== 'serve' ? '/services/<%= microserviceName %>' : 'http://localhost:<%= microserviceConfig.applicationIndex + devServerBasePort %>'}/remoteEntry.js`,
+          <%_ } _%>
+        },
+<%_ } _%>
+        shared: {
+          // { eager?, import?, packageName?, requiredVersion?, shareKey?, shareScope?, singleton?, strictVersion?, version? }
+          '@angular/core': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@angular/common'] %>' },
+          '@angular/common': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@angular/common'] %>' },
+          '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@angular/common'] %>' },
+          '@angular/router': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@angular/common'] %>' },
+          '@angular/forms': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@angular/common'] %>' },
+          '@angular/platform-browser': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@angular/common'] %>' },
+          '@fortawesome/angular-fontawesome': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@fortawesome/angular-fontawesome'] %>' },
+          '@fortawesome/fontawesome-common-types': { singleton: true, strictVersion: true },
+          '@fortawesome/fontawesome-svg-core': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@fortawesome/fontawesome-svg-core'] %>' },
+          '@fortawesome/free-solid-svg-icons': { singleton: true },
+          '@ng-bootstrap/ng-bootstrap': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@ng-bootstrap/ng-bootstrap'] %>' },
+          '@ngx-translate/core': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@ngx-translate/core'] %>' },
+          '@ngx-translate/http-loader': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['@ngx-translate/http-loader'] %>' },
+          dayjs: { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['dayjs'] %>' },
+          'ngx-infinite-scroll': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['ngx-infinite-scroll'] %>' },
+          'ngx-webstorage': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['ngx-webstorage'] %>' },
+          rxjs: { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['rxjs'] %>' },
+          'rxjs/operators': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['rxjs'] %>' },
+          'zone.js': { singleton: true, strictVersion: true, requiredVersion: '<%= dependabotPackageJson.dependencies['zone.js'] %>' },
+          'app/config/input.constants': {
+            singleton: true,
+            import: 'app/config/input.constants',
+            requiredVersion: appVersion,
+          },
+          'app/config/pagination.constants': {
+            singleton: true,
+            import: 'app/config/pagination.constants',
+            requiredVersion: appVersion,
+          },
+          'app/config/translation.config': {
+            singleton: true,
+            import: 'app/config/translation.config',
+            requiredVersion: appVersion,
+          },
+          'app/core/auth': {
+            singleton: true,
+            import: 'app/core/auth',
+            requiredVersion: appVersion,
+          },
+          'app/core/config': {
+            singleton: true,
+            import: 'app/core/config',
+            requiredVersion: appVersion,
+          },
+          'app/core/interceptor': {
+            singleton: true,
+            import: 'app/core/interceptor',
+            requiredVersion: appVersion,
+          },
+          'app/core/request': {
+            singleton: true,
+            import: 'app/core/request',
+            requiredVersion: appVersion,
+          },
+          'app/core/util': {
+            singleton: true,
+            import: 'app/core/util',
+            requiredVersion: appVersion,
+          },
+          'app/shared': {
+            singleton: true,
+            import: 'app/shared',
+            requiredVersion: appVersion,
+          },
+          'app/shared/alert': {
+            singleton: true,
+            import: 'app/shared/alert',
+            requiredVersion: appVersion,
+          },
+          'app/shared/auth': {
+            singleton: true,
+            import: 'app/shared/auth',
+            requiredVersion: appVersion,
+          },
+          'app/shared/date': {
+            singleton: true,
+            import: 'app/shared/date',
+            requiredVersion: appVersion,
+          },
+          'app/shared/language': {
+            singleton: true,
+            import: 'app/shared/language',
+            requiredVersion: appVersion,
+          },
+          'app/shared/pagination': {
+            singleton: true,
+            import: 'app/shared/pagination',
+            requiredVersion: appVersion,
+          },
+          'app/shared/sort': {
+            singleton: true,
+            import: 'app/shared/sort',
+            requiredVersion: appVersion,
+          },
+        },
+      }),
+    ],
+    output: {
+      publicPath: 'auto',
+    },
+    optimization: {
+      runtimeChunk: false,
+    },
+  };
+};

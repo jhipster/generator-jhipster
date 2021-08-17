@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,13 +18,13 @@
 -%>
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%= baseName.toLowerCase() %>-cassandra-migration:
-        environment:
-            - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
-            - USER=docker-cassandra-migration
-            # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra-Migration.Dockerfile
-        volumes:
-            - ../resources/config/cql:/cql:ro
+  <%= baseName.toLowerCase() %>-cassandra-migration:
+    environment:
+      - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
+      - USER=docker-cassandra-migration
+      # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
+    build:
+      context: .
+      dockerfile: cassandra/Cassandra-Migration.Dockerfile
+    volumes:
+      - ../resources/config/cql:/cql:ro

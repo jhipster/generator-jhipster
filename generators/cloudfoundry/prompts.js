@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,56 +20,56 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 module.exports = {
-    prompting,
+  prompting,
 };
 
 async function prompting() {
-    const databaseType = this.databaseType;
-    const prompts = [
+  const databaseType = this.databaseType;
+  const prompts = [
+    {
+      name: 'cloudfoundryDeployedName',
+      message: 'Name to deploy as:',
+      default: this.baseName,
+    },
+    {
+      type: 'list',
+      name: 'cloudfoundryProfile',
+      message: 'Which profile would you like to use?',
+      choices: [
         {
-            name: 'cloudfoundryDeployedName',
-            message: 'Name to deploy as:',
-            default: this.baseName,
+          value: 'dev',
+          name: 'dev',
         },
         {
-            type: 'list',
-            name: 'cloudfoundryProfile',
-            message: 'Which profile would you like to use?',
-            choices: [
-                {
-                    value: 'dev',
-                    name: 'dev',
-                },
-                {
-                    value: 'prod',
-                    name: 'prod',
-                },
-            ],
-            default: 0,
+          value: 'prod',
+          name: 'prod',
         },
-        {
-            when: response => databaseType !== 'no',
-            name: 'cloudfoundryDatabaseServiceName',
-            message: 'What is the name of your database service?',
-            default: 'elephantsql',
-        },
-        {
-            when: response => databaseType !== 'no',
-            name: 'cloudfoundryDatabaseServicePlan',
-            message: 'What is the name of your database plan?',
-            default: 'turtle',
-        },
-    ];
+      ],
+      default: 0,
+    },
+    {
+      when: response => databaseType !== 'no',
+      name: 'cloudfoundryDatabaseServiceName',
+      message: 'What is the name of your database service?',
+      default: 'elephantsql',
+    },
+    {
+      when: response => databaseType !== 'no',
+      name: 'cloudfoundryDatabaseServicePlan',
+      message: 'What is the name of your database plan?',
+      default: 'turtle',
+    },
+  ];
 
-    const props = await this.prompt(prompts);
+  const props = await this.prompt(prompts);
 
-    this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
-    this.cloudfoundryProfile = props.cloudfoundryProfile;
-    this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
-    this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
+  this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
+  this.cloudfoundryProfile = props.cloudfoundryProfile;
+  this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
+  this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
 
-    if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
-        this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
-        this.cloudfoundryProfile = 'prod';
-    }
+  if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
+    this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
+    this.cloudfoundryProfile = 'prod';
+  }
 }

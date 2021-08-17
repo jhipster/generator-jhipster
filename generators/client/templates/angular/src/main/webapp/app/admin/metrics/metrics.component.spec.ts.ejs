@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ import { of } from 'rxjs';
 
 import { MetricsComponent } from './metrics.component';
 import { MetricsService } from './metrics.service';
+import { Metrics } from './metrics.model';
 
 describe('Component Tests', () => {
   describe('MetricsComponent', () => {
@@ -49,19 +50,7 @@ describe('Component Tests', () => {
     describe('refresh', () => {
       it('should call refresh on init', () => {
         // GIVEN
-        const response = {
-          timers: {
-            service: 'test',
-            unrelatedKey: 'test',
-          },
-          gauges: {
-            'jcache.statistics': {
-              value: 2,
-            },
-            unrelatedKey: 'test',
-          },
-        };
-        spyOn(service, 'getMetrics').and.returnValue(of(response));
+        jest.spyOn(service, 'getMetrics').mockReturnValue(of({} as Metrics));
 
         // WHEN
         comp.ngOnInit();

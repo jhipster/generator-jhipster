@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,6 +27,7 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         // Workaround until https://github.com/reactor/reactor-core/issues/2137 is fixed
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler$BoundedState", "dispose");
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler", "schedule");
+        builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
     }
 
 }

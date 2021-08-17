@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,42 +17,43 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
-export interface I<%= entityReactName %>DeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
+export const <%= entityReactName %>DeleteDialog = (props: RouteComponentProps<{ id: string }>) => {
+  const dispatch = useAppDispatch();
 
-export const <%= entityReactName %>DeleteDialog = (props: I<%= entityReactName %>DeleteDialogProps) => {
   useEffect(() => {
-    props.getEntity(props.match.params.id);
+    dispatch(getEntity(props.match.params.id));
   }, []);
 
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
+  const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
+
   const handleClose = () => {
-    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
+    props.history.push('/<%= entityFileName %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
   };
 
   useEffect(() => {
-    if (props.updateSuccess) {
+    if (updateSuccess) {
       handleClose();
     }
-  }, [props.updateSuccess]);
+  }, [updateSuccess]);
 
   const confirmDelete = () => {
-    props.deleteEntity(props.<%= entityInstance %>Entity.id);
+    dispatch(deleteEntity(<%= entityInstance %>Entity.<%= primaryKey.name %>));
   }
 
-  const { <%= entityInstance %>Entity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
     <ModalHeader toggle={handleClose} data-cy="<%= entityInstance %>DeleteDialogHeading"><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
     <ModalBody id="<%= i18nKeyPrefix %>.delete.question">
-      <Translate contentKey="<%= i18nKeyPrefix %>.delete.question" interpolate={{ id: <%= entityInstance %>Entity.id }}>
+      <Translate contentKey="<%= i18nKeyPrefix %>.delete.question" interpolate={{ id: <%= entityInstance %>Entity.<%= primaryKey.name %> }}>
           Are you sure you want to delete this <%= entityClass %>?
       </Translate>
     </ModalBody>
@@ -70,14 +71,4 @@ export const <%= entityReactName %>DeleteDialog = (props: I<%= entityReactName %
   );
 };
 
-const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-  <%= entityInstance %>Entity: <%= entityInstance %>.entity,
-  updateSuccess: <%= entityInstance %>.updateSuccess
-});
-
-const mapDispatchToProps = { getEntity, deleteEntity };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>DeleteDialog);
+export default <%= entityReactName %>DeleteDialog;

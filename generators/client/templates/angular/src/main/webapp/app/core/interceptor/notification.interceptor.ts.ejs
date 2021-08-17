@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,29 +32,29 @@ export class NotificationInterceptor implements HttpInterceptor {
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           let alert: string | null = null;
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           let alertParams: string | null = null;
-          <%_ } _%>
+<%_ } _%>
 
           for (const headerKey of event.headers.keys()) {
             if (headerKey.toLowerCase().endsWith('app-alert')) {
               alert = event.headers.get(headerKey);
-            <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             } else if (headerKey.toLowerCase().endsWith('app-params')) {
               alertParams = decodeURIComponent(event.headers.get(headerKey)!.replace(/\+/g, ' '));
-            <%_ } _%>
+<%_ } _%>
             }
           }
 
           if (alert) {
             this.alertService.addAlert({
               type: 'success',
-              <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
               translationKey: alert,
               translationParams: { param: alertParams },
-              <%_ } else { _%>
+<%_ } else { _%>
               message: alert,
-              <%_ } _%>
+<%_ } _%>
             });
           }
         }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,17 @@ import { SessionStorageService } from 'ngx-webstorage';
 export class StateStorageService {
   private previousUrlKey = 'previousUrl';
 
-  constructor(private $sessionStorage: SessionStorageService) {}
+  constructor(private sessionStorageService: SessionStorageService) {}
 
   storeUrl(url: string): void {
-    this.$sessionStorage.store(this.previousUrlKey, url);
+    this.sessionStorageService.store(this.previousUrlKey, url);
   }
 
   getUrl(): string | null {
-    return this.$sessionStorage.retrieve(this.previousUrlKey) as string | null;
+    return this.sessionStorageService.retrieve(this.previousUrlKey) as string | null;
   }
 
   clearUrl(): void {
-    this.$sessionStorage.clear(this.previousUrlKey);
+    this.sessionStorageService.clear(this.previousUrlKey);
   }
 }

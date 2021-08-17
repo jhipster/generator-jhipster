@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,7 +28,7 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>?: I<%= entityAngularName %>;
 
-    constructor(protected <%= entityInstance %>Service: <%= entityAngularName %>Service, public activeModal: NgbActiveModal) {}
+    constructor(protected <%= entityInstance %>Service: <%= entityAngularName %>Service, protected activeModal: NgbActiveModal) {}
 
     cancel(): void {
         this.activeModal.dismiss();

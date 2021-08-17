@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,260 +22,260 @@ const { expect } = require('chai');
 const JSONEntity = require('../../../jdl/jhipster/json-entity');
 
 describe('JSONEntity', () => {
-    describe('new', () => {
-        context('when not passing a configuration', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JSONEntity();
-                }).to.throw(/^At least an entity name must be passed\.$/);
-            });
-        });
-        context('when not passing an entity name', () => {
-            it('should fail', () => {
-                expect(() => {
-                    new JSONEntity({});
-                }).to.throw(/^At least an entity name must be passed\.$/);
-            });
-        });
-        context('when only passing an entity name', () => {
-            let entity;
-
-            before(() => {
-                entity = new JSONEntity({
-                    entityName: 'toto',
-                });
-            });
-
-            it('should set default values', () => {
-                expect(entity).to.deep.equal({
-                    name: 'Toto',
-                    dto: 'no',
-                    entityTableName: 'toto',
-                    fields: [],
-                    fluentMethods: true,
-                    javadoc: undefined,
-                    jpaMetamodelFiltering: false,
-                    pagination: 'no',
-                    readOnly: false,
-                    embedded: false,
-                    relationships: [],
-                    service: 'no',
-                    applications: [],
-                });
-            });
-        });
-        context('when passing values', () => {
-            let entity;
-
-            before(() => {
-                entity = new JSONEntity({
-                    entityName: 'Titi',
-                    dto: 'mapstruct',
-                    entityTableName: 'titi',
-                    fields: [42],
-                    fluentMethods: true,
-                    javadoc: '',
-                    jpaMetamodelFiltering: true,
-                    pagination: 'pagination',
-                    readOnly: true,
-                    embedded: true,
-                    relationships: [42, 43],
-                    service: 'serviceClass',
-                    microserviceName: 'nope',
-                    angularJSSuffix: 'yes',
-                    clientRootFolder: 'oh',
-                    skipServer: true,
-                    skipClient: true,
-                    applications: [],
-                });
-            });
-
-            it('should use them', () => {
-                expect(entity).to.deep.equal({
-                    name: 'Titi',
-                    dto: 'mapstruct',
-                    entityTableName: 'titi',
-                    fields: [42],
-                    fluentMethods: true,
-                    javadoc: '',
-                    jpaMetamodelFiltering: true,
-                    pagination: 'pagination',
-                    readOnly: true,
-                    embedded: true,
-                    relationships: [42, 43],
-                    service: 'serviceClass',
-                    microserviceName: 'nope',
-                    angularJSSuffix: 'yes',
-                    clientRootFolder: 'oh',
-                    skipServer: true,
-                    skipClient: true,
-                    applications: [],
-                });
-            });
-        });
+  describe('new', () => {
+    context('when not passing a configuration', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JSONEntity();
+        }).to.throw(/^At least an entity name must be passed\.$/);
+      });
     });
-    describe('addField', () => {
-        let entity;
-
-        before(() => {
-            entity = new JSONEntity({
-                entityName: 'toto',
-            });
-        });
-
-        context('when not passing anything', () => {
-            before(() => {
-                entity.addField();
-            });
-
-            it('should do nothing', () => {
-                expect(entity.fields).to.deep.equal([]);
-            });
-        });
-        context('when passing something', () => {
-            before(() => {
-                entity.addField(42);
-            });
-
-            it('should add it', () => {
-                expect(entity.fields).to.deep.equal([42]);
-            });
-        });
+    context('when not passing an entity name', () => {
+      it('should fail', () => {
+        expect(() => {
+          new JSONEntity({});
+        }).to.throw(/^At least an entity name must be passed\.$/);
+      });
     });
-    describe('addFields', () => {
-        let entity;
+    context('when only passing an entity name', () => {
+      let entity;
 
-        before(() => {
-            entity = new JSONEntity({
-                entityName: 'toto',
-            });
+      before(() => {
+        entity = new JSONEntity({
+          entityName: 'toto',
         });
+      });
 
-        context('when not passing anything', () => {
-            before(() => {
-                entity.addFields();
-            });
-
-            it('should do nothing', () => {
-                expect(entity.fields).to.deep.equal([]);
-            });
+      it('should set default values', () => {
+        expect(entity).to.deep.equal({
+          name: 'Toto',
+          dto: 'no',
+          entityTableName: 'toto',
+          fields: [],
+          fluentMethods: true,
+          javadoc: undefined,
+          jpaMetamodelFiltering: false,
+          pagination: 'no',
+          readOnly: false,
+          embedded: false,
+          relationships: [],
+          service: 'no',
+          applications: [],
         });
-        context('when passing something', () => {
-            before(() => {
-                entity.addFields([42, 43]);
-            });
-
-            it('should add it', () => {
-                expect(entity.fields).to.deep.equal([42, 43]);
-            });
-        });
+      });
     });
-    describe('addRelationship', () => {
-        let entity;
+    context('when passing values', () => {
+      let entity;
 
-        before(() => {
-            entity = new JSONEntity({
-                entityName: 'toto',
-            });
+      before(() => {
+        entity = new JSONEntity({
+          entityName: 'Titi',
+          dto: 'mapstruct',
+          entityTableName: 'titi',
+          fields: [42],
+          fluentMethods: true,
+          javadoc: '',
+          jpaMetamodelFiltering: true,
+          pagination: 'pagination',
+          readOnly: true,
+          embedded: true,
+          relationships: [42, 43],
+          service: 'serviceClass',
+          microserviceName: 'nope',
+          angularJSSuffix: 'yes',
+          clientRootFolder: 'oh',
+          skipServer: true,
+          skipClient: true,
+          applications: [],
         });
+      });
 
-        context('when not passing anything', () => {
-            before(() => {
-                entity.addRelationship();
-            });
-
-            it('should do nothing', () => {
-                expect(entity.relationships).to.deep.equal([]);
-            });
+      it('should use them', () => {
+        expect(entity).to.deep.equal({
+          name: 'Titi',
+          dto: 'mapstruct',
+          entityTableName: 'titi',
+          fields: [42],
+          fluentMethods: true,
+          javadoc: '',
+          jpaMetamodelFiltering: true,
+          pagination: 'pagination',
+          readOnly: true,
+          embedded: true,
+          relationships: [42, 43],
+          service: 'serviceClass',
+          microserviceName: 'nope',
+          angularJSSuffix: 'yes',
+          clientRootFolder: 'oh',
+          skipServer: true,
+          skipClient: true,
+          applications: [],
         });
-        context('when passing something', () => {
-            before(() => {
-                entity.addRelationship(42);
-            });
-
-            it('should add it', () => {
-                expect(entity.relationships).to.deep.equal([42]);
-            });
-        });
+      });
     });
-    describe('addRelationships', () => {
-        let entity;
+  });
+  describe('addField', () => {
+    let entity;
 
-        before(() => {
-            entity = new JSONEntity({
-                entityName: 'toto',
-            });
-        });
-
-        context('when not passing anything', () => {
-            before(() => {
-                entity.addRelationships();
-            });
-
-            it('should do nothing', () => {
-                expect(entity.relationships).to.deep.equal([]);
-            });
-        });
-        context('when passing something', () => {
-            before(() => {
-                entity.addRelationships([42, 43]);
-            });
-
-            it('should add it', () => {
-                expect(entity.relationships).to.deep.equal([42, 43]);
-            });
-        });
+    before(() => {
+      entity = new JSONEntity({
+        entityName: 'toto',
+      });
     });
-    describe('setOptions', () => {
-        context('when not passing options', () => {
-            let originalJSONEntity;
-            let touchedJSONEntity;
 
-            before(() => {
-                originalJSONEntity = new JSONEntity({
-                    entityName: 'Toto',
-                });
-                touchedJSONEntity = new JSONEntity({
-                    entityName: 'Toto',
-                });
-                touchedJSONEntity.setOptions();
-            });
+    context('when not passing anything', () => {
+      before(() => {
+        entity.addField();
+      });
 
-            it('should not modify the object', () => {
-                expect(touchedJSONEntity).to.deep.equal(originalJSONEntity);
-            });
-        });
-        context('when passing options', () => {
-            let jsonEntity;
-
-            before(() => {
-                jsonEntity = new JSONEntity({
-                    entityName: 'Toto',
-                    javadoc: 'A comment',
-                });
-                jsonEntity.setOptions({
-                    dto: 'mapstruct',
-                    pagination: 'pagination',
-                });
-            });
-
-            it('should set them', () => {
-                expect(jsonEntity).to.deep.equal({
-                    applications: [],
-                    dto: 'mapstruct',
-                    embedded: false,
-                    entityTableName: 'toto',
-                    fields: [],
-                    fluentMethods: true,
-                    javadoc: 'A comment',
-                    jpaMetamodelFiltering: false,
-                    name: 'Toto',
-                    pagination: 'pagination',
-                    readOnly: false,
-                    relationships: [],
-                    service: 'no',
-                });
-            });
-        });
+      it('should do nothing', () => {
+        expect(entity.fields).to.deep.equal([]);
+      });
     });
+    context('when passing something', () => {
+      before(() => {
+        entity.addField(42);
+      });
+
+      it('should add it', () => {
+        expect(entity.fields).to.deep.equal([42]);
+      });
+    });
+  });
+  describe('addFields', () => {
+    let entity;
+
+    before(() => {
+      entity = new JSONEntity({
+        entityName: 'toto',
+      });
+    });
+
+    context('when not passing anything', () => {
+      before(() => {
+        entity.addFields();
+      });
+
+      it('should do nothing', () => {
+        expect(entity.fields).to.deep.equal([]);
+      });
+    });
+    context('when passing something', () => {
+      before(() => {
+        entity.addFields([42, 43]);
+      });
+
+      it('should add it', () => {
+        expect(entity.fields).to.deep.equal([42, 43]);
+      });
+    });
+  });
+  describe('addRelationship', () => {
+    let entity;
+
+    before(() => {
+      entity = new JSONEntity({
+        entityName: 'toto',
+      });
+    });
+
+    context('when not passing anything', () => {
+      before(() => {
+        entity.addRelationship();
+      });
+
+      it('should do nothing', () => {
+        expect(entity.relationships).to.deep.equal([]);
+      });
+    });
+    context('when passing something', () => {
+      before(() => {
+        entity.addRelationship(42);
+      });
+
+      it('should add it', () => {
+        expect(entity.relationships).to.deep.equal([42]);
+      });
+    });
+  });
+  describe('addRelationships', () => {
+    let entity;
+
+    before(() => {
+      entity = new JSONEntity({
+        entityName: 'toto',
+      });
+    });
+
+    context('when not passing anything', () => {
+      before(() => {
+        entity.addRelationships();
+      });
+
+      it('should do nothing', () => {
+        expect(entity.relationships).to.deep.equal([]);
+      });
+    });
+    context('when passing something', () => {
+      before(() => {
+        entity.addRelationships([42, 43]);
+      });
+
+      it('should add it', () => {
+        expect(entity.relationships).to.deep.equal([42, 43]);
+      });
+    });
+  });
+  describe('setOptions', () => {
+    context('when not passing options', () => {
+      let originalJSONEntity;
+      let touchedJSONEntity;
+
+      before(() => {
+        originalJSONEntity = new JSONEntity({
+          entityName: 'Toto',
+        });
+        touchedJSONEntity = new JSONEntity({
+          entityName: 'Toto',
+        });
+        touchedJSONEntity.setOptions();
+      });
+
+      it('should not modify the object', () => {
+        expect(touchedJSONEntity).to.deep.equal(originalJSONEntity);
+      });
+    });
+    context('when passing options', () => {
+      let jsonEntity;
+
+      before(() => {
+        jsonEntity = new JSONEntity({
+          entityName: 'Toto',
+          javadoc: 'A comment',
+        });
+        jsonEntity.setOptions({
+          dto: 'mapstruct',
+          pagination: 'pagination',
+        });
+      });
+
+      it('should set them', () => {
+        expect(jsonEntity).to.deep.equal({
+          applications: [],
+          dto: 'mapstruct',
+          embedded: false,
+          entityTableName: 'toto',
+          fields: [],
+          fluentMethods: true,
+          javadoc: 'A comment',
+          jpaMetamodelFiltering: false,
+          name: 'Toto',
+          pagination: 'pagination',
+          readOnly: false,
+          relationships: [],
+          service: 'no',
+        });
+      });
+    });
+  });
 });

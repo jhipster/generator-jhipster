@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Verzeihung, ein Fehler ist aufgetreten.
 error.status=Status:
 error.message=Meldung:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> Aktivierung
 email.activation.greeting=Liebe(r) {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> Passwort zurücksetzen
 email.reset.greeting=Liebe(r) {0}
 email.reset.text1=Für Ihren <%= baseName %> Account wurde ein neues Passwort angefordert, bitte klicken Sie unten auf den Link, um das Passwort zurückzusetzen:
 email.reset.text2=Grüße,
+<%_ } _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
@@ -32,13 +32,13 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("/api/exception-translator-test")
 public class ExceptionTranslatorTestController {
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 
     @GetMapping("/concurrency-failure")
     public void concurrencyFailure() {
         throw new ConcurrencyFailureException("test concurrency failure");
     }
-    <%_ } _%>
+<%_ } _%>
 
     @PostMapping("/method-argument")
     public void methodArgument(@Valid @RequestBody Test<%= dtoSuffix %> test<%= dtoSuffix %>) {
@@ -74,7 +74,7 @@ public class ExceptionTranslatorTestController {
 
     public static class Test<%= dtoSuffix %> {
 
-        @NotNull
+        @NotNull<% if (reactive) { %>(message = "must not be null")<% } %>
         private String test;
 
         public String getTest() {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,10 +19,6 @@
 rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
-# Build properties
-nodeVersion=<%= NODE_VERSION %>
-npmVersion=<%= NPM_VERSION %>
-
 # Dependency versions
 jhipsterDependenciesVersion=<%= JHIPSTER_DEPENDENCIES_VERSION %>
 # The spring-boot version should match the one managed by
@@ -31,51 +27,53 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
-mapstructVersion=1.4.1.Final
-archunitJunit5Version=0.14.1
+mapstructVersion=1.4.2.Final
+archunitJunit5Version=0.19.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
-<%_ if (cacheProvider === 'caffeine') { _%>
-caffeineVersion=2.8.8
+<%_ if (cacheProviderCaffeine) { _%>
+caffeineVersion=3.0.2
 typesafeConfigVersion=1.4.1
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibaseHibernate5Version=4.2.2
+<%_ if (databaseTypeSql && !reactive) { _%>
+liquibaseHibernate5Version=4.4.2
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
-<%_ if (reactive) { _%>
-blockhoundJunitPlatformVersion=1.0.4.RELEASE
-junitPlatformLauncherVersion=1.7.0
-r2dbcMariadbVersion=1.0.0
+<%_ if (databaseTypeSql && reactive) { _%>
+commonsBeanutilsVersion=1.9.4
 <%_ } _%>
 
-<%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
+<%_ if (reactive) { _%>
+blockhoundJunitPlatformVersion=1.0.6.RELEASE
+junitPlatformLauncherVersion=1.7.2
+<%_ } _%>
+
+<%_ if (databaseTypeSql) { _%>
 jaxbRuntimeVersion=2.3.3
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=4.6.1
+cassandraDriverVersion=4.11.2
 <%_ } _%>
 
 # gradle plugin version
 jibPluginVersion=<%= JIB_VERSION %>
-gitPropertiesPluginVersion=2.2.4
+gitPropertiesPluginVersion=2.3.1
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=2.2.4
+gradleNodePluginVersion=3.1.0
 <%_ } _%>
-aptPluginVersion=0.21
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 liquibasePluginVersion=2.0.4
 <%_ } _%>
-sonarqubePluginVersion=3.0
+sonarqubePluginVersion=3.3
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=4.3.1
+openapiPluginVersion=5.1.1
 <%_ } _%>
-springNoHttpPluginVersion=0.0.5.RELEASE
-checkstyleVersion=8.38
+noHttpPluginVersion=0.0.8
+checkstyleVersion=8.43
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 
@@ -83,7 +81,6 @@ checkstyleVersion=8.38
 
 ## The Gradle daemon aims to improve the startup and execution time of Gradle.
 ## The daemon is enabled by default in Gradle 3+ setting this to false will disable this.
-## TODO: disable daemon on CI, since builds should be clean and reliable on servers
 ## https://docs.gradle.org/current/userguide/gradle_daemon.html#sec:ways_to_disable_gradle_daemon
 ## uncomment the below line to disable the daemon
 
@@ -109,3 +106,6 @@ checkstyleVersion=8.38
 ## uncomment the below line to enable the selective mode
 
 #org.gradle.configureondemand=true
+
+## Install and use a local version of node and npm.
+nodeInstall

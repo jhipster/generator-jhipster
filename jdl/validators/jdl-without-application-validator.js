@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -33,9 +33,10 @@ const BinaryOptions = require('../jhipster/binary-options');
 
 const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { isReservedTableName } = require('../jhipster/reserved-keywords');
+const { isReservedPaginationWords } = require('../jhipster/reserved-keywords');
 
 module.exports = {
-    createValidator,
+  createValidator,
 };
 
 /**
@@ -49,156 +50,162 @@ module.exports = {
  * @param {Array} applicationSettings.blueprints - the blueprints used.
  * @param {Object} logger - the logger to use, default to the console.
  */
-function createValidator(jdlObject, applicationSettings = {}, logger = console) {
-    if (!jdlObject) {
-        throw new Error('A JDL object must be passed to check for business errors.');
-    }
+function createValidator(jdlObject, applicationSettings = {}, logger = console, options = {}) {
+  if (!jdlObject) {
+    throw new Error('A JDL object must be passed to check for business errors.');
+  }
+  const { unidirectionalRelationships } = options;
 
-    if (applicationSettings.blueprints && applicationSettings.blueprints.length !== 0) {
-        return {
-            checkForErrors: () => {
-                logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
-            },
-        };
-    }
-
+  if (applicationSettings.blueprints && applicationSettings.blueprints.length !== 0) {
     return {
-        checkForErrors: () => {
-            checkForEntityErrors();
-            checkForRelationshipErrors();
-            checkForEnumErrors();
-            checkDeploymentsErrors();
-            checkForOptionErrors();
-        },
+      checkForErrors: () => {
+        logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
+      },
     };
+  }
 
-    function checkForEntityErrors() {
-        if (jdlObject.getEntityQuantity() === 0) {
-            return;
-        }
-        if (!applicationSettings.databaseType) {
-            throw new Error('Database type is required to validate entities.');
-        }
-        const validator = new EntityValidator();
-        jdlObject.forEachEntity(jdlEntity => {
-            validator.validate(jdlEntity);
-            if (isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
-                logger.warn(
-                    `The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`
-                );
-            }
-            checkForFieldErrors(jdlEntity.name, jdlEntity.fields);
-        });
-    }
+  return {
+    checkForErrors: () => {
+      checkForEntityErrors();
+      checkForRelationshipErrors({ unidirectionalRelationships });
+      checkForEnumErrors();
+      checkDeploymentsErrors();
+      checkForOptionErrors();
+    },
+  };
 
-    function checkForFieldErrors(entityName, jdlFields) {
-        const validator = new FieldValidator();
-        Object.keys(jdlFields).forEach(fieldName => {
-            const jdlField = jdlFields[fieldName];
-            validator.validate(jdlField);
-            if (isReservedFieldName(jdlField.name)) {
-                logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
-            }
-            const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
-            if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
-                throw new Error(`The type '${jdlField.type}' is an unknown field type for field '${fieldName}' of entity '${entityName}'.`);
-            }
-            const isAnEnum = jdlObject.hasEnum(jdlField.type);
-            checkForValidationErrors(jdlField, isAnEnum);
-        });
+  function checkForEntityErrors() {
+    if (jdlObject.getEntityQuantity() === 0) {
+      return;
     }
+    if (!applicationSettings.databaseType) {
+      throw new Error('Database type is required to validate entities.');
+    }
+    const validator = new EntityValidator();
+    jdlObject.forEachEntity(jdlEntity => {
+      validator.validate(jdlEntity);
+      if (isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
+        logger.warn(`The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
+      }
+      checkForFieldErrors(jdlEntity.name, jdlEntity.fields);
+    });
+  }
 
-    function checkForValidationErrors(jdlField, isAnEnum) {
-        const validator = new ValidationValidator();
-        jdlField.forEachValidation(jdlValidation => {
-            validator.validate(jdlValidation);
-            if (!FieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
-                throw new Error(`The validation '${jdlValidation.name}' isn't supported for the type '${jdlField.type}'.`);
-            }
-        });
-    }
+  function checkForFieldErrors(entityName, jdlFields) {
+    const validator = new FieldValidator();
+    const filtering = applicationSettings.databaseType === 'sql';
+    Object.keys(jdlFields).forEach(fieldName => {
+      const jdlField = jdlFields[fieldName];
+      validator.validate(jdlField);
+      if (isReservedFieldName(jdlField.name)) {
+        logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
+      }
+      if (filtering && isReservedPaginationWords(jdlField.name)) {
+        throw new Error(
+          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`
+        );
+      }
+      const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
+      if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
+        throw new Error(`The type '${jdlField.type}' is an unknown field type for field '${fieldName}' of entity '${entityName}'.`);
+      }
+      const isAnEnum = jdlObject.hasEnum(jdlField.type);
+      checkForValidationErrors(jdlField, isAnEnum);
+    });
+  }
 
-    function checkForRelationshipErrors() {
-        if (jdlObject.getRelationshipQuantity() === 0) {
-            return;
-        }
-        const skippedUserManagement =
-            applicationSettings.skippedUserManagement || jdlObject.getOptionsForName(OptionNames.SKIP_USER_MANAGEMENT)[0];
-        const validator = new RelationshipValidator();
-        jdlObject.forEachRelationship(jdlRelationship => {
-            validator.validate(jdlRelationship, skippedUserManagement);
-            checkForAbsentEntities({
-                jdlRelationship,
-                doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
-                skippedUserManagementOption: skippedUserManagement,
-            });
-        });
-    }
+  function checkForValidationErrors(jdlField, isAnEnum) {
+    const validator = new ValidationValidator();
+    jdlField.forEachValidation(jdlValidation => {
+      validator.validate(jdlValidation);
+      if (!FieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
+        throw new Error(`The validation '${jdlValidation.name}' isn't supported for the type '${jdlField.type}'.`);
+      }
+    });
+  }
 
-    function checkForEnumErrors() {
-        if (jdlObject.getEnumQuantity() === 0) {
-            return;
-        }
-        const validator = new EnumValidator();
-        jdlObject.forEachEnum(jdlEnum => {
-            validator.validate(jdlEnum);
-        });
+  function checkForRelationshipErrors(options = {}) {
+    if (jdlObject.getRelationshipQuantity() === 0) {
+      return;
     }
+    const { unidirectionalRelationships } = options;
+    const skippedUserManagement =
+      applicationSettings.skippedUserManagement || jdlObject.getOptionsForName(OptionNames.SKIP_USER_MANAGEMENT)[0];
+    const validator = new RelationshipValidator();
+    jdlObject.forEachRelationship(jdlRelationship => {
+      validator.validate(jdlRelationship, { skippedUserManagement, unidirectionalRelationships });
+      checkForAbsentEntities({
+        jdlRelationship,
+        doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
+        skippedUserManagementOption: skippedUserManagement,
+      });
+    });
+  }
 
-    function checkDeploymentsErrors() {
-        if (jdlObject.getDeploymentQuantity() === 0) {
-            return;
-        }
-        const validator = new DeploymentValidator();
-        jdlObject.forEachDeployment(deployment => {
-            validator.validate(deployment);
-        });
+  function checkForEnumErrors() {
+    if (jdlObject.getEnumQuantity() === 0) {
+      return;
     }
+    const validator = new EnumValidator();
+    jdlObject.forEachEnum(jdlEnum => {
+      validator.validate(jdlEnum);
+    });
+  }
 
-    function checkForOptionErrors() {
-        if (jdlObject.getOptionQuantity() === 0) {
-            return;
-        }
-        const unaryOptionValidator = new UnaryOptionValidator();
-        const binaryOptionValidator = new BinaryOptionValidator();
-        jdlObject.getOptions().forEach(option => {
-            if (option.getType() === 'UNARY') {
-                unaryOptionValidator.validate(option);
-            } else {
-                binaryOptionValidator.validate(option);
-            }
-            checkForPaginationInAppWithCassandra(option, applicationSettings);
-        });
+  function checkDeploymentsErrors() {
+    if (jdlObject.getDeploymentQuantity() === 0) {
+      return;
     }
+    const validator = new DeploymentValidator();
+    jdlObject.forEachDeployment(deployment => {
+      validator.validate(deployment);
+    });
+  }
+
+  function checkForOptionErrors() {
+    if (jdlObject.getOptionQuantity() === 0) {
+      return;
+    }
+    const unaryOptionValidator = new UnaryOptionValidator();
+    const binaryOptionValidator = new BinaryOptionValidator();
+    jdlObject.getOptions().forEach(option => {
+      if (option.getType() === 'UNARY') {
+        unaryOptionValidator.validate(option);
+      } else {
+        binaryOptionValidator.validate(option);
+      }
+      checkForPaginationInAppWithCassandra(option, applicationSettings);
+    });
+  }
 }
 
 function getTypeCheckingFunction(entityName, applicationSettings) {
-    if (applicationSettings.applicationType === ApplicationTypes.GATEWAY) {
-        return () => true;
-    }
-    return FieldTypes.getIsType(applicationSettings.databaseType);
+  if (applicationSettings.applicationType === ApplicationTypes.GATEWAY) {
+    return () => true;
+  }
+  return FieldTypes.getIsType(applicationSettings.databaseType);
 }
 
 function checkForAbsentEntities({ jdlRelationship, doesEntityExist, skippedUserManagementOption }) {
-    const absentEntities = [];
-    if (!doesEntityExist(jdlRelationship.from)) {
-        absentEntities.push(jdlRelationship.from);
-    }
-    if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
-        absentEntities.push(jdlRelationship.to);
-    }
-    if (absentEntities.length !== 0) {
-        throw new Error(
-            `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
-                `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
-        );
-    }
+  const absentEntities = [];
+  if (!doesEntityExist(jdlRelationship.from)) {
+    absentEntities.push(jdlRelationship.from);
+  }
+  if (!doesEntityExist(jdlRelationship.to) && (!isUserManagementEntity(jdlRelationship.to) || skippedUserManagementOption)) {
+    absentEntities.push(jdlRelationship.to);
+  }
+  if (absentEntities.length !== 0) {
+    throw new Error(
+      `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
+        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared.`
+    );
+  }
 }
 function isUserManagementEntity(entityName) {
-    return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
+  return entityName.toLowerCase() === 'user' || entityName.toLowerCase() === 'authority';
 }
 function checkForPaginationInAppWithCassandra(jdlOption, applicationSettings) {
-    if (applicationSettings.databaseType === DatabaseTypes.CASSANDRA && jdlOption.name === BinaryOptions.Options.PAGINATION) {
-        throw new Error("Pagination isn't allowed when the application uses Cassandra.");
-    }
+  if (applicationSettings.databaseType === DatabaseTypes.CASSANDRA && jdlOption.name === BinaryOptions.Options.PAGINATION) {
+    throw new Error("Pagination isn't allowed when the application uses Cassandra.");
+  }
 }

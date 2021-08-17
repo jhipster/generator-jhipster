@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,28 +21,28 @@ const { expect } = require('chai');
 const FieldIssue = require('../../../../jdl/linters/issues/field-issue');
 
 describe('FieldIssue', () => {
-    describe('new', () => {
-        context('when not passing any arg', () => {
-            it('should fail', () => {
-                expect(() => new FieldIssue()).to.throw(/^An issue must at least have a rule name\.$/);
-            });
-        });
-        context('when not passing a rule name', () => {
-            it('should fail', () => {
-                expect(() => new FieldIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
-            });
-        });
-        context('when not passing an entity name', () => {
-            it('should fail', () => {
-                expect(() => new FieldIssue({ ruleName: 'Toto' })).to.throw(/^A field name and its entity's name must be passed\.$/);
-            });
-        });
-        context('when not passing a field name', () => {
-            it('should fail', () => {
-                expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).to.throw(
-                    /^A field name and its entity's name must be passed\.$/
-                );
-            });
-        });
+  describe('new', () => {
+    context('when not passing any arg', () => {
+      it('should fail', () => {
+        expect(() => new FieldIssue()).to.throw(/^An issue must at least have a rule name\.$/);
+      });
     });
+    context('when not passing a rule name', () => {
+      it('should fail', () => {
+        expect(() => new FieldIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
+      });
+    });
+    context('when not passing an entity name', () => {
+      it('should fail', () => {
+        expect(() => new FieldIssue({ ruleName: 'Toto' })).to.throw(/^A field name and its entity's name must be passed\.$/);
+      });
+    });
+    context('when not passing a field name', () => {
+      it('should fail', () => {
+        expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).to.throw(
+          /^A field name and its entity's name must be passed\.$/
+        );
+      });
+    });
+  });
 });

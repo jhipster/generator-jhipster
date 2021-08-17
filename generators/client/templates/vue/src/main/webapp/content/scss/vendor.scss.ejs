@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,27 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* after changing this file run '<%= clientPackageManager %> run webpack:build' */
+/* after changing this file run '<%= clientPackageManager %> run webapp:build' */
 
 /***************************
 put Sass variables here:
 eg $input-color: red;
 ****************************/
 // Override Boostrap variables
-<%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
 @import "bootstrap-variables";
 <%_ } _%>
 // Import Bootstrap source files from node_modules
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index.scss';
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/bootswatch";
 /* Dirty fix on navbar active link with bootswatch theme */
 nav li.router-link-active .navbar-dropdown-menu {
-  color: $navbar-<%_ if (clientThemeVariant === 'light') { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
+  color: $navbar-<%_ if (clientThemeLight) { _%>light<%_ } else { _%>dark<%_ } _%>-active-color;
 }
 <%_ } _%>
 <%_ if (enableI18nRTL) { _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Μας συγχωρείτε, κάποιο σφάλμα προέκ
 error.status=Κατάσταση:
 error.message=Μήνυμα:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Ενεργοποιήση λογαριασμού <%= baseName %>
 email.activation.greeting=Αγαπητέ/ή {0}
@@ -37,3 +38,4 @@ email.reset.title=Επαναφορά κωδικού <%= baseName %>
 email.reset.greeting=Αγαπητέ/ή {0}
 email.reset.text1=For your <%= baseName %> account a password reset was requested, please click on the URL below to reset it:
 email.reset.text2=Χαιρετισμούς,
+<%_ } _%>

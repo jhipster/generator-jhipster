@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -50,108 +50,116 @@
     <logger name="javax.management.remote" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
     <logger name="com.datastax" level="WARN"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'hazelcast') { _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
     <logger name="com.hazelcast" level="INFO"/>
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
     <logger name="com.github.couchmove" level="INFO"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
+<%_ } _%>
+<%_ if (cacheProviderMemcached) { _%>
     <logger name="com.google.code.ssm" level="WARN"/>
     <logger name="com.google.code.yanf4j" level="WARN"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'redis') { _%>
+<%_ } _%>
+<%_ if (cacheProviderRedis) { _%>
     <logger name="org.redisson" level="WARN" />
-    <%_ } _%>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
+<%_ } _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway || serviceDiscoveryEureka) { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR"/>
     <logger name="com.netflix.discovery" level="INFO"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
-    <%_ if (reactive || databaseType === 'cassandra' || cacheProvider === 'redis') { _%>
+<%_ if (reactive || databaseTypeCassandra || cacheProviderRedis) { _%>
     <logger name="io.netty" level="WARN"/>
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
     <logger name="io.searchbox" level="WARN"/>
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     <logger name="io.r2dbc" level="WARN"/>
-    <%_ } _%>
-    <%_ if (!reactive) { _%>
+<%_ } _%>
+<%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache') { _%>
+<%_ } _%>
+<%_ if (cacheProviderEhCache) { _%>
     <logger name="org.ehcache" level="WARN"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'caffeine') { _%>
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="org.apache" level="WARN"/>
-    <%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
     <logger name="org.apache.kafka" level="INFO"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
     <logger name="org.elasticsearch" level="WARN"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="org.hibernate.validator" level="WARN"/>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
-    <%_ } else if (databaseType === 'mongodb') { _%>
+<%_ } else if (databaseTypeMongodb) { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
-    <%_ } else if (databaseType === 'couchbase') { _%>
+<%_ } else if (databaseTypeCouchbase) { _%>
     <logger name="com.couchbase.client" level="WARN"/>
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     <logger name="org.reflections" level="WARN"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') { _%>
+<%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
     <logger name="org.infinispan" level="WARN"/>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
+<%_ } _%>
+<%_ if (cacheProviderMemcached) { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypePostgres) { _%>
     <logger name="org.postgresql" level="WARN"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
     <logger name="org.synchronoss" level="WARN"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
+<%_ if (prodDatabaseTypeMssql) { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
-    <%_ } _%>
-    <%_ if (reactive) { _%>
+<%_ } _%>
+<%_ if (reactive) { _%>
     <logger name="reactor" level="WARN"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/>
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="springfox.documentation.schema.property" level="ERROR"/>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || cacheProvider === 'hazelcast') { _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway || cacheProviderHazelcast) { _%>
     <logger name="sun.net.www" level="INFO"/>
-    <%_ } _%>
+<%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
-    <%_ if (cacheProvider === 'infinispan') { _%>
+<%_ if (cacheProviderInfinispan) { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
-    <%_ } _%>
+<%_ } _%>
+    <!-- See https://github.com/jhipster/generator-jhipster/issues/13835 -->
+    <logger name="Validator" level="INFO"/>
+    <!-- See https://github.com/jhipster/generator-jhipster/issues/14444 -->
+<%_ if (!reactive) { _%>
+    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
+<%_ } else { _%>
+    <logger name="_org.springframework.web.reactive.HandlerMapping.Mappings" level="INFO"/>
+<%_ } _%>
     <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level -->
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,35 +18,35 @@
  */
 
 const Validations = {
-    REQUIRED: 'required',
-    UNIQUE: 'unique',
-    MIN: 'min',
-    MAX: 'max',
-    MINLENGTH: 'minlength',
-    MAXLENGTH: 'maxlength',
-    PATTERN: 'pattern',
-    MINBYTES: 'minbytes',
-    MAXBYTES: 'maxbytes',
+  REQUIRED: 'required',
+  UNIQUE: 'unique',
+  MIN: 'min',
+  MAX: 'max',
+  MINLENGTH: 'minlength',
+  MAXLENGTH: 'maxlength',
+  PATTERN: 'pattern',
+  MINBYTES: 'minbytes',
+  MAXBYTES: 'maxbytes',
 };
 
 Validations.exists = validation =>
-    Object.keys(Validations)
-        .map(key => Validations[key])
-        .includes(validation);
+  Object.keys(Validations)
+    .map(key => Validations[key])
+    .includes(validation);
 
 Validations.needsValue = validation => {
-    const valuedMap = {
-        required: false,
-        unique: false,
-        min: true,
-        max: true,
-        minlength: true,
-        maxlength: true,
-        pattern: true,
-        minbytes: true,
-        maxbytes: true,
-    };
-    return valuedMap[validation];
+  const valuedMap = {
+    required: false,
+    unique: false,
+    min: true,
+    max: true,
+    minlength: true,
+    maxlength: true,
+    pattern: true,
+    minbytes: true,
+    maxbytes: true,
+  };
+  return valuedMap[validation];
 };
 
 module.exports = Validations;

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,7 +32,7 @@ export interface IMenuItem {
 export default class MenuItem extends React.Component<IMenuItem> {
 
   render() {
-    const { to, icon, id, children, "data-cy": string } = this.props;
+    const { to, icon, id, children } = this.props;
 
     return (
       <DropdownItem tag={Link} to={to} id={id} data-cy={this.props["data-cy"]} >

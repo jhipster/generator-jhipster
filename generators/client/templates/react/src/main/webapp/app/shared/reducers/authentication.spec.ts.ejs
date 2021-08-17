@@ -1,0 +1,328 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import sinon from 'sinon';
+<%_ if (authenticationTypeJwt) { _%>
+import { Storage } from 'react-jhipster';
+<%_ } _%>
+import configureStore from 'redux-mock-store';
+
+import authentication, {
+  getSession,
+  getAccount,
+  <%_ if (!authenticationTypeOauth2) { _%>
+  authenticate,
+  login,<% } %>
+  <%_ if (!authenticationTypeJwt) { _%>
+  logoutServer,<% } %>
+  clearAuthentication,
+  logout,<% if (authenticationTypeJwt) { %>
+  logoutSession,
+  clearAuthToken,<% } %>
+  authError,
+  clearAuth,
+  initialState,
+} from 'app/shared/reducers/authentication';
+<% if (enableTranslation) { %>import { updateLocale } from 'app/shared/reducers/locale';<% } %>
+
+describe('Authentication reducer tests', () => {
+  function isAccountEmpty(state): boolean {
+    return Object.keys(state.account).length === 0;
+  }
+
+  describe('Common tests', () => {
+    it('should return the initial state', () => {
+      const toTest = authentication(undefined, { type: '' });
+      expect(toTest).toMatchObject({
+        loading: false,
+        isAuthenticated: false,
+        errorMessage: null, // Errors returned from server side
+<%_ if (!authenticationTypeOauth2) { _%>
+        loginSuccess: false,
+        loginError: false, // Errors returned from server side
+        showModalLogin: false,
+<%_ } _%>
+        redirectMessage: null
+      });
+      expect(isAccountEmpty(toTest));
+    });
+  });
+
+<%_ if (!authenticationTypeOauth2) { _%>
+  describe('Requests', () => {
+    it('should detect a request', () => {
+      expect(authentication(undefined, { type: authenticate.pending.type })).toMatchObject({
+        loading: true
+      });
+      expect(authentication(undefined, { type: getAccount.pending.type })).toMatchObject({
+        loading: true
+      });
+    });
+  });
+<%_ } _%>
+
+  describe('Success', () => {
+<%_ if (!authenticationTypeOauth2) { _%>
+    it('should detect a success on login', () => {
+      const toTest = authentication(undefined, { type: authenticate.fulfilled.type });
+      expect(toTest).toMatchObject({
+        loading: false,
+        loginError: false,
+        loginSuccess: true,
+        showModalLogin: false
+      });
+    });
+<%_ } _%>
+
+    it('should detect a success on get session and be authenticated', () => {
+      const payload = { data: { activated: true } };
+      const toTest = authentication(undefined, { type: getAccount.fulfilled.type, payload });
+      expect(toTest).toMatchObject({
+        isAuthenticated: true,
+        loading: false,
+        account: payload.data
+      });
+    });
+
+    it('should detect a success on get session and not be authenticated', () => {
+      const payload = { data: { activated: false } };
+      const toTest = authentication(undefined, { type: getAccount.fulfilled.type, payload });
+      expect(toTest).toMatchObject({
+        isAuthenticated: false,
+        loading: false,
+        account: payload.data
+      });
+    });
+  });
+
+  describe('Failure', () => {
+<%_ if (!authenticationTypeOauth2) { _%>
+    it('should detect a failure on login', () => {
+      const error = { message: 'Something happened.' };
+      const toTest = authentication(undefined, { type: authenticate.rejected.type, error });
+
+      expect(toTest).toMatchObject({
+        errorMessage: error.message,
+        showModalLogin: true,
+        loginError: true
+      });
+      expect(isAccountEmpty(toTest));
+    });
+<%_ } _%>
+
+    it('should detect a failure', () => {
+      const error = { message: 'Something happened.' };
+      const toTest = authentication(undefined, { type: getAccount.rejected.type, error });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        isAuthenticated: false,
+<%_ if (!authenticationTypeOauth2) { _%>
+        showModalLogin: true,
+<%_ } _%>
+        errorMessage: error.message
+      });
+      expect(isAccountEmpty(toTest));
+    });
+  });
+
+  describe('Other cases', () => {
+    it('should properly reset the current state when a logout is requested', () => {
+      <%_ if (authenticationTypeOauth2) { _%>const payload = { data: { idToken: 'xyz', clientId: 'abxyz', logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
+      const toTest = authentication(undefined,
+      <%_ if (authenticationTypeJwt) { _%>
+      logoutSession()
+      <%_ } else if (authenticationTypeOauth2) { _%>
+      { type: logoutServer.fulfilled.type, payload }
+      <%_ } else { _%>
+      { type: logoutServer.fulfilled.type }
+      <%_ } _%>
+      );
+      expect(toTest).toMatchObject({
+        loading: false,
+        isAuthenticated: false,
+<%_ if (!authenticationTypeOauth2) { _%>
+        loginSuccess: false,
+        loginError: false,
+        showModalLogin: true,
+<%_ } _%>
+        errorMessage: null,
+        redirectMessage: null
+      });
+      expect(isAccountEmpty(toTest));
+    });
+
+    it('should properly define an error message and change the current state to display the login modal', () => {
+      const message = 'redirect me please';
+      const toTest = authentication(undefined, authError(message));
+      expect(toTest).toMatchObject({
+        loading: false,
+        isAuthenticated: false,
+<%_ if (!authenticationTypeOauth2) { _%>
+        loginSuccess: false,
+        loginError: false,
+        showModalLogin: true,
+<%_ } _%>
+        errorMessage: null,
+        redirectMessage: message
+      });
+      expect(isAccountEmpty(toTest));
+    });
+
+    it('should clear authentication', () => {
+      const toTest = authentication({ ...initialState, isAuthenticated: true }, clearAuth());
+      expect(toTest).toMatchObject({
+        loading: false,
+<%_ if (!authenticationTypeOauth2) { _%>
+        showModalLogin: true,
+<%_ } _%>
+        isAuthenticated: false
+      });
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk]);
+      store = mockStore({ authentication: { account: { <%_ if (enableTranslation) { _%> langKey: '<%= nativeLanguage %>' <% } %> } } });
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getAccount.pending.type
+        },
+        <%_ if (enableTranslation) { _%>
+        {
+          type: getAccount.fulfilled.type,
+          payload: resolvedObject
+        },
+        updateLocale('en'),
+        <%_ } _%>
+      ];
+      await store.dispatch(getSession());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      <%_ if (enableTranslation) { _%>
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
+    });
+
+    it('dispatches LOGOUT actions', async () => {
+<%_ if (!authenticationTypeJwt) { _%>
+      axios.post = sinon.stub().returns(Promise.resolve({}));
+<%_ } _%>
+      const expectedActions = [
+<%_ if (authenticationTypeJwt) { _%>
+        logoutSession(),
+<%_ } else { _%>
+        {
+          type: logoutServer.pending.type
+        },
+        {
+         type: logoutServer.fulfilled.type,
+         payload: {},
+        },
+        {
+         type: getAccount.pending.type,
+        },
+<%_ } _%>
+      ];
+      await store.dispatch(logout());
+<%_ if (authenticationTypeJwt) { _%>
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+<%_ } else { _%>
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+<%_ } _%>
+    });
+
+    it('dispatches CLEAR_AUTH actions', async () => {
+      const expectedActions = [authError('message'), clearAuth()];
+      await store.dispatch(clearAuthentication('message'));
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+<%_ if (!authenticationTypeOauth2) { _%>
+    it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
+  <%_ if (authenticationTypeJwt) { _%>
+      const loginResponse = { headers: { authorization: 'auth' } };
+  <%_ } else { _%>
+      const loginResponse = { value: 'any' };
+  <%_ } _%>
+      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      const expectedActions = [
+        {
+          type: authenticate.pending.type
+        },
+        {
+          type: authenticate.fulfilled.type,
+          payload: loginResponse
+        },
+        {
+          type: getAccount.pending.type
+        },
+      ];
+      await store.dispatch(login('test', 'test'));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+    });
+<%_ } _%>
+  });
+<%_ if (authenticationTypeJwt) { _%>
+  describe('clearAuthToken', () => {
+    let store;
+    beforeEach(() => {
+      const mockStore = configureStore([thunk]);
+      store = mockStore({ authentication: { account: { langKey: 'en' } } });
+    });
+    it('clears the session token on clearAuthToken', async () => {
+      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+      const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
+      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+
+      await store.dispatch(login('test', 'test'));
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      clearAuthToken()
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+    });
+    it('clears the local storage token on clearAuthToken', async () => {
+      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+      const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
+      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+
+      await store.dispatch(login('user', 'user', true));
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+      clearAuthToken()
+      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+    });
+  });
+<%_ } _%>
+});

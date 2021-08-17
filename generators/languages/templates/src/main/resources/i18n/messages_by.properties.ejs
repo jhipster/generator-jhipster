@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle = Выбачайце, адбылася памылка.
 error.status = Статус:
 error.message = Паведамленне:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> актывацыя
 email.activation.greeting=Паважаны {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> скід пароля
 email.reset.greeting=Паважаны {0}
 email.reset.text1=Для вашага <%= baseName %> акаўнта быў запытаны скід пароля, калі ласка, націсніце на спасылку ніжэй для яго скиду:
 email.reset.text2=З павагай,
+<%_ } _%>

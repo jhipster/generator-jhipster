@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,93 +18,93 @@
  */
 
 class JDLOptions {
-    constructor() {
-        this.options = {};
-        this.optionSize = 0;
-    }
+  constructor() {
+    this.options = {};
+    this.optionSize = 0;
+  }
 
-    addOption(option) {
-        if (!option || !option.getType) {
-            throw new Error("Can't add nil option.");
-        }
-        if (option.getType() === 'UNARY') {
-            addUnaryOption(this.options, option);
-        } else {
-            addBinaryOption(this.options, option);
-        }
-        this.optionSize++;
+  addOption(option) {
+    if (!option || !option.getType) {
+      throw new Error("Can't add nil option.");
     }
+    if (option.getType() === 'UNARY') {
+      addUnaryOption(this.options, option);
+    } else {
+      addBinaryOption(this.options, option);
+    }
+    this.optionSize++;
+  }
 
-    getOptions() {
-        const options = [];
-        Object.values(this.options).forEach(item => {
-            if (item.getType && item.getType() === 'UNARY') {
-                options.push(item);
-                return;
-            }
-            Object.values(item).forEach(option => options.push(option));
-        });
-        return options;
-    }
+  getOptions() {
+    const options = [];
+    Object.values(this.options).forEach(item => {
+      if (item.getType && item.getType() === 'UNARY') {
+        options.push(item);
+        return;
+      }
+      Object.values(item).forEach(option => options.push(option));
+    });
+    return options;
+  }
 
-    getOptionsForName(optionName) {
-        if (!optionName) {
-            return [];
-        }
-        return this.getOptions().filter(option => option.name === optionName);
+  getOptionsForName(optionName) {
+    if (!optionName) {
+      return [];
     }
+    return this.getOptions().filter(option => option.name === optionName);
+  }
 
-    has(optionName) {
-        if (!optionName) {
-            return false;
-        }
-        return !!this.options[optionName] || this.getOptions().filter(option => option.name === optionName).length !== 0;
+  has(optionName) {
+    if (!optionName) {
+      return false;
     }
+    return !!this.options[optionName] || this.getOptions().filter(option => option.name === optionName).length !== 0;
+  }
 
-    size() {
-        return this.optionSize;
-    }
+  size() {
+    return this.optionSize;
+  }
 
-    forEach(passedFunction, thisArg) {
-        if (!passedFunction) {
-            return;
-        }
-        this.getOptions().forEach(jdlOption => {
-            passedFunction.call(thisArg, jdlOption);
-        });
+  forEach(passedFunction, thisArg) {
+    if (!passedFunction) {
+      return;
     }
+    this.getOptions().forEach(jdlOption => {
+      passedFunction.call(thisArg, jdlOption);
+    });
+  }
 
-    toString(indent = 0) {
-        if (this.optionSize === 0) {
-            return '';
-        }
-        const options = this.getOptions();
-        const spaceBeforeEachOption = ' '.repeat(indent);
-        return options.map(jdlOption => `${spaceBeforeEachOption}${jdlOption.toString()}`).join('\n');
+  toString(indent = 0) {
+    if (this.optionSize === 0) {
+      return '';
     }
+    const options = this.getOptions();
+    const spaceBeforeEachOption = ' '.repeat(indent);
+    return options.map(jdlOption => `${spaceBeforeEachOption}${jdlOption.toString()}`).join('\n');
+  }
 }
 
 function addUnaryOption(options, optionToAdd) {
-    const key = optionToAdd.name;
-    if (!options[key]) {
-        options[key] = optionToAdd;
-        return;
-    }
-    options[key].addEntitiesFromAnotherOption(optionToAdd);
+  const key = optionToAdd.name;
+  if (!options[key]) {
+    options[key] = optionToAdd;
+    return;
+  }
+  options[key].addEntitiesFromAnotherOption(optionToAdd);
 }
 
 function addBinaryOption(options, optionToAdd) {
-    const { name, value } = optionToAdd;
+  const { name, value } = optionToAdd;
 
-    if (!options[name]) {
-        options[name] = {
-            [value]: optionToAdd,
-        };
-    } else if (!options[name][value]) {
-        options[name][value] = optionToAdd;
-    } else {
-        options[name][value].addEntitiesFromAnotherOption(optionToAdd);
-    }
+  if (!options[name]) {
+    options[name] = {
+      [value]: optionToAdd,
+    };
+  } else if (!options[name][value]) {
+    options[name][value] = optionToAdd;
+  } else {
+    options[name][value].addEntitiesFromAnotherOption(optionToAdd);
+  }
 }
 
 module.exports = JDLOptions;

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -35,19 +35,25 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 export interface I<%= entityAngularName %> {
-    <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+<%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;
-    <%_ }); _%>
+<%_ }); _%>
 }
 
 export class <%= entityAngularName %> implements I<%= entityAngularName %> {
     constructor(
-        <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+<%_ variablesWithTypes.forEach(variablesWithType => { _%>
         public <%- variablesWithType %>,
-        <%_ }); _%>
+<%_ }); _%>
     ) {
-        <%_ for (idx in defaultVariablesValues) { _%>
+<%_ for (idx in defaultVariablesValues) { _%>
         <%- defaultVariablesValues[idx] %>
-        <%_ } _%>
+<%_ } _%>
     }
 }
+<%_ if (primaryKey) { _%>
+
+export function get<%= entityAngularName %>Identifier(<%= entityInstance %>: I<%= entityAngularName %>): <%= primaryKey.tsType %> | undefined {
+  return <%= entityInstance %>.<%= primaryKey.name %>;
+}
+<%_ } _%>

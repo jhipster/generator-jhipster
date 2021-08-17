@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,12 +27,12 @@ axios.defaults.baseURL = SERVER_API_URL;
 
 const setupAxiosInterceptors = onUnauthenticated => {
   const onRequestSuccess = config => {
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     const token = Storage.local.get('<%= jhiPrefixDashed %>-authenticationToken') || Storage.session.get('<%= jhiPrefixDashed %>-authenticationToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    <%_ } _%>
+<%_ } _%>
     return config;
   };
   const onResponseSuccess = response => response;

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -30,127 +30,127 @@ const { Options, Values, OptionValues } = require('../../../jdl/jhipster/binary-
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 
 describe('Grammar tests', () => {
-    context('when parsing constants', () => {
-        context('with integer values', () => {
-            let constants;
+  context('when parsing constants', () => {
+    context('with integer values', () => {
+      let constants;
 
-            before(() => {
-                const content = parseFromContent(`MIN = 42
+      before(() => {
+        const content = parseFromContent(`MIN = 42
 MAX = 43`);
-                constants = content.constants;
-            });
+        constants = content.constants;
+      });
 
-            it('should parse them', () => {
-                expect(constants).to.deep.equal({ MIN: '42', MAX: '43' });
-            });
-        });
-        context('with decimal values', () => {
-            let constants;
-
-            before(() => {
-                const content = parseFromContent('MIN = 42.42');
-                constants = content.constants;
-            });
-
-            it('should parse them', () => {
-                expect(constants).to.deep.equal({ MIN: '42.42' });
-            });
-        });
+      it('should parse them', () => {
+        expect(constants).to.deep.equal({ MIN: '42', MAX: '43' });
+      });
     });
-    context('when parsing applications', () => {
-        context('with no custom configuration', () => {
-            let application;
+    context('with decimal values', () => {
+      let constants;
 
-            before(() => {
-                const content = parseFromContent('application {}');
-                application = content.applications[0];
-            });
+      before(() => {
+        const content = parseFromContent('MIN = 42.42');
+        constants = content.constants;
+      });
 
-            it('should parse it', () => {
-                expect(application).to.deep.equal({
-                    config: {},
-                    entities: [],
-                    options: {},
-                    useOptions: [],
-                });
-            });
+      it('should parse them', () => {
+        expect(constants).to.deep.equal({ MIN: '42.42' });
+      });
+    });
+  });
+  context('when parsing applications', () => {
+    context('with no custom configuration', () => {
+      let application;
+
+      before(() => {
+        const content = parseFromContent('application {}');
+        application = content.applications[0];
+      });
+
+      it('should parse it', () => {
+        expect(application).to.deep.equal({
+          config: {},
+          entities: [],
+          options: {},
+          useOptions: [],
         });
-        context('with a custom configuration', () => {
-            context('when setting the applicationType', () => {
-                let application;
+      });
+    });
+    context('with a custom configuration', () => {
+      context('when setting the applicationType', () => {
+        let application;
 
-                before(() => {
-                    const content = parseFromContent(`application {
+        before(() => {
+          const content = parseFromContent(`application {
   config {
     applicationType monolith
   }
 }`);
-                    application = content.applications[0];
-                });
+          application = content.applications[0];
+        });
 
-                it('should parse it', () => {
-                    expect(application).to.deep.equal({
-                        config: {
-                            applicationType: 'monolith',
-                        },
-                        entities: [],
-                        options: {},
-                        useOptions: [],
-                    });
-                });
-            });
-            context('when setting the baseName', () => {
-                let application;
+        it('should parse it', () => {
+          expect(application).to.deep.equal({
+            config: {
+              applicationType: 'monolith',
+            },
+            entities: [],
+            options: {},
+            useOptions: [],
+          });
+        });
+      });
+      context('when setting the baseName', () => {
+        let application;
 
-                before(() => {
-                    const content = parseFromContent(`application {
+        before(() => {
+          const content = parseFromContent(`application {
   config {
     baseName toto
   }
 }`);
-                    application = content.applications[0];
-                });
+          application = content.applications[0];
+        });
 
-                it('should parse it', () => {
-                    expect(application).to.deep.equal({
-                        config: {
-                            baseName: 'toto',
-                        },
-                        entities: [],
-                        options: {},
-                        useOptions: [],
-                    });
-                });
-            });
-            context('when setting the blueprints', () => {
-                let application;
+        it('should parse it', () => {
+          expect(application).to.deep.equal({
+            config: {
+              baseName: 'toto',
+            },
+            entities: [],
+            options: {},
+            useOptions: [],
+          });
+        });
+      });
+      context('when setting the blueprints', () => {
+        let application;
 
-                before(() => {
-                    const content = parseFromContent(`application {
+        before(() => {
+          const content = parseFromContent(`application {
   config {
     blueprints [generator-jhipster-vuejs, generator-jhipster-nodejs]
   }
 }`);
-                    application = content.applications[0];
-                });
-
-                it('should parse it', () => {
-                    expect(application).to.deep.equal({
-                        config: {
-                            blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs'],
-                        },
-                        entities: [],
-                        options: {},
-                        useOptions: [],
-                    });
-                });
-            });
+          application = content.applications[0];
         });
-        context('with more than one application', () => {
-            let applications;
 
-            before(() => {
-                const content = parseFromContent(`application {
+        it('should parse it', () => {
+          expect(application).to.deep.equal({
+            config: {
+              blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs'],
+            },
+            entities: [],
+            options: {},
+            useOptions: [],
+          });
+        });
+      });
+    });
+    context('with more than one application', () => {
+      let applications;
+
+      before(() => {
+        const content = parseFromContent(`application {
   config {
     baseName superApp2
     applicationType monolith
@@ -164,38 +164,38 @@ application {
   }
 }
 `);
-                applications = content.applications;
-            });
+        applications = content.applications;
+      });
 
-            it('should parse them', () => {
-                expect(applications).to.deep.equal([
-                    {
-                        config: {
-                            baseName: 'superApp2',
-                            applicationType: 'monolith',
-                        },
-                        entities: [],
-                        options: {},
-                        useOptions: [],
-                    },
-                    {
-                        config: {
-                            baseName: 'superApp1',
-                            applicationType: 'monolith',
-                        },
-                        entities: [],
-                        options: {},
-                        useOptions: [],
-                    },
-                ]);
-            });
-        });
-        context('when having entities', () => {
-            context('without exclusions', () => {
-                let application;
+      it('should parse them', () => {
+        expect(applications).to.deep.equal([
+          {
+            config: {
+              baseName: 'superApp2',
+              applicationType: 'monolith',
+            },
+            entities: [],
+            options: {},
+            useOptions: [],
+          },
+          {
+            config: {
+              baseName: 'superApp1',
+              applicationType: 'monolith',
+            },
+            entities: [],
+            options: {},
+            useOptions: [],
+          },
+        ]);
+      });
+    });
+    context('when having entities', () => {
+      context('without exclusions', () => {
+        let application;
 
-                before(() => {
-                    const content = parseFromContent(`application {
+        before(() => {
+          const content = parseFromContent(`application {
   config {
     baseName superApp
     applicationType monolith
@@ -207,19 +207,19 @@ entity A
 entity B
 entity C
 `);
-                    application = content.applications[0];
-                });
+          application = content.applications[0];
+        });
 
-                it('should parse them', () => {
-                    expect(application.entities).to.deep.equal(['A', 'B', 'C']);
-                });
-            });
-            context('with exclusions', () => {
-                context("using the 'all' keyword", () => {
-                    let application;
+        it('should parse them', () => {
+          expect(application.entities).to.deep.equal(['A', 'B', 'C']);
+        });
+      });
+      context('with exclusions', () => {
+        context("using the 'all' keyword", () => {
+          let application;
 
-                    before(() => {
-                        const content = parseFromContent(`application {
+          before(() => {
+            const content = parseFromContent(`application {
   config {
     baseName superApp
     applicationType monolith
@@ -230,18 +230,18 @@ entity A
 entity B
 entity C
 `);
-                        application = content.applications[0];
-                    });
+            application = content.applications[0];
+          });
 
-                    it('should parse the list', () => {
-                        expect(application.entities).to.deep.equal(['B', 'C']);
-                    });
-                });
-                context("using the '*' keyword", () => {
-                    let application;
+          it('should parse the list', () => {
+            expect(application.entities).to.deep.equal(['B', 'C']);
+          });
+        });
+        context("using the '*' keyword", () => {
+          let application;
 
-                    before(() => {
-                        const content = parseFromContent(`application {
+          before(() => {
+            const content = parseFromContent(`application {
   config {
     baseName superApp
     applicationType monolith
@@ -252,20 +252,20 @@ entity A
 entity B
 entity C
 `);
-                        application = content.applications[0];
-                    });
+            application = content.applications[0];
+          });
 
-                    it('should parse the list', () => {
-                        expect(application.entities).to.deep.equal(['B', 'C']);
-                    });
-                });
-            });
+          it('should parse the list', () => {
+            expect(application.entities).to.deep.equal(['B', 'C']);
+          });
         });
-        context('when having options', () => {
-            let application;
+      });
+    });
+    context('when having options', () => {
+      let application;
 
-            before(() => {
-                const content = parseFromContent(`application {
+      before(() => {
+        const content = parseFromContent(`application {
   config {
     baseName superApp
     applicationType monolith
@@ -279,35 +279,35 @@ entity A
 entity B
 entity C
 `);
-                application = content.applications[0];
-            });
+        application = content.applications[0];
+      });
 
-            it('should parse them', () => {
-                expect(application.options).to.deep.equal({
-                    readOnly: {
-                        list: ['B'],
-                        excluded: [],
-                    },
-                    pagination: {
-                        pagination: {
-                            list: ['A'],
-                            excluded: [],
-                        },
-                    },
-                    search: {
-                        couchbase: {
-                            list: ['*'],
-                            excluded: ['C'],
-                        },
-                    },
-                });
-            });
+      it('should parse them', () => {
+        expect(application.options).to.deep.equal({
+          readOnly: {
+            list: ['B'],
+            excluded: [],
+          },
+          pagination: {
+            pagination: {
+              list: ['A'],
+              excluded: [],
+            },
+          },
+          search: {
+            couchbase: {
+              list: ['*'],
+              excluded: ['C'],
+            },
+          },
         });
-        context('when having options in the use form', () => {
-            let application;
+      });
+    });
+    context('when having options in the use form', () => {
+      let application;
 
-            before(() => {
-                const content = parseFromContent(`application {
+      before(() => {
+        const content = parseFromContent(`application {
   config {
     baseName superApp
     applicationType monolith
@@ -320,84 +320,84 @@ entity A
 entity B
 entity C
 `);
-                application = content.applications[0];
-            });
+        application = content.applications[0];
+      });
 
-            it('should parse them', () => {
-                expect(application.useOptions).to.deep.equal([
-                    {
-                        excluded: [],
-                        list: ['A'],
-                        optionValues: ['pagination'],
-                    },
-                    {
-                        excluded: ['C'],
-                        list: ['*'],
-                        optionValues: ['couchbase'],
-                    },
-                ]);
-            });
-        });
+      it('should parse them', () => {
+        expect(application.useOptions).to.deep.equal([
+          {
+            excluded: [],
+            list: ['A'],
+            optionValues: ['pagination'],
+          },
+          {
+            excluded: ['C'],
+            list: ['*'],
+            optionValues: ['couchbase'],
+          },
+        ]);
+      });
     });
-    context('when parsing an entity', () => {
-        context('with a name', () => {
-            let parsedEntity;
+  });
+  context('when parsing an entity', () => {
+    context('with a name', () => {
+      let parsedEntity;
 
-            before(() => {
-                const content = parseFromContent('entity A');
-                parsedEntity = content.entities[0];
-            });
+      before(() => {
+        const content = parseFromContent('entity A');
+        parsedEntity = content.entities[0];
+      });
 
-            it('should parse it', () => {
-                expect(parsedEntity).to.deep.equal({
-                    annotations: [],
-                    body: [],
-                    javadoc: null,
-                    name: 'A',
-                    tableName: 'A',
-                });
-            });
+      it('should parse it', () => {
+        expect(parsedEntity).to.deep.equal({
+          annotations: [],
+          body: [],
+          javadoc: null,
+          name: 'A',
+          tableName: 'A',
         });
-        context('with a name and a table name', () => {
-            let parsedEntity;
+      });
+    });
+    context('with a name and a table name', () => {
+      let parsedEntity;
 
-            before(() => {
-                const content = parseFromContent('entity A(a_table)');
-                parsedEntity = content.entities[0];
-            });
+      before(() => {
+        const content = parseFromContent('entity A(a_table)');
+        parsedEntity = content.entities[0];
+      });
 
-            it('should parse it', () => {
-                expect(parsedEntity).to.deep.equal({
-                    annotations: [],
-                    body: [],
-                    javadoc: null,
-                    name: 'A',
-                    tableName: 'a_table',
-                });
-            });
+      it('should parse it', () => {
+        expect(parsedEntity).to.deep.equal({
+          annotations: [],
+          body: [],
+          javadoc: null,
+          name: 'A',
+          tableName: 'a_table',
         });
-        context('without fields', () => {
-            context('if using curly braces or not', () => {
-                let firstDeclaration;
-                let secondDeclaration;
+      });
+    });
+    context('without fields', () => {
+      context('if using curly braces or not', () => {
+        let firstDeclaration;
+        let secondDeclaration;
 
-                before(() => {
-                    const firstContent = parseFromContent('entity A');
-                    const secondContent = parseFromContent('entity A {}');
-                    firstDeclaration = firstContent.entities[0];
-                    secondDeclaration = secondContent.entities[0];
-                });
-
-                it('should produce the same result', () => {
-                    expect(firstDeclaration).to.deep.equal(secondDeclaration);
-                });
-            });
+        before(() => {
+          const firstContent = parseFromContent('entity A');
+          const secondContent = parseFromContent('entity A {}');
+          firstDeclaration = firstContent.entities[0];
+          secondDeclaration = secondContent.entities[0];
         });
-        context('with annotations', () => {
-            let parsedEntity;
 
-            before(() => {
-                const content = parseFromContent(`@dto(mapstruct)
+        it('should produce the same result', () => {
+          expect(firstDeclaration).to.deep.equal(secondDeclaration);
+        });
+      });
+    });
+    context('with annotations', () => {
+      let parsedEntity;
+
+      before(() => {
+        const content = parseFromContent(`@dto(mapstruct)
 @service(serviceClass)
 @readOnly
 @customAnnotation(value1)
@@ -405,1320 +405,1502 @@ entity C
 @customAnnotation3(2.42)
 @customAnnotation4("foo bar $")
 entity A`);
-                parsedEntity = content.entities[0];
-            });
+        parsedEntity = content.entities[0];
+      });
 
-            it('should parse it', () => {
-                expect(parsedEntity).to.deep.equal({
-                    annotations: [
-                        {
-                            optionValue: 'mapstruct',
-                            optionName: 'dto',
-                            type: 'BINARY',
-                        },
-                        {
-                            optionValue: 'serviceClass',
-                            optionName: 'service',
-                            type: 'BINARY',
-                        },
-                        {
-                            optionName: 'readOnly',
-                            type: 'UNARY',
-                        },
-                        {
-                            optionName: 'customAnnotation',
-                            optionValue: 'value1',
-                            type: 'BINARY',
-                        },
-                        {
-                            optionName: 'customAnnotation2',
-                            optionValue: '2',
-                            type: 'BINARY',
-                        },
-                        {
-                            optionName: 'customAnnotation3',
-                            optionValue: '2.42',
-                            type: 'BINARY',
-                        },
-                        {
-                            optionName: 'customAnnotation4',
-                            optionValue: 'foo bar $',
-                            type: 'BINARY',
-                        },
-                    ],
-                    body: [],
-                    javadoc: null,
-                    name: 'A',
-                    tableName: 'A',
-                });
-            });
+      it('should parse it', () => {
+        expect(parsedEntity).to.deep.equal({
+          annotations: [
+            {
+              optionValue: 'mapstruct',
+              optionName: 'dto',
+              type: 'BINARY',
+            },
+            {
+              optionValue: 'serviceClass',
+              optionName: 'service',
+              type: 'BINARY',
+            },
+            {
+              optionName: 'readOnly',
+              type: 'UNARY',
+            },
+            {
+              optionName: 'customAnnotation',
+              optionValue: 'value1',
+              type: 'BINARY',
+            },
+            {
+              optionName: 'customAnnotation2',
+              optionValue: '2',
+              type: 'BINARY',
+            },
+            {
+              optionName: 'customAnnotation3',
+              optionValue: '2.42',
+              type: 'BINARY',
+            },
+            {
+              optionName: 'customAnnotation4',
+              optionValue: 'foo bar $',
+              type: 'BINARY',
+            },
+          ],
+          body: [],
+          javadoc: null,
+          name: 'A',
+          tableName: 'A',
         });
-        context('with comments', () => {
-            context('with single-line comments', () => {
-                let parsedEntity;
+      });
+    });
+    context('with comments', () => {
+      context('with single-line comments', () => {
+        let parsedEntity;
 
-                before(() => {
-                    const content = parseFromContent('/** A comment */\nentity A');
-                    parsedEntity = content.entities[0];
-                });
+        before(() => {
+          const content = parseFromContent('/** A comment */\nentity A');
+          parsedEntity = content.entities[0];
+        });
 
-                it('should parse it', () => {
-                    expect(parsedEntity).to.deep.equal({
-                        annotations: [],
-                        body: [],
-                        javadoc: ' A comment ',
-                        name: 'A',
-                        tableName: 'A',
-                    });
-                });
-            });
-            context('with multi-line comments', () => {
-                let parsedEntity;
+        it('should parse it', () => {
+          expect(parsedEntity).to.deep.equal({
+            annotations: [],
+            body: [],
+            javadoc: ' A comment ',
+            name: 'A',
+            tableName: 'A',
+          });
+        });
+      });
+      context('with multi-line comments', () => {
+        let parsedEntity;
 
-                before(() => {
-                    const content = parseFromContent(`/**
+        before(() => {
+          const content = parseFromContent(`/**
  * Big
  * comment.
  */
  entity A`);
-                    parsedEntity = content.entities[0];
-                });
-
-                it('should parse it', () => {
-                    expect(parsedEntity).to.deep.equal({
-                        annotations: [],
-                        body: [],
-                        javadoc: '\n * Big\n * comment.\n ',
-                        name: 'A',
-                        tableName: 'A',
-                    });
-                });
-            });
+          parsedEntity = content.entities[0];
         });
-        context('with annotations and comments', () => {
-            context('when comments appear before annotations', () => {
-                let parsedEntity;
 
-                before(() => {
-                    const content = parseFromContent(
-                        `/** A comment */
+        it('should parse it', () => {
+          expect(parsedEntity).to.deep.equal({
+            annotations: [],
+            body: [],
+            javadoc: '\n * Big\n * comment.\n ',
+            name: 'A',
+            tableName: 'A',
+          });
+        });
+      });
+    });
+    context('with annotations and comments', () => {
+      context('when comments appear before annotations', () => {
+        let parsedEntity;
+
+        before(() => {
+          const content = parseFromContent(
+            `/** A comment */
  @id
  entity A
  `
-                    );
-                    parsedEntity = content.entities[0];
-                });
+          );
+          parsedEntity = content.entities[0];
+        });
 
-                it('should parse it', () => {
-                    expect(parsedEntity).to.deep.equal({
-                        annotations: [
-                            {
-                                optionName: 'id',
-                                type: 'UNARY',
-                            },
-                        ],
-                        body: [],
-                        javadoc: ' A comment ',
-                        name: 'A',
-                        tableName: 'A',
-                    });
-                });
-            });
-            context('when comments appear after annotations', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        parseFromContent(
-                            `@id
+        it('should parse it', () => {
+          expect(parsedEntity).to.deep.equal({
+            annotations: [
+              {
+                optionName: 'id',
+                type: 'UNARY',
+              },
+            ],
+            body: [],
+            javadoc: ' A comment ',
+            name: 'A',
+            tableName: 'A',
+          });
+        });
+      });
+      context('when comments appear after annotations', () => {
+        it('should fail', () => {
+          expect(() => {
+            parseFromContent(
+              `@id
  /** A comment */
  entity A
  `
-                        );
-                    }).to.throw();
-                });
-            });
+            );
+          }).to.throw();
         });
-        context('with fields', () => {
-            context('having annotations and comments', () => {
-                context('when comments appear before annotations', () => {
-                    let parsedEntity;
+      });
+    });
+    context('with fields', () => {
+      context('having annotations and comments', () => {
+        context('when comments appear before annotations', () => {
+          let parsedEntity;
 
-                    before(() => {
-                        const content = parseFromContent(
-                            `entity A {
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
   /** field comment */
   @something
   name String
 }
 `
-                        );
-                        parsedEntity = content.entities[0];
-                    });
+            );
+            parsedEntity = content.entities[0];
+          });
 
-                    it('should parse it', () => {
-                        expect(parsedEntity).to.deep.equal({
-                            annotations: [],
-                            body: [
-                                {
-                                    annotations: [
-                                        {
-                                            optionName: 'something',
-                                            type: 'UNARY',
-                                        },
-                                    ],
-                                    javadoc: ' field comment ',
-                                    name: 'name',
-                                    type: 'String',
-                                    validations: [],
-                                },
-                            ],
-                            javadoc: null,
-                            name: 'A',
-                            tableName: 'A',
-                        });
-                    });
-                });
-                context('when comments appear after annotations', () => {
-                    it('should fail', () => {
-                        expect(() => {
-                            parseFromContent(`entity A {
+          it('should parse it', () => {
+            expect(parsedEntity).to.deep.equal({
+              annotations: [],
+              body: [
+                {
+                  annotations: [
+                    {
+                      optionName: 'something',
+                      type: 'UNARY',
+                    },
+                  ],
+                  javadoc: ' field comment ',
+                  name: 'name',
+                  type: 'String',
+                  validations: [],
+                },
+              ],
+              javadoc: null,
+              name: 'A',
+              tableName: 'A',
+            });
+          });
+        });
+        context('when comments appear after annotations', () => {
+          it('should fail', () => {
+            expect(() => {
+              parseFromContent(`entity A {
   @something
   /** a comment */
   name String
 }
 `);
-                        }).to.throw();
-                    });
-                });
-            });
-            context('with validations', () => {
-                context(`with the ${REQUIRED} validation`, () => {
-                    let parsedEntity;
+            }).to.throw();
+          });
+        });
+      });
+      context('with validations', () => {
+        context(`with the ${REQUIRED} validation`, () => {
+          let parsedEntity;
 
-                    before(() => {
-                        const content = parseFromContent(
-                            `entity A {
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
   name String ${REQUIRED}
 }
 `
-                        );
-                        parsedEntity = content.entities[0];
-                    });
+            );
+            parsedEntity = content.entities[0];
+          });
 
-                    it('should parse it', () => {
-                        expect(parsedEntity.body[0].validations).to.deep.equal([
-                            {
-                                key: REQUIRED,
-                                value: '',
-                            },
-                        ]);
-                    });
-                });
-                context(`with the ${MINLENGTH} validation`, () => {
-                    context('using an integer value', () => {
-                        let parsedEntity;
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: REQUIRED,
+                value: '',
+              },
+            ]);
+          });
+        });
+        context(`with the ${MINLENGTH} validation`, () => {
+          context('using an integer value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name String ${MINLENGTH}(0)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MINLENGTH,
-                                    value: '0',
-                                },
-                            ]);
-                        });
-                    });
-                    context('using a decimal value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINLENGTH,
+                  value: '0',
+                },
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name String ${MINLENGTH}(0.01)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MINLENGTH,
-                                    value: '0.01',
-                                },
-                            ]);
-                        });
-                    });
-                });
-                context(`with the ${MAXLENGTH} validation`, () => {
-                    context('using an integer value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINLENGTH,
+                  value: '0.01',
+                },
+              ]);
+            });
+          });
+        });
+        context(`with the ${MAXLENGTH} validation`, () => {
+          context('using an integer value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name String ${MAXLENGTH}(42)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MAXLENGTH,
-                                    value: '42',
-                                },
-                            ]);
-                        });
-                    });
-                    context('using a decimal value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXLENGTH,
+                  value: '42',
+                },
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name String ${MAXLENGTH}(42.01)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MAXLENGTH,
-                                    value: '42.01',
-                                },
-                            ]);
-                        });
-                    });
-                });
-                context(`with the ${PATTERN} validation`, () => {
-                    let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXLENGTH,
+                  value: '42.01',
+                },
+              ]);
+            });
+          });
+        });
+        context(`with the ${PATTERN} validation`, () => {
+          let parsedEntity;
 
-                    before(() => {
-                        const content = parseFromContent(
-                            `entity A {
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
   name String ${PATTERN}(/[A-Za-z]\\d/)
 }
 `
-                        );
-                        parsedEntity = content.entities[0];
-                    });
+            );
+            parsedEntity = content.entities[0];
+          });
 
-                    it('should parse it', () => {
-                        expect(parsedEntity.body[0].validations).to.deep.equal([
-                            {
-                                key: PATTERN,
-                                value: '[A-Za-z]\\d',
-                            },
-                        ]);
-                    });
-                });
-                context(`with the ${UNIQUE} validation`, () => {
-                    let parsedEntity;
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: PATTERN,
+                value: '[A-Za-z]\\d',
+              },
+            ]);
+          });
+        });
+        context(`with the ${UNIQUE} validation`, () => {
+          let parsedEntity;
 
-                    before(() => {
-                        const content = parseFromContent(
-                            `entity A {
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
   name String ${UNIQUE}
 }
 `
-                        );
-                        parsedEntity = content.entities[0];
-                    });
+            );
+            parsedEntity = content.entities[0];
+          });
 
-                    it('should parse it', () => {
-                        expect(parsedEntity.body[0].validations).to.deep.equal([
-                            {
-                                key: UNIQUE,
-                                value: '',
-                            },
-                        ]);
-                    });
-                });
-                context(`with the ${MIN} validation`, () => {
-                    context('using an integer value', () => {
-                        let parsedEntity;
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: UNIQUE,
+                value: '',
+              },
+            ]);
+          });
+        });
+        context(`with the ${MIN} validation`, () => {
+          context('using an integer value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name Integer ${MIN}(0)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MIN,
-                                    value: '0',
-                                },
-                            ]);
-                        });
-                    });
-                    context('using a decimal value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MIN,
+                  value: '0',
+                },
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name Integer ${MIN}(0.01)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MIN,
-                                    value: '0.01',
-                                },
-                            ]);
-                        });
-                    });
-                });
-                context(`with the ${MAX} validation`, () => {
-                    context('using an integer value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MIN,
+                  value: '0.01',
+                },
+              ]);
+            });
+          });
+        });
+        context(`with the ${MAX} validation`, () => {
+          context('using an integer value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name Integer ${MAX}(0)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MAX,
-                                    value: '0',
-                                },
-                            ]);
-                        });
-                    });
-                    context('using a decimal value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAX,
+                  value: '0',
+                },
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name Integer ${MAX}(0.01)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MAX,
-                                    value: '0.01',
-                                },
-                            ]);
-                        });
-                    });
-                });
-                context(`with the ${MINBYTES} validation`, () => {
-                    context('using an integer value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAX,
+                  value: '0.01',
+                },
+              ]);
+            });
+          });
+        });
+        context(`with the ${MINBYTES} validation`, () => {
+          context('using an integer value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name TextBlob ${MINBYTES}(0)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MINBYTES,
-                                    value: '0',
-                                },
-                            ]);
-                        });
-                    });
-                    context('using a decimal value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINBYTES,
+                  value: '0',
+                },
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name TextBlob ${MINBYTES}(0.01)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MINBYTES,
-                                    value: '0.01',
-                                },
-                            ]);
-                        });
-                    });
-                });
-                context(`with the ${MAXBYTES} validation`, () => {
-                    context('using an integer value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINBYTES,
+                  value: '0.01',
+                },
+              ]);
+            });
+          });
+        });
+        context(`with the ${MAXBYTES} validation`, () => {
+          context('using an integer value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name TextBlob ${MAXBYTES}(0)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MAXBYTES,
-                                    value: '0',
-                                },
-                            ]);
-                        });
-                    });
-                    context('using a decimal value', () => {
-                        let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXBYTES,
+                  value: '0',
+                },
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
 
-                        before(() => {
-                            const content = parseFromContent(
-                                `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name TextBlob ${MAXBYTES}(0.01)
 }
 `
-                            );
-                            parsedEntity = content.entities[0];
-                        });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-                        it('should parse it', () => {
-                            expect(parsedEntity.body[0].validations).to.deep.equal([
-                                {
-                                    key: MAXBYTES,
-                                    value: '0.01',
-                                },
-                            ]);
-                        });
-                    });
-                });
-                context('using constants', () => {
-                    let parsedEntity;
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXBYTES,
+                  value: '0.01',
+                },
+              ]);
+            });
+          });
+        });
+        context('using constants', () => {
+          let parsedEntity;
 
-                    before(() => {
-                        const content = parseFromContent(
-                            `MAX=42
+          before(() => {
+            const content = parseFromContent(
+              `MAX=42
 entity A {
   name TextBlob ${MAXBYTES}(MAX)
 }
 `
-                        );
-                        parsedEntity = content.entities[0];
-                    });
+            );
+            parsedEntity = content.entities[0];
+          });
 
-                    it('should parse it', () => {
-                        expect(parsedEntity.body[0].validations).to.deep.equal([
-                            {
-                                key: MAXBYTES,
-                                value: 'MAX',
-                                constant: true,
-                            },
-                        ]);
-                    });
-                });
-            });
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MAXBYTES,
+                value: 'MAX',
+                constant: true,
+              },
+            ]);
+          });
         });
+      });
     });
-    context('when parsing enums', () => {
-        context('with values separated by commas', () => {
-            let parsedEnum;
+  });
+  context('when parsing enums', () => {
+    context('with values separated by commas', () => {
+      let parsedEnum;
 
-            before(() => {
-                const content = parseFromContent(
-                    `enum MyEnum {
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
   FRANCE,
   ENGLAND,
   ICELAND
 }
 `
-                );
-                parsedEnum = content.enums[0];
-            });
+        );
+        parsedEnum = content.enums[0];
+      });
 
-            it('should parse them', () => {
-                expect(parsedEnum).to.deep.equal({
-                    name: 'MyEnum',
-                    values: [
-                        {
-                            key: 'FRANCE',
-                        },
-                        {
-                            key: 'ENGLAND',
-                        },
-                        {
-                            key: 'ICELAND',
-                        },
-                    ],
-                });
-            });
+      it('should parse them', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+            },
+            {
+              key: 'ENGLAND',
+            },
+            {
+              key: 'ICELAND',
+            },
+          ],
         });
-        context('with values separated by whitespaces', () => {
-            let parsedEnum;
+      });
+    });
+    context('with values separated by whitespaces', () => {
+      let parsedEnum;
 
-            before(() => {
-                const content = parseFromContent(
-                    `enum MyEnum {
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
   FRANCE ENGLAND("aaa bbb ccc") ICELAND
   GERMANY
 }
 `
-                );
-                parsedEnum = content.enums[0];
-            });
+        );
+        parsedEnum = content.enums[0];
+      });
 
-            it('should parse them', () => {
-                expect(parsedEnum).to.deep.equal({
-                    name: 'MyEnum',
-                    values: [
-                        {
-                            key: 'FRANCE',
-                        },
-                        {
-                            key: 'ENGLAND',
-                            value: 'aaa bbb ccc',
-                        },
-                        {
-                            key: 'ICELAND',
-                        },
-                        {
-                            key: 'GERMANY',
-                        },
-                    ],
-                });
-            });
+      it('should parse them', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+            },
+            {
+              key: 'ENGLAND',
+              value: 'aaa bbb ccc',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'GERMANY',
+            },
+          ],
         });
-        context('without custom values', () => {
-            let parsedEnum;
+      });
+    });
+    context('without custom values', () => {
+      let parsedEnum;
 
-            before(() => {
-                const content = parseFromContent(
-                    `enum MyEnum {
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
   FRANCE,
   ENGLAND,
   ICELAND
 }
 `
-                );
-                parsedEnum = content.enums[0];
-            });
+        );
+        parsedEnum = content.enums[0];
+      });
 
-            it('should parse it', () => {
-                expect(parsedEnum).to.deep.equal({
-                    name: 'MyEnum',
-                    values: [
-                        {
-                            key: 'FRANCE',
-                        },
-                        {
-                            key: 'ENGLAND',
-                        },
-                        {
-                            key: 'ICELAND',
-                        },
-                    ],
-                });
-            });
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+            },
+            {
+              key: 'ENGLAND',
+            },
+            {
+              key: 'ICELAND',
+            },
+          ],
         });
-        context('without values', () => {
-            context('without spaces', () => {
-                let parsedEnum;
+      });
+    });
 
-                before(() => {
-                    const content = parseFromContent(
-                        `enum MyEnum {
+    context('without custom values but with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+            },
+            {
+              key: 'ITALY',
+            },
+            {
+              key: 'ENGLAND',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'IRELAND',
+            },
+            {
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('with custom values containing spaces and with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE ("cheese and wine country") /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND ("not a tea country") /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+              value: 'cheese and wine country',
+            },
+            {
+              key: 'ITALY',
+            },
+            {
+              key: 'ENGLAND',
+              value: 'not a tea country',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'IRELAND',
+            },
+            {
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('with custom values containing underscores and with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE ("cheese_and_wine_country") /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND ("not_a_tea_country") /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE',
+              value: 'cheese_and_wine_country',
+            },
+            {
+              key: 'ITALY',
+            },
+            {
+              key: 'ENGLAND',
+              value: 'not_a_tea_country',
+            },
+            {
+              key: 'ICELAND',
+            },
+            {
+              key: 'IRELAND',
+            },
+            {
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('without values', () => {
+      context('without spaces', () => {
+        let parsedEnum;
+
+        before(() => {
+          const content = parseFromContent(
+            `enum MyEnum {
   FRANCE (cheese_and_wine_country),
   ENGLAND (not_a_tea_country),
   ICELAND
 }
 `
-                    );
-                    parsedEnum = content.enums[0];
-                });
+          );
+          parsedEnum = content.enums[0];
+        });
 
-                it('should parse it', () => {
-                    expect(parsedEnum).to.deep.equal({
-                        name: 'MyEnum',
-                        values: [
-                            {
-                                key: 'FRANCE',
-                                value: 'cheese_and_wine_country',
-                            },
-                            {
-                                key: 'ENGLAND',
-                                value: 'not_a_tea_country',
-                            },
-                            {
-                                key: 'ICELAND',
-                            },
-                        ],
-                    });
-                });
-            });
-            context('with spaces', () => {
-                let parsedEnum;
+        it('should parse it', () => {
+          expect(parsedEnum).to.deep.equal({
+            name: 'MyEnum',
+            values: [
+              {
+                key: 'FRANCE',
+                value: 'cheese_and_wine_country',
+              },
+              {
+                key: 'ENGLAND',
+                value: 'not_a_tea_country',
+              },
+              {
+                key: 'ICELAND',
+              },
+            ],
+          });
+        });
+      });
+      context('with spaces', () => {
+        let parsedEnum;
 
-                before(() => {
-                    const content = parseFromContent(
-                        `enum MyEnum {
+        before(() => {
+          const content = parseFromContent(
+            `enum MyEnum {
   FRANCE ("cheese and wine country"),
   ENGLAND ("not a tea country"),
   ICELAND
 }
 `
-                    );
-                    parsedEnum = content.enums[0];
-                });
-
-                it('should parse it', () => {
-                    expect(parsedEnum).to.deep.equal({
-                        name: 'MyEnum',
-                        values: [
-                            {
-                                key: 'FRANCE',
-                                value: 'cheese and wine country',
-                            },
-                            {
-                                key: 'ENGLAND',
-                                value: 'not a tea country',
-                            },
-                            {
-                                key: 'ICELAND',
-                            },
-                        ],
-                    });
-                });
-            });
+          );
+          parsedEnum = content.enums[0];
         });
+
+        it('should parse it', () => {
+          expect(parsedEnum).to.deep.equal({
+            name: 'MyEnum',
+            values: [
+              {
+                key: 'FRANCE',
+                value: 'cheese and wine country',
+              },
+              {
+                key: 'ENGLAND',
+                value: 'not a tea country',
+              },
+              {
+                key: 'ICELAND',
+              },
+            ],
+          });
+        });
+      });
     });
-    context('when parsing a relationship', () => {
-        [ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY].forEach(relationshipType => {
-            context(`for a ${relationshipType} relationship`, () => {
-                let relationship;
+  });
+  context('when parsing a relationship', () => {
+    [ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY].forEach(relationshipType => {
+      context(`for a ${relationshipType} relationship`, () => {
+        let relationship;
 
-                before(() => {
-                    const content = parseFromContent(`relationship ${relationshipType} { A to B }`);
-                    relationship = content.relationships[0];
-                });
-
-                it('should parse it', () => {
-                    expect(relationship.cardinality).to.equal(relationshipType);
-                });
-            });
+        before(() => {
+          const content = parseFromContent(`relationship ${relationshipType} { A to B }`);
+          relationship = content.relationships[0];
         });
-        context('with only source & destination entities', () => {
-            let relationship;
 
-            before(() => {
-                const content = parseFromContent('relationship OneToOne { A to B }');
-                relationship = content.relationships[0];
-            });
-
-            it('should parse them', () => {
-                expect(relationship).to.deep.equal({
-                    options: {
-                        global: [],
-                        destination: [],
-                        source: [],
-                    },
-                    cardinality: 'OneToOne',
-                    from: {
-                        injectedField: null,
-                        javadoc: null,
-                        name: 'A',
-                    },
-                    to: {
-                        injectedField: null,
-                        javadoc: null,
-                        name: 'B',
-                    },
-                });
-            });
+        it('should parse it', () => {
+          expect(relationship.cardinality).to.equal(relationshipType);
         });
-        context('with an injected field in the source', () => {
-            context('that is not required', () => {
-                let relationship;
+      });
+    });
+    context('with only source & destination entities', () => {
+      let relationship;
 
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A{b} to B }');
-                    relationship = content.relationships[0];
-                });
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A to B }');
+        relationship = content.relationships[0];
+      });
 
-                it('should add it', () => {
-                    expect(relationship.from.injectedField).to.equal('b');
-                });
-                it('should set the field requirement to false', () => {
-                    expect(relationship.from.required).to.be.false;
-                });
-            });
-            context('that is required', () => {
-                let relationship;
-
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A{b required} to B }');
-                    relationship = content.relationships[0];
-                });
-
-                it('should add it', () => {
-                    expect(relationship.from.injectedField).to.equal('b');
-                });
-                it('should set the field requirement to true', () => {
-                    expect(relationship.from.required).to.be.true;
-                });
-            });
+      it('should parse them', () => {
+        expect(relationship).to.deep.equal({
+          options: {
+            global: [],
+            destination: [],
+            source: [],
+          },
+          cardinality: 'OneToOne',
+          from: {
+            injectedField: null,
+            javadoc: null,
+            name: 'A',
+          },
+          to: {
+            injectedField: null,
+            javadoc: null,
+            name: 'B',
+          },
         });
-        context('with an injected field in the destination', () => {
-            context('that is not required', () => {
-                let relationship;
+      });
+    });
+    context('with an injected field in the source', () => {
+      context('that is not required', () => {
+        let relationship;
 
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A to B{a} }');
-                    relationship = content.relationships[0];
-                });
-
-                it('should add it', () => {
-                    expect(relationship.to.injectedField).to.equal('a');
-                });
-                it('should set the field requirement to false', () => {
-                    expect(relationship.to.required).to.be.false;
-                });
-            });
-            context('that is required', () => {
-                let relationship;
-
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A to B{a required} }');
-                    relationship = content.relationships[0];
-                });
-
-                it('should add it', () => {
-                    expect(relationship.to.injectedField).to.equal('a');
-                });
-                it('should set the field requirement to true', () => {
-                    expect(relationship.to.required).to.be.true;
-                });
-            });
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b} to B }');
+          relationship = content.relationships[0];
         });
-        context('with an injected field in both sides', () => {
-            context('without them being required', () => {
-                let relationship;
 
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A{b} to B{a} }');
-                    relationship = content.relationships[0];
-                });
-
-                it('should add it in the source', () => {
-                    expect(relationship.from.injectedField).to.equal('b');
-                });
-                it('should set the source field requirement to false', () => {
-                    expect(relationship.from.required).to.be.false;
-                });
-                it('should add it in the destination', () => {
-                    expect(relationship.to.injectedField).to.equal('a');
-                });
-                it('should set the destination field requirement to false', () => {
-                    expect(relationship.to.required).to.be.false;
-                });
-            });
-            context('with them being required', () => {
-                let relationship;
-
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A{b required} to B{a required} }');
-                    relationship = content.relationships[0];
-                });
-
-                it('should set the source field requirement to true', () => {
-                    expect(relationship.from.required).to.be.true;
-                });
-                it('should set the destination field requirement to true', () => {
-                    expect(relationship.to.required).to.be.true;
-                });
-            });
+        it('should add it', () => {
+          expect(relationship.from.injectedField).to.equal('b');
         });
-        context('with an explicit join field in the source', () => {
-            let relationship;
-
-            before(() => {
-                const content = parseFromContent('relationship OneToOne { A{b(name)} to B }');
-                relationship = content.relationships[0];
-            });
-
-            it('should add it', () => {
-                expect(relationship.from.injectedField).to.equal('b(name)');
-            });
+        it('should set the field requirement to false', () => {
+          expect(relationship.from.required).to.be.false;
         });
-        context('with an explicit join field in the destination', () => {
-            let relationship;
+      });
+      context('that is required', () => {
+        let relationship;
 
-            before(() => {
-                const content = parseFromContent('relationship OneToOne { A to B{a(name)} }');
-                relationship = content.relationships[0];
-            });
-
-            it('should add it', () => {
-                expect(relationship.to.injectedField).to.equal('a(name)');
-            });
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b required} to B }');
+          relationship = content.relationships[0];
         });
-        context('with an explicit join field in both sides', () => {
-            let relationship;
 
-            before(() => {
-                const content = parseFromContent('relationship OneToOne { A{b(name)} to B{a(name)} }');
-                relationship = content.relationships[0];
-            });
-
-            it('should add it in the source', () => {
-                expect(relationship.from.injectedField).to.equal('b(name)');
-            });
-            it('should add it in the destination', () => {
-                expect(relationship.to.injectedField).to.equal('a(name)');
-            });
+        it('should add it', () => {
+          expect(relationship.from.injectedField).to.equal('b');
         });
-        context('with a method', () => {
-            let relationship;
-
-            before(() => {
-                const content = parseFromContent('relationship OneToOne { A to B with jpaDerivedIdentifier }');
-                relationship = content.relationships[0];
-            });
-
-            it('should add it', () => {
-                expect(relationship.options).to.deep.equal({
-                    global: [
-                        {
-                            optionName: 'jpaDerivedIdentifier',
-                            type: 'UNARY',
-                        },
-                    ],
-                    source: [],
-                    destination: [],
-                });
-            });
+        it('should set the field requirement to true', () => {
+          expect(relationship.from.required).to.be.true;
         });
-        context('when parsing more than one relationship', () => {
-            context('with methods', () => {
-                let relationships;
+      });
+    });
+    context('with an injected field in the destination', () => {
+      context('that is not required', () => {
+        let relationship;
 
-                before(() => {
-                    const content = parseFromContent(`relationship OneToOne {
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A to B{a} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it', () => {
+          expect(relationship.to.injectedField).to.equal('a');
+        });
+        it('should set the field requirement to false', () => {
+          expect(relationship.to.required).to.be.false;
+        });
+      });
+      context('that is required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A to B{a required} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it', () => {
+          expect(relationship.to.injectedField).to.equal('a');
+        });
+        it('should set the field requirement to true', () => {
+          expect(relationship.to.required).to.be.true;
+        });
+      });
+    });
+    context('with an injected field in both sides', () => {
+      context('without them being required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b} to B{a} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it in the source', () => {
+          expect(relationship.from.injectedField).to.equal('b');
+        });
+        it('should set the source field requirement to false', () => {
+          expect(relationship.from.required).to.be.false;
+        });
+        it('should add it in the destination', () => {
+          expect(relationship.to.injectedField).to.equal('a');
+        });
+        it('should set the destination field requirement to false', () => {
+          expect(relationship.to.required).to.be.false;
+        });
+      });
+      context('with them being required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b required} to B{a required} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should set the source field requirement to true', () => {
+          expect(relationship.from.required).to.be.true;
+        });
+        it('should set the destination field requirement to true', () => {
+          expect(relationship.to.required).to.be.true;
+        });
+      });
+    });
+    context('with an explicit join field in the source', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A{b(name)} to B }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it', () => {
+        expect(relationship.from.injectedField).to.equal('b(name)');
+      });
+    });
+    context('with an explicit join field in the destination', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A to B{a(name)} }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it', () => {
+        expect(relationship.to.injectedField).to.equal('a(name)');
+      });
+    });
+    context('with an explicit join field in both sides', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A{b(name)} to B{a(name)} }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it in the source', () => {
+        expect(relationship.from.injectedField).to.equal('b(name)');
+      });
+      it('should add it in the destination', () => {
+        expect(relationship.to.injectedField).to.equal('a(name)');
+      });
+    });
+    context('with a method', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A to B with jpaDerivedIdentifier }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it', () => {
+        expect(relationship.options).to.deep.equal({
+          global: [
+            {
+              optionName: 'jpaDerivedIdentifier',
+              type: 'UNARY',
+            },
+          ],
+          source: [],
+          destination: [],
+        });
+      });
+    });
+    context('when parsing more than one relationship', () => {
+      context('with methods', () => {
+        let relationships;
+
+        before(() => {
+          const content = parseFromContent(`relationship OneToOne {
   A to B with jpaDerivedIdentifier,
   B to C,
   D to E with jpaDerivedIdentifier
 }
 `);
-                    relationships = content.relationships;
-                });
-
-                it('should add them', () => {
-                    expect(relationships).to.deep.equal([
-                        {
-                            cardinality: 'OneToOne',
-                            from: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'A',
-                            },
-                            options: {
-                                global: [
-                                    {
-                                        optionName: 'jpaDerivedIdentifier',
-                                        type: 'UNARY',
-                                    },
-                                ],
-                                destination: [],
-                                source: [],
-                            },
-                            to: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'B',
-                            },
-                        },
-                        {
-                            cardinality: 'OneToOne',
-                            from: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'B',
-                            },
-                            options: {
-                                global: [],
-                                destination: [],
-                                source: [],
-                            },
-                            to: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'C',
-                            },
-                        },
-                        {
-                            cardinality: 'OneToOne',
-                            from: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'D',
-                            },
-                            options: {
-                                global: [
-                                    {
-                                        optionName: 'jpaDerivedIdentifier',
-                                        type: 'UNARY',
-                                    },
-                                ],
-                                destination: [],
-                                source: [],
-                            },
-                            to: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'E',
-                            },
-                        },
-                    ]);
-                });
-            });
+          relationships = content.relationships;
         });
-        context('with annotations', () => {
-            context('only in the source side', () => {
-                let relationships;
 
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { @id A to B }');
-                    relationships = content.relationships;
-                });
-
-                it('should parse them', () => {
-                    expect(relationships).to.deep.equal([
-                        {
-                            cardinality: 'OneToOne',
-                            from: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'A',
-                            },
-                            options: {
-                                global: [],
-                                destination: [],
-                                source: [
-                                    {
-                                        optionName: 'id',
-                                        type: 'UNARY',
-                                    },
-                                ],
-                            },
-                            to: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'B',
-                            },
-                        },
-                    ]);
-                });
-            });
-            context('only in the destination side', () => {
-                let relationships;
-
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { A to @id B }');
-                    relationships = content.relationships;
-                });
-
-                it('should parse them', () => {
-                    expect(relationships).to.deep.equal([
-                        {
-                            cardinality: 'OneToOne',
-                            from: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'A',
-                            },
-                            options: {
-                                global: [],
-                                destination: [
-                                    {
-                                        optionName: 'id',
-                                        type: 'UNARY',
-                                    },
-                                ],
-                                source: [],
-                            },
-                            to: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'B',
-                            },
-                        },
-                    ]);
-                });
-            });
-            context('in both sides', () => {
-                let relationships;
-
-                before(() => {
-                    const content = parseFromContent('relationship OneToOne { @id A to @id B }');
-                    relationships = content.relationships;
-                });
-
-                it('should parse them', () => {
-                    expect(relationships).to.deep.equal([
-                        {
-                            cardinality: 'OneToOne',
-                            from: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'A',
-                            },
-                            options: {
-                                global: [],
-                                destination: [
-                                    {
-                                        optionName: 'id',
-                                        type: 'UNARY',
-                                    },
-                                ],
-                                source: [
-                                    {
-                                        optionName: 'id',
-                                        type: 'UNARY',
-                                    },
-                                ],
-                            },
-                            to: {
-                                injectedField: null,
-                                javadoc: null,
-                                name: 'B',
-                            },
-                        },
-                    ]);
-                });
-            });
+        it('should add them', () => {
+          expect(relationships).to.deep.equal([
+            {
+              cardinality: 'OneToOne',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'A',
+              },
+              options: {
+                global: [
+                  {
+                    optionName: 'jpaDerivedIdentifier',
+                    type: 'UNARY',
+                  },
+                ],
+                destination: [],
+                source: [],
+              },
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B',
+              },
+            },
+            {
+              cardinality: 'OneToOne',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B',
+              },
+              options: {
+                global: [],
+                destination: [],
+                source: [],
+              },
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'C',
+              },
+            },
+            {
+              cardinality: 'OneToOne',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'D',
+              },
+              options: {
+                global: [
+                  {
+                    optionName: 'jpaDerivedIdentifier',
+                    type: 'UNARY',
+                  },
+                ],
+                destination: [],
+                source: [],
+              },
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'E',
+              },
+            },
+          ]);
         });
+      });
     });
-    context('when parsing an option', () => {
-        context('being unary', () => {
-            context('with exclusions', () => {
-                let parsedOption;
+    context('with annotations', () => {
+      context('only in the source side', () => {
+        let relationships;
 
-                before(() => {
-                    const content = parseFromContent('skipClient * except A');
-                    parsedOption = content.options.skipClient;
-                });
-
-                it('should add the exclusions', () => {
-                    expect(parsedOption).to.deep.equal({
-                        excluded: ['A'],
-                        list: ['*'],
-                    });
-                });
-            });
-            [READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER, FILTER, NO_FLUENT_METHOD].forEach(option => {
-                context(option, () => {
-                    let parsedOption;
-
-                    before(() => {
-                        const content = parseFromContent(`${option} A`);
-                        parsedOption = content.options[option];
-                    });
-
-                    it('should parse it', () => {
-                        expect(parsedOption).to.deep.equal({
-                            list: ['A'],
-                            excluded: [],
-                        });
-                    });
-                });
-            });
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { @id A to B }');
+          relationships = content.relationships;
         });
-        context('being binary', () => {
-            context('being clientRootFolder', () => {
-                context('in the regular form', () => {
-                    let parsedOption;
 
-                    before(() => {
-                        const content = parseFromContent('clientRootFolder * with client');
-                        parsedOption = content.options.clientRootFolder;
-                    });
-
-                    it('should parse it', () => {
-                        expect(parsedOption).to.deep.equal({
-                            client: {
-                                excluded: [],
-                                list: ['*'],
-                            },
-                        });
-                    });
-                });
-                context('in the path form', () => {
-                    let parsedOption;
-
-                    before(() => {
-                        const content = parseFromContent('clientRootFolder * with "../../toto"');
-                        parsedOption = content.options.clientRootFolder;
-                    });
-
-                    it('should parse it', () => {
-                        expect(parsedOption).to.deep.equal({
-                            '"../../toto"': {
-                                excluded: [],
-                                list: ['*'],
-                            },
-                        });
-                    });
-                });
-            });
-            context('with exclusions', () => {
-                let parsedOption;
-
-                before(() => {
-                    const content = parseFromContent('dto * with mapstruct except A');
-                    parsedOption = content.options.dto;
-                });
-
-                it('should add the exclusions', () => {
-                    expect(parsedOption).to.deep.equal({
-                        mapstruct: {
-                            excluded: ['A'],
-                            list: ['*'],
-                        },
-                    });
-                });
-            });
-            [SEARCH, SERVICE, PAGINATION, DTO].forEach(option => {
-                context(option, () => {
-                    Object.keys(Values[option]).forEach(key => {
-                        let parsedOption;
-
-                        before(() => {
-                            const value = Values[option][key];
-                            const content = parseFromContent(`${option === PAGINATION ? 'paginate' : option} A with ${value}`);
-                            parsedOption = content.options[option][value];
-                        });
-
-                        it('should parse it', () => {
-                            expect(parsedOption).to.deep.equal({
-                                list: ['A'],
-                                excluded: [],
-                            });
-                        });
-                    });
-                });
-            });
-            [MICROSERVICE, ANGULAR_SUFFIX].forEach(option => {
-                context(option, () => {
-                    let parsedOption;
-
-                    before(() => {
-                        const content = parseFromContent(`${option} A with toto`);
-                        parsedOption = content.options[option].toto;
-                    });
-
-                    it('should parse it', () => {
-                        expect(parsedOption).to.deep.equal({
-                            list: ['A'],
-                            excluded: [],
-                        });
-                    });
-                });
-            });
+        it('should parse them', () => {
+          expect(relationships).to.deep.equal([
+            {
+              cardinality: 'OneToOne',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'A',
+              },
+              options: {
+                global: [],
+                destination: [],
+                source: [
+                  {
+                    optionName: 'id',
+                    type: 'UNARY',
+                  },
+                ],
+              },
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B',
+              },
+            },
+          ]);
         });
-        context("using the 'all' keyword", () => {
+      });
+      context('only in the destination side', () => {
+        let relationships;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A to @id B }');
+          relationships = content.relationships;
+        });
+
+        it('should parse them', () => {
+          expect(relationships).to.deep.equal([
+            {
+              cardinality: 'OneToOne',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'A',
+              },
+              options: {
+                global: [],
+                destination: [
+                  {
+                    optionName: 'id',
+                    type: 'UNARY',
+                  },
+                ],
+                source: [],
+              },
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B',
+              },
+            },
+          ]);
+        });
+      });
+      context('in both sides', () => {
+        let relationships;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { @id A to @id B }');
+          relationships = content.relationships;
+        });
+
+        it('should parse them', () => {
+          expect(relationships).to.deep.equal([
+            {
+              cardinality: 'OneToOne',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'A',
+              },
+              options: {
+                global: [],
+                destination: [
+                  {
+                    optionName: 'id',
+                    type: 'UNARY',
+                  },
+                ],
+                source: [
+                  {
+                    optionName: 'id',
+                    type: 'UNARY',
+                  },
+                ],
+              },
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B',
+              },
+            },
+          ]);
+        });
+      });
+    });
+  });
+  context('when parsing an option', () => {
+    context('being unary', () => {
+      context('with exclusions', () => {
+        let parsedOption;
+
+        before(() => {
+          const content = parseFromContent('skipClient * except A');
+          parsedOption = content.options.skipClient;
+        });
+
+        it('should add the exclusions', () => {
+          expect(parsedOption).to.deep.equal({
+            excluded: ['A'],
+            list: ['*'],
+          });
+        });
+      });
+      [READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER, FILTER, NO_FLUENT_METHOD].forEach(option => {
+        context(option, () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent(`${option} A`);
+            parsedOption = content.options[option];
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              list: ['A'],
+              excluded: [],
+            });
+          });
+        });
+      });
+    });
+    context('being binary', () => {
+      context('being clientRootFolder', () => {
+        context('in the regular form', () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent('clientRootFolder * with client');
+            parsedOption = content.options.clientRootFolder;
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              client: {
+                excluded: [],
+                list: ['*'],
+              },
+            });
+          });
+        });
+        context('in the path form', () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent('clientRootFolder * with "../../toto"');
+            parsedOption = content.options.clientRootFolder;
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              '"../../toto"': {
+                excluded: [],
+                list: ['*'],
+              },
+            });
+          });
+        });
+      });
+      context('with exclusions', () => {
+        let parsedOption;
+
+        before(() => {
+          const content = parseFromContent('dto * with mapstruct except A');
+          parsedOption = content.options.dto;
+        });
+
+        it('should add the exclusions', () => {
+          expect(parsedOption).to.deep.equal({
+            mapstruct: {
+              excluded: ['A'],
+              list: ['*'],
+            },
+          });
+        });
+      });
+      [SEARCH, SERVICE, PAGINATION, DTO].forEach(option => {
+        context(option, () => {
+          Object.keys(Values[option]).forEach(key => {
             let parsedOption;
 
             before(() => {
-                const content = parseFromContent('clientRootFolder all with client');
-                parsedOption = content.options.clientRootFolder;
-            });
-
-            it("should parse it as '*'", () => {
-                expect(parsedOption).to.deep.equal({
-                    client: {
-                        excluded: [],
-                        list: ['*'],
-                    },
-                });
-            });
-        });
-        context("using the '*' keyword", () => {
-            let parsedOption;
-
-            before(() => {
-                const content = parseFromContent('clientRootFolder * with client');
-                parsedOption = content.options.clientRootFolder;
+              const value = Values[option][key];
+              const content = parseFromContent(`${option === PAGINATION ? 'paginate' : option} A with ${value}`);
+              parsedOption = content.options[option][value];
             });
 
             it('should parse it', () => {
-                expect(parsedOption).to.deep.equal({
-                    client: {
-                        excluded: [],
-                        list: ['*'],
-                    },
-                });
+              expect(parsedOption).to.deep.equal({
+                list: ['A'],
+                excluded: [],
+              });
             });
+          });
         });
-        context('using the use-form', () => {
-            Object.keys(OptionValues).forEach(optionValue => {
-                context(`of ${optionValue}`, () => {
-                    let parsedOptions;
+      });
+      [MICROSERVICE, ANGULAR_SUFFIX].forEach(option => {
+        context(option, () => {
+          let parsedOption;
 
-                    before(() => {
-                        const content = parseFromContent(`use ${optionValue} for A`);
-                        parsedOptions = content.useOptions;
-                    });
+          before(() => {
+            const content = parseFromContent(`${option} A with toto`);
+            parsedOption = content.options[option].toto;
+          });
 
-                    it('should parse it', () => {
-                        expect(parsedOptions).to.deep.equal([
-                            {
-                                excluded: [],
-                                list: ['A'],
-                                optionValues: [optionValue],
-                            },
-                        ]);
-                    });
-                });
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              list: ['A'],
+              excluded: [],
             });
+          });
         });
+      });
     });
+    context("using the 'all' keyword", () => {
+      let parsedOption;
+
+      before(() => {
+        const content = parseFromContent('clientRootFolder all with client');
+        parsedOption = content.options.clientRootFolder;
+      });
+
+      it("should parse it as '*'", () => {
+        expect(parsedOption).to.deep.equal({
+          client: {
+            excluded: [],
+            list: ['*'],
+          },
+        });
+      });
+    });
+    context("using the '*' keyword", () => {
+      let parsedOption;
+
+      before(() => {
+        const content = parseFromContent('clientRootFolder * with client');
+        parsedOption = content.options.clientRootFolder;
+      });
+
+      it('should parse it', () => {
+        expect(parsedOption).to.deep.equal({
+          client: {
+            excluded: [],
+            list: ['*'],
+          },
+        });
+      });
+    });
+    context('using the use-form', () => {
+      Object.keys(OptionValues).forEach(optionValue => {
+        context(`of ${optionValue}`, () => {
+          let parsedOptions;
+
+          before(() => {
+            const content = parseFromContent(`use ${optionValue} for A`);
+            parsedOptions = content.useOptions;
+          });
+
+          it('should parse it', () => {
+            expect(parsedOptions).to.deep.equal([
+              {
+                excluded: [],
+                list: ['A'],
+                optionValues: [optionValue],
+              },
+            ]);
+          });
+        });
+      });
+    });
+  });
+  context('when parsing deployments', () => {
+    context('with kubernetesStorageClassName', () => {
+      context('being empty', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName ""
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: '',
+          });
+        });
+      });
+      context('being set', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName "SetValue"
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: 'SetValue',
+          });
+        });
+      });
+    });
+  });
 });

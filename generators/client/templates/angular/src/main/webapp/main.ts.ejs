@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,19 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DEBUG_INFO_ENABLED } from './app/app.constants';
-import { AppModule } from './app/app.module';
-
-// disable debug data on prod profile to improve performance
-if (!DEBUG_INFO_ENABLED) {
-  enableProdMode();
-}
-
-platformBrowserDynamic()
-  .bootstrapModule(AppModule, { preserveWhitespaces: true })
-  // eslint-disable-next-line no-console
-  .then(() => console.log('Application started'))
-  .catch(err => console.error(err));
+import('./bootstrap').catch(err => console.error(err));

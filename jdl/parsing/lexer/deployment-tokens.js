@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,31 +21,35 @@ const { Lexer } = require('chevrotain');
 const { createTokenFromConfig } = require('./token-creator');
 
 const deploymentCategoryToken = createTokenFromConfig({
-    name: 'DEPLOYMENT_KEY',
-    pattern: Lexer.NA,
+  name: 'DEPLOYMENT_KEY',
+  pattern: Lexer.NA,
 });
 
 const deploymentTokens = [
-    { name: 'DEPLOYMENT_TYPE', pattern: 'deploymentType' },
-    { name: 'GATEWAY_TYPE', pattern: 'gatewayType' },
-    { name: 'MONITORING', pattern: 'monitoring' },
-    { name: 'DIRECTORY_PATH', pattern: 'directoryPath' },
-    { name: 'APPS_FOLDERS', pattern: 'appsFolders' },
-    { name: 'CLUSTERED_DB_APPS', pattern: 'clusteredDbApps' },
-    { name: 'DOCKER_REPOSITORY_NAME', pattern: 'dockerRepositoryName' },
-    { name: 'DOCKER_PUSH_COMMAND', pattern: 'dockerPushCommand' },
-    { name: 'KUBERNETES_NAMESPACE', pattern: 'kubernetesNamespace' },
-    { name: 'KUBERNETES_SERVICE_TYPE', pattern: 'kubernetesServiceType' },
-    { name: 'INGRESS_DOMAIN', pattern: 'ingressDomain' },
-    { name: 'ISTIO', pattern: 'istio' },
-    { name: 'OPENSHIFT_NAMESPACE', pattern: 'openshiftNamespace' },
-    { name: 'STORAGE_TYPE', pattern: 'storageType' },
+  { name: 'APPS_FOLDERS', pattern: 'appsFolders' },
+  { name: 'CLUSTERED_DB_APPS', pattern: 'clusteredDbApps' },
+  { name: 'DEPLOYMENT_TYPE', pattern: 'deploymentType' },
+  { name: 'DIRECTORY_PATH', pattern: 'directoryPath' },
+  { name: 'DOCKER_PUSH_COMMAND', pattern: 'dockerPushCommand' },
+  { name: 'DOCKER_REPOSITORY_NAME', pattern: 'dockerRepositoryName' },
+  { name: 'GATEWAY_TYPE', pattern: 'gatewayType' },
+  { name: 'INGRESS_DOMAIN', pattern: 'ingressDomain' },
+  { name: 'INGRESS_TYPE', pattern: 'ingressType' },
+  { name: 'ISTIO', pattern: 'istio' },
+  { name: 'KUBERNETES_NAMESPACE', pattern: 'kubernetesNamespace' },
+  { name: 'KUBERNETES_SERVICE_TYPE', pattern: 'kubernetesServiceType' },
+  { name: 'KUBERNETES_STORAGE_CLASS_NAME', pattern: 'kubernetesStorageClassName' },
+  { name: 'KUBERNETES_USE_DYNAMIC_STORAGE', pattern: 'kubernetesUseDynamicStorage' },
+  { name: 'MONITORING', pattern: 'monitoring' },
+  { name: 'OPENSHIFT_NAMESPACE', pattern: 'openshiftNamespace' },
+  { name: 'REGISTRY_REPLICAS', pattern: 'registryReplicas' },
+  { name: 'STORAGE_TYPE', pattern: 'storageType' },
 ].map(tokenConfig => {
-    tokenConfig.categories = [deploymentCategoryToken];
-    return createTokenFromConfig(tokenConfig);
+  tokenConfig.categories = [deploymentCategoryToken];
+  return createTokenFromConfig(tokenConfig);
 });
 
 module.exports = {
-    categoryToken: deploymentCategoryToken,
-    tokens: [deploymentCategoryToken, ...deploymentTokens],
+  categoryToken: deploymentCategoryToken,
+  tokens: [deploymentCategoryToken, ...deploymentTokens],
 };

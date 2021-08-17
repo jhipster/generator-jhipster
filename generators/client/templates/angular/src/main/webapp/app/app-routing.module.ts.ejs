@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,6 +18,7 @@
 -%>
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { errorRoute } from './layouts/error/error.route';
 import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
@@ -31,6 +32,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
   imports: [
     RouterModule.forRoot(
       [
+<%_ if (!applicationTypeMicroservice) { _%>
         {
           path: 'admin',
           data: {
@@ -39,18 +41,19 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
-        <%_ if (!skipUserManagement) { _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
         {
           path: 'account',
           loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },
-        <%_ } _%>
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         {
           path: 'login',
           loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         },
-        <%_ } _%>
+<%_ } _%>
         ...LAYOUT_ROUTES,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }

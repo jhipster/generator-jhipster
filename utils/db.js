@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,25 +27,25 @@ const crypto = require('crypto');
  * @returns hibernate SnakeCase in JHipster preferred style
  */
 function hibernateSnakeCase(value) {
-    let res = '';
-    if (value) {
-        value = value.replace('.', '_');
-        res = value[0];
-        for (let i = 1, len = value.length - 1; i < len; i++) {
-            if (
-                value[i - 1] !== value[i - 1].toUpperCase() &&
-                value[i] !== value[i].toLowerCase() &&
-                value[i + 1] !== value[i + 1].toUpperCase()
-            ) {
-                res += `_${value[i]}`;
-            } else {
-                res += value[i];
-            }
-        }
-        res += value[value.length - 1];
-        res = res.toLowerCase();
+  let res = '';
+  if (value) {
+    value = value.replace('.', '_');
+    res = value[0];
+    for (let i = 1, len = value.length - 1; i < len; i++) {
+      if (
+        value[i - 1] !== value[i - 1].toUpperCase() &&
+        value[i] !== value[i].toLowerCase() &&
+        value[i + 1] !== value[i + 1].toUpperCase()
+      ) {
+        res += `_${value[i]}`;
+      } else {
+        res += value[i];
+      }
     }
-    return res;
+    res += value[value.length - 1];
+    res = res.toLowerCase();
+  }
+  return res;
 }
 
 /**
@@ -62,22 +62,22 @@ function hibernateSnakeCase(value) {
  * @return {string} db referente name
  */
 function calculateDbNameWithLimit(tableOrEntityName, columnOrRelationshipName, limit, options = {}) {
-    const { noSnakeCase = false, prefix = '', separator = '__', appendHash = true } = options;
-    const halfLimit = Math.floor(limit / 2);
-    const suffix = !appendHash
-        ? ''
-        : `_${crypto
-              .createHash('shake256', { outputLength: 1 })
-              .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
-              .digest('hex')}`;
+  const { noSnakeCase = false, prefix = '', separator = '__', appendHash = true } = options;
+  const halfLimit = Math.floor(limit / 2);
+  const suffix = !appendHash
+    ? ''
+    : `_${crypto
+        .createHash('shake256', { outputLength: 1 })
+        .update(`${tableOrEntityName}.${columnOrRelationshipName}`, 'utf8')
+        .digest('hex')}`;
 
-    let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
-    formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
+  let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
+  formattedName = formattedName.substring(0, halfLimit - (!appendHash ? 0 : separator.length));
 
-    let otherFormattedName = noSnakeCase ? columnOrRelationshipName : hibernateSnakeCase(columnOrRelationshipName);
-    otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
+  let otherFormattedName = noSnakeCase ? columnOrRelationshipName : hibernateSnakeCase(columnOrRelationshipName);
+  otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
 
-    return `${prefix}${formattedName}${separator}${otherFormattedName}${suffix}`;
+  return `${prefix}${formattedName}${separator}${otherFormattedName}${suffix}`;
 }
 
 module.exports = { calculateDbNameWithLimit, hibernateSnakeCase };

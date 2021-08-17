@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "పెత్తనం",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "ప్రవేశ దారులు",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "ఉపయోక్త నిర్వహణ",
                 "tracker": "ఉపయోక్త ట్రాకర్",
                 "metrics": "కొలమానాలు",
@@ -151,6 +151,8 @@
         "emailexists": "ఇమెయిల్ ఇప్పటికే వినియోగంలో ఉంది!",
         "idexists": "ఒక కొత్త {{ entityName }} ఇప్పటికే ఐడి ని కలిగి ఉండకూడదు ",
         "idnull": "చెల్లని ఐడి",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,45 +22,45 @@ const JDLEntity = require('../../../../jdl/models/jdl-entity');
 const { convertEntities } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/entity-converter');
 
 describe('EntityConverter', () => {
-    describe('convertEntities', () => {
-        context('when not passing entities', () => {
-            it('should fail', () => {
-                expect(() => convertEntities()).to.throw(/^Entities have to be passed so as to be converted\.$/);
-            });
-        });
-        context('when passing entities', () => {
-            let convertedEntities;
-            let expectedEntities;
-
-            before(() => {
-                convertedEntities = convertEntities(
-                    [
-                        {
-                            name: 'A',
-                            javadoc: '/** No comment */',
-                        },
-                        {
-                            name: 'B',
-                            tableName: 'b_table',
-                        },
-                    ],
-                    () => []
-                );
-                expectedEntities = [
-                    new JDLEntity({
-                        name: 'A',
-                        comment: '/** No comment */',
-                    }),
-                    new JDLEntity({
-                        name: 'B',
-                        tableName: 'b_table',
-                    }),
-                ];
-            });
-
-            it('should convert them', () => {
-                expect(convertedEntities).to.deep.equal(expectedEntities);
-            });
-        });
+  describe('convertEntities', () => {
+    context('when not passing entities', () => {
+      it('should fail', () => {
+        expect(() => convertEntities()).to.throw(/^Entities have to be passed so as to be converted\.$/);
+      });
     });
+    context('when passing entities', () => {
+      let convertedEntities;
+      let expectedEntities;
+
+      before(() => {
+        convertedEntities = convertEntities(
+          [
+            {
+              name: 'A',
+              javadoc: '/** No comment */',
+            },
+            {
+              name: 'B',
+              tableName: 'b_table',
+            },
+          ],
+          () => []
+        );
+        expectedEntities = [
+          new JDLEntity({
+            name: 'A',
+            comment: '/** No comment */',
+          }),
+          new JDLEntity({
+            name: 'B',
+            tableName: 'b_table',
+          }),
+        ];
+      });
+
+      it('should convert them', () => {
+        expect(convertedEntities).to.deep.equal(expectedEntities);
+      });
+    });
+  });
 });

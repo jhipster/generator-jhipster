@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Ne pare rău dar a apărut o eroare
 error.status=Stare:
 error.message=Mesaj:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Activarea contului <%= baseName %>
 email.activation.greeting=Dragă {0}
@@ -37,3 +38,4 @@ email.reset.title=Resetare parolă pentru <%= baseName %>
 email.reset.greeting=Dragă {0}
 email.reset.text1=A fost solicitată o resetare de parolă pentru contul dumneavoastră <%= baseName %>, vă rugăm să accesați pagina de mai jos pentru a continua:
 email.reset.text2=Cu stimă,
+<%_ } _%>

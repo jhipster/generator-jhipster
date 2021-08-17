@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 source $(dirname $0)/00-init-env.sh
@@ -18,20 +18,31 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
+    ls -la "$JHI_FOLDER_APP"/
+    jhipster import-jdl *.jdl --no-insight $@
+
+elif [[ "$JHI_APP" == "jdl" ]]; then
+    #-------------------------------------------------------------------------------
+    # Generate project with jhipster using jdl
+    #-------------------------------------------------------------------------------
+    mkdir -p "$JHI_FOLDER_APP"
+
+    if [[ -f "$JHI_JDL_APP" ]]; then
+        cp -f "$JHI_JDL_APP" "$JHI_FOLDER_APP"/
+
+    elif [[ -d "$JHI_JDL_APP" ]]; then
+        cp -f "$JHI_JDL_APP"/*.jdl "$JHI_FOLDER_APP"/
+
+    else
+        cp -f "$JHI_JDL_SAMPLES"/"$JHI_JDL_APP"/*.jdl "$JHI_FOLDER_APP"/
+    fi
+
+    ls -la "$JHI_FOLDER_APP"/
+
+    cd "$JHI_FOLDER_APP"
     jhipster import-jdl *.jdl --no-insight $@
 
 else
-    #-------------------------------------------------------------------------------
-    # Generate UAA project with jhipster
-    #-------------------------------------------------------------------------------
-    if [[ "$JHI_APP" == *"uaa"* ]]; then
-        mkdir -p "$JHI_FOLDER_UAA"
-        cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
-        cd "$JHI_FOLDER_UAA"
-        jhipster --force --no-insight --with-entities --skip-checks $@
-        ls -al "$JHI_FOLDER_UAA"
-    fi
-
     #-------------------------------------------------------------------------------
     # Generate project with jhipster
     #-------------------------------------------------------------------------------

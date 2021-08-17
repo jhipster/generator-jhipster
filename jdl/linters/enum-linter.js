@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,7 +23,7 @@ const EnumIssue = require('./issues/enum-issue');
 let issues;
 
 module.exports = {
-    checkEnums,
+  checkEnums,
 };
 
 /**
@@ -34,54 +34,54 @@ module.exports = {
  * @return {Array} the found entity issues.
  */
 function checkEnums(enumDeclarations, fieldDeclarations) {
-    if (!enumDeclarations) {
-        return [];
-    }
-    issues = [];
-    checkForDuplicatedEnums(enumDeclarations);
-    checkForUnusedEnums(enumDeclarations, fieldDeclarations);
-    return issues;
+  if (!enumDeclarations) {
+    return [];
+  }
+  issues = [];
+  checkForDuplicatedEnums(enumDeclarations);
+  checkForUnusedEnums(enumDeclarations, fieldDeclarations);
+  return issues;
 }
 
 function checkForDuplicatedEnums(enumDeclarations) {
-    const enumNames = new Set();
-    const duplicatedEnumIssues = new Map(); // key: enumName, value: issue
-    enumDeclarations.forEach(enumDeclaration => {
-        const enumName = enumDeclaration.children.NAME[0].image;
-        if (enumNames.has(enumName)) {
-            if (!duplicatedEnumIssues.has(enumName)) {
-                duplicatedEnumIssues.set(
-                    enumName,
-                    new EnumIssue({
-                        ruleName: Rules.RuleNames.ENUM_DUPLICATED,
-                        enumName,
-                    })
-                );
-            }
-        } else {
-            enumNames.add(enumName);
-        }
-    });
-    duplicatedEnumIssues.forEach(issue => {
-        issues.push(issue);
-    });
+  const enumNames = new Set();
+  const duplicatedEnumIssues = new Map(); // key: enumName, value: issue
+  enumDeclarations.forEach(enumDeclaration => {
+    const enumName = enumDeclaration.children.NAME[0].image;
+    if (enumNames.has(enumName)) {
+      if (!duplicatedEnumIssues.has(enumName)) {
+        duplicatedEnumIssues.set(
+          enumName,
+          new EnumIssue({
+            ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+            enumName,
+          })
+        );
+      }
+    } else {
+      enumNames.add(enumName);
+    }
+  });
+  duplicatedEnumIssues.forEach(issue => {
+    issues.push(issue);
+  });
 }
 
 function checkForUnusedEnums(enumDeclarations, fieldDeclarations) {
-    const fieldTypes = fieldDeclarations.map(fieldDeclaration => {
-        return fieldDeclaration.children.type[0].children.NAME[0].image;
+  const fieldTypes = fieldDeclarations.map(fieldDeclaration => {
+    return fieldDeclaration.children.type[0].children.NAME[0].image;
+  });
+  const declaredEnums = new Set(
+    enumDeclarations.map(enumDeclaration => {
+      return enumDeclaration.children.NAME[0].image;
+    })
+  );
+  fieldTypes.forEach(usedEnum => {
+    declaredEnums.delete(usedEnum);
+  });
+  if (declaredEnums.size !== 0) {
+    declaredEnums.forEach(unusedEnum => {
+      issues.push(new EnumIssue({ enumName: unusedEnum, ruleName: Rules.RuleNames.ENUM_UNUSED }));
     });
-    const declaredEnums = new Set(
-        enumDeclarations.map(enumDeclaration => {
-            return enumDeclaration.children.NAME[0].image;
-        })
-    );
-    fieldTypes.forEach(usedEnum => {
-        declaredEnums.delete(usedEnum);
-    });
-    if (declaredEnums.size !== 0) {
-        declaredEnums.forEach(unusedEnum => {
-            issues.push(new EnumIssue({ enumName: unusedEnum, ruleName: Rules.RuleNames.ENUM_UNUSED }));
-        });
-    }
+  }
 }

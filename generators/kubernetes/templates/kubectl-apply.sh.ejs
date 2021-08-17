@@ -1,6 +1,6 @@
 #!/bin/bash
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,44 +38,45 @@ exit 0
 
 logSummary() {
     echo ""
-    <%_ if (monitoring === 'prometheus' || kubernetesServiceType === 'Ingress' || istio) { _%>
+<%_ if (monitoringPrometheus || kubernetesServiceTypeIngress || istio) { _%>
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
-        <%_ if (monitoring === 'prometheus') { _%>
+  <%_ if (monitoringPrometheus) { _%>
         echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>"
-        <%_ } _%>
-        <%_ if (kubernetesServiceType === 'Ingress') { _%>
-        <%_ appConfigs.forEach((appConfig) =>  { _%>
-        <%_ if (appConfig.applicationType === 'gateway') {_%>
+  <%_ } _%>
+  <%_ if (kubernetesServiceTypeIngress) { _%>
+    <%_ appConfigs.forEach((appConfig) =>  { _%>
+      <%_ if (appConfig.applicationTypeGateway) {_%>
         echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
-        <%_ } _%><%_ if (appConfig.applicationType === 'monolith') {_%>
+      <%_ } _%>
+      <%_ if (appConfig.applicationTypeMonolith) {_%>
         echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
-        <%_ } _%>
-        <%_ }) _%>
-        <%_ if (istio) { _%>
+      <%_ } _%>
+    <%_ }) _%>
+    <%_ if (istio) { _%>
         echo "Zipkin - http://zipkin.istio-system.<%= ingressDomain %>"
         echo "Grafana - http://grafana.istio-system.<%= ingressDomain %>"
         echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
-        <%_ } _%>
-        <%_ } _%>
-        echo "#####################################################"
     <%_ } _%>
+  <%_ } _%>
+        echo "#####################################################"
+<%_ } _%>
 }
 
 default() {
     suffix=k8s
-    <%_ if (kubernetesNamespace !== 'default') { _%>
+<%_ if (!kubernetesNamespaceDefault) { _%>
     kubectl apply -f namespace.yml
-    <%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+<%_ } _%> <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     kubectl apply -f registry-${suffix}/
-    <%_ } _%> <%_ if (istio) { _%>
+<%_ } _%> <%_ if (istio) { _%>
     kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
-    <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
     kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
-    <%_ }) _%>
-    <%_ if (useKafka === true) { _%>
+<%_ }) _%>
+<%_ if (useKafka) { _%>
     kubectl apply -f messagebroker-${suffix}/
-    <%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
+<%_ } _%> <%_ if (monitoringPrometheus) { _%>
     kubectl apply -f monitoring-${suffix}/jhipster-prometheus-crd.yml
     until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -l) -ge 2 ]; do
         echo "Waiting for the custom resource prometheus operator to get initialised";
@@ -84,11 +85,11 @@ default() {
     kubectl apply -f monitoring-${suffix}/jhipster-prometheus-cr.yml
     kubectl apply -f monitoring-${suffix}/jhipster-grafana.yml
     kubectl apply -f monitoring-${suffix}/jhipster-grafana-dashboard.yml
-    <%_ } _%>
+<%_ } _%>
 
-    <%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+<%_ if (istio && kubernetesServiceTypeIngress) { _%>
     kubectl apply -f istio-${suffix}/
-    <%_ } _%>
+<%_ } _%>
 }
 
 kustomize() {

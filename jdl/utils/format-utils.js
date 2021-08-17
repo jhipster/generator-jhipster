@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,7 +18,7 @@
  */
 
 module.exports = {
-    formatComment,
+  formatComment,
 };
 
 /**
@@ -27,21 +27,21 @@ module.exports = {
  * @returns {String} formatted comment string
  */
 function formatComment(comment) {
-    if (!comment) {
-        return undefined;
+  if (!comment) {
+    return undefined;
+  }
+  const parts = comment.trim().split('\n');
+  if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
+    return parts[0];
+  }
+  return parts.reduce((previousValue, currentValue) => {
+    // newlines in the middle of the comment should stay to achieve:
+    // multiline comments entered by user drive unchanged from JDL
+    // studio to generated domain class
+    let delimiter = '';
+    if (previousValue !== '') {
+      delimiter = '\\n';
     }
-    const parts = comment.trim().split('\n');
-    if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
-        return parts[0];
-    }
-    return parts.reduce((previousValue, currentValue) => {
-        // newlines in the middle of the comment should stay to achieve:
-        // multiline comments entered by user drive unchanged from JDL
-        // studio to generated domain class
-        let delimiter = '';
-        if (previousValue !== '') {
-            delimiter = '\\n';
-        }
-        return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
-    }, '');
+    return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
+  }, '');
 }

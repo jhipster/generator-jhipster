@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import {browser<%_ if (authenticationType === 'oauth2') { _%>, element, by<%_ } _%>} from 'protractor';
+import {browser<%_ if (authenticationTypeOauth2) { _%>, element, by<%_ } _%>} from 'protractor';
 
 import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
@@ -20,8 +20,8 @@ const expect = chai.expect;
 describe('Account', () => {
   let navBarPage: NavBarPage = new NavBarPage();
   let signInPage: SignInPage;
-  const username = process.env.E2E_USERNAME || 'admin';
-  const password = process.env.E2E_PASSWORD || 'admin';
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 <%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
@@ -47,7 +47,7 @@ describe('Account', () => {
 
     it('should fail to login with bad password', async () => {
       signInPage = await navBarPage.getSignInPage();
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await isVisible(signInPage.dangerAlert)).to.be.false;
 
@@ -60,7 +60,7 @@ describe('Account', () => {
       await waitUntilHidden(signInPage.loginForm);
 <%_ } else { _%>
       await signInPage.login(username, 'foo');
-      const alert = element(by.css('.alert-error'));
+      const alert = element(by.css('#input-error'));
       if (await alert.isPresent()) {
         // Keycloak
         expect(await alert.getText()).to.eq('Invalid username or password.');
@@ -76,7 +76,7 @@ describe('Account', () => {
     });
 
     it('should login with admin account', async () => {
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       signInPage = await navBarPage.getSignInPage();
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await isVisible(signInPage.dangerAlert)).to.be.false;
@@ -91,7 +91,7 @@ describe('Account', () => {
       await waitUntilDisplayed(navBarPage.entityMenu);
 
       expect(await navBarPage.entityMenu.isDisplayed()).to.be.true;
-  <%_ } else { _%>
+<%_ } else { _%>
       await browser.get('/');
       signInPage = await navBarPage.getSignInPage();
       await signInPage.login(username, password);
@@ -100,7 +100,7 @@ describe('Account', () => {
 
       // Success alert should appear in home page
       expect(await isVisible(success)).to.be.true;
-  <%_ } _%>
+<%_ } _%>
     });
   });
 
@@ -132,8 +132,8 @@ describe('Account', () => {
       signInPage = await navBarPage.getSignInPage();
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-      await signInPage.username.sendKeys('admin');
-      await signInPage.password.sendKeys('admin');
+      await signInPage.username.sendKeys(username);
+      await signInPage.password.sendKeys(password);
       await signInPage.loginButton.click();
 
       await waitUntilHidden(signInPage.loginForm);
@@ -208,8 +208,8 @@ describe('Account', () => {
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-        await signInPage.username.sendKeys('admin');
-        await signInPage.password.sendKeys('admin');
+        await signInPage.username.sendKeys(username);
+        await signInPage.password.sendKeys(password);
         await signInPage.loginButton.click();
 
         await waitUntilHidden(signInPage.loginForm);
@@ -235,8 +235,8 @@ describe('Account', () => {
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-        await signInPage.username.sendKeys('admin');
-        await signInPage.password.sendKeys('admin');
+        await signInPage.username.sendKeys(username);
+        await signInPage.password.sendKeys(password);
         await signInPage.loginButton.click();
 
         await waitUntilHidden(signInPage.loginForm);
@@ -249,7 +249,7 @@ describe('Account', () => {
         passwordPage = await navBarPage.getPasswordPage();
         expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
-        await passwordPage.autoChangePassword('admin', 'new_password', 'new_password');
+        await passwordPage.autoChangePassword(password, 'new_password', 'new_password');
 
         await waitUntilDisplayed(passwordPage.successAlert);
         expect(await passwordPage.successAlert.isDisplayed()).to.be.true;
@@ -262,7 +262,7 @@ describe('Account', () => {
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-        await signInPage.username.sendKeys('admin');
+        await signInPage.username.sendKeys(username);
         await signInPage.password.sendKeys('new_password');
         await signInPage.loginButton.click();
 
@@ -274,7 +274,7 @@ describe('Account', () => {
         // change back to default
         passwordPage = await navBarPage.getPasswordPage();
         expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
-        await passwordPage.autoChangePassword('new_password', 'admin', 'admin');
+        await passwordPage.autoChangePassword('new_password', password, password);
 
         await waitUntilDisplayed(passwordPage.successAlert);
         expect(await passwordPage.successAlert.isDisplayed()).to.be.true;
@@ -326,8 +326,8 @@ describe('Account', () => {
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-        await signInPage.username.sendKeys('admin');
-        await signInPage.password.sendKeys('admin');
+        await signInPage.username.sendKeys(username);
+        await signInPage.password.sendKeys(password);
         await signInPage.loginButton.click();
 
         await waitUntilHidden(signInPage.loginForm);
@@ -359,8 +359,8 @@ describe('Account', () => {
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-        await signInPage.username.sendKeys('admin');
-        await signInPage.password.sendKeys('admin');
+        await signInPage.username.sendKeys(username);
+        await signInPage.password.sendKeys(password);
         await signInPage.loginButton.click();
 
         await waitUntilHidden(signInPage.loginForm);

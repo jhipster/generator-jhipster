@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,17 +20,17 @@
 const Validator = require('./validator');
 
 class OptionValidator extends Validator {
-    constructor(optionType, additionalFieldToCheck) {
-        const fieldsToCheck = ['name', 'entityNames', 'excludedNames', 'getType'];
-        if (additionalFieldToCheck) {
-            fieldsToCheck.push(additionalFieldToCheck);
-        }
-        super(`${optionType} option`, fieldsToCheck);
+  constructor(optionType, additionalFieldToCheck) {
+    const fieldsToCheck = ['name', 'entityNames', 'excludedNames', 'getType'];
+    if (additionalFieldToCheck) {
+      fieldsToCheck.push(additionalFieldToCheck);
     }
+    super(`${optionType} option`, fieldsToCheck);
+  }
 
-    validate(jdlOption) {
-        super.validate(jdlOption);
-    }
+  validate(jdlOption) {
+    super.validate(jdlOption);
+  }
 }
 
 module.exports = OptionValidator;

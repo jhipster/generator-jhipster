@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.service.mapper;
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
@@ -82,24 +82,24 @@ public class UserMapper {
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
             user.setEmail(userDTO.getEmail());
-            <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
             user.setImageUrl(userDTO.getImageUrl());
-            <%_ } _%>
+<%_ } _%>
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
-            <%_ } _%>
-            <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
             Set<String> authorities = this.cleanNullStringAuthorities(userDTO.getAuthorities());
             user.setAuthorities(authorities);
-            <%_ } _%>
+<%_ } _%>
             return user;
         }
     }
 
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
         Set<Authority> authorities = new HashSet<>();
@@ -114,8 +114,8 @@ public class UserMapper {
 
         return authorities;
     }
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 
     private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
         Set<String> authorities = new HashSet<>();
@@ -128,7 +128,7 @@ public class UserMapper {
 
         return authorities;
     }
-    <%_ } _%>
+<%_ } _%>
 
     public <%= asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
         if (id == null) {
@@ -156,7 +156,7 @@ public class UserMapper {
     @Mapping(target = "id", source = "id")
     public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
         if ( users == null ) {
-            return null;
+            return Collections.emptySet();
         }
 
         Set<<%= asDto('User') %>> userSet = new HashSet<>();
@@ -187,7 +187,7 @@ public class UserMapper {
     @Mapping(target = "login", source = "login")
     public Set<<%= asDto('User') %>> toDtoLoginSet(Set<<%= asEntity('User') %>> users) {
         if ( users == null ) {
-            return null;
+            return Collections.emptySet();
         }
 
         Set<<%= asDto('User') %>> userSet = new HashSet<>();

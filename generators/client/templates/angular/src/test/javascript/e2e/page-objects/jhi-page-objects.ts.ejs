@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -87,7 +87,7 @@ export class NavBarPage {
     return new SignInPage();
   }
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   async getPasswordPage(): Promise<PasswordPage> {
     await this.clickOnAccountMenu();
     await this.clickOnPasswordMenu();
@@ -99,7 +99,7 @@ export class NavBarPage {
     await this.clickOnSettingsMenu();
     return new SettingsPage();
   }
-  <%_ } _%>
+<%_ } _%>
 
   async goToEntity(entityName: string): Promise<void> {
     await this.clickOnEntityMenu();
@@ -123,15 +123,15 @@ export class NavBarPage {
 }
 
 export class SignInPage {
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   username = element(by.id('username'));
   password = element(by.id('password'));
   loginButton = element(by.css('button[type=submit]'));
-  <%_ } else { _%>
+<%_ } else { _%>
   username = element(by.name('username'));
   password = element(by.name('password'));
   loginButton = element(by.css('input[type=submit]'));
-  <%_ } _%>
+<%_ } _%>
 
   async setUserName(username: string): Promise<void> {
     await this.username.sendKeys(username);
@@ -157,16 +157,17 @@ export class SignInPage {
     await this.password.clear();
   }
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   async autoSignInUsing(username: string, password: string): Promise<void> {
     await this.setUserName(username);
     await this.setPassword(password);
     await this.login();
   }
-  <%_ } else { _%>
+<%_ } else { _%>
   async loginWithOAuth(username: string, password: string): Promise<void> {
     // Entering non angular site, tell webdriver to switch to synchronous mode.
     await browser.waitForAngularEnabled(false);
+    await browser.sleep(1000);
 
     if (await this.username.isPresent()) {
       await this.username.sendKeys(username);
@@ -179,7 +180,7 @@ export class SignInPage {
       browser.waitForAngularEnabled(true);
     }
   }
-  <%_ } _%>
+<%_ } _%>
 
   async login(): Promise<void> {
     await this.loginButton.click();

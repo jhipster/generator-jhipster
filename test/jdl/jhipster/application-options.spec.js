@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,85 +22,85 @@ const { expect } = require('chai');
 const { OptionNames, doesOptionExist, getTypeForOption, shouldTheValueBeQuoted } = require('../../../jdl/jhipster/application-options');
 
 describe('ApplicationOptions', () => {
-    describe('doesOptionExist', () => {
-        context('when not passing anything', () => {
-            it('should return false', () => {
-                expect(doesOptionExist()).to.be.false;
-            });
-        });
-        context('when passing an option that does not exist', () => {
-            it('should return false', () => {
-                expect(doesOptionExist('toto')).to.be.false;
-            });
-        });
-        context('when passing an option that exists', () => {
-            it('should return true', () => {
-                expect(doesOptionExist('baseName')).to.be.true;
-            });
-        });
+  describe('doesOptionExist', () => {
+    context('when not passing anything', () => {
+      it('should return false', () => {
+        expect(doesOptionExist()).to.be.false;
+      });
     });
-    describe('getTypeForOption', () => {
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => getTypeForOption()).to.throw(/^A name has to be passed to get the option type.$/);
-            });
-        });
-        context('when passing an unknown option name', () => {
-            it('should fail', () => {
-                expect(() => getTypeForOption('tutu')).to.throw(/^Unrecognised application option name: tutu.$/);
-            });
-        });
-        context('when passing an option', () => {
-            context('that has the string type', () => {
-                it("should return 'string'", () => {
-                    expect(getTypeForOption('baseName')).to.equal('string');
-                });
-            });
-            context('that has the integer type', () => {
-                it("should return 'integer'", () => {
-                    expect(getTypeForOption('serverPort')).to.equal('integer');
-                });
-            });
-            context('that has the boolean type', () => {
-                it("should return 'boolean'", () => {
-                    expect(getTypeForOption('skipServer')).to.equal('boolean');
-                });
-            });
-            context('that has the list type', () => {
-                it("should return 'list'", () => {
-                    expect(getTypeForOption('testFrameworks')).to.equal('list');
-                });
-            });
-        });
+    context('when passing an option that does not exist', () => {
+      it('should return false', () => {
+        expect(doesOptionExist('toto')).to.be.false;
+      });
     });
-    describe('shouldTheValueBeQuoted', () => {
-        const optionsThatShouldBeQuoted = new Set([OptionNames.JHIPSTER_VERSION, OptionNames.REMEMBER_ME_KEY, OptionNames.JWT_SECRET_KEY]);
-        const optionsThatShouldNotBeQuoted = new Set(
-            Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName))
-        );
+    context('when passing an option that exists', () => {
+      it('should return true', () => {
+        expect(doesOptionExist('baseName')).to.be.true;
+      });
+    });
+  });
+  describe('getTypeForOption', () => {
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => getTypeForOption()).to.throw(/^A name has to be passed to get the option type.$/);
+      });
+    });
+    context('when passing an unknown option name', () => {
+      it('should fail', () => {
+        expect(() => getTypeForOption('tutu')).to.throw(/^Unrecognised application option name: tutu.$/);
+      });
+    });
+    context('when passing an option', () => {
+      context('that has the string type', () => {
+        it("should return 'string'", () => {
+          expect(getTypeForOption('baseName')).to.equal('string');
+        });
+      });
+      context('that has the integer type', () => {
+        it("should return 'integer'", () => {
+          expect(getTypeForOption('serverPort')).to.equal('integer');
+        });
+      });
+      context('that has the boolean type', () => {
+        it("should return 'boolean'", () => {
+          expect(getTypeForOption('skipServer')).to.equal('boolean');
+        });
+      });
+      context('that has the list type', () => {
+        it("should return 'list'", () => {
+          expect(getTypeForOption('testFrameworks')).to.equal('list');
+        });
+      });
+    });
+  });
+  describe('shouldTheValueBeQuoted', () => {
+    const optionsThatShouldBeQuoted = new Set([OptionNames.JHIPSTER_VERSION, OptionNames.REMEMBER_ME_KEY, OptionNames.JWT_SECRET_KEY]);
+    const optionsThatShouldNotBeQuoted = new Set(
+      Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName))
+    );
 
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => shouldTheValueBeQuoted()).to.throw(/^An option name has to be passed to know whether it is quoted.$/);
-            });
-        });
-        context('when passing an option for which the value should not be quoted', () => {
-            optionsThatShouldNotBeQuoted.forEach(optionName => {
-                context(`such as ${optionName}`, () => {
-                    it('should return false', () => {
-                        expect(shouldTheValueBeQuoted(optionName)).to.be.false;
-                    });
-                });
-            });
-        });
-        context('when passing an option for which the value should be quoted', () => {
-            optionsThatShouldBeQuoted.forEach(optionName => {
-                context(`such as ${optionName}`, () => {
-                    it('should return true', () => {
-                        expect(shouldTheValueBeQuoted(optionName)).to.be.true;
-                    });
-                });
-            });
-        });
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => shouldTheValueBeQuoted()).to.throw(/^An option name has to be passed to know whether it is quoted.$/);
+      });
     });
+    context('when passing an option for which the value should not be quoted', () => {
+      optionsThatShouldNotBeQuoted.forEach(optionName => {
+        context(`such as ${optionName}`, () => {
+          it('should return false', () => {
+            expect(shouldTheValueBeQuoted(optionName)).to.be.false;
+          });
+        });
+      });
+    });
+    context('when passing an option for which the value should be quoted', () => {
+      optionsThatShouldBeQuoted.forEach(optionName => {
+        context(`such as ${optionName}`, () => {
+          it('should return true', () => {
+            expect(shouldTheValueBeQuoted(optionName)).to.be.true;
+          });
+        });
+      });
+    });
+  });
 });

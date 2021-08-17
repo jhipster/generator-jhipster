@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Administreerimine",
-                <%_ if (applicationType === 'gateway') { _%>
-                "gateway": "Gateway",
-                <%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+                "gateway": "Lüüs",
+<%_ } _%>
                 "userManagement": "Kasutajate haldus",
                 "tracker": "Kasutajate jälgimine",
                 "metrics": "Meetrika",
@@ -56,8 +56,8 @@
         "form": {
             "username.label": "Kasutajanimi",
             "username.placeholder": "Teie kasutajanimi",
-            "currentpassword.label": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword.label": "Praegune salasõna",
+            "currentpassword.placeholder": "Praegune salasõna",
             "newpassword.label": "Uus salasõna",
             "newpassword.placeholder": "Uus salasõna",
             "confirmpassword.label": "Uus salasõna uuesti",
@@ -106,7 +106,7 @@
         "ribbon": {
             "dev": "Arendus"
         },
-        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+        "item-count": "Näitame {{first}} - {{second}} (kokku {{total}})."
     },
     "entity": {
         "action": {
@@ -149,7 +149,9 @@
         "userexists": "Kasutajanimi on juba kasutuses!",
         "emailexists": "E-posti aadress on juba kasutuses!",
         "idexists": "Uue {{ entityName }} ID välja väärtus peab olema tühi",
-        "idnull": "Invalid ID",
+        "idnull": "Vigane ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Ei saanud faili eraldada",
             "not.image": "Ootasime, et fail on pilt, aga faili tüüp on \"{{ fileType }}\""

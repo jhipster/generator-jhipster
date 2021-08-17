@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,111 +20,111 @@
 const RelationshipTypes = require('../jhipster/relationship-types');
 
 class JDLRelationships {
-    constructor() {
-        this.relationships = {
-            OneToOne: new Map(),
-            OneToMany: new Map(),
-            ManyToOne: new Map(),
-            ManyToMany: new Map(),
-        };
-    }
+  constructor() {
+    this.relationships = {
+      OneToOne: new Map(),
+      OneToMany: new Map(),
+      ManyToOne: new Map(),
+      ManyToMany: new Map(),
+    };
+  }
 
-    add(relationship) {
-        if (!relationship) {
-            throw new Error('A relationship must be passed so as to be added.');
-        }
-        this.relationships[relationship.type].set(relationship.getId(), relationship);
+  add(relationship) {
+    if (!relationship) {
+      throw new Error('A relationship must be passed so as to be added.');
     }
+    this.relationships[relationship.type].set(relationship.getId(), relationship);
+  }
 
-    getOneToOne(relationshipId) {
-        return this.get(RelationshipTypes.ONE_TO_ONE, relationshipId);
-    }
+  getOneToOne(relationshipId) {
+    return this.get(RelationshipTypes.ONE_TO_ONE, relationshipId);
+  }
 
-    getOneToMany(relationshipId) {
-        return this.get(RelationshipTypes.ONE_TO_MANY, relationshipId);
-    }
+  getOneToMany(relationshipId) {
+    return this.get(RelationshipTypes.ONE_TO_MANY, relationshipId);
+  }
 
-    getManyToOne(relationshipId) {
-        return this.get(RelationshipTypes.MANY_TO_ONE, relationshipId);
-    }
+  getManyToOne(relationshipId) {
+    return this.get(RelationshipTypes.MANY_TO_ONE, relationshipId);
+  }
 
-    getManyToMany(relationshipId) {
-        return this.get(RelationshipTypes.MANY_TO_MANY, relationshipId);
-    }
+  getManyToMany(relationshipId) {
+    return this.get(RelationshipTypes.MANY_TO_MANY, relationshipId);
+  }
 
-    get(type, relationshipId) {
-        if (!RelationshipTypes.exists(type)) {
-            throw new Error(`A valid relationship type must be passed so as to retrieve the relationship, got '${type}'.`);
-        }
-        if (!relationshipId) {
-            throw new Error('A relationship id must be passed so as to retrieve the relationship.');
-        }
-        return this.relationships[type].get(relationshipId);
+  get(type, relationshipId) {
+    if (!RelationshipTypes.exists(type)) {
+      throw new Error(`A valid relationship type must be passed so as to retrieve the relationship, got '${type}'.`);
     }
+    if (!relationshipId) {
+      throw new Error('A relationship id must be passed so as to retrieve the relationship.');
+    }
+    return this.relationships[type].get(relationshipId);
+  }
 
-    oneToOneQuantity() {
-        return this.relationships.OneToOne.size;
-    }
+  oneToOneQuantity() {
+    return this.relationships.OneToOne.size;
+  }
 
-    oneToManyQuantity() {
-        return this.relationships.OneToMany.size;
-    }
+  oneToManyQuantity() {
+    return this.relationships.OneToMany.size;
+  }
 
-    manyToOneQuantity() {
-        return this.relationships.ManyToOne.size;
-    }
+  manyToOneQuantity() {
+    return this.relationships.ManyToOne.size;
+  }
 
-    manyToManyQuantity() {
-        return this.relationships.ManyToMany.size;
-    }
+  manyToManyQuantity() {
+    return this.relationships.ManyToMany.size;
+  }
 
-    size() {
-        return this.oneToOneQuantity() + this.oneToManyQuantity() + this.manyToOneQuantity() + this.manyToManyQuantity();
-    }
+  size() {
+    return this.oneToOneQuantity() + this.oneToManyQuantity() + this.manyToOneQuantity() + this.manyToManyQuantity();
+  }
 
-    forEach(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.toArray().forEach(jdlRelationship => {
-            passedFunction(jdlRelationship);
-        });
+  forEach(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.toArray().forEach(jdlRelationship => {
+      passedFunction(jdlRelationship);
+    });
+  }
 
-    toArray() {
-        const relationships = [];
-        Object.keys(this.relationships).forEach(type => {
-            this.relationships[type].forEach(relationship => {
-                relationships.push(relationship);
-            });
-        });
-        return relationships;
-    }
+  toArray() {
+    const relationships = [];
+    Object.keys(this.relationships).forEach(type => {
+      this.relationships[type].forEach(relationship => {
+        relationships.push(relationship);
+      });
+    });
+    return relationships;
+  }
 
-    toString() {
-        if (this.size() === 0) {
-            return '';
-        }
-        let string = '';
-        Object.keys(this.relationships).forEach(type => {
-            if (this.relationships[type].size !== 0) {
-                const result = relationshipTypeToString(this.relationships[type], type);
-                string += `${result}\n`;
-            }
-        });
-        return string.slice(0, string.length - 1);
+  toString() {
+    if (this.size() === 0) {
+      return '';
     }
+    let string = '';
+    Object.keys(this.relationships).forEach(type => {
+      if (this.relationships[type].size !== 0) {
+        const result = relationshipTypeToString(this.relationships[type], type);
+        string += `${result}\n`;
+      }
+    });
+    return string.slice(0, string.length - 1);
+  }
 }
 
 module.exports = JDLRelationships;
 
 function relationshipTypeToString(relationships, type) {
-    let relationship = `relationship ${type} {\n`;
-    relationships.forEach(internalRelationship => {
-        let lines = internalRelationship.toString().split('\n');
-        lines = lines.slice(1, lines.length - 1);
-        relationship += `${lines.join('\n')}\n`;
-    });
-    relationship = `${relationship.slice(0, relationship.length - 1)}\n}`;
-    return relationship;
+  let relationship = `relationship ${type} {\n`;
+  relationships.forEach(internalRelationship => {
+    let lines = internalRelationship.toString().split('\n');
+    lines = lines.slice(1, lines.length - 1);
+    relationship += `${lines.join('\n')}\n`;
+  });
+  relationship = `${relationship.slice(0, relationship.length - 1)}\n}`;
+  return relationship;
 }

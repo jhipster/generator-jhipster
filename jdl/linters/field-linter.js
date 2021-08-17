@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,7 +23,7 @@ const FieldIssue = require('./issues/field-issue');
 let issues;
 
 module.exports = {
-    checkFields,
+  checkFields,
 };
 
 /**
@@ -34,35 +34,35 @@ module.exports = {
  * @return {Array} the found entity issues.
  */
 function checkFields(entityName, fieldDeclarations) {
-    if (fieldDeclarations.length === 0) {
-        return [];
-    }
-    issues = [];
-    checkForDuplicatedFields(entityName, fieldDeclarations);
-    return issues;
+  if (fieldDeclarations.length === 0) {
+    return [];
+  }
+  issues = [];
+  checkForDuplicatedFields(entityName, fieldDeclarations);
+  return issues;
 }
 
 function checkForDuplicatedFields(entityName, fieldDeclarations) {
-    const fieldNames = new Set();
-    const duplicatedFieldIssues = new Map(); // key: fieldName, value: issue
-    fieldDeclarations.forEach(fieldDeclaration => {
-        const fieldName = fieldDeclaration.children.NAME[0].image;
-        if (fieldNames.has(fieldName)) {
-            if (!duplicatedFieldIssues.has(fieldName)) {
-                duplicatedFieldIssues.set(
-                    fieldName,
-                    new FieldIssue({
-                        ruleName: Rules.RuleNames.FLD_DUPLICATED,
-                        fieldName,
-                        entityName,
-                    })
-                );
-            }
-        } else {
-            fieldNames.add(fieldName);
-        }
-    });
-    duplicatedFieldIssues.forEach(issue => {
-        issues.push(issue);
-    });
+  const fieldNames = new Set();
+  const duplicatedFieldIssues = new Map(); // key: fieldName, value: issue
+  fieldDeclarations.forEach(fieldDeclaration => {
+    const fieldName = fieldDeclaration.children.NAME[0].image;
+    if (fieldNames.has(fieldName)) {
+      if (!duplicatedFieldIssues.has(fieldName)) {
+        duplicatedFieldIssues.set(
+          fieldName,
+          new FieldIssue({
+            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            fieldName,
+            entityName,
+          })
+        );
+      }
+    } else {
+      fieldNames.add(fieldName);
+    }
+  });
+  duplicatedFieldIssues.forEach(issue => {
+    issues.push(issue);
+  });
 }

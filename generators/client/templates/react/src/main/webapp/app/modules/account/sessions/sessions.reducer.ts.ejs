@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,13 +17,9 @@
  limitations under the License.
 -%>
 import axios from 'axios';
+import { createAsyncThunk, createSlice, isPending } from '@reduxjs/toolkit';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-
-export const ACTION_TYPES = {
-  FIND_ALL: 'sessions/FIND_ALL',
-  INVALIDATE: 'sessions/INVALIDATE'
-};
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
   loading: false,
@@ -34,52 +30,49 @@ const initialState = {
 
 export type SessionsState =  Readonly<typeof initialState>;
 
-// Reducer
-export default (state: SessionsState = initialState, action): SessionsState => {
-  switch (action.type) {
-    case REQUEST(ACTION_TYPES.FIND_ALL):
-    case REQUEST(ACTION_TYPES.INVALIDATE):
-      return {
-        ...state,
-        loading: true
-      };
-    case FAILURE(ACTION_TYPES.FIND_ALL):
-      return {
-        ...state,
-        loading: false
-      };
-    case FAILURE(ACTION_TYPES.INVALIDATE):
-      return {
-        ...state,
-        loading: false,
-        updateFailure: true
-      };
-    case SUCCESS(ACTION_TYPES.FIND_ALL):
-      return {
-        ...state,
-        loading: false,
-        sessions: action.payload.data
-      };
-    case SUCCESS(ACTION_TYPES.INVALIDATE):
-      return {
-        ...state,
-        loading: false,
-        updateSuccess: true
-      };
-
-    default:
-      return state;
-  }
-};
-
 // Actions
-const apiURL = '/api/account/sessions/';
-export const findAll = () => ({
-  type: ACTION_TYPES.FIND_ALL,
-  payload: axios.get(apiURL)
+const apiUrl = '/api/account/sessions/';
+
+export const findAll = createAsyncThunk('sessions/find_all', async () => axios.get<any>(apiUrl), {
+  serializeError: serializeAxiosError,
 });
 
-export const invalidateSession = series => ({
-  type: ACTION_TYPES.INVALIDATE,
-  payload: axios.delete(`${apiURL}${series}`)
+export const invalidateSession = createAsyncThunk('sessions/invalidate', async (series: any) => axios.delete(`${apiUrl}${series}`), {
+  serializeError: serializeAxiosError,
 });
+
+export const SessionsSlice = createSlice({
+  name: 'sessions',
+  initialState: initialState as SessionsState,
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(findAll.rejected, state => {
+        state.loading = false;
+      })
+      .addCase(invalidateSession.rejected, state => {
+        state.loading = false;
+        state.updateFailure = true;
+      })
+      .addCase(findAll.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sessions= action.payload.data;
+      })
+      .addCase(invalidateSession.fulfilled, state => {
+        state.loading = false;
+        state.updateSuccess= true;
+      })
+      .addMatcher(
+        isPending(
+          findAll,
+          invalidateSession,
+        ),
+        (state) => {
+          state.loading = true;
+        }
+      );
+  },
+});
+
+// Reducer
+export default SessionsSlice.reducer;

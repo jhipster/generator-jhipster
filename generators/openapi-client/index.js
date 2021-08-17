@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,96 +16,150 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/* eslint-disable consistent-return */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list');
+const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
 const prompts = require('./prompts');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles, customizeFiles } = require('./files');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
-module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        this.option('regen', {
-            desc: 'Regenerates all saved clients',
-            type: Boolean,
-            defaults: false,
-        });
-    }
+let useBlueprints;
 
-    get initializing() {
-        return {
-            validateFromCli() {
-                this.checkInvocationFromCLI();
-            },
-            sayHello() {
-                // Have Yeoman greet the user.
-                this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
-            },
-            getConfig() {
-                this.openApiClients = this.config.get('openApiClients') || {};
-            },
-        };
-    }
+module.exports = class extends BaseBlueprintGenerator {
+  constructor(args, options, features) {
+    super(args, options, features);
+    this.option(OpenAPIOptionsNames.REGEN, {
+      desc: 'Regenerates all saved clients',
+      type: Boolean,
+      defaults: OpenAPIDefaultValues.REGEN,
+    });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENAPI_CLIENT);
+  }
 
-    get prompting() {
-        return {
-            askActionType: prompts.askActionType,
-            askExistingAvailableDocs: prompts.askExistingAvailableDocs,
-            askGenerationInfos: prompts.askGenerationInfos,
-        };
-    }
+  _initializing() {
+    return {
+      ...super._initializing(),
+      validateFromCli() {
+        this.checkInvocationFromCLI();
+      },
+      sayHello() {
+        // Have Yeoman greet the user.
+        this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
+      },
+      getConfig() {
+        this.openApiClients = this.config.get('openApiClients') || {};
+      },
+    };
+  }
 
-    get configuring() {
-        return {
-            determineApisToGenerate() {
-                this.clientsToGenerate = {};
-                if (this.options.regen || this.props.action === 'all') {
-                    this.clientsToGenerate = this.openApiClients;
-                } else if (this.props.action === 'new' || this.props.action === undefined) {
-                    this.clientsToGenerate[this.props.cliName] = {
-                        spec: this.props.inputSpec,
-                        useServiceDiscovery: this.props.useServiceDiscovery,
-                        generatorName: this.props.generatorName,
-                    };
-                } else if (this.props.action === 'select') {
-                    this.props.selected.forEach(selection => {
-                        this.clientsToGenerate[selection.cliName] = selection.spec;
-                    });
-                }
-            },
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
 
-            saveConfig() {
-                if (!this.options.regen && this.props.saveConfig) {
-                    this.openApiClients[this.props.cliName] = this.clientsToGenerate[this.props.cliName];
-                    this.config.set('openApiClients', this.openApiClients);
-                }
-            },
-        };
-    }
+  _prompting() {
+    return {
+      askActionType: prompts.askActionType,
+      askExistingAvailableDocs: prompts.askExistingAvailableDocs,
+      askGenerationInfos: prompts.askGenerationInfos,
+    };
+  }
 
-    get writing() {
-        return writeFiles();
-    }
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
 
-    install() {
+  _configuring() {
+    return {
+      determineApisToGenerate() {
+        this.clientsToGenerate = {};
+        if (this.options.regen || this.props.action === 'all') {
+          this.clientsToGenerate = this.openApiClients;
+        } else if (this.props.action === 'new' || this.props.action === undefined) {
+          this.clientsToGenerate[this.props.cliName] = {
+            spec: this.props.inputSpec,
+            useServiceDiscovery: this.props.useServiceDiscovery,
+            generatorName: this.props.generatorName,
+          };
+        } else if (this.props.action === 'select') {
+          this.props.selected.forEach(selection => {
+            this.clientsToGenerate[selection.cliName] = selection.spec;
+          });
+        }
+      },
+
+      saveConfig() {
+        if (!this.options.regen && this.props.saveConfig) {
+          this.openApiClients[this.props.cliName] = this.clientsToGenerate[this.props.cliName];
+          this.config.set('openApiClients', this.openApiClients);
+        }
+      },
+    };
+  }
+
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _writing() {
+    return writeFiles();
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _postWriting() {
+    return customizeFiles();
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
+  }
+
+  _install() {
+    return {
+      executeOpenApiClient() {
         this.clientPackageManager = this.config.get('clientPackageManager');
+        const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
+        if (stderr) {
+          this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
+        }
         Object.keys(this.clientsToGenerate).forEach(cliName => {
-            const done = this.async();
-            this.log(chalk.green(`\nGenerating client for ${cliName}`));
-            const generatorName = this.clientsToGenerate[cliName].generatorName;
-            const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
-            if (!stderr) {
-                this.success(`Succesfully generated ${cliName} ${generatorName} client`);
-                done();
-            } else {
-                this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
-                done();
-            }
+          this.log(chalk.green(`\nGenerating client for ${cliName}`));
+          const generatorName = this.clientsToGenerate[cliName].generatorName;
+          const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
+          if (!stderr) {
+            this.success(`Succesfully generated ${cliName} ${generatorName} client`);
+          } else {
+            this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
+          }
         });
-    }
+      },
+    };
+  }
 
-    end() {
+  install() {
+    if (useBlueprints) return;
+    return this._install();
+  }
+
+  _end() {
+    return {
+      tearDown() {
         this.log('End of openapi-client generator');
-    }
+      },
+    };
+  }
+
+  end() {
+    if (useBlueprints) return;
+    return this._end();
+  }
 };

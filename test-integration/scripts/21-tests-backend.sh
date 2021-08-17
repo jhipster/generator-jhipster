@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 source $(dirname $0)/00-init-env.sh
@@ -16,7 +16,7 @@ fi
 #-------------------------------------------------------------------------------
 # Exclude webpack task from Gradle if not skipping client
 #-------------------------------------------------------------------------------
-JHI_GRADLE_EXCLUDE_WEBPACK="-x webpack"
+JHI_GRADLE_EXCLUDE_WEBPACK="-x webapp"
 if [[ $(grep "\"skipClient\": true" .yo-rc.json) != "" ]]; then
     JHI_GRADLE_EXCLUDE_WEBPACK=""
 fi
@@ -40,14 +40,6 @@ elif [ -f "gradlew" ]; then
 fi
 
 #-------------------------------------------------------------------------------
-# Launch UAA tests
-#-------------------------------------------------------------------------------
-if [[ "$JHI_APP" == *"uaa"* ]]; then
-    cd "$JHI_FOLDER_UAA"
-    ./mvnw -ntp verify --batch-mode
-fi
-
-#-------------------------------------------------------------------------------
 # Enable testcontainers profiles
 #-------------------------------------------------------------------------------
 JHI_GRADLE_ENABLE_TESTCONTAINERS=""
@@ -62,7 +54,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw -ntp -P-webpack verify $JHI_MAVEN_ENABLE_TESTCONTAINERS --batch-mode \
+    ./mvnw -ntp -P-webapp verify $JHI_MAVEN_ENABLE_TESTCONTAINERS --batch-mode \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.testcontainers=INFO \
         -Dlogging.level.org.zalando=OFF \

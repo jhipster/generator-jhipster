@@ -1,11 +1,10 @@
 version: '2'
 services:
     samplekafka-mysql:
-        image: mysql:5.7.20
+        image: mysql:8.0.25
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/
         environment:
-            - MYSQL_USER=root
             - MYSQL_ALLOW_EMPTY_PASSWORD=yes
             - MYSQL_DATABASE=samplekafka
         ports:

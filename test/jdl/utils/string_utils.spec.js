@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,117 +24,117 @@ const { expect } = require('chai');
 const { lowerFirst, camelCase, upperFirst } = require('../../../jdl/utils/string-utils');
 
 describe('StringUtils', () => {
-    describe('camelCase', () => {
-        context('when passing a valid string', () => {
-            context('with only one letter', () => {
-                it('should keep it as it is', () => {
-                    expect(camelCase('e')).to.equal('e');
-                });
-            });
-            context('with only lowercase letters', () => {
-                it('should keep it as it is', () => {
-                    expect(camelCase('entity')).to.equal('entity');
-                });
-            });
-            context('with an uppercase first letter', () => {
-                it('should lowercase the first letter', () => {
-                    expect(camelCase('Entity')).to.equal('entity');
-                });
-            });
-            context('with an uppercase first letter and ending with an uppercase letter', () => {
-                it('should lowercase the first letter', () => {
-                    expect(camelCase('EntityA')).to.equal('entityA');
-                });
-            });
-            context('with an uppercase first letter and ending with more than one uppercase letter', () => {
-                it('should lowercase the first letter', () => {
-                    expect(camelCase('EntityAN')).to.equal('entityAN');
-                });
-            });
-            context('with an underscore inside the word', () => {
-                it('should remove it', () => {
-                    expect(camelCase('Entity_AN')).not.to.include('_');
-                });
-                it('should lowercase the word', () => {
-                    expect(camelCase('Entity_AN')).to.equal('entityAN');
-                });
-            });
-            context('beginning with an underscore and having one inside', () => {
-                it('should remove the two underscores', () => {
-                    expect(camelCase('_entity_AN')).not.to.include('_');
-                });
-                it('should lowercase the word', () => {
-                    expect(camelCase('_entity_AN')).to.equal('entityAN');
-                });
-            });
-            context('with dashes inside', () => {
-                it('should remove them', () => {
-                    expect(camelCase('_entit--y_AN---')).not.to.include('-');
-                });
-                it('should lowercase the word', () => {
-                    expect(camelCase('_entit--y_AN---')).to.equal('entityAN');
-                });
-            });
-            context('with spaces inside', () => {
-                it('should remove them', () => {
-                    expect(camelCase('En tity_AN ')).not.to.include(' ');
-                });
-                it('should lowercase the word', () => {
-                    expect(camelCase('En tity_AN ')).to.equal('entityAN');
-                });
-            });
+  describe('camelCase', () => {
+    context('when passing a valid string', () => {
+      context('with only one letter', () => {
+        it('should keep it as it is', () => {
+          expect(camelCase('e')).to.equal('e');
         });
-        context('when passing an invalid parameter', () => {
-            context('as it is nil', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        camelCase();
-                    }).to.throw(/^The passed string cannot be nil\.$/);
-                });
-            });
-            context('as it is empty', () => {
-                it('should return it', () => {
-                    expect(camelCase('')).to.equal('');
-                });
-            });
+      });
+      context('with only lowercase letters', () => {
+        it('should keep it as it is', () => {
+          expect(camelCase('entity')).to.equal('entity');
         });
+      });
+      context('with an uppercase first letter', () => {
+        it('should lowercase the first letter', () => {
+          expect(camelCase('Entity')).to.equal('entity');
+        });
+      });
+      context('with an uppercase first letter and ending with an uppercase letter', () => {
+        it('should lowercase the first letter', () => {
+          expect(camelCase('EntityA')).to.equal('entityA');
+        });
+      });
+      context('with an uppercase first letter and ending with more than one uppercase letter', () => {
+        it('should lowercase the first letter', () => {
+          expect(camelCase('EntityAN')).to.equal('entityAN');
+        });
+      });
+      context('with an underscore inside the word', () => {
+        it('should remove it', () => {
+          expect(camelCase('Entity_AN')).not.to.include('_');
+        });
+        it('should lowercase the word', () => {
+          expect(camelCase('Entity_AN')).to.equal('entityAN');
+        });
+      });
+      context('beginning with an underscore and having one inside', () => {
+        it('should remove the two underscores', () => {
+          expect(camelCase('_entity_AN')).not.to.include('_');
+        });
+        it('should lowercase the word', () => {
+          expect(camelCase('_entity_AN')).to.equal('entityAN');
+        });
+      });
+      context('with dashes inside', () => {
+        it('should remove them', () => {
+          expect(camelCase('_entit--y_AN---')).not.to.include('-');
+        });
+        it('should lowercase the word', () => {
+          expect(camelCase('_entit--y_AN---')).to.equal('entityAN');
+        });
+      });
+      context('with spaces inside', () => {
+        it('should remove them', () => {
+          expect(camelCase('En tity_AN ')).not.to.include(' ');
+        });
+        it('should lowercase the word', () => {
+          expect(camelCase('En tity_AN ')).to.equal('entityAN');
+        });
+      });
     });
-    describe('lowerFirst', () => {
-        context('when passing a nil string', () => {
-            it('should fail', () => {
-                expect(() => {
-                    lowerFirst();
-                }).to.throw(/^The passed string cannot be nil.$/);
-            });
+    context('when passing an invalid parameter', () => {
+      context('as it is nil', () => {
+        it('should fail', () => {
+          expect(() => {
+            camelCase();
+          }).to.throw(/^The passed string cannot be nil\.$/);
         });
-        context('when passing an empty string', () => {
-            it('should return it', () => {
-                expect(lowerFirst('')).to.equal('');
-            });
+      });
+      context('as it is empty', () => {
+        it('should return it', () => {
+          expect(camelCase('')).to.equal('');
         });
-        context('when passing a valid string', () => {
-            it('should lower the first letter', () => {
-                expect(lowerFirst('Abc')).to.equal('abc');
-            });
-        });
+      });
     });
-    describe('upperFirst', () => {
-        context('when passing a nil string', () => {
-            it('should fail', () => {
-                expect(() => {
-                    upperFirst();
-                }).to.throw(/^The passed string cannot be nil\.$/);
-            });
-        });
-        context('when passing an empty string', () => {
-            it('should return it', () => {
-                expect(upperFirst('')).to.equal('');
-            });
-        });
-        context('when passing a valid string', () => {
-            it('should upper the first letter', () => {
-                expect(upperFirst('abc')).to.equal('Abc');
-            });
-        });
+  });
+  describe('lowerFirst', () => {
+    context('when passing a nil string', () => {
+      it('should fail', () => {
+        expect(() => {
+          lowerFirst();
+        }).to.throw(/^The passed string cannot be nil.$/);
+      });
     });
+    context('when passing an empty string', () => {
+      it('should return it', () => {
+        expect(lowerFirst('')).to.equal('');
+      });
+    });
+    context('when passing a valid string', () => {
+      it('should lower the first letter', () => {
+        expect(lowerFirst('Abc')).to.equal('abc');
+      });
+    });
+  });
+  describe('upperFirst', () => {
+    context('when passing a nil string', () => {
+      it('should fail', () => {
+        expect(() => {
+          upperFirst();
+        }).to.throw(/^The passed string cannot be nil\.$/);
+      });
+    });
+    context('when passing an empty string', () => {
+      it('should return it', () => {
+        expect(upperFirst('')).to.equal('');
+      });
+    });
+    context('when passing a valid string', () => {
+      it('should upper the first letter', () => {
+        expect(upperFirst('abc')).to.equal('Abc');
+      });
+    });
+  });
 });

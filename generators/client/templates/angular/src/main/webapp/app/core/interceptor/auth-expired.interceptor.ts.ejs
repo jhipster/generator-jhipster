@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -40,19 +40,19 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
       tap({
         error: (err: HttpErrorResponse) => {
           if (err.status === 401 && err.url && !err.url.includes('api/account') && this.accountService.isAuthenticated()) {
-            <%_ if (authenticationType === 'session' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationTypeSession) { _%>
             if (err.url.includes(this.loginService.logoutUrl())) {
               this.loginService.logoutInClient();
               return;
             }
-            <%_ } _%>
+<%_ } _%>
             this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
-            <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
+<%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
             this.loginService.logout();
             this.router.navigate(['/login']);
-            <%_ } else { _%>
+<%_ } else { _%>
             this.loginService.login();
-            <%_ } _%>
+<%_ } _%>
           }
         },
       })

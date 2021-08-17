@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,86 +26,86 @@ let aws;
 let log;
 
 const Iam = (module.exports = function Iam(Aws, generator) {
-    aws = Aws;
-    log = generator.log;
+  aws = Aws;
+  log = generator.log;
 });
 
 const createRole = (RoleName, Description, AssumeRolePolicyDocument) => {
-    const iam = new aws.IAM();
-    return iam
-        .createRole({
-            RoleName,
-            Description,
-            AssumeRolePolicyDocument,
-        })
-        .promise();
+  const iam = new aws.IAM();
+  return iam
+    .createRole({
+      RoleName,
+      Description,
+      AssumeRolePolicyDocument,
+    })
+    .promise();
 };
 
 const createInstanceProfile = InstanceProfileName => {
-    const iam = new aws.IAM();
-    return iam
-        .createInstanceProfile({
-            InstanceProfileName,
-        })
-        .promise();
+  const iam = new aws.IAM();
+  return iam
+    .createInstanceProfile({
+      InstanceProfileName,
+    })
+    .promise();
 };
 
 const addRoleToInstanceProfile = (InstanceProfileName, RoleName) => {
-    const iam = new aws.IAM();
-    return iam
-        .addRoleToInstanceProfile({
-            InstanceProfileName,
-            RoleName,
-        })
-        .promise();
+  const iam = new aws.IAM();
+  return iam
+    .addRoleToInstanceProfile({
+      InstanceProfileName,
+      RoleName,
+    })
+    .promise();
 };
 
 const attachRolePolicy = (PolicyArn, RoleName) => {
-    const iam = new aws.IAM();
-    return iam
-        .attachRolePolicy({
-            PolicyArn,
-            RoleName,
-        })
-        .promise();
+  const iam = new aws.IAM();
+  return iam
+    .attachRolePolicy({
+      PolicyArn,
+      RoleName,
+    })
+    .promise();
 };
 
 const attachServicePolicyToRole = (policySuffix, roleName) => attachRolePolicy(AWS_SERVICE_ARN(policySuffix), roleName);
 const attachPolicyToRole = (policySuffix, roleName) => attachRolePolicy(AWS_POLICY_ARN(policySuffix), roleName);
 
 const getRole = RoleName => {
-    const iam = new aws.IAM();
-    return iam
-        .getRole({
-            RoleName,
-        })
-        .promise();
+  const iam = new aws.IAM();
+  return iam
+    .getRole({
+      RoleName,
+    })
+    .promise();
 };
 
 const hasRole = roleName =>
-    getRole(roleName)
-        .then(() => true)
-        .catch(err => {
-            if (err && err.code === 'NoSuchEntity') {
-                return false;
-            }
-            throw err;
-        });
+  getRole(roleName)
+    .then(() => true)
+    .catch(err => {
+      if (err && err.code === 'NoSuchEntity') {
+        return false;
+      }
+      throw err;
+    });
 
 const hasInstanceProfileName = InstanceProfileName => {
-    const iam = new aws.IAM();
-    return iam
-        .getInstanceProfile({
-            InstanceProfileName,
-        })
-        .promise()
-        .then(() => true)
-        .catch(err => {
-            if (err && err.code === 'NoSuchEntity') {
-                return false;
-            }
-            throw err;
-        });
+  const iam = new aws.IAM();
+  return iam
+    .getInstanceProfile({
+      InstanceProfileName,
+    })
+    .promise()
+    .then(() => true)
+    .catch(err => {
+      if (err && err.code === 'NoSuchEntity') {
+        return false;
+      }
+      throw err;
+    });
 };
 
 const hasInstanceProfile = () => hasInstanceProfileName(INSTANCE_PROFILE_ROLE);
@@ -113,12 +113,12 @@ const hasInstanceRole = () => hasRole(INSTANCE_PROFILE_ROLE);
 const hasServiceProfileRole = () => hasRole(SERVICE_PROFILE_ROLE);
 
 const createInstanceProfileWithAttachment = () =>
-    createInstanceProfile(INSTANCE_PROFILE_ROLE).then(() => addRoleToInstanceProfile(INSTANCE_PROFILE_ROLE, INSTANCE_PROFILE_ROLE));
+  createInstanceProfile(INSTANCE_PROFILE_ROLE).then(() => addRoleToInstanceProfile(INSTANCE_PROFILE_ROLE, INSTANCE_PROFILE_ROLE));
 
 const createServiceProfileRoleWithAttachedPolicies = () => {
-    const roleName = SERVICE_PROFILE_ROLE;
-    const description = 'Default Elastic Beanstalk Service profile created by JHipster.';
-    const assumedPolicyDoc = `{
+  const roleName = SERVICE_PROFILE_ROLE;
+  const description = 'Default Elastic Beanstalk Service profile created by JHipster.';
+  const assumedPolicyDoc = `{
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -136,19 +136,19 @@ const createServiceProfileRoleWithAttachedPolicies = () => {
   ]
 }`;
 
-    return createRole(roleName, description, assumedPolicyDoc).then(() => {
-        const policiesToAttach = [
-            attachServicePolicyToRole('AWSElasticBeanstalkEnhancedHealth', roleName),
-            attachServicePolicyToRole('AWSElasticBeanstalkService', roleName),
-        ];
-        return Promise.all(policiesToAttach);
-    });
+  return createRole(roleName, description, assumedPolicyDoc).then(() => {
+    const policiesToAttach = [
+      attachServicePolicyToRole('AWSElasticBeanstalkEnhancedHealth', roleName),
+      attachServicePolicyToRole('AWSElasticBeanstalkService', roleName),
+    ];
+    return Promise.all(policiesToAttach);
+  });
 };
 
 const createInstanceRoleWithAttachedPolicies = () => {
-    const roleName = INSTANCE_PROFILE_ROLE;
-    const description = 'Default Elastic Beanstalk instance profile created by JHipster.';
-    const assumedPolicyDoc = `{
+  const roleName = INSTANCE_PROFILE_ROLE;
+  const description = 'Default Elastic Beanstalk instance profile created by JHipster.';
+  const assumedPolicyDoc = `{
   "Version": "2008-10-17",
   "Statement": [
     {
@@ -161,14 +161,14 @@ const createInstanceRoleWithAttachedPolicies = () => {
   ]
 }`;
 
-    return createRole(roleName, description, assumedPolicyDoc).then(() => {
-        const policiesToAttach = [
-            attachPolicyToRole('AWSElasticBeanstalkWebTier', roleName),
-            attachPolicyToRole('AWSElasticBeanstalkWorkerTier', roleName),
-            attachPolicyToRole('AWSElasticBeanstalkMulticontainerDocker', roleName),
-        ];
-        return Promise.all(policiesToAttach);
-    });
+  return createRole(roleName, description, assumedPolicyDoc).then(() => {
+    const policiesToAttach = [
+      attachPolicyToRole('AWSElasticBeanstalkWebTier', roleName),
+      attachPolicyToRole('AWSElasticBeanstalkWorkerTier', roleName),
+      attachPolicyToRole('AWSElasticBeanstalkMulticontainerDocker', roleName),
+    ];
+    return Promise.all(policiesToAttach);
+  });
 };
 
 /**
@@ -182,40 +182,40 @@ const createInstanceRoleWithAttachedPolicies = () => {
  * @param callback
  */
 Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
-    hasInstanceRole()
-        .then(instanceRole => {
-            if (!instanceRole) {
-                log(`Instance role '${INSTANCE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
-                return createInstanceRoleWithAttachedPolicies();
-            }
+  hasInstanceRole()
+    .then(instanceRole => {
+      if (!instanceRole) {
+        log(`Instance role '${INSTANCE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
+        return createInstanceRoleWithAttachedPolicies();
+      }
 
-            return instanceRole;
-        })
-        .then(() => hasInstanceProfile())
-        .then(instanceProfileExists => {
-            if (!instanceProfileExists) {
-                log(`Instance profile '${INSTANCE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
-                return createInstanceProfileWithAttachment();
-            }
+      return instanceRole;
+    })
+    .then(() => hasInstanceProfile())
+    .then(instanceProfileExists => {
+      if (!instanceProfileExists) {
+        log(`Instance profile '${INSTANCE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
+        return createInstanceProfileWithAttachment();
+      }
 
-            return instanceProfileExists;
-        })
-        .then(() => hasServiceProfileRole())
-        .then(serviceProfileExists => {
-            if (!serviceProfileExists) {
-                log(`Service Profile profile '${SERVICE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
-                return createServiceProfileRoleWithAttachedPolicies();
-            }
+      return instanceProfileExists;
+    })
+    .then(() => hasServiceProfileRole())
+    .then(serviceProfileExists => {
+      if (!serviceProfileExists) {
+        log(`Service Profile profile '${SERVICE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
+        return createServiceProfileRoleWithAttachedPolicies();
+      }
 
-            return serviceProfileExists;
-        })
-        .then(() => callback(null, null))
-        .catch(err => {
-            callback(
-                {
-                    message: err.message,
-                },
-                null
-            );
-        });
+      return serviceProfileExists;
+    })
+    .then(() => callback(null, null))
+    .catch(err => {
+      callback(
+        {
+          message: err.message,
+        },
+        null
+      );
+    });
 };

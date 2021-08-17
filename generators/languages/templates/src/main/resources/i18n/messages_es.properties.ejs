@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Lo sentimos, ha ocurrido un error.
 error.status=Estado:
 error.message=Mensaje:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Activación de <%= baseName %>
 email.activation.greeting=Estimado/a {0}
@@ -37,3 +38,4 @@ email.reset.title=Reinicio de contraseña de <%= baseName %>
 email.reset.greeting=Estimado/a {0}
 email.reset.text1=Se ha solicitado el reinicio de la contraseña para su cuenta en <%= baseName %>. Por favor, haga clic en el siguiente enlace para reiniciarla:
 email.reset.text2=Saludos,
+<%_ } _%>

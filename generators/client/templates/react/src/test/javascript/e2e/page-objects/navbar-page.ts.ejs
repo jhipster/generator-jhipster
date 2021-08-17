@@ -15,9 +15,9 @@ export default class NavBarPage extends BasePage {
   adminMenu: ElementFinder = this.selector.$('#admin-menu');
   accountMenu: ElementFinder = this.selector.$('#account-menu');
   entityMenu: ElementFinder = this.selector.$('#entity-menu');
-  <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   loginItem: ElementFinder = this.selector.$('#login-item');
-  <%_ } _%>
+<%_ } _%>
 
   constructor() {
     super(selector);
@@ -25,7 +25,7 @@ export default class NavBarPage extends BasePage {
     this.signInPage = new SignInPage();
   }
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   async getPasswordPage() {
     await this.clickOnAccountMenuItem('password');
     return new PasswordPage();
@@ -41,15 +41,15 @@ export default class NavBarPage extends BasePage {
     await this.clickOnTabMenu('/account/register');
     return new RegisterPage();
   }
-  <%_ } _%>
+<%_ } _%>
 
   async getSignInPage() {
     await this.clickOnAccountMenu();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     await this.clickOnTabMenu('/login');
-    <%_ } else { _%>
+<%_ } else { _%>
     await this.loginItem.click();
-    <%_ } _%>
+<%_ } _%>
     return this.signInPage;
   }
 
@@ -89,13 +89,13 @@ export default class NavBarPage extends BasePage {
 
   async autoSignIn() {
     await this.signInPage.get();
-    const username = process.env.E2E_USERNAME || 'admin';
-    const password = process.env.E2E_PASSWORD || 'admin';
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    const username = process.env.E2E_USERNAME ?? 'admin';
+    const password = process.env.E2E_PASSWORD ?? 'admin';
+<%_ if (!authenticationTypeOauth2) { _%>
     await this.signInPage.autoSignInUsing(username, password);
-    <%_ } else { _%>
+<%_ } else { _%>
     this.signInPage.loginWithOAuth(username, password);
-    <%_ } _%>
+<%_ } _%>
   }
 
   async autoSignOut() {

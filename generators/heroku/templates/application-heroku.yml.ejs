@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,83 +29,67 @@
 # ===================================================================
 
 eureka:
-<%_ if (applicationType !== 'gateway') { _%>
-    instance:
-        hostname: <%= herokuAppName %>.herokuapp.com
-        non-secure-port: 80
-        prefer-ip-address: false
+<%_ if (!applicationTypeGateway) { _%>
+  instance:
+    hostname: <%= herokuAppName %>.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
-    client:
-        service-url:
-            defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+<%_ if (serviceDiscoveryEureka) { _%>
+  client:
+    service-url:
+      defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 <%_ } _%>
 
-<%_ if (prodDatabaseType === 'neo4j') { _%>
-org:
-    neo4j:
-      driver:
-        uri: ${GRAPHENEDB_BOLT_URL}
-        authentication:
-            username: ${GRAPHENEDB_BOLT_USER}
-            password: ${GRAPHENEDB_BOLT_PASSWORD}
-        config:
-            encrypted: true
-<%_ } _%>
-<%_ if (cacheProvider === 'memcached' || cacheProvider === 'redis') { _%>
+<%_ if (cacheProviderMemcached || cacheProviderRedis) { _%>
 jhipster:
   cache:
-    <%_ if (cacheProvider === 'redis') { _%>
+  <%_ if (cacheProviderRedis) { _%>
     redis:
-        server: ${REDIS_URL}
-        cluster: false
-        connectionPoolSize: 3
-        connectionMinimumIdleSize: 1
-        subscriptionConnectionPoolSize: 3
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
+      server: ${REDIS_URL}
+      cluster: false
+      connectionPoolSize: 3
+      connectionMinimumIdleSize: 1
+      subscriptionConnectionPoolSize: 3
+  <%_ } _%>
+  <%_ if (cacheProviderMemcached) { _%>
     memcached:
+      enabled: true
+      servers: ${MEMCACHIER_SERVERS}
+      expiration: 300
+      use-binary-protocol: true
+      authentication:
         enabled: true
-        servers: ${MEMCACHIER_SERVERS}
-        expiration: 300
-        use-binary-protocol: true
-        authentication:
-            enabled: true
-            username: ${MEMCACHIER_USERNAME}
-            password: ${MEMCACHIER_PASSWORD}
-    <%_ } _%>
+        username: ${MEMCACHIER_USERNAME}
+        password: ${MEMCACHIER_PASSWORD}
+  <%_ } _%>
 <%_ } _%>
 spring:
-<%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: ${JDBC_DATABASE_URL}
-        username: ${JDBC_DATABASE_USERNAME}
-        password: ${JDBC_DATABASE_PASSWORD}
-        hikari:
-            maximumPoolSize: 8
+<%_ if (prodDatabaseTypePostgres || prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximumPoolSize: 8
 <%_ } _%>
-<%_ if (prodDatabaseType === 'mongodb') { _%>
-    data:
-        mongodb:
-            uri: ${MONGODB_URI}?authMode=scram-sha1
-<%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
-    elasticsearch:
-        rest:
-            uris: ${BONSAI_URL}
+<%_ if (searchEngineElasticsearch) { _%>
+  elasticsearch:
+    rest:
+      uris: ${BONSAI_URL}
 <%_ } _%>
 <%_ if (useOkta) { _%>
-    security:
-        oauth2:
-            client:
-                provider:
-                    oidc:
-                        issuer-uri: ${OKTA_OAUTH2_ISSUER}
-                registration:
-                    oidc:
-                        client-id: ${OKTA_OAUTH2_CLIENT_ID_WEB}
-                        client-secret: ${OKTA_OAUTH2_CLIENT_SECRET_WEB}
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${OKTA_OAUTH2_ISSUER}
+        registration:
+          oidc:
+            client-id: ${OKTA_OAUTH2_CLIENT_ID_WEB}
+            client-secret: ${OKTA_OAUTH2_CLIENT_SECRET_WEB}
 <%_ } _%>
 server:
   port: ${PORT:8080}

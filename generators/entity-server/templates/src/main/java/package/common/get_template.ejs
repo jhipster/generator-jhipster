@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,15 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%  const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
-    const instanceType = (dto === 'mapstruct') ? `${optionalOrMono}<${asDto(entityClass)}>` : `${optionalOrMono}<${asEntity(entityClass)}>`;
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+<%  const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
+    const instanceType = `${optionalOrMono}<${restClass}>`;
+    const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::toDto`;
     const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${instanceName} =`;
 %>
 <%_ if (!viaService) { _%>
-        <%- returnPrefix %> <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% } %><% if (dto !== 'mapstruct') { %>;<% } else { %>
+        <%- returnPrefix %> <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% } %><% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%= entityToDtoReference %>);<% } %>
 <%_ } else { _%>
         <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);

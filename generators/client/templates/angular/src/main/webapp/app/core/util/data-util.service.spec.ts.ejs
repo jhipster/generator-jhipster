@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,18 +16,37 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { DataUtils } from './data-util.service';
 
 describe('Data Utils Service Test', () => {
+  let service: DataUtils;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [DataUtils],
     });
+    service = TestBed.inject(DataUtils);
   });
 
-  it('should return the bytesize of the text', inject([DataUtils], (service: DataUtils) => {
-    expect(service.byteSize('Hello Jhipster')).toBe(`10.5 bytes`);
-  }));
+  describe('byteSize', () => {
+    it('should return the bytesize of the text', () => {
+      expect(service.byteSize('Hello JHipster')).toBe(`10.5 bytes`);
+    });
+  });
+
+  describe('openFile', () => {
+    it('should open the file in the new window', () => {
+      const newWindow = { ...window };
+      newWindow.document.write = jest.fn();
+      window.open = jest.fn(() => newWindow);
+      window.URL.createObjectURL = jest.fn();
+      // 'JHipster' in base64 is 'SkhpcHN0ZXI='
+      const data = 'SkhpcHN0ZXI=';
+      const contentType = 'text/plain';
+      service.openFile(data, contentType);
+      expect(window.open).toHaveBeenCalledTimes(1);
+    });
+  });
 });

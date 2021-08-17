@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -52,9 +52,9 @@ objects:
     data:
       application.yml: |-
         configserver:
-          name: <% if (serviceDiscoveryType === 'eureka') { %> JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %>
-          status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in OpenShift
-        <%_ if (serviceDiscoveryType === 'eureka') {  _%>
+          name: <% if (serviceDiscoveryEureka) { %> JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>
+          status: Connected to <% if (serviceDiscoveryEureka) { %>the JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %> running in OpenShift
+<%_ if (serviceDiscoveryEureka) {  _%>
         eureka:
           client:
             initial-instance-info-replication-interval-seconds: 15
@@ -66,18 +66,18 @@ objects:
           instance:
             lease-renewal-interval-in-seconds: 10
             registry-default-open-for-traffic-count: 0
-        <%_ } _%>
+<%_ } _%>
         jhipster:
           security:
             authentication:
               jwt:
                 base64-secret: <%= jwtSecretKey %>
       # app specific configuration
-      <%_ if (serviceDiscoveryType === 'eureka') {  _%>
+<%_ if (serviceDiscoveryEureka) {  _%>
       jhipster-registry.yml: |-
         eureka:
           client:
             service-url:
               # This must contain a list of all Eureka server replicas for registry HA to work correctly
               defaultZone: <% for (let i = 0; i < registryReplicas; i++) { %>http://admin:${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-<%- i %>.jhipster-registry:8761/eureka/<% if (i < registryReplicas-1) { _%>,<% }} %>
-      <%_ } _%>
+<%_ } _%>

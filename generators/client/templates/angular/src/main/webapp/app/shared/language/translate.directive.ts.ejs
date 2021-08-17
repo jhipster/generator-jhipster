@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -39,6 +39,9 @@ export class TranslateDirective implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.translateService.onLangChange.pipe(takeUntil(this.directiveDestroyed)).subscribe(() => {
+      this.getTranslation();
+    });
+    this.translateService.onTranslationChange.pipe(takeUntil(this.directiveDestroyed)).subscribe(() => {
       this.getTranslation();
     });
   }

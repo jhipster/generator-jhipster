@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,8 +27,8 @@ module.exports = { convertDeployments };
  * @return {Array<JDLDeployment>} the converted JDLDeployment objects.
  */
 function convertDeployments(parsedDeployments) {
-    if (!parsedDeployments) {
-        throw new Error('Deployments have to be passed so as to be converted.');
-    }
-    return parsedDeployments.map(parsedDeployment => new JDLDeployment(parsedDeployment));
+  if (!parsedDeployments) {
+    throw new Error('Deployments have to be passed so as to be converted.');
+  }
+  return parsedDeployments.map(parsedDeployment => new JDLDeployment(parsedDeployment));
 }

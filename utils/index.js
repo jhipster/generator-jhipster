@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,27 +18,36 @@
  */
 
 module.exports = {
-    stringify: data =>
-        JSON.stringify(
-            data,
-            (key, value) => {
-                if (!value) {
-                    return value;
-                }
-                if (key === 'faker') {
-                    return '[faker]';
-                }
-                if (key === 'otherEntity' || key === 'entity') {
-                    return `[${value.name} Entity]`;
-                }
-                if (key === 'reference') {
-                    return `[${value.name} Reference]`;
-                }
-                if (key === 'otherRelationship') {
-                    return `[${value.relationshipName} relationship]`;
-                }
-                return value;
-            },
-            4
-        ),
+  stringify: data =>
+    JSON.stringify(
+      data,
+      (key, value) => {
+        if (!value) {
+          return value;
+        }
+        if (key === 'faker') {
+          return '[faker]';
+        }
+        if (key === 'otherEntity' || key === 'entity') {
+          return `[${value.name} Entity]`;
+        }
+        if (key === 'reference') {
+          return `[${value.name} Reference]`;
+        }
+        if (key === 'otherRelationship') {
+          return `[${value.relationshipName} relationship]`;
+        }
+        if (key === 'otherRelationships') {
+          return '[otherRelationships]';
+        }
+        if (key === 'derivedPrimaryKey') {
+          return `[${value.type} derivedPrimaryKey]`;
+        }
+        if (key === 'derivedFields') {
+          return '[derivedFields]';
+        }
+        return value;
+      },
+      4
+    ),
 };

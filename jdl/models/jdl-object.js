@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,280 +26,280 @@ const BinaryOptions = require('../jhipster/binary-options');
  * The JDL object class, containing applications, entities etc.
  */
 module.exports = class JDLObject {
-    constructor() {
-        this.applications = {};
-        this.deployments = {};
-        this.entities = {};
-        this.enums = new JDLEnums();
-        this.relationships = new JDLRelationships();
-        this.options = new JDLOptions();
-    }
+  constructor() {
+    this.applications = {};
+    this.deployments = {};
+    this.entities = {};
+    this.enums = new JDLEnums();
+    this.relationships = new JDLRelationships();
+    this.options = new JDLOptions();
+  }
 
-    getOptions() {
-        return this.options.getOptions();
-    }
+  getOptions() {
+    return this.options.getOptions();
+  }
 
-    /**
-     * Adds or replaces an application.
-     * @param application the application.
-     */
-    addApplication(application) {
-        if (!application) {
-            throw new Error("Can't add nil application.");
-        }
-        const baseName = application.getConfigurationOptionValue('baseName');
-        this.applications[baseName] = application;
+  /**
+   * Adds or replaces an application.
+   * @param application the application.
+   */
+  addApplication(application) {
+    if (!application) {
+      throw new Error("Can't add nil application.");
     }
+    const baseName = application.getConfigurationOptionValue('baseName');
+    this.applications[baseName] = application;
+  }
 
-    getApplicationQuantity() {
-        return Object.keys(this.applications).length;
-    }
+  getApplicationQuantity() {
+    return Object.keys(this.applications).length;
+  }
 
-    getApplication(applicationName) {
-        if (!applicationName) {
-            return undefined;
-        }
-        return this.applications[applicationName];
+  getApplication(applicationName) {
+    if (!applicationName) {
+      return undefined;
     }
+    return this.applications[applicationName];
+  }
 
-    getApplications() {
-        return Object.values(this.applications);
-    }
+  getApplications() {
+    return Object.values(this.applications);
+  }
 
-    forEachApplication(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        Object.keys(this.applications).forEach(applicationName => {
-            const application = this.applications[applicationName];
-            passedFunction(application);
-        });
+  forEachApplication(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    Object.keys(this.applications).forEach(applicationName => {
+      const application = this.applications[applicationName];
+      passedFunction(application);
+    });
+  }
 
-    /**
-     * Adds or replaces a deployment.
-     * @param deployment the deployment.
-     */
-    addDeployment(deployment) {
-        if (!deployment) {
-            throw new Error("Can't add nil deployment.");
-        }
-        this.deployments[deployment.deploymentType] = deployment;
+  /**
+   * Adds or replaces a deployment.
+   * @param deployment the deployment.
+   */
+  addDeployment(deployment) {
+    if (!deployment) {
+      throw new Error("Can't add nil deployment.");
     }
+    this.deployments[deployment.deploymentType] = deployment;
+  }
 
-    getDeploymentQuantity() {
-        return Object.keys(this.deployments).length;
-    }
+  getDeploymentQuantity() {
+    return Object.keys(this.deployments).length;
+  }
 
-    forEachDeployment(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        Object.keys(this.deployments).forEach((deploymentName, index, array) => {
-            const deployment = this.deployments[deploymentName];
-            passedFunction(deployment, index, array);
-        });
+  forEachDeployment(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    Object.keys(this.deployments).forEach((deploymentName, index, array) => {
+      const deployment = this.deployments[deploymentName];
+      passedFunction(deployment, index, array);
+    });
+  }
 
-    /**
-     * Adds or replaces an entity.
-     * @param entity the entity to add.
-     */
-    addEntity(entity) {
-        if (!entity) {
-            throw new Error("Can't add nil entity.");
-        }
-        this.entities[entity.name] = entity;
+  /**
+   * Adds or replaces an entity.
+   * @param entity the entity to add.
+   */
+  addEntity(entity) {
+    if (!entity) {
+      throw new Error("Can't add nil entity.");
     }
+    this.entities[entity.name] = entity;
+  }
 
-    getEntity(entityName) {
-        if (!entityName) {
-            throw new Error('An entity name must be passed so as to be retrieved.');
-        }
-        return this.entities[entityName];
+  getEntity(entityName) {
+    if (!entityName) {
+      throw new Error('An entity name must be passed so as to be retrieved.');
     }
+    return this.entities[entityName];
+  }
 
-    getEntities() {
-        return Object.values(this.entities);
-    }
+  getEntities() {
+    return Object.values(this.entities);
+  }
 
-    getEntityQuantity() {
-        return this.getEntityNames().length;
-    }
+  getEntityQuantity() {
+    return this.getEntityNames().length;
+  }
 
-    getEntityNames() {
-        return Object.keys(this.entities);
-    }
+  getEntityNames() {
+    return Object.keys(this.entities);
+  }
 
-    forEachEntity(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        Object.keys(this.entities).forEach((entityName, index, array) => {
-            const entity = this.entities[entityName];
-            passedFunction(entity, index, array);
-        });
+  forEachEntity(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    Object.keys(this.entities).forEach((entityName, index, array) => {
+      const entity = this.entities[entityName];
+      passedFunction(entity, index, array);
+    });
+  }
 
-    /**
-     * Adds or replaces an enum.
-     * @param enumToAdd the enum to add.
-     */
-    addEnum(enumToAdd) {
-        if (!enumToAdd) {
-            throw new Error("Can't add nil enum.");
-        }
-        this.enums.add(enumToAdd);
+  /**
+   * Adds or replaces an enum.
+   * @param enumToAdd the enum to add.
+   */
+  addEnum(enumToAdd) {
+    if (!enumToAdd) {
+      throw new Error("Can't add nil enum.");
     }
+    this.enums.add(enumToAdd);
+  }
 
-    hasEnum(enumName) {
-        return this.enums.has(enumName);
-    }
+  hasEnum(enumName) {
+    return this.enums.has(enumName);
+  }
 
-    getEnum(enumName) {
-        return this.enums.get(enumName);
-    }
+  getEnum(enumName) {
+    return this.enums.get(enumName);
+  }
 
-    getEnumQuantity() {
-        return this.enums.size();
-    }
+  getEnumQuantity() {
+    return this.enums.size();
+  }
 
-    forEachEnum(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.enums.forEach(jdlEnum => {
-            passedFunction(jdlEnum);
-        });
+  forEachEnum(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.enums.forEach(jdlEnum => {
+      passedFunction(jdlEnum);
+    });
+  }
 
-    addRelationship(relationship) {
-        if (!relationship) {
-            throw new Error("Can't add nil relationship.");
-        }
-        this.relationships.add(relationship);
+  addRelationship(relationship) {
+    if (!relationship) {
+      throw new Error("Can't add nil relationship.");
     }
+    this.relationships.add(relationship);
+  }
 
-    getRelationshipQuantity(applicationName) {
-        if (!applicationName) {
-            return this.relationships.size();
-        }
-        const applicationEntityNames = this.applications[applicationName].entityNames;
-        let count = 0;
-        this.relationships.forEach(relationship => {
-            if (applicationEntityNames.has(relationship.from) || applicationEntityNames.has(relationship.to)) {
-                count++;
-            }
-        });
-        return count;
+  getRelationshipQuantity(applicationName) {
+    if (!applicationName) {
+      return this.relationships.size();
     }
+    const applicationEntityNames = this.applications[applicationName].entityNames;
+    let count = 0;
+    this.relationships.forEach(relationship => {
+      if (applicationEntityNames.has(relationship.from) || applicationEntityNames.has(relationship.to)) {
+        count++;
+      }
+    });
+    return count;
+  }
 
-    forEachRelationship(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.relationships.forEach(jdlRelationship => {
-            passedFunction(jdlRelationship);
-        });
+  forEachRelationship(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.relationships.forEach(jdlRelationship => {
+      passedFunction(jdlRelationship);
+    });
+  }
 
-    getRelationships() {
-        return this.relationships.toArray();
-    }
+  getRelationships() {
+    return this.relationships.toArray();
+  }
 
-    addOption(option) {
-        if (!option || !option.getType) {
-            throw new Error("Can't add nil option.");
-        }
-        this.options.addOption(option);
+  addOption(option) {
+    if (!option || !option.getType) {
+      throw new Error("Can't add nil option.");
     }
+    this.options.addOption(option);
+  }
 
-    getOptionsForName(optionName) {
-        return this.options.getOptionsForName(optionName);
-    }
+  getOptionsForName(optionName) {
+    return this.options.getOptionsForName(optionName);
+  }
 
-    forEachOption(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.options.forEach(passedFunction);
+  forEachOption(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.options.forEach(passedFunction);
+  }
 
-    hasOption(optionName) {
-        if (!optionName) {
-            return false;
-        }
-        return this.options.has(optionName);
+  hasOption(optionName) {
+    if (!optionName) {
+      return false;
     }
+    return this.options.has(optionName);
+  }
 
-    isEntityInMicroservice(entityName) {
-        const options = this.getOptionsForName(BinaryOptions.Options.MICROSERVICE);
-        return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
-    }
+  isEntityInMicroservice(entityName) {
+    const options = this.getOptionsForName(BinaryOptions.Options.MICROSERVICE);
+    return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
+  }
 
-    getOptionQuantity() {
-        return this.options.size();
-    }
+  getOptionQuantity() {
+    return this.options.size();
+  }
 
-    toString() {
-        let string = '';
-        if (this.getApplicationQuantity() !== 0) {
-            string += `${applicationsToString(this.applications)}\n`;
-        }
-        if (this.getDeploymentQuantity() !== 0) {
-            string += `${deploymentsToString(this.deployments)}\n`;
-        }
-        if (this.getEntityQuantity() !== 0) {
-            string += `${entitiesToString(this.entities)}\n`;
-        }
-        if (this.getEnumQuantity() !== 0) {
-            string += `${this.enums.toString()}\n`;
-        }
-        if (this.getRelationshipQuantity() !== 0) {
-            string += `${relationshipsToString(this.relationships)}\n`;
-        }
-        if (this.getOptionQuantity() !== 0) {
-            string += `${optionsToString(this.options)}`;
-        }
-        return string;
+  toString() {
+    let string = '';
+    if (this.getApplicationQuantity() !== 0) {
+      string += `${applicationsToString(this.applications)}\n`;
     }
+    if (this.getDeploymentQuantity() !== 0) {
+      string += `${deploymentsToString(this.deployments)}\n`;
+    }
+    if (this.getEntityQuantity() !== 0) {
+      string += `${entitiesToString(this.entities)}\n`;
+    }
+    if (this.getEnumQuantity() !== 0) {
+      string += `${this.enums.toString()}\n`;
+    }
+    if (this.getRelationshipQuantity() !== 0) {
+      string += `${relationshipsToString(this.relationships)}\n`;
+    }
+    if (this.getOptionQuantity() !== 0) {
+      string += `${optionsToString(this.options)}`;
+    }
+    return string;
+  }
 };
 
 function applicationsToString(applications) {
-    let string = '';
-    Object.keys(applications).forEach(applicationName => {
-        string += `${applications[applicationName].toString()}\n`;
-    });
-    return string;
+  let string = '';
+  Object.keys(applications).forEach(applicationName => {
+    string += `${applications[applicationName].toString()}\n`;
+  });
+  return string;
 }
 
 function deploymentsToString(deployments) {
-    let string = '';
-    Object.values(deployments).forEach(deployment => {
-        string += `${deployment.toString()}\n`;
-    });
-    return string;
+  let string = '';
+  Object.values(deployments).forEach(deployment => {
+    string += `${deployment.toString()}\n`;
+  });
+  return string;
 }
 
 function entitiesToString(entities) {
-    let string = '';
-    Object.keys(entities).forEach(entityName => {
-        string += `${entities[entityName].toString()}\n`;
-    });
-    return string.slice(0, string.length - 1);
+  let string = '';
+  Object.keys(entities).forEach(entityName => {
+    string += `${entities[entityName].toString()}\n`;
+  });
+  return string.slice(0, string.length - 1);
 }
 
 function relationshipsToString(relationships) {
-    const string = relationships.toString();
-    if (string === '') {
-        return '';
-    }
-    return `${relationships.toString()}\n`;
+  const string = relationships.toString();
+  if (string === '') {
+    return '';
+  }
+  return `${relationships.toString()}\n`;
 }
 function optionsToString(options) {
-    const string = options.toString();
-    if (string === '') {
-        return '';
-    }
-    return `${string}\n`;
+  const string = options.toString();
+  if (string === '') {
+    return '';
+  }
+  return `${string}\n`;
 }

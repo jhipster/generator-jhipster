@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,13 +29,12 @@ metadata:
   namespace: <%= openshiftNamespace %>
   annotations:
     description: This template defines objects that are required to spin up a postgresqldb pod
-    tags: db, <%= app.baseName.toLowerCase() %>-postgresqldb<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
+    tags: db, <%= app.baseName.toLowerCase() %>-postgresqldb<% if (storageTypePersistent) { %> ,persistent <% } %> <% if (storageTypeEphemeral) { %> ,ephemeral <% } %>
     openshift.io/display-name: <%= app.baseName.toLowerCase() %>-postgresqldb-template
     openshift.io/long-description: >-
-        This template provides objects that are required to spin up a postgresqldb pod. <% if (storageType ==
-        'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+        This template provides objects that are required to spin up a postgresqldb pod.<% if (storageTypePersistent) { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
         Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %>
-        <% if (storageType === 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
+        <% if (storageTypeEphemeral) { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
   app: <%= app.baseName.toLowerCase() %>-postgresqldb
@@ -93,7 +92,7 @@ objects:
     stringData:
       database-user: "${POSTGRESQL_USER}"
       database-password: "${POSTGRESQL_PASSWORD}"
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
@@ -137,13 +136,13 @@ objects:
         spec:
           volumes:
           - name: ${APPLICATION_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
             persistentVolumeClaim:
               claimName: ${APPLICATION_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageTypeEphemeral) { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
             image: <%= DOCKER_POSTGRESQL %>

@@ -1,0 +1,396 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+import configureStore from 'redux-mock-store';
+import axios from 'axios';
+import thunk from 'redux-thunk';
+import sinon from 'sinon';
+
+import administration, {
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+  getGatewayRoutes,
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+  getSystemHealth,
+  getSystemMetrics,
+  getSystemThreadDump,
+  getLoggers,
+  changeLogLevel,
+  getConfigurations,
+  getEnv,
+  setLoggers,
+  <%_ if (communicationSpringWebsocket) { _%>
+  websocketActivityMessage,
+  <%_ } _%>
+<%_ } _%>
+} from './administration.reducer';
+
+describe('Administration reducer tests', () => {
+
+  function isEmpty(element): boolean {
+    if (element instanceof Array) {
+      return element.length === 0;
+    }
+    return Object.keys(element).length === 0;
+  }
+
+  function testInitialState(state) {
+    expect(state).toMatchObject({
+      loading: false,
+      errorMessage: null,
+      totalItems: 0
+    });
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+    expect(isEmpty(state.gateway.routes));
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+    expect(isEmpty(state.logs.loggers));
+    expect(isEmpty(state.threadDump));
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+    expect(isEmpty(state.tracker.activities));
+<%_ } _%>
+  }
+
+  function testMultipleTypes(types, payload, testFunction, error?) {
+    types.forEach(e => {
+      testFunction(administration(undefined, { type: e, payload, error }));
+    });
+  }
+
+  describe('Common', () => {
+    it('should return the initial state', () => {
+      testInitialState(administration(undefined, { type: '' }));
+    });
+  });
+
+  describe('Requests', () => {
+    it('should set state to loading', () => {
+      testMultipleTypes(
+        [
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+          getGatewayRoutes.pending.type,
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+          getLoggers.pending.type,
+          getSystemHealth.pending.type,
+          getSystemMetrics.pending.type,
+          getSystemThreadDump.pending.type,
+          getConfigurations.pending.type,
+          getEnv.pending.type
+<%_ } _%>
+        ],
+        {},
+        state => {
+          expect(state).toMatchObject({
+            errorMessage: null,
+            loading: true
+          });
+        }
+      );
+    });
+  });
+
+  describe('Failures', () => {
+    it('should set state to failed and put an error message in errorMessage', () => {
+      testMultipleTypes(
+        [
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+          getGatewayRoutes.rejected.type,
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+          getLoggers.rejected.type,
+          getSystemHealth.rejected.type,
+          getSystemMetrics.rejected.type,
+          getSystemThreadDump.rejected.type,
+          getConfigurations.rejected.type,
+          getEnv.rejected.type,
+<%_ } _%>
+        ],
+        'something happened',
+        state => {
+          expect(state).toMatchObject({
+            loading: false,
+            errorMessage: 'error',
+          });
+        },
+        {
+          message: 'error',
+        }
+      );
+    });
+  });
+
+  describe('Success', () => {
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+    it('should update state according to a successful fetch gateway routes request', () => {
+      const payload = { data: [] };
+      const toTest = administration(undefined, { type: getGatewayRoutes.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        gateway: { routes: payload.data }
+      });
+    });
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+    it('should update state according to a successful fetch logs request', () => {
+      const payload = { data: {
+          loggers: {
+            main: {
+              effectiveLevel: 'WARN'
+            }
+          }
+        }
+      };
+      const toTest = administration(undefined, { type: getLoggers.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        logs: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch health request', () => {
+      const payload = { data: { status: 'UP' } };
+      const toTest = administration(undefined, { type: getSystemHealth.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        health: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch metrics request', () => {
+      const payload = { data: { version: '3.1.3', gauges: {} } };
+      const toTest = administration(undefined, { type: getSystemMetrics.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        metrics: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch thread dump request', () => {
+      const payload = { data: [{ threadName: 'hz.gateway.cached.thread-6', threadId: 9266 }] };
+      const toTest = administration(undefined, { type: getSystemThreadDump.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        threadDump: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch configurations request', () => {
+      const payload = { data: { contexts: { jhipster: { beans: {} } } } };
+      const toTest = administration(undefined, { type: getConfigurations.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        configuration: {
+          configProps: payload.data,
+          env: {}
+        }
+      });
+    });
+
+    it('should update state according to a successful fetch env request', () => {
+      const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
+      const toTest = administration(undefined, { type: getEnv.fulfilled.type, payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        configuration: {
+          configProps: {},
+          env: payload.data
+        }
+      });
+    });
+<%_ } _%>
+  });
+<%_ if (communicationSpringWebsocket) { _%>
+  describe('Websocket Message Handling', () => {
+    const username = process.env.E2E_USERNAME ?? 'admin';
+
+    it('should update state according to a successful websocket message receipt', () => {
+      const payload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const toTest = administration(undefined, websocketActivityMessage(payload));
+
+      expect(toTest).toMatchObject({
+        tracker: { activities: [payload] }
+      });
+    });
+
+    it('should update state according to a successful websocket message receipt - only one activity per session', () => {
+      const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const secondPayload = { id: 1, userLogin: username, page: 'user-management', sessionId: 'abc123' };
+      const firstState = administration(undefined, websocketActivityMessage(firstPayload));
+      const secondState = administration(firstState, websocketActivityMessage(secondPayload));
+
+      expect(secondState).toMatchObject({
+        tracker: { activities: [secondPayload] }
+      });
+    });
+
+    it('should update state according to a successful websocket message receipt - remove logged out sessions', () => {
+      const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const secondPayload = { id: 1, userLogin: username, page: 'logout', sessionId: 'abc123' };
+      const firstState = administration(undefined, websocketActivityMessage(firstPayload));
+      const secondState = administration(firstState, websocketActivityMessage(secondPayload));
+
+      expect(secondState).toMatchObject({
+        tracker: { activities: [] }
+      });
+    });
+  });
+<%_ } _%>
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+<%_ if (applicationTypeGateway && serviceDiscoveryType || withAdminUi) { _%>
+    beforeEach(() => {
+      const mockStore = configureStore([thunk]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
+    it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getGatewayRoutes.pending.type
+        },
+        {
+          type: getGatewayRoutes.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getGatewayRoutes());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+    it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getSystemHealth.pending.type
+        },
+        {
+          type: getSystemHealth.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSystemHealth());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+    it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getSystemMetrics.pending.type,
+        },
+        {
+          type: getSystemMetrics.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSystemMetrics());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+    it('dispatches FETCH_THREAD_DUMP_PENDING and FETCH_THREAD_DUMP_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getSystemThreadDump.pending.type
+        },
+        {
+          type: getSystemThreadDump.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSystemThreadDump());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+    it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getLoggers.pending.type
+        },
+        {
+          type: getLoggers.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getLoggers());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+    it('dispatches FETCH_LOGS_CHANGE_LEVEL_PENDING and FETCH_LOGS_CHANGE_LEVEL_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: setLoggers.pending.type
+        },
+        {
+          type: setLoggers.fulfilled.type,
+          payload: resolvedObject
+        },
+        {
+          type: getLoggers.pending.type
+        },
+      ];
+      await store.dispatch(changeLogLevel('ROOT', 'DEBUG'));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+    });
+    it('dispatches FETCH_CONFIGURATIONS_PENDING and FETCH_CONFIGURATIONS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getConfigurations.pending.type
+        },
+        {
+          type: getConfigurations.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getConfigurations());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+    it('dispatches FETCH_ENV_PENDING and FETCH_ENV_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: getEnv.pending.type
+        },
+        {
+          type: getEnv.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getEnv());
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+<%_ } _%>
+  });
+});

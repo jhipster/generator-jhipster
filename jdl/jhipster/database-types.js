@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,19 +18,22 @@
  */
 
 const Types = {
-    SQL: 'sql',
-    MYSQL: 'mysql',
-    MARIADB: 'mariadb',
-    POSTGRESQL: 'postgresql',
-    MSSQL: 'mssql',
-    ORACLE: 'oracle',
-    MONGODB: 'mongodb',
-    CASSANDRA: 'cassandra',
-    COUCHBASE: 'couchbase',
-    NEO4J: 'neo4j',
-    NO: 'no',
+  SQL: 'sql',
+  MYSQL: 'mysql',
+  MARIADB: 'mariadb',
+  POSTGRESQL: 'postgresql',
+  MSSQL: 'mssql',
+  ORACLE: 'oracle',
+  MONGODB: 'mongodb',
+  CASSANDRA: 'cassandra',
+  COUCHBASE: 'couchbase',
+  NEO4J: 'neo4j',
+  H2_DISK: 'h2Disk',
+  H2_MEMORY: 'h2Memory',
+  NO: 'no',
 };
 
-Types.isSql = type => [Types.SQL, Types.MYSQL, Types.POSTGRESQL, Types.ORACLE, Types.MARIADB, Types.MSSQL].includes(type);
+Types.isSql = type =>
+  [Types.SQL, Types.MYSQL, Types.POSTGRESQL, Types.ORACLE, Types.MARIADB, Types.MSSQL, Types.H2_DISK, Types.H2_MEMORY].includes(type);
 
 module.exports = Types;

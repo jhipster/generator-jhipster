@@ -1,11 +1,11 @@
-import { $, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by<% } %>  } from 'protractor';
+import { $, ElementFinder<% if (authenticationTypeOauth2) { _%>, element, by, browser<% } %>  } from 'protractor';
 
 import AlertPage from './alert-page';
 
 export default class SignInPage extends AlertPage {
 
   loginForm: ElementFinder = $('#login-page');
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   username: ElementFinder = this.loginForm.$('#username');
   password: ElementFinder = this.loginForm.$('#password');
   loginButton: ElementFinder = this.loginForm.$('button[type=submit]');
@@ -21,7 +21,7 @@ export default class SignInPage extends AlertPage {
     return this.title.getAttribute('id');
   }
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   async login(username: string, password: string) {
     await this.username.sendKeys(username);
     await this.password.sendKeys(password);
@@ -29,6 +29,7 @@ export default class SignInPage extends AlertPage {
   }
 <%_ } else { _%>
   async login(username: string, password: string) {
+    await browser.sleep(1000);
     if (await this.username.isPresent()) {
       await this.username.sendKeys(username);
       await this.password.sendKeys(password);

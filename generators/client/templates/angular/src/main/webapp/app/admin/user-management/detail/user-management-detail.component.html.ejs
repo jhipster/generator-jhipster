@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,59 +17,59 @@
  limitations under the License.
 -%>
 <div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="user">
-            <h2>
-                <span <%= jhiPrefix %>Translate="userManagement.detail.title">User</span> [<strong>{{ user.login }}</strong>]
-            </h2>
+  <div class="col-8">
+    <div *ngIf="user">
+      <h2>
+        <span <%= jhiPrefix %>Translate="userManagement.detail.title">User</span> [<strong>{{ user.login }}</strong>]
+      </h2>
 
-            <dl class="row-md jh-entity-details">
-                <dt><span <%= jhiPrefix %>Translate="userManagement.login">Login</span></dt>
-                <dd>
-                    <span>{{ user.login }}</span>
-                    <span *ngIf="user.activated" class="badge badge-success" <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
-                    <span *ngIf="!user.activated" class="badge badge-danger" <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</span>
-                </dd>
+      <dl class="row-md jh-entity-details">
+        <dt><span <%= jhiPrefix %>Translate="userManagement.login">Login</span></dt>
+        <dd>
+          <span>{{ user.login }}</span>
+          <span *ngIf="user.activated" class="badge badge-success" <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
+          <span *ngIf="!user.activated" class="badge badge-danger" <%= jhiPrefix %>Translate="userManagement.deactivated">Deactivated</span>
+        </dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.firstName">First Name</span></dt>
-                <dd>{{ user.firstName }}</dd>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.firstName">First Name</span></dt>
+        <dd>{{ user.firstName }}</dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.lastName">Last Name</span></dt>
-                <dd>{{ user.lastName }}</dd>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastName">Last Name</span></dt>
+        <dd>{{ user.lastName }}</dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.email">Email</span></dt>
-                <dd>{{ user.email }}</dd>
-                <%_ if (enableTranslation) { _%>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.email">Email</span></dt>
+        <dd>{{ user.email }}</dd>
+<%_ if (enableTranslation) { _%>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span></dt>
-                <dd>{{ user.langKey }}</dd>
-                <%_ } _%>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</span></dt>
+        <dd>{{ user.langKey }}</dd>
+<%_ } _%>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy">Created By</span></dt>
-                <dd>{{ user.createdBy }}</dd>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy">Created By</span></dt>
+        <dd>{{ user.createdBy }}</dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span></dt>
-                <dd>{{ user.createdDate | date:'dd/MM/yy HH:mm' }}</dd>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate">Created Date</span></dt>
+        <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">Last Modified By</span></dt>
-                <dd>{{ user.lastModifiedBy }}</dd>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">Last Modified By</span></dt>
+        <dd>{{ user.lastModifiedBy }}</dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
-                <dd>{{ user.lastModifiedDate | date:'dd/MM/yy HH:mm' }}</dd>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">Last Modified Date</span></dt>
+        <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
-                <dt><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></dt>
-                <dd>
-                    <ul class="list-unstyled">
-                        <li *ngFor="let authority of user.authorities">
-                            <span class="badge badge-info">{{ authority }}</span>
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+        <dt><span <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</span></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <li *ngFor="let authority of user.authorities">
+              <span class="badge badge-info">{{ authority }}</span>
+            </li>
+          </ul>
+        </dd>
+      </dl>
 
-            <button type="submit" routerLink="../../" class="btn btn-info">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">Back</span>
-            </button>
-        </div>
+      <button type="submit" routerLink="../../" class="btn btn-info">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">Back</span>
+      </button>
     </div>
+  </div>
 </div>

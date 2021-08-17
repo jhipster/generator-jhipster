@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,21 +24,21 @@ const { join } = require('../utils/set-utils');
  * For flags such as skipServer, skipClient, etc.
  */
 class JDLUnaryOption extends AbstractJDLOption {
-    getType() {
-        return 'UNARY';
-    }
+  getType() {
+    return 'UNARY';
+  }
 
-    toString() {
-        const entityNames = join(this.entityNames, ', ');
-        entityNames.slice(1, entityNames.length - 1);
-        const firstPart = `${this.name} ${entityNames}`;
-        if (this.excludedNames.size === 0) {
-            return firstPart;
-        }
-        const excludedNames = join(this.excludedNames, ', ');
-        excludedNames.slice(1, this.excludedNames.length - 1);
-        return `${firstPart} except ${excludedNames}`;
+  toString() {
+    const entityNames = join(this.entityNames, ', ');
+    entityNames.slice(1, entityNames.length - 1);
+    const firstPart = `${this.name} ${entityNames}`;
+    if (this.excludedNames.size === 0) {
+      return firstPart;
     }
+    const excludedNames = join(this.excludedNames, ', ');
+    excludedNames.slice(1, this.excludedNames.length - 1);
+    return `${firstPart} except ${excludedNames}`;
+  }
 }
 
 module.exports = JDLUnaryOption;

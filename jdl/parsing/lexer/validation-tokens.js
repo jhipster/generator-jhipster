@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,11 +21,11 @@ const { createTokenFromConfig } = require('./token-creator');
 const MinMaxTokens = require('./minmax-tokens');
 
 const validationTokens = [
-    { name: 'REQUIRED', pattern: 'required' },
-    { name: 'UNIQUE', pattern: 'unique' },
-    { name: 'PATTERN', pattern: 'pattern' },
+  { name: 'REQUIRED', pattern: 'required' },
+  { name: 'UNIQUE', pattern: 'unique' },
+  { name: 'PATTERN', pattern: 'pattern' },
 ].map(createTokenFromConfig);
 
 module.exports = {
-    tokens: [...validationTokens, ...MinMaxTokens.tokens],
+  tokens: [...validationTokens, ...MinMaxTokens.tokens],
 };

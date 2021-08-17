@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,11 +27,13 @@ const expect = chai.expect;
 describe('<%= pageName %> e2e test', () => {
   let navBarPage: NavBarPage;
   let page: <%= pageName %>ComponentsPage;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    await navBarPage.login('admin', 'admin');
+    await navBarPage.login(username, password);
   });
 
   after(async () => {

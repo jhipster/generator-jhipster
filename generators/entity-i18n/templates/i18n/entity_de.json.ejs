@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,18 +22,26 @@ let helpBlocks = 0; %>
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
-                "refreshListLabel": "Refresh list",
+                "refreshListLabel": "Liste aktualisieren",
+<%_ if (!readOnly) { _%>
                 "createLabel": "<%= entityClassHumanized %> erstellen",
-                "createOrEditLabel": "<%= entityClassHumanized %> erstellen oder bearbeiten"<% if (searchEngine !== false) { %>,
-                "search": "Suche nach <%= entityClassHumanized %>"<% } %>,
-                "notFound": "No <%= entityClassPluralHumanized %> found"
-            },<% if (!microserviceAppName) { %>
+                "createOrEditLabel": "<%= entityClassHumanized %> erstellen oder bearbeiten",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "Suche nach <%= entityClassHumanized %>",
+<%_ } _%>
+                "notFound": "Keine <%= entityClassPluralHumanized %> gefunden"
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityClassHumanized %> erstellt mit ID {{ param }}",
             "updated": "<%= entityClassHumanized %> aktualisiert mit ID {{ param }}",
-            "deleted": "<%= entityClassHumanized %> gelöscht mit ID {{ param }}",<% } %>
+            "deleted": "<%= entityClassHumanized %> gelöscht mit ID {{ param }}",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Soll <%= entityClassHumanized %> {{ id }} wirklich dauerhaft gelöscht werden?"
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "<%= entityClassHumanized %> erstellt mit ID {{ param }}",
             "updated": "<%= entityClassHumanized %> aktualisiert mit ID {{ param }}",
             "deleted": "<%= entityClassHumanized %> gelöscht mit ID {{ param }}"
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

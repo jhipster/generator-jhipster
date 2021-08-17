@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 module.exports = {
-    askForPage,
+  askForPage,
 };
 
 function askForPage() {
-    if (this.pageName) return undefined;
+  if (this.pageName) return undefined;
 
-    return this.prompt({
-        type: 'input',
-        name: 'pageName',
-        message: 'What is the name of your page?',
-        default: 'MyPage',
-        validate: input => (/^([A-Z][a-zA-Z]*)$/.test(input) ? true : 'This is not a valid page name (ex: MyPage).'),
-    }).then(answers => {
-        this.pageName = answers.pageName;
-    });
+  return this.prompt({
+    type: 'input',
+    name: 'pageName',
+    message: 'What is the name of your page?',
+    default: 'MyPage',
+    validate: input => (/^([A-Z][a-zA-Z]*)$/.test(input) ? true : 'This is not a valid page name (ex: MyPage).'),
+  }).then(answers => {
+    this.pageName = answers.pageName;
+  });
 }

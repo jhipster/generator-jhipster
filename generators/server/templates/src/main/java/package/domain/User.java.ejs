@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,10 +20,10 @@ package <%= packageName %>.domain;
 
 import <%= packageName %>.config.Constants;
 
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import com.couchbase.client.java.repository.annotation.Field;
 <%_ } _%>
-<%_ if (!reactive && databaseType === 'cassandra') { _%>
+<%_ if (!reactive && databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.NamingStrategy;
@@ -32,47 +32,47 @@ import com.datastax.oss.driver.api.mapper.entity.naming.NamingConvention;
 <%_ } _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 import org.hibernate.annotations.BatchSize;
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
-<%_ } _%> <%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Property;
-import org.neo4j.springframework.data.core.schema.Relationship;
-import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
-<%_ } _%> <%_ if (reactive && databaseType === 'cassandra') { _%>
+<%_ } _%> <%_ if (databaseTypeNeo4j) { _%>
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+<%_ } _%> <%_ if (reactive && databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 import javax.persistence.*;
 <%_ } _%>
 import javax.validation.constraints.Email;
@@ -80,17 +80,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-<%_ if (user.primaryKey.type === 'UUID') { _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 
@@ -98,284 +98,287 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 /**
  * A user.
  */
- <%_ if (databaseType === 'sql') { _%>
-    <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (!reactive) { _%>
 @Entity
-    <%_ } _%>
+  <%_ } _%>
 @Table(<% if (!reactive) { %>name = <% } %>"<%= user.entityTableName %>")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
-@Cache(usage = CacheConcurrencyStrategy.<% if (cacheProvider !== 'infinispan') { %>NONSTRICT_<% } %>READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.<% if (!cacheProviderInfinispan) { %>NONSTRICT_<% } %>READ_WRITE)
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 @org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 @Node("<%= user.entityTableName %>")
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 @Document
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
-    <%_ if (reactive) { _%>
+<%_ if (databaseTypeCassandra) { _%>
+  <%_ if (reactive) { _%>
 @Table("user")
-    <%_ } else { _%>
+  <%_ } else { _%>
 @Entity
 @NamingStrategy(convention = NamingConvention.SNAKE_CASE_INSENSITIVE)
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
+public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     @Id
-    <%_ if (!reactive) { _%>
-        <%_ if (user.primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
+  <%_ if (!reactive) { _%>
+    <%_ if (user.primaryKey.fields[0].jpaGeneratedValue === 'identity') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
+    <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue === 'sequence') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-        <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue) { _%>
+    <%_ } else if (user.primaryKey.fields[0].jpaGeneratedValue) { _%>
     @GeneratedValue
-        <%_ } _%>
     <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch' && authenticationType === 'oauth2') { _%>
+  <%_ } _%>
+  <%_ if (searchEngineElasticsearch && authenticationTypeOauth2) { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
-    <%_ } _%>
-<%_ } else if (databaseType === 'neo4j') { _%>
+  <%_ } _%>
+<%_ } else if (databaseTypeNeo4j) { _%>
     @Id
-    <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
     @GeneratedValue(UUIDStringGenerator.class)
-    <%_ } _%>
+  <%_ } _%>
     @Property("user_id")
 <%_ } else { _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
     public static final String PREFIX = "user";
 
     @IdPrefix
     private String prefix = PREFIX;
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Id
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
-        <%_ if (!reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeCassandra) { _%>
+    <%_ if (!reactive) { _%>
     @PartitionKey
-        <%_ } else { _%>
+    <%_ } else { _%>
     @PrimaryKey
-        <%_ } _%>
     <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ } _%>
+  <%_ if (searchEngineElasticsearch) { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
     private <%= user.primaryKey.type %> id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Column(length = 50, unique = true, nullable = false)
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Indexed
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
     @IdAttribute
-    <%_ } _%>
+<%_ } _%>
     private String login;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "password_hash", length = 60, nullable = false)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     @Column("password_hash")
-    <%_ } _%>
+  <%_ } _%>
     private String password;
 <%_ } _%>
 
     @Size(max = 50)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "first_name", length = 50)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("first_name")
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("first_name")
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra && !reactive) { _%>
     @CqlName("firstname")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
     @Property("first_name")
-    <%_ } _%>
+<%_ } _%>
     private String firstName;
 
     @Size(max = 50)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "last_name", length = 50)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("last_name")
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("last_name")
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra && !reactive) { _%>
     @CqlName("lastname")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
     @Property("last_name")
-    <%_ } _%>
+<%_ } _%>
     private String lastName;
 
     @Email
     @Size(min = 5, max = 254)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Column(length = 254, unique = true)
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Indexed
-    <%_ } _%>
+<%_ } _%>
     private String email;
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     @NotNull
-    <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     @Column(nullable = false)
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "lang_key", length = 10)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("lang_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("lang_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
     @Property("lang_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra && reactive) { _%>
     @Column("lang_key")
-    <%_ } _%>
+<%_ } _%>
     private String langKey;
-    <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
 
     @Size(max = 256)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "image_url", length = 256)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     @Column("image_url")
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("image_url")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeNeo4j) { _%>
     @Property("image_url")
-    <%_ } _%>
+  <%_ } _%>
     private String imageUrl;
-    <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     @Size(max = 20)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "activation_key", length = 20)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     @Column("activation_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("activation_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeNeo4j) { _%>
     @Property("activation_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' && reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeCassandra && reactive) { _%>
     @Column("activation_key")
-    <%_ } _%>
+  <%_ } _%>
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Column(name = "reset_key", length = 20)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
     @Column("reset_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("reset_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeNeo4j) { _%>
     @Property("reset_key")
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' && reactive) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeCassandra && reactive) { _%>
     @Column("reset_key")
-    <%_ } _%>
+  <%_ } _%>
     @JsonIgnore
     private String resetKey;
 
-    <%_ if (databaseType === 'sql' || (databaseType === 'cassandra' && reactive)) { _%>
+  <%_ if (databaseTypeSql || (databaseTypeCassandra && reactive)) { _%>
     @Column(<% if (!reactive) { %>name = <% } %>"reset_date")
-    <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+  <%_ } else if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Field("reset_date")
-    <%_ } else if (databaseType === 'neo4j') { _%>
+  <%_ } else if (databaseTypeNeo4j) { _%>
     @Property("reset_date")
-    <%_ } _%>
+  <%_ } _%>
     private Instant resetDate = null;
 <%_ } _%>
 
     @JsonIgnore
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
     @Relationship("HAS_AUTHORITY")
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @ManyToMany
     @JoinTable(
         name = "<%= user.entityTableName %>_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-        <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
+  <%_ if (enableHibernateCache) {
+        if (cacheProviderInfinispan) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-            <%_ } else { _%>
+        <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-        <%_ } } _%>
+        <%_ }
+  } _%>
     @BatchSize(size = 20)
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Transient
-    <%_ } _%>
-    <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
     private Set<Authority> authorities = new HashSet<>();
-    <%_ } else if (['cassandra', 'couchbase'].includes(databaseType)) { _%>
+<%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
     private Set<String> authorities = new HashSet<>();
-    <%_ } _%>
-    <%_ if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    <%_ } _%>
-    private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
+  <%_ } _%>
+    private Set<PersistentToken> persistentTokens = new HashSet<>();
+<%_ } _%>
 
     public <%= user.primaryKey.type %> getId() {
         return id;
@@ -393,7 +396,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     public String getPassword() {
         return password;
@@ -427,7 +430,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     public void setEmail(String email) {
         this.email = email;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -436,7 +439,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    <%_ } _%>
+<%_ } _%>
 
     public boolean isActivated() {
         return activated;
@@ -445,7 +448,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     public void setActivated(boolean activated) {
         this.activated = activated;
     }
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     public String getActivationKey() {
         return activationKey;
@@ -480,14 +483,14 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
         this.langKey = langKey;
     }
 
-    public Set<<% if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { %>Authority<% } else if (['cassandra', 'couchbase'].includes(databaseType)) { %>String<% } %>> getAuthorities() {
+    public Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else if (databaseTypeCassandra || databaseTypeCouchbase) { %>String<% } %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { %>Authority<% } else if (['cassandra', 'couchbase'].includes(databaseType)) { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else if (databaseTypeCassandra || databaseTypeCouchbase) { %>String<% } %>> authorities) {
         this.authorities = authorities;
     }
-<%_ if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { _%>
+<%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>
 
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;
@@ -522,13 +525,15 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>
-            ", imageUrl='" + imageUrl + '\'' +<% } %>
+            ", email='" + email + '\'' +
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeSql) { _%>
+            ", imageUrl='" + imageUrl + '\'' +
+<%_ } _%>
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
-            <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
             ", activationKey='" + activationKey + '\'' +
-            <%_ } _%>
+<%_ } _%>
             "}";
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,78 +16,90 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = require('./entity-options');
+
+const { MAPSTRUCT } = MapperTypes;
+const NO_MAPPER = MapperTypes.NO;
+
+const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
+const NO_SERVICE = ServiceTypes.NO;
+
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const NO_PAGINATION = PaginationTypes.NO;
+
+const { ELASTICSEARCH, COUCHBASE } = SearchTypes;
 
 const Options = {
-    DTO: 'dto',
-    SERVICE: 'service',
-    PAGINATION: 'pagination',
-    MICROSERVICE: 'microservice',
-    SEARCH: 'search',
-    ANGULAR_SUFFIX: 'angularSuffix',
-    CLIENT_ROOT_FOLDER: 'clientRootFolder',
+  DTO: 'dto',
+  SERVICE: 'service',
+  PAGINATION: 'pagination',
+  MICROSERVICE: 'microservice',
+  SEARCH: 'search',
+  ANGULAR_SUFFIX: 'angularSuffix',
+  CLIENT_ROOT_FOLDER: 'clientRootFolder',
 };
 
 const optionNames = Object.values(Options);
 
 const Values = {
-    [Options.DTO]: { MAPSTRUCT: 'mapstruct', NO: 'no' },
-    [Options.SERVICE]: { SERVICE_CLASS: 'serviceClass', SERVICE_IMPL: 'serviceImpl', NO: 'no' },
-    [Options.PAGINATION]: {
-        PAGINATION: 'pagination',
-        'INFINITE-SCROLL': 'infinite-scroll',
-        NO: 'no',
-    },
-    [Options.SEARCH]: { ELASTICSEARCH: 'elasticsearch', COUCHBASE: 'couchbase' },
+  [Options.DTO]: { MAPSTRUCT, NO: NO_MAPPER },
+  [Options.SERVICE]: { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE },
+  [Options.PAGINATION]: {
+    PAGINATION,
+    'INFINITE-SCROLL': INFINITE_SCROLL,
+    NO: NO_PAGINATION,
+  },
+  [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE },
 };
 
 const DefaultValues = {
-    [Options.DTO]: Values[Options.DTO].NO,
-    [Options.SERVICE]: Values[Options.SERVICE].NO,
-    [Options.PAGINATION]: Values[Options.PAGINATION].NO,
+  [Options.DTO]: Values[Options.DTO].NO,
+  [Options.SERVICE]: Values[Options.SERVICE].NO,
+  [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
 function getOptionName(optionValue) {
-    return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
+  return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 
 const OptionValues = {
-    mapstruct: 'MAPSTRUCT',
-    serviceClass: 'SERVICE_CLASS',
-    serviceImpl: 'SERVICE_IMPL',
-    pagination: 'PAGINATION',
-    'infinite-scroll': 'INFINITE-SCROLL',
-    elasticsearch: 'ELASTICSEARCH',
-    couchbase: 'COUCHBASE',
+  mapstruct: 'MAPSTRUCT',
+  serviceClass: 'SERVICE_CLASS',
+  serviceImpl: 'SERVICE_IMPL',
+  pagination: 'PAGINATION',
+  'infinite-scroll': 'INFINITE-SCROLL',
+  elasticsearch: 'ELASTICSEARCH',
+  couchbase: 'COUCHBASE',
 };
 
 function forEach(passedFunction) {
-    if (!passedFunction) {
-        throw new Error('A function has to be passed to loop over the binary options.');
-    }
-    optionNames.forEach(passedFunction);
+  if (!passedFunction) {
+    throw new Error('A function has to be passed to loop over the binary options.');
+  }
+  optionNames.forEach(passedFunction);
 }
 
 function exists(passedOption, passedValue) {
-    return (
-        !Object.values(Options).includes(passedOption) ||
-        Object.values(Options).some(
-            option =>
-                passedOption === option &&
-                (passedOption === Options.MICROSERVICE ||
-                    passedOption === Options.ANGULAR_SUFFIX ||
-                    passedOption === Options.CLIENT_ROOT_FOLDER ||
-                    Object.values(Values[option]).includes(passedValue))
-        )
-    );
+  return (
+    !Object.values(Options).includes(passedOption) ||
+    Object.values(Options).some(
+      option =>
+        passedOption === option &&
+        (passedOption === Options.MICROSERVICE ||
+          passedOption === Options.ANGULAR_SUFFIX ||
+          passedOption === Options.CLIENT_ROOT_FOLDER ||
+          Object.values(Values[option]).includes(passedValue))
+    )
+  );
 }
 
 module.exports = {
-    Options,
-    // TODO change the names
-    DefaultValues,
-    OptionValues,
-    Values,
-    exists,
-    forEach,
-    getOptionName,
+  Options,
+  // TODO change the names
+  DefaultValues,
+  OptionValues,
+  Values,
+  exists,
+  forEach,
+  getOptionName,
 };

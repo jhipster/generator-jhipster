@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=متاسفیم، خطایی رخ داده است.
 error.status=وضعیت:
 error.message=پیام:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=فعالسازی حساب در <%= baseName %>
 email.activation.greeting={0} عزیز
@@ -37,3 +38,4 @@ email.reset.title=تنظیم مجدد رمزعبور در <%= baseName %>
 email.reset.greeting={0} عزیز
 email.reset.text1=برای درخواستی که برای تنظیم مجدد رمزعبور در <%= baseName %> داشتید، از آدرس اینترنتی پایین استفاده کنید:
 email.reset.text2=ارادتمند،
+<%_ } _%>

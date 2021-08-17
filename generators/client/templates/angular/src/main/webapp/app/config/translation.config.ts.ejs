@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,7 +30,7 @@ export class MissingTranslationHandlerImpl implements MissingTranslationHandler 
 }
 
 export function translatePartialLoader(http: HttpClient): TranslateLoader {
-  return new TranslateHttpLoader(http, 'i18n/', `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP ?? ''}`);
+  return new TranslateHttpLoader(http, 'i18n/', `.json?_=${I18N_HASH}`);
 }
 
 export function missingTranslationHandler(): MissingTranslationHandler {

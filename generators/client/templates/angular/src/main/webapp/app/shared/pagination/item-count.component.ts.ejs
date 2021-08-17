@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,11 +24,11 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: '<%= jhiPrefixDashed %>-item-count',
   template: `
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div>
-    <%_ } else { _%>
+<%_ } else { _%>
     <div>Showing {{ first }} - {{ second }} of {{ total }} items.</div>
-    <%_ } _%>
+<%_ } _%>
   `
 })
 export class ItemCountComponent {
@@ -39,8 +39,8 @@ export class ItemCountComponent {
    *                    itemsPerPage  Number of items per page
    */
   @Input() set params(params: { page?: number; totalItems?: number; itemsPerPage?: number }) {
-    if (params.page !== undefined && params.totalItems !== undefined && params.itemsPerPage !== undefined) {
-      this.first = (params.page - 1) * params.itemsPerPage === 0 ? 1 : (params.page - 1) * params.itemsPerPage + 1;
+    if (params.page && params.totalItems !== undefined && params.itemsPerPage) {
+      this.first = (params.page - 1) * params.itemsPerPage + 1;
       this.second = params.page * params.itemsPerPage < params.totalItems ? params.page * params.itemsPerPage : params.totalItems;
     } else {
       this.first = undefined;

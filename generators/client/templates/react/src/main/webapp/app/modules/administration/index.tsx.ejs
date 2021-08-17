@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,10 +29,10 @@ import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
 <%_ } _%>
 import Docs from './docs/docs';
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
 import Gateway from './gateway/gateway';
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import Tracker from './tracker/tracker';
 <%_ } _%>
 
@@ -41,10 +41,10 @@ const Routes = ({ match }) => (
 <%_ if (!skipUserManagement) { _%>
     <ErrorBoundaryRoute path={`${match.url}/user-management`} component={UserManagement} />
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     <ErrorBoundaryRoute exact path={`${match.url}/tracker`} component={Tracker} />
 <%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     <ErrorBoundaryRoute exact path={`${match.url}/gateway`} component={Gateway} />
 <%_ } _%>
 <%_ if (withAdminUi) { _%>

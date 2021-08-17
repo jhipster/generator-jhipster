@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2020 the original author or authors from the JHipster project.
+# Copyright 2013-2021 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -18,24 +18,30 @@
 #
 
 name: 'Validate Gradle Wrapper'
+concurrency:
+  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
 on:
-    push:
-        branches-ignore:
-            - 'dependabot/**'
-    pull_request:
-        branches:
-            - '*'
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  pull_request:
+    types: [closed, opened, synchronize, reopened]
+    branches:
+      - '*'
 
 jobs:
-    validation:
-        name: 'Validation'
-        runs-on: ubuntu-latest
-        if: >-
-            !contains(github.event.head_commit.message, '[ci skip]') &&
-            !contains(github.event.head_commit.message, '[skip ci]') &&
-            !contains(github.event.pull_request.title, '[skip ci]') &&
-            !contains(github.event.pull_request.title, '[ci skip]') &&
-            !contains(github.event.pull_request.user.login, 'dependabot')
-        steps:
-            - uses: actions/checkout@v2
-            - uses: gradle/wrapper-validation-action@v1
+  validation:
+    name: 'Validation'
+    runs-on: ubuntu-latest
+    if: >-
+      !contains(github.event.head_commit.message, '[ci skip]') &&
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[ci skip]') &&
+      github.event.action != 'closed' &&
+      !contains(github.event.pull_request.user.login, 'dependabot')
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1

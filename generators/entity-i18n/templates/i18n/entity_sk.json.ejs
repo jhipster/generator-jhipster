@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
+<%_ if (!readOnly) { _%>
                 "createLabel": "Pridať <%= entityClassHumanized %>",
-                "createOrEditLabel": "Pridať alebo upraviť <%= entityClassHumanized %>"<% if (searchEngine !== false) { %>,
-                "search": "Vyhľadať <%= entityClassHumanized %>"<% } %>,
+                "createOrEditLabel": "Pridať alebo upraviť <%= entityClassHumanized %>",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "Vyhľadať <%= entityClassHumanized %>",
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
-            },<% if (!microserviceAppName) { %>
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "Bol vytvorený potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }}",
             "updated": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol upravený.",
-            "deleted": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol vymazaný.",<% } %>
+            "deleted": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol vymazaný.",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "Ste si istý, že chcete vymazať <%= entityClassHumanized %> {{ id }}?"
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "Bol vytvorený potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }}",
             "updated": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol upravený.",
             "deleted": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol vymazaný."
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

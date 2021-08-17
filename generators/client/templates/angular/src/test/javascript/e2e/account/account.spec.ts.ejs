@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,10 +33,10 @@ describe('account', () => {
   let signInPage: SignInPage;
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
-  <%_ } _%>
+<%_ } _%>
 
   before(async () => {
     await browser.get('/');
@@ -44,62 +44,64 @@ describe('account', () => {
   });
 
   it('should fail to login with bad password', async () => {
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const expect1 = 'home.title';
-    <%_ } else { _%>
+<%_ } else { _%>
     const expect1 = 'Welcome, <%= backendName %> Hipster!';
-    <%_ } _%>
-    const value1 = await element(by.css('h1')).<%- elementGetter %>;
+<%_ } _%>
+    const value1 = await element(by.css('h1 > span')).<%- elementGetter %>;
     expect(value1).to.eq(expect1);
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     signInPage = await navBarPage.getSignInPage();
     await signInPage.autoSignInUsing(username, 'foo');
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const expect2 = 'login.messages.error.authentication';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const expect2 = 'Failed to sign in! Please check your credentials and try again.';
-    <%_ } _%>
+  <%_ } _%>
     const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
     expect(value2).to.eq(expect2);
-  <%_ } else { _%>
+<%_ } else { _%>
     signInPage = await navBarPage.getSignInPage();
     await signInPage.loginWithOAuth(username, 'foo');
 
     // Keycloak
-    const alert = element(by.css('.alert-error'));
+    const alert = element(by.css('#input-error'));
     if (await alert.isPresent()) {
       expect(await alert.getText()).to.eq('Invalid username or password.');
     } else {
       // Okta
       const error = element(by.css('.infobox-error'));
+      await browser.wait(ec.presenceOf(error), 5000);
       expect(await error.getText()).to.eq('Unable to sign in');
     }
-  <%_ } _%>
+<%_ } _%>
   });
 
   it('should login successfully with admin account', async () => {
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     await browser.get('/');
     signInPage = await navBarPage.getSignInPage();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const expect1 = 'global.form.username.label';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const expect1 = 'Login';
-    <%_ } _%>
+  <%_ } _%>
     const value1 = await element(by.className('username-label')).<%- elementGetter %>;
     expect(value1).to.eq(expect1);
     await signInPage.autoSignInUsing(username, password);
-  <%_ } else { _%>
+<%_ } else { _%>
+    await signInPage.clearPassword();
     await signInPage.loginWithOAuth('', password);
-  <%_ } _%>
+<%_ } _%>
 
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const expect2 = 'home.logged.message';
-    <%_ } else { _%>
+<%_ } else { _%>
     const expect2 = 'You are logged in as user "admin".';
-    <%_ } _%>
+<%_ } _%>
     await browser.wait(ec.visibilityOf(element(by.id('home-logged-message'))));
     const value2 = await element(by.id('home-logged-message')).<%- elementGetter %>;
     expect(value2).to.eq(expect2);
@@ -109,20 +111,20 @@ describe('account', () => {
   it('should be able to update settings', async () => {
     settingsPage = await navBarPage.getSettingsPage();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const expect1 = 'settings.title';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const expect1 = `User settings for [${username}]`;
-    <%_ } _%>
+  <%_ } _%>
     const value1 = await settingsPage.getTitle();
     expect(value1).to.eq(expect1);
     await settingsPage.save();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const expect2 = 'settings.messages.success';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const expect2 = 'Settings saved!';
-    <%_ } _%>
+  <%_ } _%>
     const alert = element(by.css('.alert-success'));
     const value2 = await alert.<%- elementGetter %>;
     expect(value2).to.eq(expect2);
@@ -131,22 +133,22 @@ describe('account', () => {
   it('should fail to update password when using incorrect current password', async () => {
     passwordPage = await navBarPage.getPasswordPage();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     expect(await passwordPage.getTitle()).to.eq('password.title');
-    <%_ } else { _%>
+  <%_ } else { _%>
     expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
-    <%_ } _%>
+  <%_ } _%>
 
     await passwordPage.setCurrentPassword('wrong_current_password');
     await passwordPage.setPassword('new_password');
     await passwordPage.setConfirmPassword('new_password');
     await passwordPage.save();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const expect2 = 'password.messages.error';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const expect2 = 'An error has occurred! The password could not be changed.';
-    <%_ } _%>
+  <%_ } _%>
     const alert = element(by.css('.alert-danger'));
     const value2 = await alert.<%- elementGetter %>;
     expect(value2).to.eq(expect2);
@@ -156,22 +158,22 @@ describe('account', () => {
   it('should be able to update password', async () => {
     passwordPage = await navBarPage.getPasswordPage();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     expect(await passwordPage.getTitle()).to.eq('password.title');
-    <%_ } else { _%>
+  <%_ } else { _%>
     expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
-    <%_ } _%>
+  <%_ } _%>
 
     await passwordPage.setCurrentPassword(password);
     await passwordPage.setPassword('newpassword');
     await passwordPage.setConfirmPassword('newpassword');
     await passwordPage.save();
 
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
     const successMsg = 'password.messages.success';
-    <%_ } else { _%>
+  <%_ } else { _%>
     const successMsg = 'Password changed!';
-    <%_ } _%>
+  <%_ } _%>
     const alert = element(by.css('.alert-success'));
     const alertValue = await alert.<%- elementGetter %>;
     expect(alertValue).to.eq(successMsg);

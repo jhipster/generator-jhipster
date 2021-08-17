@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,20 +21,20 @@ const Validator = require('./validator');
 const { isReservedClassName } = require('../jhipster/reserved-keywords');
 
 class EnumValidator extends Validator {
-    constructor() {
-        super('enum', ['name']);
-    }
+  constructor() {
+    super('enum', ['name']);
+  }
 
-    validate(jdlEnum) {
-        super.validate(jdlEnum);
-        checkForReservedClassName(jdlEnum);
-    }
+  validate(jdlEnum) {
+    super.validate(jdlEnum);
+    checkForReservedClassName(jdlEnum);
+  }
 }
 
 module.exports = EnumValidator;
 
 function checkForReservedClassName(jdlEnum) {
-    if (isReservedClassName(jdlEnum.name)) {
-        throw new Error(`The enum name '${jdlEnum.name}' is reserved keyword and can not be used as enum class name.`);
-    }
+  if (isReservedClassName(jdlEnum.name)) {
+    throw new Error(`The enum name '${jdlEnum.name}' is reserved keyword and can not be used as enum class name.`);
+  }
 }

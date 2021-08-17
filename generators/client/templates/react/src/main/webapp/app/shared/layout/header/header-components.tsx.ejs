@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,7 +34,7 @@ export const BrandIcon = props => (
   </div>
 );
 
-export const Brand = props => (
+export const Brand = () => (
 <NavbarBrand tag={Link} to="/" className="brand-logo">
   <BrandIcon />
   <span className="brand-title"><Translate contentKey="global.title"><%= capitalizedBaseName %></Translate></span>
@@ -42,7 +42,7 @@ export const Brand = props => (
 </NavbarBrand>
 );
 
-export const Home = props => (
+export const Home = () => (
   <NavItem>
     <NavLink tag={Link} to="/" className="d-flex align-items-center">
       <FontAwesomeIcon icon="home" />

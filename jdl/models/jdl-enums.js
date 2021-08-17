@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,43 +18,43 @@
  */
 
 module.exports = class JDLEnums {
-    constructor() {
-        this.enums = new Map();
-    }
+  constructor() {
+    this.enums = new Map();
+  }
 
-    add(jdlEnum) {
-        if (!jdlEnum) {
-            throw new Error("Can't add a nil JDL enum to the JDL enums.");
-        }
-        this.enums.set(jdlEnum.name, jdlEnum);
+  add(jdlEnum) {
+    if (!jdlEnum) {
+      throw new Error("Can't add a nil JDL enum to the JDL enums.");
     }
+    this.enums.set(jdlEnum.name, jdlEnum);
+  }
 
-    get(enumName) {
-        return this.enums.get(enumName);
-    }
+  get(enumName) {
+    return this.enums.get(enumName);
+  }
 
-    has(enumName) {
-        return this.enums.has(enumName);
-    }
+  has(enumName) {
+    return this.enums.has(enumName);
+  }
 
-    size() {
-        return this.enums.size;
-    }
+  size() {
+    return this.enums.size;
+  }
 
-    forEach(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.enums.forEach(jdlEnum => {
-            passedFunction(jdlEnum);
-        });
+  forEach(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.enums.forEach(jdlEnum => {
+      passedFunction(jdlEnum);
+    });
+  }
 
-    toString() {
-        let string = '';
-        this.enums.forEach(jdlEnum => {
-            string += `${jdlEnum.toString()}\n`;
-        });
-        return string;
-    }
+  toString() {
+    let string = '';
+    this.enums.forEach(jdlEnum => {
+      string += `${jdlEnum.toString()}\n`;
+    });
+    return string;
+  }
 };

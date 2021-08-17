@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,109 +22,109 @@ const JDLValidation = require('../../../jdl/models/jdl-validation');
 const ValidationValidator = require('../../../jdl/validators/validation-validator');
 
 describe('ValidationValidator', () => {
-    let validator;
+  let validator;
 
-    before(() => {
-        validator = new ValidationValidator();
+  before(() => {
+    validator = new ValidationValidator();
+  });
+
+  describe('validate', () => {
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => validator.validate()).to.throw(/^No validation\.$/);
+      });
     });
-
-    describe('validate', () => {
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No validation\.$/);
-            });
+    context('when passing a validation', () => {
+      context('with all its required attributes', () => {
+        it('should not fail', () => {
+          expect(() => validator.validate({ name: 'required' })).not.to.throw();
         });
-        context('when passing a validation', () => {
-            context('with all its required attributes', () => {
-                it('should not fail', () => {
-                    expect(() => validator.validate({ name: 'required' })).not.to.throw();
-                });
-            });
-            context('without any of its required attributes', () => {
-                it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(/^The validation attribute name was not found\.$/);
-                });
-            });
-            context('when passing an invalid name for a validation', () => {
-                let validation;
-
-                before(() => {
-                    validation = new JDLValidation({
-                        name: 'min',
-                        value: 0,
-                    });
-                    validation.name = 'toto';
-                });
-
-                it('should fail', () => {
-                    expect(() => validator.validate(validation)).to.throw(/^The validation toto doesn't exist\.$/);
-                });
-            });
-            context('when not passing a value when required', () => {
-                let validation;
-
-                before(() => {
-                    validation = new JDLValidation({
-                        name: 'min',
-                        value: 0,
-                    });
-                    delete validation.value;
-                });
-
-                it('should fail', () => {
-                    expect(() => validator.validate(validation)).to.throw(/^The validation min requires a value\.$/);
-                });
-            });
-            context('when passing a decimal value for a numeric validation', () => {
-                context('such as minlength', () => {
-                    it('should fail', () => {
-                        expect(() =>
-                            validator.validate(
-                                new JDLValidation({
-                                    name: 'minlength',
-                                    value: 0.001,
-                                })
-                            )
-                        ).to.throw(/^Decimal values are forbidden for the minlength validation.$/);
-                    });
-                });
-                context('such as maxlength', () => {
-                    it('should fail', () => {
-                        expect(() =>
-                            validator.validate(
-                                new JDLValidation({
-                                    name: 'maxlength',
-                                    value: 0.001,
-                                })
-                            )
-                        ).to.throw(/^Decimal values are forbidden for the maxlength validation.$/);
-                    });
-                });
-                context('such as minbytes', () => {
-                    it('should fail', () => {
-                        expect(() =>
-                            validator.validate(
-                                new JDLValidation({
-                                    name: 'minbytes',
-                                    value: 0.001,
-                                })
-                            )
-                        ).to.throw(/^Decimal values are forbidden for the minbytes validation.$/);
-                    });
-                });
-                context('such as maxbytes', () => {
-                    it('should fail', () => {
-                        expect(() =>
-                            validator.validate(
-                                new JDLValidation({
-                                    name: 'maxbytes',
-                                    value: 0.001,
-                                })
-                            )
-                        ).to.throw(/^Decimal values are forbidden for the maxbytes validation.$/);
-                    });
-                });
-            });
+      });
+      context('without any of its required attributes', () => {
+        it('should fail', () => {
+          expect(() => validator.validate({})).to.throw(/^The validation attribute name was not found\.$/);
         });
+      });
+      context('when passing an invalid name for a validation', () => {
+        let validation;
+
+        before(() => {
+          validation = new JDLValidation({
+            name: 'min',
+            value: 0,
+          });
+          validation.name = 'toto';
+        });
+
+        it('should fail', () => {
+          expect(() => validator.validate(validation)).to.throw(/^The validation toto doesn't exist\.$/);
+        });
+      });
+      context('when not passing a value when required', () => {
+        let validation;
+
+        before(() => {
+          validation = new JDLValidation({
+            name: 'min',
+            value: 0,
+          });
+          delete validation.value;
+        });
+
+        it('should fail', () => {
+          expect(() => validator.validate(validation)).to.throw(/^The validation min requires a value\.$/);
+        });
+      });
+      context('when passing a decimal value for a numeric validation', () => {
+        context('such as minlength', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'minlength',
+                  value: 0.001,
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the minlength validation.$/);
+          });
+        });
+        context('such as maxlength', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'maxlength',
+                  value: 0.001,
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the maxlength validation.$/);
+          });
+        });
+        context('such as minbytes', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'minbytes',
+                  value: 0.001,
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the minbytes validation.$/);
+          });
+        });
+        context('such as maxbytes', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'maxbytes',
+                  value: 0.001,
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the maxbytes validation.$/);
+          });
+        });
+      });
     });
+  });
 });

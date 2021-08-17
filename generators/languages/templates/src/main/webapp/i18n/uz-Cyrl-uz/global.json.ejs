@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -39,9 +39,9 @@
             },
             "admin": {
                 "main": "Бошқарув",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Шлюз",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "Фойдалаувчилар бошқаруви",
                 "tracker": "Фойдалаувчи кузатуви",
                 "metrics": "Метрикалар",
@@ -153,6 +153,8 @@
         "emailexists": "Email аллақачон тизимда мавжуд!",
         "idexists": "Янги {{ entityName }} IDси тизимда мавжуд ID бўлмаслиги керак.",
         "idnull": "Нотўғри ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Файлни чиқариб бўлмайди",
             "not.image": "Файл расм бўлиши керак эди, лекин \"{{ fileType }}\" топилди"

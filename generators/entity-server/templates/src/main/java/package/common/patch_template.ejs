@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,44 +17,50 @@
  limitations under the License.
 -%>
 <%
-const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const instanceType = restClass;
+const instanceName = restInstance;
 const returnType = reactive ? 'Mono' : 'Optional'
 const mapOrFlatMap = reactive ? 'flatMap' : 'map'
 const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + '> result =';
 const mapper = entityInstance  + 'Mapper';
 _%>
-<%_ if(viaService) { %>
-   <%_ if(!reactive) { %>
-   Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
-   <%_ } else { %>
-   Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
-   <%_ } %>
+<%_ if(viaService) { _%>
+  <%_ if(!reactive) { _%>
+    Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+  <%_ } else { _%>
+    Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+  <%_ } _%>
 <%_ } else { %>
 <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
    .map(existing<%= entityClass %> -> {
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
-   if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>() != null) {
-      existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>(<%= instanceName %>.get<%= field.fieldNameCapitalized %>());
-   }
-   <%_ if (field.fieldWithContentType) { _%>
-   if (<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType() != null) {
-      existing<%= entityClass %>.set<%= field.fieldNameCapitalized %>ContentType(<%= instanceName %>.get<%= field.fieldNameCapitalized %>ContentType());
-   }
-   <%_ } _%>
-
-<% } %>
-   return existing<%= entityClass %>;
-   })
-   .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)<% if (searchEngine === 'elasticsearch') { %>
-   .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
-         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
-         <%_ if(!reactive) { %>
-         return saved<%= entityClass %>;
-         <%_ } else { %>
-         return Mono.just(saved<%= entityClass %>);
-         <%_ } %>
-      })<% } %><% if (dto !== 'no') { %>
-   .map(<%= mapper %>::toDto)<% } %><% if (isService && !reactive) { %>
-   <% } %>;
+  <%_ if(dtoMapstruct) { _%>
+       <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
+  <%_ } else { _%>
+    <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+    if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>() != null) {
+        existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
+    }
+      <%_ if (field.fieldWithContentType) { _%>
+    if (<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType() != null) {
+        existing<%= entityClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType());
+    }
+      <%_ } _%>
+    <%_ } %>
+  <% } %>
+    return existing<%= entityClass %>;
+    })
+    .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+  <%_ if (searchEngineElasticsearch) { _%>
+    .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
+        <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
+    <%_ if(!reactive) { %>
+        return saved<%= entityClass %>;
+    <%_ } else { %>
+        return Mono.just(saved<%= entityClass %>);
+    <%_ } %>
+      })
+  <%_ } _%>
+  <%_ if (dtoMapstruct) { _%>
+   .map(<%= mapper %>::toDto)
+  <%_ } _%>;
 <%_ } %>

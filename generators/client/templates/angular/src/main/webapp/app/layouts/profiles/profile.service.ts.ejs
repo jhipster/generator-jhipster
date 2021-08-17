@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,15 +21,15 @@ import { HttpClient } from '@angular/common/http';
 import { map, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { ProfileInfo, InfoResponse } from './profile-info.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
-  private infoUrl = SERVER_API_URL + 'management/info';
+  private infoUrl = this.applicationConfigService.getEndpointFor('management/info');
   private profileInfo$?: Observable<ProfileInfo>;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getProfileInfo(): Observable<ProfileInfo> {
     if (this.profileInfo$) {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,9 +20,9 @@
 const fs = require('fs');
 
 module.exports = {
-    doesFileExist,
-    doesDirectoryExist,
-    createFolderIfItDoesNotExist,
+  doesFileExist,
+  doesDirectoryExist,
+  createFolderIfItDoesNotExist,
 };
 
 /**
@@ -31,8 +31,8 @@ module.exports = {
  * @returns {boolean} whether the file exists and is actually a file.
  */
 function doesFileExist(file) {
-    const statObject = getStatObject(file);
-    return statObject && statObject.isFile();
+  const statObject = getStatObject(file);
+  return statObject && statObject.isFile();
 }
 
 /**
@@ -41,8 +41,8 @@ function doesFileExist(file) {
  * @returns {boolean} whether the directory exists and is actually a directory.
  */
 function doesDirectoryExist(directory) {
-    const statObject = getStatObject(directory);
-    return statObject && statObject.isDirectory();
+  const statObject = getStatObject(directory);
+  return statObject && statObject.isDirectory();
 }
 
 /**
@@ -51,20 +51,20 @@ function doesDirectoryExist(directory) {
  * @throws WrongDirException if the directory to create exists and is a file.
  */
 function createFolderIfItDoesNotExist(directory) {
-    if (!directory) {
-        throw new Error('A directory must be passed to be created.');
-    }
-    const statObject = getStatObject(directory);
-    if (statObject && statObject.isFile()) {
-        throw new Error(`The directory to create '${directory}' is a file.`);
-    }
-    fs.mkdirSync(directory, { recursive: true });
+  if (!directory) {
+    throw new Error('A directory must be passed to be created.');
+  }
+  const statObject = getStatObject(directory);
+  if (statObject && statObject.isFile()) {
+    throw new Error(`The directory to create '${directory}' is a file.`);
+  }
+  fs.mkdirSync(directory, { recursive: true });
 }
 
 function getStatObject(file) {
-    try {
-        return fs.statSync(file);
-    } catch (error) {
-        return false;
-    }
+  try {
+    return fs.statSync(file);
+  } catch (error) {
+    return false;
+  }
 }

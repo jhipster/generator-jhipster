@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Ներեցեք, տեղի է ունեցել սխալ:
 error.status=Կարգավիճակ:
 error.message=Հաղորդագրություն:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> գրանցման ակտիվացում
 email.activation.greeting=Թանկագին {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> գաղտնաբառի ապակտիվացում
 email.reset.greeting=Թանկագին {0}
 email.reset.text1=Ձեր <%= baseName %> գրանցման համար կատարվել է գաղտնաբառի ապակտիվացում խնդրում ենք սեղմել հղումը ներքևում` ապակտիվացնելու այն:
 email.reset.text2=Հարգանքներով,
+<%_ } _%>

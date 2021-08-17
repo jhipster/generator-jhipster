@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,8 +28,8 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (azureAppInsightsInstrumentationKey !== '') { _%>
+<%_ if (!azureAppInsightsInstrumentationKeyEmpty) { _%>
 azure:
-    application-insights:
-        instrumentation-key: <%= azureAppInsightsInstrumentationKey %>
+  application-insights:
+    instrumentation-key: <%= azureAppInsightsInstrumentationKey %>
 <%_ } _%>

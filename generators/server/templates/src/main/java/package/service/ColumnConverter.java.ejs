@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,8 +19,8 @@
 package <%= packageName %>.service;
 
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
-import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
@@ -36,8 +36,8 @@ public class ColumnConverter {
     private final ConversionService conversionService;
     private final R2dbcCustomConversions conversions;
 
-    public ColumnConverter(R2dbcCustomConversions conversions, ReactiveDataAccessStrategy dataAccess) {
-        this.conversionService = dataAccess.getConverter().getConversionService();
+    public ColumnConverter(R2dbcCustomConversions conversions, R2dbcConverter r2dbcConverter) {
+        this.conversionService = r2dbcConverter.getConversionService();
         this.conversions = conversions;
     }
 
@@ -48,6 +48,7 @@ public class ColumnConverter {
      * @param <T> the parameter for the intended type.
      * @return the value which can be constructed from the input.
      */
+    @SuppressWarnings("unchecked")
     public <T> T convert(@Nullable Object value, @Nullable Class<T> target) {
 
         if (value == null || target == null || ClassUtils.isAssignableValue(target, value)) {

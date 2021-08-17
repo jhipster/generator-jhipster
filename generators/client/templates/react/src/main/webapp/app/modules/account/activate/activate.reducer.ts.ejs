@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,13 +17,9 @@
  limitations under the License.
 -%>
 import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-
-export const ACTION_TYPES = {
-  ACTIVATE_ACCOUNT: 'activate/ACTIVATE_ACCOUNT',
-  RESET: 'activate/RESET'
-};
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
   activationSuccess: false,
@@ -32,39 +28,33 @@ const initialState = {
 
 export type ActivateState =  Readonly<typeof initialState>;
 
-// Reducer
-export default (state: ActivateState = initialState, action): ActivateState => {
-  switch (action.type) {
-    case REQUEST(ACTION_TYPES.ACTIVATE_ACCOUNT):
-      return {
-        ...state
-      };
-    case FAILURE(ACTION_TYPES.ACTIVATE_ACCOUNT):
-      return {
-        ...state,
-        activationFailure: true
-      };
-    case SUCCESS(ACTION_TYPES.ACTIVATE_ACCOUNT):
-      return {
-        ...state,
-        activationSuccess: true
-      };
-    case ACTION_TYPES.RESET:
-      return {
-        ...initialState
-      };
-    default:
-      return state;
-  }
-};
-
 // Actions
-export const activateAction = key => ({
-  type: ACTION_TYPES.ACTIVATE_ACCOUNT,
-  payload: axios.get('<%= apiUaaPath %>api/activate?key=' + key)
+
+export const activateAction = createAsyncThunk('activate/activate_account', async (key: string) => axios.get(`api/activate?key=${key}`), {
+  serializeError: serializeAxiosError,
 });
 
-
-export const reset = () => ({
-  type: ACTION_TYPES.RESET
+export const ActivateSlice = createSlice({
+  name: 'activate',
+  initialState: initialState as ActivateState,
+  reducers: {
+    reset() {
+      return initialState;
+    },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(activateAction.pending, () => initialState)
+      .addCase(activateAction.rejected, state => {
+        state.activationFailure = true;
+      })
+      .addCase(activateAction.fulfilled, state => {
+        state.activationSuccess = true;
+      });
+  },
 });
+
+export const { reset } = ActivateSlice.actions;
+
+// Reducer
+export default ActivateSlice.reducer;

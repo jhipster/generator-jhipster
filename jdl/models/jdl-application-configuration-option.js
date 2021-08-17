@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,21 +18,21 @@
  */
 
 module.exports = class JDLApplicationConfigurationOption {
-    /**
-     * Creates a new application option.
-     * @param {String} name - the option's name.
-     * @param {any} value - the option's value, can be virtually anything: a String, an Int, a boolean...
-     */
-    constructor(name, value) {
-        this.name = name;
-        this.value = value;
-    }
+  /**
+   * Creates a new application option.
+   * @param {String} name - the option's name.
+   * @param {any} value - the option's value, can be virtually anything: a String, an Int, a boolean...
+   */
+  constructor(name, value) {
+    this.name = name;
+    this.value = value;
+  }
 
-    getValue() {
-        return this.value;
-    }
+  getValue() {
+    return this.value;
+  }
 
-    toString() {
-        return `${this.name} ${this.value}`;
-    }
+  toString() {
+    return `${this.name} ${this.value}`;
+  }
 };

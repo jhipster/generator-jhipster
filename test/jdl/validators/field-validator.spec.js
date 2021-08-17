@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,38 +22,38 @@ const JDLField = require('../../../jdl/models/jdl-field');
 const FieldValidator = require('../../../jdl/validators/field-validator');
 
 describe('FieldValidator', () => {
-    let validator;
+  let validator;
 
-    before(() => {
-        validator = new FieldValidator();
+  before(() => {
+    validator = new FieldValidator();
+  });
+
+  describe('validate', () => {
+    context('when not passing anything', () => {
+      it('should fail', () => {
+        expect(() => validator.validate()).to.throw(/^No field\.$/);
+      });
     });
+    context('when passing a field', () => {
+      context('with all its required attributes', () => {
+        let field;
 
-    describe('validate', () => {
-        context('when not passing anything', () => {
-            it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No field\.$/);
-            });
+        before(() => {
+          field = new JDLField({
+            name: 'a',
+            type: 'String',
+          });
         });
-        context('when passing a field', () => {
-            context('with all its required attributes', () => {
-                let field;
 
-                before(() => {
-                    field = new JDLField({
-                        name: 'a',
-                        type: 'String',
-                    });
-                });
-
-                it('should not fail', () => {
-                    expect(() => validator.validate(field)).not.to.throw();
-                });
-            });
-            context('when not passing any attribute', () => {
-                it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
-                });
-            });
+        it('should not fail', () => {
+          expect(() => validator.validate(field)).not.to.throw();
         });
+      });
+      context('when not passing any attribute', () => {
+        it('should fail', () => {
+          expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
+        });
+      });
     });
+  });
 });

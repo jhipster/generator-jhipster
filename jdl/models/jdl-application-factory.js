@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,16 +19,15 @@
 
 const ApplicationTypes = require('../jhipster/application-types');
 const {
-    getDefaultConfigForNewApplication,
-    getConfigForMonolithApplication,
-    getConfigForGatewayApplication,
-    getConfigForMicroserviceApplication,
-    getConfigForUAAApplication,
+  getDefaultConfigForNewApplication,
+  getConfigForMonolithApplication,
+  getConfigForGatewayApplication,
+  getConfigForMicroserviceApplication,
 } = require('../jhipster/default-application-options');
 const JDLApplication = require('./jdl-application');
 
 module.exports = {
-    createJDLApplication,
+  createJDLApplication,
 };
 
 /**
@@ -37,24 +36,20 @@ module.exports = {
  * @returns {JDLApplication} the created JDL application.
  */
 function createJDLApplication(config = {}) {
-    const baseConfig = getDefaultConfigForNewApplication(config);
-    switch (config.applicationType) {
-        case ApplicationTypes.MICROSERVICE:
-            return new JDLApplication({
-                config: getConfigForMicroserviceApplication(baseConfig),
-            });
-        case ApplicationTypes.GATEWAY:
-            return new JDLApplication({
-                config: getConfigForGatewayApplication(baseConfig),
-            });
-        case ApplicationTypes.UAA:
-            return new JDLApplication({
-                config: getConfigForUAAApplication(baseConfig),
-            });
-        case ApplicationTypes.MONOLITH:
-        default:
-            return new JDLApplication({
-                config: getConfigForMonolithApplication(baseConfig),
-            });
-    }
+  const baseConfig = getDefaultConfigForNewApplication(config);
+  switch (config.applicationType) {
+    case ApplicationTypes.MICROSERVICE:
+      return new JDLApplication({
+        config: getConfigForMicroserviceApplication(baseConfig),
+      });
+    case ApplicationTypes.GATEWAY:
+      return new JDLApplication({
+        config: getConfigForGatewayApplication(baseConfig),
+      });
+    case ApplicationTypes.MONOLITH:
+    default:
+      return new JDLApplication({
+        config: getConfigForMonolithApplication(baseConfig),
+      });
+  }
 }

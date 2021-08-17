@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,36 +47,38 @@ let elementGetter = `getText()`;
 let openBlockComment = ``;
 let closeBlockComment = ``;
 if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
+  elementGetter = `getAttribute('jhiTranslate')`;
 }
 for (let relationship of relationships) {
-    if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
-        openBlockComment = `/*`;
-        closeBlockComment = `*/`;
-        break;
-    }
+  if (relationship.relationshipRequired || relationship.id) {
+    openBlockComment = `/*`;
+    closeBlockComment = `*/`;
+    break;
+  }
 } _%>
 
 const expect = chai.expect;
 
 describe('<%= entityClass %> e2e test', () => {
   let navBarPage: NavBarPage;
-  <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
   let updatePage: <%= entityClass %>UpdatePage;
-  <%_ } _%>
+<%_ } _%>
   let detailsPage: <%= entityClass %>DetailsPage;
   let listPage: <%= entityClass %>ComponentsPage;
   <%= openBlockComment %>let deleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
-  <%_ if (fieldsContainBlobOrImage) { _%>
+<%_ if (fieldsContainBlobOrImage) { _%>
   const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/logo-jhipster.png';
   const absolutePath = path.resolve(__dirname, fileToUpload);
-  <%_ } _%>
+<%_ } _%>
   let beforeRecordsCount = 0;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    await navBarPage.login('admin', 'admin');
+    await navBarPage.login(username, password);
   });
 
 
@@ -91,9 +93,9 @@ describe('<%= entityClass %> e2e test', () => {
     await waitUntilAllDisplayed([listPage.title, listPage.footer]);
 
     expect(await listPage.title.getText()).not.to.be.empty;
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
     expect(await listPage.createButton.isEnabled()).to.be.true;
-    <%_ } _%>
+<%_ } _%>
 
     await waitUntilAnyDisplayed([listPage.noRecords, listPage.table]);
     beforeRecordsCount = await isVisible(listPage.noRecords) ? 0 : await getRecordsCount(listPage.table);
@@ -107,88 +109,69 @@ describe('<%= entityClass %> e2e test', () => {
 
       await waitUntilAllDisplayed([updatePage.title, updatePage.footer, updatePage.saveButton]);
 
-      <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
       expect(await updatePage.title.getAttribute('id'))
         .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
-      <%_ } else { _%>
+  <%_ } else { _%>
       expect(await updatePage.title.getText())
         .to.match(/Create or edit a <%= entityClass %>/);
-      <%_ } _%>
+  <%_ } _%>
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-      <%_ fields.filter(field => !field.id).forEach((field) => {
-        const fieldName = field.fieldName;
-        const fieldNameCapitalized = field.fieldNameCapitalized;
-        const fieldType = field.fieldType;
-        const fieldTypeBlobContent = field.fieldTypeBlobContent;
-        const fieldIsEnum = field.fieldIsEnum;
-        const fieldValidateSampleString = field.fieldValidateSampleString;
-      _%>
+  <%_ fields.filter(field => !field.id).forEach((field) => {
+    const fieldName = field.fieldName;
+    const fieldNameCapitalized = field.fieldNameCapitalized;
+    const fieldIsEnum = field.fieldIsEnum;
+    const fieldValidateSampleString = field.fieldValidateSampleString;
+  _%>
 
-      <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ if (field.fieldTypeNumeric) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('5');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('5');
 
-      <%_ } else if (fieldType === 'LocalDate') { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('2001-01-01');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2001-01-01');
 
-      <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('01/01/2001' + protractor.Key.TAB + '02:30AM');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2001-01-01T02:30');
 
-      <%_ } else if (fieldType === 'Duration') { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('PT12S');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT12S');
 
-      <%_ } else if (fieldType === 'Boolean') { _%>
-      const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
-      if (selected<%= fieldNameCapitalized %>) {
-        await updatePage.<%= fieldName %>Input.click();
-        expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.false;
-      } else {
-        await updatePage.<%= fieldName %>Input.click();
-        expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.true;
-      }
+    <%_ } else if (field.fieldTypeBoolean) { _%>
+      await updatePage.<%= fieldName %>Input.click();
 
-      <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
       await waitUntilDisplayed(updatePage.<%= fieldName %>Input);
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldName %>');
 
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/<%= fieldName %>/);
-
-      <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeBinary) { _%>
       await waitUntilDisplayed(updatePage.<%= fieldName %>Input);
       await updatePage.<%= fieldName %>Input.sendKeys(absolutePath);
 
-      <%_ } else if (fieldIsEnum) { _%>
+    <%_ } else if (fieldIsEnum) { _%>
       await selectLastOption(updatePage.<%= fieldName %>Select);
 
-      <%_ } else if (fieldType === 'UUID'){ _%>
+    <%_ } else if (field.fieldTypeUUID){ _%>
       await updatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade974');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
 
-      <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+    <%_ } else if (field.fieldTypeString && fieldValidateSampleString) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateSampleString %>');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateSampleString %>');
 
-      <%_ } else { _%>
+    <%_ } else { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldName %>');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/<%= fieldName %>/);
 
-      <%_ } _%>
-      <%_ }); _%>
-      <%_ relationships.forEach((relationship) => {
-        const relationshipType = relationship.relationshipType;
-        const ownerSide = relationship.ownerSide;
-        const relationshipName = relationship.relationshipName; _%>
-      <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%_ } _%>
+  <%_ }); _%>
+  <%_ relationships.forEach((relationship) => {
+    const ownerSide = relationship.ownerSide;
+    const relationshipName = relationship.relationshipName; _%>
+    <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
       // await selectLastOption(updatePage.<%= relationshipName %>Select);
-      <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+    <%_ } else if ((relationship.relationshipManyToMany && ownerSide)) { _%>
       // await selectLastOption(updatePage.<%= relationshipName %>Select);
-      <%_ } _%>
-      <%_ }); _%>
+    <%_ } _%>
+  <%_ }); _%>
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();
@@ -205,7 +188,7 @@ describe('<%= entityClass %> e2e test', () => {
 
       after(async () => {
 
-        const deleteButton = listPage.getDeleteButton(listPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no') { _%>last()<%_ } else {_%>first()<%_ } _%>);
+        const deleteButton = listPage.getDeleteButton(listPage.records.<%_ if (paginationInfiniteScroll || paginationNo) { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(deleteButton);
 
         deleteDialog = new <%= entityClass %>DeleteDialog();
@@ -224,21 +207,21 @@ describe('<%= entityClass %> e2e test', () => {
 
       it('should load details <%= entityClass %> page and fetch data', async () => {
 
-        const detailsButton = listPage.getDetailsButton(listPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no' ) { _%>last()<%_ } else {_%>first()<%_ } _%>);
+        const detailsButton = listPage.getDetailsButton(listPage.records.<%_ if (paginationInfiniteScroll || paginationNo) { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(detailsButton);
 
         detailsPage = new <%= entityClass %>DetailsPage();
 
-        <%_ if (fields.some(field => !field.id) && databaseType !== 'neo4j') { _%>
+  <%_ if (fields.some(field => !field.id) && !databaseTypeNeo4j) { _%>
         await waitUntilAllDisplayed([detailsPage.title, detailsPage.backButton, detailsPage.firstDetail]);
-        <%_ } else { _%>
+  <%_ } else { _%>
         await waitUntilAllDisplayed([detailsPage.title, detailsPage.backButton]);
-        <%_ } _%>
+  <%_ } _%>
 
         expect(await detailsPage.title.getText()).not.to.be.empty;
-        <%_ if (fields.some(field => !field.id) && databaseType !== 'neo4j') { _%>
+  <%_ if (fields.some(field => !field.id) && !databaseTypeNeo4j) { _%>
         expect(await detailsPage.firstDetail.getText()).not.to.be.empty;
-        <%_ } _%>
+  <%_ } _%>
 
         await click(detailsPage.backButton);
         await waitUntilCount(listPage.records, beforeRecordsCount + 1);
@@ -246,73 +229,58 @@ describe('<%= entityClass %> e2e test', () => {
 
       it('should load edit <%= entityClass %> page, fetch data and update', async () => {
 
-        const editButton = listPage.getEditButton(listPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no') { _%>last()<%_ } else {_%>first()<%_ } _%>);
+        const editButton = listPage.getEditButton(listPage.records.<%_ if (paginationInfiniteScroll || paginationNo) { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(editButton);
 
         await waitUntilAllDisplayed([updatePage.title, updatePage.footer, updatePage.saveButton]);
 
         expect(await updatePage.title.getText()).not.to.be.empty;
 
-        <%_ fields.filter(field => !field.id).forEach((field) => {
-          const fieldName = field.fieldName;
-          const fieldNameCapitalized = field.fieldNameCapitalized;
-          const fieldType = field.fieldType;
-          const fieldTypeBlobContent = field.fieldTypeBlobContent;
-          const fieldIsEnum = field.fieldIsEnum;
-          const fieldValidateModifiedString = field.fieldValidateModifiedString;
-        _%>
-        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+  <%_ fields.filter(field => !field.id).forEach((field) => {
+    const fieldName = field.fieldName;
+    const fieldNameCapitalized = field.fieldNameCapitalized;
+    const fieldType = field.fieldType;
+    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    const fieldIsEnum = field.fieldIsEnum;
+    const fieldValidateModifiedString = field.fieldValidateModifiedString;
+  _%>
+    <%_ if (field.fieldTypeNumeric) { _%>
           await clear(updatePage.<%= fieldName %>Input);
           await updatePage.<%= fieldName %>Input.sendKeys('6');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('6');
 
-        <%_ } else if (fieldType === 'LocalDate') { _%>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('2019-01-01');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2019-01-01');
 
-        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('01/01/2019' + protractor.Key.TAB + '02:30AM');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2019-01-01T02:30');
 
-        <%_ } else if (fieldType === 'Duration') { _%>
+    <%_ } else if (field.fieldTypeDuration) { _%>
           await clear(updatePage.<%= fieldName %>Input);
           await updatePage.<%= fieldName %>Input.sendKeys('PT14S');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT14S');
 
-        <%_ } else if (fieldType === 'Boolean') { _%>
-          const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
-          if (selected<%= fieldNameCapitalized %>) {
-            await updatePage.<%= fieldName %>Input.click();
-            expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.false;
-          } else {
-            await updatePage.<%= fieldName %>Input.click();
-            expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.true;
-          }
+    <%_ } else if (field.fieldTypeBoolean) { _%>
+          await updatePage.<%= fieldName %>Input.click();
 
-        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('updated<%= fieldName %>');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/updated<%= fieldName %>/);
 
-        <%_ } else if (fieldType === 'UUID'){ _%>
+    <%_ } else if (field.fieldTypeUUID) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade978');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
 
-        <%_ } else if (fieldType === 'String' && fieldValidateModifiedString) { _%>
+    <%_ } else if (field.fieldTypeString && fieldValidateModifiedString) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateModifiedString %>');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateModifiedString %>');
 
-        <%_ } else if (!fieldIsEnum && !['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+    <%_ } else if (!fieldIsEnum && !field.fieldTypeBinary) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('modified');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/modified/);
 
-        <%_ } _%>
-        <%_ }); _%>
+    <%_ } _%>
+  <%_ }); _%>
 
         await updatePage.saveButton.click();
 

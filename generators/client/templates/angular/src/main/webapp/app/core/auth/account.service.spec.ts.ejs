@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,7 +21,7 @@ jest.mock('@angular/router');
 jest.mock('@ngx-translate/core');
 <%_ } _%>
 jest.mock('app/core/auth/state-storage.service');
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 jest.mock('app/core/tracker/tracker.service');
 <%_ } _%>
 
@@ -31,14 +31,16 @@ import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageService<% } %> } from 'ngx-webstorage';
 
-import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import { TrackerService } from 'app/core/tracker/tracker.service';
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 
 import { AccountService } from './account.service';
@@ -59,41 +61,72 @@ function accountWithAuthorities(authorities: string[]): Account {
 describe('Service Tests', () => {
   describe('Account Service', () => {
     let service: AccountService;
+<%_ if (!skipUserManagement) { _%>
+    let applicationConfigService: ApplicationConfigService;
+<%_ } _%>
     let httpMock: HttpTestingController;
     let mockStorageService: StateStorageService;
     let mockRouter: Router;
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     let mockTrackerService: TrackerService;
-    <%_ } _%>
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+    let mockTranslateService: TranslateService;
+    let sessionStorageService: SessionStorageService;
+<%_ } _%>
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
         providers: [
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           TranslateService,
-          <%_ } _%>
-          <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
           TrackerService,
-          <%_ } _%>
+<%_ } _%>
           StateStorageService,
           Router,
         ],
       });
 
       service = TestBed.inject(AccountService);
+<%_ if (!skipUserManagement) { _%>
+      applicationConfigService = TestBed.inject(ApplicationConfigService);
+<%_ } _%>
       httpMock = TestBed.inject(HttpTestingController);
       mockStorageService = TestBed.inject(StateStorageService);
       mockRouter = TestBed.inject(Router);
-      <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
       mockTrackerService = TestBed.inject(TrackerService);
-      <%_ } _%>
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      mockTranslateService = TestBed.inject(TranslateService);
+      sessionStorageService = TestBed.inject(SessionStorageService);
+<%_ } _%>
     });
 
     afterEach(() => {
       httpMock.verify();
     });
 
+<%_ if (!skipUserManagement) { _%>
+  describe('save', () => {
+    it('should call account saving endpoint with correct values', () => {
+      // GIVEN
+      const account = accountWithAuthorities([]);
+
+      // WHEN
+      service.save(account).subscribe();
+      const testRequest = httpMock.expectOne({ method: 'POST', url: applicationConfigService.getEndpointFor('api/account') });
+      testRequest.flush({});
+
+      // THEN
+      expect(testRequest.request.body).toEqual(account);
+    });
+  });
+
+<%_ } _%>
     describe('authenticate', () => {
       it('authenticationState should emit null if input is null', () => {
         // GIVEN
@@ -106,10 +139,10 @@ describe('Service Tests', () => {
         // THEN
         expect(userIdentity).toBeNull();
         expect(service.isAuthenticated()).toBe(false);
-        <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
         expect(mockTrackerService.disconnect).toHaveBeenCalled();
         expect(mockTrackerService.connect).not.toHaveBeenCalled();
-        <%_ } _%>
+<%_ } _%>
       });
 
       it('authenticationState should emit the same account as was in input parameter', () => {
@@ -124,20 +157,21 @@ describe('Service Tests', () => {
         // THEN
         expect(userIdentity).toEqual(expectedResult);
         expect(service.isAuthenticated()).toBe(true);
-        <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
         expect(mockTrackerService.connect).toHaveBeenCalled();
         expect(mockTrackerService.disconnect).not.toHaveBeenCalled();
-        <%_ } _%>
+<%_ } _%>
       });
     });
 
     describe('identity', () => {
-      it('should call /account if user is undefined', () => {
+      it('should call /account only once if last call have not returned', () => {
+        // When I call
         service.identity().subscribe();
-        const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/account';
-
-        expect(req.request.url).toEqual(`${resourceUrl}`);
+        // Once more
+        service.identity().subscribe();
+        // Then there is only request
+        httpMock.expectOne({ method: 'GET' });
       });
 
       it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
@@ -160,6 +194,34 @@ describe('Service Tests', () => {
         httpMock.expectOne({ method: 'GET' });
       });
 
+<%_ if (enableTranslation) { _%>
+      describe('should change the language on authentication if necessary', () => {
+        it('should change language if user has not changed language manually', () => {
+          // GIVEN
+          sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? undefined : 'otherSessionStorageValue'));
+
+          // WHEN
+          service.identity().subscribe();
+          httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+          // THEN
+          expect(mockTranslateService.use).toHaveBeenCalledWith('accountLang');
+        });
+
+        it('should not change language if user has changed language manually', () => {
+          // GIVEN
+          sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? 'sessionLang' : undefined));
+
+          // WHEN
+          service.identity().subscribe();
+          httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+          // THEN
+          expect(mockTranslateService.use).not.toHaveBeenCalled();
+        });
+      });
+
+<%_ } _%>
       describe('navigateToStoredUrl', () => {
         it('should navigate to the previous stored url post successful authentication', () => {
           // GIVEN

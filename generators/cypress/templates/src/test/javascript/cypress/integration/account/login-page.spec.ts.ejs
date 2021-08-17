@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import {
   titleLoginSelector,
   errorLoginSelector,
@@ -7,19 +25,23 @@ import {
 } from '../../support/commands';
 
 describe('login modal', () => {
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
+
   before(() => {
     cy.window().then(win => {
       win.sessionStorage.clear();
     });
-    <%_ if (authenticationType === 'session') { _%>cy.clearCookie('SESSION')<% } %>
+<%_ if (authenticationTypeSession) { _%>
+    cy.clearCookie('SESSION');
+<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.clickOnLoginItem();
   });
 
   beforeEach(() => {
-    cy.server();
-    cy.route('POST', '/api/<%_ if (authenticationType === 'session') { _%>authentication<% } else { %>authenticate<% } %>').as('authenticate');
+    cy.intercept('POST', '/api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>').as('authenticate');
   });
 
   it('greets with signin', () => {
@@ -29,7 +51,9 @@ describe('login modal', () => {
   it('requires username', () => {
     cy.get(passwordLoginSelector).type('a-password');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').its('status').should('equal', <%_ if (authenticationType === 'session') { _%>401<% } else { %>400<% } %>);
+    <%_ if (!clientFrameworkReact) { _%>
+    cy.wait('@authenticate').then(({ response }) => expect(response.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
+    <%_ } _%>
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
     cy.get(passwordLoginSelector).clear();
@@ -38,26 +62,31 @@ describe('login modal', () => {
   it('requires password', () => {
     cy.get(usernameLoginSelector).type('a-login');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').its('status').should('equal', <%_ if (authenticationType === 'session') { _%>401<% } else { %>400<% } %>);
+    <%_ if (!clientFrameworkReact) { _%>
+    cy.wait('@authenticate').then(({ response }) => expect(response.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
     cy.get(errorLoginSelector).should('be.visible');
+    <%_ } else { _%>
+    // login page should stay open when login fails
+    cy.get(titleLoginSelector).should('be.visible');
+    <%_ } _%>
     cy.get(usernameLoginSelector).clear();
   });
 
   it('errors when password is incorrect', () => {
-    cy.get(usernameLoginSelector).type('admin');
+    cy.get(usernameLoginSelector).type(username);
     cy.get(passwordLoginSelector).type('bad-password');
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').its('status').should('equal', 401);
+    cy.wait('@authenticate').then(({ response }) => expect(response.statusCode).to.equal(401));
     cy.get(errorLoginSelector).should('be.visible');
     cy.get(usernameLoginSelector).clear();
     cy.get(passwordLoginSelector).clear();
   });
 
   it('go to login page when successfully logs in', () => {
-    cy.get(usernameLoginSelector).type('admin');
-    cy.get(passwordLoginSelector).type('admin');
+    cy.get(usernameLoginSelector).type(username);
+    cy.get(passwordLoginSelector).type(password);
     cy.get(submitLoginSelector).click();
-    cy.wait('@authenticate').its('status').should('equal', 200);
+    cy.wait('@authenticate').then(({ response }) => expect(response.statusCode).to.equal(200));
     cy.hash().should('eq', '');
   });
 });

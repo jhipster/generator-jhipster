@@ -6,67 +6,71 @@ const expectedFiles = require('../utils/expected-files');
 const LanguagesGenerator = require('../../generators/languages');
 
 const mockBlueprintSubGen = class extends LanguagesGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
+    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
-        if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
-        }
-
-        this.configOptions = jhContext.configOptions || {};
+    if (!jhContext) {
+      this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
     }
 
-    get initializing() {
-        return super._initializing();
-    }
+    this.configOptions = jhContext.configOptions || {};
+  }
 
-    get prompting() {
-        return super._prompting();
-    }
+  get initializing() {
+    return super._initializing();
+  }
 
-    get configuring() {
-        return super._configuring();
-    }
+  get prompting() {
+    return super._prompting();
+  }
 
-    get default() {
-        return super._default();
-    }
+  get configuring() {
+    return super._configuring();
+  }
 
-    get writing() {
-        return super._writing();
-    }
+  get default() {
+    return super._default();
+  }
+
+  get writing() {
+    return super._writing();
+  }
+
+  get postWriting() {
+    return super._postWriting();
+  }
 };
 
 describe('JHipster languages generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
+  const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate language with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/languages'))
-                    .inTmpDir(dir => {
-                        fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
-                    })
-                    .withOptions({
-                        fromCli: true,
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true,
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
-                    .withPrompts({
-                        languages: ['de'],
-                    })
-                    .on('end', done);
-            });
+  blueprintNames.forEach(blueprintName => {
+    describe(`generate language with blueprint option '${blueprintName}'`, () => {
+      before(done => {
+        helpers
+          .run(path.join(__dirname, '../../generators/languages'))
+          .inTmpDir(dir => {
+            fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
+          })
+          .withOptions({
+            fromCli: true,
+            skipInstall: true,
+            blueprint: blueprintName,
+            skipChecks: true,
+          })
+          .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
+          .withPrompts({
+            languages: ['de'],
+          })
+          .on('end', done);
+      });
 
-            it('creates expected files from jhipster languages generator', () => {
-                assert.file(expectedFiles.i18nDeJson);
-                assert.file(expectedFiles.i18nAdminDeJson);
-            });
-        });
+      it('creates expected files from jhipster languages generator', () => {
+        assert.file(expectedFiles.i18nDeJson);
+        assert.file(expectedFiles.i18nAdminDeJson);
+      });
     });
+  });
 });

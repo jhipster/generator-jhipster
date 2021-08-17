@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,8 +19,8 @@
 
 const { Lexer } = require('chevrotain');
 const {
-    NAME,
-    sharedCategoryTokens: { UNARY_OPTION, BINARY_OPTION },
+  NAME,
+  sharedCategoryTokens: { UNARY_OPTION, BINARY_OPTION },
 } = require('./shared-tokens');
 const ValidationTokens = require('./validation-tokens');
 const ApplicationTokens = require('./application-tokens');
@@ -32,15 +32,15 @@ const createTokenFromConfigCreator = require('./token-creator').createTokenFromC
 const tokens = {};
 
 function createTokenFromConfig(config) {
-    const newToken = createTokenFromConfigCreator(config);
-    tokens[config.name] = newToken;
-    return newToken;
+  const newToken = createTokenFromConfigCreator(config);
+  tokens[config.name] = newToken;
+  return newToken;
 }
 
 // Some categories to make the grammar easier to read
 const BOOLEAN = createTokenFromConfig({
-    name: 'BOOLEAN',
-    pattern: Lexer.NA,
+  name: 'BOOLEAN',
+  pattern: Lexer.NA,
 });
 
 // Category for the Application Configuration key names
@@ -50,23 +50,23 @@ const CONFIG_KEY = ApplicationTokens.categoryToken;
 const DEPLOYMENT_KEY = DeploymentTokens.categoryToken;
 
 createTokenFromConfig({
-    name: 'WHITESPACE',
-    pattern: /[\n\t\r \u2028\u2029]+/,
-    // Whitespace insensitivity for the win.
-    group: Lexer.SKIPPED,
+  name: 'WHITESPACE',
+  pattern: /[\n\t\r \u2028\u2029]+/,
+  // Whitespace insensitivity for the win.
+  group: Lexer.SKIPPED,
 });
 
 // Comments
 createTokenFromConfig({
-    name: 'JAVADOC',
-    pattern: /\/\*\*([\s\S]*?)\*\//,
+  name: 'JAVADOC',
+  pattern: /\/\*\*([\s\S]*?)\*\//,
 });
 
 // Comments
 createTokenFromConfig({
-    name: 'BLOCK_COMMENT',
-    pattern: /\/\*([\s\S]*?)\*\//,
-    group: Lexer.SKIPPED,
+  name: 'BLOCK_COMMENT',
+  pattern: /\/\*([\s\S]*?)\*\//,
+  group: Lexer.SKIPPED,
 });
 
 // Constants
@@ -75,7 +75,7 @@ createTokenFromConfig({ name: 'CONFIG', pattern: 'config' });
 createTokenFromConfig({ name: 'ENTITIES', pattern: 'entities' });
 
 ApplicationTokens.tokens.forEach(token => {
-    tokens[token.name] = token;
+  tokens[token.name] = token;
 });
 
 // application must appear AFTER "applicationType" due to shorter common prefix.
@@ -83,13 +83,13 @@ createTokenFromConfig({ name: 'APPLICATION', pattern: 'application' });
 
 // this is used in application config and deployment
 createTokenFromConfig({
-    name: 'SERVICE_DISCOVERY_TYPE',
-    pattern: 'serviceDiscoveryType',
-    categories: [CONFIG_KEY, DEPLOYMENT_KEY],
+  name: 'SERVICE_DISCOVERY_TYPE',
+  pattern: 'serviceDiscoveryType',
+  categories: [CONFIG_KEY, DEPLOYMENT_KEY],
 });
 
 DeploymentTokens.tokens.forEach(token => {
-    tokens[token.name] = token;
+  tokens[token.name] = token;
 });
 
 createTokenFromConfig({ name: 'DEPLOYMENT', pattern: 'deployment' });
@@ -106,19 +106,19 @@ createTokenFromConfig({ name: 'JPA_DERIVED_IDENTIFIER', pattern: 'jpaDerivedIden
 
 // Category For the relationship type key names
 RelationshipTypeTokens.tokens.forEach(token => {
-    tokens[token.name] = token;
+  tokens[token.name] = token;
 });
 
 createTokenFromConfig({ name: 'STAR', pattern: '*' });
 
 // Options
 OptionTokens.tokens.forEach(token => {
-    tokens[token.name] = token;
+  tokens[token.name] = token;
 });
 
 // validations
 ValidationTokens.tokens.forEach(token => {
-    tokens[token.name] = token;
+  tokens[token.name] = token;
 });
 
 createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
@@ -156,6 +156,6 @@ const JDLLexer = new Lexer(Object.values(tokens), { ensureOptimizations: true })
 
 // Cannot exporters constants before they have been defined (unlike functions...)
 module.exports = {
-    tokens,
-    JDLLexer,
+  tokens,
+  JDLLexer,
 };

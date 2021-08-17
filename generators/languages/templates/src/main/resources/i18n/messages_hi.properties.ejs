@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=क्षमा करें, कोई त्रुटि हो
 error.status=स्थिति:
 error.message=संदेश:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> खाता सक्रियण
 email.activation.greeting=प्रिय  {0}
@@ -34,3 +35,4 @@ email.reset.title=<%= baseName %> पासवर्ड रीसेट
 email.reset.greeting=प्रिय {0}
 email.reset.text1=अपने <%= baseName %> खाता पासवर्ड रीसेट अनुरोध किया गया था, नीचे इसे फिर से कायम करने के लिए यूआरएल पर क्लिक करें:
 email.reset.text2=सादर,
+<%_ } _%>

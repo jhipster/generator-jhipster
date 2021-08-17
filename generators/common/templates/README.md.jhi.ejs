@@ -1,0 +1,413 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%#
+ This is a fragment root file, it will be merge fragments if available.
+ EJS fragments will process % delimiter tags in template rendering and & delimiter tags in the merge process.
+-%>
+<&_
+ // Register sections and max allowed fragments, 0 for unlimited.
+ fragments.registerSections({
+   developmentSection: 0,
+   productionSection: 0,
+   testingSection: 0,
+   othersSection: 0,
+   referenceSection: 0,
+ });
+_&>
+# <%= baseName %>
+
+<%_
+let clientPackageMngrName = 'Npm';
+let clientPackageMngrAddGlobal = 'install -g';
+let clientPackageMngrAdd = 'install --save --save-exact';
+let clientPackageMngrAddDev = 'install --save-dev --save-exact';
+let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
+_%>
+This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
+
+This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
+This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
+<%_ } _%>
+
+## Development
+
+<%_ if (skipClient) { _%>
+To start your application in the dev profile, run:
+
+```
+<% if (buildToolMaven) { %>./mvnw<% } %><% if (buildToolGradle) { %>./gradlew<% } %>
+```
+
+For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+
+<%_ } _%>
+<&- fragments.developmentSection() &>
+### JHipster Control Center
+
+JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker-compose -f src/main/docker/jhipster-control-center.yml up
+```
+
+<%_ if (authenticationTypeOauth2) { -%>
+### OAuth 2.0 / OpenID Connect
+
+Congratulations! You've selected an excellent way to secure your JHipster application. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
+
+To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
+
+```
+docker-compose -f src/main/docker/keycloak.yml up
+```
+
+The security settings in `src/main/resources/config/application.yml` are configured for this image.
+
+```yaml
+spring:
+  ...
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://localhost:9080/auth/realms/jhipster
+        registration:
+          oidc:
+            client-id: web_app
+            client-secret: web_app
+```
+
+### Okta
+
+If you'd like to use Okta instead of Keycloak, it's pretty quick using the [Okta CLI](https://cli.okta.com/). After you've installed it, run:
+
+```shell
+okta register
+```
+
+Then, in your JHipster app's directory, run `okta apps create` and select **JHipster**. This will set up an Okta app for you, create `ROLE_ADMIN` and `ROLE_USER` groups, create a `.okta.env` file with your Okta settings, and configure a `groups` claim in your ID token.
+
+Run `source .okta.env` and start your app with Maven or Gradle. You should be able to sign in with the credentials you registered with.
+
+If you're on Windows, you should install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) so the `source` command will work.
+
+If you'd like to configure things manually through the Okta developer console, see the instructions below.
+
+First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
+
+Modify `src/main/resources/config/application.yml` to use your Okta settings.
+
+```yaml
+spring:
+  ...
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: https://{yourOktaDomain}/oauth2/default
+        registration:
+          oidc:
+            client-id: {clientId}
+            client-secret: {clientSecret}
+security:
+```
+
+Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login/oauth2/code/oidc` as a Login Redirect URI. Click **Done**, then Edit and add `http://localhost:8080` as a Logout redirect URI. Copy and paste the client ID and secret into your `application.yml` file.
+
+Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `<%= CLIENT_TEST_SRC_DIR %>e2e/account/account.spec.ts` and `<%= CLIENT_TEST_SRC_DIR %>e2e/admin/administration.spec.ts`.
+
+Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
+
+After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".
+
+### Auth0
+
+If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the below configuration steps:
+
+- Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
+- Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
+    - Allowed Callback URLs: `http://localhost:8080/login/oauth2/code/oidc`
+    - Allowed Logout URLs: `http://localhost:8080/`
+- Navigate to **User Management** > **Roles** and create new roles named `ROLE_ADMIN`, and `ROLE_USER`.
+- Navigate to **User Management** > **Users** and create a new user account. Click on the **Role** tab to assign roles to the newly created user account.
+- Navigate to **Auth Pipeline** > **Rules** and create a new Rule. Choose `Empty rule` template. Provide a meaningful name like `JHipster claims` and replace `Script` content with the following and Save.
+```javascript
+function (user, context, callback) {
+  user.preferred_username = user.email;
+  const roles = (context.authorization || {}).roles;
+
+  function prepareCustomClaimKey(claim) {
+    return `https://www.jhipster.tech/${claim}`;
+  }
+
+  const rolesClaim = prepareCustomClaimKey('roles');
+
+  if (context.idToken) {
+  	context.idToken[rolesClaim] = roles;
+  }
+
+  if (context.accessToken) {
+  	context.accessToken[rolesClaim] = roles;
+  }
+
+  callback(null, user, context);
+}
+```
+- In your `JHipster` application, modify `src/main/resources/config/application.yml` to use your Auth0 application settings:
+```yaml
+spring:
+  ...
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: https://{your-auth0-domain}/
+        registration:
+          oidc:
+            client-id: {clientId}
+            client-secret: {clientSecret}
+jhipster:
+  ...
+  security:
+    oauth2:
+      audience:
+        - https://{your-auth0-domain}/api/v2/
+```
+- Before running Cypress tests, specify Auth0 user credentials by overriding the `E2E_USERNAME` and `E2E_PASSWORD` environment variables. See Cypress' documentation for setting OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting) to learn more.
+
+**Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the Cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
+<%_ } _%>
+
+<%_ if (enableSwaggerCodegen) { _%>
+### Doing API-First development using openapi-generator
+
+[OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+    <%_ if (buildToolMaven) { _%>
+```bash
+./mvnw generate-sources
+```
+    <%_ } _%>
+    <%_ if (buildToolGradle) { _%>
+```bash
+./gradlew openApiGenerate
+```
+    <%_ } _%>
+Then implements the generated delegate classes with `@Service` classes.
+
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+
+Refer to [Doing API-First development][] for more details.
+<%_ } _%>
+
+## Building for production
+
+### Packaging as jar
+
+To build the final jar and optimize the <%= baseName %> application for production, run:
+
+```
+<%_ if (buildToolMaven) { _%>
+./mvnw -Pprod clean verify
+<%_ } _%>
+<%_ if (buildToolGradle) { _%>
+./gradlew -Pprod clean bootJar
+<%_ } _%>
+```
+
+<%_ if (!skipClient) { _%>
+This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
+<%_ } _%>
+To ensure everything worked, run:
+
+```
+<%_ if (buildToolMaven) { _%>
+java -jar target/*.jar
+<%_ } _%>
+<%_ if (buildToolGradle) { _%>
+java -jar build/libs/*.jar
+<%_ } _%>
+```
+
+<% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
+<% } %>
+Refer to [Using JHipster in production][] for more details.
+
+### Packaging as war
+
+To package your application as a war in order to deploy it to an application server, run:
+
+```
+<%_ if (buildToolMaven) { _%>
+./mvnw -Pprod,war clean verify
+<%_ } _%>
+<%_ if (buildToolGradle) { _%>
+./gradlew -Pprod -Pwar clean bootWar
+<%_ } _%>
+```
+
+<&- fragments.productionSection() &>
+## Testing
+
+To launch your application's tests, run:
+
+```
+<%_ if (buildToolMaven) { _%>
+./mvnw verify
+<%_ } else { _%>
+./gradlew test integrationTest jacocoTestReport
+<%_ } _%>
+```
+
+<&- fragments.testingSection() -&>
+<%_ if (gatlingTests) { _%>
+### Other tests
+
+Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling).
+
+To use those tests, you must install Gatling from [https://gatling.io/](https://gatling.io/).
+<%_ } _%>
+
+For more information, refer to the [Running tests page][].
+
+<%_ if (cypressCoverage) { _%>
+
+### E2E Webapp Code Coverage
+
+When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
+
+Build your Angular application with instrumented code:
+
+    npm run webapp:instrumenter
+
+Start your backend without compiling frontend:
+
+    npm run backend:start
+
+Start your Cypress end to end testing:
+
+    npm run e2e:cypress:coverage
+
+The coverage report is generated under `./coverage/lcov-report/`
+
+<%_ } _%>
+
+### Code quality
+
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
+
+Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+
+You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <% if (buildTool === 'maven') { %>maven<% } %><% if (buildTool === 'gradle') { %>gradle<% } %> plugin<% } %>.
+
+Then, run a Sonar analysis:
+
+<%_ if (buildToolMaven) { _%>
+```
+./mvnw -Pprod clean verify sonar:sonar
+```
+
+If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
+
+```
+./mvnw initialize sonar:sonar
+```
+<%_ } else if (buildToolGradle) { _%>
+```
+./gradlew -Pprod clean check jacocoTestReport sonarqube
+```
+<%_ } _%>
+
+For more information, refer to the [Code quality page][].
+
+## Using Docker to simplify development (optional)
+
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+
+<%_ if (!databaseTypeNo) { _%>
+For example, to start a <%= prodDatabaseType %> database in a docker container, run:
+
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
+```
+
+To stop it and remove the container, run:
+
+```
+docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
+```
+<%_ } _%>
+
+You can also fully dockerize your application and all the services that it depends on.
+To achieve this, first build a docker image of your app by running:
+
+```
+<% if (buildToolMaven) { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildToolGradle) { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+```
+
+Then run:
+
+```
+docker-compose -f src/main/docker/app.yml up -d
+```
+
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
+
+## Continuous Integration (optional)
+
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
+
+<& if (fragments.othersSection()) { &>
+## Others
+<&- fragments.othersSection() &>
+<& } &>
+[JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
+[JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
+[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/
+<%_ } _%>
+[Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
+<%_ if (serviceDiscoveryEureka) { _%>
+[Service Discovery and Configuration with the JHipster-Registry]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#jhipster-registry
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
+[Service Discovery and Configuration with Consul]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#consul
+<%_ } _%>
+[Using Docker and Docker-Compose]: <%= DOCUMENTATION_ARCHIVE_URL %>/docker-compose
+[Using JHipster in production]: <%= DOCUMENTATION_ARCHIVE_URL %>/production/
+[Running tests page]: <%= DOCUMENTATION_ARCHIVE_URL %>/running-tests/
+[Code quality page]: <%= DOCUMENTATION_ARCHIVE_URL %>/code-quality/
+[Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
+
+[Node.js]: https://nodejs.org/
+[NPM]: https://www.npmjs.com/
+<&- fragments.referenceSection() &>
+<% if (gatlingTests) { %>[Gatling]: https://gatling.io/<% } %>
+<%_ if (enableSwaggerCodegen) { _%>
+[OpenAPI-Generator]: https://openapi-generator.tech
+[Swagger-Editor]: https://editor.swagger.io
+[Doing API-First development]: <%= DOCUMENTATION_ARCHIVE_URL %>/doing-api-first-development/
+<%_ } _%>

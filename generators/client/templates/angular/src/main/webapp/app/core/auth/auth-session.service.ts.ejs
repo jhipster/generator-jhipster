@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,26 +17,24 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient<% if (authenticationType !== 'oauth2') { %>, HttpHeaders<% } %> } from '@angular/common/http';
+import { HttpClient<% if (!authenticationTypeOauth2) { %>, HttpHeaders<% } %> } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
 
-import { SERVER_API_URL } from 'app/app.constants';
-<%_ if (authenticationType === 'oauth2') { _%>
+import { ApplicationConfigService } from '../config/application-config.service';
+<%_ if (authenticationTypeOauth2) { _%>
 import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
 import { Login } from 'app/login/login.model';
-
-export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
 <%_ } _%>
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
   login(credentials: Login): Observable<{}> {
     const data =
@@ -47,24 +45,24 @@ export class AuthServerProvider {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/authentication'), data, { headers });
   }
 
   logout(): Observable<void> {
     // logout from the server
-    return this.http.post(LOGOUT_URL, {}).pipe(
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/logout'), {}).pipe(
       map(() => {
         // to get a new csrf token call the api
-        this.http.get(SERVER_API_URL + 'api/account').subscribe();
+        this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe();
       })
     );
   }
 
-  <%_ } else { _%>
+<%_ } else { _%>
 
   logout(): Observable<Logout> {
-    return this.http.post<Logout>(SERVER_API_URL + 'api/logout', {});
+    return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
   }
 
-  <%_ } _%>
+<%_ } _%>
 }

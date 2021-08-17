@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,8 +23,8 @@
 # ================================================================================
 
 dispatch:
-    # Default service serves the typical web resources and all static resources.
-    <% for (appConfig of appConfigs) { %>
-    - url: "*/services/<%= appConfig.baseName %>/*"
-      service: <%= appConfig.gaeServiceName %>
-    <% } %>
+  # Default service serves the typical web resources and all static resources.
+<%_ for (appConfig of appConfigs) { _%>
+  - url: "*/services/<%= appConfig.baseName %>/*"
+    service: <%= appConfig.gaeServiceName %>
+<%_ } _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
     currentSearch: string;
-    <%_ } _%>
+<%_ } _%>
     isLoading = false;
     totalItems = 0;
     itemsPerPage = ITEMS_PER_PAGE;
@@ -31,24 +31,24 @@
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         protected activatedRoute: ActivatedRoute,
-        <%_ if (fieldsContainBlob) { _%>
+<%_ if (fieldsContainBlob) { _%>
         protected dataUtils: DataUtils,
-        <%_ } _%>
+<%_ } _%>
         protected router: Router,
-        <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
         protected modalService: NgbModal
-        <%_ } _%>
+<%_ } _%>
     ) {
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
         this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-        <%_ } _%>
+<%_ } _%>
     }
 
     loadPage(page?: number, dontNavigate?: boolean): void {
         this.isLoading = true;
         const pageToLoad: number = page ?? this.page ?? 1;
 
-        <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 page: pageToLoad - 1,
@@ -66,7 +66,7 @@
                 );
             return;
         }
-        <%_ } _%>
+<%_ } _%>
 
         this.<%= entityInstance %>Service.query({
             page: pageToLoad - 1,
@@ -83,28 +83,19 @@
             );
     }
 
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (searchEngine) { _%>
     search(query: string): void {
+    <%_ if (notSortableFieldsAfterSearch) { _%>
+        if (query && [<%- notSortableFieldsAfterSearch %>].includes(this.predicate)) {
+            this.predicate = '<%- primaryKey.name %>';
+            this.ascending = true;
+        }
+    <%_ } _%>
         this.currentSearch = query;
         this.loadPage(1);
     }
-    <%_ } _%>
+<%_ } _%>
 
     ngOnInit(): void {
         this.handleNavigation();
-    }
-
-    protected handleNavigation(): void {
-        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
-            const page = params.get('page');
-            const pageNumber = page !== null ? +page : 1;
-            const sort = (params.get('sort') ?? data['defaultSort']).split(',');
-            const predicate = sort[0];
-            const ascending = sort[1] === 'asc';
-            if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
-              this.predicate = predicate;
-              this.ascending = ascending;
-              this.loadPage(pageNumber, true);
-            }
-        });
     }

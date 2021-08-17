@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,13 +20,13 @@
 const Validator = require('./validator');
 
 class FieldValidator extends Validator {
-    constructor() {
-        super('field', ['name', 'type']);
-    }
+  constructor() {
+    super('field', ['name', 'type']);
+  }
 
-    validate(jdlField) {
-        super.validate(jdlField);
-    }
+  validate(jdlField) {
+    super.validate(jdlField);
+  }
 }
 
 module.exports = FieldValidator;

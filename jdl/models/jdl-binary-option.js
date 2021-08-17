@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,35 +25,33 @@ const { join } = require('../utils/set-utils');
  * For options like the DTO, the service, etc.
  */
 class JDLBinaryOption extends AbstractJDLOption {
-    constructor(args) {
-        super(args);
-        if (args.value == null) {
-            throw new Error('A binary option must have a value.');
-        }
-        this.value = args.value;
+  constructor(args) {
+    super(args);
+    if (args.value == null) {
+      throw new Error('A binary option must have a value.');
     }
+    this.value = args.value;
+  }
 
-    getType() {
-        return 'BINARY';
-    }
+  getType() {
+    return 'BINARY';
+  }
 
-    toString() {
-        const entityNames = join(this.entityNames, ', ');
-        entityNames.slice(1, entityNames.length - 1);
-        let optionName = this.name;
-        if (this.name === BinaryOptions.Options.PAGINATION) {
-            optionName = 'paginate';
-        } else if (this.name === BinaryOptions.Options.SEARCH) {
-            optionName = 'search';
-        }
-        const firstPart = `${optionName} ${entityNames} with ${this.value}`;
-        if (this.excludedNames.size === 0) {
-            return firstPart;
-        }
-        const excludedNames = join(this.excludedNames, ', ');
-        excludedNames.slice(1, this.excludedNames.length - 1);
-        return `${firstPart} except ${excludedNames}`;
+  toString() {
+    const entityNames = join(this.entityNames, ', ');
+    entityNames.slice(1, entityNames.length - 1);
+    let optionName = this.name;
+    if (this.name === BinaryOptions.Options.PAGINATION) {
+      optionName = 'paginate';
     }
+    const firstPart = `${optionName} ${entityNames} with ${this.value}`;
+    if (this.excludedNames.size === 0) {
+      return firstPart;
+    }
+    const excludedNames = join(this.excludedNames, ', ');
+    excludedNames.slice(1, this.excludedNames.length - 1);
+    return `${firstPart} except ${excludedNames}`;
+  }
 }
 
 module.exports = JDLBinaryOption;

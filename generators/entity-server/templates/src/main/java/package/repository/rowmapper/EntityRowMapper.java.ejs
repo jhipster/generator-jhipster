@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,24 +18,24 @@
 -%>
 package <%= packageName %>.repository.rowmapper;
 
-<%_ if (fieldsContainBigDecimal === true) { _%>
+<%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_} if (fieldsContainInstant === true) { _%>
+<%_} if (fieldsContainInstant) { _%>
 import java.time.Instant;
-<%_ } if (fieldsContainLocalDate === true) { _%>
+<%_ } if (fieldsContainLocalDate) { _%>
 import java.time.LocalDate;
-<%_ } if (fieldsContainZonedDateTime === true) { _%>
+<%_ } if (fieldsContainZonedDateTime) { _%>
 import java.time.ZonedDateTime;
-<%_ } if (fieldsContainDuration === true) { _%>
+<%_ } if (fieldsContainDuration) { _%>
 import java.time.Duration;
-<%_ } if (fieldsContainUUID === true) { _%>
+<%_ } if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
 
-import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= persistClass %>;
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
@@ -44,10 +44,10 @@ import <%= packageName %>.service.ColumnConverter;
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@link Row} to {@link <%= asEntity(entityClass) %>}, with proper type conversions.
+ * Converter between {@link Row} to {@link <%= persistClass %>}, with proper type conversions.
  */
 @Service
-public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= asEntity(entityClass) %>> {
+public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= persistClass %>> {
     private final ColumnConverter converter;
     public <%= entityClass %>RowMapper(ColumnConverter converter) {
         this.converter = converter;
@@ -55,24 +55,24 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
 
     /**
      * Take a {@link Row} and a column prefix, and extract all the fields.
-     * @return the {@link <%= asEntity(entityClass) %>} stored in the database.
+     * @return the {@link <%= persistClass %>} stored in the database.
      */
     @Override
-    public <%= asEntity(entityClass) %> apply(Row row, String prefix) {
-        <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();
-        <%_ fields.forEach(function(field) {
-            let fieldType = field.fieldType;
-            if (field.fieldTypeBlobContent === 'text') {
-                fieldType = 'String';
-            }
-            if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
+    public <%= persistClass %> apply(Row row, String prefix) {
+        <%= persistClass %> entity = new <%= persistClass %>();
+<%_ fields.forEach(function(field) {
+  let fieldType = field.fieldType;
+  if (field.blobContentTypeText) {
+    fieldType = 'String';
+  }
+  if (field.fieldTypeBytes && !field.blobContentTypeText) { _%>
         entity.set<%= field.fieldInJavaBeanMethod %>ContentType(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>_content_type", String.class));
-            <%_ } _%>
+  <%_ } _%>
         entity.set<%= field.fieldInJavaBeanMethod %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
-        <%_ }); _%>
-        <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
-        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
-        <%_ }); _%> 
+<%_ }); _%>
+<%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
+        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", <%= rel.otherEntity.primaryKey.type %>.class));
+<%_ }); _%>
         return entity;
     }
 

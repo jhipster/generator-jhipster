@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "පරිපාලනය",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "දොරටුව",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "පරිශීලක කළමනාකරණය",
                 "tracker": "පරිශීලක ට්රැකර්",
                 "metrics": "මිනුම්",
@@ -151,6 +151,8 @@
         "emailexists": "විද්‍යුත් තැපෑල දැනටමත් භාවිතයේ පවතී!",
         "idexists": "නව {{ entityName }}ට දැනටමත් හැඳුනුම්පතක් තිබිය නොහැක",
         "idnull": "අවලංගු හැඳුනුම්පත",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "ගොනුව උපුටා ගැනීමට නොහැකි විය",
             "not.image": "ගොනුව රූපයක් වනු ඇතැයි අපේක්ෂා කළ නමුත් \"{{ fileType }}\""

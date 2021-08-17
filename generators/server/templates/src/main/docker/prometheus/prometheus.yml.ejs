@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -42,8 +42,8 @@ scrape_configs:
     #basic_auth:
     # username: admin
     # password: admin
-    metrics_path: <% if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
+    metrics_path: <% if (applicationTypeMicroservice && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
     static_configs:
       - targets:
-          # On MacOS, replace localhost by host.docker.internal
-          - localhost:<%= serverPort %>
+        # On MacOS, replace localhost by host.docker.internal
+        - localhost:<%= serverPort %>

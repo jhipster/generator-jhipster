@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,13 +20,13 @@
 const JDLApplicationConfigurationOption = require('./jdl-application-configuration-option');
 
 module.exports = class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
-    constructor(name, value, quoted = false) {
-        super(name, value);
-        this.quoted = quoted;
-    }
+  constructor(name, value, quoted = false) {
+    super(name, value);
+    this.quoted = quoted;
+  }
 
-    toString() {
-        const value = this.quoted && !this.value.includes('"') ? `"${this.value}"` : this.value;
-        return `${this.name} ${value}`;
-    }
+  toString() {
+    const value = this.quoted && !this.value.includes('"') ? `"${this.value}"` : this.value;
+    return `${this.name} ${value}`;
+  }
 };

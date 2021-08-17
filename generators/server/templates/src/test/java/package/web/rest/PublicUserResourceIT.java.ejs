@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,23 +18,23 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.service.EntityManager;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
@@ -45,14 +45,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
-<%_ if (cacheManagerIsAvailable === true) { _%>
+<%_ if (cacheManagerIsAvailable) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
-<%_ if (cacheProvider === 'memcached' ) { _%>
+<%_ if (cacheProviderMemcached) { _%>
 import org.springframework.cache.support.NoOpCacheManager;
 <%_ } _%>
 import org.springframework.http.MediaType;
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
@@ -64,34 +64,34 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
-<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+<%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 import javax.persistence.EntityManager;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import java.util.UUID;
 <%_ } _%>
 
 <%_ if (reactive) { _%>
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ } _%>
-<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+<%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
 <%_ if (!reactive) { _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import static org.hamcrest.Matchers.hasItems;
-    <%_ } _%>
+  <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -109,13 +109,18 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ } _%>
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
-class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
 
+<%_ const DEFAULT_USER = {firstName: 'john', lastName: 'doe'}; _%>
+<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+    private static final String DEFAULT_<%= field.fieldName.toUpperCase() %> = "<%= DEFAULT_USER [field.fieldName] %>";
+<%_ } _%>
+
     @Autowired
     private UserRepository userRepository;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 
     /**
      * This repository is mocked in the <%= packageName %>.repository.search test package.
@@ -124,68 +129,71 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
      */
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
 
     @Autowired
     private EntityManager em;
-    <%_ } _%>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
+<%_ } _%>
+<%_ if (cacheManagerIsAvailable) { _%>
 
     @Autowired
     private CacheManager cacheManager;
-    <%_ } _%>
+<%_ } _%>
 
     @Autowired
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
     private WebTestClient webTestClient;
-    <%_ } else { _%>
+<%_ } else { _%>
     private MockMvc restUserMockMvc;
-    <%_ } _%>
+<%_ } _%>
 
     private <%= asEntity('User') %> user;
 
-    <%_ if (cacheManagerIsAvailable === true) { _%>
+<%_ if (cacheManagerIsAvailable) { _%>
     @BeforeEach
     public void setup() {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
     }
 
-    <%_ } _%>
-    <%_ if (reactive && testsNeedCsrf) { _%>
+<%_ } _%>
+<%_ if (reactive && testsNeedCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
     }
 
-    <%_ } _%>
+<%_ } _%>
     @BeforeEach
     public void initTest() {
-        user = UserResourceIT.initTestUser(userRepository<% if (databaseType === 'sql') { %>, em<% } %>);
+        user = UserResourceIT.initTestUser(userRepository<% if (databaseTypeSql) { %>, em<% } %>);
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+<%_ } _%>
     void getAllPublicUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         // Get all the users
-        <%_ if (!reactive) { _%>
-        restUserMockMvc.perform(get("/api/users<% if (databaseType === 'sql') { %>?sort=id,desc<% } %>")
+<%_ if (!reactive) { _%>
+        restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
+  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+            .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(DEFAULT_<%= field.fieldName.toUpperCase() %>)))
+  <%_ } _%>
             .andExpect(jsonPath("$.[*].email").doesNotExist())
-            <%_ if (databaseType !== 'cassandra') { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
             .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
-            <%_ } _%>
+  <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").doesNotExist());
-        <%_ } else { _%>
+<%_ } else { _%>
         <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -194,17 +202,20 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        <% } _%>
+  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+  <%_ } _%>
+<% } _%>
     }
 
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')
-            && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
+<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)
+  && (!(authenticationTypeOauth2 && applicationTypeMicroservice))) { _%>
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/authorities")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON))
@@ -212,7 +223,7 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
-        <%_ } else { _%>
+  <%_ } else { _%>
         webTestClient.get().uri("/api/authorities")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -222,30 +233,30 @@ class PublicUserResourceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .jsonPath("$").isArray()
             .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]").hasJsonPath()
             .jsonPath("$[?(@=='" + AuthoritiesConstants.USER + "')]").hasJsonPath();
-        <%_ } _%>
+  <%_ } _%>
     }
-    <%_ } _%>
+<%_ } _%>
 
-    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+<%_ if (databaseTypeSql && !authenticationTypeOauth2) { _%>
     @Test
-    <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     void getAllUsersSortedByParameters() throws Exception {
         // Initialize the database
         userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
             restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
             restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
             restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
             restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-        <%_ } else { _%>
+  <%_ } else { _%>
             webTestClient.get().uri("/api/users?sort=resetKey,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
             webTestClient.get().uri("/api/users?sort=password,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
             webTestClient.get().uri("/api/users?sort=resetKey,id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
             webTestClient.get().uri("/api/users?sort=id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk();
-        <%_ } _%>
+  <%_ } _%>
     }
-    <%_ } _%>
+<%_ } _%>
 }

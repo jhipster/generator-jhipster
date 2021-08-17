@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,13 +20,13 @@
 image: jhipster/jhipster:v<%= jhipsterVersion %>
 <%_ } _%>
 
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle && !skipServer) { _%>
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
         - .gradle/
 <%_ } _%>
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven && !skipServer) { _%>
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
@@ -42,9 +42,9 @@ stages:
     - release
     - deploy
 <%_ } _%>
-<%_ if (buildTool === 'gradle') { _%>
+<%_ if (buildToolGradle) { _%>
 before_script:
-    <%_ if (clientFramework === ANGULAR) { _%>
+    <%_ if (clientFrameworkAngular) { _%>
     - export NG_CLI_ANALYTICS="false"
     <%_ } _%>
     - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -55,7 +55,7 @@ nohttp:
     stage: check
     script:
         - ./gradlew checkstyleNohttp --no-daemon
-<%_ if (cicdIntegrations.includes('snyk')) { _%>
+    <%_ if (cicdIntegrationsSnyk) { _%>
 
 dependency-scanning:
     stage: check
@@ -65,7 +65,7 @@ dependency-scanning:
         - ./snyk test --all-projects
         - ./snyk monitor --all-projects
     allow_failure: true
-<%_ } _%>
+    <%_ } _%>
 
 gradle-compile:
     stage: build
@@ -90,8 +90,8 @@ gradle-test:
         expire_in: 1 day
 
 gradle-integration-test:
-<%_ if (insideDocker) { _%>
-    <%_ if (cacheProvider === 'redis' || ['sql', 'cassandra', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
+    <%_ if (insideDocker) { _%>
+        <%_ if (cacheProviderRedis || databaseTypeSql || databaseTypeCassandra || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
     # DinD service is required for Testcontainers
     services:
         - docker:dind
@@ -101,12 +101,12 @@ gradle-integration-test:
         DOCKER_HOST: 'tcp://docker:2375'
         # Improve performance with overlayfs.
         DOCKER_DRIVER: overlay2
+        <%_ } _%>
     <%_ } _%>
-<%_ } _%>
 
     stage: test
     script:
-        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseType === 'sql' && !reactive) { %>-Ptestcontainers<% } %>
+        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseTypeSql && !reactive) { %>-Ptestcontainers<% } %>
     artifacts:
         reports:
             junit: build/test-results/integrationTest/TEST-*.xml
@@ -115,7 +115,7 @@ gradle-integration-test:
             - build/jacoco/
         expire_in: 1 day
 
-<%_ if (!skipClient) { _%>
+    <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
     script:
@@ -127,9 +127,9 @@ frontend-test:
             - build/test-results/
             - build/jacoco/
         expire_in: 1 day
-<%_ } _%>
+    <%_ } _%>
 
-<%_ if (cicdIntegrations.includes('sonar')) { _%>
+    <%_ if (cicdIntegrationsSonar) { _%>
 sonar-analyze:
     stage: analyze
     except:
@@ -143,7 +143,7 @@ sonar-analyze:
     script:
         - ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
     allow_failure: true
-<%_ } _%>
+    <%_ } _%>
 
 gradle-package:
     stage: package
@@ -166,7 +166,7 @@ gradle-package:
 #    script:
 #        - ./gradlew jib -Pprod -PnodeInstall -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
 
-<%_ if (cicdIntegrations.includes('heroku')) { _%>
+    <%_ if (cicdIntegrationsHeroku) { _%>
 deploy-to-production:
     stage: deploy
     script:
@@ -174,17 +174,17 @@ deploy-to-production:
     environment:
         name: production
     when: manual
+    <%_ } _%>
 <%_ } _%>
-<%_ } _%>
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (buildToolMaven) { _%>
 before_script:
-    <%_ if (clientFramework === ANGULAR) { _%>
+    <%_ if (clientFrameworkAngular) { _%>
     - export NG_CLI_ANALYTICS="false"
     <%_ } _%>
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
         <%_ if (!insideDocker) { _%>
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
     <%_ } _%>
@@ -193,7 +193,7 @@ nohttp:
     stage: check
     script:
         - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
-<%_ if (cicdIntegrations.includes('snyk')) { _%>
+    <%_ if (cicdIntegrationsSnyk) { _%>
 
 dependency-scanning:
     stage: check
@@ -203,12 +203,12 @@ dependency-scanning:
         - ./snyk test --all-projects
         - ./snyk monitor --all-projects
     allow_failure: true
-<%_ } _%>
+    <%_ } _%>
 
 maven-compile:
     stage: build
     script:
-        - ./mvnw -ntp compile -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/classes/
@@ -216,8 +216,8 @@ maven-compile:
         expire_in: 1 day
 
 maven-test:
-<%_ if (insideDocker) { _%>
-    <%_ if (cacheProvider === 'redis' || ['sql', 'cassandra', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
+    <%_ if (insideDocker) { _%>
+        <%_ if (cacheProviderRedis || databaseTypeSql || databaseTypeCassandra || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
     # DinD service is required for Testcontainers
     services:
         - docker:dind
@@ -227,30 +227,33 @@ maven-test:
         DOCKER_HOST: 'tcp://docker:2375'
         # Improve performance with overlayfs.
         DOCKER_DRIVER: overlay2
+        <%_ } _%>
     <%_ } _%>
-<%_ } _%>
 
     stage: test
     script:
-        - ./mvnw -ntp verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseType === 'sql') { %>-Dspring.profiles.active=testcontainers<% } %>
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseTypeSql) { %>-Dspring.profiles.active=testcontainers<% } %>
     artifacts:
         reports:
-            junit: target/test-results/**/TEST-*.xml
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
         paths:
-            - target/test-results
-            - target/jacoco
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
         expire_in: 1 day
 
-<%_ if (!skipClient) { _%>
+    <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
     script:
-<%_ if (insideDocker) { _%>
+        <%_ if (insideDocker) { _%>
         - npm install
         - npm test
-<%_ } else { _%>
+        <%_ } else { _%>
         - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
-<%_ } _%>
+        <%_ } _%>
     artifacts:
         reports:
             junit: target/test-results/TESTS-results-jest.xml
@@ -258,8 +261,8 @@ frontend-test:
             - target/test-results
             - target/jacoco
         expire_in: 1 day
-<%_ } _%>
-<%_ if (cicdIntegrations.includes('sonar')) { _%>
+    <%_ } _%>
+    <%_ if (cicdIntegrationsSonar) { _%>
 sonar-analyze:
     stage: analyze
     dependencies:
@@ -270,12 +273,12 @@ sonar-analyze:
     script:
         - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     allow_failure: true
-<%_ } _%>
+    <%_ } _%>
 
 maven-package:
     stage: package
     script:
-        - ./mvnw -ntp verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp verify <% if (cicdIntegrationsDeploy) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/*.jar
@@ -291,9 +294,9 @@ maven-package:
 #    dependencies:
 #        - maven-package
 #    script:
-#        - ./mvnw -ntp compile jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+#        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
 
-<%_ if (cicdIntegrations.includes('heroku')) { _%>
+    <%_ if (cicdIntegrationsHeroku) { _%>
 deploy-to-production:
     stage: deploy
     script:
@@ -301,7 +304,7 @@ deploy-to-production:
     environment:
         name: production
     when: manual
-<%_ } _%>
+    <%_ } _%>
 <%_ } _%>
 <%_ if (skipServer) { _%>
 cache:
@@ -310,46 +313,46 @@ cache:
 stages:
     - build
     - test
-    <%_ if (cicdIntegrations.includes('sonar')) { _%>
+    <%_ if (cicdIntegrationsSonar) { _%>
     - analyze
     <%_ } _%>
     - packaging
-webpack-build:
+webapp-build:
     stage: build
     script:
         - <%= clientPackageManager %> install
-        - <%= clientPackageManager %> run ci:webpack:build
+        - <%= clientPackageManager %> run webapp:build
     artifacts:
         paths:
             - build/
-webpack-test:
+webapp-test:
     stage: test
     dependencies:
-        - webpack-build
+        - webapp-build
     script:
-        - <%= clientPackageManager %> run webpack:test
+        - <%= clientPackageManager %> run webapp:test
     artifacts:
         reports:
             junit: build/test-results/TESTS-results-jest.xml
         paths:
             - build/test-results
         expire_in: 1 day
-<%_ if (cicdIntegrations.includes('sonar')) { _%>
+    <%_ if (cicdIntegrationsSonar) { _%>
 sonar-analyze:
     stage: analyze
     dependencies:
-        - webpack-test
+        - webapp-test
     script:
         - npm run sonar
     artifacts:
         paths:
         - build/
         - build/test-results
-<%_ } _%>
-webpack-prod:
+    <%_ } _%>
+webapp-prod:
     stage: packaging
     script:
-        - <%= clientPackageManager %> run webpack:prod
+        - <%= clientPackageManager %> run webapp:prod
         # - add cmd to zip the app folder build/resources/main/static
     artifacts:
         paths:

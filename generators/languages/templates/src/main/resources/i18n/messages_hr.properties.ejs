@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Na žalost, dogodila se pogreška.
 error.status=Status:
 error.message=Poruka:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation e-mail
 email.activation.title=<%= baseName %> aktivacija korisničkog računa
 email.activation.greeting=Dragi/draga {0}
@@ -37,4 +38,4 @@ email.reset.title=<%= baseName %> reset zaporke
 email.reset.greeting=Dragi/draga {0}
 email.reset.text1=Za vaš <%= baseName %> korisnički račun zatražen je reset zaporke, kliknite na donji URL da bi resetirali zaporku:
 email.reset.text2=Pozdrav,
-
+<%_ } _%>

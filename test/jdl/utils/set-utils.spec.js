@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,84 +21,84 @@ const { expect } = require('chai');
 const { addAll, join } = require('../../../jdl/utils/set-utils');
 
 describe('SetUtils', () => {
-    describe('addAll', () => {
-        context('when not passing a set', () => {
-            it('should fail', () => {
-                expect(() => addAll()).to.throw(/^A Set must be passed so as to insert elements\.$/);
-            });
-        });
-        context('when not passing elements', () => {
-            let set;
-
-            before(() => {
-                set = new Set([1, 2, 3]);
-                addAll(set);
-            });
-
-            it('should return the set unchanged', () => {
-                expect(set).to.deep.equal(new Set([1, 2, 3]));
-            });
-        });
-        context('when passing an empty list as elements', () => {
-            let set;
-
-            before(() => {
-                set = new Set([1, 2, 3]);
-                addAll(set, []);
-            });
-
-            it('should return the set unchanged', () => {
-                expect(set).to.deep.equal(new Set([1, 2, 3]));
-            });
-        });
-        context('when passing elements', () => {
-            let set;
-
-            before(() => {
-                set = new Set([1, 2, 3]);
-                addAll(set, [3, 42]);
-            });
-
-            it('should add them to the set', () => {
-                expect(set).to.deep.equal(new Set([1, 2, 3, 42]));
-            });
-        });
+  describe('addAll', () => {
+    context('when not passing a set', () => {
+      it('should fail', () => {
+        expect(() => addAll()).to.throw(/^A Set must be passed so as to insert elements\.$/);
+      });
     });
-    describe('join', () => {
-        context('when not passing a set', () => {
-            it('should fail', () => {
-                expect(() => join()).to.throw(/^A Set must be passed so as to join elements\.$/);
-            });
-        });
-        context('when not passing the separator', () => {
-            let result;
+    context('when not passing elements', () => {
+      let set;
 
-            before(() => {
-                const set = new Set();
-                set.add(42);
-                set.add('a');
-                result = join(set);
-            });
+      before(() => {
+        set = new Set([1, 2, 3]);
+        addAll(set);
+      });
 
-            it('should join the elements using a comma', () => {
-                expect(result).to.equal('42,a');
-            });
-        });
-        context('when passing a separator', () => {
-            it('should use it', () => {
-                let result;
-
-                before(() => {
-                    const set = new Set();
-                    set.add(42);
-                    set.add('a');
-                    result = join(set, ', ');
-                });
-
-                it('should join the elements using the separator', () => {
-                    expect(result).to.equal('42, a');
-                });
-            });
-        });
+      it('should return the set unchanged', () => {
+        expect(set).to.deep.equal(new Set([1, 2, 3]));
+      });
     });
+    context('when passing an empty list as elements', () => {
+      let set;
+
+      before(() => {
+        set = new Set([1, 2, 3]);
+        addAll(set, []);
+      });
+
+      it('should return the set unchanged', () => {
+        expect(set).to.deep.equal(new Set([1, 2, 3]));
+      });
+    });
+    context('when passing elements', () => {
+      let set;
+
+      before(() => {
+        set = new Set([1, 2, 3]);
+        addAll(set, [3, 42]);
+      });
+
+      it('should add them to the set', () => {
+        expect(set).to.deep.equal(new Set([1, 2, 3, 42]));
+      });
+    });
+  });
+  describe('join', () => {
+    context('when not passing a set', () => {
+      it('should fail', () => {
+        expect(() => join()).to.throw(/^A Set must be passed so as to join elements\.$/);
+      });
+    });
+    context('when not passing the separator', () => {
+      let result;
+
+      before(() => {
+        const set = new Set();
+        set.add(42);
+        set.add('a');
+        result = join(set);
+      });
+
+      it('should join the elements using a comma', () => {
+        expect(result).to.equal('42,a');
+      });
+    });
+    context('when passing a separator', () => {
+      it('should use it', () => {
+        let result;
+
+        before(() => {
+          const set = new Set();
+          set.add(42);
+          set.add('a');
+          result = join(set, ', ');
+        });
+
+        it('should join the elements using the separator', () => {
+          expect(result).to.equal('42, a');
+        });
+      });
+    });
+  });
 });

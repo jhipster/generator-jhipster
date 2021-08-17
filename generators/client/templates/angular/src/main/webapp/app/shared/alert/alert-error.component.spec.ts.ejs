@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -40,9 +40,9 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           imports: [TranslateModule.forRoot()],
-          <%_ } _%>
+<%_ } _%>
           declarations: [AlertErrorComponent],
           providers: [EventManager, AlertService],
         })
@@ -61,7 +61,7 @@ describe('Component Tests', () => {
           alerts.push(alert);
         }
         return alert;
-      }
+      };
     });
 
     describe('Error Handling', () => {
@@ -164,6 +164,25 @@ describe('Component Tests', () => {
         // THEN
         expect(comp.alerts.length).toBe(1);
         expect(comp.alerts[0].<%= mainAlertField %>).toBe('Error Message');
+      });
+
+      it('Should display an alert on status 500 with detail', () => {
+        // GIVEN
+        const response = new HttpErrorResponse({
+          url: 'http://localhost:8080/api/foos',
+          headers: new HttpHeaders(),
+          status: 500,
+          statusText: 'Internal server error',
+          error: {
+            status: 500,
+            message: 'error.http.500',
+            detail: 'Detailed error message',
+          },
+        });
+        eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
+        // THEN
+        expect(comp.alerts.length).toBe(1);
+        expect(comp.alerts[0].<%= mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.http.500'<% } else { %>'Detailed error message'<% } %>);
       });
     });
   });

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -58,19 +58,19 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-postgresql
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       volumes:
       - name: data
-        <%_ if (kubernetesUseDynamicStorage) { _%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
           claimName: <%= app.baseName.toLowerCase() %>-postgresql-pvc
-        <%_ } else { _%>
+<%_ } else { _%>
         emptyDir: {}
-        <%_ } _%>
+<%_ } _%>
       containers:
       - name: postgres
         image: <%= DOCKER_POSTGRESQL %>

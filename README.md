@@ -1,8 +1,8 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url]
 
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Webflux Build Status][github-actions-webflux-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Webflux Build Status][github-actions-webflux-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
 
 Greetings, Java Hipster!
 
@@ -20,16 +20,25 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
-### Gold Sponsors
+### Platinum Sponsors
 
 <table>
   <tbody>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Gold-Sponsor" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/okta.png">
+        <a href="https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Platinum-Sponsor" target="_blank">
+          <img width="425em" src="https://www.jhipster.tech/images/open-collective/okta.png">
         </a>
       </td>
+    </tr>
+  </tbody>
+</table>
+
+### Gold Sponsors
+
+<table>
+  <tbody>
+    <tr>
       <td align="center" valign="middle">
         <a href="http://www.octoconsulting.com/" target="_blank">
           <img width="200em" src="https://www.jhipster.tech/images/open-collective/octoconsulting.png">
@@ -38,6 +47,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       <td align="center" valign="middle">
         <a href="https://dev.entando.org/jhipster" target="_blank">
           <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.datastax.com/" target="_blank">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/datastax.png">
         </a>
       </td>
     </tr>
@@ -79,7 +93,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | [![No Database][github-no-database]][github-actions]                   |
 | [![Microservices JWT][github-ms-jwt]][github-actions]                  |
 | [![Microservices OAuth2][github-ms-oauth2]][github-actions]            |
-| [![Microservices UAA][github-ms-uaa]][github-actions]                  |
 | [![Docker Image][github-docker-image]][github-actions]                 |
 | [![Official Windows][github-official-windows]][github-actions]         |
 
@@ -102,11 +115,10 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-vue-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20SQL/badge.svg
 [github-vue-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20NoSQL/badge.svg
 [github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
-[github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth2/badge.svg
+[github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth%202.0/badge.svg
 [github-no-database]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/No%20Database/badge.svg
 [github-ms-jwt]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20JWT/badge.svg
-[github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth2/badge.svg
-[github-ms-uaa]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20UAA/badge.svg
+[github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth%202.0/badge.svg
 [github-docker-image]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Docker%20Image/badge.svg
 [sonar-url]: https://sonarcloud.io/dashboard?id=jhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=alert_status
@@ -135,3 +147,5 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [npmcharts-url]: https://npmcharts.com/compare/generator-jhipster
 [gitter-badge-image]: https://badges.gitter.im/jhipster/generator-jhipster.svg
 [gitter-badge-url]: https://gitter.im/jhipster/generator-jhipster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[snyk-image]: https://snyk.io/test/npm/generator-jhipster/badge.svg
+[snyk-url]: https://snyk.io/test/npm/generator-jhipster

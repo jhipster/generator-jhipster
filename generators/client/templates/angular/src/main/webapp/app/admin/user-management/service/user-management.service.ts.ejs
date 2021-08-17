@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,23 +18,23 @@
 -%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable<% if (authenticationType !== 'oauth2' && databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { %>, of<% } %> } from 'rxjs';
+import { Observable<% if (!authenticationTypeOauth2 && !databaseTypeSql && !databaseTypeMongodb && !databaseTypeCouchbase) { %>, of<% } %> } from 'rxjs';
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
 import { IUser } from '../user-management.model';
-<%_ if (authenticationType !== 'oauth2' && databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { _%>
+<%_ if (!authenticationTypeOauth2 && !databaseTypeSql && !databaseTypeMongodb && !databaseTypeCouchbase) { _%>
 import { Authority } from 'app/config/authority.constants';
 <%_ } _%>
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
-  public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/admin/users';
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   create(user: IUser): Observable<IUser> {
     return this.http.post<IUser>(this.resourceUrl, user);
   }
@@ -46,24 +46,24 @@ export class UserManagementService {
   find(login: string): Observable<IUser> {
     return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
   }
-  <%_ } _%>
+<%_ } _%>
 
   query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
-      const options = createRequestOption(req);
-      return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
+    const options = createRequestOption(req);
+    return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   delete(login: string): Observable<{}> {
     return this.http.delete(`${this.resourceUrl}/${login}`);
   }
 
   authorities(): Observable<string[]> {
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/authorities');
-    <%_ } else { _%>
+  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
+    return this.http.get<string[]>(this.applicationConfigService.getEndpointFor('api/authorities'));
+  <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);
-    <%_ } _%>
-  }
   <%_ } _%>
+  }
+<%_ } _%>
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,25 +25,25 @@ const packageJson = require('../package.json');
 const { logger } = cliUtils;
 
 const downloadFile = (url, filename) => {
-    return new Promise((resolve, reject) => {
-        logger.info(`Downloading file: ${url}`);
-        https
-            .get(url, response => {
-                if (response.statusCode !== 200) {
-                    return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
-                }
+  return new Promise((resolve, reject) => {
+    logger.info(`Downloading file: ${url}`);
+    https
+      .get(url, response => {
+        if (response.statusCode !== 200) {
+          return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
+        }
 
-                logger.debug(`Creating file: ${path.join(filename)}`);
-                const fileStream = fs.createWriteStream(`${filename}`);
-                fileStream.on('finish', () => fileStream.close());
-                fileStream.on('close', () => resolve(filename));
-                response.pipe(fileStream);
-                return undefined;
-            })
-            .on('error', e => {
-                reject(e);
-            });
-    });
+        logger.debug(`Creating file: ${path.join(filename)}`);
+        const fileStream = fs.createWriteStream(`${filename}`);
+        fileStream.on('finish', () => fileStream.close());
+        fileStream.on('close', () => resolve(filename));
+        response.pipe(fileStream);
+        return undefined;
+      })
+      .on('error', e => {
+        reject(e);
+      });
+  });
 };
 
 /**
@@ -53,30 +53,30 @@ const downloadFile = (url, filename) => {
  * @param {any} options options passed from CLI
  */
 module.exports = ([jdlFiles = []], options = {}) => {
-    logger.debug('cmd: download');
-    logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
-    if (!jdlFiles || jdlFiles.length === 0) {
-        return Promise.reject(new Error('\nAt least one jdl file is required.\n'));
-    }
-    return Promise.all(
-        jdlFiles.map(filename => {
-            let url;
-            try {
-                const urlObject = new URL(filename);
-                url = filename;
-                filename = path.basename(urlObject.pathname);
-            } catch (_error) {
-                if (options.skipSampleRepository) {
-                    return Promise.reject(new Error(`Could not find ${filename}, make sure the path is correct.`));
-                }
-                url = new URL(filename, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/`).toString();
-                filename = path.basename(filename);
-            }
-            return downloadFile(url, filename).catch(error => {
-                logger.info(error.message);
-                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/').toString();
-                return downloadFile(url, filename);
-            });
-        })
-    );
+  logger.debug('cmd: download');
+  logger.debug(`jdlFiles: ${toString(jdlFiles)}`);
+  if (!jdlFiles || jdlFiles.length === 0) {
+    return Promise.reject(new Error('\nAt least one jdl file is required.\n'));
+  }
+  return Promise.all(
+    jdlFiles.map(filename => {
+      let url;
+      try {
+        const urlObject = new URL(filename);
+        url = filename;
+        filename = path.basename(urlObject.pathname);
+      } catch (_error) {
+        if (options.skipSampleRepository) {
+          return Promise.reject(new Error(`Could not find ${filename}, make sure the path is correct.`));
+        }
+        url = new URL(filename, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version}/`).toString();
+        filename = path.basename(filename);
+      }
+      return downloadFile(url, filename).catch(error => {
+        logger.info(error.message);
+        url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/main/').toString();
+        return downloadFile(url, filename);
+      });
+    })
+  );
 };

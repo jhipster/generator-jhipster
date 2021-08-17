@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,21 +17,21 @@
  limitations under the License.
 -%>
 // Override Boostrap variables
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 // Import Bootstrap source files from node_modules
 @import "node_modules/bootstrap/scss/bootstrap";
-<%_ if (clientTheme !== 'none') { _%>
+<%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/bootswatch";
 <%_ } _%>
 <%_ if (enableI18nRTL) { _%>
 @import '../content/scss/rtl.scss';
 <%_ } _%>
 body {
-  <%_ if (clientTheme === 'none') { _%>
+<%_ if (clientThemeNone) { _%>
   background: #fafafa;
-  <%_ } _%>
+<%_ } _%>
   margin: 0;
 }
 

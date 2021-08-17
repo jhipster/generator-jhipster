@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,24 +19,24 @@
 <h3 id="endpointsRequestsMetrics">Endpoints requests (time in millisecond)</h3>
 
 <div class="table-responsive" *ngIf="!updating && endpointsRequestsMetrics">
-    <table class="table table-striped" aria-describedby="endpointsRequestsMetrics">
-        <thead>
-            <tr>
-                <th scope="col">Method</th>
-                <th scope="col">Endpoint url</th>
-                <th scope="col" class="text-right">Count</th>
-                <th scope="col" class="text-right">Mean</th>
-            </tr>
-        </thead>
-        <tbody>
-            <ng-container *ngFor="let entry of (endpointsRequestsMetrics | keyvalue)">
-                <tr *ngFor="let method of (entry.value | keyvalue)">
-                    <td>{{ method.key }}</td>
-                    <td>{{ entry.key }}</td>
-                    <td class="text-right">{{ method.value!.count }}</td>
-                    <td class="text-right">{{ method.value!.mean | number: '1.0-3' }}</td>
-                </tr>
-            </ng-container>
-        </tbody>
-    </table>
+  <table class="table table-striped" aria-describedby="endpointsRequestsMetrics">
+    <thead>
+      <tr>
+        <th scope="col">Method</th>
+        <th scope="col">Endpoint url</th>
+        <th scope="col" class="text-right">Count</th>
+        <th scope="col" class="text-right">Mean</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let entry of endpointsRequestsMetrics | keyvalue">
+        <tr *ngFor="let method of entry.value | keyvalue">
+          <td>{{ method.key }}</td>
+          <td>{{ entry.key }}</td>
+          <td class="text-right">{{ method.value!.count }}</td>
+          <td class="text-right">{{ method.value!.mean | number: '1.0-3' }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
 </div>

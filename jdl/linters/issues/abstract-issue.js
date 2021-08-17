@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,12 +18,12 @@
  */
 
 class AbstractIssue {
-    constructor(args) {
-        if (!args || !args.ruleName) {
-            throw new Error('An issue must at least have a rule name.');
-        }
-        this.ruleName = args.ruleName;
+  constructor(args) {
+    if (!args || !args.ruleName) {
+      throw new Error('An issue must at least have a rule name.');
     }
+    this.ruleName = args.ruleName;
+  }
 }
 
 module.exports = AbstractIssue;

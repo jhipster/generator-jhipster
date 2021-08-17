@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,73 +20,73 @@
 # This file will be used at compile time to generate Spring-MVC endpoint stubs using openapi-generator
 openapi: "3.0.1"
 info:
-    title: "<%= baseName %>"
-    version: 0.0.1
+  title: "<%= baseName %>"
+  version: 0.0.1
 servers:
-    - url: http://localhost:<%= serverPort %>/api
-      description: Development server
-    - url: https://localhost:<%= serverPort %>/api
-      description: Development server with TLS Profile
+  - url: http://localhost:<%= serverPort %>/api
+    description: Development server
+  - url: https://localhost:<%= serverPort %>/api
+    description: Development server with TLS Profile
 paths: {}
 components:
-    responses:
-        Problem:
-            description: error occurred - see status code and problem object for more information.
-            content:
-                "application/problem+json":
-                    schema:
-                        $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
-<% if (authenticationType === 'jwt') { %>
-    securitySchemes:
-        jwt:
-            type: http
-            description: JWT Authentication
-            scheme: bearer
-            bearerFormat: JWT
-        <%_ if (applicationType === 'monolith') { _%>
-        basic:
-            type: http
-            description: Basic Authentication
-            scheme: basic
-        <%_ } _%>
+  responses:
+    Problem:
+      description: error occurred - see status code and problem object for more information.
+      content:
+        "application/problem+json":
+          schema:
+            $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+<% if (authenticationTypeJwt) { %>
+  securitySchemes:
+    jwt:
+      type: http
+      description: JWT Authentication
+      scheme: bearer
+      bearerFormat: JWT
+  <%_ if (applicationTypeMonolith) { _%>
+    basic:
+      type: http
+      description: Basic Authentication
+      scheme: basic
+  <%_ } _%>
 security:
-    - jwt: []
-    <%_ if (applicationType === 'monolith') { _%>
-    - basic: []
-    <%_ } _%>
+  - jwt: []
+  <%_ if (applicationTypeMonolith) { _%>
+  - basic: []
+  <%_ } _%>
 <% } %>
-<% if (authenticationType === 'oauth2') { %>
-    securitySchemes:
-        oauth:
-            type: oauth2
-            description: OAuth2 authentication with KeyCloak
-            flows:
-                authorizationCode:
-                    authorizationUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
-                    tokenUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
-                    scopes:
-                        jhipster: Jhipster specific claims
-                        email: Email claims
-                        profile: Profile claims
-        openId:
-            type: openIdConnect
-            description: OpenID Connect authentication with KeyCloak
-            openIdConnectUrl: http://localhost:9080/auth/realms/jhipster/.well-known/openid-configuration
+<% if (authenticationTypeOauth2) { %>
+  securitySchemes:
+    oauth:
+      type: oauth2
+      description: OAuth2 authentication with KeyCloak
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+          tokenUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+          scopes:
+            jhipster: Jhipster specific claims
+            email: Email claims
+            profile: Profile claims
+    openId:
+      type: openIdConnect
+      description: OpenID Connect authentication with KeyCloak
+      openIdConnectUrl: http://localhost:9080/auth/realms/jhipster/.well-known/openid-configuration
 security:
-    - oauth: [jhipster, email, profile]
-    - openId: [jhipster, email, profile]
+  - oauth: [jhipster, email, profile]
+  - openId: [jhipster, email, profile]
 <% } %>
-<% if (authenticationType === 'session') { %>
-    securitySchemes:
-        sessionId:
-            type: apiKey
-            name: JSESSIONID
-            in: cookie
-        csrf:
-            type: apiKey
-            name: XSRF-TOKEN
-            in: cookie
+<% if (authenticationTypeSession) { %>
+  securitySchemes:
+    sessionId:
+      type: apiKey
+      name: JSESSIONID
+      in: cookie
+    csrf:
+      type: apiKey
+      name: XSRF-TOKEN
+      in: cookie
 security:
-    - sessionId: []
-    - csrf: []
+  - sessionId: []
+  - csrf: []
 <% } %>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,18 +26,18 @@ metadata:
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>
-  <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
-    <%_ if (kubernetesServiceType !== 'Ingress') { _%>
+<%_ if (app.applicationTypeMonolith || app.applicationTypeGateway) { _%>
+  <%_ if (!kubernetesServiceTypeIngress) { _%>
   type: <%= kubernetesServiceType %>
-    <%_ } else { _%>
-  type: <%= ingressType === 'gke' ? 'NodePort' : 'ClusterIP' %>
-    <%_ } _%>
+  <%_ } else { _%>
+  type: <%= ingressTypeGke ? 'NodePort' : 'ClusterIP' %>
   <%_ } _%>
+<%_ } _%>
   ports:
   - name: http
-  <%_ if (!app.serviceDiscoveryType  || app.applicationType === 'uaa') { _%>
+<%_ if (!app.serviceDiscoveryType) { _%>
     port: 80
     targetPort: <%= app.serverPort %>
-  <%_ } else { _%>
+<%_ } else { _%>
     port: <%= app.serverPort %>
-  <%_ } _%>
+<%_ } _%>

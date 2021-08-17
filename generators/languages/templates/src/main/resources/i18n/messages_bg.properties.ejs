@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Съжаляваме, получи се грешка.
 error.status=Статус:
 error.message=Съобщение:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=Активация на акаунт за <%= baseName %>
 email.activation.greeting=Уважаеми {0}
@@ -38,3 +39,4 @@ email.reset.title=Възстановяване на парола за <%= baseNa
 email.reset.greeting=Уважаеми {0}
 email.reset.text1=Направена е заявка за възстановяване на паролата за вашия акаунт в <%= baseName %>. Моля, посетете URL адреса по-долу, за да бъде възстановена паролата:
 email.reset.text2=Поздрави,
+<%_ } _%>

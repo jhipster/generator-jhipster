@@ -6,7 +6,7 @@ import router from '@/router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import TrackerService from '@/admin/tracker/tracker.service';
 <%_ } _%>
 
@@ -50,13 +50,13 @@ describe('LoginForm Component', () => {
         <%_ } _%>
         localVue,
         provide: {
-          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(router), <% } %>router)
+          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationTypeSession) { %> { get: () => {} }, <% } %><% if (communicationSpringWebsocket) { %>new TrackerService(router), <% } %>router)
         }
       });
     loginForm = wrapper.vm;
   });
 
-  <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
   it('should not store token if authentication is KO', async () => {
     // GIVEN
     loginForm.login = 'login';
@@ -123,7 +123,7 @@ describe('LoginForm Component', () => {
     expect(loginForm.authenticationError).toBeFalsy();
     expect(sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken')).toEqual(jwtSecret);
   });
-  <%_ } else { _%>
+<%_ } else { _%>
   it('should authentication be KO', async () => {
     // GIVEN
     loginForm.login = 'login';
@@ -161,6 +161,6 @@ describe('LoginForm Component', () => {
 
     expect(loginForm.authenticationError).toBeFalsy();
   });
-  <%_ } _%>
+<%_ } _%>
 
 });

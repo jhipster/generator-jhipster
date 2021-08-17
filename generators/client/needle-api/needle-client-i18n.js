@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,26 +20,26 @@ const chalk = require('chalk');
 const needleClient = require('./needle-client');
 
 module.exports = class extends needleClient {
-    addElementTranslationKey(key, value, language) {
-        const errorMessage = ' not added as a new entity in the menu.';
-        this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-element');
-    }
+  addElementTranslationKey(key, value, language) {
+    const errorMessage = ' not added as a new entity in the menu.';
+    this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-element');
+  }
 
-    addAdminElementTranslationKey(key, value, language) {
-        const errorMessage = ' not added as a new entry in the admin menu.';
-        this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-admin-element');
-    }
+  addAdminElementTranslationKey(key, value, language) {
+    const errorMessage = ' not added as a new entry in the admin menu.';
+    this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-admin-element');
+  }
 
-    addEntityTranslationKey(key, value, language) {
-        const errorMessage = ' not added as a new entity in the menu.';
-        this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-entry');
-    }
+  addEntityTranslationKey(key, value, language) {
+    const errorMessage = ' not added as a new entity in the menu.';
+    this._addTranslationKey(key, value, language, errorMessage, 'jhipster-needle-menu-add-entry');
+  }
 
-    _addTranslationKey(key, value, language, errorMessage, needle) {
-        const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
-        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${value}",`);
+  _addTranslationKey(key, value, language, errorMessage, needle) {
+    const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
+    const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
+    const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${value}",`);
 
-        this.addBlockContentToFile(rewriteFileModel, fullErrorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, fullErrorMessage);
+  }
 };

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,7 @@ error.subtitle=Na žalost, došlo je do greške.
 error.status=Status:
 error.message=Poruka:
 
+<%_ if (!skipUserManagement) { _%>
 # Activation email
 email.activation.title=<%= baseName %> aktivacija naloga
 email.activation.greeting=Poštovani/a {0}
@@ -37,3 +38,4 @@ email.reset.title=<%= baseName %> promena lozinke
 email.reset.greeting=Poštovani/a {0}
 email.reset.text1=Podnet je zahtev za promenu lozinke na Vašem <%= baseName %> nalogu, molimo Vas kliknite na link ispod kako biste promenili lozinku:
 email.reset.text2=S poštovanjem,
+<%_ } _%>

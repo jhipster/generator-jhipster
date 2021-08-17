@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,10 +23,10 @@ const nameTokenConfig = { name: 'NAME', pattern: namePattern };
 
 const nameToken = createToken(nameTokenConfig);
 const keywordTokenConfig = {
-    name: 'KEYWORD',
-    pattern: Lexer.NA,
-    longer_alt: nameToken,
-    categories: [nameToken],
+  name: 'KEYWORD',
+  pattern: Lexer.NA,
+  longer_alt: nameToken,
+  categories: [nameToken],
 };
 const keywordToken = createToken(keywordTokenConfig);
 
@@ -34,11 +34,11 @@ const unaryOptionCategoryToken = createToken({ name: 'UNARY_OPTION', pattern: Le
 const binaryOptionCategoryToken = createToken({ name: 'BINARY_OPTION', pattern: Lexer.NA });
 
 module.exports = {
-    NAME: nameToken,
-    KEYWORD: keywordToken,
-    namePattern,
-    sharedCategoryTokens: {
-        UNARY_OPTION: unaryOptionCategoryToken,
-        BINARY_OPTION: binaryOptionCategoryToken,
-    },
+  NAME: nameToken,
+  KEYWORD: keywordToken,
+  namePattern,
+  sharedCategoryTokens: {
+    UNARY_OPTION: unaryOptionCategoryToken,
+    BINARY_OPTION: binaryOptionCategoryToken,
+  },
 };

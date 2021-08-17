@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,11 +25,11 @@ jib {
     }
     container {
         entrypoint = ["bash", "-c", "/entrypoint.sh"]
-        ports = ["<%= serverPort %>"<% if (cacheProvider === 'hazelcast') { %>, "5701/udp" <% } %>]
+        ports = ["<%= serverPort %>"<% if (cacheProviderHazelcast) { %>, "5701/udp" <% } %>]
         environment = [
-            <%_ if (cacheProvider === 'infinispan') { _%>
+<%_ if (cacheProviderInfinispan) { _%>
             JAVA_OPTS: "-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true",
-            <%_ } _%>
+<%_ } _%>
             SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
             JHIPSTER_SLEEP: "0"
         ]

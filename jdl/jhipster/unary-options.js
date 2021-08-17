@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,23 +19,23 @@
 const applicationOptions = require('./application-options');
 
 const Options = {
-    SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
-    SKIP_SERVER: applicationOptions.OptionNames.SKIP_SERVER,
-    NO_FLUENT_METHOD: 'noFluentMethod',
-    READ_ONLY: 'readOnly',
-    FILTER: 'filter',
-    EMBEDDED: 'embedded',
+  SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
+  SKIP_SERVER: applicationOptions.OptionNames.SKIP_SERVER,
+  NO_FLUENT_METHOD: 'noFluentMethod',
+  READ_ONLY: 'readOnly',
+  FILTER: 'filter',
+  EMBEDDED: 'embedded',
 };
 
 const optionNames = Object.values(Options);
 
 Options.forEach = passedFunction => {
-    if (!passedFunction) {
-        throw new Error('A function has to be passed to loop over the unary options.');
-    }
-    optionNames.forEach(optionName => {
-        passedFunction(optionName);
-    });
+  if (!passedFunction) {
+    throw new Error('A function has to be passed to loop over the unary options.');
+  }
+  optionNames.forEach(optionName => {
+    passedFunction(optionName);
+  });
 };
 
 Options.exists = option => Object.values(Options).includes(option);

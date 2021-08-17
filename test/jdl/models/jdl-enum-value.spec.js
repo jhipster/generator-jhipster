@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,35 +22,35 @@ const { expect } = require('chai');
 const JDLEnumValue = require('../../../jdl/models/jdl-enum-value');
 
 describe('JDLEnumValue', () => {
-    describe('new', () => {
-        context('when not passing an enum value name', () => {
-            it('should fail', () => {
-                expect(() => new JDLEnumValue()).to.throw(/^The enum value name has to be passed to create an enum\.$/);
-            });
-        });
+  describe('new', () => {
+    context('when not passing an enum value name', () => {
+      it('should fail', () => {
+        expect(() => new JDLEnumValue()).to.throw(/^The enum value name has to be passed to create an enum\.$/);
+      });
     });
-    describe('toString', () => {
-        context('without a specified enum value', () => {
-            let enumValue;
+  });
+  describe('toString', () => {
+    context('without a specified enum value', () => {
+      let enumValue;
 
-            before(() => {
-                enumValue = new JDLEnumValue('FRENCH');
-            });
+      before(() => {
+        enumValue = new JDLEnumValue('FRENCH');
+      });
 
-            it('should omit it', () => {
-                expect(enumValue.toString()).to.equal('FRENCH');
-            });
-        });
-        context('with a specified enum value', () => {
-            let enumValue;
-
-            before(() => {
-                enumValue = new JDLEnumValue('FRENCH', 'frenchy');
-            });
-
-            it('should include it', () => {
-                expect(enumValue.toString()).to.equal('FRENCH (frenchy)');
-            });
-        });
+      it('should omit it', () => {
+        expect(enumValue.toString()).to.equal('FRENCH');
+      });
     });
+    context('with a specified enum value', () => {
+      let enumValue;
+
+      before(() => {
+        enumValue = new JDLEnumValue('FRENCH', 'frenchy');
+      });
+
+      it('should include it', () => {
+        expect(enumValue.toString()).to.equal('FRENCH (frenchy)');
+      });
+    });
+  });
 });

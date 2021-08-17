@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,22 +20,22 @@
 const GAstVisitor = require('chevrotain').GAstVisitor;
 
 class TokenCollectorVisitor extends GAstVisitor {
-    constructor() {
-        super();
-        this.actualTokens = [];
-    }
+  constructor() {
+    super();
+    this.actualTokens = [];
+  }
 
-    visitTerminal(node) {
-        this.actualTokens.push(node.terminalType);
-    }
+  visitTerminal(node) {
+    this.actualTokens.push(node.terminalType);
+  }
 
-    visitRepetitionMandatoryWithSeparator(node) {
-        this.actualTokens.push(node.separator);
-    }
+  visitRepetitionMandatoryWithSeparator(node) {
+    this.actualTokens.push(node.separator);
+  }
 
-    visitRepetitionWithSeparator(node) {
-        this.actualTokens.push(node.separator);
-    }
+  visitRepetitionWithSeparator(node) {
+    this.actualTokens.push(node.separator);
+  }
 }
 
 module.exports = TokenCollectorVisitor;

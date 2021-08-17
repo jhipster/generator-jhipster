@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "refreshListLabel": "Refresh list",
+<%_ if (!readOnly) { _%>
                 "createLabel": "<%= entityClassHumanized %> အသစ်ထည့်မည်",
-                "createOrEditLabel": "<%= entityClassHumanized %> အသစ်ထည့်ခြင်း (သို့) ပြုပြင်ခြင်း"<% if (searchEngine !== false) { %>,
-                "search": "ရှာဖွေရန် <%= entityClassHumanized %>"<% } %>,
+                "createOrEditLabel": "<%= entityClassHumanized %> အသစ်ထည့်ခြင်း (သို့) ပြုပြင်ခြင်း",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "ရှာဖွေရန် <%= entityClassHumanized %>",
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
-            },<% if (!microserviceAppName) { %>
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> အသစ်တစ်ခုအား ထည့်ပြီးပါပြီ။",
             "updated": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> တစ်ခုအား ပြုပြင်ပြီးပါပြီ။",
-            "deleted": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။",<% } %>
+            "deleted": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "<%= entityClassHumanized %> {{ id }} အား ဖျက်ပါမည်။ သေချာပါသလား?"
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> အသစ်တစ်ခုအား ထည့်ပြီးပါပြီ။",
             "updated": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> တစ်ခုအား ပြုပြင်ပြီးပါပြီ။",
             "deleted": "{{ param }} အိုင်ဒီဖြင့် <%= entityClassHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။"
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

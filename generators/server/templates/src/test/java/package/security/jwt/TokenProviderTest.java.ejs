@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -106,7 +106,7 @@ class TokenProviderTest {
     }
 
     @Test
-    public void testKeyIsSetFromSecretWhenSecretIsNotEmpty() {
+    void testKeyIsSetFromSecretWhenSecretIsNotEmpty() {
         final String secret = "NwskoUmKHZtzGRKJKVjsJF7BtQMMxNWi";
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         jHipsterProperties.getSecurity().getAuthentication().getJwt().setSecret(secret);
@@ -114,12 +114,11 @@ class TokenProviderTest {
         TokenProvider tokenProvider = new TokenProvider(jHipsterProperties);
 
         Key key = (Key) ReflectionTestUtils.getField(tokenProvider, "key");
-        assertThat(key).isNotNull();
-        assertThat(key).isEqualTo(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)));
+        assertThat(key).isNotNull().isEqualTo(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)));
     }
 
     @Test
-    public void testKeyIsSetFromBase64SecretWhenSecretIsEmpty() {
+    void testKeyIsSetFromBase64SecretWhenSecretIsEmpty() {
         final String base64Secret = "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8";
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         jHipsterProperties.getSecurity().getAuthentication().getJwt().setBase64Secret(base64Secret);
@@ -127,8 +126,7 @@ class TokenProviderTest {
         TokenProvider tokenProvider = new TokenProvider(jHipsterProperties);
 
         Key key = (Key) ReflectionTestUtils.getField(tokenProvider, "key");
-        assertThat(key).isNotNull();
-        assertThat(key).isEqualTo(Keys.hmacShaKeyFor(Decoders.BASE64.decode(base64Secret)));
+        assertThat(key).isNotNull().isEqualTo(Keys.hmacShaKeyFor(Decoders.BASE64.decode(base64Secret)));
     }
 
     private Authentication createAuthentication() {

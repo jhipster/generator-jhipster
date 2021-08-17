@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>;
 
-<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
-import <%= packageName %>.client.OAuth2InterceptedFeignConfiguration;
-<%_ } _%>
 import <%= packageName %>.config.ApplicationProperties;
 
 import tech.jhipster.config.DefaultProfileUtil;
@@ -31,17 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-<%_ } _%>
-<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-<%_ } _%>
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -53,16 +43,8 @@ import java.util.TimeZone;
 import java.time.ZoneId;
 import java.util.Optional;
 
-<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
-@ComponentScan(
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
-)
-<%_ } _%>
 @SpringBootApplication
-@EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
-<%_ if (applicationType === 'gateway' && !reactive) { _%>
-@EnableZuulProxy
-<%_ } _%>
+@EnableConfigurationProperties({<% if (databaseTypeSql) { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);
@@ -133,9 +115,9 @@ public class <%= mainClass %> {
             hostAddress,
             serverPort,
             contextPath,
-            env.getActiveProfiles(),
+            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles(),
             ZoneId.systemDefault());
-        <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
+<%_ if (serviceDiscoveryType && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {
@@ -143,6 +125,6 @@ public class <%= mainClass %> {
         }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
-        <%_ } _%>
+<%_ } _%>
     }
 }

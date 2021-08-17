@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -106,10 +106,10 @@ spec:
     metadata:
       labels:
         k8s-app: prometheus-operator
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       containers:
       - args:

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,13 +21,11 @@ package <%= packageName %>.config;
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
-import tech.jhipster.config.JHipsterConstants;
-<%_ if (applicationType === 'gateway' && databaseType !== 'cassandra') { _%>
+<%_ if (applicationTypeGateway && !databaseTypeCassandra) { _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
 import org.springframework.data.convert.ReadingConverter;
@@ -40,8 +38,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
-@ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
+@Configuration
+<%_ if (applicationTypeGateway && !databaseTypeCassandra) { _%>
+@ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
+<%_ } _%>
 public class DatabaseConfiguration {
 
     @Bean
@@ -64,7 +64,7 @@ public class DatabaseConfiguration {
 
     @WritingConverter
     class ZonedDateTimeToTupleConverter implements Converter<ZonedDateTime, TupleValue> {
-        private TupleType type = DataTypes.tupleOf(DataTypes.TIMESTAMP, DataTypes.ASCII);
+        private TupleType type = DataTypes.tupleOf(DataTypes.TIMESTAMP, DataTypes.TEXT);
 
         @Override
         public TupleValue convert(@Nonnull ZonedDateTime source) {

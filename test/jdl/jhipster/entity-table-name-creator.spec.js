@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,33 +21,33 @@ const { expect } = require('chai');
 const { getTableNameFromEntityName } = require('../../../jdl/jhipster/entity-table-name-creator');
 
 describe('EntityTableNameCreator', () => {
-    describe('getTableNameFromEntityName', () => {
-        context('when not passing an entity name', () => {
-            it('should fail', () => {
-                expect(() => getTableNameFromEntityName(undefined)).to.throw(/^An entity name must be passed to get a table name.$/);
-            });
-        });
-        context('when passing an entity name', () => {
-            context("like 'Aabcd'", () => {
-                it('should just lowercase the first letter', () => {
-                    expect(getTableNameFromEntityName('Toto')).to.equal('toto');
-                });
-            });
-            context("like 'AaBbc", () => {
-                it('should add underscores before each capitalized letters and lowercase everything', () => {
-                    expect(getTableNameFromEntityName('TotoTata')).to.equal('toto_tata');
-                });
-            });
-            context('like ABabc', () => {
-                it('should add underscores before each capitalized letters and lowercase everything', () => {
-                    expect(getTableNameFromEntityName('TTotoTata')).to.equal('t_toto_tata');
-                });
-            });
-            context('for already converted names', () => {
-                it('should keep them the same', () => {
-                    expect(getTableNameFromEntityName('t_toto_tata')).to.equal('t_toto_tata');
-                });
-            });
-        });
+  describe('getTableNameFromEntityName', () => {
+    context('when not passing an entity name', () => {
+      it('should fail', () => {
+        expect(() => getTableNameFromEntityName(undefined)).to.throw(/^An entity name must be passed to get a table name.$/);
+      });
     });
+    context('when passing an entity name', () => {
+      context("like 'Aabcd'", () => {
+        it('should just lowercase the first letter', () => {
+          expect(getTableNameFromEntityName('Toto')).to.equal('toto');
+        });
+      });
+      context("like 'AaBbc", () => {
+        it('should add underscores before each capitalized letters and lowercase everything', () => {
+          expect(getTableNameFromEntityName('TotoTata')).to.equal('toto_tata');
+        });
+      });
+      context('like ABabc', () => {
+        it('should add underscores before each capitalized letters and lowercase everything', () => {
+          expect(getTableNameFromEntityName('TTotoTata')).to.equal('t_toto_tata');
+        });
+      });
+      context('for already converted names', () => {
+        it('should keep them the same', () => {
+          expect(getTableNameFromEntityName('t_toto_tata')).to.equal('t_toto_tata');
+        });
+      });
+    });
+  });
 });

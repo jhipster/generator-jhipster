@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,25 +22,25 @@ const { expect } = require('chai');
 const Rules = require('../../../jdl/linters/rules');
 
 describe('Rules', () => {
-    describe('getRules', () => {
-        context('when not passing a rule name', () => {
-            it('should fail', () => {
-                expect(() => Rules.getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
-            });
-        });
-        context('when passing a rule name', () => {
-            context('of an absent rule', () => {
-                it('should return undefined', () => {
-                    expect(Rules.getRule('toto')).to.be.undefined;
-                });
-            });
-            Object.keys(Rules.RuleNames).forEach(ruleName => {
-                context(`for rule name ${ruleName}`, () => {
-                    it('should return the corresponding rule', () => {
-                        expect(Rules.getRule(ruleName)).to.deep.equal(Rules[ruleName]);
-                    });
-                });
-            });
-        });
+  describe('getRules', () => {
+    context('when not passing a rule name', () => {
+      it('should fail', () => {
+        expect(() => Rules.getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
+      });
     });
+    context('when passing a rule name', () => {
+      context('of an absent rule', () => {
+        it('should return undefined', () => {
+          expect(Rules.getRule('toto')).to.be.undefined;
+        });
+      });
+      Object.keys(Rules.RuleNames).forEach(ruleName => {
+        context(`for rule name ${ruleName}`, () => {
+          it('should return the corresponding rule', () => {
+            expect(Rules.getRule(ruleName)).to.deep.equal(Rules[ruleName]);
+          });
+        });
+      });
+    });
+  });
 });

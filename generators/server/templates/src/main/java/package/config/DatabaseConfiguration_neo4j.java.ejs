@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,29 +19,38 @@
 
 package <%= packageName %>.config;
 
-import tech.jhipster.config.JHipsterConstants;
+import org.neo4j.driver.Driver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
-<%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
-import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+import org.springframework.data.neo4j.core.<% if (reactive) { %>Reactive<% } %>DatabaseSelectionProvider;
+
+import org.springframework.data.neo4j.core.transaction.<% if (reactive) { %>Reactive<% } %>Neo4jTransactionManager;
+import org.springframework.data.neo4j.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+import org.springframework.data.neo4j.repository.config.<% if (reactive) { %>Reactive<% } %>Neo4jRepositoryConfigurationExtension;
+
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
+import org.springframework.transaction.<% if (reactive) { %>Reactive<% } %>TransactionManager;
 
 @Configuration
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
 <%_ } else { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 public class DatabaseConfiguration {
+
+     @Bean(<% if (reactive) { %>Reactive<% } %>Neo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+     public <% if (reactive) { %>Reactive<% } %>TransactionManager transactionManager(Driver driver, <% if (reactive) { %>Reactive<% } %>DatabaseSelectionProvider databaseNameProvider) {
+         return new <% if (reactive) { %>Reactive<% } %>Neo4jTransactionManager(driver, databaseNameProvider);
+     }
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,183 +32,200 @@
 # ===================================================================
 
 logging:
-    level:
-        ROOT: INFO
-        tech.jhipster: INFO
-        <%_ if (packageName !== 'tech.jhipster') { _%>
-        <%= packageName %>: INFO
-        <%_ } _%>
-        <%_ if (databaseType === 'neo4j') { _%>
-        org.neo4j.driver: WARN
-        <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+  level:
+    ROOT: INFO
+    tech.jhipster: INFO
+<%_ if (packageName !== 'tech.jhipster') { _%>
+    <%= packageName %>: INFO
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+    org.neo4j.driver: WARN
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 
 eureka:
-    instance:
-        prefer-ip-address: true
-    client:
-        service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 org:
-    neo4j:
-        driver:
-            pool:
-                metrics-enabled: true
-            uri: bolt://localhost:7687
-            # Uncomment to use an authenticated connection
-            # authentication:
-            #     username: neo4j
-            #     password: secret
-        migrations:
-            locations-to-scan:
-            packages-to-scan: <%= packageName %>.config.neo4j
-            installed-by: <%= baseName %>
+  neo4j:
+    driver:
+      pool:
+        metrics-enabled: true
+    migrations:
+      locations-to-scan:
+      packages-to-scan: <%= packageName %>.config.neo4j
+      installed-by: <%= baseName %>
 <%_ } _%>
 management:
-    metrics:
-        export:
-            prometheus:
-                enabled: false
+  metrics:
+    export:
+      prometheus:
+        enabled: false
 
 spring:
-    devtools:
-        restart:
-            enabled: false
-        livereload:
-            enabled: false
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
-    cloud:
-        consul:
-            discovery:
-               prefer-ip-address: true
-            host: localhost
-            port: 8500
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: SA
-        password: yourStrong(!)Password
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-        username: system
-        password: oracle
-        <%_ } _%>
-        hikari:
-            poolName: Hikari
-            auto-commit: false
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
-            data-source-properties:
-                cachePrepStmts: true
-                prepStmtCacheSize: 250
-                prepStmtCacheSqlLimit: 2048
-                useServerPrepStmts: true
-        <%_ } _%>
-    jpa:
-        <%_ if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || (searchEngine === 'elasticsearch' && reactive)) { _%>
-    data:
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
-        mongodb:
-            uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
-            database: <%= baseName %>
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
-        cassandra:
-            contact-points: localhost
-            compression: LZ4
-            keyspace-name: <%= baseName %>
-            local-datacenter: datacenter1
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%_ if (reactive) { _%>
-        elasticsearch:
-          client:
-            reactive:
-              endpoints: localhost:9200
-        <%_ } else { _%>
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+<%_ if (databaseTypeNeo4j) { _%>
+  neo4j:
+    pool:
+      metrics-enabled: true
+    uri: bolt://localhost:7687
+    # Uncomment to use an authenticated connection
+    # authentication:
+    #   username: neo4j
+    #   password: secret
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+  cloud:
+    config:
+      retry:
+        initial-interval: 1000
+        max-interval: 2000
+        max-attempts: 100
+      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      # name of the config server's property source (file.yml) that we want to use
+      name: <%= baseName %>
+      profile: prod
+      label: main # toggle to switch to a different version of the configuration as stored in git
+      # it can be set to any label, branch or commit of the configuration source Git repository
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
+  cloud:
+    consul:
+      discovery:
+        prefer-ip-address: true
+      host: localhost
+      port: 8500
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: root
+    password:
+  <%_ } else if (prodDatabaseTypePostgres) { _%>
+    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } else if (prodDatabaseTypeMssql) { _%>
+    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: SA
+    password: yourStrong(!)Password
+  <%_ } else if (prodDatabaseTypeOracle) { _%>
+    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    username: system
+    password: oracle
+  <%_ } _%>
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql) { _%>
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  <%_ } _%>
+  jpa:
+  <%_ if (prodDatabaseTypePostgres) { _%>
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCassandra || (searchEngineElasticsearch && reactive)) { _%>
+  data:
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+    mongodb:
+      uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+      database: <%= baseName %>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+    cassandra:
+      contact-points: localhost
+      compression: LZ4
+      keyspace-name: <%= baseName %>
+      local-datacenter: datacenter1
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+  <%_ if (reactive) { _%>
     elasticsearch:
-        rest:
-            uris: http://localhost:9200
-        <%_ } _%>
+      client:
+        reactive:
+          endpoints: localhost:9200
+  <%_ } else { _%>
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+  couchbase:
+    bootstrap-hosts: localhost
+    bucket:
+      name: <%= baseName %>
+      password: password
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
+  liquibase:
+    contexts: prod
+  <%_ if (reactive) { _%>
+    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypePostgres || prodDatabaseTypeMssql) { _%>
+    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    <%_ } else if (prodDatabaseTypeOracle) { _%>
+    url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
     <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
-    couchbase:
-        bootstrap-hosts: localhost
-        bucket:
-            name: <%= baseName %>
-            password: password
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
-    # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
-    liquibase:
-        contexts: prod
-        <%_ if (reactive) { _%>
-            <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(prodDatabaseType)) { _%>
-        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-            <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: <%- getJDBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-            <%_ } _%>
-        <%_ } _%>
-    <%_ } _%>
-    mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-    <%_ if (databaseType === 'sql' && reactive) { _%>
-    r2dbc:
-        <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: root
-        password:
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: <%= baseName %>
-        password:
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
-        username: SA
-        password: yourStrong(!)Password
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
-        username: system
-        password: oracle
-        <%_ } _%>
-    <%_ } _%>
-    thymeleaf:
-        cache: true
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-    sleuth:
-        sampler:
-            probability: 1 # report 100% of traces
-    zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-        base-url: http://localhost:9411
-        enabled: false
-        locator:
-            discovery:
-                enabled: true
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+<%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+  r2dbc:
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: root
+    password:
+  <%_ } else if (prodDatabaseTypePostgres) { _%>
+    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: <%= baseName %>
+    password:
+  <%_ } else if (prodDatabaseTypeMssql) { _%>
+    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
+    username: SA
+    password: yourStrong(!)Password
+  <%_ } else if (prodDatabaseTypeOracle) { _%>
+    url: <%- getR2DBCUrl(prodDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
+    username: system
+    password: oracle
+  <%_ } _%>
+<%_ } _%>
+  thymeleaf:
+    cache: true
+<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
+  sleuth:
+    sampler:
+      probability: 1 # report 100% of traces
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    base-url: http://localhost:9411
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
 <%_ } _%>
 
 # ===================================================================
@@ -231,12 +248,12 @@ spring:
 #     ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
-    port: <%= serverPort %>
-    shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
-    compression:
-        enabled: true
-        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
-        min-response-size: 1024
+  port: <%= serverPort %>
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+    min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties
@@ -245,150 +262,104 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (applicationType === 'gateway' && cacheProvider === 'hazelcast' && serviceDiscoveryType) { _%>
-    gateway:
-        rate-limiting:
-            enabled: false
-        <%_ if (!reactive) { _%>
-        authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-            app1: /api # recommended prod configuration
-        <%_ } _%>
-    <%_ } _%>
-    http:
-        cache: # Used by the CachingHttpHeadersFilter
-            timeToLiveInDays: 1461
-    <%_ if (cacheProvider !== 'no') { _%>
-    cache: # Cache configuration
-        <%_ if (cacheProvider === 'hazelcast') { _%>
-        hazelcast: # Hazelcast distributed cache
-            time-to-live-seconds: 3600
-            backup-count: 1
-        <%_ } _%>
-        <%_ if (cacheProvider === 'ehcache') { _%>
-        ehcache: # Ehcache configuration
-            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
-            max-entries: 1000 # Number of objects in each cache entry
-        <%_ } _%>
-        <%_ if (cacheProvider === 'caffeine') { _%>
-        caffeine: # Caffeine configuration
-            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
-            max-entries: 1000 # Number of objects in each cache entry
-        <%_ } _%>
-        <%_ if (cacheProvider === 'infinispan') { _%>
-        infinispan:
-            config-file: default-configs/default-jgroups-tcp.xml
-            statsEnabled: true
-            # local app cache
-            local:
-                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-                max-entries: 1000 # Number of objects in each cache entry
-            # distributed app cache
-            distributed:
-                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-                max-entries: 1000 # Number of objects in each cache entry
-                instance-count: 2
-            # replicated app cache
-            replicated:
-                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
-                max-entries: 1000 # Number of objects in each cache entry
-        <%_ } _%>
-        <%_ if (cacheProvider === 'memcached') { _%>
-        memcached:
-            enabled: true
-            servers: localhost:11211
-            expiration: 300
-            use-binary-protocol: true
-        <%_ } _%>
-        <%_ if (cacheProvider === 'redis') { _%>
-        redis: # Redis configuration
-            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-            server: redis://localhost:6379
-            cluster: false
-            # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
-            # cluster: true
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
-    security:
-        authentication:
-            jwt:
-                # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-                # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
-                # - In the JHipster Registry (which includes a Spring Cloud Config server)
-                # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
-                # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-                base64-secret: <%= jwtSecretKey %>
-                # Token is valid 24 hours
-                token-validity-in-seconds: 86400
-                token-validity-in-seconds-for-remember-me: 2592000
-    <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-    security:
-        client-authorization:
-            <%_ if (applicationType !== 'uaa') { _%>
-            access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-            token-service-id: <%= uaaBaseName.toLowerCase() %>
-            <%_ } _%>
-            client-id: internal
-            client-secret: internal
-    <%_ } _%>
-    <%_ if (applicationType == 'uaa') { _%>
-        authentication:
-            jwt:
-                # Access Token is valid for 5 mins
-                token-validity-in-seconds: 300
-                # Refresh Token is valid for 7 days
-                token-validity-in-seconds-for-remember-me: 252000
-    <%_ } _%>
-<%_ if (authenticationType === 'session' && !reactive) { _%>
-    security:
-        remember-me:
-            # security key (this key should be unique for your application, and kept secret)
-            key: <%= rememberMeKey %>
+<%_ if (applicationTypeGateway && cacheProviderHazelcast && serviceDiscoveryType) { _%>
+  gateway:
+    rate-limiting:
+      enabled: false
+  <%_ if (!reactive) { _%>
+    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+      app1: /api # recommended prod configuration
+  <%_ } _%>
 <%_ } _%>
-    mail: # specific JHipster mail property, for standard properties see MailProperties
-        base-url: http://my-server-url-to-change # Modify according to your server's URL
-    logging:
-        use-json-format: false # By default, logs are not in Json format
-        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
-            enabled: false
-            host: localhost
-            port: 5000
-            queue-size: 512
-<%_ if (applicationType === 'uaa') { _%>
-uaa:
-    #be sure to to change to a different keystore in production!
-    #create one using: keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
-    key-store:
-        name: config/tls/keystore.p12
-        password: password
-        alias: selfsigned
-    web-client-configuration:
-        # Access Token is valid for 5 mins
-        access-token-validity-in-seconds: 300
-        # Refresh Token is valid for 7 days
-        refresh-token-validity-in-seconds-for-remember-me: 604800
-        #change client secret in production, keep in sync with gateway configuration
-        client-id: web_app
-        secret: changeit
-<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-oauth2:
-    signature-verification:
-        public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
-        #ttl for public keys to verify JWT tokens (in ms)
-        ttl: 3600000
-        #max. rate at which public keys will be fetched (in ms)
-        public-key-refresh-rate-limit: 10000
-    web-client-configuration:
-        #change client secret in production, keep in sync with UAA configuration
-        client-id: web_app
-        secret: changeit
-    <%_ if (applicationType === 'gateway') { _%>
-        # Controls session expiration due to inactivity (ignored for remember-me).
-        # Negative values disable session inactivity expiration.
-        session-timeout-in-seconds: 1800
-    <%_ } _%>
+  http:
+    cache: # Used by the CachingHttpHeadersFilter
+      timeToLiveInDays: 1461
+<%_ if (!cacheProviderNo) { _%>
+  cache: # Cache configuration
+  <%_ if (cacheProviderHazelcast) { _%>
+    hazelcast: # Hazelcast distributed cache
+      time-to-live-seconds: 3600
+      backup-count: 1
+  <%_ } _%>
+  <%_ if (cacheProviderEhCache) { _%>
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 1000 # Number of objects in each cache entry
+  <%_ } _%>
+  <%_ if (cacheProviderCaffeine) { _%>
+    caffeine: # Caffeine configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
+      max-entries: 1000 # Number of objects in each cache entry
+  <%_ } _%>
+  <%_ if (cacheProviderInfinispan) { _%>
+    infinispan:
+      config-file: default-configs/default-jgroups-tcp.xml
+      statsEnabled: true
+      # local app cache
+      local:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 1000 # Number of objects in each cache entry
+      # distributed app cache
+      distributed:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 1000 # Number of objects in each cache entry
+        instance-count: 2
+      # replicated app cache
+      replicated:
+        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        max-entries: 1000 # Number of objects in each cache entry
+  <%_ } _%>
+  <%_ if (cacheProviderMemcached) { _%>
+    memcached:
+      enabled: true
+      servers: localhost:11211
+      expiration: 300
+      use-binary-protocol: true
+  <%_ } _%>
+  <%_ if (cacheProviderRedis) { _%>
+    redis: # Redis configuration
+      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+      server: redis://localhost:6379
+      cluster: false
+      # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+      # cluster: true
+  <%_ } _%>
 <%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+  registry:
+    password: admin
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
+        # - In the JHipster Registry (which includes a Spring Cloud Config server)
+        # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
+        # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
+        base64-secret: <%= jwtSecretKey %>
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 2592000
+<%_ } _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: <%= rememberMeKey %>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://my-server-url-to-change # Modify according to your server's URL
+<%_ } _%>
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
 
 # ===================================================================
 # Application specific properties

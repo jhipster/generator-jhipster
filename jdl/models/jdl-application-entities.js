@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,52 +20,52 @@
 const { join } = require('../utils/set-utils');
 
 module.exports = class JDLApplicationEntities {
-    /**
-     * Creates a new instance.
-     * @param {Array<String>} entityNames - the entity names.
-     */
-    constructor(entityNames = []) {
-        this.entityNames = new Set(entityNames);
-    }
+  /**
+   * Creates a new instance.
+   * @param {Array<String>} entityNames - the entity names.
+   */
+  constructor(entityNames = []) {
+    this.entityNames = new Set(entityNames);
+  }
 
-    add(entityName) {
-        if (!entityName) {
-            throw new Error('An entity name has to be passed so as to be added.');
-        }
-        this.entityNames.add(entityName);
+  add(entityName) {
+    if (!entityName) {
+      throw new Error('An entity name has to be passed so as to be added.');
     }
+    this.entityNames.add(entityName);
+  }
 
-    addEntityNames(entityNames = []) {
-        const filteredNames = entityNames.filter(entityName => !!entityName);
-        this.entityNames = new Set([...this.entityNames, ...filteredNames]);
-    }
+  addEntityNames(entityNames = []) {
+    const filteredNames = entityNames.filter(entityName => !!entityName);
+    this.entityNames = new Set([...this.entityNames, ...filteredNames]);
+  }
 
-    has(entityName) {
-        return this.entityNames.has(entityName);
-    }
+  has(entityName) {
+    return this.entityNames.has(entityName);
+  }
 
-    forEach(passedFunction) {
-        if (!passedFunction) {
-            return;
-        }
-        this.entityNames.forEach(entityName => {
-            passedFunction(entityName);
-        });
+  forEach(passedFunction) {
+    if (!passedFunction) {
+      return;
     }
+    this.entityNames.forEach(entityName => {
+      passedFunction(entityName);
+    });
+  }
 
-    toArray() {
-        return Array.from(this.entityNames);
-    }
+  toArray() {
+    return Array.from(this.entityNames);
+  }
 
-    size() {
-        return this.entityNames.size;
-    }
+  size() {
+    return this.entityNames.size;
+  }
 
-    toString(indent = 0) {
-        if (this.entityNames.size === 0) {
-            return '';
-        }
-        const spaceBefore = ' '.repeat(indent);
-        return `${spaceBefore}entities ${join(this.entityNames, ', ')}`;
+  toString(indent = 0) {
+    if (this.entityNames.size === 0) {
+      return '';
     }
+    const spaceBefore = ' '.repeat(indent);
+    return `${spaceBefore}entities ${join(this.entityNames, ', ')}`;
+  }
 };

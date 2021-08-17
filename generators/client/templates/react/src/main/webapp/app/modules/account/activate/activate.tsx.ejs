@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,12 +17,11 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
 import { Translate, getUrlParameter } from 'react-jhipster';
 
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (
@@ -44,16 +43,17 @@ const failureAlert = (
   </Alert>
 );
 
-export interface IActivateProps extends StateProps, DispatchProps, RouteComponentProps<{ key: any }> {}
-
-export const ActivatePage = (props: IActivateProps) => {
+export const ActivatePage = (props: RouteComponentProps<{ key: any }>) => {
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const key = getUrlParameter('key', props.location.search);
-    props.activateAction(key);
+    dispatch(activateAction(key));
     return () => {
-      props.reset();
+      dispatch(reset());
     };
   }, []);
+
+  const { activationSuccess, activationFailure } = useAppSelector(state => state.activate);
 
   return (
     <div>
@@ -62,22 +62,12 @@ export const ActivatePage = (props: IActivateProps) => {
           <h1>
             <Translate contentKey="activate.title">Activation</Translate>
           </h1>
-          {props.activationSuccess ? successAlert : undefined}
-          {props.activationFailure ? failureAlert : undefined}
+          {activationSuccess ? successAlert : undefined}
+          {activationFailure ? failureAlert : undefined}
         </Col>
       </Row>
     </div>
   );
 };
 
-const mapStateToProps = ({ activate }: IRootState) => ({
-  activationSuccess: activate.activationSuccess,
-  activationFailure: activate.activationFailure
-});
-
-const mapDispatchToProps = { activateAction, reset };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(ActivatePage);
+export default ActivatePage;

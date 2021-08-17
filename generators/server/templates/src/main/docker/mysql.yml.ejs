@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,16 +19,15 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%= baseName.toLowerCase() %>-mysql:
-        image: <%= DOCKER_MYSQL %>
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
-        environment:
-            - MYSQL_USER=root
-            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-            - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
-        # If you want to expose these ports outside your dev PC, 
-        # remove the "127.0.0.1:" prefix
-        ports:
-            - 127.0.0.1:3306:3306
-        command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  <%= baseName.toLowerCase() %>-mysql:
+    image: <%= DOCKER_MYSQL %>
+    # volumes:
+    #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp

@@ -1,0 +1,71 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "health": {
+        "title": "ਸਿਹਤ ਜਾਂਚ",
+        "refresh.button": "ਤਾਜ਼ਾ ਕਰੋ",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "ਵੇਰਵੇ",
+            "properties": "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+            "name": "ਨਾਮ",
+            "value": "ਵੈਲਿਊ",
+            "error": "ਗਲਤੀ"
+        },
+        "indicator": {
+<%_ if (messageBrokerKafka) { _%>
+            "binders": "Message broker",
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "clientConfigServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+  <%_ if (serviceDiscoveryConsul) { _%>
+            "consul": "Consul",<% } else if (reactive) { %>
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
+            "hazelcast": "Hazelcast",
+<%_ } _%>
+            "diskSpace": "Disk space",
+            "mail": "Email",
+            "livenessState": "Liveness state",
+            "readinessState": "Readiness state",
+            "ping": "Application"<% if (searchEngineElasticsearch) { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
+            "db": "Database"<% } %><% if (databaseTypeSql && reactive) { %>,
+            "r2dbc": "Database"<% } %><% if (databaseTypeMongodb) { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseTypeCouchbase) { %>,
+            "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
+            "neo4j": "Neo4j"<% } %>
+        },
+        "table": {
+            "service": "ਸੇਵਾ ਦਾ ਨਾਮ",
+            "status": "ਸਥਿਤੀ"
+        },
+        "status": {
+            "UNKNOWN": "ਅਣਜਾਣ",
+            "UP": "ਚਾਲੂ",
+            "DOWN": "ਬੰਦ"
+        }
+    }
+}

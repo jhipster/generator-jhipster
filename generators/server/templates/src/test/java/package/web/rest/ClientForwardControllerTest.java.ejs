@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -70,7 +70,7 @@ class ClientForwardControllerTest {
             .andExpect(forwardedUrl("/"));
     }
 
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     @Test
     void getWebsocketInfoEndpoint() throws Exception {
         restMockMvc.perform(get("/websocket/info"))
@@ -88,7 +88,7 @@ class ClientForwardControllerTest {
         restMockMvc.perform(get("/websocket/tracker/308/sessionId/xhr_streaming"))
             .andExpect(status().isNotFound());
     }
-    <%_ } _%>
+<%_ } _%>
 
     @RestController
     public static class TestController {

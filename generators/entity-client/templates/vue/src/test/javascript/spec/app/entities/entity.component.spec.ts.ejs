@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -37,7 +37,7 @@ const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-badge', {});
-<%_ if (pagination !== 'no') { _%>
+<%_ if (!paginationNo) { _%>
 localVue.component('jhi-sort-indicator', {});
 <%_ } _%>
 localVue.directive('b-modal', {});
@@ -64,11 +64,11 @@ describe('Component Tests', () => {
 
       wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>Component, {
         store,
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         i18n,
-        <%_ } _%>
+<%_ } _%>
         localVue,
-        stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
+        stubs: {<%_ if (!paginationNo) { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub
         }
@@ -86,9 +86,9 @@ describe('Component Tests', () => {
 
       // THEN
       expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+      expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({id: <%- tsKeyId %>}));
     });
-<%_ if (pagination !== 'no') { _%>
+<%_ if (!paginationNo) { _%>
 
     it('should load a page', async () => {
       // GIVEN
@@ -101,9 +101,9 @@ describe('Component Tests', () => {
 
       // THEN
       expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+      expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({id: <%- tsKeyId %>}));
     });
-    <%_ if (pagination !== 'infinite-scroll') { _%>
+  <%_ if (!paginationInfiniteScroll) { _%>
 
     it('should not load a page if the page is the same as the previous page', () => {
       // GIVEN
@@ -116,7 +116,7 @@ describe('Component Tests', () => {
       // THEN
       expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeFalsy();
     });
-    <%_ } _%>
+  <%_ } _%>
 
     it('should re-initialize the page', async () => {
       // GIVEN
@@ -130,11 +130,11 @@ describe('Component Tests', () => {
       await comp.$nextTick();
 
       // THEN
-      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(<%_ if (pagination === 'pagination' || pagination === 'pager' ) { _%>3<%_ } else { _%>2<%_ } _%>);
+      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(<%_ if (paginationPagination) { _%>3<%_ } else { _%>2<%_ } _%>);
       expect(comp.page).toEqual(1);
-      expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+      expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({id: <%- tsKeyId %>}));
     });
-    <%_ if (pagination === 'infinite-scroll') { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
 
     it('should calculate the sort attribute for an id', () => {
       // WHEN
@@ -154,7 +154,7 @@ describe('Component Tests', () => {
       // THEN
       expect(result).toEqual(['name,asc', 'id']);
     });
-    <%_ } else { _%>
+  <%_ } else { _%>
 
     it('should calculate the sort attribute for an id', () => {
       // WHEN
@@ -174,7 +174,7 @@ describe('Component Tests', () => {
       // THEN
       expect(result).toEqual(['name,asc', 'id']);
     });
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (!readOnly) { _%>
     it('Should call delete service on confirmDelete', async () => {

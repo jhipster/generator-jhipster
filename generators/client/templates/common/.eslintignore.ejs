@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,13 +18,10 @@
 -%>
 node_modules/
 src/main/docker/
-<%_ if (cypressTests) { _%>
-<%= CLIENT_TEST_SRC_DIR %>cypress/
-<%_ } _%>
 <%_ if (protractorTests) { _%>
 <%= CLIENT_TEST_SRC_DIR %>protractor.conf.js
 <%_ } _%>
-<%= clientFramework === ANGULAR ? '' : CLIENT_TEST_SRC_DIR %>jest.conf.js
+<%= clientFramework !== VUE ? '' : CLIENT_TEST_SRC_DIR %>jest.conf.js
 webpack/
 target/
 build/

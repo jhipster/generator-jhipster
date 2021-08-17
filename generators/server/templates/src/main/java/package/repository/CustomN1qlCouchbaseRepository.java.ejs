@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import com.couchbase.client.java.search.SearchQuery;
 import com.couchbase.client.java.search.queries.AbstractFtsQuery;
 import com.couchbase.client.java.search.queries.DocIdQuery;
@@ -31,14 +31,14 @@ import org.springframework.data.couchbase.core.CouchbaseOperations;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
 import org.springframework.data.couchbase.repository.support.N1qlCouchbaseRepository;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 
 import java.io.Serializable;
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 /**
  * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N1qlCouchbaseRepository<T, ID><%if (searchEngine === 'couchbase') { %> implements SearchCouchbaseRepository<T, ID><% } %> {
+public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N1qlCouchbaseRepository<T, ID><%if (searchEngineCouchbase) { %> implements SearchCouchbaseRepository<T, ID><% } %> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
 
@@ -67,7 +67,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
     public <S extends T> S save(S entity) {
         return super.save(populateIdIfNecessary(entity));
     }
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 
     public Page<T> search(String indexName, String request, Pageable pageable) {
         SearchQuery searchQuery = new SearchQuery(indexName, queryString(request))

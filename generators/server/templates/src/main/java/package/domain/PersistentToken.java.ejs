@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.domain;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.NamingStrategy;
 import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
@@ -29,19 +29,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Property;
-import org.neo4j.springframework.data.core.schema.Relationship;
+<%_ if (databaseTypeNeo4j) { _%>
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
@@ -49,7 +49,7 @@ import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } _%>
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import javax.persistence.*;
 <%_ } _%>
 import javax.validation.constraints.NotNull;
@@ -57,13 +57,13 @@ import javax.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.Objects;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import java.time.Instant;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
@@ -74,26 +74,26 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  *
  * @see <%= packageName %>.security.PersistentTokenRememberMeServices
  */
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_persistent_token")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 @Document(collection = "<%= jhiTablePrefix %>_persistent_token")
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 @Document
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
-    <%_ if (reactive) { _%>
+<%_ if (databaseTypeCassandra) { _%>
+  <%_ if (reactive) { _%>
 @Table(name = "persistent_token")
-    <%_ } else { _%>
+  <%_ } else { _%>
 @Entity
 @NamingStrategy(convention = NamingConvention.SNAKE_CASE_INSENSITIVE)
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 public class PersistentToken implements Serializable {
 
@@ -101,7 +101,7 @@ public class PersistentToken implements Serializable {
 
     private static final int MAX_USER_AGENT_LEN = 255;
 
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
     public static final String PREFIX = "token";
 
     @SuppressWarnings("unused")
@@ -114,74 +114,74 @@ public class PersistentToken implements Serializable {
 
     @IdAttribute
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j')  { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j)  { _%>
     @Id
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
     @PartitionKey
 <%_ } _%>
     private String series;
 
     @JsonIgnore
     @NotNull
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     @Column(name = "token_value", nullable = false)
-    <%_ } else if (databaseType === 'cassandra' && reactive) { _%>
+<%_ } else if (databaseTypeCassandra && reactive) { _%>
     @Column(name = "token_value")
-    <%_ } _%>
+<%_ } _%>
     private String tokenValue;
 
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     @Column(name = "token_date")
-    <%_ } else if (databaseType === 'neo4j') { _%>
+<%_ } else if (databaseTypeNeo4j) { _%>
     @Property(name = "token_date")
-    <%_ } else if (databaseType === 'cassandra' && reactive) { _%>
+<%_ } else if (databaseTypeCassandra && reactive) { _%>
     @Column(name = "token_date")
-    <%_ } _%>
-    private <% if (databaseType !== 'cassandra') { %>LocalDate<% } else { %>Instant<% } %> tokenDate;
+<%_ } _%>
+    private <% if (!databaseTypeCassandra) { %>LocalDate<% } else { %>Instant<% } %> tokenDate;
 
     //an IPV6 address max length is 39 characters
     @Size(min = 0, max = 39)
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     @Column(name = "ip_address", length = 39)
-    <%_ } else if (databaseType === 'cassandra' && reactive) { _%>
+<%_ } else if (databaseTypeCassandra && reactive) { _%>
     @Column(name = "ip_address")
-    <%_ } else if (databaseType === 'neo4j') { _%>
+<%_ } else if (databaseTypeNeo4j) { _%>
     @Property(name = "ip_address")
-    <%_ } _%>
+<%_ } _%>
     private String ipAddress;
 
-    <%_ if (databaseType === 'sql' || (databaseType === 'cassandra' && reactive)) { _%>
+<%_ if (databaseTypeSql || (databaseTypeCassandra && reactive)) { _%>
     @Column(name = "user_agent")
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
     @Property(name = "user_agent")
-    <%_ } _%>
+<%_ } _%>
     private String userAgent;
-    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 
     private String login;
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
-        <%_ if (reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+  <%_ if (reactive) { _%>
     @Column(name = "user_id")
-        <%_ } _%>
+  <%_ } _%>
     private String userId;
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
     @JsonIgnore
-        <%_ if (databaseType === 'sql') { _%>
+  <%_ if (databaseTypeSql) { _%>
     @ManyToOne
-        <%_ } _%>
-        <%_ if (databaseType === 'mongodb') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeMongodb) { _%>
     @DBRef
-        <%_ } _%>
-        <%_ if (databaseType === 'neo4j') { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeNeo4j) { _%>
     @Relationship(value = "HAS_PERSISTENT_TOKEN", direction = Relationship.Direction.INCOMING)
-        <%_ } _%>
+  <%_ } _%>
     private <%= asEntity('User') %> user;
-    <%_ } _%>
+<%_ } _%>
 
     public String getSeries() {
         return series;
@@ -199,11 +199,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public <% if (databaseType !== 'cassandra') { %>LocalDate<% } else { %>Instant<% } %> getTokenDate() {
+    public <% if (!databaseTypeCassandra) { %>LocalDate<% } else { %>Instant<% } %> getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(<% if (databaseType !== 'cassandra') { %>LocalDate<% } else { %>Instant<% } %> tokenDate) {
+    public void setTokenDate(<% if (!databaseTypeCassandra) { %>LocalDate<% } else { %>Instant<% } %> tokenDate) {
         this.tokenDate = tokenDate;
     }
 
@@ -226,7 +226,7 @@ public class PersistentToken implements Serializable {
             this.userAgent = userAgent;
         }
     }
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
     public <%= asEntity('User') %> getUser() {
         return user;
@@ -235,7 +235,7 @@ public class PersistentToken implements Serializable {
     public void setUser(<%= asEntity('User') %> user) {
         this.user = user;
     }
-    <%_ } else if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 
     public String getLogin() {
         return login;
@@ -244,8 +244,8 @@ public class PersistentToken implements Serializable {
     public void setLogin(String login) {
         this.login = login;
     }
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
 
     public String getUserId() {
         return userId;
@@ -254,7 +254,7 @@ public class PersistentToken implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    <%_ } _%>
+<%_ } _%>
 
     @Override
     public boolean equals(Object o) {

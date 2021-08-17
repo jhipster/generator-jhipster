@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,144 +16,129 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
 <%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
 <%_ if (useKafka) { _%>
-    zookeeper:
-        image: <%= DOCKER_ZOOKEEPER %>
-        environment:
-            ZOOKEEPER_CLIENT_PORT: 2181
-            ZOOKEEPER_TICK_TIME: 2000
-            ZOOKEEPER_SYNC_LIMIT: 2
-    kafka:
-        image: <%= DOCKER_KAFKA %>
-        environment:
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-            KAFKA_BROKER_ID: 2
-            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-            #ports:
-            # - 9092:9092 # Uncomment to make Kafka available externally
+  zookeeper:
+    image: <%= DOCKER_ZOOKEEPER %>
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+  kafka:
+    image: <%= DOCKER_KAFKA %>
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      #ports:
+      # - 9092:9092 # Uncomment to make Kafka available externally
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
-    jhipster-registry:
-        image: <%= DOCKER_JHIPSTER_REGISTRY %>
-        volumes:
-            - ./central-server-config:/central-config
-        # By default the JHipster Registry runs with the "dev" and "native"
-        # Spring profiles.
-        # "native" profile means the filesystem is used to store data, see
-        # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
-        environment:
-            - _JAVA_OPTIONS=-Xmx512m -Xms256m
-            <%_ if (authenticationType === 'oauth2') { _%>
-            - JHIPSTER_SLEEP=20
-            <%_ } _%>
-            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
-            - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
-            - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
-            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
-            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
-            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-            # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-            <%_ if (monitoring === 'elk') { _%>
-            - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
-            - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
-            <%_ } _%>
-            <%_ if (monitoring === 'prometheus') { _%>
-            - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-            <%_ } _%>
-            <%_ if (authenticationType === 'oauth2') { _%>
-            # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
-            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
-            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-            <%_ } _%>
-            <%_ if (authenticationType === 'uaa') { _%>
-            # change the name of UAA server here, if needed
-            - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
-            <%_ } _%>
-        ports:
-            - 8761:8761
+<%_ if (serviceDiscoveryEureka) { _%>
+  jhipster-registry:
+    image: <%= DOCKER_JHIPSTER_REGISTRY %>
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the "dev" and "native"
+    # Spring profiles.
+    # "native" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+  <%_ if (usesOauth2) { _%>
+      - JHIPSTER_SLEEP=20
+  <%_ } _%>
+      - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
+      - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
+      - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+  <%_ if (monitoringELK) { _%>
+      - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
+      - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
+  <%_ } _%>
+  <%_ if (monitoringPrometheus) { _%>
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+  <%_ } _%>
+  <%_ if (usesOauth2) { _%>
+      # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
+  <%_ } _%>
+    ports:
+      - 8761:8761
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'consul') { _%>
-    consul:
-        image: <%= DOCKER_CONSUL %>
-        ports:
-            - 8300:8300
-            - 8500:8500
-            - 8600:8600
-        command: consul agent -dev -ui -client 0.0.0.0
-    consul-config-loader:
-        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
-        volumes:
-            - ./central-server-config:/config
-        environment:
-            - INIT_SLEEP_SECONDS=5
-            - CONSUL_URL=consul
-            - CONSUL_PORT=8500
+<%_ if (serviceDiscoveryConsul) { _%>
+  consul:
+    image: <%= DOCKER_CONSUL %>
+    ports:
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  consul-config-loader:
+    image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+    volumes:
+      - ./central-server-config:/config
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
 <%_ } _%>
-<%_ if (gatewayType === 'traefik') { _%>
-    traefik:
-        image: <%= DOCKER_TRAEFIK %>
-        command: --web
-        ports:
-          - 80:80
-          - 28080:8080
-        volumes:
-          - ./traefik/traefik.toml:/etc/traefik/traefik.toml
+<%_ if (usesOauth2) { _%>
+  keycloak:
+    image: <%= DOCKER_KEYCLOAK %>
+    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    volumes:
+      - ./realm-config:/opt/jboss/keycloak/realm-config
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+    ports:
+      - 9080:9080
+      - 9443:9443
+      - 10990:10990
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-    keycloak:
-        image: <%= DOCKER_KEYCLOAK %>
-        command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
-        volumes:
-          - ./realm-config:/opt/jboss/keycloak/realm-config
-        environment:
-          - KEYCLOAK_USER=admin
-          - KEYCLOAK_PASSWORD=admin
-          - DB_VENDOR=h2
-        ports:
-          - 9080:9080
-          - 9443:9443
-          - 10990:10990
-<%_ } _%>
-<%_ if (monitoring === 'prometheus') { _%>
+<%_ if (monitoringPrometheus) { _%>
 
-    prometheus:
-        image: <%= DOCKER_PROMETHEUS %>
-        volumes:
-          - ./prometheus-conf/:/etc/prometheus/
-          - prometheus_data:/prometheus
-        command:
-          - '--config.file=/etc/prometheus/prometheus.yml'
-        ports:
-          - 9090:9090
-    alertmanager:
-        image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
-        ports:
-          - 9093:9093
-        volumes:
-          - ./alertmanager-conf/:/etc/alertmanager/
-        command:
-          - '--config.file=/etc/alertmanager/config.yml'
-          - '--storage.path=/alertmanager'
+  prometheus:
+    image: <%= DOCKER_PROMETHEUS %>
+    volumes:
+      - ./prometheus-conf/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+  alertmanager:
+    image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager-conf/:/etc/alertmanager/
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
 
-    grafana:
-        image: <%= DOCKER_GRAFANA %>
-        ports:
-          - 3000:3000
-        volumes:
-          - grafana_data:/var/lib/grafana
-        environment:
-          - GF_SECURITY_ADMIN_PASSWORD=admin
-          - GF_USERS_ALLOW_SIGN_UP=false
+  grafana:
+    image: <%= DOCKER_GRAFANA %>
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
 
 volumes:
-    prometheus_data: {}
-    grafana_data: {}
+  prometheus_data: {}
+  grafana_data: {}
 <%_ } _%>

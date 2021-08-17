@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Administrator",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Gateway",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "User management",
                 "tracker": "User tracker",
                 "metrics": "Statistieken",
@@ -146,6 +146,8 @@
         "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID",
         "idnull": "Invalid ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

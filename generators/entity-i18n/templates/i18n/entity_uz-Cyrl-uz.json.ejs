@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,17 +23,25 @@ let helpBlocks = 0; %>
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "refreshListLabel": "Refresh list",
+<%_ if (!readOnly) { _%>
                 "createLabel": "Янги <%= entityClassHumanized %> қўшиш",
-                "createOrEditLabel": "<%= entityClassHumanized %>ни таҳрирлаш"<% if (searchEngine !== false) { %>,
-                "search": "<%= entityClassHumanized %>ни излаш"<% } %>,
+                "createOrEditLabel": "<%= entityClassHumanized %>ни таҳрирлаш",
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+                "search": "<%= entityClassHumanized %>ни излаш",
+<%_ } _%>
                 "notFound": "No <%= entityClassPluralHumanized %> found"
-            },<% if (!microserviceAppName) { %>
+            },
+<%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityClassHumanized %> {{ param }} билан қўшилди.",
             "updated": "{{ param }}- <%= entityClassHumanized %> сақланди.",
-            "deleted": "{{ param }}- <%= entityClassHumanized %> ўчирилди.",<% } %>
+            "deleted": "{{ param }}- <%= entityClassHumanized %> ўчирилди.",
+<%_ } _%>
+<%_ if (!readOnly) { _%>
             "delete": {
                 "question": "{{ id }}- <%= entityClassHumanized %>ни ўчирмоқчимисиз? "
             },
+<%_ } _%>
             "detail": {
                 "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) {
@@ -48,12 +56,14 @@ let helpBlocks = 0; %>
             } %>
             }<% } %>
         }
-    }<% if (microserviceAppName) { %>,
+    }
+<%_ if (microserviceAppName && !readOnly) { _%>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "<%= entityClassHumanized %> {{ param }} билан қўшилди.",
             "updated": "{{ param }}- <%= entityClassHumanized %> сақланди.",
             "deleted": "{{ param }}- <%= entityClassHumanized %> ўчирилди."
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

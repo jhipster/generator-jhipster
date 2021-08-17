@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -58,7 +58,7 @@ export class EventManager {
     if (typeof eventNames === 'string') {
       eventNames = [eventNames];
     }
-    const subscriber: Subscription = this.observable
+    return this.observable
       .pipe(
         filter((event: EventWithContent<unknown> | string) => {
           for (const eventName of eventNames) {
@@ -70,7 +70,6 @@ export class EventManager {
         })
       )
       .subscribe(callback);
-    return subscriber;
   }
 
   /**

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,15 +21,15 @@ const JDLApplicationConfigurationOption = require('./jdl-application-configurati
 const { join } = require('../utils/set-utils');
 
 module.exports = class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
-    constructor(name, value) {
-        super(name, new Set(value));
-    }
+  constructor(name, value) {
+    super(name, new Set(value));
+  }
 
-    getValue() {
-        return Array.from(this.value);
-    }
+  getValue() {
+    return Array.from(this.value);
+  }
 
-    toString() {
-        return `${this.name} [${join(this.value, ', ')}]`;
-    }
+  toString() {
+    return `${this.name} [${join(this.value, ', ')}]`;
+  }
 };

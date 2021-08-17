@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,46 +24,46 @@ const { INFO } = require('./rule-levels');
  * Represents a rule for the linters.
  */
 class Rule {
-    /**
-     * Creates a new rule from an arg object.
-     * @param args the argument object, keys:
-     *               - name: the rule's name
-     *               - level: the rule's level (INFO, WARNING, etc.), default: RuleLevels.INFO
-     *               - comment: a possible comment for the rule
-     */
-    constructor(args) {
-        if (!args || !args.name) {
-            throw new Error('A rule must at least have a name.');
-        }
-        const merged = merge(defaults(), args);
-        this.name = merged.name;
-        this.level = merged.level;
-        this.comment = merged.comment;
+  /**
+   * Creates a new rule from an arg object.
+   * @param args the argument object, keys:
+   *               - name: the rule's name
+   *               - level: the rule's level (INFO, WARNING, etc.), default: RuleLevels.INFO
+   *               - comment: a possible comment for the rule
+   */
+  constructor(args) {
+    if (!args || !args.name) {
+      throw new Error('A rule must at least have a name.');
     }
+    const merged = merge(defaults(), args);
+    this.name = merged.name;
+    this.level = merged.level;
+    this.comment = merged.comment;
+  }
 
-    /**
-     * Compares this rule to another.
-     * @param otherRule the other rule.
-     * @returns {number} 1 if this rule has a higher priority, 0 if they are equal, -1 otherwise.
-     */
-    compareTo(otherRule) {
-        if (!otherRule) {
-            throw new Error('A rule has to be passed so as to be compared.');
-        }
-        if (this.level.priority === otherRule.level.priority) {
-            return 0;
-        }
-        if (this.level.priority > otherRule.level.priority) {
-            return 1;
-        }
-        return -1;
+  /**
+   * Compares this rule to another.
+   * @param otherRule the other rule.
+   * @returns {number} 1 if this rule has a higher priority, 0 if they are equal, -1 otherwise.
+   */
+  compareTo(otherRule) {
+    if (!otherRule) {
+      throw new Error('A rule has to be passed so as to be compared.');
     }
+    if (this.level.priority === otherRule.level.priority) {
+      return 0;
+    }
+    if (this.level.priority > otherRule.level.priority) {
+      return 1;
+    }
+    return -1;
+  }
 }
 
 module.exports = Rule;
 
 function defaults() {
-    return {
-        level: INFO,
-    };
+  return {
+    level: INFO,
+  };
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,46 +21,46 @@ const merge = require('../utils/object-utils').merge;
 const JDLEnumValue = require('./jdl-enum-value');
 
 class JDLEnum {
-    constructor(args) {
-        const merged = merge(defaults(), args);
-        if (!merged.name) {
-            throw new Error("The enum's name must be passed to create an enum.");
-        }
-        this.comment = merged.comment;
-        this.name = merged.name;
-        this.values = new Map(
-            merged.values.map(entry => {
-                return [entry.key, new JDLEnumValue(entry.key, entry.value)];
-            })
-        );
+  constructor(args) {
+    const merged = merge(defaults(), args);
+    if (!merged.name) {
+      throw new Error("The enum's name must be passed to create an enum.");
     }
+    this.comment = merged.comment;
+    this.name = merged.name;
+    this.values = new Map(
+      merged.values.map(entry => {
+        return [entry.key, new JDLEnumValue(entry.key, entry.value)];
+      })
+    );
+  }
 
-    getValuesAsString() {
-        return stringifyValues(this.values).join(',');
-    }
+  getValuesAsString() {
+    return stringifyValues(this.values).join(',');
+  }
 
-    toString() {
-        let comment = '';
-        if (this.comment) {
-            comment += `/**\n * ${this.comment}\n */\n`;
-        }
-        const values = stringifyValues(this.values);
-        return `${comment}enum ${this.name} {\n  ${values.join(',\n  ')}\n}`;
+  toString() {
+    let comment = '';
+    if (this.comment) {
+      comment += `/**\n * ${this.comment}\n */\n`;
     }
+    const values = stringifyValues(this.values);
+    return `${comment}enum ${this.name} {\n  ${values.join(',\n  ')}\n}`;
+  }
 }
 
 module.exports = JDLEnum;
 
 function defaults() {
-    return {
-        values: [],
-    };
+  return {
+    values: [],
+  };
 }
 
 function stringifyValues(jdlEnumValues) {
-    const values = [];
-    jdlEnumValues.forEach(jdlEnumValue => {
-        values.push(jdlEnumValue.toString());
-    });
-    return values;
+  const values = [];
+  jdlEnumValues.forEach(jdlEnumValue => {
+    values.push(jdlEnumValue.toString());
+  });
+  return values;
 }

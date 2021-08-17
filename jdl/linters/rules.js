@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,63 +21,63 @@ const Rule = require('./rule');
 const { INFO, WARNING, ERROR } = require('./rule-levels');
 
 const rulesNames = {
-    ENT_SHORTER_DECL: 'ENT_SHORTER_DECL',
-    ENT_OPTIONAL_TABLE_NAME: 'ENT_OPTIONAL_TABLE_NAME',
-    ENT_DUPLICATED: 'ENT_DUPLICATED',
-    FLD_OPTIONAL_COMMAS: 'FLD_OPTIONAL_COMMAS',
-    REL_INDIVIDUAL_DECL: 'REL_INDIVIDUAL_DECL',
-    FLD_DUPLICATED: 'FLD_DUPLICATED',
-    ENUM_DUPLICATED: 'ENUM_DUPLICATED',
-    ENUM_UNUSED: 'ENUM_UNUSED',
+  ENT_SHORTER_DECL: 'ENT_SHORTER_DECL',
+  ENT_OPTIONAL_TABLE_NAME: 'ENT_OPTIONAL_TABLE_NAME',
+  ENT_DUPLICATED: 'ENT_DUPLICATED',
+  FLD_OPTIONAL_COMMAS: 'FLD_OPTIONAL_COMMAS',
+  REL_INDIVIDUAL_DECL: 'REL_INDIVIDUAL_DECL',
+  FLD_DUPLICATED: 'FLD_DUPLICATED',
+  ENUM_DUPLICATED: 'ENUM_DUPLICATED',
+  ENUM_UNUSED: 'ENUM_UNUSED',
 };
 
 const rules = {
-    ENT_SHORTER_DECL: new Rule({
-        name: 'ShorterEntityDeclaration',
-        level: INFO,
-        comment: 'When an entity does not have any field, it is possible to omit the curly braces.',
-    }),
-    ENT_OPTIONAL_TABLE_NAME: new Rule({
-        name: 'OptionalEntityTableName',
-        level: WARNING,
-        comment: 'Setting custom table names is possible, but not recommended.',
-    }),
-    ENT_DUPLICATED: new Rule({
-        name: 'DuplicatedEntityDeclaration',
-        level: ERROR,
-        comment: 'An entity should not be declared more than once.',
-    }),
-    FLD_DUPLICATED: new Rule({
-        name: 'DuplicatedFieldDeclaration',
-        level: ERROR,
-        comment: 'A field should not be declared more than once in an entity.',
-    }),
-    FLD_OPTIONAL_COMMAS: new Rule({
-        name: 'OptionalFieldCommas',
-        level: INFO,
-        comment: 'While commas are supported, they are not mandatory if only one field is declared per line.',
-    }),
-    REL_INDIVIDUAL_DECL: new Rule({
-        name: 'IndividualRelationshipDeclaration',
-        level: WARNING,
-        comment: 'It is preferable to group relationships by type instead of declaring them one by one.',
-    }),
-    ENUM_DUPLICATED: new Rule({
-        name: 'DuplicatedEnumDeclaration',
-        level: ERROR,
-        comment: 'An enum should not be declared more than once.',
-    }),
-    ENUM_UNUSED: new Rule({
-        name: 'UnusedEnum',
-        level: INFO,
-        comment: 'An unused enum should be removed.',
-    }),
+  ENT_SHORTER_DECL: new Rule({
+    name: 'ShorterEntityDeclaration',
+    level: INFO,
+    comment: 'When an entity does not have any field, it is possible to omit the curly braces.',
+  }),
+  ENT_OPTIONAL_TABLE_NAME: new Rule({
+    name: 'OptionalEntityTableName',
+    level: WARNING,
+    comment: 'Setting custom table names is possible, but not recommended.',
+  }),
+  ENT_DUPLICATED: new Rule({
+    name: 'DuplicatedEntityDeclaration',
+    level: ERROR,
+    comment: 'An entity should not be declared more than once.',
+  }),
+  FLD_DUPLICATED: new Rule({
+    name: 'DuplicatedFieldDeclaration',
+    level: ERROR,
+    comment: 'A field should not be declared more than once in an entity.',
+  }),
+  FLD_OPTIONAL_COMMAS: new Rule({
+    name: 'OptionalFieldCommas',
+    level: INFO,
+    comment: 'While commas are supported, they are not mandatory if only one field is declared per line.',
+  }),
+  REL_INDIVIDUAL_DECL: new Rule({
+    name: 'IndividualRelationshipDeclaration',
+    level: WARNING,
+    comment: 'It is preferable to group relationships by type instead of declaring them one by one.',
+  }),
+  ENUM_DUPLICATED: new Rule({
+    name: 'DuplicatedEnumDeclaration',
+    level: ERROR,
+    comment: 'An enum should not be declared more than once.',
+  }),
+  ENUM_UNUSED: new Rule({
+    name: 'UnusedEnum',
+    level: INFO,
+    comment: 'An unused enum should be removed.',
+  }),
 };
 
 module.exports = {
-    RuleNames: rulesNames,
-    getRule,
-    ...rules,
+  RuleNames: rulesNames,
+  getRule,
+  ...rules,
 };
 
 /**
@@ -87,8 +87,8 @@ module.exports = {
  * @throws if no ruleName is passed.
  */
 function getRule(ruleName) {
-    if (!ruleName) {
-        throw new Error('A rule name has to be passed to get a rule.');
-    }
-    return rules[ruleName];
+  if (!ruleName) {
+    throw new Error('A rule name has to be passed to get a rule.');
+  }
+  return rules[ruleName];
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,7 +30,7 @@ helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
 helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --namespace <%- kubernetesNamespace %>
 <%_ }) _%>
 
-<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+<%_ if (istio && kubernetesServiceTypeIngress) { _%>
 kubectl apply -f istio-${suffix}/
 <%_ } _%>
 

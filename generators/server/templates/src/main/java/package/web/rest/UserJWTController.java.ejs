@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -51,7 +51,7 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class UserJWTController {
 
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     private final TokenProvider tokenProvider;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -74,7 +74,7 @@ public class UserJWTController {
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
-    <%_ } else { _%>
+<%_ } else { _%>
     private final TokenProvider tokenProvider;
 
     private final ReactiveAuthenticationManager authenticationManager;
@@ -98,7 +98,7 @@ public class UserJWTController {
             });
     }
 
-    <%_ } _%>
+<%_ } _%>
     /**
      * Object to return as body in JWT Authentication.
      */

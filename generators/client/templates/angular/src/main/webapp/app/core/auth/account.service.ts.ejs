@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,9 +27,9 @@ import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from '../config/application-config.service';
 import { Account } from 'app/core/auth/account.model';
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import { TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
 
@@ -37,37 +37,41 @@ import { TrackerService } from '../tracker/tracker.service';
 export class AccountService {
   private userIdentity: Account | null = null;
   private authenticationState = new ReplaySubject<Account | null>(1);
-  private accountCache$?: Observable<Account | null>;
+  private accountCache$?: Observable<Account> | null;
 
   constructor(
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
-    private sessionStorage: SessionStorageService,
-    <%_ } _%>
+    private sessionStorageService: SessionStorageService,
+<%_ } _%>
     private http: HttpClient,
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     private trackerService: TrackerService,
-    <%_ } _%>
+<%_ } _%>
     private stateStorageService: StateStorageService,
-    private router: Router
+    private router: Router,
+    private applicationConfigService: ApplicationConfigService
   ) {}
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   save(account: Account): Observable<{}> {
-    return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
   }
-  <%_ } _%>
+<%_ } _%>
 
   authenticate(identity: Account | null): void {
     this.userIdentity = identity;
     this.authenticationState.next(this.userIdentity);
-    <%_ if (websocket === 'spring-websocket') { _%>
+    if (!identity) {
+      this.accountCache$ = null;
+    }
+<%_ if (communicationSpringWebsocket) { _%>
     if (identity) {
       this.trackerService.connect();
     } else {
       this.trackerService.disconnect();
     }
-    <%_ } _%>
+<%_ } _%>
   }
 
   hasAnyAuthority(authorities: string[] | string): boolean {
@@ -81,29 +85,26 @@ export class AccountService {
   }
 
   identity(force?: boolean): Observable<Account | null> {
-    if (!this.accountCache$ || force || !this.isAuthenticated()) {
+    if (!this.accountCache$ || force) {
       this.accountCache$ = this.fetch().pipe(
-        catchError(() => of(null)),
-        tap((account: Account | null) => {
+        tap((account: Account) => {
           this.authenticate(account);
 
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           // After retrieve the account info, the language will be changed to
           // the user's preferred language configured in the account setting
-          if (account?.langKey) {
-            const langKey = this.sessionStorage.retrieve('locale') ?? account.langKey;
-            this.translateService.use(langKey);
+          // unless user have choosed other language in the current session
+          if (!this.sessionStorageService.retrieve('locale')) {
+            this.translateService.use(account.langKey);
           }
-          <%_ } _%>
+<%_ } _%>
 
-          if (account) {
-            this.navigateToStoredUrl();
-          }
+          this.navigateToStoredUrl();
         }),
         shareReplay()
       );
     }
-    return this.accountCache$;
+    return this.accountCache$.pipe(catchError(() => of(null)));
   }
 
   isAuthenticated(): boolean {
@@ -114,12 +115,8 @@ export class AccountService {
     return this.authenticationState.asObservable();
   }
 
-  getImageUrl(): string {
-    return this.userIdentity?.imageUrl ?? '';
-  }
-
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
+    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('api/account'));
   }
 
   private navigateToStoredUrl(): void {

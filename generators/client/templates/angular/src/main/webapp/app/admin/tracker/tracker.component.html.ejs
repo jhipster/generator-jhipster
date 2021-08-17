@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,27 +17,27 @@
  limitations under the License.
 -%>
 <div>
-    <h2 id="tracker-page-heading" <%= jhiPrefix %>Translate="tracker.title">Real-time user activities</h2>
+  <h2 id="tracker-page-heading" <%= jhiPrefix %>Translate="tracker.title">Real-time user activities</h2>
 
-    <div class="table-responsive">
-        <table class="table table-striped" aria-describedby="tracker-page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" <%= jhiPrefix %>Translate="tracker.table.userlogin">User</th>
-                    <th scope="col" <%= jhiPrefix %>Translate="tracker.table.ipaddress">IP Address</th>
-                    <th scope="col" <%= jhiPrefix %>Translate="tracker.table.page">Current page</th>
-                    <th scope="col" <%= jhiPrefix %>Translate="tracker.table.time">Time</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let activity of activities">
-                    <td>{{ activity.userLogin }}</td>
-                    <td>{{ activity.ipAddress }}</td>
-                    <td>{{ activity.page }}</td>
-                    <td>{{ activity.time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="table-responsive">
+    <table class="table table-striped" aria-describedby="tracker-page-heading">
+      <thead>
+        <tr>
+          <th scope="col" <%= jhiPrefix %>Translate="tracker.table.userlogin">User</th>
+          <th scope="col" <%= jhiPrefix %>Translate="tracker.table.ipaddress">IP Address</th>
+          <th scope="col" <%= jhiPrefix %>Translate="tracker.table.page">Current page</th>
+          <th scope="col" <%= jhiPrefix %>Translate="tracker.table.time">Time</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let activity of activities">
+          <td>{{ activity.userLogin }}</td>
+          <td>{{ activity.ipAddress }}</td>
+          <td>{{ activity.page }}</td>
+          <td>{{ activity.time | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
