@@ -2338,7 +2338,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const appendEjs = transform && !['.ejs', '.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const ejsFile = appendEjs || extension === '.ejs';
 
-      if (!typeof transform === 'boolean') {
+      if (typeof transform !== 'boolean') {
         throw new Error(`Transform ${transform} value is not supported`);
       }
       destinationFile = transform ? normalizeEjs(destinationFile) : destinationFile;
