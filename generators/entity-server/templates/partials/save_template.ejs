@@ -56,7 +56,7 @@ if (isUsingMapsId) {
     <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
   <%_ } _%>
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
     <%_ if (returnDirectly) { _%>
         return result;
