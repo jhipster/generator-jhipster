@@ -69,7 +69,7 @@ public class CustomCouchbaseRepository<T, ID extends Serializable> extends Simpl
     public <S extends T> S save(S entity) {
         return super.save(entity);
     }
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngineCouchbase) { _%>
 
     public Page<T> search(String indexName, String request, Pageable pageable) {
         SearchQuery searchQuery = queryString(request);
