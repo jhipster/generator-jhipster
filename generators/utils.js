@@ -888,6 +888,10 @@ function languageToJavaLanguage(language) {
   return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
 }
 
+/**
+ * @private
+ * Utility function add condition to every block in addition to the already existing condition.
+ */
 function addSectionsCondition(files, commonCondition) {
   return Object.fromEntries(
     Object.entries(files).map(([sectionName, sectionValue]) => {
@@ -912,6 +916,12 @@ function addSectionsCondition(files, commonCondition) {
   );
 }
 
+/**
+ * @private
+ * Utility function to merge sections (jhipster files structure)
+ * Merging { foo: [blocks1], bar: [block2]} and { foo: [blocks3], bar: [block4]}
+ * Results in { foo: [blocks1, block3], bar: [block2, block4]}
+ */
 function mergeSections(...allFiles) {
   const generated = {};
   for (const files of allFiles) {
