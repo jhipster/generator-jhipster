@@ -766,17 +766,17 @@ public class UserService {
     <%_ if (databaseTypeCouchbase && !reactive) { _%>
         // FIXME: 2/1/21 Current version of Spring Data doesnt seem to support Pagination parameters. Changed the
         //  method to return a list and added a count query to construct the page.
-        // return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
+        // return userRepository.findAllActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
 
-        final Long count = userRepository.countAllByIdNotNullAndActivatedIsTrue();
+        final Long count = userRepository.countAllActivatedIsTrue();
         if (count == 0) {
             return <% if (reactive) { %>Flux<% } else { %>Page<% } %>.empty();
         }
 
-        final List<User> users = userRepository.findAllByIdNotNullAndActivatedIsTrue();
+        final List<User> users = userRepository.findAllActivatedIsTrue();
         return new PageImpl<>(users.stream().map(UserDTO::new).collect(Collectors.toList()), pageable, count);
     <%_ } else { _%>
-        return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
+        return userRepository.findAllActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
     <%_ } _%>
     }
 

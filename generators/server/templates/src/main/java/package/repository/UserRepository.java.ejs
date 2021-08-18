@@ -283,19 +283,19 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true")
     <%_ } _%>
-    Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    Page<<%= asEntity('User') %>> findAllActivatedIsTrue(Pageable pageable);
   <% } %>
 
   <%_ if (databaseTypeCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue();
+    <%= listOrFlux %><<%= asEntity('User') %>> findAllActivatedIsTrue();
 
-    @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
+    @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND activated = true")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Long countAllByIdNotNullAndActivatedIsTrue();
+    Long countAllActivatedIsTrue();
   <%_ } _%>
 }
 <%_ } else if (databaseTypeSql && reactive) { _%>
