@@ -55,7 +55,7 @@ const h2Files = {
   ],
 };
 
-const sqlFiles = {
+const liquibaseFiles = {
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,
@@ -1783,7 +1783,7 @@ const baseServerFiles = {
 const serverFiles = mergeSections(
   baseServerFiles,
   addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
-  addSectionsCondition(sqlFiles, context => context.databaseTypeSql),
+  addSectionsCondition(liquibaseFiles, context => context.databaseTypeSql),
   addSectionsCondition(mongoDbFiles, context => context.databaseTypeMongodb),
   addSectionsCondition(couchbaseFiles, context => context.databaseTypeCouchbase),
   addSectionsCondition(neo4jFiles, context => context.databaseTypeNeo4j),
