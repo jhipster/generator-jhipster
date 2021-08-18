@@ -1818,10 +1818,4 @@ function writeFiles() {
 module.exports = {
   writeFiles,
   serverFiles,
-  h2Files,
-  sqlFiles,
-  mongoDbFiles,
-  couchbaseFiles,
-  neo4jFiles,
-  cassandraFiles,
 };
