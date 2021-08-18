@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%= entityAbsolutePackage %>.repository;
 
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal) { _%>
@@ -56,23 +56,23 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.r2dbc.core.RowsFetchSpec;
 <%_ } _%>
 
-import <%= packageName %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <% relationships.forEach(function(rel) {
   if (rel.relationshipManyToMany && rel.ownerSide) { _%>
-import <%= packageName %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>;
+import <%= entityAbsolutePackage %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>;
   <%_ } _%>
 <%_ }); _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 
-import <%= packageName %>.domain.enumeration.<%= element %>;
+import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
 <%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
-import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
+import <%= entityAbsolutePackage %>.repository.rowmapper.<%= element %>RowMapper;
 <%_ }); _%>
-import <%= packageName %>.service.EntityManager;
+import <%= entityAbsolutePackage %>.service.EntityManager;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
-import <%= packageName %>.service.EntityManager.LinkTable;
+import <%= entityAbsolutePackage %>.service.EntityManager.LinkTable;
 <%_ } _%>
 
 import reactor.core.publisher.Flux;

@@ -358,6 +358,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.user = this.configOptions.sharedEntities.User;
       },
 
+      loadDomains() {
+        if (!this.configOptions.sharedEntities) return;
+        this.domains = [
+          ...new Set(
+            Object.entries(this.configOptions.sharedEntities).map(([_name, entity]) => entity.entityAbsolutePackage || this.packageName)
+          ),
+        ];
+      },
+
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
           app: {
