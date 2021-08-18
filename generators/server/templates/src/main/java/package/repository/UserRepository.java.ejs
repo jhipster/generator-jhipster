@@ -100,6 +100,7 @@ import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ScanConsistency;
 import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
+import org.springframework.data.domain.PageImpl;
 <%_ } _%>
 <%_ if (reactive && databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -282,16 +283,18 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     Mono<Long> count();
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true")
-    <%_ } _%>
+    default Page<<%= asEntity('User') %>> findAllActivatedIsTrue(Pageable pageable) {
+        return new PageImpl<>(findAllActivatedIsTrue(new org.springframework.data.couchbase.core.query.Query().with(pageable).export()), pageable, countAllActivatedIsTrue());
+    }
+    <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllActivatedIsTrue(Pageable pageable);
+    <%_ } _%>
   <% } %>
 
   <%_ if (databaseTypeCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true")
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true #{[0]}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= asEntity('User') %>> findAllActivatedIsTrue();
+    <%= listOrFlux %><<%= asEntity('User') %>> findAllActivatedIsTrue(String pageableStatement);
 
     @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND activated = true")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
