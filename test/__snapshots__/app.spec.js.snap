@@ -10574,6 +10574,9 @@ Object {
   "tsconfig.test.json": Object {
     "stateCleared": "modified",
   },
+  "webpack/environment.js": Object {
+    "stateCleared": "modified",
+  },
   "webpack/logo-jhipster.png": Object {
     "stateCleared": "modified",
   },

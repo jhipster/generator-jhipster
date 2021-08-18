@@ -37,6 +37,7 @@ const files = {
         'tsconfig.json',
         'tsconfig.test.json',
         'jest.conf.js',
+        'webpack/environment.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
