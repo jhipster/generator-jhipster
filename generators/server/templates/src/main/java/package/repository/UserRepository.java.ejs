@@ -287,7 +287,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
         return new PageImpl<>(findAllActivatedIsTrue(new org.springframework.data.couchbase.core.query.Query().with(pageable).export()), pageable, countAllActivatedIsTrue());
     }
     <%_ } else { _%>
-    Page<<%= asEntity('User') %>> findAllActivatedIsTrue(Pageable pageable);
+    Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>
   <% } %>
 
