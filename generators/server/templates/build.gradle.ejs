@@ -542,6 +542,9 @@ dependencies {
     liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    <%_ if (reactive) { _%>
+    implementation "org.springframework.data:spring-data-commons"
+    <%_ } _%>
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
