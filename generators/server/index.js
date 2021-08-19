@@ -22,18 +22,21 @@ const _ = require('lodash');
 const os = require('os');
 const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const { CASSANDRA, COUCHBASE, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../../jdl/jhipster/database-types');
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
+const { getBase64Secret, getRandomHex } = require('../utils');
+
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { OAUTH2, SESSION, JWT } = require('../../jdl/jhipster/authentication-types');
+const { CASSANDRA, COUCHBASE, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../../jdl/jhipster/database-types');
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
 
 const NO_DATABASE = databaseTypes.NO;
 
@@ -225,6 +228,19 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       configServerPort() {
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
+        }
+      },
+      configure() {
+        // Generate JWT secret key if key does not already exist in config
+        if (
+          !this.jhipsterConfig.jwtSecretKey &&
+          (this.jhipsterConfig.authenticationType === JWT || this.jhipsterConfig.applicationType === MICROSERVICE)
+        ) {
+          this.jhipsterConfig.jwtSecretKey = getBase64Secret.call(this, null, 64);
+        }
+        // Generate remember me key if key does not already exist in config
+        if (!this.jhipsterConfig.rememberMeKey && this.jhipsterConfig.authenticationType === SESSION) {
+          this.jhipsterConfig.rememberMeKey = getRandomHex();
         }
       },
     };

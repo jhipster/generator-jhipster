@@ -65,7 +65,6 @@ const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 const { CUSTOM_PRIORITIES } = require('../lib/constants/priorities.cjs');
-const { getBase64Secret, getRandomHex } = require('./utils');
 const cacheTypes = require('../jdl/jhipster/cache-types');
 const serviceDiscoveryTypes = require('../jdl/jhipster/service-discovery-types');
 const searchEngineTypes = require('../jdl/jhipster/search-engine-types');
@@ -2835,15 +2834,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     // can control the applications
     if (dest.serviceDiscoveryType === EUREKA && dest.authenticationType !== OAUTH2) {
       dest.authenticationType = JWT;
-    }
-
-    // Generate JWT secret key if key does not already exist in config
-    if ((dest.authenticationType === JWT || dest.applicationType === MICROSERVICE) && dest.jwtSecretKey === undefined) {
-      dest.jwtSecretKey = getBase64Secret.call(this, null, 64);
-    }
-    // Generate remember me key if key does not already exist in config
-    if (dest.authenticationType === SESSION && !dest.rememberMeKey) {
-      dest.rememberMeKey = getRandomHex();
     }
 
     if (dest.authenticationType === OAUTH2) {
