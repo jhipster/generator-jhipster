@@ -19,13 +19,15 @@
 package <%= packageName %>.repository;
 
 import com.couchbase.client.java.query.QueryScanConsistency;
-import com.mycompany.myapp.repository.search.SearchCouchbaseRepository;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import org.springframework.data.couchbase.repository.ScanConsistency;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
+<%_ if (searchEngineCouchbase) { _%>
+import <%= packageName %>.repository.search.SearchCouchbaseRepository;
+<%_ } _%>
 
 import java.util.List;
 
