@@ -450,6 +450,10 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     }
     const mainGeneratorJhipsterVersion = packagejs.version;
     const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
+    if (blueprintJhipsterVersion && !semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {
+      this.info(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
+      return;
+    }
     if (blueprintJhipsterVersion) {
       if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
         this.error(
