@@ -20,7 +20,7 @@ package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.<%= persistClass %>;
 
-<%_ if (relationshipsContainEagerLoad) { _%>
+<%_ if (relationshipsContainEagerLoad || databaseTypeCouchbase) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -38,14 +38,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import org.springframework.data.couchbase.repository.ScanConsistency;
   <%_ if (relationshipsContainEagerLoad) { _%>
 import org.springframework.data.couchbase.repository.Query;
+import org.springframework.data.domain.PageImpl;
   <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
@@ -115,17 +114,61 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
       } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(@Param("id") <%= primaryKey.type %> id);
     <%_
-    } else if (databaseTypeMongodb || databaseTypeCouchbase)  { _%>
+    } else if (databaseTypeMongodb)  { _%>
 
-    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    @Query("{}")
     Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    @Query("{}")
     List<<%= persistClass %>> findAllWithEagerRelationships();
 
-    @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    @Query("{}")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
-        }
-    } _%>
+    } else if (databaseTypeCouchbase) { %>
+
+    String SELECT = "SELECT #{#n1ql.fields}, #{#n1ql.bucket}.*" + <%
+      for (const relationship of relationships) {
+          if (relationship.collection) {
+            %> ", (SELECT <%= relationship.relationshipFieldName %>.*, meta(<%= relationship.relationshipFieldName %>).id FROM <%= relationship.relationshipFieldNamePlural %> <%= relationship.relationshipFieldName %>) as <%= relationship.relationshipFieldNamePlural %>"  + <%
+          } else {
+            %> ", (SELECT <%= relationship.relationshipFieldName %>.*, meta(<%= relationship.relationshipFieldName %>).id)[0] as <%= relationship.relationshipFieldName %>" + <%
+          }
+      } %>
+        " FROM #{#n1ql.bucket}";
+
+    String JOIN = <%
+        relationships.forEach(function (relationship, index) {
+          if (!relationship.collection) { %>
+            " LEFT JOIN #{#n1ql.bucket} <%= relationship.relationshipFieldName %> ON KEYS #{#n1ql.bucket}.<%= relationship.relationshipFieldName %>"<%
+          } else { %>
+            " LEFT NEST #{#n1ql.bucket} <%= relationship.relationshipFieldNamePlural %> ON KEYS #{#n1ql.bucket}.<%= relationship.relationshipFieldNamePlural %>"<%
+          }
+          if (index < relationships.length - 1) { %>
+            + <%
+          }
+        }); %>;
+
+
+    default Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable) {
+        return new PageImpl<>(
+            findAllWithEagerRelationshipsWithPagination(new org.springframework.data.couchbase.core.query.Query().with(pageable).export()),
+            pageable,
+            count()
+        );
+    }
+
+    @Query(SELECT + JOIN + " WHERE #{#n1ql.bucket}.#{#n1ql.filter} #{[0]}")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= persistClass %>> findAllWithEagerRelationshipsWithPagination(String pageableStatement);
+
+    @Query(SELECT + JOIN + " WHERE #{#n1ql.bucket}.#{#n1ql.filter}")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= persistClass %>> findAllWithEagerRelationships();
+
+    @Query(SELECT + " USE KEYS $1" + JOIN)
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Optional<<%= persistClass %>> findOneWithEagerRelationships(String id);<%
+    }
+  } _%>
 }
