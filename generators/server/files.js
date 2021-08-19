@@ -938,6 +938,10 @@ const serverFiles = {
           file: 'package/repository/CustomCouchbaseRepository.java',
           renameTo: generator => `${generator.javaDir}repository/CustomCouchbaseRepository.java`,
         },
+        {
+          file: 'package/repository/N1qlCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
+        }
       ],
     },
     {

@@ -83,7 +83,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><% if (databaseTypeCouchbase) { %>CouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
   <%_
   for (const relationship of relationships) {
     if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
@@ -128,17 +128,4 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     <%_
         }
     } _%>
-    <%_ if (databaseTypeCouchbase) { _%>
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= persistClass %>> findAll();
-
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= persistClass %>> findAll(Sort sort);
-
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Page<<%= persistClass %>> findAll(Pageable pageable);
-    <%_ } _%>
 }

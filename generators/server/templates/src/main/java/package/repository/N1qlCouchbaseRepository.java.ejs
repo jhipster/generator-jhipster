@@ -18,29 +18,28 @@
 -%>
 package <%= packageName %>.repository;
 
-import org.springframework.data.couchbase.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import com.mycompany.myapp.repository.search.SearchCouchbaseRepository;
+import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.data.couchbase.repository.ScanConsistency;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 @NoRepositoryBean
-public interface N1qlCouchbaseRepository<T, ID extends Serializable> extends PagingAndSortingRepository<T, ID> {
-
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
+public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<T, ID><% } %> {
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     List<T> findAll();
 
-    @Query("SELECT count(*) FROM #{#n1ql.bucket} WHERE #{#n1ql.filter}")
-    long count();
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<T> findAll(Sort sort);
 
-    @Query("DELETE FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} returning #{#n1ql.fields}")
-    T removeAll();
-
-    default void deleteAll() {
-        removeAll();
-    }
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Page<T> findAll(Pageable pageable);
 }
