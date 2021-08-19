@@ -763,7 +763,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllPublicUsers(Pageable pageable) {
-          return userRepository.findAllActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
+          return userRepository.findAll<% if (reactive) { %>ByIdNotNullAnd<% } %>ActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
     }
 
     <%_ if (reactive) { _%>
