@@ -23,7 +23,6 @@ const constants = require('../generator-constants');
 const { GENERATOR_CYPRESS } = require('../generator-list');
 const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
-let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -34,8 +33,12 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     this.loadRuntimeOptions();
+  }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CYPRESS);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_CYPRESS);
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -48,7 +51,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -75,7 +78,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -95,7 +98,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -110,7 +113,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
@@ -120,7 +123,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -139,7 +142,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -227,7 +230,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 };

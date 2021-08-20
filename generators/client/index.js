@@ -44,8 +44,6 @@ const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;
 
-let useBlueprints;
-
 module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
@@ -76,8 +74,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     this.loadRuntimeOptions();
 
     this.existingProject = !!this.jhipsterConfig.clientFramework;
+  }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLIENT);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_CLIENT);
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -108,7 +110,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -124,7 +126,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -160,7 +162,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
@@ -185,7 +187,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get composing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._composing();
   }
 
@@ -243,7 +245,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -283,7 +285,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
@@ -314,7 +316,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -328,18 +330,18 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         if (this.skipClient) return;
         switch (this.clientFramework) {
           case ANGULAR:
-            return writeAngularFiles.call(this, useBlueprints);
+            return writeAngularFiles.call(this);
           case REACT:
-            return writeReactFiles.call(this, useBlueprints);
+            return writeReactFiles.call(this);
           case VUE:
-            return writeVueFiles.call(this, useBlueprints);
+            return writeVueFiles.call(this);
           default:
           // do nothing by default
         }
       },
       writeCommonFiles() {
         if (this.skipClient) return;
-        return writeCommonFiles.call(this, useBlueprints);
+        return writeCommonFiles.call(this);
       },
 
       ...super._missingPostWriting(),
@@ -347,7 +349,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -392,7 +394,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 
@@ -414,7 +416,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 

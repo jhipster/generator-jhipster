@@ -25,8 +25,6 @@ const prompts = require('./prompts');
 const { writeFiles, customizeFiles } = require('./files');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
-let useBlueprints;
-
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -35,7 +33,12 @@ module.exports = class extends BaseBlueprintGenerator {
       type: Boolean,
       defaults: OpenAPIDefaultValues.REGEN,
     });
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENAPI_CLIENT);
+  }
+
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_OPENAPI_CLIENT);
+    }
   }
 
   _initializing() {
@@ -55,7 +58,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -68,7 +71,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -101,7 +104,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
@@ -110,7 +113,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -119,7 +122,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 
@@ -146,7 +149,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   install() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._install();
   }
 
@@ -159,7 +162,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 };

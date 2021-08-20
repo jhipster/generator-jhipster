@@ -41,11 +41,11 @@ const { GeneratorTypes } = require('../../jdl/jhipster/kubernetes-platform-types
 
 const { K8S } = GeneratorTypes;
 
-let useBlueprints;
 module.exports = class extends BaseDockerGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_KUBERNETES_KNATIVE);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_KUBERNETES_KNATIVE);
+    }
   }
 
   _initializing() {
@@ -85,7 +85,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -106,7 +106,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -134,7 +134,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
@@ -152,7 +152,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -161,7 +161,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -235,7 +235,7 @@ module.exports = class extends BaseDockerGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 };

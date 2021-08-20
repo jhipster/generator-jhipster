@@ -230,14 +230,14 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * Instantiates the blueprint generators, if any.
    * @param {string} subGen - sub generator
    * @param {any} extraOptions - extra options to pass to blueprint generator
-   * @return {true} useBlueprints - true if one or more blueprints generators have been constructed; false otherwise
+   * @return {boolean} - true if one or more blueprints generators have been constructed; false otherwise
    */
   instantiateBlueprints(subGen, extraOptions) {
     if (this.options.help) {
       // Ignore blueprint registered options.
       return false;
     }
-    let useBlueprints = false;
+    let delegateToBlueprint = false;
 
     if (!this.configOptions.blueprintConfigured) {
       this.configOptions.blueprintConfigured = true;
@@ -254,12 +254,12 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
             this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
           } else {
             // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
-            useBlueprints = true;
+            delegateToBlueprint = true;
           }
         }
       });
     }
-    return useBlueprints;
+    return delegateToBlueprint;
   }
 
   /**

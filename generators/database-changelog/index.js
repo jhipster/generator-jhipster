@@ -28,7 +28,6 @@ const BASE_CHANGELOG = {
   removedRelationships: [],
 };
 
-let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -45,7 +44,12 @@ module.exports = class extends BaseBlueprintGenerator {
     }
     this.info(`Creating changelog for entities ${this.options.entities}`);
     this.configOptions.oldSharedEntities = this.configOptions.oldSharedEntities || [];
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DATABASE_CHANGELOG);
+  }
+
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG);
+    }
   }
 
   _default() {
@@ -75,7 +79,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 

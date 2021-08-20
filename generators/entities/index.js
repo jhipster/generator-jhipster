@@ -21,8 +21,6 @@ const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { GENERATOR_ENTITIES, GENERATOR_ENTITIES_CLIENT, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
 
-let useBlueprints;
-
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
@@ -75,10 +73,12 @@ module.exports = class extends BaseBlueprintGenerator {
       defaults: true,
       hide: true,
     });
+  }
 
-    if (this.options.help) return;
-
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITIES);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_ENTITIES);
+    }
 
     if (this.options.entitiesToImport) {
       const entities = this.jhipsterConfig.entities || [];
@@ -123,7 +123,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    return useBlueprints ? undefined : this._initializing();
+    if (this.delegateToBlueprint) return {};
+    return this._initializing();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -159,7 +160,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get composing() {
-    return useBlueprints ? undefined : this._composing();
+    if (this.delegateToBlueprint) return {};
+    return this._composing();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -185,7 +187,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    return useBlueprints ? undefined : this._default();
+    if (this.delegateToBlueprint) return {};
+    return this._default();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -194,6 +197,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    return useBlueprints ? undefined : this._writing();
+    if (this.delegateToBlueprint) return {};
+    return this._writing();
   }
 };

@@ -29,16 +29,18 @@ const {
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 const { POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-types');
 
-let useBlueprints;
-
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
     this.entity = this.options.context;
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
+  }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_CLIENT, { context: this.options.context });
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_ENTITY_CLIENT, { context: this.options.context });
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -84,7 +86,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -143,7 +145,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -166,7 +168,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 
