@@ -27,23 +27,12 @@ const mockBlueprintSubGen = class extends EntityGenerator {
   }
 
   get initializing() {
-    const phaseFromJHipster = super._initializing();
-    const customPrePhaseSteps = {
-      // Create a custom persistent entity config.
+    return {
       createCustomConfig() {
         // Override with new value
         this.entityConfig.customBlueprintConfigKey = 'customBlueprintConfigValue';
       },
-    };
-    const customPostPhaseSteps = {
-      changeProperty() {
-        this.context.frontendAppName = 'awesomeApp';
-      },
-    };
-    return {
-      ...customPrePhaseSteps,
-      ...phaseFromJHipster,
-      ...customPostPhaseSteps,
+      ...super._initializing(),
     };
   }
 
@@ -64,7 +53,12 @@ const mockBlueprintSubGen = class extends EntityGenerator {
   }
 
   get preparing() {
-    return super._preparing();
+    return {
+      ...super._preparing(),
+      changeProperty() {
+        this.context.frontendAppName = 'awesomeApp';
+      },
+    };
   }
 
   get preparingFields() {

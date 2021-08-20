@@ -99,7 +99,7 @@ describe('JHipster generator languages', () => {
   context('Creates default i18n files', () => {
     constants.LANGUAGES.forEach(language => {
       describe(`with prompts for ${language.name}`, () => {
-        before(done => {
+        before(() =>
           helpers
             .run(require.resolve('../generators/languages'))
             .withOptions({ skipInstall: true })
@@ -108,91 +108,79 @@ describe('JHipster generator languages', () => {
               nativeLanguage: language.value,
               languages: [language.value],
             })
-            .on('end', done);
-        });
+        );
         containsLanguageFiles(language.value);
       });
       describe(`with options for ${language.name}`, () => {
-        before(done => {
+        before(() =>
           helpers
             .run(require.resolve('../generators/languages'))
             .withLocalConfig({ enableTranslation: true, nativeLanguage: language.value })
             .withOptions({ skipInstall: true, languages: [language.value] })
-            .on('end', done);
-        });
+        );
         containsLanguageFiles(language.value);
       });
     });
   });
   context('should not create i18n files', () => {
     describe('for already generated native language', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
           .withOptions({ skipInstall: true })
-          .on('end', done);
-      });
+      );
       noLanguageFiles('fr');
     });
     describe('for already generated languages', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ skipInstall: true, skipPrompts: true })
-          .on('end', done);
-      });
+      );
       noLanguageFiles('fr');
       noLanguageFiles('en');
     });
   });
   context('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
-      before(done => {
-        helpers
-          .run(require.resolve('../generators/languages'))
-          .withOptions({ skipInstall: true })
-          .withPrompts({
-            enableTranslation: true,
-            nativeLanguage: 'fr',
-            languages: [],
-          })
-          .on('end', done);
-      });
+      before(() =>
+        helpers.run(require.resolve('../generators/languages')).withOptions({ skipInstall: true }).withPrompts({
+          enableTranslation: true,
+          nativeLanguage: 'fr',
+          languages: [],
+        })
+      );
       containsLanguageFiles('fr');
     });
     describe('using options', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: [] })
           .withOptions({ skipInstall: true })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
     });
     describe('when regenerating', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
           .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
     });
   });
   context('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
-      before(done => {
-        helpers.run(require.resolve('../generators/languages')).withOptions({ skipInstall: true, skipPrompts: true }).on('end', done);
-      });
+      before(() => helpers.run(require.resolve('../generators/languages')).withOptions({ skipInstall: true, skipPrompts: true }));
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
     describe('using prompts', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withOptions({ skipInstall: true })
@@ -201,37 +189,34 @@ describe('JHipster generator languages', () => {
             nativeLanguage: 'fr',
             languages: ['en'],
           })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
     describe('using options', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
           .withOptions({ skipInstall: true, languages: ['en'] })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
     describe('when regenerating', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ skipInstall: true, skipPrompts: true, regenerate: true })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
   });
   context('Creates default i18n files for more than one language', () => {
     describe('with prompts', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withOptions({ skipInstall: true })
@@ -240,19 +225,17 @@ describe('JHipster generator languages', () => {
             nativeLanguage: 'fr',
             languages: ['fr', 'de'],
           })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
       containsLanguageFiles('de');
     });
     describe('with options', () => {
-      before(done => {
+      before(() =>
         helpers
           .run(require.resolve('../generators/languages'))
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr' })
           .withOptions({ skipInstall: true, languages: ['fr', 'de'] })
-          .on('end', done);
-      });
+      );
       containsLanguageFiles('fr');
       containsLanguageFiles('de');
     });
