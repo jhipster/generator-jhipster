@@ -91,14 +91,13 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
 <%_ if (!reactive || authenticationTypeOauth2) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-import java.time.temporal.ChronoUnit;
 
 /**
  * Service class for managing users.
