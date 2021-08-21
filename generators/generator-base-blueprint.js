@@ -226,44 +226,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
-   * @deprecated
-   * Instantiates the blueprint generators, if any.
-   * @param {string} subGen - sub generator
-   * @param {any} extraOptions - extra options to pass to blueprint generator
-   * @return {boolean} - true if one or more blueprints generators have been constructed; false otherwise
-   */
-  instantiateBlueprints(subGen, extraOptions) {
-    if (this.options.help) {
-      // Ignore blueprint registered options.
-      return false;
-    }
-    let delegateToBlueprint = false;
-
-    if (!this.configOptions.blueprintConfigured) {
-      this.configOptions.blueprintConfigured = true;
-      this._configureBlueprints();
-    }
-
-    const blueprints = this.jhipsterConfig.blueprints;
-    if (blueprints && blueprints.length > 0) {
-      blueprints.forEach(blueprint => {
-        const blueprintGenerator = this._composeBlueprint(blueprint.name, subGen, extraOptions);
-        if (blueprintGenerator) {
-          if (blueprintGenerator.sbsBlueprint) {
-            // If sbsBlueprint, add templatePath to the original generator templatesFolder.
-            this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
-          } else {
-            // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
-            delegateToBlueprint = true;
-          }
-        }
-      });
-    }
-    return delegateToBlueprint;
-  }
-
-  /**
-   * @private
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} extraOptions - extra options to pass to blueprint generator
