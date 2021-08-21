@@ -315,7 +315,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * @param {any} options - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
-  _composeBlueprint(blueprint, subGen, extraOptions = {}) {
+  async _composeBlueprint(blueprint, subGen, extraOptions = {}) {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.configOptions.skipChecks && !this.options.skipChecks) {
       this._checkBlueprint(blueprint);
@@ -324,16 +324,17 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     const generatorName = packageNameToNamespace(blueprint);
     const generatorNamespace = `${generatorName}:${subGen}`;
     if (!this.env.isPackageRegistered(generatorName)) {
-      this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
+      await this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
     }
-    if (!this.env.get(generatorNamespace)) {
+    if (!(await this.env.get(generatorNamespace))) {
       this.debug(
-        `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
-          subGen
+        `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(
+          generatorNamespace
         )} subgenerator: falling back to default generator`
       );
       return undefined;
     }
+    this.debug(`Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`);
 
     const finalOptions = {
       ...this.options,
@@ -342,7 +343,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       jhipsterContext: this,
     };
 
-    const blueprintGenerator = this.composeWith(generatorNamespace, finalOptions, true);
+    const blueprintGenerator = await this.composeWith(generatorNamespace, finalOptions, true);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }

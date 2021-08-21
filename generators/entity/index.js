@@ -460,9 +460,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      composeEntities() {
+      async composeEntities() {
         // We need to compose with others entities to update relationships.
-        this.composeWithJHipster(
+        await this.composeWithJHipster(
           GENERATOR_ENTITIES,
           {
             entities: this.options.singleEntity ? [this.context.name] : undefined,
@@ -517,22 +517,22 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.configOptions.sharedEntities[this.context.name] = this.context;
       },
 
-      composing() {
+      async composing() {
         if (this.options.skipWriting) return;
         const context = this.context;
         if (!context.skipServer) {
-          this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
+          await this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
             context,
           });
         }
 
         if (!context.skipClient || this.jhipsterConfig.applicationType === GATEWAY) {
-          this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
+          await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
             context,
             skipInstall: this.options.skipInstall,
           });
           if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
+            await this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
               context,
               skipInstall: this.options.skipInstall,
             });

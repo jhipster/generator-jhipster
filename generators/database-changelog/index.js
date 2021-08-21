@@ -54,26 +54,33 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _default() {
     return {
-      calculateChangelogs() {
+      async calculateChangelogs() {
         const diff = this._generateChangelogFromFiles();
 
-        diff.forEach(([fieldChanges, _relationshipChanges]) => {
-          if (fieldChanges.type === 'entity-new') {
-            this._composeWithIncrementalChangelogProvider(fieldChanges);
-          } else if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
-            this._composeWithIncrementalChangelogProvider(fieldChanges);
-          }
-        });
+        await Promise.all(
+          diff.map(([fieldChanges, _relationshipChanges]) => {
+            if (fieldChanges.type === 'entity-new') {
+              return this._composeWithIncrementalChangelogProvider(fieldChanges);
+            }
+            if (fieldChanges.addedFields.length > 0 || fieldChanges.removedFields.length > 0) {
+              return this._composeWithIncrementalChangelogProvider(fieldChanges);
+            }
+            return undefined;
+          })
+        );
 
-        diff.forEach(([_fieldChanges, relationshipChanges]) => {
-          if (
-            relationshipChanges &&
-            relationshipChanges.incremental &&
-            (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
-          ) {
-            this._composeWithIncrementalChangelogProvider(relationshipChanges);
-          }
-        });
+        await Promise.all(
+          diff.map(([_fieldChanges, relationshipChanges]) => {
+            if (
+              relationshipChanges &&
+              relationshipChanges.incremental &&
+              (relationshipChanges.addedRelationships.length > 0 || relationshipChanges.removedRelationships.length > 0)
+            ) {
+              return this._composeWithIncrementalChangelogProvider(relationshipChanges);
+            }
+            return undefined;
+          })
+        );
       },
     };
   }
@@ -89,7 +96,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _composeWithIncrementalChangelogProvider(databaseChangelog) {
     const skipWriting = !this.options.entities.includes(databaseChangelog.entityName);
-    this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, {
+    return this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, {
       databaseChangelog,
       skipWriting,
       configOptions: this.configOptions,

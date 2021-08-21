@@ -130,22 +130,24 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      composeEachEntity() {
-        this.getExistingEntityNames().forEach(entityName => {
-          if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
-          const selectedEntity = this.options.entities.includes(entityName);
-          const { regenerate = !selectedEntity } = this.options;
-          this.composeWithJHipster(GENERATOR_ENTITY, [entityName], {
-            skipWriting: !this.options.writeEveryEntity && !selectedEntity,
-            regenerate,
-            skipDbChangelog: this.jhipsterConfig.databaseType === SQL || this.options.skipDbChangelog,
-            skipInstall: true,
-            skipPrompts: this.options.skipPrompts,
-          });
-        });
+      async composeEachEntity() {
+        return Promise.all(
+          this.getExistingEntityNames().map(async entityName => {
+            if (this.options.composedEntities && this.options.composedEntities.includes(entityName)) return;
+            const selectedEntity = this.options.entities.includes(entityName);
+            const { regenerate = !selectedEntity } = this.options;
+            await this.composeWithJHipster(GENERATOR_ENTITY, [entityName], {
+              skipWriting: !this.options.writeEveryEntity && !selectedEntity,
+              regenerate,
+              skipDbChangelog: this.jhipsterConfig.databaseType === SQL || this.options.skipDbChangelog,
+              skipInstall: true,
+              skipPrompts: this.options.skipPrompts,
+            });
+          })
+        );
       },
 
-      databaseChangelog() {
+      async databaseChangelog() {
         if (this.jhipsterConfig.skipServer || this.jhipsterConfig.databaseType !== SQL || this.options.skipDbChangelog) {
           return;
         }
@@ -154,7 +156,10 @@ module.exports = class extends BaseBlueprintGenerator {
           return;
         }
 
-        this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG, this.options.writeEveryEntity ? existingEntities : this.options.entities);
+        await this.composeWithJHipster(
+          GENERATOR_DATABASE_CHANGELOG,
+          this.options.writeEveryEntity ? existingEntities : this.options.entities
+        );
       },
     };
   }
@@ -167,7 +172,7 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _default() {
     return {
-      composeEntitiesClient() {
+      async composeEntitiesClient() {
         if (this.options.entities.length !== this.jhipsterConfig.entities.length) return;
         const clientEntities = this.getExistingEntityNames()
           .map(entityName => {
@@ -179,7 +184,7 @@ module.exports = class extends BaseBlueprintGenerator {
           })
           .filter(entity => !entity.skipClient);
         if (clientEntities.length === 0) return;
-        this.composeWithJHipster(GENERATOR_ENTITIES_CLIENT, clientEntities, {
+        await this.composeWithJHipster(GENERATOR_ENTITIES_CLIENT, clientEntities, {
           skipInstall: this.options.skipInstall,
         });
       },

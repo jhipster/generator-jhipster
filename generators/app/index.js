@@ -405,16 +405,16 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
        * When composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        */
-      compose() {
-        this.composeWithJHipster(GENERATOR_COMMON, true);
+      async compose() {
+        await this.composeWithJHipster(GENERATOR_COMMON, true);
         if (!this.jhipsterConfig.skipServer) {
-          this.composeWithJHipster(GENERATOR_SERVER, true);
+          await this.composeWithJHipster(GENERATOR_SERVER, true);
         }
         if (!this.jhipsterConfig.skipClient) {
-          this.composeWithJHipster(GENERATOR_CLIENT, true);
+          await this.composeWithJHipster(GENERATOR_CLIENT, true);
         }
         if (!this.configOptions.skipI18n) {
-          this.composeWithJHipster(
+          await this.composeWithJHipster(
             GENERATOR_LANGUAGES,
             {
               regenerate: true,
@@ -444,20 +444,22 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
         this.config.set(config);
       },
 
-      composeEntities() {
+      async composeEntities() {
         if (!this.options.withEntities) return;
-        this.composeWithJHipster(GENERATOR_ENTITIES, { skipInstall: true }, true);
+        await this.composeWithJHipster(GENERATOR_ENTITIES, { skipInstall: true }, true);
       },
 
-      composePages() {
+      async composePages() {
         if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0 || this.configOptions.skipComposePage) return;
         this.configOptions.skipComposePage = true;
-        this.jhipsterConfig.pages.forEach(page => {
-          this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
-            skipInstall: true,
-            page,
-          });
-        });
+        await Promise.all(
+          this.jhipsterConfig.pages.map(page => {
+            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, [page.name], {
+              skipInstall: true,
+              page,
+            });
+          })
+        );
       },
     };
   }

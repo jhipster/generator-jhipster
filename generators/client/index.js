@@ -169,19 +169,19 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      composeCommon() {
-        this.composeWithJHipster(GENERATOR_COMMON, true);
+      async composeCommon() {
+        await this.composeWithJHipster(GENERATOR_COMMON, true);
       },
-      composeCypress() {
+      async composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
         if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
-        this.composeWithJHipster(GENERATOR_CYPRESS, { existingProject: this.existingProject }, true);
+        await this.composeWithJHipster(GENERATOR_CYPRESS, { existingProject: this.existingProject }, true);
       },
-      composeLanguages() {
+      async composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
 
-        this.composeWithJHipster(GENERATOR_LANGUAGES, true);
+        await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
     };
   }
