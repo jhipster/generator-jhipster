@@ -19,7 +19,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - ms-react-gateway-consul-jwt
 - ms-react-gateway-consul-oauth2
 - ngx-couchbase
-- ngx-couchbase-search
+- ngx-gradle-couchbase-search
 - ngx-neo4j
 - ngx-default
 - ngx-gradle-fr

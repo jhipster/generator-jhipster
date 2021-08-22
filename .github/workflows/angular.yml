@@ -71,6 +71,7 @@ jobs:
           - ngx-mongodb-kafka-cucumber
           - ngx-h2mem-ws-nol2
           - ngx-couchbase
+          - ngx-gradle-couchbase-search
           - ngx-gradle-fr
           - ngx-gradle-mysql-es-noi18n-mapsid
           - ngx-gradle-mariadb-oauth2-infinispan
@@ -122,7 +123,7 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: ngx-couchbase-search
+          - app-sample: ngx-gradle-couchbase-search
             entity: couchbase
             environment: prod
             war: 0
