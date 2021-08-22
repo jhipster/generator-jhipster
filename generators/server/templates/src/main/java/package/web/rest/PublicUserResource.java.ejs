@@ -76,7 +76,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 <%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 <%_ } _%>
