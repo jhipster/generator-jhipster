@@ -27,10 +27,6 @@ import <%= packageName %>.domain.User;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
   <%_ } _%>
-  <%_ if (!reactive) { _%>
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.data.domain.Sort;
