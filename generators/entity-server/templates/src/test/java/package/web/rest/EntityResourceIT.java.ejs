@@ -951,9 +951,9 @@ _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-    <%_ if (databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
         TimeUnit.SECONDS.sleep(3);
-    <%_ } _%>
+<%_ } _%>
 
         // Get the <%= entityInstance %>
 <%_ if (!reactive) { _%>
