@@ -152,10 +152,6 @@ function askForServerSideOpts() {
             value: SQL,
             name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
           });
-          opts.push({
-            value: COUCHBASE,
-            name: 'Couchbase',
-          });
         } else {
           opts.push({
             value: SQL,
