@@ -71,7 +71,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: auto
+    default: dependabot/maven/org.springframework.boot-spring-boot-dependencies-2.5.4
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
