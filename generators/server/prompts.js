@@ -174,7 +174,7 @@ function askForServerSideOpts() {
         }
         opts.push({
           value: 'couchbase',
-          name: 'Couchbase',
+          name: '[BETA] Couchbase',
         });
         opts.push({
           value: NEO4J,
