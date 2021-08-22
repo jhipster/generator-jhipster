@@ -97,12 +97,6 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: react-maven-couchbase-caffeine
-            entity: couchbase
-            environment: prod
-            war: 0
-            e2e: 0
-            testcontainers: 1
           - app-sample: react-gradle-mysql-es-noi18n-mapsid
             entity: sqlfull
             environment: prod
