@@ -71,7 +71,6 @@ jobs:
           - vue-gradle-session
           - vue-ws-theme
           - vue-oauth2
-          - vue-couchbase
           - vue-mongodb-kafka-cucumber
           - vue-session-cassandra-fr
         include:
