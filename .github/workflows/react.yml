@@ -68,7 +68,6 @@ jobs:
           - react-maven-mysql-es-noi18n-mapsid
           - react-maven-h2mem-memcached
           - react-maven-cassandra-session-redis
-          - react-maven-couchbase-caffeine
           - react-gradle-mysql-es-noi18n-mapsid
           - react-gradle-h2mem-memcached
           - react-gradle-cassandra-session-redis
