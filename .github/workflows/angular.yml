@@ -122,6 +122,12 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
+          - app-sample: ngx-couchbase-search
+            entity: couchbase
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
           - app-sample: ngx-gradle-fr
             entity: sql
             environment: prod
