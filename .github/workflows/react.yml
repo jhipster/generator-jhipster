@@ -72,7 +72,6 @@ jobs:
           - react-gradle-mysql-es-noi18n-mapsid
           - react-gradle-h2mem-memcached
           - react-gradle-cassandra-session-redis
-          - react-gradle-couchbase-caffeine
         include:
           - app-sample: react-default
             entity: sql
