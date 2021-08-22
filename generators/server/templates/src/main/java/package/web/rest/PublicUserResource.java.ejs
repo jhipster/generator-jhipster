@@ -96,7 +96,14 @@ public class PublicUserResource {
     private final UserRepository userRepository;
 <%_ } _%>
 
-    public PublicUserResource(UserService userService<% if (searchEngineElasticsearch) { %>, UserSearchRepository userSearchRepository<% } else if (searchEngine != false) { %>, UserRepository userRepository<% } %> ) {
+    public PublicUserResource(
+<%_ if (searchEngineElasticsearch) { -%>,
+        UserSearchRepository userSearchRepository,
+<%_ } else if (searchEngineCouchbase) { -%>
+        UserRepository userRepository,
+<%_ } -%>
+        UserService userService
+    ) {
         this.userService = userService;
 <%_ if (searchEngineElasticsearch) { _%>
         this.userSearchRepository = userSearchRepository;
