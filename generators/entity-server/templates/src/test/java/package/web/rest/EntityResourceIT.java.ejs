@@ -891,7 +891,7 @@ _%>
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
-<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j) { %>
+<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
