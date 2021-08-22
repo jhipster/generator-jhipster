@@ -92,7 +92,7 @@ public class PublicUserResource {
     private final UserService userService;
 <%_ if (searchEngineElasticsearch) { _%>
     private final UserSearchRepository userSearchRepository;
-<%_ } else if (searchEngine != false) { _%>
+<%_ } else if (searchEngineCouchbase) { _%>
     private final UserRepository userRepository;
 <%_ } _%>
 
