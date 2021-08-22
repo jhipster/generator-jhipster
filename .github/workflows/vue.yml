@@ -109,11 +109,6 @@ jobs:
             environment: prod
             war: 0
             e2e: 1
-          - app-sample: vue-couchbase
-            entity: couchbase
-            environment: dev
-            war: 0
-            e2e: 1
           - app-sample: vue-mongodb-kafka-cucumber
             entity: mongodb
             environment: dev
