@@ -482,8 +482,9 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
     }
 <%_ } _%>
 
-// Disabled test case for Couchbase as it is flaky, but functionally is working
-<%_ if (!databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Ignore
+<%_ } _%>
     @Test
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
