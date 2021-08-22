@@ -20,7 +20,7 @@ package <%= packageName %>.web.rest;
 
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
-<%_ } else if (searchEngine != false) { _%>
+<%_ } else if (searchEngineCouchbase) { _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.domain.User;
 <%_ } _%>
