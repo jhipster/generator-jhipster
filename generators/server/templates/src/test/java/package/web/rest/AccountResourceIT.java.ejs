@@ -22,8 +22,6 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } else if (databaseTypeCouchbase) { _%>
 import <%= packageName %>.CouchbaseTestContainerExtension;
-<%_ } else if (databaseTypeNeo4j) { _%>
-import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
