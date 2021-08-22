@@ -51,7 +51,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
-<%_ if (databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
