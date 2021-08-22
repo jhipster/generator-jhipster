@@ -30,12 +30,35 @@ import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.couchbase.core.query.Query;
+
+import static java.lang.String.format;
 
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 @NoRepositoryBean
 public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<T, ID><% } %> {
+
+    static String pageableStatement(Pageable pageable, String prefix) {
+        Sort sort = Sort.by(
+            pageable.getSort().stream()
+                .map(order -> {
+                    String property = order.getProperty();
+                    if ("id".equals(property)) {
+                        return order.withProperty(format("meta(%s).id", prefix));
+                    }
+                    return order.withProperty(format("%s.%s", prefix, property));
+                })
+                .collect(Collectors.toList()));
+        return new Query()
+            .limit(pageable.getPageSize())
+            .skip(pageable.getOffset())
+            .with(sort)
+            .export();
+    }
+
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     List<T> findAll();
 
