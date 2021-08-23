@@ -129,8 +129,10 @@ test {
 }
 
 task integrationTest(type: Test) {
+<%_ if (databaseTypeCouchbase) { _%>
     minHeapSize = "128m"
     maxHeapSize = "512m"
+<%_ } _%>
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
