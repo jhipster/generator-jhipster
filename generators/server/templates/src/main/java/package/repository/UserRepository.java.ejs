@@ -184,6 +184,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     // https://github.com/spring-projects/spring-data-couchbase/issues/897
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
+
     <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%_ } _%>
