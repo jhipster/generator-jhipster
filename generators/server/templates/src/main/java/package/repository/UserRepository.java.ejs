@@ -191,6 +191,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
+
     <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%_ } _%>
