@@ -99,7 +99,7 @@ public class PublicUserResource {
 <%_ } _%>
 
     public PublicUserResource(
-<%_ if (searchEngineElasticsearch) { -%>,
+<%_ if (searchEngineElasticsearch) { -%>
         UserSearchRepository userSearchRepository,
 <%_ } else if (searchEngineCouchbase) { -%>
         UserRepository userRepository,
