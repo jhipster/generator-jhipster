@@ -483,7 +483,7 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
 <%_ } _%>
 
 <%_ if (databaseTypeCouchbase) { _%>
-    @Ignore
+    @org.junit.Ignore
 <%_ } _%>
     @Test
 <%_ if (databaseTypeSql && !reactive) { _%>
