@@ -484,8 +484,24 @@ const serverFiles = {
           file: 'package/domain/PersistentToken.java',
           renameTo: generator => `${generator.javaDir}domain/PersistentToken.java`,
         },
+      ],
+    },
+    {
+      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === SESSION && !generator.reactive && generator.databaseType != COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
         {
           file: 'package/repository/PersistentTokenRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/PersistentTokenRepository.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === SESSION && !generator.reactive && generator.databaseType === COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: `package/repository/PersistentTokenRepository_couchbase.java`,
           renameTo: generator => `${generator.javaDir}repository/PersistentTokenRepository.java`,
         },
       ],
