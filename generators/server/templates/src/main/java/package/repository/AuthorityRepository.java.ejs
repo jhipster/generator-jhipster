@@ -19,7 +19,9 @@
 package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.Authority;
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.stereotype.Repository;
+<%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
   <%_ if (!reactive) { _%>
