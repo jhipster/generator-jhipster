@@ -119,7 +119,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     @Query("{}")
     List<<%= persistClass %>> findAllWithEagerRelationships();
 
-    @Query("{}")
+    @Query("{'id': ?0}")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
     }
