@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-describe('Lighthoyse Audits', () => {
-    beforeEach(() => { 
+describe('Lighthouse Audits', () => {
+    beforeEach(() => {
       cy.visit('/');
     });
 
     it('homepage', () => {
-      const customThresholds = {  
+      const customThresholds = {
         performance: 80,
         accessibility: 90,
         seo: 90,
