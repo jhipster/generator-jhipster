@@ -238,6 +238,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       async writeClientTranslations() {
         if (this.skipClient) return;
+        // make it Promise.all() when `this.lang = lang;` can be dropped.
         for (const lang of this.languagesToApply) {
           this.lang = lang;
           await this.writeFiles({ sections: clientI18nFiles });

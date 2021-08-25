@@ -51,7 +51,6 @@ module.exports.clientI18nFiles = {
         'metrics.json',
         {
           transform: true,
-          method: 'template',
           file: 'health.json',
         },
       ],
