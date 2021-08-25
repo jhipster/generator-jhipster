@@ -48,9 +48,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.couchbase.repository.CouchbaseRepository;
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.stereotype.Repository;
@@ -62,15 +59,11 @@ import javax.validation.Validator;
 import java.util.ArrayList;
 <%_ } _%>
 import java.util.List;
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import java.util.Set;
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-
-import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <%_ } _%>
 
 /**
@@ -78,32 +71,14 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
  * Spring Data JPA repository for the {@link PersistentToken} entity.
 <%_ } else if (databaseTypeMongodb) { _%>
  * Spring Data MongoDB repository for the {@link PersistentToken} entity.
-<%_ } else if (databaseTypeCouchbase) { _%>
- * Spring Data Couchbase repository for the {@link PersistentToken} entity.
 <%_ } else if (databaseTypeCassandra) { _%>
  * Cassandra repository for the {@link PersistentToken} entity.
 <%_ } _%>
  */
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-public interface PersistentTokenRepository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>CouchbaseRepository<% } %><PersistentToken, String> {
-  <%_ if (databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+public interface PersistentTokenRepository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><PersistentToken, String> {
 
-    default Optional<PersistentToken> findBySeries(String series) {
-        return findById(PersistentToken.PREFIX + ID_DELIMITER + series);
-    }
-
-    default void deleteBySeries(String series) {
-        deleteById(PersistentToken.PREFIX + ID_DELIMITER + series);
-    }
-
-    default List<PersistentToken> findByUser(<%= asEntity('User') %> user) {
-        return findByLogin(user.getLogin());
-    }
-
-    List<PersistentToken> findByLogin(String login);
-  <%_ } else { _%>
     List<PersistentToken> findByUser(<%= asEntity('User') %> user);
-  <%_ } _%>
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 
