@@ -68,8 +68,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeSql) { _%>
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("created_by")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("created_by")
@@ -81,8 +84,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeSql) { _%>
     @Column(name = "created_date", updatable = false)
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("created_date")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("created_date")
@@ -96,8 +102,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeSql) { _%>
     @Column(name = "last_modified_by", length = 50)
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("last_modified_by")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("last_modified_by")
@@ -109,8 +118,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
 <%_ if (databaseTypeSql) { _%>
     @Column(name = "last_modified_date")
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("last_modified_date")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("last_modified_date")
