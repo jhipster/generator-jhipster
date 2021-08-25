@@ -373,6 +373,10 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
         }
+
+        if (!this.jhipsterConfig.skipCommitHook && !this.jhipsterConfig.monorepository) {
+          scriptsStorage.set('prepare', 'husky install');
+        }
       },
 
       microfrontend() {

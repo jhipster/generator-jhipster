@@ -132,6 +132,13 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanup() {
+        if (this.isJhipsterVersionLessThan('7.1.1') && this.jhipsterConfig) {
+          if (!this.jhipsterConfig.skipCommitHook) {
+            this.removeFile('.huskyrc');
+          }
+        }
+      },
       writePrettierConfig() {
         // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
         return this.writeFilesToDisk(prettierConfigFiles);

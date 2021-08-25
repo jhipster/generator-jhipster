@@ -38,7 +38,14 @@ module.exports.files = {
 module.exports.commitHooksFiles = {
   commitHooks: [
     {
-      templates: ['.huskyrc', '.lintstagedrc.js'],
+      templates: [
+        '.lintstagedrc.js',
+        {
+          file: '.husky/pre-commit',
+          method: 'copy',
+          noEjs: true,
+        },
+      ],
     },
   ],
 };
