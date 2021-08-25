@@ -187,9 +187,6 @@ import java.util.UUID;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import java.util.concurrent.TimeUnit;
-<%_ } _%>
 
 <%_ if (fieldsContainBigDecimal) { _%>
 import static <%= packageName %>.web.rest.TestUtil.sameNumber;
@@ -857,10 +854,6 @@ _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-<%_ if (databaseTypeCouchbase) { _%>
-        TimeUnit.SECONDS.sleep(3);
-<%_ } _%>
-
         // Get all the <%= entityInstance %>List
 <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (!databaseTypeCassandra) { %> + "?sort=<%= primaryKey.name %>,desc"<% } %>))
@@ -952,10 +945,6 @@ _%>
   <%_ } _%>
 <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
-
-<%_ if (databaseTypeCouchbase) { _%>
-        TimeUnit.SECONDS.sleep(3);
-<%_ } _%>
 
         // Get the <%= entityInstance %>
 <%_ if (!reactive) { _%>
