@@ -58,14 +58,16 @@ module.exports = {
 function writeFiles() {
   return {
     async writeEnumFiles() {
+      if (this.skipClient || !this.enableTranslation) return;
       const { clientRootFolder, clientSrcDir, packageName, frontendAppName } = this;
-      for (const field of this.fields) {
-        if (field.fieldIsEnum === true) {
-          // Copy for each
-          if (!this.skipClient && this.enableTranslation) {
+      await Promise.all(
+        this.fields
+          .map(field => {
+            if (!field.fieldIsEnum) return undefined;
+            // Copy for each
             const languages = this.languages || this.getAllInstalledLanguages();
-            for (const lang of languages) {
-              await this.writeFiles({
+            return languages.map(lang =>
+              this.writeFiles({
                 sections: enumClientI18nFiles,
                 context: {
                   ...utils.getEnumInfo(field, this.clientRootFolder),
@@ -75,24 +77,24 @@ function writeFiles() {
                   packageName,
                   clientSrcDir,
                 },
-              });
-            }
-          }
-        }
-      }
+              })
+            );
+          })
+          .flat()
+      );
     },
 
     async writeClientFiles() {
-      if (this.skipClient) return;
+      if (this.skipClient || !this.enableTranslation) return;
 
       // Copy each
-      if (this.enableTranslation) {
-        const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = this;
-        for (const lang of languages) {
+      const { clientSrcDir, frontendAppName, languages = this.getAllInstalledLanguages() } = this;
+      await Promise.all(
+        languages.map(async lang => {
           await this.writeFiles({ sections: entityClientI18nFiles, context: { ...this.entity, clientSrcDir, frontendAppName, lang } });
           this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClassHumanized || startCase(this.entityClass), lang);
-        }
-      }
+        })
+      );
     },
   };
 }
