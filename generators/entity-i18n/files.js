@@ -59,7 +59,7 @@ function writeFiles() {
   return {
     async writeEnumFiles() {
       if (this.skipClient || !this.enableTranslation) return;
-      const { clientRootFolder, clientSrcDir, packageName, frontendAppName } = this;
+      const { clientSrcDir, packageName, frontendAppName } = this;
       await Promise.all(
         this.fields
           .map(field => {
@@ -71,7 +71,6 @@ function writeFiles() {
                 sections: enumClientI18nFiles,
                 context: {
                   ...utils.getEnumInfo(field, this.clientRootFolder),
-                  clientRootFolder,
                   lang,
                   frontendAppName,
                   packageName,
