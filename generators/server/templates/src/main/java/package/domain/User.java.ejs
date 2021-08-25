@@ -212,8 +212,11 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("first_name")
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("first_name")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeCassandra && !reactive) { _%>
     @CqlName("firstname")
@@ -230,8 +233,11 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("last_name")
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("last_name")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeCassandra && !reactive) { _%>
     @CqlName("lastname")
@@ -266,8 +272,11 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("lang_key")
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     @Field("lang_key")
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+    @Field
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     @Property("lang_key")
@@ -285,8 +294,11 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
   <%_ if (databaseTypeSql && reactive) { _%>
     @Column("image_url")
   <%_ } _%>
-  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeMongodb) { _%>
     @Field("image_url")
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
+    @Field
   <%_ } _%>
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("image_url")
@@ -302,8 +314,11 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
   <%_ if (databaseTypeSql && reactive) { _%>
     @Column("activation_key")
   <%_ } _%>
-  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeMongodb) { _%>
     @Field("activation_key")
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
+    @Field
   <%_ } _%>
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("activation_key")
@@ -321,8 +336,11 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
   <%_ if (databaseTypeSql && reactive) { _%>
     @Column("reset_key")
   <%_ } _%>
-  <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeMongodb) { _%>
     @Field("reset_key")
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
+    @Field
   <%_ } _%>
   <%_ if (databaseTypeNeo4j) { _%>
     @Property("reset_key")
@@ -335,8 +353,10 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
 
   <%_ if (databaseTypeSql || (databaseTypeCassandra && reactive)) { _%>
     @Column(<% if (!reactive) { %>name = <% } %>"reset_date")
-  <%_ } else if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+  <%_ } else if (databaseTypeMongodb) { _%>
     @Field("reset_date")
+  <%_ } else if (databaseTypeCouchbase) { _%>
+    @Field
   <%_ } else if (databaseTypeNeo4j) { _%>
     @Property("reset_date")
   <%_ } _%>

@@ -67,14 +67,14 @@ import java.util.stream.Collectors;
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
     <%_ } _%>
   <%_ } else { _%>
-    @Field("<%= field.fieldNameUnderscored %>")
+    @Field
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-    @Field("<%= field.fieldNameUnderscored %>_content_type")
+    @Field
 <&_ } -&>
 <%_ } -%>
 
