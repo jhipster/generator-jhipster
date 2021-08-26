@@ -24,7 +24,7 @@ const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const writeFiles = require('./files').writeFiles;
+const { writeFiles } = require('./files');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -386,7 +386,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
-    return { ...writeFiles(), ...super._missingPostWriting() };
+    return {
+      ...writeFiles(),
+      ...super._missingPostWriting(),
+    };
   }
 
   get writing() {
