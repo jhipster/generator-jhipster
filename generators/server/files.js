@@ -23,7 +23,7 @@ const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-type
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const { COUCHBASE, MARIADB, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
+const { COUCHBASE, MARIADB, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
@@ -80,7 +80,7 @@ const mongoDbFiles = {
   docker: [
     {
       path: DOCKER_DIR,
-      templates: ['mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
+      templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
     },
   ],
   serverResource: [
@@ -107,6 +107,12 @@ const mongoDbFiles = {
 };
 
 const neo4jFiles = {
+  docker: [
+    {
+      path: DOCKER_DIR,
+      templates: ['neo4j.yml'],
+    },
+  ],
   serverResource: [
     {
       condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
@@ -156,6 +162,7 @@ const cassandraFiles = {
       path: DOCKER_DIR,
       templates: [
         // docker-compose files
+        'cassandra.yml',
         'cassandra-cluster.yml',
         'cassandra-migration.yml',
         // dockerfiles
@@ -235,7 +242,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.prodDatabaseType !== NO_DATABASE && generator.prodDatabaseType !== ORACLE,
+      condition: generator => generator.databaseTypeSql && !generator.prodDatabaseTypeOracle,
       path: DOCKER_DIR,
       templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }],
     },

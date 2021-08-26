@@ -34,7 +34,7 @@ const couchbaseFiles = {
   docker: [
     {
       path: DOCKER_DIR,
-      templates: ['couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
+      templates: ['couchbase.yml', 'couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
     },
   ],
   serverJavaConfig: [
