@@ -58,7 +58,8 @@
     "jdl",
     "lib",
     "utils",
-    "!__snapshots__",
+    "!__*",
+    "!*.snap",
     "!*.spec.?(c|m)js"
   ],
   "scripts": {
