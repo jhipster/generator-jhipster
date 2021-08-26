@@ -26,7 +26,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('
 const cacheProviderTypes = require('../../jdl/jhipster/cache-types');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = require('../../jdl/jhipster/database-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
@@ -168,11 +168,10 @@ function askForServerSideOpts() {
             name: 'Cassandra',
           });
         }
-        // Couchbase is broken, see https://github.com/jhipster/generator-jhipster/pull/14184 for more information.
-        /* opts.push({
+        opts.push({
           value: 'couchbase',
-          name: 'Couchbase',
-        }); */
+          name: '[BETA] Couchbase',
+        });
         opts.push({
           value: NEO4J,
           name: '[BETA] Neo4j',
@@ -329,7 +328,7 @@ function askForOptionalItems() {
       value: 'searchEngine:elasticsearch',
     });
   }
-  if (databaseType === 'couchbase') {
+  if (databaseType === COUCHBASE) {
     choices.push({
       name: 'Couchbase FTS as search engine',
       value: 'searchEngine:couchbase',

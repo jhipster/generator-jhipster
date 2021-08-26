@@ -20,6 +20,8 @@ package <%= packageName %>.web.rest;
 
 <%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
+<%_ } else if (databaseTypeCouchbase) { _%>
+import <%= packageName %>.CouchbaseTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
@@ -49,6 +51,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
+<%_ if (databaseTypeCouchbase) { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (!reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

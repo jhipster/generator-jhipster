@@ -208,7 +208,7 @@ class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCas
 <% } _%>
     }
 
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)
+<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j)
   && (!(authenticationTypeOauth2 && applicationTypeMicroservice))) { _%>
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>

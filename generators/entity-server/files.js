@@ -192,11 +192,21 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && !generator.embedded,
+      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/repository/EntityRepository.java',
+          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType === COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/EntityRepository_couchbase.java',
           renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
         },
       ],

@@ -20,6 +20,13 @@ package <%= packageName %>.web.rest;
 
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } else if (searchEngineCouchbase) { _%>
+import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.domain.User;
+  <%_ if (!reactive) { _%>
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.data.domain.Sort;
@@ -72,7 +79,6 @@ import java.util.Arrays;
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
@@ -87,14 +93,24 @@ public class PublicUserResource {
 
     private final UserService userService;
 <%_ if (searchEngineElasticsearch) { _%>
-
     private final UserSearchRepository userSearchRepository;
+<%_ } else if (searchEngineCouchbase) { _%>
+    private final UserRepository userRepository;
 <%_ } _%>
 
-    public PublicUserResource(UserService userService<% if (searchEngineElasticsearch) { %>, UserSearchRepository userSearchRepository<% } %>) {
+    public PublicUserResource(
+<%_ if (searchEngineElasticsearch) { -%>
+        UserSearchRepository userSearchRepository,
+<%_ } else if (searchEngineCouchbase) { -%>
+        UserRepository userRepository,
+<%_ } -%>
+        UserService userService
+    ) {
         this.userService = userService;
 <%_ if (searchEngineElasticsearch) { _%>
         this.userSearchRepository = userSearchRepository;
+<%_ } else if (searchEngine != false) { _%>
+        this.userRepository = userRepository;
 <%_ } _%>
     }
 
@@ -179,7 +195,14 @@ public class PublicUserResource {
         return userSearchRepository.search(query).map(<%= asDto('User') %>::new).collectList();
     <%_ } _%>
   <%_ } else { _%>
-        return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
+     <%_ if (!reactive) { _%>
+        return StreamSupport
+            .stream(userRepository.search(User.PREFIX, query).spliterator(), false)
+            .map(<%= asDto('User') %>::new)
+            .collect(Collectors.toList());
+     <%_ } else { _%>
+        return userRepository.search(User.PREFIX, query).map(<%= asDto('User') %>::new).collectList();
+     <%_ } _%>
   <%_ } _%>
     }
 <%_ } _%>

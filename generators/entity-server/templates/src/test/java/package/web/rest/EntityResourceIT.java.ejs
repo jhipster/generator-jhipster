@@ -886,7 +886,7 @@ _%>
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
-<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j) { %>
+<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
@@ -1164,7 +1164,7 @@ _%>
         <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
     }
     <%_ } else { _%>
-        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);        
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
     <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();

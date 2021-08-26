@@ -18,29 +18,53 @@
 -%>
 package <%= packageName %>.repository;
 
-import org.springframework.data.couchbase.core.query.Query;
-import org.springframework.data.couchbase.repository.CouchbasePagingAndSortingRepository;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.data.couchbase.repository.ScanConsistency;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
+<%_ if (searchEngineCouchbase) { _%>
+import <%= packageName %>.repository.search.SearchCouchbaseRepository;
+<%_ } _%>
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.data.couchbase.core.query.Query;
+
+import static java.lang.String.format;
 
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 @NoRepositoryBean
-public interface N1qlCouchbaseRepository<T, ID extends Serializable> extends CouchbasePagingAndSortingRepository<T, ID> {
+public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<T, ID><% } %> {
 
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
+    static String pageableStatement(Pageable pageable, String prefix) {
+        Sort sort = Sort.by(
+            pageable.getSort().stream()
+                .map(order -> {
+                    String property = order.getProperty();
+                    if ("id".equals(property)) {
+                        return order.withProperty(format("meta(%s).id", prefix));
+                    }
+                    return order.withProperty(format("%s.%s", prefix, property));
+                })
+                .collect(Collectors.toList()));
+        return new Query()
+            .limit(pageable.getPageSize())
+            .skip(pageable.getOffset())
+            .with(sort)
+            .export();
+    }
+
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     List<T> findAll();
 
-    @Query("SELECT count(*) FROM #{#n1ql.bucket} WHERE #{#n1ql.filter}")
-    long count();
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<T> findAll(Sort sort);
 
-    @Query("DELETE FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} returning #{#n1ql.fields}")
-    T removeAll();
-
-    default void deleteAll() {
-        removeAll();
-    }
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Page<T> findAll(Pageable pageable);
 }

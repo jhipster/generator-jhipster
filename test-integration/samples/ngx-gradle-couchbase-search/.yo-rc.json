@@ -14,7 +14,7 @@
     "searchEngine": "couchbase",
     "messageBroker": false,
     "serviceDiscoveryType": false,
-    "buildTool": "maven",
+    "buildTool": "gradle",
     "enableSwaggerCodegen": false,
     "clientFramework": "angularX",
     "clientPackageManager": "npm",

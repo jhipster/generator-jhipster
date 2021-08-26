@@ -20,34 +20,46 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterProperties;
 
 import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
 import com.github.couchmove.Couchmove;
-import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
-<%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
+<%_ if (searchEngineCouchbase) { _%>
+import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
+<%_ } else if (searchEngineElasticsearch) { _%>
+import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
 <%_ } _%>
+
+import <%= packageName %>.config.couchbase.CustomCouchbaseRepositoryFactoryBean;
+
 import org.apache.commons.codec.binary.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.GenericConverter;
+import org.springframework.core.convert.support.GenericConversionService;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
+import org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter;
+import org.springframework.data.couchbase.core.mapping.CouchbaseMappingContext;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
@@ -60,26 +72,52 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+<%_ if (reactive) { _%>
+import java.lang.reflect.Field;
+import org.springframework.data.repository.util.QueryExecutionConverters;
+import reactor.core.publisher.Flux;
+<%_ } _%>
 
 @Configuration
+@EnableConfigurationProperties(CouchbaseProperties.class)
 <%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
-    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class)<%_ } _%>)
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(<% if (searchEngineCouchbase) { %>repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class, <% } %>basePackages = "<%= packageName %>.repository", repositoryFactoryBeanClass = CustomCouchbaseRepositoryFactoryBean.class<%_ if (searchEngineElasticsearch) { %>,
+    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
 <%_ if (!reactive) { _%>
-@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
 <%_ } _%>
-@Import(value = CouchbaseAutoConfiguration.class)
-public class DatabaseConfiguration {
+public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
+    private final JHipsterProperties jHipsterProperties;
+    private final CouchbaseProperties couchbaseProperties;
+
+    public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseProperties couchbaseProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+        this.couchbaseProperties = couchbaseProperties;
+        <% if (reactive) { %>allowPageable();<% } %>
+    }
+
+<%_ if (reactive) { _%>
+    // Temporary Hack to fix pageable
+    @SuppressWarnings("unchecked")
+    private void allowPageable() {
+        try {
+            Field allowed_pageable_types = QueryExecutionConverters.class.getDeclaredField("ALLOWED_PAGEABLE_TYPES");
+            allowed_pageable_types.setAccessible(true);
+            Set<Class<?>> ALLOWED_PAGEABLE_TYPES = (Set<Class<?>>) allowed_pageable_types.get(QueryExecutionConverters.class);
+            ALLOWED_PAGEABLE_TYPES.add(Flux.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+<%_ } _%>
     @Bean
     public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
         return new ValidatingCouchbaseEventListener(validator());
@@ -88,6 +126,31 @@ public class DatabaseConfiguration {
     @Bean
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
+    }
+
+    @Override
+    public String getConnectionString() {
+        return couchbaseProperties.getConnectionString();
+    }
+
+    @Override
+    public String getUserName() {
+        return couchbaseProperties.getUsername();
+    }
+
+    @Override
+    public String getPassword() {
+        return couchbaseProperties.getPassword();
+    }
+
+    @Override
+    public String getBucketName() {
+        return jHipsterProperties.getDatabase().getCouchbase().getBucketName();
+    }
+
+    @Bean
+    public Bucket bucket(Cluster cluster) {
+        return cluster.bucket(jHipsterProperties.getDatabase().getCouchbase().getBucketName());
     }
 
     @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
@@ -105,10 +168,18 @@ public class DatabaseConfiguration {
         return new CouchbaseCustomConversions(converters);
     }
 
+    @Override
+    public MappingCouchbaseConverter mappingCouchbaseConverter(CouchbaseMappingContext couchbaseMappingContext, CouchbaseCustomConversions couchbaseCustomConversions) {
+        MappingCouchbaseConverter mappingCouchbaseConverter = super.mappingCouchbaseConverter(couchbaseMappingContext, couchbaseCustomConversions);
+        ((GenericConversionService) mappingCouchbaseConverter.getConversionService()).addConverter(StringToObjectConverter.INSTANCE);
+        return mappingCouchbaseConverter;
+    }
+
     @Bean
-    public Couchmove couchmove(Bucket couchbaseBucket, CouchbaseProperties properties) {
+    public Couchmove couchmove(Cluster cluster) {
         log.debug("Configuring Couchmove");
-        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getBucket().getName(), properties.getBucket().getPassword(), "config/couchmove/changelog");
+        Bucket bucket = cluster.bucket(getBucketName());
+        Couchmove couchmove = new Couchmove(bucket, cluster, "config/couchmove/changelog");
         couchmove.migrate();
         return couchmove;
     }
@@ -201,9 +272,9 @@ public class DatabaseConfiguration {
         }
     }
 
-   /**
-    * Simple singleton to convert {@link UUID}s to their {@link String} representation.
-    */
+    /**
+     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+     */
     @WritingConverter
     public enum UUIDToStringConverter implements Converter<UUID, String> {
         INSTANCE;
@@ -215,8 +286,8 @@ public class DatabaseConfiguration {
     }
 
     /**
-    * Simple singleton to convert from {@link String} {@link UUID} representation.
-    */
+     * Simple singleton to convert from {@link String} {@link UUID} representation.
+     */
     @ReadingConverter
     public enum StringToUUIDConverter implements Converter<String, UUID> {
         INSTANCE;
@@ -228,4 +299,17 @@ public class DatabaseConfiguration {
 
     }
 
+    public enum StringToObjectConverter implements GenericConverter {
+        INSTANCE;
+
+        @Override
+        public Set<ConvertiblePair> getConvertibleTypes() {
+            return Collections.singleton(new ConvertiblePair(String.class, Object.class));
+        }
+
+        @Override
+        public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+            return null;
+        }
+    }
 }

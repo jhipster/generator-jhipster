@@ -432,6 +432,12 @@ Object {
           "file": "package/domain/PersistentToken.java",
           "renameTo": [Function],
         },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
         Object {
           "file": "package/repository/PersistentTokenRepository.java",
           "renameTo": [Function],
@@ -718,11 +724,61 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/N1qlCouchbaseRepository.java",
+          "file": "package/config/couchbase/CustomCouchbaseRepositoryFactory.java",
           "renameTo": [Function],
         },
         Object {
-          "file": "package/repository/CustomN1qlCouchbaseRepository.java",
+          "file": "package/config/couchbase/CustomCouchbaseRepositoryFactoryBean.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/couchbase/CustomCouchbaseRepositoryQuery.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/couchbase/CustomN1qlQueryCreator.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/couchbase/CustomN1qlRepositoryQueryExecutor.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/couchbase/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/PersistentTokenRepository_couchbase.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/CustomCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/N1qlCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/CustomReactiveCouchbaseRepository.java",
           "renameTo": [Function],
         },
       ],
@@ -742,21 +798,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/CustomN1qlCouchbaseRepositoryTest.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/ReactiveN1qlCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/repository/CustomReactiveN1qlCouchbaseRepository.java",
+          "file": "package/repository/CustomCouchbaseRepositoryTest.java",
           "renameTo": [Function],
         },
       ],
@@ -1826,7 +1868,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/config/DatabaseConfigurationIT.java",
+          "file": "package/CouchbaseTestContainerExtension.java",
           "renameTo": [Function],
         },
       ],
