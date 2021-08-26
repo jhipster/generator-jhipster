@@ -288,11 +288,7 @@ public class UserService {
       <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
       <%_ } _%>
-        if (userDTO.getLangKey() == null) {
-            newUser.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
-        } else {
-            newUser.setLangKey(userDTO.getLangKey());
-        }
+        newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
