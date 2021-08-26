@@ -130,6 +130,7 @@ Object {
       "condition": [Function],
       "path": "src/main/docker/",
       "templates": Array [
+        "mongodb.yml",
         "mongodb-cluster.yml",
         "mongodb/MongoDB.Dockerfile",
         "mongodb/scripts/init_replicaset.js",
@@ -139,15 +140,14 @@ Object {
       "condition": [Function],
       "path": "src/main/docker/",
       "templates": Array [
-        "couchbase-cluster.yml",
-        "couchbase/Couchbase.Dockerfile",
-        "couchbase/scripts/configure-node.sh",
+        "neo4j.yml",
       ],
     },
     Object {
       "condition": [Function],
       "path": "src/main/docker/",
       "templates": Array [
+        "cassandra.yml",
         "cassandra-cluster.yml",
         "cassandra-migration.yml",
         "cassandra/Cassandra-Migration.Dockerfile",
@@ -715,60 +715,6 @@ Object {
       "templates": Array [
         Object {
           "file": "package/config/ElasticsearchConfiguration.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/couchbase/CustomCouchbaseRepositoryFactory.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/couchbase/CustomCouchbaseRepositoryFactoryBean.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/couchbase/CustomCouchbaseRepositoryQuery.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/couchbase/CustomN1qlQueryCreator.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/couchbase/CustomN1qlRepositoryQueryExecutor.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/couchbase/package-info.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/repository/JHipsterCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/PersistentTokenRepository_couchbase.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/JHipsterCouchbaseRepositoryTest.java",
           "renameTo": [Function],
         },
       ],
@@ -1583,23 +1529,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
-        "config/couchmove/changelog/V0__create_indexes.n1ql",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
-        "config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json",
-        "config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json",
-        "config/couchmove/changelog/V0.1__initial_setup/user__admin.json",
-        "config/couchmove/changelog/V0.1__initial_setup/user__user.json",
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/main/java/",
       "templates": Array [
         Object {
@@ -1829,16 +1758,6 @@ Object {
       "templates": Array [
         Object {
           "file": "package/web/rest/KafkaResourceIT.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/CouchbaseTestContainerExtension.java",
           "renameTo": [Function],
         },
       ],
