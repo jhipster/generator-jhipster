@@ -147,7 +147,7 @@ const couchbaseFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: `package/repository/PersistentTokenRepository_couchbase.java`,
+          file: 'package/repository/PersistentTokenRepository_couchbase.java',
           renameTo: generator => `${generator.javaDir}repository/PersistentTokenRepository.java`,
         },
       ],
@@ -631,7 +631,11 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === SESSION && !generator.reactive && generator.databaseType != COUCHBASE,
+      condition: generator =>
+        !shouldSkipUserManagement(generator) &&
+        generator.authenticationType === SESSION &&
+        !generator.reactive &&
+        generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {

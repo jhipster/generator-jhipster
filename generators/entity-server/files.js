@@ -192,7 +192,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType != COUCHBASE,
+      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
