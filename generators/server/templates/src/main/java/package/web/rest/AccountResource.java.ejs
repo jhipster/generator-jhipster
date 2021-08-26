@@ -24,7 +24,6 @@ import <%= packageName %>.security.SecurityUtils;
   <%_ } _%>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,6 +121,7 @@ import org.springframework.web.bind.annotation.RestController;
   <%_ if (reactive) { _%>
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import java.security.Principal;
   <%_ } else { _%>
 import javax.servlet.http.HttpServletRequest;
   <%_ } _%>
@@ -230,7 +230,6 @@ import <%= packageName %>.service.MailService;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.web.rest.errors.*;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;

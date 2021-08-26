@@ -3,6 +3,7 @@ import buildPaginationQueryOpts from '@/shared/sort/sorts';
 <%_ if (databaseTypeCassandra) { _%>
 import {Authority} from '@/shared/security/authority'
 <%_ } _%>
+import { IUser } from '@/shared/model/user.model';
 
 export default class UserManagementService {
 
@@ -10,11 +11,11 @@ export default class UserManagementService {
     return axios.get(`api/admin/users/${userId}`);
   }
 
-  public create(user): Promise<any> {
+  public create(user: IUser): Promise<any> {
     return axios.post('api/admin/users', user);
   }
 
-  public update(user): Promise<any> {
+  public update(user: IUser): Promise<any> {
     return axios.put('api/admin/users', user);
   }
 

@@ -30,12 +30,12 @@ const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = '7.0.2';
-const JIB_VERSION = '3.1.1';
+const JIB_VERSION = '3.1.4';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.1.1-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.5.3';
+const SPRING_BOOT_VERSION = '2.5.4';
 const LIQUIBASE_VERSION = '4.4.2';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.32.Final';

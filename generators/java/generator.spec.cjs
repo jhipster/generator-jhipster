@@ -37,12 +37,12 @@ describe(`JHipster ${generator} generator`, () => {
     defaultConfig,
     customPrompts: {
       packageName: 'my.custom.package.name',
-      buildTool: 'any',
       prettierJavaIndent: 2,
+      buildTool: 'any',
     },
     generatorPath,
   });
-  describe('blueprint support', () => testBlueprintSupport('java'));
+  describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
       let runResult;

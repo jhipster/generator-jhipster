@@ -77,8 +77,8 @@ const { SPRING_WEBSOCKET } = require('../jdl/jhipster/websocket-types');
  * The method signatures in private API can be changed without a major version change.
  */
 module.exports = class JHipsterBasePrivateGenerator extends Generator {
-  constructor(args, opts, features) {
-    super(args, opts, features);
+  constructor(args, options, features) {
+    super(args, options, features);
     // expose lodash to templates
     this._ = _;
   }

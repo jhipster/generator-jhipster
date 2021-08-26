@@ -18,17 +18,25 @@
 -%>
 package <%= packageName %>.service;
 
-<% if (useInterface === false) { %>import org.slf4j.Logger;
+<%_ if (!useInterface) { _%>
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.stereotype.Service;
+  <%_ if (databaseTypeSql) { _%>
+import org.springframework.transaction.annotation.Transactional;
+  <%_ } _%>
 
-@Service<% if (databaseType === 'sql') { %>
-@Transactional<% } %>
+@Service
+  <%_ if (databaseTypeSql) { _%>
+@Transactional
+  <%_ } _%>
 public class <%= serviceClass %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClass %>.class);
 
-}<% } else  { %>public interface <%= serviceClass %> {
+}
+<%_ } else  { _%>
+public interface <%= serviceClass %> {
 
-}<% } %>
+}
+<%_ } _%>

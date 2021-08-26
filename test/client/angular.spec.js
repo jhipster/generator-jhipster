@@ -1,6 +1,7 @@
 const expect = require('expect');
 const path = require('path');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
 
 describe('JHipster angular generator', () => {
   describe('microfrontend', () => {
@@ -10,7 +11,7 @@ describe('JHipster angular generator', () => {
         .create(path.join(__dirname, '../../generators/client'))
         .withOptions({
           skipInstall: true,
-          auth: 'oauth2',
+          auth: OAUTH2,
           microfrontend: true,
           enableTranslation: true,
           nativeLanguage: 'en',

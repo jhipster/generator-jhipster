@@ -33,8 +33,8 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     this.option('skip-prompts', {
       desc: 'Skip prompts',
@@ -245,6 +245,18 @@ module.exports = class extends BaseBlueprintGenerator {
           statistics.sendSubGenEvent('languages/language', language);
         });
       },
+
+      ...super._missingPostWriting(),
+    };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _postWriting() {
+    return {
       write() {
         if (!this.skipClient) {
           this.updateLanguagesInDayjsConfiguation(this.languages);
@@ -272,8 +284,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get postWriting() {
     if (useBlueprints) return;
-    return this._writing();
+    return this._postWriting();
   }
 };

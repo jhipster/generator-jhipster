@@ -110,7 +110,7 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
             .andExpect(content().string(""));
 <%_ } else { _%>
     void testNonAuthenticatedUser() {
-        webTestClient.get().uri("/api/authenticate")
+        accountWebTestClient.get().uri("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -131,7 +131,7 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
             .andExpect(content().string(TEST_USER_LOGIN));
 <%_ } else { _%>
     void testAuthenticatedUser() {
-        webTestClient
+        accountWebTestClient
             .get().uri("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()

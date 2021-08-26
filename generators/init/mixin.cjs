@@ -54,7 +54,7 @@ module.exports.mixin = parent =>
      * @param {any} config - config to load config from
      * @param {any} into - destination context to use default is context
      */
-    loadInitConfig(config = this.jhipsterConfig, into = this) {
+    loadInitConfig(into = this, config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);
       into[PRETTIER_DEFAULT_INDENT] = config[PRETTIER_DEFAULT_INDENT];
       into[SKIP_COMMIT_HOOK] = config[SKIP_COMMIT_HOOK];
@@ -64,7 +64,7 @@ module.exports.mixin = parent =>
      * Prepare derived init properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    prepareDerivedInitProperties(fromInto = this) {}
+    prepareInitDerivedProperties(fromInto = this) {}
 
     /**
      * Load init constants into 'into'.

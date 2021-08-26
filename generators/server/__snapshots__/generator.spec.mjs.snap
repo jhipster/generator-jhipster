@@ -1,0 +1,1911 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster server generator exported files should match snapshot 1`] = `
+Object {
+  "docker": Array [
+    Object {
+      "path": "src/main/docker/",
+      "templates": Array [
+        "app.yml",
+        "jhipster-control-center.yml",
+        "sonar.yml",
+        "monitoring.yml",
+        "prometheus/prometheus.yml",
+        "grafana/provisioning/dashboards/dashboard.yml",
+        "grafana/provisioning/dashboards/JVM.json",
+        "grafana/provisioning/datasources/datasource.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        Object {
+          "file": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "hazelcast-management-center.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "memcached.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "redis.yml",
+        "redis-cluster.yml",
+        "redis/Redis-Cluster.Dockerfile",
+        "redis/connectRedisCluster.sh",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "elasticsearch.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "kafka.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        Object {
+          "file": "config/README.md",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "consul.yml",
+        Object {
+          "file": "config/git2consul.json",
+          "method": "copy",
+        },
+        Object {
+          "file": "config/consul-config/application.yml",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "jhipster-registry.yml",
+        Object {
+          "file": "config/docker-config/application.yml",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "config/localhost-config/application.yml",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "swagger-editor.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "keycloak.yml",
+        Object {
+          "file": "config/realm-config/jhipster-realm.json",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "config/realm-config/jhipster-users-0.json",
+          "method": "copy",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "mongodb-cluster.yml",
+        "mongodb/MongoDB.Dockerfile",
+        "mongodb/scripts/init_replicaset.js",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "couchbase-cluster.yml",
+        "couchbase/Couchbase.Dockerfile",
+        "couchbase/scripts/configure-node.sh",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "cassandra-cluster.yml",
+        "cassandra-migration.yml",
+        "cassandra/Cassandra-Migration.Dockerfile",
+        "cassandra/scripts/autoMigrate.sh",
+        "cassandra/scripts/execute-cql.sh",
+      ],
+    },
+  ],
+  "jib": Array [
+    Object {
+      "path": "src/main/docker/jib/",
+      "templates": Array [
+        "entrypoint.sh",
+      ],
+    },
+  ],
+  "packageJson": Array [
+    Object {
+      "condition": [Function],
+      "templates": Array [
+        "package.json",
+      ],
+    },
+  ],
+  "serverBuild": Array [
+    Object {
+      "templates": Array [
+        Object {
+          "file": "checkstyle.xml",
+          "options": Object {
+            "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
+          },
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "templates": Array [
+        "build.gradle",
+        "settings.gradle",
+        "gradle.properties",
+        "gradle/sonar.gradle",
+        "gradle/docker.gradle",
+        Object {
+          "file": "gradle/profile_dev.gradle",
+          "options": Object {
+            "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
+          },
+        },
+        Object {
+          "file": "gradle/profile_prod.gradle",
+          "options": Object {
+            "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
+          },
+        },
+        "gradle/war.gradle",
+        "gradle/zipkin.gradle",
+        Object {
+          "file": "gradlew",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": "gradlew.bat",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": "gradle/wrapper/gradle-wrapper.jar",
+          "method": "copy",
+          "noEjs": true,
+        },
+        "gradle/wrapper/gradle-wrapper.properties",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "templates": Array [
+        "gradle/swagger.gradle",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "templates": Array [
+        Object {
+          "file": "mvnw",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": "mvnw.cmd",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": ".mvn/wrapper/maven-wrapper.jar",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": ".mvn/wrapper/maven-wrapper.properties",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": ".mvn/wrapper/MavenWrapperDownloader.java",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": "pom.xml",
+          "options": Object {
+            "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
+          },
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "templates": Array [
+        Object {
+          "file": "npmw",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
+          "file": "npmw.cmd",
+          "method": "copy",
+          "noEjs": true,
+        },
+      ],
+    },
+  ],
+  "serverJavaApp": Array [
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/Application.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/ApplicationWebXml.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/ArchTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/IntegrationTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/GeneratedByJHipster.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaAuthConfig": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/SpringSecurityAuditorAware.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/SecurityUtils.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/AuthoritiesConstants.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/SecurityUtilsUnitTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/jwt/TokenProvider.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/jwt/JWTFilter.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/jwt/JWTConfigurer.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/jwt/JWTRelayGatewayFilterFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/SecurityConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/SecurityConfiguration_reactive.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/PersistentTokenRememberMeServices.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/domain/PersistentToken.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/PersistentTokenRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/AudienceValidator.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/oauth2/JwtGrantedAuthorityConverter.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/oauth2/OAuthIdpTokenResponseDTO.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/AudienceValidatorTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestSecurityConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/AuthorizationHeaderUtilTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/DomainUserDetailsService.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/UserNotActivatedException.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/vm/LoginVM.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/UserJWTController.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/OpenApiConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/CustomClaimConverter.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/CustomClaimConverterIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaConfig": Array [
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/aop/logging/LoggingAspect.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/AsyncConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/DateTimeFormatConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/LoggingConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/ApplicationProperties.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/JacksonConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/LocaleConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/LoggingAspectConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/WebConfigurer.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/StaticResourcesWebConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/Constants.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/ReactorConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/CacheConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/CacheFactoryConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/RedisTestContainerExtension.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": [Function],
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/LiquibaseConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/ColumnConverter.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/EntityManager.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/rowmapper/UserRowMapper.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/WebsocketConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/WebsocketSecurityConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/ElasticsearchConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/N1qlCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/CustomN1qlCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/search/SearchCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/CustomN1qlCouchbaseRepositoryTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/ReactiveN1qlCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/CustomReactiveN1qlCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaDomain": Array [
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/domain/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/domain/AbstractAuditingEntity.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaGateway": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/vm/RouteVM.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/GatewayResource.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/AuthInfoResource.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/LogoutResource.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/apidocs/GatewaySwaggerResourcesProvider.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/filter/ModifyServersOpenApiFilter.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/filter/ModifyServersOpenApiFilterTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/apidocs/GatewaySwaggerResourcesProviderTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaPackageInfo": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/search/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaService": Array [
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/KafkaProperties.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaServiceError": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/EmailAlreadyUsedException.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/InvalidPasswordException.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/UsernameAlreadyUsedException.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaUserManagement": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/domain/User.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/domain/Authority.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/AuthorityRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "config/liquibase/data/user.csv",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "config/liquibase/data/authority.csv",
+        "config/liquibase/data/user_authority.csv",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/Constants.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/UserService.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/AdminUserDTO.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/UserDTO.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/mapper/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/mapper/UserMapper.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/UserRepository.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/UserResource.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/PublicUserResource.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/vm/ManagedUserVM.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/AccountResource.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/UserServiceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/mapper/UserMapperTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/PublicUserResourceIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/UserResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/AccountResourceIT_skipUserManagement.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/AccountResourceIT_oauth2.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/search/UserSearchRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/search/UserSearchRepositoryMockConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "templates/mail/activationEmail.html",
+        "templates/mail/creationEmail.html",
+        "templates/mail/passwordResetEmail.html",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/UserRepository.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/UserService.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/MailService.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/AdminUserDTO.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/UserDTO.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/dto/PasswordChangeDTO.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/vm/ManagedUserVM.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/AccountResource.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/UserResource.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/PublicUserResource.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/vm/KeyAndPasswordVM.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/mapper/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/mapper/UserMapper.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/search/UserSearchRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/repository/search/UserSearchRepositoryMockConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/jwt/TokenProviderTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/jwt/JWTFilterTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/UserJWTControllerIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/cucumber/stepdefs/UserStepDefs.java",
+          "renameTo": [Function],
+        },
+        "../features/user/user.feature",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "templates/mail/testEmail.html",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "i18n/messages_en.properties",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/service/MailServiceIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/UserServiceIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/service/mapper/UserMapperTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/NoOpMailConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/PublicUserResourceIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/UserResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/AccountResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/AccountResourceIT_oauth2.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/WithUnauthenticatedMockUser.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaWeb": Array [
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/vm/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/ClientForwardController.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/filter/SpaWebFilter.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/KafkaResource.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaWebError": Array [
+    Object {
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/errors/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/BadRequestAlertException.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/ErrorConstants.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/ExceptionTranslator.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/FieldErrorVM.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/errors/EmailAlreadyUsedException.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/InvalidPasswordException.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/LoginAlreadyUsedException.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverJavaWebsocket": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/websocket/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/websocket/ActivityService.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/websocket/dto/package-info.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/websocket/dto/ActivityDTO.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverMicroservice": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/FeignConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/client/JWT_UserFeignClientInterceptor.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/oauth2/AuthorizationHeaderUtil.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/FeignConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/client/AuthorizedFeignClient.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/client/OAuth2InterceptedFeignConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/client/TokenRelayRequestInterceptor.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/RestTemplateConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "static/microservices_index.html",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverMicroserviceAndGateway": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "config/bootstrap.yml",
+        "config/bootstrap-prod.yml",
+      ],
+    },
+  ],
+  "serverResource": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "banner-react.txt",
+          "method": "copy",
+          "noEjs": true,
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "banner-vue.txt",
+          "method": "copy",
+          "noEjs": true,
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "banner.txt",
+          "method": "copy",
+          "noEjs": true,
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "swagger/api.yml",
+      ],
+    },
+    Object {
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "templates/error.html",
+          "method": "copy",
+        },
+        "logback-spring.xml",
+        "config/application.yml",
+        "config/application-dev.yml",
+        "config/application-tls.yml",
+        "config/application-prod.yml",
+        "i18n/messages.properties",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "h2.server.properties",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "config/liquibase/changelog/initial_schema.xml",
+          "options": Object {
+            "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
+          },
+          "override": [Function],
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "config/liquibase/master.xml",
+          "override": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/dbmigrations/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/dbmigrations/InitialSetupMigration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "config/couchmove/changelog/V0__create_indexes.n1ql",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json",
+        "config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json",
+        "config/couchmove/changelog/V0.1__initial_setup/user__admin.json",
+        "config/couchmove/changelog/V0.1__initial_setup/user__user.json",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/neo4j/Neo4jMigrations.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/neo4j/package-info.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "config/couchmove/changelog/V0.1__initial_setup/user__admin.json",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "config/couchmove/changelog/V0.1__initial_setup/user__user.json",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        "config/cql/create-keyspace-prod.cql",
+        "config/cql/create-keyspace.cql",
+        "config/cql/drop-keyspace.cql",
+        Object {
+          "file": "config/cql/changelog/README.md",
+          "method": "copy",
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/resources/",
+      "templates": Array [
+        Object {
+          "file": "config/cql/changelog/create-tables.cql",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "config/cql/changelog/insert_default_users.cql",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverTestFw": Array [
+    Object {
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/TestUtil.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/ExceptionTranslatorIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/web/rest/errors/ExceptionTranslatorTestController.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/ClientForwardControllerTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/timezone/HibernateTimeZoneIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/timezone/DateTimeWrapper.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/repository/timezone/DateTimeWrapperRepository.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "path": "src/test/resources/",
+      "templates": Array [
+        "config/application.yml",
+        "logback.xml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "config/application-testcontainers.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "testcontainers/mariadb/my.cnf",
+          "method": "copy",
+          "noEjs": true,
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/ReactiveSqlTestContainerExtension.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/WebConfigurerTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/WebConfigurerTestController.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/StaticResourcesWebConfigurerTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "config/bootstrap.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/LogoutResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/",
+      "templates": Array [
+        "gatling/conf/gatling.conf",
+        "gatling/conf/logback.xml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/cucumber/CucumberIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/cucumber/stepdefs/StepDefs.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/cucumber/CucumberTestContextConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "../features/gitkeep",
+          "noEjs": true,
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "cucumber.properties",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/DomainUserDetailsServiceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/KafkaResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/DatabaseConfigurationIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/AbstractNeo4jIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/CassandraKeyspaceIT.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/AbstractCassandraTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+  "serverTestReactive": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/JHipsterBlockHoundIntegration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "META-INF/services/reactor.blockhound.integration.BlockHoundIntegration",
+      ],
+    },
+  ],
+  "springBootOauth2": Array [
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/OAuth2Configuration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": [Function],
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/test/util/OAuth2TestUtil.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+  ],
+}
+`;

@@ -28,8 +28,8 @@ const packageJson = require('../../package.json');
 let useBlueprints;
 
 module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     if (this.options.help) {
       return;

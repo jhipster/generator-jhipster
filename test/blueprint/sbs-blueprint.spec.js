@@ -3,9 +3,10 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const Generator = require('yeoman-generator');
 const expectedFiles = require('../utils/expected-files');
-const constants = require('../../generators/generator-constants');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const { MYSQL } = require('../../jdl/jhipster/database-types');
+const { ANGULAR_X } = require('../../jdl/jhipster/client-framework-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
 const mockBlueprintSubGen = class extends Generator {
   constructor(args, opts) {
@@ -33,9 +34,9 @@ describe('JHipster client generator with sbs blueprint', () => {
       .run(path.join(__dirname, '../../generators/client'))
       .withOptions({
         fromCli: true,
-        build: 'maven',
-        auth: 'jwt',
-        db: 'mysql',
+        build: MAVEN,
+        auth: JWT,
+        db: MYSQL,
         skipInstall: true,
         blueprint: 'myblueprint',
         skipChecks: true,
@@ -43,7 +44,7 @@ describe('JHipster client generator with sbs blueprint', () => {
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
       .withPrompts({
         baseName: 'jhipster',
-        clientFramework: ANGULAR,
+        clientFramework: ANGULAR_X,
         enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['fr', 'en'],

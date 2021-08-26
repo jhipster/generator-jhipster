@@ -25,15 +25,15 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 const constants = require('../generator-constants');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_CICD } = require('../generator-list');
+const { GENERATOR_CI_CD } = require('../generator-list');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     // Automatically configure Travis
     this.option('autoconfigure-travis', {
@@ -77,7 +77,7 @@ module.exports = class extends BaseBlueprintGenerator {
       description: 'Automatically configure CircleCI',
     });
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CICD);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CI_CD);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -151,7 +151,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       insight() {
         if (this.abort) return;
-        statistics.sendSubGenEvent('generator', GENERATOR_CICD);
+        statistics.sendSubGenEvent('generator', GENERATOR_CI_CD);
       },
       setTemplateConstants() {
         if (this.abort) return;
@@ -194,11 +194,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
         this._loadCiCdConfig();
         this.loadPlatformConfig();
-        this.loadDerivedPlatformConfig();
       },
     };
   }

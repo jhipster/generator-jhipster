@@ -3,6 +3,10 @@ const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ServerGenerator = require('../../generators/server');
 const EnvironmentBuilder = require('../../cli/environment-builder');
+const { MYSQL, SQL, H2_MEMORY } = require('../../jdl/jhipster/database-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../../jdl/jhipster/cache-types');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
   constructor(args, opts) {
@@ -68,16 +72,16 @@ describe('JHipster server generator with blueprint', () => {
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
             enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'mysql',
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: MYSQL,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['fr'],
-            buildTool: 'maven',
+            buildTool: MAVEN,
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             serverSideOptions: [],
           })
@@ -114,16 +118,16 @@ describe('JHipster server generator with blueprint', () => {
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
           serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
+          authenticationType: JWT,
+          cacheProvider: EHCACHE,
           enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'mysql',
+          databaseType: SQL,
+          devDatabaseType: H2_MEMORY,
+          prodDatabaseType: MYSQL,
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr'],
-          buildTool: 'maven',
+          buildTool: MAVEN,
           rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
           serverSideOptions: [],
         })

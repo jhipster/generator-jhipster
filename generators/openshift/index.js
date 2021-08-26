@@ -42,8 +42,8 @@ let useBlueprints;
 
 /* eslint-disable consistent-return */
 module.exports = class extends BaseDockerGenerator {
-  constructor(args, options) {
-    super(args, options);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENSHIFT);
   }
 
@@ -167,8 +167,7 @@ module.exports = class extends BaseDockerGenerator {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
-          this.loadServerConfig(element);
-          this.loadDerivedServerConfig(element);
+          this.loadServerConfig(element, element);
           this.loadDerivedAppConfig(element);
         });
         this.loadDeploymentConfig(this);

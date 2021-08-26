@@ -1,14 +1,30 @@
 {
   "env": {
     "node": true,
-    "es6": true,
-    "mocha": true
+    "es2020": true
   },
   "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "plugins": ["mocha", "prettier", "chai-friendly"],
   "settings": {
     "import/core-modules": ["generator-jhipster", "generator-jhipster/support"]
   },
+  "overrides": [
+    {
+      "files": ["**/*.mjs"],
+      "parserOptions": {
+        "ecmaVersion": 11
+      },
+      "rules": {
+        "import/extensions": [0, { "pattern": { "{c,m,}js": "always" } }]
+      }
+    },
+    {
+      "files": ["**/*.spec.{c,m,}js", "test/**/*.{c,m,}js"],
+      "env": {
+        "mocha": true
+      }
+    }
+  ],
   "rules": {
     "prettier/prettier": "error",
     "linebreak-style": 0,
