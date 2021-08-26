@@ -98,7 +98,7 @@
     "mem-fs-editor": "9.3.0",
     "minimatch": "3.0.4",
     "normalize-path": "3.0.0",
-    "ora": "5.4.1",
+    "ora": "6.0.0",
     "os-locale": "5.0.0",
     "p-queue": "6.6.2",
     "parse-gitignore": "1.0.1",
