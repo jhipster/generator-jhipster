@@ -89,7 +89,7 @@
     "didyoumean": "1.2.2",
     "ejs": "3.1.6",
     "faker": "5.5.3",
-    "find-up": "5.0.0",
+    "find-up": "6.0.0",
     "glob": "7.1.7",
     "gulp-filter": "7.0.0",
     "insight": "0.11.1",
