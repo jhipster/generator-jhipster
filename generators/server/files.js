@@ -131,16 +131,7 @@ const neo4jFiles = {
     {
       condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
       path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
-          renameTo: () => 'config/neo4j/migrations/user__admin.json',
-        },
-        {
-          file: 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
-          renameTo: () => 'config/neo4j/migrations/user__user.json',
-        },
-      ],
+      templates: ['config/neo4j/migrations/user__admin.json', 'config/neo4j/migrations/user__user.json'],
     },
   ],
   serverTestFw: [

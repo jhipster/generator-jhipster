@@ -1545,14 +1545,8 @@ Object {
       "condition": [Function],
       "path": "src/main/resources/",
       "templates": Array [
-        Object {
-          "file": "config/couchmove/changelog/V0.1__initial_setup/user__admin.json",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "config/couchmove/changelog/V0.1__initial_setup/user__user.json",
-          "renameTo": [Function],
-        },
+        "config/neo4j/migrations/user__admin.json",
+        "config/neo4j/migrations/user__user.json",
       ],
     },
     Object {
