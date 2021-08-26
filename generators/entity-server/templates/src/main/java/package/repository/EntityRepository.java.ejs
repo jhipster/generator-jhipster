@@ -20,7 +20,7 @@ package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.<%= persistClass %>;
 
-<%_ if (relationshipsContainEagerLoad || databaseTypeCouchbase) { _%>
+<%_ if (relationshipsContainEagerLoad) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -37,22 +37,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.ScanConsistency;
-  <%_ if (relationships.length != 0) { _%>
-import org.springframework.data.couchbase.repository.Query;
-import org.springframework.data.domain.PageImpl;
-import java.util.Optional;
-import static <%= packageName %>.repository.N1qlCouchbaseRepository.pageableStatement;
-  <%_ } _%>
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
-if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) {
+if (databaseTypeSql || databaseTypeMongodb) {
   let importList = fieldsContainOwnerManyToMany;
   for (r of relationships) {
     if (r.relationshipManyToOne && r.otherEntityUser) {
@@ -60,7 +50,7 @@ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) {
     }
   }
 _%>
-  <%_ if (importList || databaseTypeCouchbase) { _%>
+  <%_ if (importList) { _%>
 import java.util.List;
   <%_ } _%>
   <%_ if (relationshipsContainEagerLoad) { _%>
@@ -79,7 +69,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
   <%_
   for (const relationship of relationships) {
     if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
@@ -124,50 +114,5 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     <%_
     }
   }
-
-  if (databaseTypeCouchbase && relationships.length != 0) { %>
-
-    String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
-      for (const relationship of relationships) {
-          if (relationship.collection) {
-            %> ", (SELECT `<%= relationship.relationshipFieldName %>`.*, meta(`<%= relationship.relationshipFieldName %>`).id FROM `<%= relationship.relationshipFieldNamePlural %>` `<%= relationship.relationshipFieldName %>`) as `<%= relationship.relationshipFieldNamePlural %>`"  + <%
-          } else {
-            %> ", (SELECT `<%= relationship.relationshipFieldName %>`.*, meta(`<%= relationship.relationshipFieldName %>`).id)[0] as `<%= relationship.relationshipFieldName %>`" + <%
-          }
-      } %>
-        " FROM #{#n1ql.bucket} b";
-
-    String JOIN = <%
-        relationships.forEach(function (relationship, index) {
-          if (!relationship.collection) { %>
-            " LEFT JOIN #{#n1ql.bucket} `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
-          } else { %>
-            " LEFT NEST #{#n1ql.bucket} `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
-          }
-          if (index < relationships.length - 1) { %>
-            + <%
-          }
-        }); %>;
-
-
-    default Page<<%= persistClass %>> findAll(Pageable pageable) {
-        return new PageImpl<>(
-            findAllWithPagination(pageableStatement(pageable, "b")),
-            pageable,
-            count()
-        );
-    }
-
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} #{[0]}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= persistClass %>> findAllWithPagination(String pageableStatement);
-
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= persistClass %>> findAll();
-
-    @Query(SELECT + " USE KEYS $1" + JOIN)
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Optional<<%= persistClass %>> findById(String id);<%
-    } _%>
+  _%>
 }
