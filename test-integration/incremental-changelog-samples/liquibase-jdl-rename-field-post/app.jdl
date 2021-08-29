@@ -138,7 +138,7 @@ relationship ManyToOne {
   BankAccount{user(login)} to User
 }
 relationship ManyToMany {
-  Operation{theLabel(labelName)} to TheLabel{operation}
+  Operation{theLabel(labelName)} to TheLabel{operation(named)}
 }
 
 relationship OneToMany {
