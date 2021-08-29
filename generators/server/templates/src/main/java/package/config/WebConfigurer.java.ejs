@@ -49,7 +49,7 @@ import org.springframework.context.annotation.Profile;
     <%_ } _%>
 import org.springframework.core.annotation.Order;
 <%_ } _%>
-<%_ if (reactive && databaseType != 'no') { _%>
+<%_ if (reactive && !databaseTypeNo) { _%>
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ } _%>
@@ -205,7 +205,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     }
 <%_ if (reactive) { _%>
 
-    <%_ if (databaseType != 'no') { _%>
+  <%_ if (!databaseTypeNo) { _%>
     // TODO: remove when this is supported in spring-boot
     @Bean
     HandlerMethodArgumentResolver reactivePageableHandlerMethodArgumentResolver() {
@@ -217,7 +217,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     HandlerMethodArgumentResolver reactiveSortHandlerMethodArgumentResolver() {
         return new ReactiveSortHandlerMethodArgumentResolver();
     }
-    <%_ } _%>
+  <%_ } _%>
 
     @Bean
     @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
