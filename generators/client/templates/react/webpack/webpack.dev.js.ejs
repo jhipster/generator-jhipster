@@ -56,9 +56,10 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
     ]
   },
   devServer: {
-    stats: options.stats,
     hot: true,
-    contentBase: './<%= DIST_DIR %>',
+    static: {
+      directory: './<%= DIST_DIR %>',
+    },
     port: <%= devServerPort %>,
     proxy: [{
       context: [
@@ -83,9 +84,6 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
       target: 'ws://127.0.0.1:<%= serverPort %>',
       ws: true
     }<% } %>],
-    watchOptions: {
-      ignore: [/node_modules/, utils.root('src/test')],
-    },
     https: options.tls,
     historyApiFallback: true
   },
