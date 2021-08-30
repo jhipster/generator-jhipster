@@ -126,11 +126,10 @@ spring:
     username: system
     password: oracle
   <%_ } _%>
-    hikari:
-      poolName: Hikari
-      auto-commit: false
+    poolName: Hikari
+    auto-commit: false
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql) { _%>
-      data-source-properties:
+    data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
