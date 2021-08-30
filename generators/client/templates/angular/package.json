@@ -31,7 +31,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-webpack-plugin": "3.0.1",
     "folder-hash": "4.0.1",
-    "jest": "27.0.6",
+    "jest": "27.1.0",
     "jest-preset-angular": "9.0.7",
     "jest-date-mock": "1.0.8",
     "jest-junit": "12.2.0",
