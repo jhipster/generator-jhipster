@@ -492,6 +492,10 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${testDir}config/DatabaseConfigurationIT.java`);
     if (generator.searchEngine !== 'couchbase') {
       generator.removeFile(`${javaDir}repository/CustomN1qlCouchbaseRepository.java`);
+    } else {
+      generator.removeFile(`${javaDir}repository/CustomCouchbaseRepository.java`);
+      generator.removeFile(`${javaDir}repository/SearchCouchbaseRepository.java`);
+      generator.removeFile(`${testDir}repository/CustomCouchbaseRepositoryTest.java`);
     }
   }
 }

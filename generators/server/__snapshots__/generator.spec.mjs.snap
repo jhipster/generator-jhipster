@@ -764,10 +764,6 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/CustomCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/repository/N1qlCouchbaseRepository.java",
           "renameTo": [Function],
         },
@@ -785,20 +781,10 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/search/SearchCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/CustomCouchbaseRepositoryTest.java",
+          "file": "package/repository/N1qlCouchbaseRepositoryTest.java",
           "renameTo": [Function],
         },
       ],

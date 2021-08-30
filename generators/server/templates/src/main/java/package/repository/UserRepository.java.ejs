@@ -55,9 +55,6 @@ import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
   <%_ } _%>
 <%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-import <%= packageName %>.repository.search.SearchCouchbaseRepository;
-<%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.apache.commons.beanutils.BeanComparator;
 <%_ } _%>
@@ -161,16 +158,21 @@ import java.time.Instant;
 <% if (databaseTypeCouchbase) { %>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
+<%_ if (searchEngineCouchbase) { _%>
+import static <%= packageName %>.repository.N1qlCouchbaseRepository.pageableStatement;
+import static <%= packageName %>.repository.N1qlCouchbaseRepository.searchQuery;
+<%_ } _%>
 /**
  * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
  */
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
     let listOrFlux = reactive ? 'Flux' : 'List';
+    let pageOrFlux = (reactive) ? 'Flux' : 'Page';
 _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
+public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
   <%_ if (cacheManagerIsAvailable) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -288,6 +290,19 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND activated = true")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     Long countAllActivatedIsTrue();
+  <%_ } _%>
+
+  <%_ if (searchEngineCouchbase) { _%>
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{n1ql.bucket}, #{[0]) #{[1]}")
+    <%= listOrFlux %><User> search(String queryString, String pageableStatement);
+
+    default <%= listOrFlux %><User> search(String queryString) {
+        return search(searchQuery(queryString).toString(), "");
+    }
+
+    default <%= pageOrFlux %><User> search(String queryString, Pageable pageable) {
+        return new PageImpl<>(search(searchQuery(queryString).toString(), pageableStatement(pageable, "b")));
+    }
   <%_ } _%>
 }
 <%_ } else if (databaseTypeSql && reactive) { _%>

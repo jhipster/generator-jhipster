@@ -20,15 +20,20 @@ package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.<%= persistClass %>;
 
+<%_ if (relationships.length !== 0 || searchEngineCouchbase) { _%>
+import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import static <%= packageName %>.repository.N1qlCouchbaseRepository.pageableStatement;
+<%_ } _%>
+<%_ if (relationships.length !== 0) { _%>
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.ScanConsistency;
-<%_ if (relationships.length !== 0) { _%>
-import org.springframework.data.couchbase.repository.Query;
-import org.springframework.data.domain.PageImpl;
 import java.util.Optional;
-import static <%= packageName %>.repository.N1qlCouchbaseRepository.pageableStatement;
+<%_ } _%>
+<%_ if (searchEngineCouchbase) { _%>
+import static <%= packageName %>.repository.N1qlCouchbaseRepository.searchQuery;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
@@ -101,4 +106,22 @@ public interface <%= entityClass %>Repository extends N1qlCouchbaseRepository<<%
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     Optional<<%= persistClass %>> findById(String id);<%
     } _%>
+
+<%_ if (searchEngineCouchbase) { _%>
+  <%_ if (relationships.length === 0) { _%>
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
+  <%_ } else { _%>
+    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} AND SEARCH(b, #{[0]}) #{[1]}")
+  <%_ } _%>
+    List<<%= persistClass %>> search(String queryString, String pageableStatement);
+
+    default List<<%= persistClass %>> search(String queryString) {
+        return search(searchQuery(queryString).toString(), "");
+    }
+
+    default Page<<%= persistClass %>> search(String queryString, Pageable pageable) {
+        return new PageImpl<>(search(searchQuery(queryString).toString(), pageableStatement(pageable<% if (relationships.length !== 0) { %>, "b"<% } %>)));
+    }
+<%_ } _%>
+
 }

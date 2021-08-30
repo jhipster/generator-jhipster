@@ -27,12 +27,12 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CustomCouchbaseRepositoryTest {
+class N1qlCouchbaseRepositoryTest {
 
     @MethodSource
     @ParameterizedTest
     void queryString(String query, SearchQuery ftsQuery) {
-        assertThat(Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository.queryString(query).toString()).isEqualTo(ftsQuery.toString());
+        assertThat(N1ql<% if (reactive) { %>Reactive<% } %>CouchbaseRepository.searchQuery(query).toString()).isEqualTo(ftsQuery.toString());
     }
 
     @SuppressWarnings("unused")

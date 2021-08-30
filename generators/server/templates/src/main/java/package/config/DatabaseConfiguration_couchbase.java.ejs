@@ -26,11 +26,6 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.couchmove.Couchmove;
-<%_ if (searchEngineCouchbase) { _%>
-import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
-<%_ } else if (searchEngineElasticsearch) { _%>
-import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
-<%_ } _%>
 
 import <%= packageName %>.config.couchbase.CustomCouchbaseRepositoryFactoryBean;
 
@@ -81,7 +76,7 @@ import reactor.core.publisher.Flux;
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(<% if (searchEngineCouchbase) { %>repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class, <% } %>basePackages = "<%= packageName %>.repository", repositoryFactoryBeanClass = CustomCouchbaseRepositoryFactoryBean.class<%_ if (searchEngineElasticsearch) { %>,
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(basePackages = "<%= packageName %>.repository", repositoryFactoryBeanClass = CustomCouchbaseRepositoryFactoryBean.class<%_ if (searchEngineElasticsearch) { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
 <%_ if (!reactive) { _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
