@@ -66,8 +66,16 @@ const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 const { CUSTOM_PRIORITIES } = require('../lib/constants/priorities.cjs');
 const cacheTypes = require('../jdl/jhipster/cache-types');
+const serviceDiscoveryTypes = require('../jdl/jhipster/service-discovery-types');
+const searchEngineTypes = require('../jdl/jhipster/search-engine-types');
+const messageBrokerTypes = require('../jdl/jhipster/message-broker-types');
+const websocketTypes = require('../jdl/jhipster/websocket-types');
 
 const NO_CACHE = cacheTypes.NO;
+const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
+const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
+const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
+const NO_WEBSOCKET = websocketTypes.FALSE;
 
 /**
  * This is the Generator base class.
@@ -2820,6 +2828,20 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   loadDerivedServerConfig(dest = this) {
     if (!dest.packageFolder) {
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
+    }
+
+    // Convert to false for templates.
+    if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
+      dest.serviceDiscoveryType = false;
+    }
+    if (dest.websocket === NO_WEBSOCKET || !dest.websocket) {
+      dest.websocket = false;
+    }
+    if (dest.searchEngine === NO_SEARCH_ENGINE || !dest.searchEngine) {
+      dest.searchEngine = false;
+    }
+    if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
+      dest.messageBroker = false;
     }
 
     dest.authenticationTypeSession = dest.authenticationType === SESSION;

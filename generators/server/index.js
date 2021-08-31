@@ -49,16 +49,10 @@ const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
-const serviceDiscoveryTypes = require('../../jdl/jhipster/service-discovery-types');
-const searchEngineTypes = require('../../jdl/jhipster/search-engine-types');
-const messageBrokerTypes = require('../../jdl/jhipster/message-broker-types');
 const websocketTypes = require('../../jdl/jhipster/websocket-types');
 
 const NO_CACHE = cacheTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
-const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.FALSE;
 
 let useBlueprints;
@@ -611,20 +605,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       config.enableHibernateCache = false;
     }
 
-    // Convert to false for templates.
-    if (config.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !config.serviceDiscoveryType) {
-      config.serviceDiscoveryType = false;
-    }
-    if (config.websocket === NO_WEBSOCKET || !config.websocket) {
-      config.websocket = false;
-    }
-    if (config.searchEngine === NO_SEARCH_ENGINE || !config.searchEngine) {
-      config.searchEngine = false;
-    }
-    if (config.messageBroker === NO_MESSAGE_BROKER || !config.messageBroker) {
-      config.messageBroker = false;
-    }
-
     if (!config.databaseType && config.prodDatabaseType) {
       config.databaseType = this.getDBTypeFromDBValue(config.prodDatabaseType);
     }
@@ -634,7 +614,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
     // force variables unused by microservice applications
     if (config.applicationType === MICROSERVICE) {
-      config.websocket = false;
+      config.websocket = NO_WEBSOCKET;
     }
 
     const databaseType = config.databaseType;
