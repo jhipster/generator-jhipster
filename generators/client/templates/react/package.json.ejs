@@ -117,10 +117,6 @@
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
     "json-loader": "<%= dependabotPackageJson.devDependencies['json-loader'] %>",
-<%_ if (!skipCommitHook) { _%>
-    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
     "folder-hash": "<%= dependabotPackageJson.devDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
@@ -225,7 +221,6 @@
     "webapp:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "npm run webpack -- serve",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
-
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
