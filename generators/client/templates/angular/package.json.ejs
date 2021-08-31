@@ -81,10 +81,6 @@
 <%_ if (websocket === 'spring-websocket') { _%>
     "@types/sockjs-client": "1.5.0",
 <%_ } _%>
-<%_ if (!skipCommitHook) { _%>
-    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-<%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
 <%_ } _%>
