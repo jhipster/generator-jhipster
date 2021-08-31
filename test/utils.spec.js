@@ -54,7 +54,7 @@ describe('JHipster Utils', () => {
 
       before(() => {
         const clientRootFolder = 'root';
-        const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB' };
+        const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeJavadoc: 'enum comment' };
         enumInfo = utils.getEnumInfo(field, clientRootFolder);
       });
 
@@ -66,6 +66,9 @@ describe('JHipster Utils', () => {
       });
       it('returns the enums values', () => {
         assert.deepStrictEqual(enumInfo.enums, ['AAA', 'BBB']);
+      });
+      it('returns the enums comment', () => {
+        assert.deepStrictEqual(enumInfo.javadoc, '/**\n * enum comment\n */');
       });
     });
     describe("when the enums don't have custom values", () => {
@@ -84,8 +87,8 @@ describe('JHipster Utils', () => {
       });
       it('returns the enums values', () => {
         assert.deepStrictEqual(enumInfo.enumValues, [
-          { name: 'AAA', value: 'AAA' },
-          { name: 'BBB', value: 'BBB' },
+          { name: 'AAA', value: 'AAA', comment: undefined },
+          { name: 'BBB', value: 'BBB', comment: undefined },
         ]);
       });
     });
@@ -108,8 +111,9 @@ describe('JHipster Utils', () => {
           {
             name: 'AAA',
             value: 'aaa',
+            comment: undefined,
           },
-          { name: 'BBB', value: 'BBB' },
+          { name: 'BBB', value: 'BBB', comment: undefined },
         ]);
       });
     });
@@ -133,8 +137,9 @@ describe('JHipster Utils', () => {
             {
               name: 'AAA',
               value: 'aaa',
+              comment: undefined,
             },
-            { name: 'BBB', value: 'bbb' },
+            { name: 'BBB', value: 'bbb', comment: undefined },
           ]);
         });
       });
@@ -157,8 +162,41 @@ describe('JHipster Utils', () => {
             {
               name: 'AAA',
               value: 'aaa',
+              comment: undefined,
             },
-            { name: 'BBB', value: 'bbb and b' },
+            { name: 'BBB', value: 'bbb and b', comment: undefined },
+          ]);
+        });
+      });
+      describe('with comments over them', () => {
+        let enumInfo;
+
+        before(() => {
+          const clientRootFolder = 'root';
+          const field = {
+            enumName: 'fieldName',
+            fieldValues: 'AAA(aaa), BBB(bbb and b)',
+            fieldValuesJavadocs: {
+              AAA: 'first comment',
+              BBB: 'second comment',
+            },
+          };
+          enumInfo = utils.getEnumInfo(field, clientRootFolder);
+        });
+
+        it('returns whether there are custom enums', () => {
+          assert.strictEqual(enumInfo.withoutCustomValues, false);
+          assert.strictEqual(enumInfo.withSomeCustomValues, false);
+          assert.strictEqual(enumInfo.withCustomValues, true);
+        });
+        it('returns the enums values', () => {
+          assert.deepStrictEqual(enumInfo.enumValues, [
+            {
+              name: 'AAA',
+              value: 'aaa',
+              comment: '    /**\n     * first comment\n     */',
+            },
+            { name: 'BBB', value: 'bbb and b', comment: '    /**\n     * second comment\n     */' },
           ]);
         });
       });
