@@ -639,7 +639,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
           // if no files in Git from current folder then we assume that this is initial application generation
           this.gitExec('add .', { trace: false }, code => {
             if (code === 0) {
-              this.gitExec(`commit -m "${commitMsg}" -- .`, { trace: false }, code => {
+              this.gitExec(`commit --no-verify -m "${commitMsg}" -- .`, { trace: false }, code => {
                 if (code === 0) {
                   this.log(chalk.green.bold(`Application successfully committed to Git from ${process.cwd()}.`));
                 } else {

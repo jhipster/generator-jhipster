@@ -187,6 +187,9 @@ module.exports = class extends MixedChain {
       addCommitHookDependencies() {
         if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
         this.packageJson.merge({
+          scripts: {
+            prepare: 'husky install',
+          },
           devDependencies: {
             husky: this.nodeDependencies.husky,
             'lint-staged': this.nodeDependencies['lint-staged'],

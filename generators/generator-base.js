@@ -2572,6 +2572,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.skipCommitHook = true;
     }
 
+    if (options.monorepository !== undefined) {
+      this.jhipsterConfig.monorepository = options.monorepository;
+    }
+
     if (options.baseName) {
       this.jhipsterConfig.baseName = this.options.baseName;
     }

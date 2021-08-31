@@ -19,7 +19,7 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".huskyrc": Object {
+  ".husky/pre-commit": Object {
     "stateCleared": "modified",
   },
   ".lintstagedrc.js": Object {
@@ -72,7 +72,7 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".huskyrc": Object {
+  ".husky/pre-commit": Object {
     "stateCleared": "modified",
   },
   ".lintstagedrc.js": Object {

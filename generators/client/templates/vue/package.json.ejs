@@ -95,10 +95,6 @@
     <%_ });
 } _%>
     "html-webpack-plugin": "<%= dependabotPackageJson.devDependencies['html-webpack-plugin'] %>",
-<%_ if (!skipCommitHook) { _%>
-    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-<%_ } _%>
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-serializer-vue": "<%= dependabotPackageJson.devDependencies['jest-serializer-vue'] %>",
