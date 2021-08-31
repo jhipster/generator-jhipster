@@ -185,7 +185,7 @@ module.exports = class extends MixedChain {
   get postWriting() {
     return {
       addCommitHookDependencies() {
-        if (this.shouldSkipFiles() || this.shouldSkipCommitHook() || this.options.monorepository) return;
+        if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
         this.packageJson.merge({
           scripts: {
             prepare: 'husky install',

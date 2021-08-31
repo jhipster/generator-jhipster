@@ -375,12 +375,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
   _postWriting() {
     return {
-      packageJsonPrepareScripts() {
-        const scriptsStorage = this.packageJson.createStorage('scripts');
-        if (!this.jhipsterConfig.skipCommitHook && !this.jhipsterConfig.monorepository) {
-          scriptsStorage.set('prepare', 'husky install');
-        }
-      },
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = this.serverPort;

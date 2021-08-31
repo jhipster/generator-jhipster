@@ -149,8 +149,8 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   _writing() {
     return {
       cleanup() {
-        if (this.isJhipsterVersionLessThan('7.1.1') && this.jhipsterConfig) {
-          if (!this.jhipsterConfig.skipCommitHook) {
+        if (this.isJhipsterVersionLessThan('7.1.1')) {
+          if (!this.skipCommitHook) {
             this.removeFile('.huskyrc');
           }
         }
