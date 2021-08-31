@@ -69,6 +69,22 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
+  _configuring() {
+    return {
+      configure() {
+        if (this.jhipsterConfig.monorepository) {
+          this.jhipsterConfig.skipCommitHook = true;
+        }
+      },
+    };
+  }
+
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  // Public API method used by the getter and also by Blueprints
   _loading() {
     return {
       loadSharedConfig() {
@@ -151,5 +167,27 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   get writing() {
     if (useBlueprints) return;
     return this._writing();
+  }
+
+  _postWriting() {
+    return {
+      addCommitHookDependencies() {
+        if (this.skipCommitHook) return;
+        this.packageJson.merge({
+          scripts: {
+            prepare: 'husky install',
+          },
+          devDependencies: {
+            husky: this.dependabotPackageJson.devDependencies.husky,
+            'lint-staged': this.dependabotPackageJson.devDependencies['lint-staged'],
+          },
+        });
+      },
+    };
+  }
+
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
   }
 };
