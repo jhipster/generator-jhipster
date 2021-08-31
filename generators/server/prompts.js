@@ -305,9 +305,11 @@ function askForServerSideOpts() {
     this.serverPort = this.jhipsterConfig.serverPort = answers.serverPort || '8080';
     this.cacheProvider = this.jhipsterConfig.cacheProvider = !answers.reactive ? answers.cacheProvider : NO_CACHE_PROVIDER;
     this.enableHibernateCache = this.jhipsterConfig.enableHibernateCache = !!answers.enableHibernateCache;
-    this.databaseType = this.jhipsterConfig.databaseType = answers.databaseType;
-    this.devDatabaseType = this.jhipsterConfig.devDatabaseType = answers.devDatabaseType;
-    this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType;
+
+    const { databaseType } = answers;
+    this.databaseType = this.jhipsterConfig.databaseType = databaseType;
+    this.devDatabaseType = this.jhipsterConfig.devDatabaseType = answers.devDatabaseType || databaseType;
+    this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType || databaseType;
     this.searchEngine = this.jhipsterConfig.searchEngine = answers.searchEngine;
     this.buildTool = this.jhipsterConfig.buildTool = answers.buildTool;
   });

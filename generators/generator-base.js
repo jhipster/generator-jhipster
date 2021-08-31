@@ -65,7 +65,6 @@ const { GATLING, CUCUMBER, PROTRACTOR, CYPRESS } = require('../jdl/jhipster/test
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../jdl/jhipster/application-types');
 const { ELASTICSEARCH } = require('../jdl/jhipster/search-engine-types');
 const { CUSTOM_PRIORITIES } = require('../lib/constants/priorities.cjs');
-const { getBase64Secret, getRandomHex } = require('./utils');
 const cacheTypes = require('../jdl/jhipster/cache-types');
 const serviceDiscoveryTypes = require('../jdl/jhipster/service-discovery-types');
 const searchEngineTypes = require('../jdl/jhipster/search-engine-types');
@@ -2848,30 +2847,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.packageFolder = dest.packageName.replace(/\./g, '/');
     }
 
-    // JWT authentication is mandatory with Eureka, so the JHipster Registry
-    // can control the applications
-    if (dest.serviceDiscoveryType === EUREKA && dest.authenticationType !== OAUTH2) {
-      dest.authenticationType = JWT;
-    }
-
-    // Generate JWT secret key if key does not already exist in config
-    if ((dest.authenticationType === JWT || dest.applicationType === MICROSERVICE) && dest.jwtSecretKey === undefined) {
-      dest.jwtSecretKey = getBase64Secret.call(this, null, 64);
-    }
-    // Generate remember me key if key does not already exist in config
-    if (dest.authenticationType === SESSION && !dest.rememberMeKey) {
-      dest.rememberMeKey = getRandomHex();
-    }
-
-    if (dest.authenticationType === OAUTH2) {
-      dest.skipUserManagement = true;
-    }
-
-    if (dest.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(dest.cacheProvider)) {
-      this.info(`Disabling hibernate cache for cache provider ${dest.cacheProvider}`);
-      dest.enableHibernateCache = false;
-    }
-
     // Convert to false for templates.
     if (dest.serviceDiscoveryType === NO_SERVICE_DISCOVERY || !dest.serviceDiscoveryType) {
       dest.serviceDiscoveryType = false;
@@ -2884,30 +2859,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
       dest.messageBroker = false;
-    }
-
-    if (!dest.databaseType && dest.prodDatabaseType) {
-      dest.databaseType = this.getDBTypeFromDBValue(dest.prodDatabaseType);
-    }
-    if (!dest.devDatabaseType && dest.prodDatabaseType) {
-      dest.devDatabaseType = dest.prodDatabaseType;
-    }
-
-    // force variables unused by microservice applications
-    if (dest.applicationType === MICROSERVICE) {
-      dest.websocket = false;
-    }
-
-    const databaseType = dest.databaseType;
-    if (databaseType === NO_DATABASE) {
-      dest.devDatabaseType = NO_DATABASE;
-      dest.prodDatabaseType = NO_DATABASE;
-      dest.enableHibernateCache = false;
-      dest.skipUserManagement = true;
-    } else if ([MONGODB, NEO4J, COUCHBASE, CASSANDRA].includes(databaseType)) {
-      dest.devDatabaseType = databaseType;
-      dest.prodDatabaseType = databaseType;
-      dest.enableHibernateCache = false;
     }
 
     dest.authenticationTypeSession = dest.authenticationType === SESSION;
