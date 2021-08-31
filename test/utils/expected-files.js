@@ -172,6 +172,7 @@ const expectedFiles = {
     '.editorconfig',
     '.lintstagedrc.js',
     '.husky/pre-commit',
+    'package.json',
   ],
 
   server: [
@@ -393,7 +394,6 @@ const expectedFiles = {
     'angular.json',
     'ngsw-config.json',
     '.eslintrc.json',
-    'package.json',
     '.browserslistrc',
     `${CLIENT_MAIN_SRC_DIR}main.ts`,
     `${CLIENT_MAIN_SRC_DIR}bootstrap.ts`,
