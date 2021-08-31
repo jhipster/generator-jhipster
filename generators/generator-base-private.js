@@ -65,8 +65,6 @@ const databaseTypes = require('../jdl/jhipster/database-types');
 const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL, ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
-const { GATEWAY } = require('../jdl/jhipster/application-types');
-const { SPRING_WEBSOCKET } = require('../jdl/jhipster/websocket-types');
 
 /**
  * This is the Generator base private class.
@@ -104,47 +102,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
-   * Install I18N Client Files By Language
-   *
-   * @param {any} _this reference to generator
-   * @param {string} webappDir web app directory
-   * @param {string} lang language code
-   */
-  installI18nClientFilesByLanguage(_this, webappDir, lang) {
-    const generator = _this || this;
-    const prefix = this.fetchFromInstalledJHipster('languages/templates');
-    if (generator.applicationType === GATEWAY && generator.serviceDiscoveryType) {
-      generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
-    }
-    if (generator.withAdminUi) {
-      generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
-      generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
-      generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
-    }
-    generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'register.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'sessions.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'settings.json', lang);
-    generator.copyI18nFilesByName(generator, webappDir, 'user-management.json', lang);
-
-    // tracker.json for Websocket
-    if (this.websocket === SPRING_WEBSOCKET) {
-      generator.copyI18nFilesByName(generator, webappDir, 'tracker.json', lang);
-    }
-
-    // Templates
-    generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
-    generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-    if (generator.withAdminUi) {
-      generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
-    }
-    generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
-  }
-
-  /**
    * Install I18N Server Files By Language
    *
    * @param {any} _this - reference to generator
@@ -164,50 +121,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
         `${testResourceDir}i18n/messages_${langJavaProp}.properties`
       );
-    }
-  }
-
-  /**
-   * Copy I18N
-   *
-   * @param language
-   * @param prefix
-   */
-  copyI18n(language, prefix = '') {
-    try {
-      const fileName = this.entityTranslationKey;
-      this.template(
-        `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
-        `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
-      );
-      this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClassHumanized || _.startCase(this.entityClass), language);
-    } catch (e) {
-      this.debug('Error:', e);
-      // An exception is thrown if the folder doesn't exist
-      // do nothing
-    }
-  }
-
-  /**
-   * Copy Enum I18N
-   *
-   * @param language
-   * @param enumInfo
-   * @param prefix
-   */
-  copyEnumI18n(language, enumInfo, prefix = '') {
-    try {
-      this.template(
-        `${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`,
-        `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
-        this,
-        {},
-        enumInfo
-      );
-    } catch (e) {
-      this.debug('Error:', e);
-      // An exception is thrown if the folder doesn't exist
-      // do nothing
     }
   }
 

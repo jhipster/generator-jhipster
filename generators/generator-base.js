@@ -1617,6 +1617,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * @deprecated
    * Copy i18 files for given language
    *
    * @param {object} generator - context that can be used as the generator instance or data to process template
@@ -2752,6 +2753,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.applicationTypeGateway = dest.applicationType === GATEWAY;
     dest.applicationTypeMonolith = dest.applicationType === MONOLITH;
     dest.applicationTypeMicroservice = dest.applicationType === MICROSERVICE;
+
+    // Application name modified, using each technology's conventions
+    if (dest.baseName) {
+      dest.camelizedBaseName = _.camelCase(dest.baseName);
+      dest.hipster = this.getHipster(dest.baseName);
+      dest.capitalizedBaseName = _.upperFirst(dest.baseName);
+      dest.dasherizedBaseName = _.kebabCase(dest.baseName);
+      dest.lowercaseBaseName = dest.baseName.toLowerCase();
+      dest.humanizedBaseName = dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName);
+    }
   }
 
   /**
@@ -2767,6 +2778,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientTheme = config.clientTheme;
     dest.clientThemeVariant = config.clientThemeVariant;
     dest.devServerPort = config.devServerPort;
+
+    dest.clientSrcDir = config.clientSrcDir || this.CLIENT_MAIN_SRC_DIR;
   }
 
   loadDerivedClientConfig(dest = this) {
@@ -2777,6 +2790,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.clientThemePrimary = dest.clientThemeVariant === 'primary';
     dest.clientThemeLight = dest.clientThemeVariant === 'light';
     dest.clientThemeDark = dest.clientThemeVariant === 'dark';
+
+    if (dest.baseName) {
+      dest.frontendAppName = this.getFrontendAppName(dest.baseName);
+    }
   }
 
   /**
