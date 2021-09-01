@@ -1736,10 +1736,6 @@ _%>
             .thenReturn(Stream.of(<%= persistInstance %>));
       <%_ } _%>
     <%_ } _%>
-  <%_ } else if (searchEngineCouchbase) { _%>
-
-        // Wait for the <%= entityInstance %> to be indexed
-        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (reactive) { %>.collectList().block()<% } %>);
   <%_ } _%>
 
         // Search the <%= entityInstance %>

@@ -26,7 +26,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
 <%_ if (searchEngineCouchbase) { _%>
-import <%= packageName %>.repository.search.SearchCouchbaseRepository;
+import com.couchbase.client.java.search.SearchQuery;
+import com.couchbase.client.java.search.queries.DocIdQuery;
+import com.couchbase.client.java.search.queries.QueryStringQuery;
+import java.util.LinkedList;
 <%_ } _%>
 
 import java.util.List;
@@ -39,7 +42,7 @@ import static java.lang.String.format;
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 @NoRepositoryBean
-public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<T, ID><% } %> {
+public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID> {
 
     static String pageableStatement(Pageable pageable) {
         return pageableStatement(pageable, "");
@@ -53,6 +56,9 @@ public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, I
                     if ("id".equals(property)) {
                         return order.withProperty(format("meta(%s).id", prefix));
                     }
+                    if (prefix.isEmpty()) {
+                        return order;
+                    }
                     return order.withProperty(format("%s.%s", prefix, property));
                 })
                 .collect(Collectors.toList()));
@@ -62,6 +68,27 @@ public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, I
             .with(sort)
             .export();
     }
+
+<%_ if (searchEngineCouchbase) { _%>
+    static SearchQuery searchQuery(String queryString) {
+        List<String> ids = new LinkedList<>();
+        for (String r : queryString.split(" ")) {
+            if (r.indexOf("id:") == 0) {
+                ids.add(r.substring(3));
+                queryString = queryString.replace(r, "").replaceAll("[ ]+", " ").trim();
+            }
+        }
+        QueryStringQuery query = SearchQuery.queryString(queryString);
+        if (ids.size() != 0) {
+            DocIdQuery docIdQuery = SearchQuery.docId(ids.toArray(new String[0]));
+            if (!queryString.isEmpty()) {
+                return SearchQuery.conjuncts(query, docIdQuery);
+            }
+            return docIdQuery;
+        }
+        return query;
+    }
+<%_ } _%>
 
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     List<T> findAll();

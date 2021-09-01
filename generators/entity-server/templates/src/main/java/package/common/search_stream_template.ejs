@@ -25,7 +25,7 @@ const entityToDtoReference = mapper + '::' + 'toDto'; %>
         return StreamSupport
             .stream(<%= entityInstance %>SearchRepository.search(query).spliterator(), false)
     <%_ } else { _%>
-            return <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
+            return <%= entityInstance %>Repository.search(query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
     <%_ } _%>
     <%_ if (dtoMapstruct) { _%>
             .map(<%= entityToDtoReference %>)
@@ -34,7 +34,7 @@ const entityToDtoReference = mapper + '::' + 'toDto'; %>
         .collect(Collectors.toList());
     <%_ } _%>
   <%_ } else { _%>
-        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineCouchbase) { %><%= entityClass %>.PREFIX, <% } %>query)<%_ if (dtoMapstruct) { %>
+        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query)<%_ if (dtoMapstruct) { %>
             .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
     <%_ } _%>
 <%_ } else { _%>

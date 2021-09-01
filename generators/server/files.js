@@ -157,10 +157,6 @@ const couchbaseFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/CustomCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomCouchbaseRepository.java`,
-        },
-        {
           file: 'package/repository/N1qlCouchbaseRepository.java',
           renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
         },
@@ -178,21 +174,11 @@ const couchbaseFiles = {
     },
     {
       condition: generator => generator.searchEngine === COUCHBASE,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/SearchCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/search/SearchCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.searchEngine === COUCHBASE,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/CustomCouchbaseRepositoryTest.java',
-          renameTo: generator => `${generator.testDir}repository/CustomCouchbaseRepositoryTest.java`,
+          file: 'package/repository/N1qlCouchbaseRepositoryTest.java',
+          renameTo: generator => `${generator.testDir}repository/N1qlCouchbaseRepositoryTest.java`,
         },
       ],
     },
