@@ -19,9 +19,8 @@
 package <%= packageName %>.repository;
 
 import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.CouchbaseRepository;
+import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
 import org.springframework.data.couchbase.repository.ScanConsistency;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -32,18 +31,29 @@ import com.couchbase.client.java.search.queries.QueryStringQuery;
 import java.util.LinkedList;
 <%_ } _%>
 
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } else { _%>
+import org.springframework.data.domain.Page;
+<%_ } _%>
+<%_ if (!reactive || searchEngineCouchbase) { _%>
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.couchbase.core.query.Query;
 
 import static java.lang.String.format;
-
+<%_ } _%>
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
+<%_
+let listOrFlux = reactive ? 'Flux' : 'List';
+let pageOrFlux = (reactive) ? 'Flux' : 'Page';
+_%>
 @NoRepositoryBean
-public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID> {
-
+public interface <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
+<%_ if (!reactive || searchEngineCouchbase) { _%>
     static String pageableStatement(Pageable pageable) {
         return pageableStatement(pageable, "");
     }
@@ -68,7 +78,7 @@ public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, I
             .with(sort)
             .export();
     }
-
+<%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
     static SearchQuery searchQuery(String queryString) {
         List<String> ids = new LinkedList<>();
@@ -91,14 +101,14 @@ public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, I
 <%_ } _%>
 
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<T> findAll();
+    <%= listOrFlux %><T> findAll();
 
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<T> findAll(Sort sort);
+    <%= listOrFlux %><T> findAll(Sort sort);
 
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Page<T> findAll(Pageable pageable);
+    <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable);
 
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    void deleteAll();
+    <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll();
 }

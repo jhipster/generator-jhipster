@@ -167,8 +167,8 @@ const couchbaseFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/CustomReactiveCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomReactiveCouchbaseRepository.java`,
+          file: 'package/repository/N1qlCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`,
         },
       ],
     },
@@ -178,7 +178,7 @@ const couchbaseFiles = {
       templates: [
         {
           file: 'package/repository/N1qlCouchbaseRepositoryTest.java',
-          renameTo: generator => `${generator.testDir}repository/N1qlCouchbaseRepositoryTest.java`,
+          renameTo: generator => `${generator.testDir}repository/${generator.reactive ? 'Reactive' : ''}N1qlCouchbaseRepositoryTest.java`,
         },
       ],
     },

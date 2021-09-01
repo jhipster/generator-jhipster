@@ -96,7 +96,9 @@ import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<%
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ScanConsistency;
+  <%_ if (!reactive) { _%>
 import org.springframework.data.domain.PageImpl;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (reactive && databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -159,8 +161,8 @@ import java.time.Instant;
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
 <%_ if (searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.N1qlCouchbaseRepository.pageableStatement;
-import static <%= packageName %>.repository.N1qlCouchbaseRepository.searchQuery;
+import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.pageableStatement;
+import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.searchQuery;
 <%_ } _%>
 /**
  * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
@@ -267,29 +269,31 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
     <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND meta(#{#n1ql.bucket}).id is not null AND activated = true")
     <%_ } _%>
-    Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    Flux<<%= asEntity('User') %>>findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(Pageable pageable);
 
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
     Mono<Long> count();
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
-    default Page<<%= asEntity('User') %>> findAllActivatedIsTrue(Pageable pageable) {
-        return new PageImpl<>(findAllActivatedIsTrue(N1qlCouchbaseRepository.pageableStatement(pageable)), pageable, countAllActivatedIsTrue());
+    default Page<<%= asEntity('User') %>> findAllByActivatedIsTrue(Pageable pageable) {
+        return new PageImpl<>(findAllByActivatedIsTrue(N1qlCouchbaseRepository.pageableStatement(pageable)), pageable, countAllByActivatedIsTrue());
     }
     <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>
   <% } %>
 
-  <%_ if (databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeCouchbase && !reactive) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true #{[0]}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= asEntity('User') %>> findAllActivatedIsTrue(String pageableStatement);
+    List<<%= asEntity('User') %>> findAllByActivatedIsTrue(String pageableStatement);
 
     @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND activated = true")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Long countAllActivatedIsTrue();
+    Long countAllByActivatedIsTrue();
   <%_ } _%>
 
   <%_ if (searchEngineCouchbase) { _%>
@@ -302,7 +306,10 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     }
 
     default <%= pageOrFlux %><User> search(String queryString, Pageable pageable) {
-        return new PageImpl<>(search(searchQuery(queryString).toString(), pageableStatement(pageable, "b")));
+        return
+            <% if (!reactive) { %>new PageImpl<>(<% } %>
+                search(searchQuery(queryString).toString(), pageableStatement(pageable))
+            <% if (!reactive) { %>)<% } %>;
     }
   <%_ } _%>
 }

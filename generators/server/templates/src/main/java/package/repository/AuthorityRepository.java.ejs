@@ -37,13 +37,17 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 import org.springframework.data.couchbase.repository.Query;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.ScanConsistency;
-import java.util.List;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
-<% if (reactive) { %>import reactor.core.publisher.Flux;<% } else { %>import java.util.List;<% } %>
 <%_ } _%>
-
+<%_ if (databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+  <%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+  <%_ } else { _%>
+import java.util.List;
+  <%_ } _%>
+<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 /**
  * Spring Data <% if (reactive) { %>R2DBC<% } else { %>JPA<% } %> repository for the {@link Authority} entity.
@@ -67,6 +71,9 @@ import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<%
 <%_ if (databaseTypeCouchbase) { _%>
 @Repository
 <%_ } _%>
+<%_
+let listOrFlux = reactive ? 'Flux' : 'List';
+_%>
 public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (reactive) { %>R2dbc<% } else { %>Jpa<% } %>Repository<% } else { %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><% } %><Authority, String> {
 <%_ if (databaseTypeNeo4j) { _%>
     <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<%_ } _%>
@@ -75,7 +82,7 @@ public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (
 <%_ if (databaseTypeCouchbase) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= asEntity('Authority') %>> findAll();
+    <%= listOrFlux %><<%= asEntity('Authority') %>> findAll();
 <%_ } _%>
 
 }

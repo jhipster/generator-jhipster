@@ -488,7 +488,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
   }
   if (generator.isJhipsterVersionLessThan('7.1.1')) {
-    generator.removeFile(`${javaDir}repository/ReactiveN1qlCouchbaseRepository.java `);
+    generator.removeFile(`${javaDir}repository/CustomReactiveCouchbaseRepository.java `);
     generator.removeFile(`${testDir}config/DatabaseConfigurationIT.java`);
     if (generator.searchEngine !== 'couchbase') {
       generator.removeFile(`${javaDir}repository/CustomN1qlCouchbaseRepository.java`);
