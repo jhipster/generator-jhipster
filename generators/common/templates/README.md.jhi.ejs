@@ -141,7 +141,7 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 ### Auth0
 
-If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, you can follow the below configuration steps:
+If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, follow the configuration steps below:
 
 - Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
 - Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
@@ -162,11 +162,11 @@ function (user, context, callback) {
   const rolesClaim = prepareCustomClaimKey('roles');
 
   if (context.idToken) {
-  	context.idToken[rolesClaim] = roles;
+    context.idToken[rolesClaim] = roles;
   }
 
   if (context.accessToken) {
-  	context.accessToken[rolesClaim] = roles;
+    context.accessToken[rolesClaim] = roles;
   }
 
   callback(null, user, context);
@@ -181,6 +181,7 @@ spring:
       client:
         provider:
           oidc:
+            # make sure to include the ending slash!
             issuer-uri: https://{your-auth0-domain}/
         registration:
           oidc:
