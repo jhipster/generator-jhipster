@@ -34,6 +34,8 @@ import java.util.Optional;
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
 import static <%= packageName %>.repository.N1qlCouchbaseRepository.searchQuery;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.ScanConsistency;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
@@ -108,6 +110,7 @@ public interface <%= entityClass %>Repository extends N1qlCouchbaseRepository<<%
     } _%>
 
 <%_ if (searchEngineCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
   <%_ if (relationships.length === 0) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
   <%_ } else { _%>
