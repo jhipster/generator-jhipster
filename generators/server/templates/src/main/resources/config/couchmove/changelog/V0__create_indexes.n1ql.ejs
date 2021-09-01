@@ -1,4 +1,3 @@
--- create indexes
 CREATE INDEX type ON `${bucket}`(`_class`)
     WITH { "defer_build" : true };
 <%_ if (!skipUserManagement) { _%>
@@ -18,6 +17,3 @@ CREATE INDEX token_date ON `${bucket}`(tokenDate)
     WITH { "defer_build" : true };
   <%_ } _%>
 <%_ } _%>
-
--- build indexes asynchronously
-BUILD INDEX ON `${bucket}`(type<% if (!skipUserManagement) { %>, user_mail<% if (authenticationTypeSession) { %>, token_login, token_date<% } %><% } %>);
