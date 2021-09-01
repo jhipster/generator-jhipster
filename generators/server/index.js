@@ -425,6 +425,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               'docker:db:await': 'wait-on tcp:9042 && sleep 20',
             });
           }
+          if (databaseType === COUCHBASE) {
+            scriptsStorage.set({
+              'docker:db:await':
+                'echo "Waiting for Couchbase to start" && wait-on http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"',
+            });
+          }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
             scriptsStorage.set({
               'docker:db:build': `docker-compose -f ${dockerFile} build`,
