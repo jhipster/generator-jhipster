@@ -41,6 +41,10 @@ import static java.lang.String.format;
 @NoRepositoryBean
 public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, ID><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<T, ID><% } %> {
 
+    static String pageableStatement(Pageable pageable) {
+        return pageableStatement(pageable, "");
+    }
+
     static String pageableStatement(Pageable pageable, String prefix) {
         Sort sort = Sort.by(
             pageable.getSort().stream()
@@ -67,4 +71,7 @@ public interface N1qlCouchbaseRepository<T, ID> extends CouchbaseRepository<T, I
 
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     Page<T> findAll(Pageable pageable);
+
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    void deleteAll();
 }

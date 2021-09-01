@@ -96,11 +96,9 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.domain.Sort;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.couchbase.repository.ScanConsistency;
-import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
 import org.springframework.data.domain.PageImpl;
 <%_ } _%>
 <%_ if (reactive && databaseTypeCassandra) { _%>
@@ -172,7 +170,7 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
 _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>CouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
+public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
   <%_ if (cacheManagerIsAvailable) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -242,18 +240,6 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%= listOrFlux %><<%= asEntity('User') %>> findAll();
 
   <%_ } _%>
-  <%_ if (databaseTypeCouchbase) { _%>
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= asEntity('User') %>> findAll();
-
-  <%_ } _%>
-  <%_ if (databaseTypeCouchbase) { _%>
-    @Override
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= asEntity('User') %>> findAll(Sort sort);
-
-  <%_ } _%>
   <%_ if (databaseTypeSql) { _%>
     @EntityGraph(attributePaths = "authorities")
     <%_ if (cacheManagerIsAvailable) { _%>
@@ -287,7 +273,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
     default Page<<%= asEntity('User') %>> findAllActivatedIsTrue(Pageable pageable) {
-        return new PageImpl<>(findAllActivatedIsTrue(new org.springframework.data.couchbase.core.query.Query().with(pageable).export()), pageable, countAllActivatedIsTrue());
+        return new PageImpl<>(findAllActivatedIsTrue(N1qlCouchbaseRepository.pageableStatement(pageable)), pageable, countAllActivatedIsTrue());
     }
     <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
