@@ -34,6 +34,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -103,27 +104,27 @@ class LogoutResourceIT {
 
     @Test
     void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
+        final String ORIGIN_URL = "http://localhost:8080";
 <%_ if (!reactive) { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
             .getConfigurationMetadata().get("end_session_endpoint").toString();
-        restLogoutMockMvc.perform(post("/api/logout"))
+        logoutUrl = logoutUrl + "?id_token_hint=" + ID_TOKEN + "&post_logout_redirect_uri=" + ORIGIN_URL;
+        restLogoutMockMvc.perform(post("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
-            .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
 <%_ } else { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc")
             .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata()
                 .get("end_session_endpoint").toString()).block();
-
+        logoutUrl = logoutUrl + "?id_token_hint=" + ID_TOKEN + "&post_logout_redirect_uri=" + ORIGIN_URL;
         this.webTestClient.mutateWith(csrf())
             .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
-            .post().uri("/api/logout").exchange()
+            .post().uri("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL).exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
-            .jsonPath("$.logoutUrl").isEqualTo(logoutUrl.toString())
-            .jsonPath("$.idToken").isEqualTo(ID_TOKEN);
+            .jsonPath("$.logoutUrl").isEqualTo(logoutUrl);
 <%_ } _%>
     }
 }
