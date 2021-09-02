@@ -93,6 +93,7 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
+            scope: openid,profile,email
 ```
 
 ### Okta
@@ -187,6 +188,7 @@ spring:
           oidc:
             client-id: {clientId}
             client-secret: {clientSecret}
+            scope: openid,profile,email
 jhipster:
   ...
   security:
@@ -194,17 +196,19 @@ jhipster:
       audience:
         - https://{your-auth0-domain}/api/v2/
 ```
+  <%_ if (testFrameworkCypress) { _%>
 
 Before running Cypress tests, specify Auth0 user credentials by overriding the `CYPRESS_E2E_USERNAME` and `CYPRESS_E2E_PASSWORD` environment variables.
 
 ```
-export CYPRESS_E2E_USERNAME=<your-username>
-export CYPRESS_E2E_PASSWORD=<your-password>
+export CYPRESS_E2E_USERNAME="<your-username>"
+export CYPRESS_E2E_PASSWORD="<your-password>"
 ```
 
 See Cypress' documentation for setting OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting) to learn more.
 
 **Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the Cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
+  <%_ } _%>
 <%_ } _%>
 
 <%_ if (enableSwaggerCodegen) { _%>
