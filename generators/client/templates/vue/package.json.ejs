@@ -79,6 +79,7 @@
     "@vue/eslint-config-prettier": "<%= dependabotPackageJson.devDependencies['@vue/eslint-config-prettier'] %>",
     "@vue/eslint-config-typescript": "<%= dependabotPackageJson.devDependencies['@vue/eslint-config-typescript'] %>",
     "@vue/test-utils": "<%= dependabotPackageJson.devDependencies['@vue/test-utils'] %>",
+    "axios-mock-adapter": "<%= dependabotPackageJson.devDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= dependabotPackageJson.devDependencies['autoprefixer'] %>",
     "browser-sync": "<%= dependabotPackageJson.devDependencies['browser-sync'] %>",
     "browser-sync-webpack-plugin": "<%= dependabotPackageJson.devDependencies['browser-sync-webpack-plugin'] %>",
@@ -94,10 +95,6 @@
     <%_ });
 } _%>
     "html-webpack-plugin": "<%= dependabotPackageJson.devDependencies['html-webpack-plugin'] %>",
-<%_ if (!skipCommitHook) { _%>
-    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-<%_ } _%>
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-serializer-vue": "<%= dependabotPackageJson.devDependencies['jest-serializer-vue'] %>",
@@ -192,7 +189,7 @@
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
     "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress=profile --env stats=minimal",
     "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress=profile --env stats=minimal",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress=profile --inline --env stats=normal",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress=profile --env stats=normal",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "webpack serve",

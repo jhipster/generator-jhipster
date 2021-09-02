@@ -48,6 +48,8 @@ export const HealthPage = () => {
     setHealthObject({ ...healthObj, name });
   };
 
+  const getBadgeType = (status: string) => status !== 'UP' ? 'danger' : 'success';
+
   const handleClose = () => setShowModal(false);
 
   const renderModal = () => <HealthModal healthObject={healthObject} handleClose={handleClose} showModal={showModal} />;
@@ -84,7 +86,7 @@ export const HealthPage = () => {
                   <tr key={configPropIndex}>
                     <td>{configPropKey}</td>
                     <td>
-                      <Badge color={data[configPropKey].status !== 'UP' ? 'danger' : 'success'}>{data[configPropKey].status}</Badge>
+                      <Badge color={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
                     </td>
                     <td>
                       {data[configPropKey].details ? (

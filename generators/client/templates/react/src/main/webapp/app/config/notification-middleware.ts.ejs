@@ -97,8 +97,7 @@ export default () => next => action => {
               addErrorAlert(errorHeader, errorHeader, { entityName });
             } else if (data?.fieldErrors) {
               const fieldErrors = data.fieldErrors;
-              for (let i = 0; i < fieldErrors.length; i++) {
-                const fieldError = fieldErrors[i];
+              for (const fieldError of fieldErrors) {
                 if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
                     fieldError.message = 'Size';
                 }

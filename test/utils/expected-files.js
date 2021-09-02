@@ -163,7 +163,17 @@ const expectedFiles = {
 
   maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', 'checkstyle.xml'],
 
-  common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig', '.huskyrc', '.lintstagedrc.js'],
+  common: [
+    '.prettierignore',
+    '.prettierrc',
+    'README.md',
+    '.gitignore',
+    '.gitattributes',
+    '.editorconfig',
+    '.lintstagedrc.js',
+    '.husky/pre-commit',
+    'package.json',
+  ],
 
   server: [
     `${SERVER_MAIN_RES_DIR}banner.txt`,
@@ -384,7 +394,6 @@ const expectedFiles = {
     'angular.json',
     'ngsw-config.json',
     '.eslintrc.json',
-    'package.json',
     '.browserslistrc',
     `${CLIENT_MAIN_SRC_DIR}main.ts`,
     `${CLIENT_MAIN_SRC_DIR}bootstrap.ts`,
@@ -760,9 +769,6 @@ const expectedFiles = {
   ],
 
   couchbase: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/N1qlCouchbaseRepository.java`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepository.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseConfigurationIT.java`,
     `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
     `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
     `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
@@ -781,10 +787,7 @@ const expectedFiles = {
     `${DOCKER_DIR}neo4j.yml`,
   ],
 
-  couchbaseSearch: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SearchCouchbaseRepository.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepositoryTest.java`,
-  ],
+  couchbaseSearch: [`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/JHipsterCouchbaseRepositoryTest.java`],
 
   cassandra: [
     `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,

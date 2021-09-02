@@ -33,7 +33,7 @@ if (paginationNo) { %>
     <%_ if (viaService) { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);
     <%_ } else { _%>
-        Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineElasticsearch) { %>query<% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable);
+        Page<<%= persistClass %>> page = <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable);
     <%_ } _%>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dtoMapstruct) { %>)<% } %>);
@@ -43,7 +43,7 @@ if (paginationNo) { %>
                 (searchEngineElasticsearch ? 'Search' : '') + 'Repository.count' %>()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
-            .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><%= viaService ? 'Service' : (searchEngineElasticsearch ? 'Search' : '') + 'Repository' %>.search(<% if (!viaService && searchEngineCouchbase) { %><%= entityClass %>.PREFIX, <% } %>query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>));
+            .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><%= viaService ? 'Service' : (searchEngineElasticsearch ? 'Search' : '') + 'Repository' %>.search(query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>));
   <%_ } _%>
 <% } -%>
     }

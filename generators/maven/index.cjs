@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
-const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/support/priorities.cjs');
+const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list');
 const { files } = require('./files.cjs');
@@ -29,8 +29,8 @@ const { BUILD_TOOL, BUILD_DESTINATION } = require('../java/constants.cjs');
 const MixedChain = generateMixedChain(GENERATOR_JAVA);
 
 module.exports = class extends MixedChain {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+  constructor(args, options, features) {
+    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -44,6 +44,9 @@ module.exports = class extends MixedChain {
       [BUILD_TOOL]: MAVEN,
       [BUILD_DESTINATION]: BUILD_DESTINATION_VALUE,
     });
+
+    // Application context for templates
+    this.application = {};
 
     if (this.options.defaults) {
       this.configureChain();
@@ -86,10 +89,10 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
@@ -102,7 +105,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
@@ -116,7 +119,7 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+        await this.writeFiles({ sections: files, context: this.application });
       },
     };
   }

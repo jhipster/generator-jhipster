@@ -17,10 +17,6 @@
  * limitations under the License.
  */
 
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
 module.exports.files = {
   prettier: [
     {
@@ -42,7 +38,14 @@ module.exports.files = {
 module.exports.commitHooksFiles = {
   commitHooks: [
     {
-      templates: ['.huskyrc', '.lintstagedrc.js'],
+      templates: [
+        '.lintstagedrc.js',
+        {
+          file: '.husky/pre-commit',
+          method: 'copy',
+          noEjs: true,
+        },
+      ],
     },
   ],
 };

@@ -1,8 +1,12 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { SUPPORTED_CLIENT_FRAMEWORKS } = require('../../generators/generator-constants');
-
-const ANGULAR = SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
+const { H2_DISK, MYSQL, SQL } = require('../../jdl/jhipster/database-types');
+const { EHCACHE } = require('../../jdl/jhipster/cache-types');
+const { JWT } = require('../../jdl/jhipster/authentication-types');
+const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
+const { ANGULAR } = require('../../jdl/jhipster/client-framework-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipster:client', 'jhipster:languages', 'jhipster:entity'];
 
@@ -21,17 +25,17 @@ describe('jhipster:app prompts', () => {
           .withPrompts({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',
-            applicationType: 'monolith',
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            prodDatabaseType: 'mysql',
-            cacheProvider: 'ehcache',
-            authenticationType: 'jwt',
+            applicationType: MONOLITH,
+            databaseType: SQL,
+            devDatabaseType: H2_DISK,
+            prodDatabaseType: MYSQL,
+            cacheProvider: EHCACHE,
+            authenticationType: JWT,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['en', 'fr'],
-            testFrameworks: ['cypress'],
-            buildTool: 'maven',
+            testFrameworks: [CYPRESS],
+            buildTool: MAVEN,
             clientFramework: ANGULAR,
             clientTheme: 'none',
           })
@@ -45,7 +49,7 @@ describe('jhipster:app prompts', () => {
       after(() => runResult.cleanup());
 
       it('should write testFrameworks with cypress value to .yo-rc.json', () => {
-        assert.jsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: ['cypress'] } });
+        assert.jsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [CYPRESS] } });
       });
     });
   });

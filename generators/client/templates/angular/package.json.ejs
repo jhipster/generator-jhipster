@@ -81,10 +81,6 @@
 <%_ if (websocket === 'spring-websocket') { _%>
     "@types/sockjs-client": "1.5.0",
 <%_ } _%>
-<%_ if (!skipCommitHook) { _%>
-    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-<%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
 <%_ } _%>
@@ -99,6 +95,7 @@
     "@angular/compiler-cli": "<%= dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-builders/custom-webpack": "<%= dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
     "@angular-builders/jest": "<%= dependabotPackageJson.devDependencies['@angular-builders/jest'] %>",
+    "@angular-devkit/build-angular": "<%= dependabotPackageJson.devDependencies['@angular/cli'] %>",
     "@angular/service-worker": "<%= dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-eslint/eslint-plugin": "<%= dependabotPackageJson.devDependencies['@angular-eslint/eslint-plugin'] %>",
     "@types/jest": "<%= dependabotPackageJson.devDependencies['@types/jest'] %>",
@@ -118,6 +115,7 @@
     <%_ });
 } _%>
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
+    "jest-preset-angular": "<%= dependabotPackageJson.devDependencies['jest-preset-angular'] %>",
     "jest-date-mock": "<%= dependabotPackageJson.devDependencies['jest-date-mock'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",

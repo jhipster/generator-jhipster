@@ -5,6 +5,11 @@ const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files').entity;
 const EntityServerGenerator = require('../../generators/entity-server');
 const constants = require('../../generators/generator-constants');
+const { MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
+
+const NO_SERVICE = ServiceTypes.NO;
+const NO_PAGINATION = PaginationTypes.NO;
+const NO_DTO = MapperTypes.NO;
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -62,9 +67,9 @@ describe('JHipster entity server generator with blueprint', () => {
           .withPrompts({
             fieldAdd: false,
             relationshipAdd: false,
-            dto: 'no',
-            service: 'no',
-            pagination: 'no',
+            dto: NO_DTO,
+            service: NO_SERVICE,
+            pagination: NO_PAGINATION,
           })
       );
 

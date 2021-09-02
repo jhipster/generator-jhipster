@@ -30,12 +30,12 @@ const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = '7.0.2';
-const JIB_VERSION = '3.1.1';
+const JIB_VERSION = '3.1.4';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.1.1-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.5.3';
+const SPRING_BOOT_VERSION = '2.5.4';
 const LIQUIBASE_VERSION = '4.4.2';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.32.Final';
@@ -53,7 +53,7 @@ const DOCKER_MYSQL = 'mysql:8.0.25';
 const DOCKER_MARIADB = 'mariadb:10.6.1';
 const DOCKER_POSTGRESQL = 'postgres:13.3';
 const DOCKER_MONGODB = 'mongo:4.4.6';
-const DOCKER_COUCHBASE = 'couchbase/server:6.6.2';
+const DOCKER_COUCHBASE = 'couchbase/server:7.0.0';
 const DOCKER_CASSANDRA = 'cassandra:3.11.10';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04';
 const DOCKER_NEO4J = 'neo4j:4.2.7';

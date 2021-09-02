@@ -27,8 +27,8 @@ const {
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('workspaces', {
       desc: 'Generate workspaces for multiples applications',

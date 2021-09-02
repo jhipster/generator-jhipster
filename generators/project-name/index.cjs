@@ -25,7 +25,7 @@ const {
   CONFIGURING_PRIORITY,
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
-} = require('../../lib/support/priorities.cjs');
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_PROJECT_NAME } = require('../generator-list');
 const { defaultConfig } = require('./config.cjs');
@@ -35,8 +35,8 @@ const { dependencyChain } = require('./mixin.cjs');
 const MixedChain = generateMixedChain(GENERATOR_PROJECT_NAME);
 
 module.exports = class extends MixedChain {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+  constructor(args, options, features) {
+    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -45,6 +45,9 @@ module.exports = class extends MixedChain {
     }
 
     if (this.options.help) return;
+
+    // Application context for templates
+    this.application = {};
 
     if (this.options.defaults) {
       this.configureChain();
@@ -134,10 +137,10 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
@@ -150,7 +153,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }

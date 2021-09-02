@@ -31,8 +31,8 @@ const { MYSQL, POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-type
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options) {
-    super(args, options);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_AWS);
   }
 

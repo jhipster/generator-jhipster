@@ -75,7 +75,7 @@ async function askForApplicationType() {
 }
 
 function askForModuleName() {
-  if (this.existingProject) return undefined;
+  if (this.existingProject || this.jhipsterConfig.baseName) return undefined;
   return this.askModuleName(this);
 }
 

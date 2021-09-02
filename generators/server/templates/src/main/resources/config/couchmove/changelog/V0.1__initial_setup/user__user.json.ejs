@@ -1,15 +1,15 @@
 {
   "login": "user",
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   "password": "$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K",
-  <% } %>
-  "first_name": "User",
-  "last_name": "User",
+<% } %>
+  "firstName": "User",
+  "lastName": "User",
   "email": "user@localhost",
   "activated": true,
-  "lang_key": "<%= nativeLanguage %>",
-  "created_by": "system",
-  "last_modified_by": "system",
+  "langKey": "<%= nativeLanguage %>",
+  "createdBy": "system",
+  "lastModifiedBy": "system",
   "authorities": [
     "ROLE_USER"
   ],

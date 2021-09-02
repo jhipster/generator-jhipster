@@ -19,19 +19,22 @@
 package <%= packageName %>;
 
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
+import <%= packageName %>.CouchbaseTestContainerExtension;
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
+<%_ if (cacheProviderRedis) { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis' || databaseType === 'neo4j' || reactiveSqlTestContainers) { _%>
+<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -47,15 +50,18 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
+<%_ if (cacheProviderRedis) { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
+@ExtendWith(CouchbaseTestContainerExtension.class)
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>

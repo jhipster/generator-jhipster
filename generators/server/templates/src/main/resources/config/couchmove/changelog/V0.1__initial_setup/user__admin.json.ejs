@@ -1,15 +1,15 @@
 {
   "login": "admin",
-  <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   "password": "$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC",
-  <% } %>
-  "first_name": "Administrator",
-  "last_name": "Administrator",
+<% } %>
+  "firstName": "Administrator",
+  "lastName": "Administrator",
   "email": "admin@localhost",
   "activated": true,
-  "lang_key": "<%= nativeLanguage %>",
-  "created_by": "system",
-  "last_modified_by": "system",
+  "langKey": "<%= nativeLanguage %>",
+  "createdBy": "system",
+  "lastModifiedBy": "system",
   "authorities": [
     "ROLE_USER",
     "ROLE_ADMIN"

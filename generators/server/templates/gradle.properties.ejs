@@ -28,12 +28,12 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
 mapstructVersion=1.4.2.Final
-archunitJunit5Version=0.19.0
+archunitJunit5Version=0.20.1
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-caffeineVersion=3.0.2
+caffeineVersion=3.0.3
 typesafeConfigVersion=1.4.1
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -56,7 +56,7 @@ jaxbRuntimeVersion=2.3.3
 <%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=4.11.2
+cassandraDriverVersion=4.11.3
 <%_ } _%>
 
 # gradle plugin version
@@ -70,10 +70,10 @@ liquibasePluginVersion=2.0.4
 <%_ } _%>
 sonarqubePluginVersion=3.3
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=5.1.1
+openapiPluginVersion=5.2.1
 <%_ } _%>
 noHttpPluginVersion=0.0.8
-checkstyleVersion=8.43
+checkstyleVersion=8.45.1
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

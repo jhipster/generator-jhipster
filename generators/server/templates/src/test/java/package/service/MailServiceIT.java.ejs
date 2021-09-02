@@ -19,7 +19,7 @@
 package <%= packageName %>.service;
 
 import <%= packageName %>.config.Constants;
-<% if (databaseType === 'cassandra') { %>
+<% if (databaseTypeCassandra) { %>
 import <%= packageName %>.AbstractCassandraTest;<% } %>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
@@ -59,7 +59,7 @@ import static org.mockito.Mockito.*;
  * Integration tests for {@link MailService}.
  */
 @IntegrationTest
-class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class MailServiceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
     private static final String[] languages = {
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
@@ -166,7 +166,7 @@ class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         assertThat(message.getContent().toString()).isEqualToNormalizingNewlines("<html>test title, http://127.0.0.1:8080, john</html>\n");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
     @Test
     void testSendActivationEmail() throws Exception {
@@ -212,7 +212,7 @@ class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCas
         assertThat(message.getContent().toString()).isNotEmpty();
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
-    <%_ } _%>
+<%_ } _%>
 
     @Test
     void testSendEmailWithException() {

@@ -38,8 +38,8 @@ const statistics = require('../statistics');
 
 let useBlueprints;
 module.exports = class extends BaseDockerGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_KUBERNETES_HELM);
   }
 
@@ -119,8 +119,7 @@ module.exports = class extends BaseDockerGenerator {
     return {
       loadSharedConfig() {
         this.appConfigs.forEach(element => {
-          this.loadServerConfig(element);
-          this.loadDerivedServerConfig(element);
+          this.loadServerConfig(element, element);
           this.loadDerivedAppConfig(element);
         });
         this.loadDeploymentConfig(this);

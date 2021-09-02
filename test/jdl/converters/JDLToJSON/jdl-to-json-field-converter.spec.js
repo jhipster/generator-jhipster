@@ -155,6 +155,44 @@ describe('JDLToJSONFieldConverter', () => {
           });
         });
       });
+      context('with field types being enums with comments', () => {
+        let convertedField;
+
+        before(() => {
+          const jdlObject = new JDLObject();
+          const entityA = new JDLEntity({
+            name: 'A',
+            comment: 'The best entity',
+          });
+          const enumType = new JDLEnum({
+            comment: 'enum comment',
+            name: 'CustomEnum',
+            values: ['AA', 'AB'].map(value => ({ key: value, comment: 'some comment' })),
+          });
+          const enumField = new JDLField({
+            name: 'enumField',
+            type: 'CustomEnum',
+          });
+          jdlObject.addEnum(enumType);
+          entityA.addField(enumField);
+          jdlObject.addEntity(entityA);
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')[0];
+        });
+
+        it('should convert them', () => {
+          expect(convertedField).to.deep.equal({
+            fieldName: 'enumField',
+            fieldType: 'CustomEnum',
+            fieldTypeJavadoc: 'enum comment',
+            fieldValuesJavadocs: {
+              AA: 'some comment',
+              AB: 'some comment',
+            },
+            fieldValues: 'AA,AB',
+          });
+        });
+      });
       context('with comments', () => {
         let convertedField;
 

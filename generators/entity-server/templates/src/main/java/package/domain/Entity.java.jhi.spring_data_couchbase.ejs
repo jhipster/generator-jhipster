@@ -30,14 +30,13 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <&_ if (fragment.importSection) { -&>
   <%_ if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
   <%_ } _%>
-import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.Field;
   <%_ if (relationships.length > 0) { _%>
-import org.springframework.data.couchbase.core.query.FetchType;
-import org.springframework.data.couchbase.core.query.N1qlJoin;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.stream.Collectors;
   <%_ } _%>
 <&_ } -&>
@@ -68,18 +67,18 @@ import java.util.stream.Collectors;
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
     <%_ } _%>
   <%_ } else { _%>
-    @Field("<%= field.fieldNameUnderscored %>")
+    @Field
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-    @Field("<%= field.fieldNameUnderscored %>_content_type")
+    @Field
 <&_ } -&>
 <%_ } -%>
 
-<%_ for (const relationship of relationships) { _%>
+<%_/* for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
@@ -100,14 +99,17 @@ import java.util.stream.Collectors;
 
 <&_ } -&>
 <%_ } -%>
+<% Commented out until N1qlJoin support is fixed */%>
 
 <&_ if (fragment.classAdditionalRelationshipsSection) { -&>
     <%_ for (const relationship of relationships) { _%>
-      <%_ if (!relationship.id) { _%>
+      <%_ if (!relationship.id && !relationship.otherEntity.embedded) { _%>
         <%_ if (relationship.collection) { _%>
+    @JsonIgnore
     @Field("<%= relationship.relationshipFieldNamePlural %>")
     private Set<String> <%= relationship.relationshipFieldName %>Ids = new HashSet<>();
         <%_ } else if (relationship.ownerSide) { _%>
+    @JsonIgnore
     @Field("<%= relationship.relationshipFieldName %>")
     private <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id;
         <%_ } _%>
@@ -173,7 +175,7 @@ import java.util.stream.Collectors;
         this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
         <%_ if (!relationship.otherEntity.embedded) { _%>
-        this.<%= relationship.relationshipFieldName %>Ids.add(<%= relationship.otherEntityName %>.get<%= primaryKey.nameCapitalized %>());
+        this.<%= relationship.relationshipFieldName %>Ids.add(<%= relationship.otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>());
         <%_ } _%>
         <%_ if (relationship.otherRelationship) { _%>
           <%_ if (!relationship.otherRelationship.collection) { _%>
@@ -194,7 +196,7 @@ import java.util.stream.Collectors;
         this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
       <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
         <%_ if (!relationship.otherEntity.embedded) { _%>
-        this.<%= relationship.relationshipFieldName %>Ids.remove(<%= relationship.otherEntityName %>.get<%= primaryKey.nameCapitalized %>());
+        this.<%= relationship.relationshipFieldName %>Ids.remove(<%= relationship.otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>());
         <%_ } _%>
         <%_ if (relationship.otherRelationship) { _%>
           <%_ if (!relationship.otherRelationship.collection) { _%>

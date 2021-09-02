@@ -49,7 +49,9 @@ module.exports = async env => webpackMerge(await commonConfig({ env: MODE }), {
     moduleIds: 'named',
   },
   devServer: {
-    contentBase: './<%= DIST_DIR %>',
+    static: {
+      directory: './<%= DIST_DIR %>',
+    },
     port: <%= devServerPort %>,
     proxy: [
       {
@@ -81,9 +83,6 @@ module.exports = async env => webpackMerge(await commonConfig({ env: MODE }), {
       }
 <%_ } _%>
     ],
-    watchOptions: {
-      ignored: /node_modules/
-    },
     historyApiFallback: true
   },
   plugins: [

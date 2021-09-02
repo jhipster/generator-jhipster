@@ -30,14 +30,14 @@ const { isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
-    this.entity = opts.context;
+    this.entity = this.options.context;
 
-    this.jhipsterContext = opts.jhipsterContext || opts.context;
+    this.jhipsterContext = this.options.jhipsterContext || this.options.context;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_SERVER, { context: opts.context });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITY_SERVER, { context: this.options.context });
   }
 
   // Public API method used by the getter and also by Blueprints

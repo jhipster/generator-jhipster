@@ -26,7 +26,7 @@ const {
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
   WRITING_PRIORITY,
-} = require('../../lib/support/priorities.cjs');
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_SPRING_BOOT } = require('../generator-list');
 const { files } = require('./files.cjs');
@@ -35,8 +35,8 @@ const { dependencyChain } = require('./mixin.cjs');
 const MixedChain = generateMixedChain(GENERATOR_SPRING_BOOT);
 
 module.exports = class extends MixedChain {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+  constructor(args, options, features) {
+    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -45,6 +45,9 @@ module.exports = class extends MixedChain {
     }
 
     if (this.options.help) return;
+
+    // Application context for templates
+    this.application = {};
 
     if (this.options.defaults) {
       this.configureChain();
@@ -117,10 +120,10 @@ module.exports = class extends MixedChain {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
@@ -133,7 +136,7 @@ module.exports = class extends MixedChain {
   get preparing() {
     return {
       prepareDerivedProperties() {
-        this.prepareDerivedChainProperties();
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
@@ -147,7 +150,7 @@ module.exports = class extends MixedChain {
     return {
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+        await this.writeFiles({ sections: files, context: this.application });
       },
     };
   }

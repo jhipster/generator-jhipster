@@ -26,8 +26,8 @@ const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter')
 const { BASE_NAME } = OptionNames;
 
 module.exports = class extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.argument('jdlFile', { type: String, required: false });
 

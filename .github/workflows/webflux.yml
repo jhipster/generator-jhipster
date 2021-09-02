@@ -71,6 +71,7 @@ jobs:
           - webflux-gateway-oauth2
           - webflux-psql
           - webflux-mariadb-gradle
+          - webflux-couchbase
         include:
           - app-sample: webflux-mongodb
             entity: mongodb
@@ -114,6 +115,12 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 0
+          - app-sample: webflux-couchbase
+            entity: couchbase
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration

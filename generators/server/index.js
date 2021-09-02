@@ -23,25 +23,43 @@ const os = require('os');
 const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { CASSANDRA, COUCHBASE, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../../jdl/jhipster/database-types');
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
+const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
+const {
+  CASSANDRA,
+  COUCHBASE,
+  MARIADB,
+  MSSQL,
+  MYSQL,
+  ORACLE,
+  POSTGRESQL,
+  SQL,
+  MONGODB,
+  NEO4J,
+} = require('../../jdl/jhipster/database-types');
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
+const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { getBase64Secret, getRandomHex } = require('../utils');
+const cacheTypes = require('../../jdl/jhipster/cache-types');
+const websocketTypes = require('../../jdl/jhipster/websocket-types');
 
+const NO_CACHE = cacheTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
+const NO_WEBSOCKET = websocketTypes.FALSE;
 
 let useBlueprints;
 
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     // This adds support for a `--experimental` flag which can be used to enable experimental features
     this.option('experimental', {
@@ -64,23 +82,26 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     // Not using normal blueprints or this is a normal blueprint.
     if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
       this.setFeatures({
-        customInstallTask: function customInstallTask(preferredPm, defaultInstallTask) {
-          if ((preferredPm && preferredPm !== 'npm') || this.skipClient || this.jhipsterConfig.skipClient) {
+        customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
+          const buildTool = this.jhipsterConfig.buildTool;
+          if (
+            (preferredPm && preferredPm !== 'npm') ||
+            this.skipClient ||
+            this.jhipsterConfig.skipClient ||
+            (buildTool !== GRADLE && buildTool !== MAVEN)
+          ) {
             return defaultInstallTask();
           }
-          const gradle = this.jhipsterConfig.buildTool === GRADLE;
+          const gradle = buildTool === GRADLE;
           const command = gradle ? './gradlew' : './npmw';
           const args = gradle ? ['npmInstall'] : ['install'];
 
-          const failureCallback = error => {
+          try {
+            await this.spawnCommand(command, args, { preferLocal: true });
+          } catch (error) {
             this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
-            return true;
-          };
-
-          return this.spawnCommand(command, args, { preferLocal: true }).then(
-            () => true,
-            error => failureCallback(error)
-          );
+          }
+          return true;
         }.bind(this),
       });
     }
@@ -223,6 +244,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
         }
+      },
+      configure() {
+        this._configureServer();
       },
     };
   }
@@ -401,6 +425,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               'docker:db:await': 'wait-on tcp:9042 && sleep 20',
             });
           }
+          if (databaseType === COUCHBASE) {
+            scriptsStorage.set({
+              'docker:db:await':
+                'echo "Waiting for Couchbase to start" && wait-on http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"',
+            });
+          }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
             scriptsStorage.set({
               'docker:db:build': `docker-compose -f ${dockerFile} build`,
@@ -554,5 +584,55 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   get end() {
     if (useBlueprints) return;
     return this._end();
+  }
+
+  _configureServer(config = this.jhipsterConfig) {
+    // JWT authentication is mandatory with Eureka, so the JHipster Registry
+    // can control the applications
+    if (config.serviceDiscoveryType === EUREKA && config.authenticationType !== OAUTH2) {
+      config.authenticationType = JWT;
+    }
+
+    // Generate JWT secret key if key does not already exist in config
+    if ((config.authenticationType === JWT || config.applicationType === MICROSERVICE) && config.jwtSecretKey === undefined) {
+      config.jwtSecretKey = getBase64Secret.call(this, null, 64);
+    }
+    // Generate remember me key if key does not already exist in config
+    if (config.authenticationType === SESSION && !config.rememberMeKey) {
+      config.rememberMeKey = getRandomHex();
+    }
+
+    if (config.authenticationType === OAUTH2) {
+      config.skipUserManagement = true;
+    }
+
+    if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
+      this.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
+      config.enableHibernateCache = false;
+    }
+
+    if (!config.databaseType && config.prodDatabaseType) {
+      config.databaseType = this.getDBTypeFromDBValue(config.prodDatabaseType);
+    }
+    if (!config.devDatabaseType && config.prodDatabaseType) {
+      config.devDatabaseType = config.prodDatabaseType;
+    }
+
+    // force variables unused by microservice applications
+    if (config.applicationType === MICROSERVICE) {
+      config.websocket = NO_WEBSOCKET;
+    }
+
+    const databaseType = config.databaseType;
+    if (databaseType === NO_DATABASE) {
+      config.devDatabaseType = NO_DATABASE;
+      config.prodDatabaseType = NO_DATABASE;
+      config.enableHibernateCache = false;
+      config.skipUserManagement = true;
+    } else if ([MONGODB, NEO4J, COUCHBASE, CASSANDRA].includes(databaseType)) {
+      config.devDatabaseType = databaseType;
+      config.prodDatabaseType = databaseType;
+      config.enableHibernateCache = false;
+    }
   }
 };

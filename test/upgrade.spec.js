@@ -6,10 +6,12 @@ const fse = require('fs-extra');
 const expect = require('chai').expect;
 const expectedFiles = require('./utils/expected-files');
 const packageJson = require('../package.json');
-const constants = require('../generators/generator-constants');
 const { prepareTempDir } = require('./utils/utils');
-
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const { JWT } = require('../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../jdl/jhipster/cache-types');
+const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
+const { MAVEN } = require('../jdl/jhipster/build-tool-types');
+const { ANGULAR_X } = require('../jdl/jhipster/client-framework-types');
 
 describe('JHipster upgrade generator', function () {
   this.timeout(400000);
@@ -23,20 +25,20 @@ describe('JHipster upgrade generator', function () {
         .withOptions({ skipInstall: true, skipChecks: true, fromCli: true })
         .withPrompts({
           baseName: 'jhipster',
-          clientFramework: ANGULAR,
+          clientFramework: ANGULAR_X,
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
           serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
+          authenticationType: JWT,
+          cacheProvider: EHCACHE,
           enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'postgresql',
+          databaseType: SQL,
+          devDatabaseType: H2_MEMORY,
+          prodDatabaseType: POSTGRESQL,
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr'],
-          buildTool: 'maven',
+          buildTool: MAVEN,
           rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
           skipClient: false,
           skipUserManagement: false,
@@ -101,20 +103,20 @@ describe('JHipster upgrade generator', function () {
         .withOptions({ skipInstall: true, skipChecks: true, fromCli: true, blueprints: blueprintName })
         .withPrompts({
           baseName: 'jhipster',
-          clientFramework: ANGULAR,
+          clientFramework: ANGULAR_X,
           packageName: 'com.mycompany.myapp',
           packageFolder: 'com/mycompany/myapp',
           serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          cacheProvider: 'ehcache',
+          authenticationType: JWT,
+          cacheProvider: EHCACHE,
           enableHibernateCache: true,
-          databaseType: 'sql',
-          devDatabaseType: 'h2Memory',
-          prodDatabaseType: 'postgresql',
+          databaseType: SQL,
+          devDatabaseType: H2_MEMORY,
+          prodDatabaseType: POSTGRESQL,
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr'],
-          buildTool: 'maven',
+          buildTool: MAVEN,
           rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
           skipClient: false,
           skipUserManagement: false,

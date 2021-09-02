@@ -56,6 +56,9 @@ import org.springframework.cache.CacheManager;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
+    <%_ if (databaseTypeCouchbase) { _%>
+import org.springframework.data.domain.PageImpl;
+    <%_ } _%>
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -91,14 +94,13 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
 <%_ if (!reactive || authenticationTypeOauth2) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-import java.time.temporal.ChronoUnit;
 
 /**
  * Service class for managing users.
@@ -756,7 +758,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asDto('User') %>> getAllPublicUsers(Pageable pageable) {
-        return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
+        return userRepository.findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(pageable).map(<%= asDto('User') %>::new);
     }
 
     <%_ if (reactive) { _%>
