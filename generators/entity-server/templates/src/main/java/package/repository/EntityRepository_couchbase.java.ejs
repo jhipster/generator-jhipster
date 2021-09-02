@@ -63,9 +63,9 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 <%_
-let optionalOrMono = reactive ? 'Mono' : 'Optional';
-let listOrFlux = reactive ? 'Flux' : 'List';
-let pageOrFlux = (reactive) ? 'Flux' : 'Page';
+    let optionalOrMono = reactive ? 'Mono' : 'Optional';
+    let listOrFlux = reactive ? 'Flux' : 'List';
+    let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @Repository
 public interface <%= entityClass %>Repository extends <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {

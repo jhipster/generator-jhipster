@@ -48,8 +48,8 @@ import static java.lang.String.format;
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 <%_
-let listOrFlux = reactive ? 'Flux' : 'List';
-let pageOrFlux = (reactive) ? 'Flux' : 'Page';
+    let listOrFlux = reactive ? 'Flux' : 'List';
+    let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @NoRepositoryBean
 public interface <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
