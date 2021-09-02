@@ -112,7 +112,7 @@ class LogoutResourceIT {
         restLogoutMockMvc.perform(post("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
+            .andExpect(jsonPath("$.logoutUrl").value(logoutUrl));
 <%_ } else { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc")
             .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata()
