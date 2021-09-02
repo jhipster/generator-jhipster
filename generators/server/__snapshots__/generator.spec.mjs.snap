@@ -747,6 +747,10 @@ Object {
           "file": "package/config/couchbase/package-info.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/repository/JHipsterCouchbaseRepository.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -761,30 +765,10 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/N1qlCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/CustomReactiveCouchbaseRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/N1qlCouchbaseRepositoryTest.java",
+          "file": "package/repository/JHipsterCouchbaseRepositoryTest.java",
           "renameTo": [Function],
         },
       ],

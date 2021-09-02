@@ -140,6 +140,10 @@ const couchbaseFiles = {
           file: 'package/config/couchbase/package-info.java',
           renameTo: generator => `${generator.javaDir}config/couchbase/package-info.java`,
         },
+        {
+          file: 'package/repository/JHipsterCouchbaseRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/JHipsterCouchbaseRepository.java`,
+        },
       ],
     },
     {
@@ -153,32 +157,12 @@ const couchbaseFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/N1qlCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.reactive,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/CustomReactiveCouchbaseRepository.java',
-          renameTo: generator => `${generator.javaDir}repository/CustomReactiveCouchbaseRepository.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.searchEngine === COUCHBASE,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/N1qlCouchbaseRepositoryTest.java',
-          renameTo: generator => `${generator.testDir}repository/N1qlCouchbaseRepositoryTest.java`,
+          file: 'package/repository/JHipsterCouchbaseRepositoryTest.java',
+          renameTo: generator => `${generator.testDir}repository/JHipsterCouchbaseRepositoryTest.java`,
         },
       ],
     },
