@@ -161,8 +161,8 @@ import java.time.Instant;
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
 <%_ if (searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.pageableStatement;
-import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.searchQuery;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
 <%_ } _%>
 /**
  * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
@@ -174,7 +174,7 @@ import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>
 _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
+public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
   <%_ if (cacheManagerIsAvailable) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -279,7 +279,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
     default Page<<%= asEntity('User') %>> findAllByActivatedIsTrue(Pageable pageable) {
-        return new PageImpl<>(findAllByActivatedIsTrue(N1qlCouchbaseRepository.pageableStatement(pageable)), pageable, countAllByActivatedIsTrue());
+        return new PageImpl<>(findAllByActivatedIsTrue(JHipsterCouchbaseRepository.pageableStatement(pageable)), pageable, countAllByActivatedIsTrue());
     }
     <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);

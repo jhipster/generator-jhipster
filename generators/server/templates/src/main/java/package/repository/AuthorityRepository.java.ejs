@@ -74,7 +74,7 @@ import java.util.List;
 <%_
     let listOrFlux = reactive ? 'Flux' : 'List';
 _%>
-public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (reactive) { %>R2dbc<% } else { %>Jpa<% } %>Repository<% } else { %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><% } %><Authority, String> {
+public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (reactive) { %>R2dbc<% } else { %>Jpa<% } %>Repository<% } else { %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<% } %><% } %><Authority, String> {
 <%_ if (databaseTypeNeo4j) { _%>
     <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<%_ } _%>
     <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('Authority') %>> findAll();

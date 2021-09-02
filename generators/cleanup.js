@@ -490,13 +490,12 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.isJhipsterVersionLessThan('7.1.1')) {
     generator.removeFile(`${javaDir}repository/CustomReactiveCouchbaseRepository.java `);
     generator.removeFile(`${testDir}config/DatabaseConfigurationIT.java`);
-    if (generator.searchEngine !== 'couchbase') {
-      generator.removeFile(`${javaDir}repository/CustomN1qlCouchbaseRepository.java`);
-    } else {
-      generator.removeFile(`${javaDir}repository/CustomCouchbaseRepository.java`);
-      generator.removeFile(`${javaDir}repository/SearchCouchbaseRepository.java`);
-      generator.removeFile(`${testDir}repository/CustomCouchbaseRepositoryTest.java`);
-    }
+    generator.removeFile(`${javaDir}repository/N1qlCouchbaseRepository.java`);
+    generator.removeFile(`${javaDir}repository/ReactiveN1qlCouchbaseRepository.java`);
+    generator.removeFile(`${javaDir}repository/CustomN1qlCouchbaseRepository.java`);
+    generator.removeFile(`${javaDir}repository/CustomCouchbaseRepository.java`);
+    generator.removeFile(`${javaDir}repository/SearchCouchbaseRepository.java`);
+    generator.removeFile(`${testDir}repository/CustomCouchbaseRepositoryTest.java`);
   }
 }
 

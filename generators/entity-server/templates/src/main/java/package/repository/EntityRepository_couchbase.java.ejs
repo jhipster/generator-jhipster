@@ -21,7 +21,7 @@ package <%= packageName %>.repository;
 import <%= packageName %>.domain.<%= persistClass %>;
 
 <%_ if ((relationships.length !== 0 && !reactive) || searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.pageableStatement;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
 <%_ } _%>
 <%_ if (relationships.length !== 0 || searchEngineCouchbase) { _%>
 import org.springframework.data.couchbase.repository.Query;
@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Optional;
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.searchQuery;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
@@ -68,7 +68,7 @@ import java.util.UUID;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
   <%_
   if (relationships.length !== 0) { %>
 

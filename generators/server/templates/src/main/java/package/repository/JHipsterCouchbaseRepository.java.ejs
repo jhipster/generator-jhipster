@@ -52,7 +52,7 @@ import static java.lang.String.format;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @NoRepositoryBean
-public interface <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
+public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
 <%_ if (!reactive || searchEngineCouchbase) { _%>
     static String pageableStatement(Pageable pageable) {
         return pageableStatement(pageable, "");
