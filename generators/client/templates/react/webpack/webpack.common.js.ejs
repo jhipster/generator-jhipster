@@ -49,11 +49,6 @@ const getTsLoaderRule = env => {
       }
     }
   ];
-  if (env === 'development') {
-    rules.unshift({
-      loader: 'react-hot-loader/webpack'
-    });
-  }
   return rules;
 };
 
