@@ -49,11 +49,6 @@ const getTsLoaderRule = env => {
       }
     }
   ];
-  if (env === 'development') {
-    rules.unshift({
-      loader: 'react-hot-loader/webpack'
-    });
-  }
   return rules;
 };
 
@@ -102,15 +97,6 @@ return merge(
         use: getTsLoaderRule(options.env),
         include: [utils.root('./<%= CLIENT_MAIN_SRC_DIR %>app')],
         exclude: [utils.root('node_modules')]
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-        loader: 'file-loader',
-        options: {
-          digest: 'hex',
-          hash: 'sha512',
-          name: 'content/[hash].[ext]'
-        }
       },
       {
         enforce: 'pre',
