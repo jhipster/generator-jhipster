@@ -72,7 +72,6 @@
     "sinon": "11.1.2",
     "source-map-loader": "3.0.0",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
-    "stripcomment-loader": "0.1.0",
     "style-loader": "3.2.1",
     "swagger-ui-dist": "3.52.0",
     "terser-webpack-plugin": "5.2.0",
