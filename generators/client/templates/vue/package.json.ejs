@@ -164,15 +164,15 @@
     "e2e": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
 <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress:headless",
+    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress",
 <%_ } _%>
 <%_ if (protractorTests) { _%>
     "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor",
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
-    "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
+    "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
     "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open",
 <%_ } _%>
