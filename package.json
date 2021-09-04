@@ -100,7 +100,7 @@
     "normalize-path": "3.0.0",
     "ora": "6.0.0",
     "os-locale": "6.0.0",
-    "p-queue": "7.1.0",
+    "p-queue": "6.6.2",
     "parse-gitignore": "1.0.1",
     "pluralize": "8.0.0",
     "prettier": "2.3.2",
