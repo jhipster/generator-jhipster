@@ -177,14 +177,14 @@
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
 <%_ if (protractorTests && !cypressTests) { _%>
-    "e2e": "<%= clientPackageManager %> run e2e:protractor",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
+    "e2e": "<%= clientPackageManager %> run e2e:protractor --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
 <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress",
+    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
 <%_ } _%>
 <%_ if (protractorTests) { _%>
-    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor",
+    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
@@ -198,24 +198,23 @@
 <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
-    "start": "<%= clientPackageManager %> run webapp:dev",
+    "start": "<%= clientPackageManager %> run webapp:dev --",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
 <%_ } _%>
     "pretest": "<%= clientPackageManager %> run lint",
-    "test": "<%= clientPackageManager %> run jest",
-    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
+    "test": "<%= clientPackageManager %> run jest --",
+    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
-    "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
-    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --env stats=minimal",
-    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress=profile",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --env stats=minimal",
-    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --inline --progress=profile --env stats=normal",
-    "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
-    "webapp:test": "<%= clientPackageManager %> run test",
-    "webpack-dev-server": "npm run webpack -- serve",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
+    "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
+    "webapp:build:dev": "webpack --config webpack/webpack.dev.js --env stats=minimal",
+    "webapp:build:prod": "webpack --config webpack/webpack.prod.js --progress=profile",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --env stats=minimal",
+    "webapp:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress=profile --env stats=normal",
+    "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
+    "webapp:test": "<%= clientPackageManager %> run test --",
+    "webpack-dev-server": "webpack serve"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

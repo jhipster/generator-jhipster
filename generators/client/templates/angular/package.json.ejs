@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.1-SNAPSHOT",
@@ -143,14 +144,14 @@
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests && !cypressTests) { _%>
-    "e2e": "<%= clientPackageManager %> run e2e:protractor",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
+    "e2e": "<%= clientPackageManager %> run e2e:protractor --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
     <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress",
+    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
-    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor",
+    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
@@ -168,8 +169,8 @@
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
-    "serve": "<%= clientPackageManager %> run start",
-    "build": "<%= clientPackageManager %> run webapp:prod",
+    "serve": "<%= clientPackageManager %> run start --",
+    "build": "<%= clientPackageManager %> run webapp:prod --",
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
@@ -180,7 +181,7 @@
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
-    "webapp:test": "<%= clientPackageManager %> run test"
+    "webapp:test": "<%= clientPackageManager %> run test --"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
