@@ -35,3 +35,22 @@ server:
     enabled-protocols: TLSv1.2
   http2:
     enabled: true
+
+
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+<%_ if (!applicationTypeMicroservice) { _%>
+  cors:
+  # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
+  allowed-origins: "https://localhost:8100,https://localhost:9000<%_ if (!skipClient) { _%>,https://localhost:<%= devServerPort %><%_ } _%>"
+<%_ } else { _%>
+# CORS is disabled by default on microservices, as you should access them through a gateway.
+# If you want to enable it, please uncomment the configuration below.
+# cors:
+#   allowed-origins: "https://localhost:9000"
+<%_ } _%>
