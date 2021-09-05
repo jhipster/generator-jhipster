@@ -80,7 +80,7 @@
   },
   "dependencies": {
     "aws-sdk": "2.978.0",
-    "axios": "0.21.1",
+    "axios": "0.21.3",
     "chalk": "4.1.2",
     "chevrotain": "9.0.2",
     "commander": "8.1.0",
