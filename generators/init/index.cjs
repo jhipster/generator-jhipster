@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const simpleGit = require('simple-git');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const {
   INITIALIZING_PRIORITY,
@@ -277,13 +276,6 @@ module.exports = class extends MixedChain {
   /*
    * Start of local public API, blueprints may override to customize the generator behavior.
    */
-
-  createGit() {
-    return simpleGit({ baseDir: this.destinationPath() }).env({
-      ...process.env,
-      LANG: 'en',
-    });
-  }
 
   shouldSkipCommitHook() {
     return this.application[SKIP_COMMIT_HOOK];
