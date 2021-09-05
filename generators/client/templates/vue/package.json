@@ -3,7 +3,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/vue-fontawesome": "2.0.2",
-    "axios": "0.21.1",
+    "axios": "0.21.3",
     "bootstrap": "4.6.0",
     "bootstrap-vue": "2.21.2",
     "bootswatch": "5.1.0",
