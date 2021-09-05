@@ -43,18 +43,18 @@ public class <%= controllerClass %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= controllerClass %>.class);
 
-    <%_ for(let idx in controllerActions) { _%>
+<%_ for(let idx in controllerActions) { _%>
     /**
     * <%= controllerActions[idx].actionMethod.toUpperCase() %> <%= controllerActions[idx].actionName %>
     */
     @<%= controllerActions[idx].actionMethod %>Mapping("/<%= (controllerActions[idx].actionPath) %>")
     public <% if (reactiveController) { %>Mono<String><% } else { %>String<% } %> <%= controllerActions[idx].actionName %>() {
-        <%_ if (reactiveController) { _%>
+  <%_ if (reactiveController) { _%>
         return Mono.just("<%= controllerActions[idx].actionName %>");
-        <%_ } else { _%>
+  <%_ } else { _%>
         return "<%= controllerActions[idx].actionName %>";
-        <%_ } _%>
+  <%_ } _%>
     }
 
-    <%_ } _%>
+<%_ } _%>
 }

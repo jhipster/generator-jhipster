@@ -23,8 +23,11 @@ const { requiredConfig, defaultConfig } = require('./config.cjs');
 const { options } = require('./options.cjs');
 const {
   JAVA_VERSION,
-  JAVA_APP_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
+  JAVA_APP_VERSION,
+  JAVA_SOURCE_DIR,
+  JAVA_RESOURCE_DIR,
+  JAVA_TEST_DIR,
   PACKAGE_NAME,
   PRETTIER_JAVA_INDENT,
   BUILD_TOOL,
@@ -65,7 +68,7 @@ module.exports.mixin = parent =>
      * @param {any} config - config to load config from
      * @param {any} into - destination context to use default is context
      */
-    loadJavaConfig(config = this.jhipsterConfig, into = this) {
+    loadJavaConfig(into = this, config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);
       into[PACKAGE_NAME] = config[PACKAGE_NAME];
       into[PRETTIER_JAVA_INDENT] = config[PRETTIER_JAVA_INDENT];
@@ -77,13 +80,14 @@ module.exports.mixin = parent =>
      * Prepare derived java properties into fromInto.
      * @param {any} fromInto - source/destination context
      */
-    prepareDerivedJavaProperties(fromInto = this) {
-      fromInto.javaMainClass = fromInto.getMainClassName(fromInto.baseName);
+    prepareJavaDerivedProperties(fromInto = this) {
+      fromInto.javaMainClass = this.getMainClassName(fromInto.baseName);
       fromInto.packageFolder = fromInto[PACKAGE_NAME].replace(/\./g, '/');
 
-      fromInto.buildToolMaven = fromInto.buildTool === BUILD_TOOL_MAVEN;
-      fromInto.buildToolGradle = fromInto.buildTool === BUILD_TOOL_GRADLE;
-      fromInto.buildToolUnknown = !fromInto.buildToolMaven && !fromInto.buildToolGradle;
+      const buildTool = fromInto[BUILD_TOOL];
+      fromInto.buildToolNo = !buildTool || buildTool === 'no';
+      fromInto.buildToolMaven = buildTool === BUILD_TOOL_MAVEN;
+      fromInto.buildToolGradle = buildTool === BUILD_TOOL_GRADLE;
     }
 
     /**
@@ -92,14 +96,17 @@ module.exports.mixin = parent =>
      */
     loadJavaConstants(into = this) {
       into.JAVA_VERSION = JAVA_VERSION;
-      into.JAVA_APP_VERSION = JAVA_APP_VERSION;
       into.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
+      into.JAVA_APP_VERSION = JAVA_APP_VERSION;
+      into.JAVA_SOURCE_DIR = JAVA_SOURCE_DIR;
+      into.JAVA_RESOURCE_DIR = JAVA_RESOURCE_DIR;
+      into.JAVA_TEST_DIR = JAVA_TEST_DIR;
     }
 
     /**
      * Compose with selected java configuration.
      */
-    async composeWithJavaDependencies(config = this.jhipsterConfig) {
+    async composeWithJavaConfig(config = this.jhipsterConfig) {
       config = defaults({}, config, defaultConfig);
       const buildTool = config[BUILD_TOOL];
       if (buildTool === BUILD_TOOL_MAVEN) {

@@ -55,6 +55,10 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
     };
     return { ...phaseFromJHipster, ...customPhaseSteps };
   }
+
+  get postWriting() {
+    return super._postWriting();
+  }
 };
 
 describe('needle API i18n: JHipster language generator with blueprint', () => {

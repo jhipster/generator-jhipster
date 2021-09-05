@@ -5,6 +5,11 @@ const helpers = require('yeoman-test');
 const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const reactFiles = require('../generators/client/files-react').files;
+const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
+const { ANGULAR_X, REACT } = require('../jdl/jhipster/client-framework-types');
+const { JWT } = require('../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../jdl/jhipster/cache-types');
+const { MAVEN } = require('../jdl/jhipster/build-tool-types');
 
 const outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([$/])/, 'src/main/webapp2$1') : undefined);
 
@@ -31,20 +36,20 @@ describe('JHipster generator', () => {
           })
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: 'angularX',
+            clientFramework: ANGULAR_X,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
             enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: POSTGRESQL,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['fr'],
-            buildTool: 'maven',
+            buildTool: MAVEN,
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             skipClient: false,
             skipUserManagement: false,
@@ -92,20 +97,20 @@ describe('JHipster generator', () => {
           })
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: 'react',
+            clientFramework: REACT,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
             enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: POSTGRESQL,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['fr'],
-            buildTool: 'maven',
+            buildTool: MAVEN,
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             skipClient: false,
             skipUserManagement: false,
@@ -128,7 +133,7 @@ describe('JHipster generator', () => {
             outputPathCustomizer: applyCustomizers,
             enableTranslation: true,
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
+            authenticationType: JWT,
             testFrameworks: [],
           })
         );

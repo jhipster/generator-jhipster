@@ -4,22 +4,23 @@ const path = require('path');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
 
 const yoRc = {
   'generator-jhipster-myblueprint': {
-    applicationType: 'monolith',
+    applicationType: MONOLITH,
     languages: ['fr'],
     baseName: 'myblueprint',
     nativeLang: 'en',
   },
   'generator-jhipster-myblueprint2': {
-    applicationType: 'monolith',
+    applicationType: MONOLITH,
     languages: ['en'],
     baseName: 'myblueprint2',
     nativeLang: 'en',
   },
   'generator-jhipster': {
-    applicationType: 'monolith',
+    applicationType: MONOLITH,
     baseName: 'jhipster',
     jhipsterVersion: '6.6.0',
     blueprints: [
@@ -73,7 +74,7 @@ describe('JHipster blueprint config migration with ignore option', () => {
             baseName: 'myblueprint2',
           },
           'generator-jhipster': {
-            applicationType: 'monolith',
+            applicationType: MONOLITH,
             baseName: 'jhipster',
             jhipsterVersion: '6.6.0',
             nativeLang: 'en',

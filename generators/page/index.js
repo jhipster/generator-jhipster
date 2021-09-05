@@ -30,8 +30,8 @@ const { VUE } = constants.SUPPORTED_CLIENT_FRAMEWORKS;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     // This makes it possible to pass `pageName` by argument
     this.argument('pageName', {

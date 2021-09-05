@@ -37,18 +37,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import <%= packageName %>.repository.search.SearchCouchbaseRepository;
-  <%_ if (relationshipsContainEagerLoad) { _%>
-import org.springframework.data.couchbase.core.query.Query;
-  <%_ } _%>
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
-if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) {
+if (databaseTypeSql || databaseTypeMongodb) {
   let importList = fieldsContainOwnerManyToMany;
   for (r of relationships) {
     if (r.relationshipManyToOne && r.otherEntityUser) {
@@ -75,7 +69,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
   <%_
   for (const relationship of relationships) {
     if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
@@ -107,17 +101,18 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
       } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(@Param("id") <%= primaryKey.type %> id);
     <%_
-    } else if (databaseTypeMongodb || databaseTypeCouchbase)  { _%>
+    } else if (databaseTypeMongodb)  { _%>
 
-    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    @Query("{}")
     Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    @Query("{}")
     List<<%= persistClass %>> findAllWithEagerRelationships();
 
-    @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    @Query("{'id': ?0}")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
     }
-  } _%>
+  }
+  _%>
 }

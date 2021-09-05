@@ -30,13 +30,23 @@ class JDLEnum {
     this.name = merged.name;
     this.values = new Map(
       merged.values.map(entry => {
-        return [entry.key, new JDLEnumValue(entry.key, entry.value)];
+        return [entry.key, new JDLEnumValue(entry.key, entry.value, entry.comment)];
       })
     );
   }
 
   getValuesAsString() {
     return stringifyValues(this.values).join(',');
+  }
+
+  getValueJavadocs() {
+    const javadocs = {};
+    this.values.forEach(jdlEnumValue => {
+      if (jdlEnumValue.comment) {
+        javadocs[jdlEnumValue.name] = jdlEnumValue.comment;
+      }
+    });
+    return javadocs;
   }
 
   toString() {

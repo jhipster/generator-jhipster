@@ -55,9 +55,6 @@ import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
   <%_ } _%>
 <%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-import <%= packageName %>.repository.search.SearchCouchbaseRepository;
-<%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.apache.commons.beanutils.BeanComparator;
 <%_ } _%>
@@ -94,6 +91,14 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.Query;
+import org.springframework.data.couchbase.repository.ScanConsistency;
+  <%_ if (!reactive) { _%>
+import org.springframework.data.domain.PageImpl;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (reactive && databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -155,33 +160,50 @@ import java.time.Instant;
 <% if (databaseTypeCouchbase) { %>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
+<%_ if (searchEngineCouchbase) { _%>
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
+<%_ } _%>
 /**
  * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
  */
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
     let listOrFlux = reactive ? 'Flux' : 'List';
+    let pageOrFlux = (reactive) ? 'Flux' : 'Page';
 _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><%if (searchEngineCouchbase) { %>, SearchCouchbaseRepository<<%= asEntity('User') %>, String><% } } %> {
+public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%= asEntity('User') %>, <%= user.primaryKey.type %>><% } %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
   <%_ if (cacheManagerIsAvailable) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
+    // @ScanConsistency is to fix index issues with Spring Data Couchbase
+    // https://github.com/spring-projects/spring-data-couchbase/issues/897
+  <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
 
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
 
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
     <%= listOrFlux %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
   <%_ } _%>
 
   <%_ if (!authenticationTypeOauth2) { _%>
-
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
   <%_ } _%>
 
@@ -191,12 +213,19 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
       <%_ } _%>
     <%_ } _%>
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE LOWER(email) = LOWER($1) AND #{#n1ql.filter}")
+    <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
   <%_ } _%>
   <%_ if (databaseTypeCouchbase) { _%>
-      <%_ if (cacheManagerIsAvailable) { _%>
+    <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+    <%_ } _%>
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%_ } _%>
     default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
         return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
@@ -233,14 +262,56 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <% if (reactive) { %>
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
     Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
 
-    Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
+    Flux<<%= asEntity('User') %>>findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(Pageable pageable);
 
+    <%_ if (databaseTypeCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%_ } _%>
     Mono<Long> count();
   <% } else { %>
+    <%_ if (databaseTypeCouchbase) { _%>
+    default Page<<%= asEntity('User') %>> findAllByActivatedIsTrue(Pageable pageable) {
+        return new PageImpl<>(findAllByActivatedIsTrue(JHipsterCouchbaseRepository.pageableStatement(pageable)), pageable, countAllByActivatedIsTrue());
+    }
+    <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    <%_ } _%>
   <% } %>
+
+  <%_ if (databaseTypeCouchbase && !reactive) { _%>
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true #{[0]}")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    List<<%= asEntity('User') %>> findAllByActivatedIsTrue(String pageableStatement);
+
+    @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND activated = true")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    Long countAllByActivatedIsTrue();
+  <%_ } _%>
+
+  <%_ if (searchEngineCouchbase) { _%>
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{n1ql.bucket}, #{[0]) #{[1]}")
+    <%= listOrFlux %><User> search(String queryString, String pageableStatement);
+
+    default <%= listOrFlux %><User> search(String queryString) {
+        return search(searchQuery(queryString).toString(), "");
+    }
+
+    default <%= pageOrFlux %><User> search(String queryString, Pageable pageable) {
+        return
+            <% if (!reactive) { %>new PageImpl<>(<% } %>
+                search(searchQuery(queryString).toString(), pageableStatement(pageable))
+            <% if (!reactive) { %>)<% } %>;
+    }
+  <%_ } _%>
 }
 <%_ } else if (databaseTypeSql && reactive) { _%>
 @Repository

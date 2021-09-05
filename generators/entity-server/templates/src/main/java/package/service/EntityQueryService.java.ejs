@@ -125,6 +125,10 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
     protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= persistClass %>> specification = Specification.where(null);
         if (criteria != null) {
+            // This has to be called first, because the distinct method returns null
+            if (criteria.getDistinct() != null) {
+                specification = specification.and(distinct(criteria.getDistinct()));
+            }
             if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
                 specification = specification.and(<%= getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
             }

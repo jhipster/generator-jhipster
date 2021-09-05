@@ -18,17 +18,24 @@
 -%>
 package <%= packageName %>.domain.enumeration;
 
+<%_ if (typeof javadoc === 'undefined') { _%>
 /**
  * The <%= enumName %> enumeration.
  */
+<%_ } else { _%>
+<%= javadoc %>
+<%_ } _%>
 public enum <%= enumName %> {
 <%_ if (withoutCustomValues) { _%>
-    <%= enumValues.map(enumValue => enumValue.name).join(', ') %>
+<%= enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}    ${enumValue.name}`).join(', ') %>
 <%_ } else {
   enumValues.forEach((enumWithCustomValue, index) => {
-    if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
+    if (enumWithCustomValue.comment){  _%>
+<%= enumWithCustomValue.comment %>
+  <%_ } 
+  if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
     <%= enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
-    <%_ } else { _%>
+  <%_ } else { _%>
     <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ }
   }); _%>

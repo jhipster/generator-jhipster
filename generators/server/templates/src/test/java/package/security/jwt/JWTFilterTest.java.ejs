@@ -68,9 +68,9 @@ class JWTFilterTest {
 
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", 60000);
         jwtFilter = new JWTFilter(tokenProvider);
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         SecurityContextHolder.getContext().setAuthentication(null);
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
@@ -81,7 +81,7 @@ class JWTFilterTest {
             Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
         String jwt = tokenProvider.createToken(authentication, false);
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         request.setRequestURI("/api/test");
@@ -91,7 +91,7 @@ class JWTFilterTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("test-user");
         assertThat(SecurityContextHolder.getContext().getAuthentication().getCredentials()).hasToString(jwt);
-        <%_ } else { _%>
+<%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
             .header(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
@@ -105,13 +105,13 @@ class JWTFilterTest {
                 .doOnSuccess(auth -> assertThat(auth.getCredentials().toString()).hasToString(jwt))
                 .then()
         ).block();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
     void testJWTFilterInvalidToken()<% if (!reactive) { %> throws Exception<% } %> {
         String jwt = "wrong_jwt";
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         request.setRequestURI("/api/test");
@@ -120,7 +120,7 @@ class JWTFilterTest {
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
-        <%_ } else { _%>
+<%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
             .header(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
@@ -133,12 +133,12 @@ class JWTFilterTest {
                 .doOnSuccess(auth -> assertThat(auth).isNull())
                 .then()
         ).block();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
     void testJWTFilterMissingAuthorization()<% if (!reactive) { %> throws Exception<% } %> {
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRequestURI("/api/test");
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -146,7 +146,7 @@ class JWTFilterTest {
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
-        <%_ } else { _%>
+<%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test");
         MockServerWebExchange exchange = MockServerWebExchange.from(request);
@@ -158,12 +158,12 @@ class JWTFilterTest {
                 .doOnSuccess(auth -> assertThat(auth).isNull())
                 .then()
         ).block();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
     void testJWTFilterMissingToken()<% if (!reactive) { %> throws Exception<% } %> {
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
         request.setRequestURI("/api/test");
@@ -172,7 +172,7 @@ class JWTFilterTest {
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
-        <%_ } else { _%>
+<%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
             .header(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
@@ -185,7 +185,7 @@ class JWTFilterTest {
                 .doOnSuccess(auth -> assertThat(auth).isNull())
                 .then()
         ).block();
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
@@ -196,7 +196,7 @@ class JWTFilterTest {
             Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
         String jwt = tokenProvider.createToken(authentication, false);
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
         request.setRequestURI("/api/test");
@@ -205,7 +205,7 @@ class JWTFilterTest {
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
-        <%_ } else { _%>
+<%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
             .header(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
@@ -218,7 +218,7 @@ class JWTFilterTest {
                 .doOnSuccess(auth -> assertThat(auth).isNull())
                 .then()
         ).block();
-        <%_ } _%>
+<%_ } _%>
     }
 
 }

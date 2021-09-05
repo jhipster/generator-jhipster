@@ -25,6 +25,7 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipste
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { MapperTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = require('../../jdl/jhipster/cache-types');
+const { writeEntityCouchbaseFiles } = require('./files-couchbase');
 
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
@@ -49,16 +50,6 @@ const serverFiles = {
         {
           file: 'config/cql/changelog/added_entity.cql',
           renameTo: generator => `config/cql/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.cql`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.searchEngine === COUCHBASE && !generator.skipDbChangelog,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'config/couchmove/changelog/entity.fts',
-          renameTo: generator => `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.fts`,
         },
       ],
     },
@@ -128,16 +119,6 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseTypeCouchbase,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/Entity.java.jhi.spring_data_couchbase',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_couchbase`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
@@ -192,7 +173,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && !generator.embedded,
+      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -202,7 +183,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && !generator.embedded,
+      condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -385,6 +366,7 @@ function writeFiles() {
         }
       });
     },
+    ...writeEntityCouchbaseFiles(),
   };
 }
 

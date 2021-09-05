@@ -42,8 +42,8 @@ const execCmd = util.promisify(ChildProcess.exec);
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('skip-build', {
       desc: 'Skips building the application',
