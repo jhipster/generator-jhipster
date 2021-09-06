@@ -71,7 +71,15 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _configuring() {
     return {
-      configure() {
+      async configureMonorepository() {
+        if (this.jhipsterConfig.monorepository) return;
+
+        const git = this.createGit();
+        if ((await git.checkIsRepo()) && !(await git.checkIsRepo('root'))) {
+          this.jhipsterConfig.monorepository = true;
+        }
+      },
+      configureCommitHook() {
         if (this.jhipsterConfig.monorepository) {
           this.jhipsterConfig.skipCommitHook = true;
         }
