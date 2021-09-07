@@ -169,7 +169,7 @@ module.exports = class extends BaseBlueprintGenerator {
           },
           scripts: {
             'cypress:audits': 'cypress open --config-file cypress-audits.json',
-            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --headless --config-file cypress-audits.json',
+            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.json',
             // eslint-disable-next-line no-template-curly-in-string
             'e2e:cypress:audits': 'cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.json',
           },
@@ -187,7 +187,7 @@ module.exports = class extends BaseBlueprintGenerator {
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
             'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
-            'e2e:cypress:coverage': 'npm run e2e:cypress',
+            'e2e:cypress:coverage': 'npm run e2e:cypress:headed',
             'poste2e:cypress:coverage': 'nyc report',
             'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',
             'webapp:instrumenter': 'ng build --configuration instrumenter',

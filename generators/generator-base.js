@@ -27,6 +27,7 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const normalize = require('normalize-path');
+const simpleGit = require('simple-git');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
@@ -3134,6 +3135,16 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         delete this.options[optionName];
       }
+    });
+  }
+
+  /**
+   * Create a simple-git instance using current destinationPath as baseDir.
+   */
+  createGit() {
+    return simpleGit({ baseDir: this.destinationPath() }).env({
+      ...process.env,
+      LANG: 'en',
     });
   }
 };

@@ -23,21 +23,12 @@ import { logout } from 'app/shared/reducers/authentication';
 
 export const Logout = () => {
   const logoutUrl = useAppSelector(state => state.authentication.logoutUrl);
-  const idToken = useAppSelector(state => state.authentication.idToken);
-  const clientId = useAppSelector(state => state.authentication.clientId);
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     dispatch(logout());
     if (logoutUrl) {
-      // if Keycloak, logoutUrl has protocol/openid-connect in it
-      if (logoutUrl.includes('/protocol')) {
-        window.location.href = `${logoutUrl}?redirect_uri=${window.location.origin}`;
-      } else if(logoutUrl.includes('auth0.com')) {
-        window.location.href = `${logoutUrl}?client_id=${clientId}&returnTo=${window.location.origin}`;
-      } else {
-        window.location.href = `${logoutUrl}?id_token_hint=${idToken}&post_logout_redirect_uri=${window.location.origin}`;
-      }
+      window.location.href = logoutUrl;
     }
   });
 

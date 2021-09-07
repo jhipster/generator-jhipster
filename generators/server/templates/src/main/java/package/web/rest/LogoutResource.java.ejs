@@ -27,9 +27,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 <%_ if (!reactive) { _%>
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import org.springframework.http.HttpHeaders;
 <%_ } else { _%>
 import org.springframework.web.server.WebSession;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 import java.util.Map;
@@ -53,51 +54,68 @@ public class LogoutResource {
 <%_ } _%>
      * @param idToken the ID token.
 <%_ if (reactive) { _%>
+     * @param request a {@link ServerHttpRequest} request.
      * @param session the current {@link WebSession}.
 <%_ } _%>
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout URL and ID token.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout URL.
      */
     @PostMapping("/api/logout")
 <%_ if (!reactive) { _%>
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
-        String logoutUrl;
+        StringBuilder logoutUrl = new StringBuilder();
+
         String issuerUri = this.registration.getProviderDetails().getIssuerUri();
         if (issuerUri.contains("auth0.com")) {
-            logoutUrl = issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
+            logoutUrl.append(issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout");
         } else {
-            logoutUrl = this.registration.getProviderDetails()
-                .getConfigurationMetadata()
-                .get("end_session_endpoint")
-                .toString();
+            logoutUrl.append(this.registration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
         }
 
-        Map<String, String> logoutDetails = new HashMap<>();
-        logoutDetails.put("logoutUrl", logoutUrl);
-        logoutDetails.put("idToken", idToken.getTokenValue());
-        logoutDetails.put("clientId", this.registration.getClientId());
+        String originUrl = request.getHeader(HttpHeaders.ORIGIN);
+
+        if (logoutUrl.indexOf("/protocol") > -1) {
+            logoutUrl.append("?redirect_uri=").append(originUrl);
+        } else if (logoutUrl.indexOf("auth0.com") > -1) {
+            // Auth0
+            logoutUrl.append("?client_id=").append(this.registration.getClientId()).append("&returnTo=").append(originUrl);
+        } else {
+            // Okta
+            logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);
+        }
+
         request.getSession().invalidate();
-        return ResponseEntity.ok().body(logoutDetails);
+        return ResponseEntity.ok().body(Map.of("logoutUrl", logoutUrl.toString()));
     }
 <%_ } else { _%>
-    public Mono<Map<String, String>> logout(@AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken, WebSession session) {
-        return session.invalidate().then(
-            this.registration
-                .map(oidc -> Map.of(
-                    "clientId", oidc.getClientId(),
-                    "logoutUrl", prepareLogoutUri(oidc.getProviderDetails()),
-                    "idToken", idToken.getTokenValue())
-                )
-        );
+    public Mono<Map<String, String>> logout(@AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken, ServerHttpRequest request, WebSession session) {
+        return session
+            .invalidate()
+            .then(
+                this.registration.map(oidc -> prepareLogoutUri(request, oidc, idToken))
+            );
     }
 
-    private String prepareLogoutUri(ClientRegistration.ProviderDetails providerDetails) {
-        if (providerDetails.getIssuerUri().contains("auth0.com")) {
-            String issuerUri = providerDetails.getIssuerUri();
-            return issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout";
+    private Map<String, String> prepareLogoutUri(ServerHttpRequest request, ClientRegistration clientRegistration, OidcIdToken idToken) {
+        StringBuilder logoutUrl = new StringBuilder();
+        String issuerUri = clientRegistration.getProviderDetails().getIssuerUri();
+        if (issuerUri.contains("auth0.com")) {
+            logoutUrl.append(issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout");
         } else {
-            return providerDetails.getConfigurationMetadata().get("end_session_endpoint").toString();
+            logoutUrl.append(clientRegistration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
         }
+
+        String originUrl = request.getHeaders().getOrigin();
+        if (logoutUrl.indexOf("/protocol") > -1) {
+            logoutUrl.append("?redirect_uri=").append(originUrl);
+        } else if (logoutUrl.indexOf("auth0.com") > -1) {
+            // Auth0
+            logoutUrl.append("?client_id=").append(clientRegistration.getClientId()).append("&returnTo=").append(originUrl);
+        } else {
+            // Okta
+            logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);
+        }
+        return Map.of("logoutUrl", logoutUrl.toString());
     }
 
 <%_ } _%>

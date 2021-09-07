@@ -43,11 +43,6 @@ module.exports = async () => webpackMerge(await commonConfig({ env: ENV }), {
   module: {
     rules: [
       {
-        enforce: 'pre',
-        test: /\.s?css$/,
-        loader: 'stripcomment-loader'
-      },
-      {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {

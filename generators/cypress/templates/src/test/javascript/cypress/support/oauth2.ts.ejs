@@ -133,41 +133,26 @@ Cypress.Commands.add('oktaLogin', (oauth2Data: any, username, password) => {
 
 Cypress.Commands.add('oauthLogout', () => {
   cy.getCookie('XSRF-TOKEN')
-    .then(csrfCookie => {
+    .then(csrfCookie => cy.location().then(loc$ => cy.request({
+          method: 'POST',
+          url: `api/logout`,
+          headers: {
+            'X-XSRF-TOKEN': csrfCookie?.value,
+            origin: loc$.origin,
+          },
+        })
+    ))
+    .then(res => {
+      expect(res.status).to.eq(200);
       return cy.request({
-        method: 'POST',
-        url: `api/logout`,
-        headers: {
-          'X-XSRF-TOKEN': csrfCookie?.value,
-        },
-      })
-  })
-  .then(res => {
-    expect(res.status).to.eq(200)
-    let logoutUrl = res.body.logoutUrl
-    let redirectUri
-    cy.location().then(loc$ => {
-      redirectUri = loc$.origin
-      // Keycloak: uri has protocol/openid-connect/token
-      if (logoutUrl.includes('/protocol')) {
-        logoutUrl = `${logoutUrl}?redirect_uri=${redirectUri}`
-      } else if (logoutUrl.includes('auth0.com')) {
-        // Auth0
-        logoutUrl = `${logoutUrl}?client_id=${res.body.clientId}&returnTo=${window.location.origin}`;
-      } else {
-        // Else, Okta
-        logoutUrl = `${logoutUrl}?id_token_hint=${res.body.idToken}&post_logout_redirect_uri=${redirectUri}`
-      }
-      return cy.request({
-        url: logoutUrl,
+        url: res.body.logoutUrl,
         followRedirect: true,
-      })
+      });
     })
-  })
-  .then(res => {
-    expect(res.status).to.eq(200)
-    cy.visit('/')
-  })
+    .then(res => {
+      expect(res.status).to.eq(200);
+      cy.visit('/');
+    });
 });
 
 Cypress.Commands.add('clearCache', () => {
