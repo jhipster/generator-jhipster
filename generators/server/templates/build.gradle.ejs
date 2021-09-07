@@ -482,6 +482,11 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
+    <%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+    implementation "com.playtika.reactivefeign:feign-reactor-webclient:3.1.1"
+    implementation "com.playtika.reactivefeign:feign-reactor-cloud:3.1.1"
+    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration:3.1.1"
+    <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
     <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
     implementation "org.springframework.security:spring-security-data"

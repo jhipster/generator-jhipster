@@ -853,6 +853,23 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 <%_ } _%>
+<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-webclient</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-cloud</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-spring-configuration</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+<%_ } _%>
 <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
         <dependency>
             <groupId>org.springframework.security</groupId>

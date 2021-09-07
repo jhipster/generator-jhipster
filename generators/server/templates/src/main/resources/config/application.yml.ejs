@@ -58,11 +58,19 @@ eureka:
       git-branch: ${git.branch:}
       context-path: ${server.servlet.context-path:}
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-
-
+<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+reactive:
+  feign:
+    circuit:
+      breaker:
+        enabled: true
+  # client:
+  #   config:
+  #     default:
+  #       connectTimeout: 5000
+  #       readTimeout: 5000
 <%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
+<%_ if (applicationTypeMicroservice && !reactive) { _%>
 feign:
   circuitbreaker:
     enabled: true
