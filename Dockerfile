@@ -1,4 +1,5 @@
-FROM ubuntu:20.04
+# syntax=docker/dockerfile:1
+FROM eclipse-temurin:11-focal
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
@@ -19,14 +20,24 @@ RUN \
     bzip2 \
     fontconfig \
     libpng-dev \
-    sudo \
-    openjdk-11-jdk && \
-  update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
-  # install node.js
-  wget https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+    sudo && \
+  ARCH="$(dpkg --print-architecture)"; \
+  case "${ARCH}" in \
+     aarch64|arm64) \
+       NODE_BINARY_URL='https://nodejs.org/dist/v16.8.0/node-v16.8.0-linux-arm64.tar.gz'; \
+       ;; \
+     amd64|x86_64) \
+       NODE_BINARY_URL='https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.gz'; \
+       ;; \
+     *) \
+       echo "Unsupported arch: ${ARCH}"; \
+       exit 1; \
+       ;; \
+  esac; \
+  wget $NODE_BINARY_URL -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
-  npm install -g npm && \
+  npm install -g npm@latest && \
   # install yeoman
   npm install -g yo && \
   # cleanup
