@@ -137,7 +137,8 @@ _%>
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  tableName="<%= user.entityTableName %>">
+                  tableName="<%= user.entityTableName %>"
+                  usePreparedStatements="true">
     <%_ if (prodDatabaseTypePostgres) { _%>
             <column name="id" type="<%= idField.loadColumnType %>"/>
     <%_ } _%>
@@ -148,13 +149,15 @@ _%>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  tableName="<%= jhiTablePrefix %>_authority">
+                  tableName="<%= jhiTablePrefix %>_authority"
+                  usePreparedStatements="true">
             <column name="name" type="string"/>
         </loadData>
         <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  tableName="<%= jhiTablePrefix %>_user_authority">
+                  tableName="<%= jhiTablePrefix %>_user_authority"
+                  usePreparedStatements="true">
             <column name="user_id" type="<%= idField.loadColumnType %>"/>
         </loadData>
   <%_ } _%>
