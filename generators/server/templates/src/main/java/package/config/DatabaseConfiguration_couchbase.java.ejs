@@ -29,8 +29,6 @@ import com.github.couchmove.Couchmove;
 
 import <%= packageName %>.config.couchbase.CustomCouchbaseRepositoryFactoryBean;
 
-import org.apache.commons.codec.binary.Base64;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
@@ -269,7 +267,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
         @Override
         public byte[] convert(String source) {
-            return Base64.decodeBase64(source);
+            return Base64.getDecoder().decode(source);
         }
     }
 
