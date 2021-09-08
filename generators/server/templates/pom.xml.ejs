@@ -104,7 +104,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
   <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version>4.4.2</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>4.4.3</liquibase-hibernate5.version>
   <%_ } _%>
   <%_ if (devDatabaseTypeH2Disk) { _%>
         <h2.version>1.4.200</h2.version>
@@ -159,7 +159,7 @@
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
@@ -1115,8 +1115,8 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>pl.project13.maven</groupId>
-                    <artifactId>git-commit-id-plugin</artifactId>
+                    <groupId>io.github.git-commit-id</groupId>
+                    <artifactId>git-commit-id-maven-plugin</artifactId>
                     <version>${git-commit-id-plugin.version}</version>
                     <executions>
                         <execution>
@@ -1782,8 +1782,8 @@
                     </plugin>
 <%_ } _%>
                     <plugin>
-                        <groupId>pl.project13.maven</groupId>
-                        <artifactId>git-commit-id-plugin</artifactId>
+                        <groupId>io.github.git-commit-id</groupId>
+                        <artifactId>git-commit-id-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
