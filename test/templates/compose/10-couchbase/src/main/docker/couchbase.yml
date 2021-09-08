@@ -8,7 +8,7 @@ services:
             - 8091:8091
             - 8092:8092
             - 8093:8093
-            - 8094:80934
+            - 8094:8094
             - 11210:11210
         environment:
             - BUCKET=mscouchbase

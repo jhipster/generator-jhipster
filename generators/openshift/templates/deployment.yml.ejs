@@ -188,9 +188,9 @@ objects:
               value: ${APPLICATION_NAME}-cassandra
 <%_ } _%>
 <%_ if (app.databaseTypeCouchbase) { _%>
-            - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
+            - name: SPRING_COUCHBASE_CONNECTION_STRING
               value: ${APPLICATION_NAME}-couchbase
-            - name: SPRING_COUCHBASE_BUCKET_NAME
+            - name: JHIPSTER_COUCHBASE_BUCKET_NAME
               value: ${APPLICATION_NAME}
 <%_ } _%>
 <%_ if (app.searchEngineElasticsearch) { _%>
