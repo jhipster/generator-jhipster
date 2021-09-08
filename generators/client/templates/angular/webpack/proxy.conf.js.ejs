@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 function setupProxy() {
-  const tls = process.env.TLS;
+  const tls = process.argv.includes('--ssl');
   const conf = [
     {
       context: [

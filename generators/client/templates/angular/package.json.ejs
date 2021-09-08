@@ -128,8 +128,7 @@
     "webpack": "<%= dependabotPackageJson.devDependencies['webpack'] %>",
     "webpack-bundle-analyzer": "<%= dependabotPackageJson.devDependencies['webpack-bundle-analyzer'] %>",
     "webpack-merge": "<%= dependabotPackageJson.devDependencies['webpack-merge'] %>",
-    "webpack-notifier": "<%= dependabotPackageJson.devDependencies['webpack-notifier'] %>",
-    "cross-env": "<%= dependabotPackageJson.devDependencies['cross-env'] %>"
+    "webpack-notifier": "<%= dependabotPackageJson.devDependencies['webpack-notifier'] %>"
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
@@ -166,7 +165,7 @@
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
-    "start-tls": "cross-env TLS=true <%= clientPackageManager %> run webapp:dev-ssl",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>

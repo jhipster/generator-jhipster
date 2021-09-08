@@ -31,7 +31,6 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const environment = require('./environment');
 
-const tls = process.env.TLS;
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
@@ -72,6 +71,7 @@ module.exports = async (config, options, targetOptions) => {
   }
 <%_ if (!this.applicationTypeMicroservice) { _%>
   if (targetOptions.target === 'serve' || config.watch) {
+    const tls = config.devServer?.https;
     config.plugins.push(
       new BrowserSyncPlugin(
         {
