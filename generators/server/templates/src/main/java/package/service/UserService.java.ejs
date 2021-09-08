@@ -911,7 +911,7 @@ public class UserService {
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                         user.getLangKey(), user.getImageUrl());
                 }
-                // no last updated info, blindly update
+            // no last updated info, blindly update
             } else {
                 log.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
@@ -1042,8 +1042,6 @@ public class UserService {
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
-        } else {
-            user.setEmail((String) details.get("sub"));
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));

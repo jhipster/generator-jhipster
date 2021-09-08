@@ -65,6 +65,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
   <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
   <%_ } _%>
 import java.util.*;
@@ -319,7 +320,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // each scope as a GrantedAuthority, which we don't care about.
                 if (authority instanceof OidcUserAuthority) {
                     OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                    mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
+                    OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
+                    if (userInfo != null) {
+                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(userInfo.getClaims()));
+                    }
                 }
             });
             return mappedAuthorities;
