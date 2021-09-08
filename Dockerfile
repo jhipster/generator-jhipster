@@ -24,17 +24,17 @@ RUN \
   ARCH="$(dpkg --print-architecture)"; \
   case "${ARCH}" in \
      aarch64|arm64) \
-       NODE_BINARY_URL='https://nodejs.org/dist/v16.8.0/node-v16.8.0-linux-arm64.tar.gz'; \
+       ARCH='arm64'; \
        ;; \
      amd64|x86_64) \
-       NODE_BINARY_URL='https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.gz'; \
+       ARCH='x64'; \
        ;; \
      *) \
        echo "Unsupported arch: ${ARCH}"; \
        exit 1; \
        ;; \
   esac; \
-  wget $NODE_BINARY_URL -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-$ARCH.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm@latest && \
