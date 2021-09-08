@@ -45,6 +45,7 @@ plugins {
 <%_ } _%>
     id "org.sonarqube"
     id "io.spring.nohttp"
+    id "com.github.andygoossens.gradle-modernizer-plugin"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -126,6 +127,11 @@ test {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
+}
+
+modernizer {
+    failOnViolations = true
+    includeTestClasses = true
 }
 
 task integrationTest(type: Test) {
