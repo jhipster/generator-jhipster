@@ -297,7 +297,6 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <%_ if (searchEngineCouchbase) { _%>
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{n1ql.bucket}, #{[0]) #{[1]}")
     <%= listOrFlux %><User> search(String queryString, String pageableStatement);
 

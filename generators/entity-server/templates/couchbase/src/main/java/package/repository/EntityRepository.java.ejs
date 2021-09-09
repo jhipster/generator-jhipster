@@ -123,7 +123,6 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     } _%>
 
 <%_ if (searchEngineCouchbase) { _%>
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
   <%_ if (relationships.length === 0) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
   <%_ } else { _%>
