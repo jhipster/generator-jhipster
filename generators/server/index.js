@@ -501,6 +501,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         let e2ePackage = 'target/e2e';
         if (buildTool === MAVEN) {
           scriptsStorage.set({
+            'app:start': './mvnw',
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
@@ -516,6 +517,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
           e2ePackage = 'e2e';
           scriptsStorage.set({
+            'app:start': './gradlew',
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
