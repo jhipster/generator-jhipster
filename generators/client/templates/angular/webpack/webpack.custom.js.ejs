@@ -71,7 +71,7 @@ module.exports = async (config, options, targetOptions) => {
   }
 <%_ if (!this.applicationTypeMicroservice) { _%>
   if (targetOptions.target === 'serve' || config.watch) {
-    const tls = config.devServer?.https;
+    const tls = Boolean(config.devServer && config.devServer.https);
     config.plugins.push(
       new BrowserSyncPlugin(
         {
