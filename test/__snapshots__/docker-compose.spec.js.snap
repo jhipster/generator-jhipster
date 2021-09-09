@@ -83,8 +83,8 @@ eureka:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
-      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
-      - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+      - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
+      - JHIPSTER_COUCHBASE_BUCKET_NAME=mscouchbase
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscouchbase-couchbase-node:
     build:
@@ -723,8 +723,8 @@ eureka:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
-      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
-      - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+      - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
+      - JHIPSTER_COUCHBASE_BUCKET_NAME=mscouchbase
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscouchbase-couchbase:
     build:
