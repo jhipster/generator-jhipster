@@ -37,13 +37,13 @@ import reactor.core.publisher.Mono;
 <%_ } else { _%>
 import org.springframework.data.domain.Page;
 <%_ } _%>
-<%_ if (!reactive || searchEngineCouchbase) { _%>
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.couchbase.core.query.Query;
 
 import static java.lang.String.format;
-<%_ } _%>
+
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
@@ -53,7 +53,7 @@ import static java.lang.String.format;
 _%>
 @NoRepositoryBean
 public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
-<%_ if (!reactive || searchEngineCouchbase) { _%>
+
     static String pageableStatement(Pageable pageable) {
         return pageableStatement(pageable, "");
     }
@@ -78,7 +78,7 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
             .with(sort)
             .export();
     }
-<%_ } _%>
+
 <%_ if (searchEngineCouchbase) { _%>
     static SearchQuery searchQuery(String queryString) {
         List<String> ids = new LinkedList<>();

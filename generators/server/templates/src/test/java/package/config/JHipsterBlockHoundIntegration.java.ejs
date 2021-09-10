@@ -28,6 +28,9 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler$BoundedState", "dispose");
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler", "schedule");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
+    <%_ if (databaseTypeCouchbase) { _%>
+        builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
+    <%_} _%>
     }
 
 }
