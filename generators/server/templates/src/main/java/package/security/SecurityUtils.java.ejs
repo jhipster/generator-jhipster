@@ -35,19 +35,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } _%>
-<%_ if (reactive) { _%>
-import reactor.core.publisher.Mono;
-<%_ } _%>
-
 <%_ if (authenticationTypeOauth2) { _%>
 import java.util.*;
 import java.util.stream.Collectors;
-<%_ } _%>
-<%_ if (!reactive) { _%>
-  <%_ if (!authenticationTypeOauth2) { _%>
-import java.util.Optional;
-  <%_ } _%>
+  <%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+  <%_ } else { _%>
 import java.util.stream.Stream;
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+import java.util.Arrays;
+  <%_ } else { _%>
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
+  <%_ } _%>
 <%_ } _%>
 
 /**
@@ -140,25 +144,50 @@ public final class SecurityUtils {
     }
 
     /**
+     * Checks if the current user has any of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has any of the authorities, false otherwise.
+     */
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserAnyOfAuthorities(String... authorities) {
+<%_ if (!reactive) { _%>
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (
+            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+        );
+<%_ } else { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .map(authorityList -> authorityList.stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+            );
+<%_ } _%>
+    }
+
+    /**
+     * Checks if the current user has none of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has none of the authorities, false otherwise.
+     */
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserNoneOfAuthorities(String... authorities) {
+<%_ if (!reactive) { _%>
+        return !hasCurrentUserAnyOfAuthorities(authorities);
+<%_ } else { _%>
+        return hasCurrentUserAnyOfAuthorities(authorities).map(result -> !result);
+<%_ } _%>
+    }
+
+    /**
      * Checks if the current user has a specific authority.
      *
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
     public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserThisAuthority(String authority) {
-<%_ if (!reactive) { _%>
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).anyMatch(authority::equals);
-<%_ } else { _%>
-        return ReactiveSecurityContextHolder.getContext()
-            .map(SecurityContext::getAuthentication)
-            .map(Authentication::getAuthorities)
-            .map(authorities -> authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(authority::equals)
-            );
-<%_ } _%>
+        return hasCurrentUserAnyOfAuthorities(authority);
     }
 
 <%_ if (!reactive) { _%>
