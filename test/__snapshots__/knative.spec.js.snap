@@ -9421,7 +9421,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9704,7 +9704,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:13.3
+          image: postgres:13.4
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -10301,7 +10301,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -10919,7 +10919,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11145,7 +11145,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11734,7 +11734,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12367,7 +12367,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12620,7 +12620,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mariadb
-          image: mariadb:10.6.1
+          image: mariadb:10.6.4
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -13006,7 +13006,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.6
+          image: mongo:4.4.8
           command:
             - /work-dir/peer-finder
           args:
@@ -13036,7 +13036,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.6
+          image: mongo:4.4.8
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -13301,7 +13301,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04
+          image: mcr.microsoft.com/mssql/server:2019-CU12-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -13505,7 +13505,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -13788,7 +13788,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:13.3
+          image: postgres:13.4
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -16737,7 +16737,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:8.0.1
+          image: grafana/grafana:8.1.3
           ports:
             - containerPort: 3000
               name: http
@@ -17028,7 +17028,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -17619,7 +17619,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18216,7 +18216,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
