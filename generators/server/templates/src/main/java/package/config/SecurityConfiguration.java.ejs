@@ -259,9 +259,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 <%_ if (communicationSpringWebsocket) { _%>
             .antMatchers("/websocket/**").authenticated()
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-            .antMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
-<%_ } _%>
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
@@ -275,7 +272,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .apply(securityConfigurerAdapter());
   <%_ } else if (authenticationTypeOauth2) { _%>
-    <%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
+    <%_ if (applicationTypeMonolith) { _%>
         .and()
             .oauth2Login()
     <%_ } _%>
