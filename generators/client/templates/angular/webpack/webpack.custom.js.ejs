@@ -30,8 +30,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const environment = require('./environment');
+const proxyConfig = require('./proxy.conf');
 
-const tls = process.env.TLS;
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
@@ -69,6 +69,12 @@ module.exports = async (config, options, targetOptions) => {
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       })
     );
+  }
+
+  // configuring proxy for back end service
+  const tls = Boolean(config.devServer && config.devServer.https);
+  if (config.devServer) {
+    config.devServer.proxy = proxyConfig({ tls });
   }
 <%_ if (!this.applicationTypeMicroservice) { _%>
   if (targetOptions.target === 'serve' || config.watch) {

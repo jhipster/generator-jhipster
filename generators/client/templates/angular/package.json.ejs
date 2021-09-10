@@ -165,7 +165,7 @@
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
-    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
@@ -180,6 +180,7 @@
     "webapp:build:prod": "ng build --configuration production",
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
+    "webapp:dev-ssl": "ng serve --ssl",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
     "webapp:test": "<%= clientPackageManager %> run test --"
   },
