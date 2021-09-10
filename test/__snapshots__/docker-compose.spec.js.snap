@@ -72,7 +72,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -83,8 +83,8 @@ eureka:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
-      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
-      - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+      - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
+      - JHIPSTER_COUCHBASE_BUCKET_NAME=mscouchbase
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscouchbase-couchbase-node:
     build:
@@ -202,7 +202,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -217,7 +217,7 @@ eureka:
       - JHIPSTER_SLEEP=30
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscassandra-cassandra-node:
-    image: cassandra:3.11.10
+    image: cassandra:3.11.11
     environment:
       - CASSANDRA_SEEDS=mscassandra-cassandra
   mscassandra-cassandra-migration:
@@ -231,7 +231,7 @@ eureka:
     volumes:
       - 05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
-    image: cassandra:3.11.10
+    image: cassandra:3.11.11
 
   jhipster-registry:
     image: jhipster/jhipster-registry:v6.8.0
@@ -346,7 +346,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -360,7 +360,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -375,7 +375,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:13.3
+    image: postgres:13.4
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -391,7 +391,7 @@ eureka:
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmongodb-mongodb:
-    image: mongo:4.4.6
+    image: mongo:4.4.8
 
   msmariadb:
     image: msmariadb
@@ -401,7 +401,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.6.1
+    image: mariadb:10.6.4
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -513,7 +513,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -527,7 +527,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -542,7 +542,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:13.3
+    image: postgres:13.4
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -563,10 +563,10 @@ eureka:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
-    image: mongo:4.4.6
+    image: mongo:4.4.8
     command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
-    image: mongo:4.4.6
+    image: mongo:4.4.8
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
@@ -682,7 +682,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -696,7 +696,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -711,7 +711,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:13.3
+    image: postgres:13.4
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -723,8 +723,8 @@ eureka:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
-      - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
-      - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+      - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
+      - JHIPSTER_COUCHBASE_BUCKET_NAME=mscouchbase
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscouchbase-couchbase:
     build:
@@ -741,7 +741,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.6.1
+    image: mariadb:10.6.4
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -848,7 +848,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -862,7 +862,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -967,7 +967,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -981,7 +981,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1112,7 +1112,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -1126,7 +1126,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1155,7 +1155,7 @@ eureka:
       - 8761:8761
 
   prometheus:
-    image: prom/prometheus:v2.27.1
+    image: prom/prometheus:v2.29.2
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -1164,7 +1164,7 @@ eureka:
     ports:
       - 9090:9090
   alertmanager:
-    image: prom/alertmanager:v0.22.2
+    image: prom/alertmanager:v0.23.0
     ports:
       - 9093:9093
     volumes:
@@ -1174,7 +1174,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:8.0.1
+    image: grafana/grafana:8.1.3
     ports:
       - 3000:3000
     volumes:
@@ -1295,7 +1295,7 @@ Launch all your infrastructure by running: \`docker-compose up -d\`.
     ports:
       - \\"8080:8080\\"
   samplemysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=samplemysql
@@ -1376,7 +1376,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1478,7 +1478,7 @@ eureka:
     ports:
       - \\"8080:8080\\"
   jhgate-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -1578,7 +1578,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmysql-mysql:
-    image: mysql:8.0.25
+    image: mysql:8.0.26
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql

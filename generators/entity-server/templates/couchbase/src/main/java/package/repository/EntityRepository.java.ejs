@@ -20,14 +20,12 @@ package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.<%= persistClass %>;
 
-<%_ if ((relationships.length !== 0 && !reactive) || searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
-<%_ } _%>
 <%_ if (relationships.length !== 0 || searchEngineCouchbase) { _%>
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Pageable;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.ScanConsistency;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -94,24 +92,19 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
           }
         }); %>;
 
-    <%_ if (!reactive) { _%>
-    default Page<<%= persistClass %>> findAll(Pageable pageable) {
-        return new PageImpl<>(
-            findAllWithPagination(pageableStatement(pageable, "b")),
+    default <%= pageOrFlux %><<%= persistClass %>> findAll<% if (reactive) {%>By<% } %>(Pageable pageable) {
+        return
+        <% if (!reactive) { %>new PageImpl<>(<% } %>
+            findAllBy(pageableStatement(pageable, "b"))
+        <% if (!reactive) { %>,
             pageable,
             count()
-        );
+        )<% } %>;
     }
 
     @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} #{[0]}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= persistClass %>> findAllWithPagination(String pageableStatement);
-    <%_ } else { _%>
-
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
-    <%_ } _%>
+    <%= listOrFlux %><<%= persistClass %>> findAllBy(String pageableStatement);
 
     @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
@@ -123,7 +116,6 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     } _%>
 
 <%_ if (searchEngineCouchbase) { _%>
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
   <%_ if (relationships.length === 0) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
   <%_ } else { _%>

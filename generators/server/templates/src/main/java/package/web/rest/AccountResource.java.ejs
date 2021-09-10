@@ -249,7 +249,7 @@ import javax.servlet.http.HttpServletRequest;
   <%_ } _%>
 import javax.validation.Valid;
   <%_ if (authenticationTypeSession && !reactive) { _%>
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.net.URLDecoder;
   <%_ } _%>
   <%_ if (reactive) { _%>
@@ -458,11 +458,11 @@ public class AccountResource {
      *   cookie.
      *
      * @param series the series of an existing session.
-     * @throws UnsupportedEncodingException if the series couldn't be URL decoded.
+     * @throws IllegalArgumentException if the series couldn't be URL decoded.
      */
     @DeleteMapping("/account/sessions/{series}")
-    public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
-        String decodedSeries = URLDecoder.decode(series, "UTF-8");
+    public void invalidateSession(@PathVariable String series) {
+        String decodedSeries = URLDecoder.decode(series, StandardCharsets.UTF_8);
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(u ->

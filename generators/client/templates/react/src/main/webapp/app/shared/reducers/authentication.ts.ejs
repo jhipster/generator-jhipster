@@ -42,8 +42,6 @@ export const initialState = {
   errorMessage: null as unknown as string, // Errors returned from server side
   redirectMessage: null as unknown as string,
   sessionHasBeenFetched: false,
-  idToken: null as unknown as string,
-  clientId: null as unknown as string,
   logoutUrl: null as unknown as string,
 };
 
@@ -219,8 +217,6 @@ export const AuthenticationSlice = createSlice({
         <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true
         <%_ } else { _%>
-        idToken: action.payload.data.idToken,
-        clientId: action.payload.data.clientId,
         logoutUrl: action.payload.data.logoutUrl
         <%_ } _%>
       }))

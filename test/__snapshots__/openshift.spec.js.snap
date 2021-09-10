@@ -268,7 +268,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -591,7 +591,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -1225,7 +1225,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -1389,7 +1389,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: cassandra:3.11.10
+              image: cassandra:3.11.11
               env:
                 - name: DATA_FILE_DIRECTORIES
                   value: /data/db
@@ -1826,7 +1826,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mariadb:10.6.1
+              image: mariadb:10.6.4
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2161,7 +2161,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.6
+              image: mongo:4.4.8
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}
@@ -2472,7 +2472,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2897,7 +2897,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.3
+              image: postgres:13.4
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -3692,7 +3692,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4039,7 +4039,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -4664,7 +4664,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mysql:8.0.25
+              image: mysql:8.0.26
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -5089,7 +5089,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.3
+              image: postgres:13.4
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}

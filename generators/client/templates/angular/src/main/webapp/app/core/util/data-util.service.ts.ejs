@@ -57,17 +57,10 @@ export class DataUtils {
     const blob = new Blob([byteArray], {
       type: contentType,
     });
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (window.navigator.msSaveOrOpenBlob) {
-      // To support IE
-      window.navigator.msSaveOrOpenBlob(blob);
-    } else {
-      // Other browsers
-      const fileURL = window.URL.createObjectURL(blob);
-      const win = window.open(fileURL);
-      win!.onload = function() {
+    const fileURL = window.URL.createObjectURL(blob);
+    const win = window.open(fileURL);
+    win!.onload = function() {
         URL.revokeObjectURL(fileURL);
-      }  
     }
   }
 

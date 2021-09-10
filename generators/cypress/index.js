@@ -169,7 +169,7 @@ module.exports = class extends BaseBlueprintGenerator {
           },
           scripts: {
             'cypress:audits': 'cypress open --config-file cypress-audits.json',
-            'e2e:cypress:audits:headless': 'npm run e2e:cypress --config-file cypress-audits.json',
+            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.json',
             // eslint-disable-next-line no-template-curly-in-string
             'e2e:cypress:audits': 'cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.json',
           },
