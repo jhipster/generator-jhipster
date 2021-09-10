@@ -149,7 +149,7 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has any of the authorities, false otherwise.
      */
-    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %>  hasCurrentUserAnyOfAuthorities(String... authorities) {
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserAnyOfAuthorities(String... authorities) {
 <%_ if (!reactive) { _%>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (
