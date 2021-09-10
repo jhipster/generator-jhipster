@@ -277,6 +277,13 @@ public class SecurityConfiguration {
             .pathMatchers("/api/auth-info").permitAll()
             .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
+<%_ if (applicationTypeGateway) { _%>
+  <%_ if (microfrontend && authenticationTypeJwt) { _%>
+            .pathMatchers("/services/*/*.js").permitAll()
+            .pathMatchers("/services/*/*.js.map").permitAll()
+  <%_ } _%>
+            .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+<%_ } _%>
 <%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
             .pathMatchers("/services/**").authenticated()
 <%_ } _%>
