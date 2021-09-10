@@ -37,7 +37,7 @@ RUN \
   wget https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-$ARCH.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
-  npm install -g npm@latest && \
+  npm install -g npm@7 && \
   # install yeoman
   npm install -g yo && \
   # cleanup
