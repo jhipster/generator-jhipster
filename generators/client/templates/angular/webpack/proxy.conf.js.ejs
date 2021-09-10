@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-function setupProxy() {
-  const tls = process.argv.includes('--ssl');
+function setupProxy({ tls }) {
   const conf = [
     {
       context: [
@@ -50,4 +49,4 @@ function setupProxy() {
   return conf;
 }
 
-module.exports = setupProxy();
+module.exports = setupProxy;
