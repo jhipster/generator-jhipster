@@ -25,7 +25,7 @@ const commonPackageJson = require('./common/templates/package.json');
 const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
 
 // Version of Node, NPM
-const NODE_VERSION = '14.17.1';
+const NODE_VERSION = '14.17.6';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
@@ -48,7 +48,7 @@ const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.8.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.5.0';
-const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
+const DOCKER_JAVA_JRE = 'eclipse-temurin:11-jre-focal';
 const DOCKER_MYSQL = 'mysql:8.0.26';
 const DOCKER_MARIADB = 'mariadb:10.6.4';
 const DOCKER_POSTGRESQL = 'postgres:13.4';
