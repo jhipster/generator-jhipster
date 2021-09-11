@@ -279,6 +279,7 @@ public class SecurityConfiguration {
             .pathMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
   <%_ if (microfrontend && authenticationTypeJwt) { _%>
+            // microfrontend resources are loaded by webpack without a bearer-token, they need to be public
             .pathMatchers("/services/*/*.js").permitAll()
             .pathMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
