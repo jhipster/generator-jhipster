@@ -170,7 +170,7 @@ module.exports = class extends BaseBlueprintGenerator {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
             'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
             ...this._getOtherScripts(),
-            ...this._createConcurrentyScript('watch', 'backend:build-cache'),
+            ...this._createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
             ...this._createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
@@ -229,7 +229,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {};
   }
 
-  _createConcurrentyScript(...scripts) {
+  _createConcurrentlyScript(...scripts) {
     const scriptsList = scripts
       .map(script => {
         const packageScripts = this.packages.map(packageName => [
