@@ -278,6 +278,7 @@ application {
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
