@@ -806,7 +806,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v6.8.0
+              image: jhipster/jhipster-registry:v7.0.0
               ports:
                 - name: http
                   containerPort: 8761
@@ -3108,7 +3108,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v6.8.0
+              image: jhipster/jhipster-registry:v7.0.0
               ports:
                 - name: http
                   containerPort: 8761
@@ -4252,7 +4252,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v6.8.0
+              image: jhipster/jhipster-registry:v7.0.0
               ports:
                 - name: http
                   containerPort: 8761
@@ -5292,7 +5292,7 @@ objects:
           terminationGracePeriodSeconds: 10
           containers:
             - name: \${APPLICATION_NAME}
-              image: jhipster/jhipster-registry:v6.8.0
+              image: jhipster/jhipster-registry:v7.0.0
               ports:
                 - name: http
                   containerPort: 8761
