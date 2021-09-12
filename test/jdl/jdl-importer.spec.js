@@ -767,6 +767,7 @@ relationship OneToOne {
             searchEngine: false,
             enableTranslation: true,
             entitySuffix: '',
+            gradleEnterpriseHost: '',
             applicationType: 'gateway',
             cacheProvider: 'no',
             testFrameworks: [],
