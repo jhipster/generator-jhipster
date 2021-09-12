@@ -165,7 +165,7 @@ function parseLiquibaseLoadColumnType(entity, field) {
     return 'date';
   }
 
-  if(columnType === 'boolean') {
+  if (columnType === 'boolean') {
     return columnType;
   }
 
