@@ -481,6 +481,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         });
         scriptsStorage.set({
+          'docker:app:up': `docker-compose -f ${this.DOCKER_DIR}app.yml up -d ${this.dasherizedBaseName}-app`,
           'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
@@ -509,6 +510,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
+            'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',

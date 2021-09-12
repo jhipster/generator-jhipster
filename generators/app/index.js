@@ -265,7 +265,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     }
 
     // Write new definitions to memfs
-    if (this.options.applicationWithEntities) {
+    if (!this.fromBlueprint && this.options.applicationWithEntities) {
       this.config.set({
         ...this.config.getAll(),
         ...this.options.applicationWithEntities.config,
