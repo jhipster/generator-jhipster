@@ -161,7 +161,11 @@ function parseLiquibaseLoadColumnType(entity, field) {
   }
 
   // eslint-disable-next-line no-template-curly-in-string
-  if (['date', '${datetimeType}', 'boolean'].includes(columnType)) {
+  if (['date', '${datetimeType}'].includes(columnType)) {
+    return 'date';
+  }
+
+  if(columnType === 'boolean') {
     return columnType;
   }
 
