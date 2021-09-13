@@ -46,7 +46,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const websocketTypes = require('../../jdl/jhipster/websocket-types');
@@ -603,7 +603,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     }
 
     // Generate JWT secret key if key does not already exist in config
-    if ((config.authenticationType === JWT || config.applicationType === MICROSERVICE) && config.jwtSecretKey === undefined) {
+    if (
+      (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
+      config.jwtSecretKey === undefined
+    ) {
       config.jwtSecretKey = getBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config
