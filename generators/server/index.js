@@ -481,7 +481,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         });
         scriptsStorage.set({
-          'docker:app:up': `docker-compose -f ${this.DOCKER_DIR}app.yml up -d ${this.dasherizedBaseName}-app`,
+          'docker:app:up': `docker-compose -f ${this.DOCKER_DIR}app.yml up -d`,
           'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
