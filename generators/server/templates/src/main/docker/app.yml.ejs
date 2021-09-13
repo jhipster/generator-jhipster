@@ -294,6 +294,7 @@ _%>
     # When run with the "prod" Spring profile, it will read the configuration from a Git repository
     # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
     environment:
+      - JHIPSTER_SLEEP=20
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationTypeOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=admin
