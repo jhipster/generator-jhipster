@@ -159,7 +159,9 @@ Start gateway from source:
 
 ```
 cd gateway
-npm run app:start # alias for ./mvnw or ./gradlew, according to the configured build-tool
+npm run docker:db:up # start database if necessary
+npm run docker:others:up # start service discovery and authentication service if necessary
+npm run app:start # alias for ./(mvnw|gradlew)
 ```
 
 Microfrontend's build-watch script is configured to watch and compile microfrontend's sources but synchronizes with gateway's frontend.
@@ -167,6 +169,7 @@ Start it using:
 
 ```
 cd microfrontend
+npm run docker:db:up # start database if necessary
 npm run build-watch
 ```
 
@@ -174,7 +177,8 @@ It's possible to run microfrontend's frontend standalone using:
 
 ```
 cd microfrontend
-npm start
+npm run docker:db:up # start database if necessary
+npm watch # alias for `npm start` and `npm run backend:start` in parallel
 ```
 
 <%_ } -%>
