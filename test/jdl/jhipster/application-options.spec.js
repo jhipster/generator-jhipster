@@ -74,7 +74,12 @@ describe('ApplicationOptions', () => {
     });
   });
   describe('shouldTheValueBeQuoted', () => {
-    const optionsThatShouldBeQuoted = new Set([OptionNames.JHIPSTER_VERSION, OptionNames.REMEMBER_ME_KEY, OptionNames.JWT_SECRET_KEY]);
+    const optionsThatShouldBeQuoted = new Set([
+      OptionNames.JHIPSTER_VERSION,
+      OptionNames.REMEMBER_ME_KEY,
+      OptionNames.JWT_SECRET_KEY,
+      OptionNames.GRADLE_ENTERPRISE_HOST,
+    ]);
     const optionsThatShouldNotBeQuoted = new Set(
       Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName))
     );

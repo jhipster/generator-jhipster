@@ -274,6 +274,20 @@ function askForServerSideOpts() {
       default: serverDefaultConfig.buildTool,
     },
     {
+      when: answers => answers.buildTool === GRADLE && this.options.experimental,
+      type: 'confirm',
+      name: 'enableGradleEnterprise',
+      message: 'Do you want to enable Gradle Enterprise integration?',
+      default: serverDefaultConfig.enableGradleEnterprise,
+    },
+    {
+      when: answers => answers.enableGradleEnterprise,
+      type: 'input',
+      name: 'gradleEnterpriseHost',
+      message: 'Enter your Gradle Enterprise host',
+      validate: input => (input.length === 0 ? 'Please enter your Gradle Enterprise host' : true),
+    },
+    {
       when: applicationType === MONOLITH,
       type: 'list',
       name: SERVICE_DISCOVERY_TYPE,
@@ -312,6 +326,8 @@ function askForServerSideOpts() {
     this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = answers.prodDatabaseType || databaseType;
     this.searchEngine = this.jhipsterConfig.searchEngine = answers.searchEngine;
     this.buildTool = this.jhipsterConfig.buildTool = answers.buildTool;
+    this.enableGradleEnterprise = this.jhipsterConfig.enableGradleEnterprise = answers.enableGradleEnterprise;
+    this.gradleEnterpriseHost = this.jhipsterConfig.gradleEnterpriseHost = answers.gradleEnterpriseHost;
   });
 }
 

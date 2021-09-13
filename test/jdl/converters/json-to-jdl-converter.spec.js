@@ -54,9 +54,11 @@ describe('JSONToJDLConverter', () => {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
@@ -103,9 +105,11 @@ describe('JSONToJDLConverter', () => {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
@@ -233,9 +237,11 @@ paginate Country with pager
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
@@ -268,9 +274,11 @@ application {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
@@ -303,9 +311,11 @@ application {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
