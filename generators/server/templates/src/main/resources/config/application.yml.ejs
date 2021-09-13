@@ -58,40 +58,27 @@ eureka:
       git-branch: ${git.branch:}
       context-path: ${server.servlet.context-path:}
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
-
+<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+reactive:
+  feign:
+    circuit:
+      breaker:
+        enabled: true
+  # client:
+  #   config:
+  #     default:
+  #       connectTimeout: 5000
+  #       readTimeout: 5000
 <%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
+<%_ if (applicationTypeMicroservice && !reactive) { _%>
 feign:
-  hystrix:
+  circuitbreaker:
     enabled: true
   # client:
   #   config:
   #     default:
   #       connectTimeout: 5000
   #       readTimeout: 5000
-
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          strategy: SEMAPHORE
-          # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-          # thread:
-          #   timeoutInMilliseconds: 10000
-  shareSecurityContext: true
-
 <%_ } _%>
 management:
   endpoints:

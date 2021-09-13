@@ -464,7 +464,11 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    <%_ if (reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+    <%_ } else { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+    <%_ } _%>
     implementation "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType) { _%>
@@ -483,6 +487,11 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    <%_ } _%>
+    <%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+    implementation "com.playtika.reactivefeign:feign-reactor-webclient"
+    implementation "com.playtika.reactivefeign:feign-reactor-cloud"
+    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
     <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
