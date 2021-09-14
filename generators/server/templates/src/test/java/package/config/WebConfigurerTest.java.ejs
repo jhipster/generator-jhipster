@@ -20,7 +20,7 @@ package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
@@ -84,9 +84,9 @@ class WebConfigurerTest {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
 
         assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
         verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
@@ -94,9 +94,9 @@ class WebConfigurerTest {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
 
         assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
         verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
-        <%_ } _%>
+<%_ } _%>
     }
 
 <%_ if (!skipClient) { _%>
@@ -108,11 +108,9 @@ class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("abs")).isEqualTo("audio/x-mpeg");
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
-        <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
             assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= CLIENT_DIST_DIR %>"));
         }
-        <%_ } _%>
     }
 
 <%_ } _%>

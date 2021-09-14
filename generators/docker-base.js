@@ -68,7 +68,7 @@ function checkImages() {
  */
 function generateJwtSecret() {
   if (this.jwtSecretKey === undefined) {
-    this.jwtSecretKey = getBase64Secret();
+    this.jwtSecretKey = getBase64Secret.call(this);
   }
 }
 
@@ -111,8 +111,9 @@ function loadConfigs() {
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = this.getJhipsterConfig(`${path}/.yo-rc.json`).getAll();
       _.defaults(config, defaultConfig);
-
-      this.loadDerivedServerConfig(config, config);
+      this.loadServerConfig(config, config);
+      this.loadDerivedPlatformConfig(config);
+      this.loadDerivedAppConfig(config);
 
       if (config.applicationType === MONOLITH) {
         this.monolithicNb++;
@@ -141,7 +142,6 @@ function setClusteredApps() {
 
 function loadFromYoRc() {
   this.loadDeploymentConfig();
-  this.loadDerivedDeploymentConfig();
 
   this.useKafka = false;
   this.useMemcached = false;
@@ -166,7 +166,7 @@ function loadFromYoRc() {
     setClusteredApps.call(this);
     if (!this.adminPassword) {
       this.adminPassword = 'admin'; // TODO find a better way to do this
-      this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
+      this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
     }
   }
 }

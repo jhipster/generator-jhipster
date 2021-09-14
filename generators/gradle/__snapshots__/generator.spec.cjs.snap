@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster gradle generator with empty configuration should generate only gradle files 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster gradle generator with valid configuration should generate only gradle files 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

@@ -16,11 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const crypto = require('crypto');
+const { defaultKubernetesConfig } = require('./kubernetes/kubernetes-constants');
 const { loadFromYoRc } = require('./docker-base');
 const constants = require('./generator-constants');
+const { MICROSERVICE } = require('../jdl/jhipster/application-types');
+const { GeneratorTypes, IngressTypes, ServiceTypes } = require('../jdl/jhipster/kubernetes-platform-types');
+
+const { INGRESS } = ServiceTypes;
+const { GKE, NGINX } = IngressTypes;
+const { K8S, HELM } = GeneratorTypes;
 
 module.exports = {
   checkKubernetes,
@@ -29,6 +38,7 @@ module.exports = {
   saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
+  derivedKubernetesPlatformProperties,
 };
 
 function checkKubernetes() {
@@ -72,31 +82,36 @@ function loadConfig() {
   this.ingressType = this.config.get('ingressType');
   this.ingressDomain = this.config.get('ingressDomain');
   this.istio = this.config.get('istio');
-  this.dbRandomPassword = crypto.randomBytes(30).toString('hex');
+  this.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
   this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
   this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
   this.generatorType = this.config.get('generatorType');
 }
 
 function saveConfig() {
-  this.config.set({
-    appsFolders: this.appsFolders,
-    directoryPath: this.directoryPath,
-    clusteredDbApps: this.clusteredDbApps,
-    serviceDiscoveryType: this.serviceDiscoveryType,
-    jwtSecretKey: this.jwtSecretKey,
-    dockerRepositoryName: this.dockerRepositoryName,
-    dockerPushCommand: this.dockerPushCommand,
-    kubernetesNamespace: this.kubernetesNamespace,
-    kubernetesServiceType: this.kubernetesServiceType,
-    kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
-    kubernetesStorageClassName: this.kubernetesStorageClassName,
-    generatorType: this.generatorType,
-    ingressType: this.ingressType,
-    ingressDomain: this.ingressDomain,
-    monitoring: this.monitoring,
-    istio: this.istio,
-  });
+  this.config.set(
+    _.defaults(
+      {
+        appsFolders: this.appsFolders,
+        directoryPath: this.directoryPath,
+        clusteredDbApps: this.clusteredDbApps,
+        serviceDiscoveryType: this.serviceDiscoveryType,
+        jwtSecretKey: this.jwtSecretKey,
+        dockerRepositoryName: this.dockerRepositoryName,
+        dockerPushCommand: this.dockerPushCommand,
+        kubernetesNamespace: this.kubernetesNamespace,
+        kubernetesServiceType: this.kubernetesServiceType,
+        kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
+        kubernetesStorageClassName: this.kubernetesStorageClassName,
+        generatorType: this.generatorType,
+        ingressType: this.ingressType,
+        ingressDomain: this.ingressDomain,
+        monitoring: this.monitoring,
+        istio: this.istio,
+      },
+      defaultKubernetesConfig
+    )
+  );
 }
 
 function setupKubernetesConstants() {
@@ -108,6 +123,16 @@ function setupKubernetesConstants() {
   this.KUBERNETES_INGRESS_API_VERSION = constants.KUBERNETES_INGRESS_API_VERSION;
   this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = constants.KUBERNETES_ISTIO_NETWORKING_API_VERSION;
   this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
+}
+
+function derivedKubernetesPlatformProperties(dest = _.defaults({}, this, defaultKubernetesConfig)) {
+  dest.deploymentApplicationTypeMicroservice = dest.deploymentApplicationType === MICROSERVICE;
+  dest.ingressTypeNginx = dest.ingressType === NGINX;
+  dest.ingressTypeGke = dest.ingressType === GKE;
+  dest.kubernetesServiceTypeIngress = dest.kubernetesServiceType === INGRESS;
+  dest.kubernetesNamespaceDefault = dest.kubernetesNamespace === 'default';
+  dest.generatorTypeK8s = dest.generatorType === K8S;
+  dest.generatorTypeHelm = dest.generatorType === HELM;
 }
 
 function setupHelmConstants() {

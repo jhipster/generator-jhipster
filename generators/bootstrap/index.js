@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { State } = require('mem-fs-editor');
 const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
@@ -26,7 +27,10 @@ const {
   createYoResolveTransform,
 } = require('yeoman-environment/lib/util/transform');
 
+const { hasState, setModifiedFileState } = State;
+
 const BaseGenerator = require('../generator-base');
+const { MultiStepTransform } = require('../../utils/multi-step-transform');
 const { defaultConfig } = require('../generator-defaults');
 const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
@@ -39,8 +43,8 @@ const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 const { STRING: TYPE_STRING, LONG: TYPE_LONG } = CommonDBTypes;
 
 module.exports = class extends BaseGenerator {
-  constructor(args, options) {
-    super(args, options, { unique: 'namespace', customCommitTask: true });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
 
     /*
      * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
@@ -64,6 +68,8 @@ module.exports = class extends BaseGenerator {
     if (this.options.withGeneratedFlag !== undefined) {
       this.jhipsterConfig.withGeneratedFlag = this.options.withGeneratedFlag;
     }
+
+    if (this.options.help) return;
 
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
@@ -95,7 +101,7 @@ module.exports = class extends BaseGenerator {
           this.debug('Skipping commit prettier');
           return;
         }
-        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc', '.prettierignore'])));
+        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc**', '.prettierignore'])), true);
       },
       async commitFiles() {
         if (this.options.skipCommit) {
@@ -141,7 +147,7 @@ module.exports = class extends BaseGenerator {
    * @param {Stream} [stream] - files stream, defaults to this.sharedFs.stream().
    * @return {Promise}
    */
-  _commitSharedFs(stream = this.env.sharedFs.stream()) {
+  _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
     return new Promise((resolve, reject) => {
       this.env.sharedFs.each(file => {
         if (
@@ -149,10 +155,14 @@ module.exports = class extends BaseGenerator {
           (path.basename(file.path) === '.yo-rc.json' ||
             (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
         ) {
-          file.state = file.state || 'modified';
+          if (!hasState(file) && !this.options.reproducibleTests) {
+            setModifiedFileState(file);
+          }
         }
       });
       const transformStreams = [
+        // multi-step changes the file path, should be executed earlier in the pipeline
+        new MultiStepTransform(),
         createYoResolveTransform(this.env.conflicter),
         createYoRcTransform(),
         createEachFileTransform(file => {
@@ -167,10 +177,10 @@ module.exports = class extends BaseGenerator {
         transformStreams.push(generatedAnnotationTransform(this));
       }
 
-      if (!this.options.skipPrettier) {
+      if (!skipPrettier) {
         const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+        const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
         // docker-compose modifies .yo-rc.json from others folder, match them all.
         const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
@@ -282,7 +292,6 @@ module.exports = class extends BaseGenerator {
     });
     this.configOptions.sharedEntities.User = user;
 
-    user.resetFakerSeed();
     const liquibaseFakeData = oauth2
       ? []
       : [

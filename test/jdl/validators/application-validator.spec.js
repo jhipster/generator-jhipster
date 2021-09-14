@@ -28,6 +28,7 @@ const { expect } = chai;
 const ApplicationValidator = require('../../../jdl/validators/application-validator');
 
 const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
+const { SPRING_WEBSOCKET } = require('../../../jdl/jhipster/websocket-types');
 const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
 const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
 const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
@@ -482,6 +483,23 @@ describe('ApplicationValidator', () => {
 
           it('should fail', () => {
             expect(() => validator.validate(application)).to.throw(/^Pagination isn't allowed when the app uses Cassandra\.$/);
+          });
+        });
+      });
+      context('with the reactive option', () => {
+        context('and with websockets', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLApplication({
+                  config: {
+                    ...basicValidApplicationConfig,
+                    reactive: true,
+                    websocket: OptionValues[OptionNames.WEBSOCKET][SPRING_WEBSOCKET],
+                  },
+                })
+              )
+            ).to.throw(/^Websockets aren't allowed when the app is reactive\.$/);
           });
         });
       });

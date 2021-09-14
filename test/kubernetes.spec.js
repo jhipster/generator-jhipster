@@ -2,6 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const expect = require('expect');
 
 const expectedFiles = {
   eurekaregistry: ['./registry-k8s/jhipster-registry.yml', './registry-k8s/application-configmap.yml'],
@@ -43,13 +44,14 @@ const expectedFiles = {
 
 describe('JHipster Kubernetes Sub Generator', () => {
   describe('only gateway', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -64,7 +66,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -81,13 +86,15 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('gateway and mysql microservice', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -101,7 +108,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -118,13 +128,14 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('mysql microservice with custom namespace', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -138,7 +149,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -155,13 +169,14 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('gateway and ingress', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -175,7 +190,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -189,13 +207,15 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('MySQL and PostgreSQL microservices without gateway', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -209,7 +229,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -229,13 +252,19 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          fse.copySync(path.join(__dirname, './templates/compose/04-mongo'), path.join(dir, './04-mongo'));
+          fse.copySync(path.join(__dirname, './templates/compose/07-mariadb'), path.join(dir, './07-mariadb'));
+          fse.copySync(path.join(__dirname, './templates/compose/11-mssql'), path.join(dir, './11-mssql'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -249,7 +278,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -278,13 +310,14 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('monolith application', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/08-monolith'), path.join(dir, './08-monolith'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -298,7 +331,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
@@ -312,13 +348,14 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('Kafka application', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/09-kafka'), path.join(dir, './09-kafka'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'monolith',
           directoryPath: './',
@@ -332,7 +369,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
       assert.noFile(expectedFiles.eurekaregistry);
@@ -346,13 +386,14 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -365,7 +406,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -385,13 +429,14 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('gateway with istio routing', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -405,7 +450,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);
@@ -422,13 +470,19 @@ describe('JHipster Kubernetes Sub Generator', () => {
   });
 
   describe('mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning', () => {
-    before(done => {
-      helpers
-        .run(require.resolve('../generators/kubernetes'))
-        .inTmpDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(require.resolve('../generators/kubernetes'))
+        .doInDir(dir => {
+          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
+          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
+          fse.copySync(path.join(__dirname, './templates/compose/03-psql'), path.join(dir, './03-psql'));
+          fse.copySync(path.join(__dirname, './templates/compose/04-mongo'), path.join(dir, './04-mongo'));
+          fse.copySync(path.join(__dirname, './templates/compose/07-mariadb'), path.join(dir, './07-mariadb'));
+          fse.copySync(path.join(__dirname, './templates/compose/11-mssql'), path.join(dir, './11-mssql'));
         })
-        .withOptions({ skipChecks: true })
+        .withOptions({ skipChecks: true, reproducibleTests: true })
         .withPrompts({
           deploymentApplicationType: 'microservice',
           directoryPath: './',
@@ -442,7 +496,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
         })
-        .on('end', done);
+        .run();
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       assert.file(expectedFiles.eurekaregistry);

@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Administración",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Gateway",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "Gestión de usuarios",
                 "tracker": "Registro de usuarios",
                 "metrics": "Métricas",
@@ -150,8 +150,8 @@
         "emailexists": "¡La cuenta de correo ya está en uso!",
         "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
         "idnull": "ID inválido",
-        "idinvalid": "Invalid Id",
-        "idnotfound": "ID cannot be found",
+        "idinvalid": "ID inválido",
+        "idnotfound": "ID no encontrado",
         "file": {
             "could.not.extract": "No se pudo extraer el fichero",
             "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\""

@@ -32,6 +32,10 @@ const mockBlueprintSubGen = class extends SpringServiceGenerator {
     return super._default();
   }
 
+  get loading() {
+    return super._loading();
+  }
+
   get writing() {
     const phaseFromJHipster = super._writing();
     const customPhaseSteps = {
@@ -65,7 +69,7 @@ describe('JHipster spring service generator with blueprint', () => {
             blueprint: blueprintName,
             skipChecks: true,
           })
-          .inTmpDir(dir => {
+          .doInDir(dir => {
             fse.copySync(path.join(__dirname, '../templates/default'), dir);
           })
           .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:spring-service']])
@@ -100,7 +104,7 @@ describe('JHipster spring service generator with blueprint', () => {
           blueprint: 'myblueprint',
           skipChecks: true,
         })
-        .inTmpDir(dir => {
+        .doInDir(dir => {
           fse.copySync(path.join(__dirname, '../templates/default'), dir);
         })
         .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:spring-service']])

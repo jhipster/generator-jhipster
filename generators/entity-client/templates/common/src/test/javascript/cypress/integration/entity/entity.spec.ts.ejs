@@ -16,7 +16,6 @@ import {
 
 const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 
-resetFakerSeed('entity-cypress');
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
 // We cannot generate a required entity with required relationship.
@@ -27,12 +26,14 @@ describe('<%= entityClass %> e2e test', () => {
 
   const <%= entityInstance %>PageUrl = '/<%= entityUrl %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityUrl %>(\\?.*)?$');
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
 
 <%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
     cy.getOauth2Data();
     cy.get('@oauth2Data').then(oauth2Data => {
-      cy.oauthLogin(oauth2Data, Cypress.env('E2E_USERNAME') || "admin", Cypress.env('E2E_PASSWORD') || "admin");
+      cy.oauthLogin(oauth2Data, username, password);
     });
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
     cy.visit('');
@@ -40,9 +41,7 @@ describe('<%= entityClass %> e2e test', () => {
   });
 
   afterEach(() => {
-    cy.get('@oauth2Data').then(oauth2Data => {
-      cy.oauthLogout(oauth2Data);
-    });
+    cy.oauthLogout();
     cy.clearCache();
   });
 <%_ } else { _%>
@@ -51,7 +50,7 @@ describe('<%= entityClass %> e2e test', () => {
       win.sessionStorage.clear()
     });
     cy.visit('');
-    cy.login('admin', 'admin');
+    cy.login(username, password);
     cy.get(entityItemSelector).should('exist');
   });
 <%_ } _%>
@@ -127,7 +126,7 @@ describe('<%= entityClass %> e2e test', () => {
     cy.visit(<%= entityInstance %>PageUrl);
     cy.get(entityCreateButtonSelector).click({force: true});
     cy.getEntityCreateUpdateHeading('<%= entityClass %>');
-  <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden).forEach((field) => {
+  <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly).forEach((field) => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     const fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
@@ -137,32 +136,21 @@ describe('<%= entityClass %> e2e test', () => {
     }
   _%>
 
-    <%_ if (field.fieldTypeTimed) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('equal', '<%= fieldValue %>');
-
-    <%_ } else if (field.fieldTypeDuration) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('PT12S').should('have.value', 'PT12S');
-
-    <%_ } else if (field.fieldTypeBoolean) { _%>
+    <%_ if (field.fieldTypeBoolean) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
     cy.get(`[data-cy="<%= fieldName %>"]`).click().should('be.checked');
-    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
-    <%_ } else if (field.fieldTypeBinary) { _%>
+    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
     cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).select('<%= fieldValue %>');
 
-    <%_ } else if (field.fieldTypeUUID) { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
-
-    <%_ } else if(field.fieldTypeNumeric || field.fieldTypeLocalDate) { _%>
+    <%_ } else if (field.fieldTypeString || field.fieldTypeNumeric || field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { _%>
     cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').should('have.value', '<%= fieldValue %>');
 
     <%_ } else { _%>
-    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>', { force: true }).invoke('val').should('match', new RegExp('<%= fieldValue %>'));
+    cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));
 
     <%_ } _%>
   <%_ }); _%>
@@ -177,6 +165,10 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%_ } _%>
   <%_ }); _%>
+  <%_ if (fieldsContainBlobOrImage) { _%>
+    // since cypress clicks submit too fast before the blob fields are validated
+    cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
+  <%_ } _%>
     cy.get(entityCreateSaveButtonSelector).click({force: true});
     cy.scrollTo('top', {ensureScrollable: false});
     cy.get(entityCreateSaveButtonSelector).should('not.exist');

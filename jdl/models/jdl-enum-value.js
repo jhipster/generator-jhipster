@@ -1,10 +1,11 @@
 class JDLEnumValue {
-  constructor(name, value) {
+  constructor(name, value, comment) {
     if (!name) {
       throw new Error('The enum value name has to be passed to create an enum.');
     }
     this.name = name;
     this.value = value;
+    this.comment = comment;
   }
 
   toString() {

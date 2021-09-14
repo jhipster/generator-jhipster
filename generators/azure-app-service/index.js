@@ -28,8 +28,6 @@ const { defaultConfig } = require('../generator-defaults');
 // Global constants
 const constants = require('../generator-constants');
 
-const { OptionNames } = require('../../jdl/jhipster/application-options');
-
 const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GENERATOR_AZURE_APP_SERVICE } = require('../generator-list');
 
@@ -41,8 +39,8 @@ const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('skip-build', {
       desc: 'Skips building the application',
@@ -70,7 +68,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _initializing() {
     return {
-      getConfig() {
+      sayHello() {
         if (!this.options.fromCli) {
           this.warning(
             `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
@@ -79,9 +77,14 @@ module.exports = class extends BaseBlueprintGenerator {
           );
         }
         this.log(chalk.bold('Azure App Service configuration is starting'));
-        this.baseName = this.config.get(OptionNames.BASE_NAME);
-        this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
+      },
+      getSharedConfig() {
+        this.loadAppConfig();
+        this.loadServerConfig();
+      },
+      getConfig() {
         this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
+        this.azureLocation = this.config.get('azureLocation');
         this.azureAppServicePlan = this.config.get('azureAppServicePlan');
         this.azureAppServiceName = this.config.get('azureAppServiceName');
         this.azureApplicationInsightsName = this.config.get('azureApplicationInsightsName');
@@ -133,6 +136,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
           if (err) {
             this.config.set({
               azureAppServiceResourceGroupName: null,
+              azureLocation: 'eastus',
             });
             this.abort = true;
             this.error('Could not retrieve your Azure default configuration.');
@@ -142,6 +146,9 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
               if (json[key].name === 'group') {
                 this.azureAppServiceResourceGroupName = json[key].value;
               }
+              if (json[key].name === 'location') {
+                this.azureLocation = json[key].value;
+              }
             });
             if (this.azureAppServiceResourceGroupName === '') {
               this.log(
@@ -149,6 +156,9 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 '${chalk.yellow('az configure --defaults group=<resource group name>')}`
               );
               this.azureAppServiceResourceGroupName = '';
+            }
+            if (this.azureLocation === '') {
+              this.azureLocation = 'eastus';
             }
           }
           done();
@@ -165,6 +175,12 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
             name: 'azureAppServiceResourceGroupName',
             message: 'Azure resource group name:',
             default: this.azureAppServiceResourceGroupName,
+          },
+          {
+            type: 'input',
+            name: 'azureLocation',
+            message: 'Azure location:',
+            default: this.azureLocation,
           },
           {
             type: 'input',
@@ -188,6 +204,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
 
         this.prompt(prompts).then(props => {
           this.azureAppServiceResourceGroupName = props.azureAppServiceResourceGroupName;
+          this.azureLocation = props.azureLocation;
           this.azureAppServicePlan = props.azureAppServicePlan;
           this.azureApplicationInsightsName = props.azureApplicationInsightsName;
           this.azureAppServiceName = props.azureAppServiceName;
@@ -290,7 +307,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
               if (!servicePlanAlreadyExists) {
                 this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                 exec(
-                  `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`,
+                  `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName} --location ${this.azureLocation}`,
                   err => {
                     if (err) {
                       this.abort = true;
@@ -428,7 +445,7 @@ which is free for the first 30 days`);
             if (err) {
               this.log('Azure Application Insights instance does not exist, creating it...');
               exec(
-                `az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`,
+                `az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName} --location ${this.azureLocation}`,
                 (err, stdout) => {
                   if (err) {
                     this.log(err);
@@ -469,8 +486,10 @@ which is free for the first 30 days`);
     return this._default();
   }
 
-  _loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    super.loadPlatformConfig(config, dest);
+  _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    this.loadAppConfig(config, dest);
+    this.loadServerConfig(config, dest);
+    super.loadDerivedAppConfig(dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 
@@ -478,7 +497,7 @@ which is free for the first 30 days`);
   _loading() {
     return {
       loadSharedConfig() {
-        this._loadPlatformConfig();
+        this._computeDerivedConfig();
       },
     };
   }

@@ -24,6 +24,7 @@ const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
 const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
 const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
+const SharedData = require('../lib/support/shared-data.cjs');
 
 module.exports = class EnvironmentBuilder {
   /**
@@ -34,7 +35,13 @@ module.exports = class EnvironmentBuilder {
    */
   static create(args, options = {}, adapter) {
     // Remove after migration to environment 3.
-    const sharedOptions = { fromCli: true, localConfigOnly: true, ...options.sharedOptions, configOptions: { sharedEntities: {} } };
+    const sharedOptions = {
+      fromCli: true,
+      localConfigOnly: true,
+      ...options.sharedOptions,
+      configOptions: { sharedEntities: {} },
+      jhipsterSharedData: new SharedData(),
+    };
     const env = Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
     return new EnvironmentBuilder(env);
   }
@@ -90,7 +97,7 @@ module.exports = class EnvironmentBuilder {
    */
   _lookupJHipster() {
     // Register jhipster generators.
-    this.env.lookup({ packagePaths: [path.join(__dirname, '..')] }).forEach(generator => {
+    this.env.lookup({ packagePaths: [path.join(__dirname, '..')], lookups: ['generators'] }).forEach(generator => {
       // Verify jhipster generators namespace.
       assert(
         generator.namespace.startsWith(`${CLI_NAME}:`),

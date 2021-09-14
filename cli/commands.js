@@ -18,14 +18,14 @@
  */
 
 const defaultCommands = {
+  add: {
+    desc: 'Add a feature to current project',
+  },
   app: {
     desc: '[Default] Create a new JHipster application based on the selected options',
   },
   aws: {
     desc: 'Deploy the current application to Amazon Web Services',
-  },
-  'aws-containers': {
-    desc: 'Deploy the current application to Amazon Web Services using ECS',
   },
   'azure-app-service': {
     desc: 'Deploy the current application to Azure App Service',
@@ -59,11 +59,20 @@ const defaultCommands = {
   gae: {
     desc: 'Deploy the current application to Google App Engine',
   },
+  gradle: {
+    desc: 'Create Gradle project (alpha)',
+  },
   heroku: {
     desc: 'Deploy the current application to Heroku',
   },
   info: {
     desc: 'Display information about your current project and system',
+  },
+  init: {
+    desc: 'Init project (alpha)',
+  },
+  java: {
+    desc: 'Run java generator (alpha)',
   },
   jdl: {
     alias: 'import-jdl',
@@ -72,13 +81,11 @@ const defaultCommands = {
     options: [
       {
         option: '--fork',
-        desc:
-          'Generate multiple applications in parallel without any interaction. This is default when every application in the JDL is new. Files will be overwritten without prompt. The "--incremental-changelog" option might not work correctly when this option is used for existing applications',
+        desc: 'Generate multiple applications in parallel without any interaction. This is default when every application in the JDL is new. Files will be overwritten without prompt. The "--incremental-changelog" option might not work correctly when this option is used for existing applications',
       },
       {
         option: '--interactive',
-        desc:
-          'Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders',
+        desc: 'Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders',
       },
       {
         option: '--json-only',
@@ -111,6 +118,11 @@ const defaultCommands = {
       {
         option: '--unidirectional-relationships',
         desc: 'Generate unidirectional relationships',
+      },
+      {
+        option: '--force-no-filtering',
+        desc: "Don't filter jdl entities",
+        default: false,
       },
     ],
     desc: `Create entities from the JDL file/URL/content passed in argument.
@@ -150,15 +162,24 @@ const defaultCommands = {
   languages: {
     desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
   },
+  maven: {
+    desc: 'Create Maven project (alpha)',
+  },
   openshift: {
     desc: 'Deploy the current application to OpenShift',
   },
   page: {
     desc: 'Create a new page. (Supports vue clients)',
   },
+  'project-name': {
+    desc: 'Configure project name (alpha)',
+  },
   run: {
     desc: 'Run a module or custom generator',
     argument: ['[generator]'],
+  },
+  'spring-boot': {
+    desc: 'Create a Spring Boot application (alpha)',
   },
   'spring-service': {
     alias: 'service',

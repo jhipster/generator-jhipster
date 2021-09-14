@@ -38,6 +38,8 @@ const files = {
         '.eslintrc.json',
         'angular.json',
         'ngsw-config.json',
+        'README.md.jhi.client.angular',
+        'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
         '.browserslistrc',
@@ -54,11 +56,17 @@ const files = {
   angularApp: [
     {
       path: CLIENT_MAIN_SRC_DIR,
-      templates: ['main.ts', 'polyfills.ts'],
+      templates: ['main.ts', 'bootstrap.ts', 'polyfills.ts', 'declarations.d.ts'],
     },
     {
       path: ANGULAR_DIR,
       templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts'],
+    },
+  ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js'],
     },
   ],
   angularMain: [
@@ -167,6 +175,7 @@ const files = {
   ],
   angularAdminModule: [
     {
+      condition: generator => !generator.applicationTypeMicroservice,
       path: ANGULAR_DIR,
       templates: [
         { file: 'admin/admin-routing.module.ts', method: 'processJs' },
@@ -411,6 +420,7 @@ const files = {
       templates: [
         'admin/configuration/configuration.component.spec.ts',
         'admin/configuration/configuration.service.spec.ts',
+        'admin/health/modal/health-modal.component.spec.ts',
         'admin/health/health.component.spec.ts',
         'admin/logs/logs.component.spec.ts',
         'admin/logs/logs.service.spec.ts',
@@ -429,6 +439,7 @@ const files = {
         'home/home.component.spec.ts',
         'layouts/main/main.component.spec.ts',
         'layouts/navbar/navbar.component.spec.ts',
+        'layouts/profiles/page-ribbon.component.spec.ts',
         'shared/alert/alert.component.spec.ts',
         'shared/alert/alert-error.component.spec.ts',
         'shared/date/format-medium-date.pipe.spec.ts',
@@ -500,6 +511,5 @@ module.exports = {
 };
 
 function writeFiles() {
-  // write angular 2.x and above files
   return this.writeFilesToDisk(files, 'angular');
 }

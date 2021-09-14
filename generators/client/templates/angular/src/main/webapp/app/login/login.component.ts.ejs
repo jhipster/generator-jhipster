@@ -29,7 +29,7 @@ import { AccountService } from 'app/core/auth/account.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('username', { static: false })
-  username?: ElementRef;
+  username!: ElementRef;
 
   authenticationError = false;
 
@@ -56,9 +56,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.username) {
-      this.username.nativeElement.focus();
-    }
+    this.username.nativeElement.focus();
   }
 
   login(): void {

@@ -339,8 +339,12 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   enumDeclaration(context) {
     const name = context.NAME[0].image;
     const values = this.visit(context.enumPropList);
+    let javadoc = null;
+    if (context.JAVADOC) {
+      javadoc = trimComment(context.JAVADOC[0].image);
+    }
 
-    return { name, values };
+    return { name, values, javadoc };
   }
 
   enumPropList(context) {
@@ -351,6 +355,10 @@ module.exports = class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const prop = {
       key: context.enumPropKey[0].image,
     };
+
+    if (context.JAVADOC) {
+      prop.comment = trimComment(context.JAVADOC[0].image);
+    }
     if (context.enumPropValue) {
       prop.value = context.enumPropValue[0].image;
     }
@@ -644,5 +652,5 @@ function getSpecialUnaryOptionDeclaration(context, visitor) {
 }
 
 function trimComment(comment) {
-  return comment.replace(/^\/[*]+/, '').replace(/[*]+\/$/, '');
+  return comment.replace(/^\/[*]+[ ]*/, '').replace(/[ ]*[*]+\/$/, '');
 }

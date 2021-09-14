@@ -466,7 +466,7 @@ entity A`);
           expect(parsedEntity).to.deep.equal({
             annotations: [],
             body: [],
-            javadoc: ' A comment ',
+            javadoc: 'A comment',
             name: 'A',
             tableName: 'A',
           });
@@ -488,7 +488,7 @@ entity A`);
           expect(parsedEntity).to.deep.equal({
             annotations: [],
             body: [],
-            javadoc: '\n * Big\n * comment.\n ',
+            javadoc: '\n * Big\n * comment.\n',
             name: 'A',
             tableName: 'A',
           });
@@ -518,7 +518,7 @@ entity A`);
               },
             ],
             body: [],
-            javadoc: ' A comment ',
+            javadoc: 'A comment',
             name: 'A',
             tableName: 'A',
           });
@@ -565,7 +565,7 @@ entity A`);
                       type: 'UNARY',
                     },
                   ],
-                  javadoc: ' field comment ',
+                  javadoc: 'field comment',
                   name: 'name',
                   type: 'String',
                   validations: [],
@@ -978,6 +978,7 @@ entity A {
 
       it('should parse them', () => {
         expect(parsedEnum).to.deep.equal({
+          javadoc: null,
           name: 'MyEnum',
           values: [
             {
@@ -1009,6 +1010,7 @@ entity A {
 
       it('should parse them', () => {
         expect(parsedEnum).to.deep.equal({
+          javadoc: null,
           name: 'MyEnum',
           values: [
             {
@@ -1045,6 +1047,7 @@ entity A {
 
       it('should parse it', () => {
         expect(parsedEnum).to.deep.equal({
+          javadoc: null,
           name: 'MyEnum',
           values: [
             {
@@ -1060,6 +1063,170 @@ entity A {
         });
       });
     });
+
+    context('without custom values but with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `
+            /** country enum */
+            enum MyEnum {
+            /** some comment */FRANCE /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          javadoc: 'country enum',
+          name: 'MyEnum',
+          values: [
+            {
+              comment: 'some comment',
+              key: 'FRANCE',
+            },
+            {
+              comment: 'some comment',
+              key: 'ITALY',
+            },
+            {
+              comment: 'some comment',
+              key: 'ENGLAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'ICELAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'IRELAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('with custom values containing spaces and with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `/** country enum */
+            enum MyEnum {
+            /** some comment */FRANCE ("cheese and wine country") /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND ("not a tea country") /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          javadoc: 'country enum',
+          name: 'MyEnum',
+          values: [
+            {
+              comment: 'some comment',
+              key: 'FRANCE',
+              value: 'cheese and wine country',
+            },
+            {
+              comment: 'some comment',
+              key: 'ITALY',
+            },
+            {
+              comment: 'some comment',
+              key: 'ENGLAND',
+              value: 'not a tea country',
+            },
+            {
+              comment: 'some comment',
+              key: 'ICELAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'IRELAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
+    context('with custom values containing underscores and with comments', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+            /** some comment */FRANCE ("cheese_and_wine_country") /** some comment */,
+            /** some comment */ ITALY /** some comment */,
+                                        ENGLAND ("not_a_tea_country") /** some comment */,
+                                        ICELAND/** some comment */,
+            /** some comment */IRELAND,
+            /** some comment */ CANADA
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          javadoc: null,
+          name: 'MyEnum',
+          values: [
+            {
+              comment: 'some comment',
+              key: 'FRANCE',
+              value: 'cheese_and_wine_country',
+            },
+            {
+              comment: 'some comment',
+              key: 'ITALY',
+            },
+            {
+              comment: 'some comment',
+              key: 'ENGLAND',
+              value: 'not_a_tea_country',
+            },
+            {
+              comment: 'some comment',
+              key: 'ICELAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'IRELAND',
+            },
+            {
+              comment: 'some comment',
+              key: 'CANADA',
+            },
+          ],
+        });
+      });
+    });
+
     context('without values', () => {
       context('without spaces', () => {
         let parsedEnum;
@@ -1078,6 +1245,7 @@ entity A {
 
         it('should parse it', () => {
           expect(parsedEnum).to.deep.equal({
+            javadoc: null,
             name: 'MyEnum',
             values: [
               {
@@ -1112,6 +1280,7 @@ entity A {
 
         it('should parse it', () => {
           expect(parsedEnum).to.deep.equal({
+            javadoc: null,
             name: 'MyEnum',
             values: [
               {
@@ -1716,6 +1885,48 @@ entity A {
                 optionValues: [optionValue],
               },
             ]);
+          });
+        });
+      });
+    });
+  });
+  context('when parsing deployments', () => {
+    context('with kubernetesStorageClassName', () => {
+      context('being empty', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName ""
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: '',
+          });
+        });
+      });
+      context('being set', () => {
+        let parsedDeployment;
+
+        before(() => {
+          const content = parseFromContent(
+            `deployment {
+  kubernetesStorageClassName "SetValue"
+}
+`
+          );
+          parsedDeployment = content.deployments[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedDeployment).to.deep.equal({
+            kubernetesStorageClassName: 'SetValue',
           });
         });
       });

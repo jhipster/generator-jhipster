@@ -27,8 +27,8 @@ const {
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('workspaces', {
       desc: 'Generate workspaces for multiples applications',
@@ -89,7 +89,6 @@ module.exports = class extends BaseBlueprintGenerator {
               }
             }
           }
-          // eslint-disable-next-line no-await-in-loop
           dirent = await dir.read();
         }
         dir.closeSync();
@@ -171,7 +170,7 @@ module.exports = class extends BaseBlueprintGenerator {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
             'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
             ...this._getOtherScripts(),
-            ...this._createConcurrentyScript('watch'),
+            ...this._createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
             ...this._createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
@@ -230,7 +229,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {};
   }
 
-  _createConcurrentyScript(...scripts) {
+  _createConcurrentlyScript(...scripts) {
     const scriptsList = scripts
       .map(script => {
         const packageScripts = this.packages.map(packageName => [

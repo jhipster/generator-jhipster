@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.1-SNAPSHOT",
@@ -81,17 +82,11 @@
 <%_ if (websocket === 'spring-websocket') { _%>
     "@types/sockjs-client": "1.5.0",
 <%_ } _%>
-<%_ if (!skipCommitHook) { _%>
-    "husky": "<%= dependabotPackageJson.devDependencies['husky'] %>",
-    "lint-staged": "<%= dependabotPackageJson.devDependencies['lint-staged'] %>",
-<%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= dependabotPackageJson.devDependencies['cypress'] %>",
-<%_ if (authenticationType === 'oauth2') { _%>
-    "puppeteer": "<%= dependabotPackageJson.devDependencies['puppeteer'] %>",
-<%_ } _%>
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
+    "folder-hash": "<%= dependabotPackageJson.devDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= dependabotPackageJson.devDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
 <%_ if (!skipServer) { _%>
@@ -100,7 +95,8 @@
     "@angular/cli": "<%= dependabotPackageJson.devDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-builders/custom-webpack": "<%= dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
-    "@angular-builders/jest": "<%= dependabotPackageJson.devDependencies['@angular-builders/custom-webpack'] %>",
+    "@angular-builders/jest": "<%= dependabotPackageJson.devDependencies['@angular-builders/jest'] %>",
+    "@angular-devkit/build-angular": "<%= dependabotPackageJson.devDependencies['@angular/cli'] %>",
     "@angular/service-worker": "<%= dependabotPackageJson.dependencies['@angular/common'] %>",
     "@angular-eslint/eslint-plugin": "<%= dependabotPackageJson.devDependencies['@angular-eslint/eslint-plugin'] %>",
     "@types/jest": "<%= dependabotPackageJson.devDependencies['@types/jest'] %>",
@@ -113,7 +109,6 @@
     "eslint": "<%= dependabotPackageJson.devDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= dependabotPackageJson.devDependencies['eslint-config-prettier'] %>",
     "eslint-webpack-plugin": "<%= dependabotPackageJson.devDependencies['eslint-webpack-plugin'] %>",
-    "friendly-errors-webpack-plugin": "<%= dependabotPackageJson.devDependencies['friendly-errors-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
     <%_ otherModules.forEach(module => { _%>
@@ -121,13 +116,14 @@
     <%_ });
 } _%>
     "jest": "<%= dependabotPackageJson.devDependencies['jest'] %>",
+    "jest-preset-angular": "<%= dependabotPackageJson.devDependencies['jest-preset-angular'] %>",
     "jest-date-mock": "<%= dependabotPackageJson.devDependencies['jest-date-mock'] %>",
     "jest-junit": "<%= dependabotPackageJson.devDependencies['jest-junit'] %>",
     "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
     "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
     "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
     "rimraf": "<%= dependabotPackageJson.devDependencies['rimraf'] %>",
-    "simple-progress-webpack-plugin": "<%= dependabotPackageJson.devDependencies['simple-progress-webpack-plugin'] %>",
+    "ts-jest": "<%= dependabotPackageJson.devDependencies['ts-jest'] %>",
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
     "webpack": "<%= dependabotPackageJson.devDependencies['webpack'] %>",
     "webpack-bundle-analyzer": "<%= dependabotPackageJson.devDependencies['webpack-bundle-analyzer'] %>",
@@ -148,18 +144,18 @@
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests && !cypressTests) { _%>
-    "e2e": "<%= clientPackageManager %> run e2e:protractor",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless",
+    "e2e": "<%= clientPackageManager %> run e2e:protractor --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
     <%_ } else if ((cypressTests && !protractorTests) || (protractorTests && cypressTests)) {  _%>
-    "e2e": "<%= clientPackageManager %> run e2e:cypress",
-    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress:headless",
+    "e2e": "<%= clientPackageManager %> run e2e:cypress:headed --",
+    "e2e:headless": "<%= clientPackageManager %> run e2e:cypress --",
     <%_ } _%>
     <%_ if (protractorTests) { _%>
-    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor",
+    "e2e:protractor:headless": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:protractor": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
     <%_ if (cypressTests) { _%>
-    "e2e:cypress:headless": "<%= clientPackageManager %> run e2e:cypress -- --headless",
+    "e2e:cypress:headed": "<%= clientPackageManager %> run e2e:cypress -- --headed",
     "e2e:cypress": "cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false}",
     "cypress": "cypress open",
     <%_ } _%>
@@ -168,24 +164,25 @@
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
     <%_ } _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
-    "start": "ng serve --hmr",
-    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
+    "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
     <%_ } _%>
-    "serve": "<%= clientPackageManager %> run start",
-    "build": "<%= clientPackageManager %> run webapp:prod",
+    "serve": "<%= clientPackageManager %> run start --",
+    "build": "<%= clientPackageManager %> run webapp:prod --",
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
     "test:watch": "<%= clientPackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev",
-    "webapp:build:dev": "ng build",
-    "webapp:build:prod": "ng build --prod",
+    "webapp:build:dev": "ng build --configuration development",
+    "webapp:build:prod": "ng build --configuration production",
     "webapp:dev": "ng serve",
     "webapp:dev-verbose": "ng serve --verbose",
+    "webapp:dev-ssl": "ng serve --ssl",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod",
-    "webapp:test": "<%= clientPackageManager %> run test"
+    "webapp:test": "<%= clientPackageManager %> run test --"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",

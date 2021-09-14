@@ -22,26 +22,26 @@ package <%= packageName %>.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.<%= databaseType %>.core.mapping.Document;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
-    <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (!reactive) { _%>
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
-    <%_ } else { _%>
+  <%_ } else { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -51,39 +51,39 @@ import java.util.Objects;
 /**
  * An authority (a security role) used by Spring Security.
  */
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_authority")
-    <%_ if (enableHibernateCache) { _%>
-        <%_ if (cacheProvider === 'infinispan') { _%>
+  <%_ if (enableHibernateCache) { _%>
+    <%_ if (cacheProviderInfinispan) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-        <%_ } else { _%>
+    <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-        <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 @Table("<%= jhiTablePrefix %>_authority")
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 @Node("<%= jhiTablePrefix %>_authority")
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 @Document
 <%_ } _%>
-public class Authority implements Serializable<% if (databaseType === 'sql' && reactive) { %>, Persistable<String><% } %> {
+public class Authority implements Serializable<% if (databaseTypeSql && reactive) { %>, Persistable<String><% } %> {
 
     private static final long serialVersionUID = 1L;
 
     @NotNull
     @Size(max = 50)
     @Id
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     @Column(length = 50)
-    <%_ } _%>
+<%_ } _%>
     private String name;
 
     public String getName() {
@@ -117,7 +117,7 @@ public class Authority implements Serializable<% if (databaseType === 'sql' && r
             "name='" + name + '\'' +
             "}";
     }
-    <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 
     @Override
     public String getId() {
@@ -128,5 +128,5 @@ public class Authority implements Serializable<% if (databaseType === 'sql' && r
     public boolean isNew() {
         return true;
     }
-    <%_ } _%>
+<%_ } _%>
 }

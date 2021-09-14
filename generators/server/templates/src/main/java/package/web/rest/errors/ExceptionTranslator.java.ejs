@@ -23,15 +23,15 @@ import tech.jhipster.web.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
-<%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
 import org.springframework.dao.DataAccessException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
-<%_ if (reactive && databaseType === 'sql') { _%>
+<%_ if (reactive && databaseTypeSql) { _%>
 import org.springframework.stereotype.Component;
 <%_ } _%>
 import org.springframework.validation.BindingResult;
@@ -77,7 +77,7 @@ import java.util.stream.Collectors;
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
 @ControllerAdvice
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 @Component("jhiExceptionTranslator")
 <%_ } _%>
 public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
@@ -113,34 +113,34 @@ _%>
     @Override
     public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
         if (entity == null) {
-            <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
             return null;
-            <%_ } else { _%>
+<%_ } else { _%>
             return Mono.empty();
-            <%_ } _%>
+<%_ } _%>
         }
         Problem problem = entity.getBody();
         if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
-            <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
             return entity;
-            <%_ } else { _%>
+<%_ } else { _%>
             return Mono.just(entity);
-            <%_ } _%>
+<%_ } _%>
         }
 
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
         String requestUri = nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
-    <%_ } _%>
+<%_ } _%>
         ProblemBuilder builder = Problem.builder()
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
             .withTitle(problem.getTitle())
-            <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
             .with(PATH_KEY, requestUri);
-            <%_ } else { _%>
+<%_ } else { _%>
             .with(PATH_KEY, request.getRequest().getPath().value());
-            <%_ } _%>
+<%_ } _%>
 
         if (problem instanceof ConstraintViolationProblem) {
             builder
@@ -199,7 +199,7 @@ _%>
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
         return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 
     @ExceptionHandler
     public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
@@ -209,7 +209,7 @@ _%>
             .build();
         return create(ex, problem, request);
     }
-    <%_ } _%>
+<%_ } _%>
 
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
@@ -227,7 +227,7 @@ _%>
                         .map(this::toProblem)
                         .orElse(null));
             }
-            <%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
             if (throwable instanceof DataAccessException) {
                 return Problem.builder()
                     .withType(type)
@@ -239,7 +239,7 @@ _%>
                         .map(this::toProblem)
                         .orElse(null));
             }
-            <%_ } _%>
+<%_ } _%>
             if (containsPackageName(throwable.getMessage())) {
                 return Problem.builder()
                     .withType(type)

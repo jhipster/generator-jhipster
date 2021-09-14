@@ -54,6 +54,7 @@ describe('Component Tests', () => {
             comp = fixture.componentInstance;
 <%_ if (fieldsContainBlob) { _%>
             dataUtils = TestBed.inject(DataUtils);
+            jest.spyOn(window, 'open').mockImplementation(() => null);
 <%_ } _%>
         });
 
@@ -63,7 +64,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining(<%- testEntity %>));
+                expect(comp.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
             });
         });
 
@@ -71,7 +72,7 @@ describe('Component Tests', () => {
         describe('byteSize', () => {
             it('Should call byteSize from DataUtils', () => {
                 // GIVEN
-                spyOn(dataUtils, 'byteSize');
+                jest.spyOn(dataUtils, 'byteSize');
                 const fakeBase64 = 'fake base64';
 
                 // WHEN
@@ -84,8 +85,13 @@ describe('Component Tests', () => {
 
         describe('openFile', () => {
             it('Should call openFile from DataUtils', () => {
+                const newWindow = { ...window };
+                newWindow.document.write = jest.fn();
+                window.open = jest.fn(() => newWindow);
+                window.onload = jest.fn(() => newWindow);
+                window.URL.createObjectURL = jest.fn();
                 // GIVEN
-                spyOn(dataUtils, 'openFile');
+                jest.spyOn(dataUtils, 'openFile');
                 const fakeContentType = 'fake content type';
                 const fakeBase64 = 'fake base64';
 

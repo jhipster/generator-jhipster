@@ -304,6 +304,24 @@ function cleanupOldFiles(generator) {
       generator.removeFile('.npmrc');
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.0.2') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === VUE) {
+      generator.removeFile('config/index.js');
+      generator.removeFile('config/dev.env.js');
+      generator.removeFile('config/prod.env.js');
+    }
+  }
+  if (generator.isJhipsterVersionLessThan('7.1.0') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === REACT) {
+      generator.removeFile(`${REACT_DIR}shared/reducers/action-type.util.ts`);
+      generator.removeFile(`${REACT_DIR}config/devtools.tsx`);
+    }
+  }
+  if (generator.isJhipsterVersionLessThan('7.1.1') && generator.jhipsterConfig) {
+    if (generator.jhipsterConfig.clientFramework === ANGULAR) {
+      generator.removeFile('.npmrc');
+    }
+  }
 }
 
 /**

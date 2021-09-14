@@ -23,22 +23,20 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
 
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
+const { MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GENERATOR_AZURE_SPRING_CLOUD } = require('../generator-list');
-const { JWT } = require('../../jdl/jhipster/authentication-types');
 
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('skip-build', {
       desc: 'Skips building the application',
@@ -58,37 +56,36 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   _initializing() {
-    if (!this.options.fromCli) {
-      this.warning(
-        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-          'jhipster <command>'
-        )} instead of ${chalk.red('yo jhipster:<command>')}`
-      );
-    }
-    this.log(chalk.bold('Azure Spring Cloud configuration is starting'));
-    this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-    this.baseName = this.config.get(OptionNames.BASE_NAME);
-    this.packageName = this.config.get(OptionNames.PACKAGE_NAME);
-    this.packageFolder = this.config.get(OptionNames.PACKAGE_FOLDER);
-    this.authenticationType = this.config.get(OptionNames.AUTHENTICATION_TYPE);
-    this.jwtSecretKey = this.config.get(OptionNames.JWT_SECRET_KEY);
-    this.cacheProvider = this.config.get(OptionNames.CACHE_PROVIDER) || NO_CACHE_PROVIDER;
-    this.enableHibernateCache =
-      this.config.get(OptionNames.ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-    this.databaseType = this.config.get(OptionNames.DATABASE_TYPE);
-    this.prodDatabaseType = this.config.get(OptionNames.PROD_DATABASE_TYPE);
-    this.searchEngine = this.config.get(OptionNames.SEARCH_ENGINE);
-    this.frontendAppName = this.getFrontendAppName();
-    this.buildTool = this.config.get(OptionNames.BUILD_TOOL);
-    this.applicationType = this.config.get(OptionNames.APPLICATION_TYPE);
-    this.serviceDiscoveryType = this.config.get(OptionNames.SERVICE_DISCOVERY_TYPE);
-    this.azureSpringCloudResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
-    this.azureSpringCloudServiceName = ''; // This is not saved, as it is better to get the Azure default variable
-    this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');
-    this.azureSpringCloudDeploymentType = this.config.get('azureSpringCloudDeploymentType');
+    return {
+      sayHello() {
+        if (!this.options.fromCli) {
+          this.warning(
+            `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+              'jhipster <command>'
+            )} instead of ${chalk.red('yo jhipster:<command>')}`
+          );
+        }
+        this.log(chalk.bold('Azure Spring Cloud configuration is starting'));
+      },
+      getSharedConfig() {
+        this.loadAppConfig();
+        this.loadServerConfig();
+        this.loadPlatformConfig();
+      },
+      getConfig() {
+        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
+        this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
+        this.frontendAppName = this.getFrontendAppName();
+        this.azureSpringCloudResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
+        this.azureSpringCloudServiceName = ''; // This is not saved, as it is better to get the Azure default variable
+        this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');
+        this.azureSpringCloudDeploymentType = this.config.get('azureSpringCloudDeploymentType');
+      },
+    };
   }
 
-  initializing() {
+  get initializing() {
     if (useBlueprints) return;
     return this._initializing();
   }
@@ -311,14 +308,32 @@ ${chalk.red('az extension add --name spring-cloud')}`
           }
         );
       },
+    };
+  }
 
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  _loading() {
+    return {
       derivedProperties() {
         this.isPackageNameJhipsterTech = this.packageName !== 'tech.jhipster';
-        this.isAuthenticationTypeJwt = this.authenticationType === JWT;
-        this.buildToolMaven = this.buildTool === MAVEN;
-        this.buildToolGradle = this.buildTool === GRADLE;
+        this.loadDerivedServerConfig();
+        this.loadDerivedPlatformConfig();
+        this.loadDerivedAppConfig();
       },
+    };
+  }
 
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
+
+  _writing() {
+    return {
       copyAzureSpringCloudFiles() {
         if (this.abort) return;
         this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
@@ -340,9 +355,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get default() {
+  get writing() {
     if (useBlueprints) return;
-    return this._default();
+    return this._writing();
   }
 
   _end() {

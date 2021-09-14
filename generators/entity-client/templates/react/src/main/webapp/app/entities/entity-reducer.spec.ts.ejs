@@ -23,7 +23,6 @@ _%>
 import axios from 'axios';
 
 import configureStore from 'redux-mock-store';
-import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 <%_ if (paginationInfiniteScroll) { _%>
@@ -31,23 +30,22 @@ import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
 
 import reducer, {
-  ACTION_TYPES,
 <%_ if (!readOnly) { _%>
   createEntity,
   deleteEntity,
 <%_ } _%>
   getEntities,
 <%_ if (searchEngine) { _%>
-  getSearchEntities,
+  searchEntities,
 <%_ } _%>
   getEntity,
 <%_ if (!readOnly) { _%>
   updateEntity,
-  partialUpdate,
+  partialUpdateEntity,
 <%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { EntityState } from 'app/shared/reducers/reducer.utils';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 describe('Entities reducer tests', () => {
@@ -60,10 +58,10 @@ describe('Entities reducer tests', () => {
     }
   }
 
-  const initialState = {
+  const initialState: EntityState<I<%= entityReactName %>> = {
     loading: false,
     errorMessage: null,
-    entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+    entities: [],
     entity: defaultValue,
 <%_ if (paginationInfiniteScroll) { _%>
     links: {
@@ -88,15 +86,15 @@ describe('Entities reducer tests', () => {
     expect(isEmpty(state.entity));
   }
 
-  function testMultipleTypes(types, payload, testFunction) {
+  function testMultipleTypes(types, payload, testFunction, error?) {
     types.forEach(e => {
-      testFunction(reducer(undefined, { type: e, payload }));
+      testFunction(reducer(undefined, { type: e, payload, error }));
     });
   }
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(reducer(undefined, {}));
+      testInitialState(reducer(undefined, { type: '' }));
     });
   });
 
@@ -104,11 +102,11 @@ describe('Entities reducer tests', () => {
     it('should set state to loading', () => {
       testMultipleTypes(
         [
-          REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          getEntities.pending.type,
 <%_ if (searchEngine) { _%>
-          REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          searchEntities.pending.type,
 <%_ } _%>
-          REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
+          getEntity.pending.type
         ],
         {},
         state => {
@@ -125,10 +123,10 @@ describe('Entities reducer tests', () => {
     it('should set state to updating', () => {
       testMultipleTypes(
         [
-          REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>),
-          REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>),
-          REQUEST(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>),
-          REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>)
+          createEntity.pending.type,
+          updateEntity.pending.type,
+          partialUpdateEntity.pending.type,
+          deleteEntity.pending.type
         ],
         {},
         state => {
@@ -144,10 +142,7 @@ describe('Entities reducer tests', () => {
 
     it('should reset the state', () => {
       expect(
-        reducer({ ...initialState, loading: true }, {
-          type: ACTION_TYPES.RESET
-        })
-        ).toEqual({
+        reducer({ ...initialState, loading: true }, reset())).toEqual({
           ...initialState
       });
     });
@@ -157,25 +152,28 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          getEntities.rejected.type,
 <%_ if (searchEngine) { _%>
-          FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          searchEntities.rejected.type,
 <%_ } _%>
-          FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          getEntity.rejected.type,
 <%_ if (!readOnly) { _%>
-          FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
-          FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
-          FAILURE(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>),
-          FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>)
+          createEntity.rejected.type,
+          updateEntity.rejected.type,
+          partialUpdateEntity.rejected.type,
+          deleteEntity.rejected.type
 <%_ } _%>
         ],
-        'error message',
+        'some message',
         state => {
           expect(state).toMatchObject({
             errorMessage: 'error message',
             updateSuccess: false,
             updating: false
           });
+        },
+        {
+          message: 'error message',
         }
       );
     });
@@ -188,7 +186,7 @@ describe('Entities reducer tests', () => {
       const links = parseHeaderForLinks(payload.headers.link);
 <%_ } _%>
       expect(reducer(undefined, {
-        type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+        type: getEntities.fulfilled.type,
         payload
       })).toEqual({
       ...initialState,
@@ -209,7 +207,7 @@ describe('Entities reducer tests', () => {
       const links = parseHeaderForLinks(payload.headers.link);
   <%_ } _%>
       expect(reducer(undefined, {
-        type: SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+        type: searchEntities.fulfilled.type,
         payload
       })).toEqual({
       ...initialState,
@@ -229,7 +227,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: { 1: 'fake1' } };
       expect(
         reducer(undefined, {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          type: getEntity.fulfilled.type,
           payload
         })
       ).toEqual({
@@ -243,7 +241,7 @@ describe('Entities reducer tests', () => {
     it('should create/update entity', () => {
       const payload = { data: 'fake payload' };
       expect(reducer(undefined, {
-        type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
+        type: createEntity.fulfilled.type,
         payload
       })).toEqual({
         ...initialState,
@@ -257,7 +255,7 @@ describe('Entities reducer tests', () => {
       const payload = 'fake payload';
       const toTest = reducer(undefined,
         {
-          type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
+          type: deleteEntity.fulfilled.type,
           payload
         });
       expect(toTest).toMatchObject({
@@ -273,7 +271,7 @@ describe('Entities reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware]);
+      const mockStore = configureStore([thunk]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
@@ -282,144 +280,151 @@ describe('Entities reducer tests', () => {
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
-    it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %>_LIST actions', async () => {
+    it('dispatches FETCH_<%= entityActionName %>_LIST actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+          type: getEntities.pending.type
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          type: getEntities.fulfilled.type,
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getEntities({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 <%_ if (searchEngine) { _%>
-    it('dispatches ACTION_TYPES.SEARCH_<%= entityActionNamePlural %> actions', async () => {
+    it('dispatches SEARCH_<%= entityActionNamePlural %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>)
+          type: searchEntities.pending.type
         },
         {
-          type: SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          type: searchEntities.fulfilled.type,
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getSearchEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(searchEntities({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 <%_ } _%>
 
-    it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %> actions', async () => {
+    it('dispatches FETCH_<%= entityActionName %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
+          type: getEntity.pending.type
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          type: getEntity.fulfilled.type,
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getEntity(42666));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
     });
 
 <%_ if (!readOnly) { _%>
-    it('dispatches ACTION_TYPES.CREATE_<%= entityActionName %> actions', async () => {
+    it('dispatches CREATE_<%= entityActionName %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>)
+          type: createEntity.pending.type
         },
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
-          type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
-          payload: resolvedObject
-        }<%_ if (!paginationInfiniteScroll) { _%>,
-        {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+          type: getEntities.pending.type
         },
+        <%_ } _%>
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          type: createEntity.fulfilled.type,
           payload: resolvedObject
         }
-  <%_ } _%>
       ];
-      await store.dispatch(createEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(createEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
     });
 
-    it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
+    it('dispatches UPDATE_<%= entityActionName %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>)
+          type: updateEntity.pending.type
         },
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
-          type: SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>),
+          type: getEntities.pending.type
+        },
+        <%_ } _%>
+        {
+          type: updateEntity.fulfilled.type,
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(updateEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
     });
 
-    it('dispatches ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
+    it('dispatches PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>)
+          type: partialUpdateEntity.pending.type
         },
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
-          type: SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_<%= entityActionName %>),
+          type: getEntities.pending.type
+        },
+        <%_ } _%>
+        {
+          type: partialUpdateEntity.fulfilled.type,
           payload: resolvedObject
 
         }
       ];
-      await store.dispatch(partialUpdate({ id: <%- generateTestEntityId(primaryKey.type) %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(partialUpdateEntity({ id: <%- generateTestEntityId(primaryKey.type) %> }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
     });
 
-    it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
+    it('dispatches DELETE_<%= entityActionName %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>)
+          type: deleteEntity.pending.type
         },
+        <%_ if (!paginationInfiniteScroll) { _%>
         {
-          type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
-          payload: resolvedObject
-        }<%_ if (!paginationInfiniteScroll) { _%>,
-        {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+          type: getEntities.pending.type
         },
+        <%_ } _%>
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          type: deleteEntity.fulfilled.type,
           payload: resolvedObject
         }
-  <%_ } _%>
       ];
-      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(deleteEntity(42666));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
     });
 <%_ } _%>
 
-    it('dispatches ACTION_TYPES.RESET actions', async () => {
-      const expectedActions = [
-        {
-          type: ACTION_TYPES.RESET
-        }
-      ];
+    it('dispatches RESET actions', async () => {
+      const expectedActions = [reset()];
       await store.dispatch(reset());
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
-
-<%_ if (fieldsContainBlob && !readOnly) { _%>
-  describe('blobFields', () => {
-    it('should properly set a blob in state.', () => {
-      const payload = { name: 'fancyBlobName', data: 'fake data', contentType: 'fake dataType' };
-      expect(reducer(undefined, {
-        type: ACTION_TYPES.SET_BLOB,
-        payload
-      })).toEqual({
-        ...initialState,
-        entity: {
-          ...initialState.entity,
-          fancyBlobName: payload.data,
-          fancyBlobNameContentType: payload.contentType
-        }
-      });
-    });
-  });
-<%_ } _%>
 });

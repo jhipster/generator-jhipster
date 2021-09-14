@@ -44,8 +44,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor);
     }
 }
-<%_ } _%>
-<%_ if (reactive) { _%>
+<%_ } else { _%>
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;

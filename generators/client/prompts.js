@@ -169,7 +169,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
     return [
       { value: 'cerulean', name: 'Cerulean' },
       { value: 'cosmo', name: 'Cosmo' },
-      { value: 'cerulean', name: 'Cyborg' },
+      { value: 'cyborg', name: 'Cyborg' },
       { value: 'darkly', name: 'Darkly' },
       { value: 'flatly', name: 'Flatly' },
       { value: 'journal', name: 'Journal' },
@@ -178,7 +178,9 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       { value: 'lux', name: 'Lux' },
       { value: 'materia', name: 'Materia' },
       { value: 'minty', name: 'Minty' },
+      { value: 'morph', name: 'Morph' },
       { value: 'pulse', name: 'Pulse' },
+      { value: 'quartz', name: 'Quartz' },
       { value: 'sandstone', name: 'Sandstone' },
       { value: 'simplex', name: 'Simplex' },
       { value: 'sketchy', name: 'Sketchy' },
@@ -187,13 +189,15 @@ async function _retrieveBootswatchThemes(generator, useApi) {
       { value: 'spacelab', name: 'Spacelab' },
       { value: 'superhero', name: 'Superhero' },
       { value: 'united', name: 'United' },
+      { value: 'vapor', name: 'Vapor' },
       { value: 'yeti', name: 'Yeti' },
+      { value: 'zephyr', name: 'Zephyr' },
     ];
   }
 
   return new Promise((resolve, reject) => {
     generator.httpsGet(
-      'https://bootswatch.com/api/4.json',
+      'https://bootswatch.com/api/5.json',
 
       body => {
         try {

@@ -29,29 +29,31 @@
             "error": "Greška"
         },
         "indicator": {
-            <%_ if (messageBroker === 'kafka') { _%>
+<%_ if (messageBrokerKafka) { _%>
             "binders": "Broker za poruke",
-            <%_ } _%>
-            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Mikroservis Refresh Scope",
             "clientConfigServer": "Mikroservis Konfiguracioni Server",
-            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } %>
-            <%_ } _%>
-            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hystrix": "Hystrix",
+  <%_ if (serviceDiscoveryConsul) { _%>
+            "consul": "Consul",
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
             "hazelcast": "Hazelcast",
-            <%_ } _%>
+<%_ } _%>
             "diskSpace": "Veličina diska",
             "mail": "Email",
             "livenessState": "Liveness state",
             "readinessState": "Readiness state",
-            "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
-            "elasticsearch": "Elastična pretraga"<% } %><% if (databaseType === 'sql' && !reactive) { %>,
-            "db": "SQL baza podataka"<% } %><% if (databaseType === 'sql' && reactive) { %>,
-            "r2dbc": "SQL baza podataka"<% } %><% if (databaseType === 'mongodb') { %>,
-            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "ping": "Application"<% if (searchEngineElasticsearch) { %>,
+            "elasticsearch": "Elastična pretraga"<% } %><% if (databaseTypeSql && !reactive) { %>,
+            "db": "SQL baza podataka"<% } %><% if (databaseTypeSql && reactive) { %>,
+            "r2dbc": "SQL baza podataka"<% } %><% if (databaseTypeMongodb) { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseTypeCassandra) { %>,
+            "couchbase": "Couchbase"<% } %><% if (databaseTypeNeo4j) { %>,
             "neo4j": "Neo4j"<% } %>
         },
         "table": {

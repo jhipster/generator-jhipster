@@ -23,34 +23,17 @@ const { defaultConfig } = require('../generator-defaults');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
-const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
-const { GENERATOR_CICD } = require('../generator-list');
-
-const {
-  BASE_NAME,
-  APPLICATION_TYPE,
-  DATABASE_TYPE,
-  PROD_DATABASE_TYPE,
-  SKIP_CLIENT,
-  SKIP_SERVER,
-  CLIENT_PACKAGE_MANAGER,
-  BUILD_TOOL,
-  REACTIVE,
-  CLIENT_FRAMEWORK,
-  TEST_FRAMEWORKS,
-  CACHE_PROVIDER,
-} = OptionNames;
+const { GENERATOR_CI_CD } = require('../generator-list');
 
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     // Automatically configure Travis
     this.option('autoconfigure-travis', {
@@ -94,7 +77,7 @@ module.exports = class extends BaseBlueprintGenerator {
       description: 'Automatically configure CircleCI',
     });
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CICD);
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CI_CD);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -103,29 +86,25 @@ module.exports = class extends BaseBlueprintGenerator {
       validateFromCli() {
         this.checkInvocationFromCLI();
       },
+
       sayHello() {
         this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
+
+      getSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadPlatformConfig();
+      },
+
       getConfig() {
-        this.jhipsterVersion = packagejs.version;
         const configuration = this.config;
-        this.baseName = configuration.get(BASE_NAME);
         this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.applicationType = configuration.get(APPLICATION_TYPE);
-        this.databaseType = configuration.get(DATABASE_TYPE);
-        this.prodDatabaseType = configuration.get(PROD_DATABASE_TYPE);
-        this.skipClient = configuration.get(SKIP_CLIENT);
-        this.skipServer = configuration.get(SKIP_SERVER);
-        this.clientPackageManager = configuration.get(CLIENT_PACKAGE_MANAGER);
-        this.buildTool = configuration.get(BUILD_TOOL);
-        this.reactive = configuration.get(REACTIVE);
         this.herokuAppName = configuration.get('herokuAppName');
         if (this.herokuAppName === undefined) {
           this.herokuAppName = _.kebabCase(this.baseName);
         }
-        this.clientFramework = configuration.get(CLIENT_FRAMEWORK);
-        this.testFrameworks = configuration.get(TEST_FRAMEWORKS);
-        this.cacheProvider = configuration.get(CACHE_PROVIDER);
         this.autoconfigureTravis = this.options.autoconfigureTravis;
         this.autoconfigureJenkins = this.options.autoconfigureJenkins;
         this.autoconfigureGitlab = this.options.autoconfigureGitlab;
@@ -134,10 +113,12 @@ module.exports = class extends BaseBlueprintGenerator {
         this.autoconfigureCircleCI = this.options.autoconfigureCircle;
         this.abort = false;
       },
+
       initConstants() {
         this.NODE_VERSION = constants.NODE_VERSION;
         this.NPM_VERSION = constants.NPM_VERSION;
       },
+
       getConstants() {
         this.DOCKER_DIR = constants.DOCKER_DIR;
         this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -170,7 +151,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       insight() {
         if (this.abort) return;
-        statistics.sendSubGenEvent('generator', GENERATOR_CICD);
+        statistics.sendSubGenEvent('generator', GENERATOR_CI_CD);
       },
       setTemplateConstants() {
         if (this.abort) return;
@@ -194,9 +175,8 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._configuring();
   }
 
-  _loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    super.loadPlatformConfig(config, dest);
-    dest.cicdIntegrationsSnyk = config.cicdIntegrations || [];
+  _loadCiCdConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+    dest.cicdIntegrations = dest.cicdIntegrations || config.cicdIntegrations || [];
     dest.cicdIntegrationsSnyk = dest.cicdIntegrations.includes('snyk');
     dest.cicdIntegrationsSonar = dest.cicdIntegrations.includes('sonar');
     dest.cicdIntegrationsHeroku = dest.cicdIntegrations.includes('heroku');
@@ -214,9 +194,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
-        this._loadPlatformConfig();
+        this._loadCiCdConfig();
+        this.loadPlatformConfig();
       },
     };
   }

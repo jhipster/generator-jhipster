@@ -17,16 +17,68 @@
  * limitations under the License.
  */
 
+const { MICROSERVICE } = require('../jhipster/application-types');
+const { NO } = require('../jhipster/database-types');
+const { ELASTICSEARCH } = require('../jhipster/search-engine-types');
+const { Options } = require('../jhipster/deployment-options');
 const Validator = require('./validator');
 
-class DeploymentValidator extends Validator {
+module.exports = class DeploymentValidator extends Validator {
   constructor() {
-    super('deployment', ['deploymentType', 'appsFolders', 'dockerRepositoryName']);
+    super('deployment', ['deploymentType', 'appsFolders', 'directoryPath']);
   }
 
-  validate(jdlDeployment) {
+  validate(jdlDeployment, options = {}) {
     super.validate(jdlDeployment);
+
+    switch (jdlDeployment.deploymentType) {
+      case Options.deploymentType.dockerCompose:
+        validateDockerComposeRelatedDeployment(jdlDeployment, options);
+        break;
+      case Options.deploymentType.kubernetes:
+        validateKubernetesRelatedDeployment(jdlDeployment);
+        break;
+      case Options.deploymentType.openshift:
+        validateOpenshiftRelatedDeployment(jdlDeployment, options);
+        break;
+      default:
+        throw new Error(`The deployment type ${jdlDeployment.deploymentType} isn't supported.`);
+    }
+  }
+};
+
+function validateDockerComposeRelatedDeployment(jdlDeployment, options = {}) {
+  if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === MICROSERVICE) {
+    throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
   }
 }
 
-module.exports = DeploymentValidator;
+function validateKubernetesRelatedDeployment(jdlDeployment) {
+  if (!jdlDeployment.kubernetesServiceType) {
+    throw new Error('A kubernetes service type must be provided when dealing with kubernetes-related deployments.');
+  }
+  if (jdlDeployment.istio && !jdlDeployment.ingressDomain) {
+    throw new Error(
+      'An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.'
+    );
+  }
+  if (jdlDeployment.kubernetesServiceType === Options.kubernetesServiceType.ingress && !jdlDeployment.ingressType) {
+    throw new Error('An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.');
+  }
+}
+
+function validateOpenshiftRelatedDeployment(jdlDeployment, options) {
+  if (jdlDeployment.storageType) {
+    if (options.prodDatabaseType === NO) {
+      throw new Error("Can't have the storageType option set when there is no prodDatabaseType.");
+    }
+
+    if (options.searchEngine === ELASTICSEARCH) {
+      throw new Error("Can't have the storageType option set when elasticsearch is the search engine.");
+    }
+
+    if (jdlDeployment.monitoring === Options.monitoring.prometheus) {
+      throw new Error("Can't have the storageType option set when the monitoring is done with prometheus.");
+    }
+  }
+}

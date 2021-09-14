@@ -44,6 +44,15 @@ const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../..
 const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/jhipster/relationship-options');
 const logger = require('../../../../jdl/utils/objects/logger');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-with-applications-to-json-converter');
+const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../../jdl/jhipster/entity-options');
+const { COUCHBASE } = require('../../../../jdl/jhipster/search-engine-types');
+
+const { MAPSTRUCT } = MapperTypes;
+const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
+const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
+const NO_DTO = MapperTypes.NO;
+const NO_PAGINATION = PaginationTypes.NO;
+const NO_SERVICE = ServiceTypes.NO;
 
 describe('JDLWithApplicationsToJSONConverter', () => {
   describe('convert', () => {
@@ -162,7 +171,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
         it('should convert the entity', () => {
           expect(convertedEntity).to.deep.equal({
             applications: ['toto'],
-            dto: 'no',
+            dto: NO_DTO,
             embedded: false,
             entityTableName: 'entity_a',
             fields: [],
@@ -170,10 +179,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
             javadoc: 'The best entity',
             jpaMetamodelFiltering: false,
             name: 'A',
-            pagination: 'no',
+            pagination: NO_PAGINATION,
             readOnly: false,
             relationships: [],
-            service: 'no',
+            service: NO_SERVICE,
           });
         });
       });
@@ -267,7 +276,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
             angularJSSuffix: 'suffix',
             applications: ['toto'],
             clientRootFolder: '../client_root_folder',
-            dto: 'mapstruct',
+            dto: MAPSTRUCT,
             embedded: true,
             entityTableName: 'entity_a',
             fields: [],
@@ -276,11 +285,11 @@ describe('JDLWithApplicationsToJSONConverter', () => {
             jpaMetamodelFiltering: true,
             microserviceName: 'myMs',
             name: 'A',
-            pagination: 'pagination',
+            pagination: PAGINATION,
             readOnly: true,
             relationships: [],
-            searchEngine: 'couchbase',
-            service: 'serviceImpl',
+            searchEngine: COUCHBASE,
+            service: SERVICE_IMPL,
             skipClient: true,
             skipServer: true,
           });
@@ -328,7 +337,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
         it('should set the service option to serviceClass', () => {
           expect(convertedEntity).to.deep.equal({
             applications: ['toto'],
-            dto: 'mapstruct',
+            dto: MAPSTRUCT,
             embedded: false,
             entityTableName: 'entity_a',
             fields: [],
@@ -336,10 +345,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
             javadoc: 'The best entity',
             jpaMetamodelFiltering: false,
             name: 'A',
-            pagination: 'no',
+            pagination: NO_PAGINATION,
             readOnly: false,
             relationships: [],
-            service: 'serviceClass',
+            service: SERVICE_CLASS,
           });
         });
       });
@@ -387,7 +396,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
         it('should set the service option to serviceClass', () => {
           expect(convertedEntity).to.deep.equal({
             applications: ['toto'],
-            dto: 'no',
+            dto: NO_DTO,
             embedded: false,
             entityTableName: 'entity_a',
             fields: [],
@@ -395,10 +404,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
             javadoc: 'The best entity',
             jpaMetamodelFiltering: true,
             name: 'A',
-            pagination: 'no',
+            pagination: NO_PAGINATION,
             readOnly: false,
             relationships: [],
-            service: 'serviceClass',
+            service: SERVICE_CLASS,
           });
         });
       });
@@ -436,7 +445,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
         it('should prevent the entities from being searched', () => {
           expect(convertedEntity).to.deep.equal({
             applications: ['toto'],
-            dto: 'no',
+            dto: NO_DTO,
             embedded: false,
             entityTableName: 'entity_a',
             fields: [],
@@ -444,11 +453,11 @@ describe('JDLWithApplicationsToJSONConverter', () => {
             javadoc: 'The best entity',
             jpaMetamodelFiltering: false,
             name: 'A',
-            pagination: 'no',
+            pagination: NO_PAGINATION,
             readOnly: false,
             relationships: [],
             searchEngine: false,
-            service: 'no',
+            service: NO_SERVICE,
           });
         });
       });
@@ -506,10 +515,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'no',
+              pagination: NO_PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             });
           });
         });
@@ -559,7 +568,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
           it('should convert them', () => {
             expect(convertedEntity).to.deep.equal({
               applications: ['toto'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_a',
               fields: [
@@ -588,10 +597,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'no',
+              pagination: NO_PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             });
           });
         });
@@ -627,7 +636,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
           it('should convert them', () => {
             expect(convertedEntity).to.deep.equal({
               applications: ['toto'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'a',
               fields: [
@@ -641,10 +650,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'no',
+              pagination: NO_PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             });
           });
         });
@@ -680,7 +689,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
           it('should convert them', () => {
             expect(convertedEntity).to.deep.equal({
               applications: ['toto'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_a',
               fields: [
@@ -694,10 +703,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'no',
+              pagination: NO_PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             });
           });
         });
@@ -788,7 +797,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
           it('should convert them', () => {
             expect(convertedEntity).to.deep.equal({
               applications: ['toto'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_a',
               fields: [
@@ -820,10 +829,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'no',
+              pagination: NO_PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             });
           });
         });
@@ -862,7 +871,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
           it('should convert them', () => {
             expect(convertedEntity).to.deep.equal({
               applications: ['toto'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_a',
               fields: [
@@ -879,10 +888,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'no',
+              pagination: NO_PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             });
           });
         });
@@ -1692,7 +1701,7 @@ describe('JDLWithApplicationsToJSONConverter', () => {
           expect(convertedEntitiesForTataApplication).to.deep.equal([
             {
               applications: ['tata'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_a',
               fields: [],
@@ -1700,14 +1709,14 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'A',
-              pagination: 'pagination',
+              pagination: PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             },
             {
               applications: ['tata'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_b',
               fields: [],
@@ -1715,14 +1724,14 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'B',
-              pagination: 'infinite-scroll',
+              pagination: INFINITE_SCROLL,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             },
             {
               applications: ['tata', 'tutu'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_c',
               fields: [],
@@ -1730,16 +1739,16 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'C',
-              pagination: 'pagination',
+              pagination: PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             },
           ]);
           expect(convertedEntitiesForTutuApplication).to.deep.equal([
             {
               applications: ['tata', 'tutu'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_c',
               fields: [],
@@ -1747,14 +1756,14 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'C',
-              pagination: 'pagination',
+              pagination: PAGINATION,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             },
             {
               applications: ['tutu'],
-              dto: 'mapstruct',
+              dto: MAPSTRUCT,
               embedded: false,
               entityTableName: 'entity_d',
               fields: [],
@@ -1765,11 +1774,11 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               pagination: 'infinite-scroll',
               readOnly: false,
               relationships: [],
-              service: 'serviceClass',
+              service: SERVICE_CLASS,
             },
             {
               applications: ['tutu'],
-              dto: 'no',
+              dto: NO_DTO,
               embedded: false,
               entityTableName: 'entity_e',
               fields: [],
@@ -1777,10 +1786,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
               javadoc: 'The best entity',
               jpaMetamodelFiltering: false,
               name: 'E',
-              pagination: 'infinite-scroll',
+              pagination: INFINITE_SCROLL,
               readOnly: false,
               relationships: [],
-              service: 'no',
+              service: NO_SERVICE,
             },
           ]);
         });

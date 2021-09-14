@@ -254,11 +254,11 @@ async function askForServiceDiscovery() {
     return;
   }
 
-  if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')) {
+  if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === CONSUL)) {
     this.serviceDiscoveryType = CONSUL;
     this.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
-  } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')) {
-    this.serviceDiscoveryType = 'eureka';
+  } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === EUREKA)) {
+    this.serviceDiscoveryType = EUREKA;
     this.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
   } else {
     this.log(chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'));
@@ -313,7 +313,7 @@ async function askForAdminPassword() {
 
   const props = await this.prompt(prompts);
   this.adminPassword = props.adminPassword;
-  this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
+  this.adminPasswordBase64 = getBase64Secret.call(this, this.adminPassword);
 }
 
 /**

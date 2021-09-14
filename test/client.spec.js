@@ -1,14 +1,14 @@
+const expect = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
+const { JWT } = require('../jdl/jhipster/authentication-types');
+const { CYPRESS } = require('../jdl/jhipster/test-framework-types');
+const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const { skipPrettierHelpers: helpers, getFilesForOptions } = require('./utils/utils');
 const expectedFiles = require('./utils/expected-files');
-const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
 const constants = require('../generators/generator-constants');
 const { appDefaultConfig } = require('../generators/generator-defaults');
-const {
-  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT, VUE },
-} = require('../generators/generator-constants');
 
 const { CLIENT_TEST_SRC_DIR, CLIENT_MAIN_SRC_DIR } = constants;
 
@@ -34,7 +34,7 @@ describe('JHipster client generator', () => {
         getFilesForOptions(reactFiles, {
           enableTranslation: true,
           serviceDiscoveryType: false,
-          authenticationType: 'jwt',
+          authenticationType: JWT,
           testFrameworks: [],
         })
       );
@@ -51,8 +51,9 @@ describe('JHipster client generator', () => {
   });
 
   describe('generate client with Angular', () => {
+    let runResult;
     before(async () => {
-      await helpers
+      runResult = await helpers
         .run(path.join(__dirname, '../generators/client'))
         .withOptions({ skipInstall: true, auth: 'jwt' })
         .withPrompts({
@@ -61,25 +62,12 @@ describe('JHipster client generator', () => {
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
-          clientFramework: ANGULAR,
+          clientFramework: ANGULAR_X,
         });
     });
 
     it('creates expected files for default configuration for client generator', () => {
-      assert.noFile(expectedFiles.server);
-      assert.noFile(expectedFiles.maven);
-      assert.file(expectedFiles.common);
-      assert.file(expectedFiles.i18nJson);
-      assert.file(expectedFiles.i18nAdminJson);
-      assert.file(expectedFiles.clientCommon);
-      assert.file(
-        getFilesForOptions(angularFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          testFrameworks: [],
-        })
-      );
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('contains clientFramework with angularX value', () => {
       assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
@@ -96,7 +84,7 @@ describe('JHipster client generator', () => {
   });
 
   describe('--skip-jhipster-dependencies', () => {
-    [ANGULAR, REACT, VUE].forEach(clientFramework => {
+    [ANGULAR_X, REACT, VUE].forEach(clientFramework => {
       describe(`and ${clientFramework}`, () => {
         let runResult;
         before(async () => {
@@ -128,7 +116,7 @@ describe('JHipster client generator', () => {
         runResult = await helpers
           .create(require.resolve('../generators/client'))
           .withOptions({
-            defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR, testFrameworks: ['cypress'] },
+            defaultLocalConfig: { ...appDefaultConfig, clientFramework: ANGULAR_X, testFrameworks: ['cypress'] },
           })
           .run();
       });
@@ -221,8 +209,8 @@ describe('JHipster client generator', () => {
           .withOptions({
             defaultLocalConfig: {
               ...appDefaultConfig,
-              clientFramework: ANGULAR,
-              testFrameworks: ['cypress'],
+              clientFramework: ANGULAR_X,
+              testFrameworks: [CYPRESS],
               withAdminUi: false,
             },
           })
@@ -319,7 +307,7 @@ describe('JHipster client generator', () => {
           .create(require.resolve('../generators/client'))
           .withOptions({
             skipPrettier: false,
-            defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: ['cypress'] },
+            defaultLocalConfig: { ...appDefaultConfig, clientFramework: REACT, testFrameworks: [CYPRESS] },
           })
           .run();
       });
@@ -345,17 +333,6 @@ describe('JHipster client generator', () => {
       it('admin reducer should contains admin component related code', () => {
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          "  FETCH_LOGS: 'administration/FETCH_LOGS',\n" +
-            "  FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',\n" +
-            "  FETCH_HEALTH: 'administration/FETCH_HEALTH',\n" +
-            "  FETCH_METRICS: 'administration/FETCH_METRICS',\n" +
-            "  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',\n" +
-            "  FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',\n" +
-            "  FETCH_ENV: 'administration/FETCH_ENV',"
-        );
-
-        runResult.assertFileContent(
-          `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
           `
   logs: {
     loggers: [] as any[],
@@ -372,12 +349,7 @@ describe('JHipster client generator', () => {
 
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+          'isPending(getSystemHealth, getSystemMetrics, getSystemThreadDump, getLoggers, getConfigurations, getEnv)'
         );
       });
 
@@ -411,7 +383,7 @@ describe('JHipster client generator', () => {
             defaultLocalConfig: {
               ...appDefaultConfig,
               clientFramework: REACT,
-              testFrameworks: ['cypress'],
+              testFrameworks: [CYPRESS],
               withAdminUi: false,
             },
           })
@@ -466,12 +438,12 @@ describe('JHipster client generator', () => {
 
         runResult.assertNoFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/administration.reducer.ts`,
-          'case REQUEST(ACTION_TYPES.FETCH_METRICS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_LOGS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_ENV):\n' +
-            '    case REQUEST(ACTION_TYPES.FETCH_HEALTH):'
+          'getSystemHealth.pending,\n' +
+            '          getSystemMetrics.pending,\n' +
+            '          getSystemThreadDump.pending,\n' +
+            '          getLoggers.pending,\n' +
+            '          getConfigurations.pending,\n' +
+            '          getEnv.pending'
         );
       });
 

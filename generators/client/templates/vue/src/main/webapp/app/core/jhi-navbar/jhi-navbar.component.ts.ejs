@@ -47,26 +47,16 @@ export default class JhiNavbar extends Vue {
 <%_ if (!authenticationTypeJwt) { _%>
     this.loginService().logout().then(response => {
       this.$store.commit('logout');
-      this.$router.push('/', () => {});
+      this.$router.push('/');
   <%_ if (authenticationTypeOauth2) { _%>
-      const data = response.data;
-      let logoutUrl = data.logoutUrl;
-      // if Keycloak, uri has protocol/openid-connect/token
-      if (logoutUrl.indexOf('/protocol') > -1) {
-        logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
-      } else {
-        // Okta
-        logoutUrl = logoutUrl + '?id_token_hint=' +
-        data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
-      }
-      window.location.href = logoutUrl;
+      window.location.href = response.data.logoutUrl;
   <%_ } _%>
     });
 <%_ } else { _%>
     localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     this.$store.commit('logout');
-    this.$router.push('/', () => {});
+    this.$router.push('/');
 <%_ } _%>
   }
 

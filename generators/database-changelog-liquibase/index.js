@@ -38,8 +38,10 @@ const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options) {
-    super(args, options);
+  constructor(args, options, features) {
+    super(args, options, features);
+
+    if (this.options.help) return;
 
     assert(this.options.databaseChangelog, 'Changelog is required');
     this.databaseChangelog = this.options.databaseChangelog;
@@ -60,8 +62,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
+        this.loadPlatformConfig();
       },
     };
   }
@@ -96,15 +98,6 @@ module.exports = class extends BaseBlueprintGenerator {
             .filter(field => !field.transient)
             .map(field => prepareFieldForLiquibaseTemplates(this.entity, field));
         }
-      },
-
-      setupReproducibility() {
-        if (this.jhipsterConfig.skipServer || this.entity.skipServer) {
-          return;
-        }
-
-        // In order to have consistent results with Faker, restart seed with current entity name hash.
-        this.entity.resetFakerSeed();
       },
 
       prepareFakeData() {

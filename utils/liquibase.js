@@ -19,6 +19,13 @@
 
 const _ = require('lodash');
 
+const { MYSQL, MARIADB, POSTGRESQL } = require('../jdl/jhipster/database-types');
+const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../jdl/jhipster/field-types');
+
+const { STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE, UUID, BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, INSTANT, DURATION } = CommonDBTypes;
+const { BYTES } = RelationalOnlyDBTypes;
+const { TEXT } = BlobTypes;
+
 module.exports = {
   parseLiquibaseChangelogDate,
   formatDateForChangelog,
@@ -73,69 +80,69 @@ function formatDateForChangelog(now) {
 
 function parseLiquibaseColumnType(entity, field) {
   const fieldType = field.fieldType;
-  if (fieldType === 'String' || field.fieldIsEnum) {
+  if (fieldType === STRING || field.fieldIsEnum) {
     return `varchar(${field.fieldValidateRulesMaxlength || 255})`;
   }
 
-  if (fieldType === 'Integer') {
+  if (fieldType === INTEGER) {
     return 'integer';
   }
 
-  if (fieldType === 'Long') {
+  if (fieldType === LONG) {
     return 'bigint';
   }
 
-  if (fieldType === 'Float') {
+  if (fieldType === FLOAT) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${floatType}';
   }
 
-  if (fieldType === 'Double') {
+  if (fieldType === DOUBLE) {
     return 'double';
   }
 
-  if (fieldType === 'BigDecimal') {
+  if (fieldType === BIG_DECIMAL) {
     return 'decimal(21,2)';
   }
 
-  if (fieldType === 'LocalDate') {
+  if (fieldType === LOCAL_DATE) {
     return 'date';
   }
 
-  if (fieldType === 'Instant') {
+  if (fieldType === INSTANT) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${datetimeType}';
   }
 
-  if (fieldType === 'ZonedDateTime') {
+  if (fieldType === ZONED_DATE_TIME) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${datetimeType}';
   }
 
-  if (fieldType === 'Duration') {
+  if (fieldType === DURATION) {
     return 'bigint';
   }
 
-  if (fieldType === 'UUID') {
+  if (fieldType === UUID) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${uuidType}';
   }
 
-  if (fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
+  if (fieldType === BYTES && field.fieldTypeBlobContent !== TEXT) {
     const { prodDatabaseType } = entity;
-    if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
+    if (prodDatabaseType === MYSQL || prodDatabaseType === POSTGRESQL || prodDatabaseType === MARIADB) {
       return 'longblob';
     }
 
     return 'blob';
   }
 
-  if (field.fieldTypeBlobContent === 'text') {
+  if (field.fieldTypeBlobContent === TEXT) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${clobType}';
   }
 
-  if (fieldType === 'Boolean') {
+  if (fieldType === BOOLEAN) {
     return 'boolean';
   }
 
@@ -154,7 +161,11 @@ function parseLiquibaseLoadColumnType(entity, field) {
   }
 
   // eslint-disable-next-line no-template-curly-in-string
-  if (['date', '${datetimeType}', 'boolean'].includes(columnType)) {
+  if (['date', '${datetimeType}'].includes(columnType)) {
+    return 'date';
+  }
+
+  if (columnType === 'boolean') {
     return columnType;
   }
 
@@ -171,8 +182,8 @@ function parseLiquibaseLoadColumnType(entity, field) {
   if (
     // eslint-disable-next-line no-template-curly-in-string
     columnType === '${uuidType}' &&
-    prodDatabaseType !== 'mysql' &&
-    prodDatabaseType !== 'mariadb'
+    prodDatabaseType !== MYSQL &&
+    prodDatabaseType !== MARIADB
   ) {
     // eslint-disable-next-line no-template-curly-in-string
     return '${uuidType}';
@@ -184,8 +195,8 @@ function parseLiquibaseLoadColumnType(entity, field) {
 function prepareFieldForLiquibaseTemplates(entity, field) {
   _.defaults(field, {
     columnType: parseLiquibaseColumnType(entity, field),
-    shouldDropDefaultValue: field.fieldType === 'ZonedDateTime' || field.fieldType === 'Instant',
-    shouldCreateContentType: field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text',
+    shouldDropDefaultValue: field.fieldType === ZONED_DATE_TIME || field.fieldType === INSTANT,
+    shouldCreateContentType: field.fieldType === BYTES && field.fieldTypeBlobContent !== TEXT,
     nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes('required')),
   });
   _.defaults(field, {

@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-function setupProxy() {
-  const tls = process.env.TLS;
+function setupProxy({ tls }) {
   const conf = [
     {
       context: [
@@ -35,14 +34,14 @@ function setupProxy() {
         '/auth',
         '/health',
       ],
-      target: `http${tls ? 's' : ''}://localhost:<%= serverPort %>`,
+      target: `http${tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
       secure: false,
       changeOrigin: tls,
     },
 <%_ if (communicationSpringWebsocket) { _%>
     {
       context: ['/websocket'],
-      target: 'ws://127.0.0.1:<%= serverPort %>',
+      target: 'ws://127.0.0.1:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
       ws: true,
     },
 <%_ } _%>
@@ -50,4 +49,4 @@ function setupProxy() {
   return conf;
 }
 
-module.exports = setupProxy();
+module.exports = setupProxy;

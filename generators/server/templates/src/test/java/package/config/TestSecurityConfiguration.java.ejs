@@ -16,48 +16,52 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const reactivePrefix = reactive ? 'Reactive' : ''; _%>
 package <%= packageName %>.config;
 
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.oauth2.client.InMemory<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemory<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.AuthenticatedPrincipalOAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.jwt.<% if (reactive) { %>Reactive<% } %>JwtDecoder;
+import static org.mockito.Mockito.mock;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.mockito.Mockito.mock;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.client.InMemory<%= reactivePrefix %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.<%= reactivePrefix %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.<%= reactivePrefix %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemory<%= reactivePrefix %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.jwt.<%= reactivePrefix %>JwtDecoder;
+<%_ if (applicationTypeMonolith) { _%>
+import org.springframework.context.annotation.Import;
+<%_ } _%>
 
 /**
  * This class allows you to run unit and integration tests without an IdP.
  */
 @TestConfiguration
+<%_ if (applicationTypeMonolith) { _%>
+@Import(OAuth2Configuration.class)
+<%_ } _%>
 public class TestSecurityConfiguration {
-    private final ClientRegistration clientRegistration;
 
-    public TestSecurityConfiguration() {
-        this.clientRegistration = clientRegistration().build();
+    @Bean
+    ClientRegistration clientRegistration() {
+        return clientRegistrationBuilder().build();
     }
 
     @Bean
-    <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemory<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository(clientRegistration);
+    <%= reactivePrefix %>ClientRegistrationRepository clientRegistrationRepository(ClientRegistration clientRegistration) {
+        return new InMemory<%= reactivePrefix %>ClientRegistrationRepository(clientRegistration);
     }
 
-    private ClientRegistration.Builder clientRegistration() {
+    private ClientRegistration.Builder clientRegistrationBuilder() {
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("end_session_endpoint", "https://jhipster.org/logout");
 
         return ClientRegistration.withRegistrationId("oidc")
+            .issuerUri("{baseUrl}")
             .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
             .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -74,17 +78,12 @@ public class TestSecurityConfiguration {
     }
 
     @Bean
-    <% if (reactive) { %>Reactive<% } %>JwtDecoder jwtDecoder() {
-        return mock(<% if (reactive) { %>Reactive<% } %>JwtDecoder.class);
+    <%= reactivePrefix %>JwtDecoder jwtDecoder() {
+        return mock(<%= reactivePrefix %>JwtDecoder.class);
     }
 
     @Bean
-    public <% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService authorizedClientService(<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository clientRegistrationRepository) {
-        return new InMemory<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService(clientRegistrationRepository);
-    }
-
-    @Bean
-    public OAuth2AuthorizedClientRepository authorizedClientRepository(OAuth2AuthorizedClientService authorizedClientService) {
-        return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService);
+    <%= reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService(<%= reactivePrefix %>ClientRegistrationRepository clientRegistrationRepository) {
+        return new InMemory<%= reactivePrefix %>OAuth2AuthorizedClientService(clientRegistrationRepository);
     }
 }

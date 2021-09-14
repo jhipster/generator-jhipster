@@ -45,8 +45,8 @@ const TYPE_UUID = CommonDBTypes.UUID;
 let useBlueprints;
 
 module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     // This adds support for a `--auth` flag
     this.option('auth', {
@@ -85,19 +85,22 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.checkInvocationFromCLI();
       },
 
-      displayLogo() {
-        if (this.logo) {
-          this.printJHipsterLogo();
-        }
-      },
-
-      setupClientConstants() {
+      setupConstants() {
         // Make constants available in templates
+        this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
+        this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
+        this.packagejs = packagejs;
         this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
         this.ANGULAR = ANGULAR;
         this.REACT = REACT;
         this.VUE = VUE;
         this.NODE_VERSION = constants.NODE_VERSION;
+      },
+
+      displayLogo() {
+        if (this.logo) {
+          this.printJHipsterLogo();
+        }
       },
     };
   }
@@ -131,6 +134,21 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
         this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
         this.packagejs = packagejs;
+      },
+
+      configureDevServerPort() {
+        this.devServerBasePort = this.jhipsterConfig.clientFramework === ANGULAR ? 4200 : 9060;
+
+        if (this.jhipsterConfig.devServerBasePort !== undefined) return undefined;
+        let devServerPort;
+
+        if (this.jhipsterConfig.applicationIndex !== undefined) {
+          devServerPort = this.devServerBasePort + this.jhipsterConfig.applicationIndex;
+        } else if (!this.devServerPort) {
+          devServerPort = this.devServerBasePort;
+        }
+
+        this.jhipsterConfig.devServerPort = devServerPort;
       },
 
       saveConfig() {
@@ -178,8 +196,14 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
+        this.loadPlatformConfig();
         this.loadTranslationConfig();
+      },
+
+      checkMicrofrontend() {
+        if (this.microfrontend && !this.clientFrameworkAngular) {
+          throw new Error(`Microfrontend requires ${ANGULAR} client framework.`);
+        }
       },
 
       validateSkipServer() {
@@ -235,15 +259,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
         this.styleSheetExt = 'scss';
         this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
-
-        // Application name modified, using each technology's conventions
-        this.camelizedBaseName = _.camelCase(this.baseName);
-        this.frontendAppName = this.getFrontendAppName();
-        this.hipster = this.getHipster(this.baseName);
-        this.capitalizedBaseName = _.upperFirst(this.baseName);
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.lowercaseBaseName = this.baseName.toLowerCase();
-        this.humanizedBaseName = this.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(this.baseName);
 
         if (this.authenticationType === OAUTH2 || this.databaseType === NO_DATABASE) {
           this.skipUserManagement = true;
@@ -349,16 +364,11 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           scriptsStorage.set('ci:frontend:build', 'npm run webapp:build:$npm_package_config_default_environment');
           scriptsStorage.set('ci:frontend:test', 'npm run ci:frontend:build && npm test');
         }
+      },
 
-        if (scriptsStorage.get('e2e')) {
-          scriptsStorage.set({
-            'ci:server:await':
-              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
-            'pree2e:headless': 'npm run ci:server:await',
-            'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
-            'e2e:dev': 'concurrently -k -s first "./mvnw" "e2e"',
-          });
-        }
+      microfrontend() {
+        if (!this.microfrontend) return;
+        this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
       },
     };
   }

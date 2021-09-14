@@ -20,7 +20,7 @@ package <%= packageName %>.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -31,29 +31,36 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } _%>
-<%_ if (reactive) { _%>
-import reactor.core.publisher.Mono;
-<%_ } _%>
-
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import java.util.*;
 import java.util.stream.Collectors;
-<%_ } _%>
-<%_ if (!reactive) { _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
-import java.util.Optional;
-    <%_ } _%>
+  <%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+  <%_ } else { _%>
 import java.util.stream.Stream;
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+import java.util.Arrays;
+  <%_ } else { _%>
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
+  <%_ } _%>
 <%_ } _%>
 
 /**
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
+<%_ if (authenticationTypeOauth2) { _%>
+    public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+<%_ } _%>
 
     private SecurityUtils() {
     }
@@ -80,7 +87,7 @@ public final class SecurityUtils {
         } else if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
             return springSecurityUser.getUsername();
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
         } else if (authentication instanceof JwtAuthenticationToken) {
             return (String) ((JwtAuthenticationToken)authentication).getToken().getClaims().get("preferred_username");
         } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
@@ -95,7 +102,7 @@ public final class SecurityUtils {
         return null;
     }
 
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
 
     /**
      * Get the JWT of the current user.
@@ -103,13 +110,13 @@ public final class SecurityUtils {
      * @return the JWT of the current user.
      */
     public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserJWT() {
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-        <%_ } else { _%>
+  <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
-        <%_ } _%>
+  <%_ } _%>
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
     }
@@ -137,42 +144,67 @@ public final class SecurityUtils {
     }
 
     /**
+     * Checks if the current user has any of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has any of the authorities, false otherwise.
+     */
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserAnyOfAuthorities(String... authorities) {
+<%_ if (!reactive) { _%>
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (
+            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+        );
+<%_ } else { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+            .map(Authentication::getAuthorities)
+            .map(authorityList -> authorityList.stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+            );
+<%_ } _%>
+    }
+
+    /**
+     * Checks if the current user has none of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has none of the authorities, false otherwise.
+     */
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserNoneOfAuthorities(String... authorities) {
+<%_ if (!reactive) { _%>
+        return !hasCurrentUserAnyOfAuthorities(authorities);
+<%_ } else { _%>
+        return hasCurrentUserAnyOfAuthorities(authorities).map(result -> !result);
+<%_ } _%>
+    }
+
+    /**
      * Checks if the current user has a specific authority.
      *
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
     public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserThisAuthority(String authority) {
-<%_ if (!reactive) { _%>
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).anyMatch(authority::equals);
-<%_ } else { _%>
-        return ReactiveSecurityContextHolder.getContext()
-            .map(SecurityContext::getAuthentication)
-            .map(Authentication::getAuthorities)
-            .map(authorities -> authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(authority::equals)
-            );
-<%_ } _%>
+        return hasCurrentUserAnyOfAuthorities(authority);
     }
 
 <%_ if (!reactive) { _%>
     private static Stream<String> getAuthorities(Authentication authentication) {
-        <%_ if (authenticationType === 'oauth2') { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
         Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken ?
             extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
             : authentication.getAuthorities();
         return authorities.stream()
-        <%_ } else { _%>
+  <%_ } else { _%>
         return authentication.getAuthorities().stream()
-        <%_ } _%>
+  <%_ } _%>
             .map(GrantedAuthority::getAuthority);
     }
 
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
         return mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
     }
@@ -180,7 +212,8 @@ public final class SecurityUtils {
     @SuppressWarnings("unchecked")
     private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
         return (Collection<String>) claims.getOrDefault("groups",
-            claims.getOrDefault("roles", new ArrayList<>()));
+            claims.getOrDefault("roles",
+            claims.getOrDefault(CLAIMS_NAMESPACE + "roles", new ArrayList<>())));
     }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {

@@ -18,6 +18,15 @@
  */
 const execSync = require('child_process').execSync;
 const dockerPrompts = require('../docker-prompts');
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
+const { IngressTypes, ServiceTypes } = require('../../jdl/jhipster/kubernetes-platform-types');
+
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { defaultKubernetesConfig, ingressDefaultConfig } = require('./kubernetes-constants');
+
+const NO_DATABASE = databaseTypes.NO;
+const { LOAD_BALANCER, INGRESS, NODE_PORT } = ServiceTypes;
+const { GKE, NGINX } = IngressTypes;
 
 module.exports = {
   askForKubernetesNamespace,
@@ -38,7 +47,7 @@ async function askForKubernetesNamespace() {
       type: 'input',
       name: 'kubernetesNamespace',
       message: 'What should we use for the Kubernetes namespace?',
-      default: this.kubernetesNamespace ? this.kubernetesNamespace : 'default',
+      default: this.kubernetesNamespace ? this.kubernetesNamespace : defaultKubernetesConfig.kubernetesNamespace,
     },
   ];
 
@@ -53,25 +62,25 @@ async function askForKubernetesServiceType() {
 
   const prompts = [
     {
-      when: () => istio === false,
+      when: () => !istio,
       type: 'list',
       name: 'kubernetesServiceType',
       message: 'Choose the Kubernetes service type for your edge services',
       choices: [
         {
-          value: 'LoadBalancer',
+          value: LOAD_BALANCER,
           name: 'LoadBalancer - Let a Kubernetes cloud provider automatically assign an IP',
         },
         {
-          value: 'NodePort',
+          value: NODE_PORT,
           name: 'NodePort - expose the services to a random port (30000 - 32767) on all cluster nodes',
         },
         {
-          value: 'Ingress',
+          value: INGRESS,
           name: 'Ingress - create ingresses for your services. Requires a running ingress controller',
         },
       ],
-      default: this.kubernetesServiceType ? this.kubernetesServiceType : 'LoadBalancer',
+      default: this.kubernetesServiceType ? this.kubernetesServiceType : defaultKubernetesConfig.kubernetesServiceType,
     },
   ];
 
@@ -85,21 +94,21 @@ async function askForIngressType() {
 
   const prompts = [
     {
-      when: () => kubernetesServiceType === 'Ingress',
+      when: () => kubernetesServiceType === INGRESS,
       type: 'list',
       name: 'ingressType',
       message: 'Choose the Kubernetes Ingress type',
       choices: [
         {
-          value: 'nginx',
+          value: NGINX,
           name: 'NGINX Ingress - choose this if you are running on Minikube',
         },
         {
-          value: 'gke',
+          value: GKE,
           name: 'Google Kubernetes Engine Ingress - choose this if you are running on GKE',
         },
       ],
-      default: this.ingressType ? this.ingressType : 'nginx',
+      default: this.ingressType ? this.ingressType : ingressDefaultConfig.ingressType,
     },
   ];
 
@@ -128,20 +137,20 @@ async function askForIngressDomain() {
     } catch (ex) {
       istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
     }
-  } else if (this.ingressType === 'nginx') {
+  } else if (this.ingressType === NGINX) {
     defaultValue = '192.168.99.100.nip.io';
   } else {
     defaultValue = 'none';
   }
 
   const examples = ['example.com', '192.168.99.100.nip.io'];
-  if (this.ingressType !== 'nginx' && !istio) {
+  if (this.ingressType !== NGINX && !istio) {
     examples.push('none');
   }
 
   const prompts = [
     {
-      when: () => kubernetesServiceType === 'Ingress' || istio === true,
+      when: () => kubernetesServiceType === INGRESS || istio === true,
       type: 'input',
       name: 'ingressDomain',
       message: `${istioMessage}${istioMessage ? '\n' : ''}What is the root FQDN for your ingress services (e.g. ${examples.join(', ')})?`,
@@ -150,7 +159,7 @@ async function askForIngressDomain() {
       default: defaultValue,
       validate: input => {
         if (input.length === 0) {
-          if (this.ingressType === 'nginx' || istio) {
+          if (this.ingressType === NGINX || istio) {
             return 'domain name cannot be empty';
           }
           return true;
@@ -177,7 +186,7 @@ async function askForIngressDomain() {
 
 async function askForIstioSupport() {
   if (this.regenerate) return;
-  if (this.deploymentApplicationType === 'monolith') {
+  if (this.deploymentApplicationType === MONOLITH) {
     this.istio = false;
     return;
   }
@@ -209,7 +218,7 @@ async function askForPersistentStorage() {
   if (this.regenerate) return;
   let usingDataBase = false;
   this.appConfigs.forEach((appConfig, index) => {
-    if (appConfig.prodDatabaseType !== 'no') {
+    if (appConfig.prodDatabaseType !== NO_DATABASE) {
       usingDataBase = true;
     }
   });

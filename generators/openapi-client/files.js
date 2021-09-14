@@ -21,6 +21,12 @@ const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
 const constants = require('../generator-constants');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { JWT, SESSION } = require('../../jdl/jhipster/authentication-types');
+
+const { AUTHENTICATION_TYPE, BASE_NAME, BUILD_TOOL, PACKAGE_FOLDER, PACKAGE_NAME, REACTIVE } = OptionNames;
 
 module.exports = {
   writeFiles,
@@ -30,7 +36,7 @@ module.exports = {
 function writeFiles() {
   return {
     addOpenAPIIgnoreFile() {
-      const basePath = this.config.get('reactive') ? 'java' : 'spring';
+      const basePath = this.config.get(REACTIVE) ? 'java' : 'spring';
       this.copy(`${basePath}/.openapi-generator-ignore`, '.openapi-generator-ignore');
     },
   };
@@ -39,11 +45,11 @@ function writeFiles() {
 function customizeFiles() {
   return {
     callOpenApiGenerator() {
-      this.baseName = this.config.get('baseName');
-      this.authenticationType = this.config.get('authenticationType');
-      this.packageName = this.config.get('packageName');
-      this.packageFolder = this.config.get('packageFolder');
-      this.buildTool = this.config.get('buildTool');
+      this.baseName = this.config.get(BASE_NAME);
+      this.authenticationType = this.config.get(AUTHENTICATION_TYPE);
+      this.packageName = this.config.get(PACKAGE_NAME);
+      this.packageFolder = this.config.get(PACKAGE_FOLDER);
+      this.buildTool = this.config.get(BUILD_TOOL);
 
       if (Object.keys(this.clientsToGenerate).length === 0) {
         this.log('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
@@ -104,10 +110,10 @@ function customizeFiles() {
         return;
       }
 
-      if (this.buildTool === 'maven') {
-        if (!['microservice', 'gateway'].includes(this.applicationType)) {
+      if (this.buildTool === MAVEN) {
+        if (![MICROSERVICE, GATEWAY].includes(this.applicationType)) {
           let exclusions;
-          if (this.authenticationType === 'session') {
+          if (this.authenticationType === SESSION) {
             exclusions = `
             <exclusions>
                 <exclusion>
@@ -119,9 +125,9 @@ function customizeFiles() {
           this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-openfeign', null, exclusions);
         }
         this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-oauth2');
-      } else if (this.buildTool === 'gradle') {
-        if (!['microservice', 'gateway'].includes(this.applicationType)) {
-          if (this.authenticationType === 'session') {
+      } else if (this.buildTool === GRADLE) {
+        if (![MICROSERVICE, GATEWAY].includes(this.applicationType)) {
+          if (this.authenticationType === SESSION) {
             const content =
               "compile 'org.springframework.cloud:spring-cloud-starter-openfeign', { exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-ribbon' }";
             this.rewriteFile('./build.gradle', 'jhipster-needle-gradle-dependency', content);
@@ -139,11 +145,11 @@ function customizeFiles() {
      */
     addJacksonDataBindNullable() {
       if (!this.enableSwaggerCodegen) {
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
           // eslint-disable-next-line no-template-curly-in-string
           this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
-        } else if (this.buildTool === 'gradle') {
+        } else if (this.buildTool === GRADLE) {
           this.addGradleProperty('jacksonDatabindNullableVersion', constants.JACKSON_DATABIND_NULLABLE_VERSION);
           this.addGradleDependency(
             'compile',
@@ -164,7 +170,7 @@ function customizeFiles() {
       this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
       const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
-      if (this.applicationType !== 'microservice' || !['jwt'].includes(this.authenticationType)) {
+      if (this.applicationType !== MICROSERVICE || ![JWT].includes(this.authenticationType)) {
         this.rewriteFile(
           mainClassFile,
           'import org.springframework.core.env.Environment;',

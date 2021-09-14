@@ -23,8 +23,8 @@ const glob = require('glob');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
-const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const cacheProviders = require('../../jdl/jhipster/cache-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const constants = require('../generator-constants');
@@ -38,22 +38,36 @@ const exec = childProcess.exec;
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  initializing() {
-    this.log(chalk.bold('CloudFoundry configuration is starting'));
-    const configuration = this.config;
-    this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-    this.baseName = configuration.get(OptionNames.BASE_NAME);
-    this.buildTool = configuration.get(OptionNames.BUILD_TOOL);
-    this.packageName = configuration.get(OptionNames.PACKAGE_NAME);
-    this.packageFolder = configuration.get(OptionNames.PACKAGE_FOLDER);
-    this.cacheProvider = configuration.get(OptionNames.CACHE_PROVIDER) || NO_CACHE_PROVIDER;
-    this.enableHibernateCache =
-      configuration.get(OptionNames.ENABLE_HIBERNATE_CACHE) && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-    this.databaseType = configuration.get(OptionNames.DATABASE_TYPE);
-    this.devDatabaseType = configuration.get(OptionNames.DEV_DATABASE_TYPE);
-    this.prodDatabaseType = configuration.get(OptionNames.PROD_DATABASE_TYPE);
-    this.frontendAppName = this.getFrontendAppName();
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLOUDFOUNDRY);
+  }
+
+  _initializing() {
+    return {
+      sayHello() {
+        this.log(chalk.bold('CloudFoundry configuration is starting'));
+      },
+
+      getSharedConfig() {
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadPlatformConfig();
+      },
+      getConfig() {
+        const configuration = this.config;
+        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
+        this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
+        this.frontendAppName = this.getFrontendAppName();
+      },
+    };
+  }
+
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
   }
 
   _prompting() {
@@ -179,9 +193,9 @@ module.exports = class extends BaseBlueprintGenerator {
         const done = this.async();
         let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -t 120 -p';
         let jarFolder = '';
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           jarFolder = ' target/';
-        } else if (this.buildTool === 'gradle') {
+        } else if (this.buildTool === GRADLE) {
           jarFolder = ' build/libs/';
         }
         if (os.platform() === 'win32') {

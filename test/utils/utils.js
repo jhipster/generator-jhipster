@@ -6,6 +6,7 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const { createHelpers } = require('yeoman-test');
 
+const SharedData = require('../../lib/support/shared-data.cjs');
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
 
@@ -19,8 +20,11 @@ const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 module.exports = {
   DEFAULT_TEST_OPTIONS,
   basicHelpers: createTestHelpers(),
-  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true } }),
-  dryRunHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true }, environmentOptions: { dryRun: true } }),
+  skipPrettierHelpers: createTestHelpers({ generatorOptions: { skipPrettier: true, reproducible: true } }),
+  dryRunHelpers: createTestHelpers({
+    generatorOptions: { skipPrettier: true, reproducible: true },
+    environmentOptions: { dryRun: true },
+  }),
   createTestHelpers,
   getFilesForOptions,
   shouldBeV3DockerfileCompatible,
@@ -36,7 +40,12 @@ module.exports = {
 
 function createTestHelpers(options = {}) {
   const { environmentOptions = {} } = options;
-  const sharedOptions = { ...DEFAULT_TEST_OPTIONS, configOptions: {}, ...environmentOptions.sharedOptions };
+  const sharedOptions = {
+    ...DEFAULT_TEST_OPTIONS,
+    configOptions: {},
+    jhipsterSharedData: new SharedData(),
+    ...environmentOptions.sharedOptions,
+  };
   const newOptions = {
     settings: { ...DEFAULT_TEST_SETTINGS, ...options.settings },
     environmentOptions: { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions },

@@ -26,12 +26,14 @@ const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     if (this.options.help) {
       return;
     }
+
+    this.loadRuntimeOptions();
 
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CYPRESS);
   }
@@ -86,8 +88,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
+        this.loadPlatformConfig();
       },
     };
   }
@@ -143,19 +145,49 @@ module.exports = class extends BaseBlueprintGenerator {
 
   _postWriting() {
     return {
+      loadPackageJson() {
+        // Load common client package.json into dependabotPackageJson
+        _.merge(
+          this.dependabotPackageJson,
+          this.fs.readJSON(this.fetchFromInstalledJHipster('client', 'templates', 'common', 'package.json'))
+        );
+      },
+
+      configure() {
+        this.packageJson.merge({
+          devDependencies: {
+            'eslint-plugin-cypress': this.dependabotPackageJson.devDependencies['eslint-plugin-cypress'],
+          },
+        });
+      },
+
+      configureAudits() {
+        this.packageJson.merge({
+          devDependencies: {
+            lighthouse: this.dependabotPackageJson.devDependencies.lighthouse,
+            'cypress-audit': this.dependabotPackageJson.devDependencies['cypress-audit'],
+          },
+          scripts: {
+            'cypress:audits': 'cypress open --config-file cypress-audits.json',
+            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.json',
+            // eslint-disable-next-line no-template-curly-in-string
+            'e2e:cypress:audits': 'cypress run --browser chrome --record ${CYPRESS_ENABLE_RECORD:-false} --config-file cypress-audits.json',
+          },
+        });
+      },
       configureCoverage() {
         if (!this.cypressCoverage) return;
         this.packageJson.merge({
           devDependencies: {
-            '@cypress/code-coverage': this.configOptions.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
-            'babel-loader': this.configOptions.dependabotPackageJson.devDependencies['babel-loader'],
-            'babel-plugin-istanbul': this.configOptions.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
-            nyc: this.configOptions.dependabotPackageJson.devDependencies.nyc,
+            '@cypress/code-coverage': this.dependabotPackageJson.devDependencies['@cypress/code-coverage'],
+            'babel-loader': this.dependabotPackageJson.devDependencies['babel-loader'],
+            'babel-plugin-istanbul': this.dependabotPackageJson.devDependencies['babel-plugin-istanbul'],
+            nyc: this.dependabotPackageJson.devDependencies.nyc,
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
             'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
-            'e2e:cypress:coverage': 'npm run e2e:cypress',
+            'e2e:cypress:coverage': 'npm run e2e:cypress:headed',
             'poste2e:cypress:coverage': 'nyc report',
             'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',
             'webapp:instrumenter': 'ng build --configuration instrumenter',

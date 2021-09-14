@@ -5,8 +5,8 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=prod
             - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
-            - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
-            - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+            - SPRING_COUCHBASE_CONNECTION_STRING=mscouchbase-couchbase
+            - JHIPSTER_COUCHBASE_BUCKET_NAME=mscouchbase
     mscouchbase-couchbase:
         build:
             context: .
@@ -15,7 +15,7 @@ services:
             - 8091:8091
             - 8092:8092
             - 8093:8093
-            - 8094:80934
+            - 8094:8094
             - 11210:11210
         environment:
             - BUCKET=mscouchbase

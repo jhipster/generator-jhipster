@@ -29,7 +29,7 @@ services:
     # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
+      - SPRING_PROFILES_ACTIVE=dev,api-docs<% if (authenticationTypeOauth2) { %>,oauth2<% } %>
       - SPRING_SECURITY_USER_PASSWORD=admin
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
@@ -37,12 +37,12 @@ services:
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-      <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
       # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
-      <%_ } _%>
+<%_ } _%>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:

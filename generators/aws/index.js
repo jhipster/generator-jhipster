@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
-const AwsFactory = require('./lib/aws.js');
+const AwsFactory = require('./lib/aws');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
 const { GENERATOR_AWS } = require('../generator-list');
@@ -31,8 +31,8 @@ const { MYSQL, POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-type
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options) {
-    super(args, options);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_AWS);
   }
 
@@ -80,7 +80,7 @@ module.exports = class extends BaseBlueprintGenerator {
             this.dbEngine = MYSQL;
             break;
           case POSTGRESQL:
-            this.dbEngine = POSTGRESQL;
+            this.dbEngine = 'postgres';
             break;
           default:
             this.error('Sorry deployment for this database is not possible');

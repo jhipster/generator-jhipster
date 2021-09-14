@@ -25,6 +25,7 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipste
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { MapperTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = require('../../jdl/jhipster/cache-types');
+const { writeEntityCouchbaseFiles } = require('./files-couchbase');
 
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
@@ -52,24 +53,88 @@ const serverFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.searchEngine === COUCHBASE && !generator.skipDbChangelog,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'config/couchmove/changelog/entity.fts',
-          renameTo: generator => `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.fts`,
-        },
-      ],
-    },
   ],
   server: [
     {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/domain/Entity.java',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java`,
+          file: 'package/domain/Entity.java.jhi',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi`,
+        },
+        {
+          file: 'package/domain/Entity.java.jhi.javax_validation',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.javax_validation`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_reactive',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_reactive`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeCassandra,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_cassandra',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_cassandra`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeNeo4j,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_neo4j',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_neo4j`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.javax_persistence',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.javax_persistence`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeMongodb,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_mongodb',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_mongodb`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.enableHibernateCache,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.hibernate_cache',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.hibernate_cache`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngineElasticsearch,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.elastic_search',
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.elastic_search`,
         },
       ],
     },
@@ -108,7 +173,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && !generator.embedded,
+      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -118,7 +183,7 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && !generator.embedded,
+      condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -230,7 +295,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/EntityTest.java',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}Test.java`,
+          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}Test.java`,
         },
       ],
     },
@@ -265,13 +330,6 @@ module.exports = {
 
 function writeFiles() {
   return {
-    setupReproducibility() {
-      if (this.skipServer) return;
-
-      // In order to have consistent results with Faker, restart seed with current entity name hash.
-      this.resetFakerSeed();
-    },
-
     writeServerFiles() {
       if (this.skipServer) return undefined;
 
@@ -308,6 +366,7 @@ function writeFiles() {
         }
       });
     },
+    ...writeEntityCouchbaseFiles(),
   };
 }
 

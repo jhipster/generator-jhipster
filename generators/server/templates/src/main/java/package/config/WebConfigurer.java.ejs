@@ -21,11 +21,11 @@ package <%= packageName %>.config;
 <%_ if (reactive) { _%>
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
-<%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType)) { _%>
+<%_ if (!skipClient || devDatabaseTypeH2Any) { _%>
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType)) { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
@@ -49,11 +49,11 @@ import org.springframework.context.annotation.Profile;
     <%_ } _%>
 import org.springframework.core.annotation.Order;
 <%_ } _%>
-<%_ if (reactive) { _%>
+<%_ if (reactive && !databaseTypeNo) { _%>
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ } _%>
-<%_ if (!reactive || (['h2Disk', 'h2Memory'].includes(devDatabaseType) && reactive)) { _%>
+<%_ if (!reactive || (devDatabaseTypeH2Any && reactive)) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 <%_ } _%>
@@ -77,7 +77,6 @@ import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 import javax.servlet.*;
     <%_ if (!skipClient) { _%>
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.*;
@@ -98,22 +97,27 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     private final Environment env;
 
-    <%_ } _%>
+<%_ } _%>
     private final JHipsterProperties jHipsterProperties;
 
     public WebConfigurer(<% if (!reactive || (devDatabaseTypeH2Any && reactive)) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         this.env = env;
-        <%_ } _%>
+<%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
 <%_ if (devDatabaseTypeH2Any && reactive) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            H2ConfigurationHelper.initH2Console();
+            try {
+                H2ConfigurationHelper.initH2Console();
+            } catch (Exception e) {
+                // Console may already be running on another app or after a refresh.
+                e.printStackTrace();
+            };
         }
-<%_ } _%>  
+<%_ } _%>
     }
 
 
@@ -125,21 +129,21 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
 
-    <%_ if (devDatabaseTypeH2Any) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             initH2Console(servletContext);
         }
-    <%_ } _%>
+  <%_ } _%>
         log.info("Web application fully configured");
     }
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 
     /**
      * Customize the Servlet engine: Mime types, the document root, the cache.
      */
     @Override
     public void customize(WebServerFactory server) {
-        // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
+        // When running in an IDE or with <% if (buildToolGradle) { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
         setLocationForStaticAssets(server);
     }
 
@@ -159,13 +163,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
      * Resolve path prefix to static resources.
      */
     private String resolvePathPrefix() {
-        String fullExecutablePath;
-        try {
-            fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            /* try without decoding if this ever happens */
-            fullExecutablePath = this.getClass().getResource("").getPath();
-        }
+        String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
         int extractionEndIndex = extractedPath.indexOf("<%= BUILD_DIR %>");
@@ -175,14 +173,14 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         return extractedPath.substring(0, extractionEndIndex);
     }
 
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
     @Bean
     public Cors<% if (reactive) { %>Web<% } %>Filter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
-        if (!CollectionUtils.isEmpty(config.getAllowedOrigins())) {
+        if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || ! CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
             log.debug("Registering CORS filter");
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/management/**", config);
@@ -190,16 +188,17 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/v3/api-docs", config);
             source.registerCorsConfiguration("/swagger-resources", config);
             source.registerCorsConfiguration("/swagger-ui/**", config);
-            <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
             source.registerCorsConfiguration("/*/api/**", config);
             source.registerCorsConfiguration("/services/*/api/**", config);
             source.registerCorsConfiguration("/*/management/**", config);
-            <%_ } _%>
+<%_ } _%>
         }
         return new Cors<% if (reactive) { %>Web<% } %>Filter(source);
     }
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
 
+  <%_ if (!databaseTypeNo) { _%>
     // TODO: remove when this is supported in spring-boot
     @Bean
     HandlerMethodArgumentResolver reactivePageableHandlerMethodArgumentResolver() {
@@ -211,13 +210,14 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     HandlerMethodArgumentResolver reactiveSortHandlerMethodArgumentResolver() {
         return new ReactiveSortHandlerMethodArgumentResolver();
     }
+  <%_ } _%>
 
     @Bean
     @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
     public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
         return new ProblemExceptionHandler(mapper, problemHandling);
     }
-        <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 
     @Bean
     ResourceHandlerRegistrationCustomizer registrationCustomizer() {
@@ -231,9 +231,9 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         // Use a cache filter that only match selected paths
         return new CachingHttpHeadersFilter(TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays()));
     }
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (devDatabaseTypeH2Any && !reactive) { _%>
 
     /**
      * Initializes H2 console.
@@ -242,6 +242,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         log.debug("Initialize H2 console");
         H2ConfigurationHelper.initH2Console(servletContext);
     }
-    <%_ } _%>
+<%_ } _%>
 
 }

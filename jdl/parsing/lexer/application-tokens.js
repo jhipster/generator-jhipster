@@ -65,6 +65,8 @@ const {
   TEST_FRAMEWORKS,
   WEBSOCKET,
   WITH_ADMIN_UI,
+  ENABLE_GRADLE_ENTERPRISE,
+  GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
 const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
@@ -110,6 +112,8 @@ const applicationConfigTokens = [
   { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
   { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
   { name: 'REMEMBER_ME_KEY', pattern: REMEMBER_ME_KEY },
+  { name: 'ENABLE_GRADLE_ENTERPRISE', pattern: ENABLE_GRADLE_ENTERPRISE },
+  { name: 'GRADLE_ENTERPRISE_HOST', pattern: GRADLE_ENTERPRISE_HOST },
 ].map(tokenConfig => {
   tokenConfig.categories = [applicationConfigCategoryToken];
   // This is actually needed as the skipClient & skipServer options are both entity & app options...

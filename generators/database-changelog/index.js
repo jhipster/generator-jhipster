@@ -31,8 +31,8 @@ const BASE_CHANGELOG = {
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options) {
-    super(args, options, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     this.argument('entities', {
       desc: 'Which entities to generate a new changelog',

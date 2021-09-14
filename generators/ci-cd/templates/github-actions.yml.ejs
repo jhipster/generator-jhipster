@@ -48,6 +48,9 @@ if (!databaseTypeNo && !skipServer ) { _%>
 <%_ if (clientFrameworkAngular) { _%>
             NG_CLI_ANALYTICS: false
 <%_ } _%>
+<%_ if (enableGradleEnterprise) { _%>
+            GRADLE_ENTERPRISE_ACCESS_KEY: ${{secrets.GRADLE_ENTERPRISE_ACCESS_KEY}}
+<%_ } _%>
         steps:
             - uses: actions/checkout@v2
 <%_ if (!skipClient) { _%>
@@ -58,7 +61,7 @@ if (!databaseTypeNo && !skipServer ) { _%>
 if (!skipServer) { _%>
             - uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11.x'
 <%_ }
 if (!skipClient) { _%>

@@ -21,7 +21,7 @@ const assert = require('assert');
 const _ = require('lodash');
 const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = require('../jdl/jhipster/field-types');
-const { MIN, MINLENGTH, MAX, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../jdl/jhipster/validations');
+const { MIN, MINLENGTH, MINBYTES, MAX, MAXBYTES, MAXLENGTH, PATTERN, REQUIRED, UNIQUE } = require('../jdl/jhipster/validations');
 const { MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 
@@ -98,10 +98,12 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
-    const generated = field.createRandexp().gen();
-    if (type === 'csv') {
-      data = `"${generated.replace(/"/g, '')}"`;
-    } else if (type === 'cypress') {
+    const re = field.createRandexp();
+    if (!re) {
+      return undefined;
+    }
+    const generated = re.gen();
+    if (type === 'csv' || type === 'cypress') {
       data = generated.replace(/"/g, '');
     } else {
       data = generated;
@@ -116,6 +118,9 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     } else {
       data = undefined;
     }
+  } else if (field.fieldType === DURATION && type === 'cypress') {
+    data = `PT${faker.datatype.number({ min: 1, max: 59 })}M`;
+
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL, DURATION].includes(field.fieldType)) {
     data = faker.datatype.number({
@@ -164,10 +169,7 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     }
 
     // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
-    if (
-      field.fieldValidateRules.includes(PATTERN) &&
-      !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data.substring(1, data.length - 1))
-    ) {
+    if (field.fieldValidateRules.includes(PATTERN) && !new RegExp(`^${field.fieldValidateRulesPattern}$`).test(data)) {
       data = undefined;
     }
   }
@@ -178,12 +180,14 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)
   ) {
     data = `'${data}'`;
+  } else if (data !== undefined && type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes(PATTERN)) {
+    data = `"${data}"`;
   }
 
   return data;
 };
 
-function derivedProperties(field) {
+function _derivedProperties(field) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
   const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
@@ -222,6 +226,8 @@ function derivedProperties(field) {
     fieldValidationMaxLength: validationRules.includes(MAXLENGTH),
     fieldValidationPattern: validationRules.includes(PATTERN),
     fieldValidationUnique: validationRules.includes(UNIQUE),
+    fieldValidationMinBytes: validationRules.includes(MINBYTES),
+    fieldValidationMaxBytes: validationRules.includes(MAXBYTES),
   });
 }
 
@@ -355,7 +361,17 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   const faker = entityWithConfig.faker;
-  field.createRandexp = () => faker.createRandexp(field.fieldValidateRulesPattern);
+  field.createRandexp = () => {
+    // check if regex is valid. If not, issue warning and we skip fake data generation.
+    try {
+      // eslint-disable-next-line no-new
+      new RegExp(field.fieldValidateRulesPattern);
+    } catch (e) {
+      this.warning(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
+      return undefined;
+    }
+    return faker.createRandexp(field.fieldValidateRulesPattern);
+  };
 
   field.uniqueValue = [];
 
@@ -383,7 +399,7 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   field.path = [field.fieldName];
   field.relationshipsPath = [];
   field.reference = fieldToReference(entityWithConfig, field);
-  derivedProperties(field);
+  _derivedProperties(field);
   return field;
 }
 

@@ -1,10 +1,15 @@
+const expect = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
-const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
+const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
+const { ANGULAR_X, REACT } = require('../jdl/jhipster/client-framework-types');
+const { JWT } = require('../jdl/jhipster/authentication-types');
+const { EHCACHE } = require('../jdl/jhipster/cache-types');
+const { MAVEN } = require('../jdl/jhipster/build-tool-types');
 
 const outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([$/])/, 'src/main/webapp2$1') : undefined);
 
@@ -15,9 +20,10 @@ const applyCustomizers = paths => clientTestPathCustomizer(outputPathCustomizer(
 describe('JHipster generator', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
-      before(done => {
-        helpers
-          .run(path.join(__dirname, '../generators/app'))
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/app'))
           .withEnvironment(env => {
             env.sharedOptions.outputPathCustomizer = [outputPathCustomizer, clientTestPathCustomizer];
             return env;
@@ -30,46 +36,30 @@ describe('JHipster generator', () => {
           })
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: 'angularX',
+            clientFramework: ANGULAR_X,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
             enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: POSTGRESQL,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['fr'],
-            buildTool: 'maven',
+            buildTool: MAVEN,
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             skipClient: false,
             skipUserManagement: false,
             serverSideOptions: [],
           })
-          .on('end', done);
+          .run();
       });
 
       it('creates expected default files for angularX', () => {
-        assert.file(expectedFiles.common.map(applyCustomizers));
-        assert.file(expectedFiles.server.map(applyCustomizers));
-        assert.file(expectedFiles.userManagementServer.map(applyCustomizers));
-        assert.file(expectedFiles.jwtServer.map(applyCustomizers));
-        assert.file(expectedFiles.maven.map(applyCustomizers));
-        assert.file(expectedFiles.dockerServices.map(applyCustomizers));
-        assert.file(expectedFiles.postgresql.map(applyCustomizers));
-        assert.file(expectedFiles.hibernateTimeZoneConfig.map(applyCustomizers));
-        assert.file(
-          getFilesForOptions(angularFiles, {
-            outputPathCustomizer: applyCustomizers,
-            enableTranslation: true,
-            serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            testFrameworks: [],
-          })
-        );
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
       it('outputPathCustomizer converts webapp to webapp2', () => {
         assert.equal(applyCustomizers('src/main/webapp/foo'), 'src/main/webapp2/foo');
@@ -107,20 +97,20 @@ describe('JHipster generator', () => {
           })
           .withPrompts({
             baseName: 'jhipster',
-            clientFramework: 'react',
+            clientFramework: REACT,
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
-            cacheProvider: 'ehcache',
+            authenticationType: JWT,
+            cacheProvider: EHCACHE,
             enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Memory',
-            prodDatabaseType: 'postgresql',
+            databaseType: SQL,
+            devDatabaseType: H2_MEMORY,
+            prodDatabaseType: POSTGRESQL,
             enableTranslation: true,
             nativeLanguage: 'en',
             languages: ['fr'],
-            buildTool: 'maven',
+            buildTool: MAVEN,
             rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
             skipClient: false,
             skipUserManagement: false,
@@ -143,7 +133,7 @@ describe('JHipster generator', () => {
             outputPathCustomizer: applyCustomizers,
             enableTranslation: true,
             serviceDiscoveryType: false,
-            authenticationType: 'jwt',
+            authenticationType: JWT,
             testFrameworks: [],
           })
         );

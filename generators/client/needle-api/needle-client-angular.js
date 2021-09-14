@@ -235,7 +235,10 @@ module.exports = class extends needleClientBase {
       const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, `path: '${entityUrl}'`, this.generator);
 
       if (!isSpecificEntityAlreadyGenerated) {
-        const modulePath = `./${entityFolderName}/${entityFileName}.module`;
+        const modulePath =
+          this.generator.jhipsterConfig.microfrontend && this.generator.jhipsterConfig.applicationType === 'gateway' && microserviceName
+            ? `${microserviceName}/${entityFileName}`
+            : `./${entityFolderName}/${entityFileName}.module`;
         const moduleName = microserviceName
           ? `${this.generator.upperFirstCamelCase(microserviceName)}${entityAngularName}Module`
           : `${entityAngularName}Module`;

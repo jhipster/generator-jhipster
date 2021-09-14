@@ -22,9 +22,18 @@
   "newProjectRoot": "projects",
   "projects": {
     "<%= dasherizedBaseName %>": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
       "root": "",
       "sourceRoot": "<%= MAIN_SRC_DIR.replace(/\/$/, "") %>",
-      "projectType": "application",
+      "prefix": "<%= jhiPrefixDashed %>",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -37,7 +46,7 @@
             "main": "<%= MAIN_SRC_DIR %>main.ts",
             "polyfills": "<%= MAIN_SRC_DIR %>polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
+            "inlineStyleLanguage": "scss",
             "assets": [
               "<%= MAIN_SRC_DIR %>content",
               "<%= MAIN_SRC_DIR %>favicon.ico",
@@ -60,7 +69,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "namedChunks": false,
+              "namedChunks": <%= Boolean(microfrontend) %>,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -69,29 +78,42 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "<%= dasherizedBaseName %>:build",
-            "proxyConfig": "./webpack/proxy.conf.js"
+            "browserTarget": "<%= dasherizedBaseName %>:build:development",
+            "port": <%= devServerPort %>
           },
           "configurations": {
             "production": {
               "browserTarget": "<%= dasherizedBaseName %>:build:production"
+            },
+            "development": {
+              "browserTarget": "<%= dasherizedBaseName %>:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "test": {
           "builder": "@angular-builders/jest:run",
@@ -99,16 +121,7 @@
             "configPath": "jest.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "prefix": "<%= jhiPrefixDashed %>"
+      }
     }
   },
   "defaultProject": "<%= dasherizedBaseName %>",

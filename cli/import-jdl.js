@@ -155,6 +155,9 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     inline: undefined,
     skipSampleRepository: undefined,
     workspaces: undefined,
+    forceNoFiltering: undefined,
+    unidirectionalRelationships: undefined,
+    localConfigOnly: undefined,
     fromJdl: true,
   };
 
@@ -162,17 +165,20 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     const oldCwd = process.cwd();
     process.chdir(cwd);
     env = env || EnvironmentBuilder.createDefaultBuilder(undefined, { cwd }).getEnvironment();
-    return env.run(`${CLI_NAME}:${command}`, generatorOptions).then(
-      () => {
+    return env
+      .run(`${CLI_NAME}:${command}`, generatorOptions)
+      .then(
+        () => {
+          logger.info(`Generator ${command} succeed`);
+        },
+        error => {
+          logger.error(`Error running generator ${command}: ${error}`, error);
+          return Promise.reject(error);
+        }
+      )
+      .finally(() => {
         process.chdir(oldCwd);
-        logger.info(`Generator ${command} succeed`);
-      },
-      error => {
-        process.chdir(oldCwd);
-        logger.error(`Error running generator ${command}: ${error}`, error);
-        return Promise.reject(error);
-      }
-    );
+      });
   }
   logger.debug(`Child process will be triggered for ${command} with cwd: ${cwd}`);
   const args = [command, ...getOptionAsArgs(generatorOptions)];
@@ -253,7 +259,7 @@ const generateDeploymentFiles = ({ processor, deployment }) => {
   const cwd = path.join(processor.pwd, deploymentType);
   logger.debug(`Child process will be triggered for ${jhipsterCli} with cwd: ${cwd}`);
 
-  return runGenerator(deploymentType, { cwd, fork: true }, { force: true, ...processor.options, skipPrompts: true });
+  return runGenerator(deploymentType, { cwd, fork: false }, { force: true, ...processor.options, skipPrompts: true });
 };
 
 /**
@@ -350,6 +356,7 @@ class JDLProcessor {
       applicationType: this.options.applicationType,
       skipUserManagement: this.options.skipUserManagement,
       unidirectionalRelationships: this.options.unidirectionalRelationships,
+      forceNoFiltering: this.options.forceNoFiltering,
       generatorVersion: packagejs.version,
       skipFileGeneration: true,
     };
@@ -406,6 +413,32 @@ class JDLProcessor {
     if (applicationsWithEntities.length === 0) {
       return Promise.resolve();
     }
+
+    const allApplications = Object.fromEntries(
+      applicationsWithEntities.map((applicationWithEntities, applicationIndex) => {
+        applicationWithEntities.config.applicationIndex = applicationIndex;
+        return [applicationWithEntities.config.baseName, applicationWithEntities.config];
+      })
+    );
+
+    applicationsWithEntities.forEach((applicationWithEntities, idx) => {
+      const relatedApplications = Object.entries(allApplications).filter(
+        ([baseName]) =>
+          applicationWithEntities.config.baseName !== baseName &&
+          applicationWithEntities.entities.find(entity => entity.microserviceName === baseName)
+      );
+      const { serverPort: gatewayServerPort } = applicationWithEntities.config;
+      if (relatedApplications.length > 0) {
+        applicationWithEntities.config.applications = Object.fromEntries(
+          relatedApplications.map(([baseName, config]) => {
+            config.gatewayServerPort = gatewayServerPort;
+            const { serverPort, applicationIndex } = config;
+            return [baseName, { serverPort, applicationIndex }];
+          })
+        );
+      }
+    });
+
     if (this.interactive) {
       return applicationsWithEntities.reduce((promise, applicationWithEntities) => {
         return promise.then(() => callGenerator(applicationWithEntities));
@@ -436,13 +469,10 @@ class JDLProcessor {
           throw error;
         }
       };
-      if (this.interactive) {
-        // Queue callGenerator in chain
-        return this.importState.exportedDeployments.reduce((promise, deployment) => {
-          return promise.then(() => callGenerator(deployment));
-        }, Promise.resolve());
-      }
-      return Promise.all(this.importState.exportedDeployments.map(callGenerator));
+      // Queue callGenerator in chain
+      return this.importState.exportedDeployments.reduce((promise, deployment) => {
+        return promise.then(() => callGenerator(deployment));
+      }, Promise.resolve());
     };
 
     return callDeploymentGenerator();

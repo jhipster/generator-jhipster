@@ -71,7 +71,9 @@ class Statistics {
         value: 1,
       });
     };
-    insight.optOut = this.optOut;
+    if (this.optOut !== undefined) {
+      insight.optOut = this.optOut;
+    }
     this.insight = insight;
   }
 

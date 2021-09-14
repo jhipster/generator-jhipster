@@ -18,32 +18,39 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } else if (searchEngineCouchbase) { _%>
+import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.domain.User;
+  <%_ if (!reactive) { _%>
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+  <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.data.domain.Sort;
 import java.util.Collections;
 <%_ } _%>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import tech.jhipster.web.util.PaginationUtil;
 <%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
-    <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+  <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-    <%_ } else { _%>
+  <%_ } else { _%>
 import org.springframework.data.domain.PageImpl;
-    <%_ } _%>
+  <%_ } _%>
 import org.springframework.data.domain.Pageable;
-    <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
 import org.springframework.http.HttpHeaders;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,38 +76,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
+<%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 @RestController
 @RequestMapping("/api")
 public class PublicUserResource {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
-    <%_ } _%>
+<%_ } _%>
 
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-
+<%_ if (searchEngineElasticsearch) { _%>
     private final UserSearchRepository userSearchRepository;
+<%_ } else if (searchEngineCouchbase) { _%>
+    private final UserRepository userRepository;
 <%_ } _%>
 
-    public PublicUserResource(UserService userService<% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+    public PublicUserResource(
+<%_ if (searchEngineElasticsearch) { -%>
+        UserSearchRepository userSearchRepository,
+<%_ } else if (searchEngineCouchbase) { -%>
+        UserRepository userRepository,
+<%_ } -%>
+        UserService userService
+    ) {
         this.userService = userService;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         this.userSearchRepository = userSearchRepository;
-        <%_ } _%>
+<%_ } else if (searchEngine != false) { _%>
+        this.userRepository = userRepository;
+<%_ } _%>
     }
 
     /**
      * {@code GET /users} : get all users with only the public informations - calling this are allowed for anyone.
-     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j' || databaseType === 'couchbase') { %>
+     *<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %>
         <%_ if (reactive) { _%>
      * @param request a {@link ServerHttpRequest} request.
         <%_ } _%>
@@ -108,40 +124,40 @@ public class PublicUserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
-        <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+  <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllPublicUsers(Pageable pageable) {
         log.debug("REST request to get all public User names");
-        <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
-        <%_ } _%>
+    <%_ } _%>
 
         final Page<<%= asDto('User') %>> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-        <%_ } else { _%>
+  <%_ } else { _%>
     public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllPublicUsers(ServerHttpRequest request, Pageable pageable) {
         log.debug("REST request to get all public User names");
-        <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
-        <%_ } _%>
+    <%_ } _%>
 
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
-        <%_ } _%>
-        <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ } _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
     private boolean onlyContainsAllowedProperties(Pageable pageable) {
         return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
     }
-        <%_ } _%>
+  <%_ } _%>
 
     /**
      * Gets a list of all roles.
@@ -152,14 +168,14 @@ public class PublicUserResource {
         return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
     }
 
-    <%_ } else { // Cassandra _%>
+<%_ } else { /* Cassandra */ _%>
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllPublicUsers() {
         return userService.getAllPublicUsers();
     }
 
-    <%_ } _%>
+<%_ } _%>
 
-    <%_ if (searchEngine !== false) { _%>
+<%_ if (!!searchEngine) { _%>
 
     /**
      * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
@@ -169,18 +185,25 @@ public class PublicUserResource {
      */
     @GetMapping("/_search/users/{query}")
     public <% if(reactive) { %>Mono<<% } %>List<<%= asDto('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%_ if (!reactive) { _%>
+  <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (!reactive) { _%>
         return StreamSupport
-            .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .stream(userSearchRepository.search(query).spliterator(), false)
             .map(<%= asDto('User') %>::new)
             .collect(Collectors.toList());
-        <%_ } else { _%>
-        return userSearchRepository.search(query).map(<%= asDto('User') %>::new).collectList();
-        <%_ } _%>
     <%_ } else { _%>
-        return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
+        return userSearchRepository.search(query).map(<%= asDto('User') %>::new).collectList();
     <%_ } _%>
+  <%_ } else { _%>
+     <%_ if (!reactive) { _%>
+        return StreamSupport
+            .stream(userRepository.search(User.PREFIX, query).spliterator(), false)
+            .map(<%= asDto('User') %>::new)
+            .collect(Collectors.toList());
+     <%_ } else { _%>
+        return userRepository.search(User.PREFIX, query).map(<%= asDto('User') %>::new).collectList();
+     <%_ } _%>
+  <%_ } _%>
     }
 <%_ } _%>
 

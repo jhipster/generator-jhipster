@@ -234,7 +234,7 @@ function importOnlyEntities(jdlObject, configuration) {
 }
 
 function importOneApplicationAndEntities(jdlObject, configuration) {
-  const { skipFileGeneration, unidirectionalRelationships } = configuration;
+  const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
 
   const importState = {
     exportedApplications: [],
@@ -264,6 +264,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
       applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: false,
       skipFileGeneration,
+      forceNoFiltering,
     });
     importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
     importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
@@ -272,7 +273,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
 }
 
 function importApplicationsAndEntities(jdlObject, configuration) {
-  const { skipFileGeneration, unidirectionalRelationships } = configuration;
+  const { skipFileGeneration, unidirectionalRelationships, forceNoFiltering } = configuration;
 
   const importState = {
     exportedApplications: [],
@@ -297,6 +298,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
       applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE),
       forSeveralApplications: true,
       skipFileGeneration,
+      forceNoFiltering,
     });
     const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
     importState.exportedApplicationsWithEntities[applicationName] = {

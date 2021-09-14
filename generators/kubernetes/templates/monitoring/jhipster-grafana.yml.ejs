@@ -39,10 +39,10 @@ spec:
     metadata:
       labels:
         app: jhipster-grafana
-     <%_ if (istio) { _%>
+<%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
-     <%_ } _%>
+<%_ } _%>
     spec:
       containers:
       - name: jhipster-grafana
@@ -91,15 +91,15 @@ spec:
   - name: http
     port: 3000
     targetPort: 3000
-  <%_ if (kubernetesServiceType !== 'Ingress') { _%>
+<%_ if (!kubernetesServiceTypeIngress) { _%>
   type: <%= kubernetesServiceType %>
-  <%_ } else { _%>
+<%_ } else { _%>
   type: ClusterIP
-  <%_ } _%>
+<%_ } _%>
   selector:
     app: jhipster-grafana
 ---
-<%_ if (kubernetesServiceType === 'Ingress' && !istio ) { _%>
+<%_ if (kubernetesServiceTypeIngress && !istio ) { _%>
 apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:

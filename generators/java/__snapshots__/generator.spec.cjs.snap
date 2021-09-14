@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster java generator with add option and default config should write only java files and match snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster java generator with default config should write java files with maven build tool and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/MavenWrapperDownloader.java": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw": Object {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "pom.xml": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster java generator with gradle option should write java files with gradle build tool and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "build.gradle": Object {
+    "stateCleared": "modified",
+  },
+  "gradle.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": Object {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew": Object {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "settings.gradle": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

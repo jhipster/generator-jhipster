@@ -29,25 +29,19 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = async () => webpackMerge(await commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
-  cache: false,
   entry: {
     main: './<%= MAIN_SRC_DIR %>app/index'
   },
   output: {
     path: utils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].[hash].bundle.js',
-    chunkFilename: 'app/[name].[hash].chunk.js'
+    filename: 'app/[name].[contenthash].bundle.js',
+    chunkFilename: 'app/[name].[chunkhash].chunk.js'
   },
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.s?css$/,
-        loader: 'stripcomment-loader'
-      },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -104,8 +98,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
   plugins: [
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
-      filename: 'content/[name].[hash].css',
-      chunkFilename: 'content/[name].[hash].css'
+      filename: 'content/[name].[contenthash].css',
+      chunkFilename: 'content/[name].[chunkhash].css'
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,

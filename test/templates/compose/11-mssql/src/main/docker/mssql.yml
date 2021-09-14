@@ -1,7 +1,7 @@
 version: '2'
 services:
     msmssql-mssql:
-        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        image: mcr.microsoft.com/mssql/server:2019-CU12-ubuntu-20.04
         # volumes are not supported on macOS
         # volumes:
         #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/

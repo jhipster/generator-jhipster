@@ -105,7 +105,8 @@ _%>
         <loadData
                   file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
                   separator=";"
-                  tableName="<%= entity.entityTableName %>">
+                  tableName="<%= entity.entityTableName %>"
+                  usePreparedStatements="true">
     <%_ for (field of fields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
         <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>

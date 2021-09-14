@@ -70,7 +70,7 @@ class ClientForwardControllerTest {
             .andExpect(forwardedUrl("/"));
     }
 
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     @Test
     void getWebsocketInfoEndpoint() throws Exception {
         restMockMvc.perform(get("/websocket/info"))
@@ -88,7 +88,7 @@ class ClientForwardControllerTest {
         restMockMvc.perform(get("/websocket/tracker/308/sessionId/xhr_streaming"))
             .andExpect(status().isNotFound());
     }
-    <%_ } _%>
+<%_ } _%>
 
     @RestController
     public static class TestController {

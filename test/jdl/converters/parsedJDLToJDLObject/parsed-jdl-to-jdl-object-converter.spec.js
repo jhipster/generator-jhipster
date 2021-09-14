@@ -36,6 +36,24 @@ const Validations = require('../../../../jdl/jhipster/validations');
 const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../../jdl/jhipster/binary-options').Options;
 const BinaryOptionValues = require('../../../../jdl/jhipster/binary-options').Values;
+const { MONOLITH } = require('../../../../jdl/jhipster/application-types');
+const { MapperTypes, ServiceTypes, PaginationTypes } = require('../../../../jdl/jhipster/entity-options');
+const { OptionNames } = require('../../../../jdl/jhipster/application-options');
+const { Options } = require('../../../../jdl/jhipster/binary-options');
+const { MAVEN } = require('../../../../jdl/jhipster/build-tool-types');
+const { EHCACHE } = require('../../../../jdl/jhipster/cache-types');
+const { JWT } = require('../../../../jdl/jhipster/authentication-types');
+const { ANGULAR_X } = require('../../../../jdl/jhipster/client-framework-types');
+const { SQL, H2_DISK, POSTGRESQL } = require('../../../../jdl/jhipster/database-types');
+const { EUREKA } = require('../../../../jdl/jhipster/service-discovery-types');
+const monitoringTypes = require('../../../../jdl/jhipster/monitoring-types');
+
+const { DTO } = Options;
+const { SKIP_CLIENT, SKIP_SERVER } = OptionNames;
+const { MAPSTRUCT } = MapperTypes;
+const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
+const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
+const NO_MONITORING = monitoringTypes.NO;
 
 describe('ParsedJDLToJDLObjectConverter', () => {
   describe('parse', () => {
@@ -388,18 +406,18 @@ describe('ParsedJDLToJDLObjectConverter', () => {
         context('checking the options', () => {
           it('should parse them', () => {
             expect(options.length).to.equal(7);
-            expect(options[0].name).to.equal('skipClient');
-            expect(options[1].name).to.equal('skipServer');
-            expect(options[2].name).to.equal('dto');
-            expect(options[2].value).to.equal('mapstruct');
+            expect(options[0].name).to.equal(SKIP_CLIENT);
+            expect(options[1].name).to.equal(SKIP_SERVER);
+            expect(options[2].name).to.equal(DTO);
+            expect(options[2].value).to.equal(MAPSTRUCT);
             expect(options[3].name).to.equal('service');
-            expect(options[3].value).to.equal('serviceImpl');
+            expect(options[3].value).to.equal(SERVICE_IMPL);
             expect(options[4].name).to.equal('service');
-            expect(options[4].value).to.equal('serviceClass');
+            expect(options[4].value).to.equal(SERVICE_CLASS);
             expect(options[5].name).to.equal('pagination');
-            expect(options[5].value).to.equal('infinite-scroll');
+            expect(options[5].value).to.equal(INFINITE_SCROLL);
             expect(options[6].name).to.equal('pagination');
-            expect(options[6].value).to.equal('pagination');
+            expect(options[6].value).to.equal(PAGINATION);
           });
         });
       });
@@ -491,17 +509,17 @@ describe('ParsedJDLToJDLObjectConverter', () => {
           });
           parsedConfig = jdlObject.applications.toto;
           expectedConfig = createJDLApplication({
-            applicationType: 'monolith',
-            authenticationType: 'jwt',
+            applicationType: MONOLITH,
+            authenticationType: JWT,
             baseName: 'toto',
-            buildTool: 'maven',
-            cacheProvider: 'ehcache',
-            clientFramework: 'angularX',
+            buildTool: MAVEN,
+            cacheProvider: EHCACHE,
+            clientFramework: ANGULAR_X,
             clientTheme: 'none',
             clientThemeVariant: '',
             clientPackageManager: 'npm',
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
+            databaseType: SQL,
+            devDatabaseType: H2_DISK,
             enableHibernateCache: true,
             enableSwaggerCodegen: false,
             enableTranslation: false,
@@ -509,7 +527,7 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             messageBroker: false,
             packageFolder: 'com/mathieu/sample',
             packageName: 'com.mathieu.sample',
-            prodDatabaseType: 'postgresql',
+            prodDatabaseType: POSTGRESQL,
             searchEngine: false,
             serverPort: '8080',
             serviceDiscoveryType: false,
@@ -544,11 +562,10 @@ describe('ParsedJDLToJDLObjectConverter', () => {
           expect(deployment).to.deep.equal({
             deploymentType: 'docker-compose',
             directoryPath: '../',
-            dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             gatewayType: 'SpringCloudGateway',
-            monitoring: 'no',
-            serviceDiscoveryType: 'eureka',
+            monitoring: NO_MONITORING,
+            serviceDiscoveryType: EUREKA,
           });
         });
       });

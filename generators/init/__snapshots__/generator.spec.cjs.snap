@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster init generator with default config should write files and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster init generator with skipCommitHook option should not create husky files and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

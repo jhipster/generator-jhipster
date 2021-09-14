@@ -1,16 +1,16 @@
+const expect = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const expectedFiles = require('../utils/expected-files');
-const getFilesForOptions = require('../utils/utils').getFilesForOptions;
-const angularFiles = require('../../generators/client/files-angular').files;
+
 const EnvironmentBuilder = require('../../cli/environment-builder');
 
 describe('JHipster application generator with scoped blueprint', () => {
   describe('generate monolith application with scoped blueprint', () => {
-    before(() => {
-      return helpers
+    let runResult;
+    before(async () => {
+      runResult = await helpers
         .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
         .inTmpDir(dir => {
           // Fake the presence of the blueprint in node_modules
@@ -30,16 +30,7 @@ describe('JHipster application generator with scoped blueprint', () => {
     });
 
     it('creates expected default files for server and angularX', () => {
-      assert.file(expectedFiles.common);
-      assert.file(expectedFiles.server);
-      assert.file(
-        getFilesForOptions(angularFiles, {
-          enableTranslation: true,
-          serviceDiscoveryType: false,
-          authenticationType: 'jwt',
-          testFrameworks: [],
-        })
-      );
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {

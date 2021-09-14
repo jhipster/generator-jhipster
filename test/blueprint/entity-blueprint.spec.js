@@ -5,6 +5,11 @@ const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files').entity;
 const EntityGenerator = require('../../generators/entity');
 const constants = require('../../generators/generator-constants');
+const { MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
+
+const NO_SERVICE = ServiceTypes.NO;
+const NO_PAGINATION = PaginationTypes.NO;
+const NO_DTO = MapperTypes.NO;
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
@@ -22,23 +27,12 @@ const mockBlueprintSubGen = class extends EntityGenerator {
   }
 
   get initializing() {
-    const phaseFromJHipster = super._initializing();
-    const customPrePhaseSteps = {
-      // Create a custom persistent entity config.
+    return {
       createCustomConfig() {
         // Override with new value
         this.entityConfig.customBlueprintConfigKey = 'customBlueprintConfigValue';
       },
-    };
-    const customPostPhaseSteps = {
-      changeProperty() {
-        this.context.frontendAppName = 'awesomeApp';
-      },
-    };
-    return {
-      ...customPrePhaseSteps,
-      ...phaseFromJHipster,
-      ...customPostPhaseSteps,
+      ...super._initializing(),
     };
   }
 
@@ -48,6 +42,31 @@ const mockBlueprintSubGen = class extends EntityGenerator {
 
   get configuring() {
     return super._configuring();
+  }
+
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return {
+      ...super._preparing(),
+      changeProperty() {
+        this.context.frontendAppName = 'awesomeApp';
+      },
+    };
+  }
+
+  get preparingFields() {
+    return super._preparingFields();
+  }
+
+  get preparingRelationships() {
+    return super._preparingRelationships();
   }
 
   get default() {
@@ -72,8 +91,8 @@ describe('JHipster entity generator with blueprint', () => {
 
   blueprintNames.forEach(blueprintName => {
     describe(`generate entity with blueprint option '${blueprintName}'`, () => {
-      before(done => {
-        helpers
+      before(async () => {
+        await helpers
           .run(path.join(__dirname, '../../generators/entity'))
           .inTmpDir(dir => {
             fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
@@ -90,11 +109,10 @@ describe('JHipster entity generator with blueprint', () => {
             fieldAdd: false,
             relationshipAdd: false,
             baseName: 'jhipster',
-            dto: 'no',
-            service: 'no',
-            pagination: 'no',
-          })
-          .on('end', done);
+            dto: NO_DTO,
+            service: NO_SERVICE,
+            pagination: NO_PAGINATION,
+          });
       });
 
       it('creates expected files from jhipster entity generator', () => {
@@ -132,9 +150,9 @@ describe('JHipster entity generator with blueprint', () => {
         .withPrompts({
           fieldAdd: false,
           relationshipAdd: false,
-          dto: 'no',
-          service: 'no',
-          pagination: 'no',
+          dto: NO_DTO,
+          service: NO_SERVICE,
+          pagination: NO_PAGINATION,
         })
         .on('end', done);
     });

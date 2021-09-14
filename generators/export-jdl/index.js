@@ -19,19 +19,22 @@
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
-
+const { GENERATOR_EXPORT_JDL } = require('../generator-list');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
 const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter');
 
+const { BASE_NAME } = OptionNames;
+
 module.exports = class extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.argument('jdlFile', { type: String, required: false });
 
     if (this.options.help) {
       return;
     }
-    this.baseName = this.config.get('baseName');
+    this.baseName = this.config.get(BASE_NAME);
     this.jdlFile = this.options.jdlFile || `${this.baseName}.jdl`;
   }
 
@@ -42,7 +45,7 @@ module.exports = class extends BaseGenerator {
       },
 
       insight() {
-        statistics.sendSubGenEvent('generator', 'export-jdl');
+        statistics.sendSubGenEvent('generator', GENERATOR_EXPORT_JDL);
       },
 
       convertToJDL() {

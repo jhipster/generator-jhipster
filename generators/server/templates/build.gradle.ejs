@@ -34,17 +34,18 @@ plugins {
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
-    <%_ if (enableSwaggerCodegen) { _%>
+<%_ if (enableSwaggerCodegen) { _%>
     id "org.openapi.generator"
-    <%_ } _%>
-    <%_ if (!skipClient) { _%>
+<%_ } _%>
+<%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     id "org.liquibase.gradle"
-    <%_ } _%>
+<%_ } _%>
     id "org.sonarqube"
     id "io.spring.nohttp"
+    id "com.github.andygoossens.gradle-modernizer-plugin"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -118,17 +119,26 @@ springBoot {
 test {
     useJUnitPlatform()
     exclude "**/*IT*", "**/*IntTest*"
-
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
 }
 
+modernizer {
+    failOnViolations = true
+    includeTestClasses = true
+}
+
 task integrationTest(type: Test) {
+<%_ if (databaseTypeCouchbase) { _%>
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
+<%_ } _%>
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
@@ -136,11 +146,10 @@ task integrationTest(type: Test) {
 <%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
 <%_ } _%>
-
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
 <%_ if (databaseType === 'sql') { _%>
     if (project.hasProperty('testcontainers')) {
         <%_ if (!reactive) { _%>
@@ -336,7 +345,7 @@ dependencies {
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
         <%_ if (reactive) { _%>
-    implementation "commons-beanutils:commons-beanutils:1.9.4"
+    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
         <%_ } _%>
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
@@ -455,7 +464,11 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    <%_ if (reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+    <%_ } else { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+    <%_ } _%>
     implementation "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType) { _%>
@@ -475,8 +488,13 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
+    <%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+    implementation "com.playtika.reactivefeign:feign-reactor-webclient"
+    implementation "com.playtika.reactivefeign:feign-reactor-cloud"
+    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
+    <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
-    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
+    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
     implementation "org.springframework.security:spring-security-data"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-web"
@@ -504,7 +522,6 @@ dependencies {
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
-    implementation "com.couchbase.client:encryption"
     <%_ } _%>
     implementation ("io.springfox:springfox-oas")
     implementation ("io.springfox:springfox-swagger2")
@@ -535,13 +552,12 @@ dependencies {
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "com.github.sabomichal:liquibase-mssql"
-        <%_ if (!reactive) { _%>
-    liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
-        <%_ } else { _%>
+    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
+        <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
+    liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
+    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
@@ -602,6 +618,7 @@ dependencies {
     <%_ if (cacheProvider === 'redis') { %>
     testImplementation "org.testcontainers:testcontainers"
     <%_ } _%>
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
@@ -628,10 +645,14 @@ wrapper {
 <%_ if (!skipClient) { _%>
 
 if (project.hasProperty("nodeInstall")) {
+    // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154
+    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
+    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
+    Boolean downloadNode = !os.isMacOsX() || arch.isAmd64()
     node {
         version = "<%= NODE_VERSION %>"
         npmVersion = "<%= NPM_VERSION %>"
-        download = true
+        download = downloadNode
     }
 }
 <%_ } _%>

@@ -1,0 +1,148 @@
+#
+# Copyright 2013-2021 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Build cache
+on:
+  workflow_dispatch:
+    inputs:
+      key:
+        description: 'Cache key'
+        required: false
+        default: '-new'
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  npm_cache:
+    name: Create cache
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    steps:
+      - name: 'SETUP: Checkout generator-jhipster'
+        uses: actions/checkout@v2
+        with:
+          path: generator-jhipster
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./generator-jhipster/.github/actions/setup
+        with:
+          jdl-sample: cache
+          generator-jhipster-branch: local
+      - uses: actions/setup-node@v2.4.0
+        with:
+          node-version: ${{ steps.setup.outputs.node-version }}
+      - name: 'SETUP: load npm cache'
+        uses: actions/cache@v2.1.6
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/Cypress/
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
+      - name: 'SETUP: load maven cache'
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
+      - name: 'SETUP: load gradle cache'
+        uses: actions/cache@v2.1.6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
+
+      # generator-jhipster npm
+      - name: 'Install generator-jhipster npm version'
+        run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
+      - name: Cache generator-jhipster node_modules
+        run: npm ci
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}/generator-jhipster
+      - name: Cache last released generator-jhipster
+        run: |
+          npm install -g generator-jhipster@latest
+          npm uninstall -g generator-jhipster
+        continue-on-error: true
+      - name: Cache common node_modules
+        run: npm install
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/common/templates/
+      - name: Cache angular node_modules
+        run: npm install --force
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/angular
+      - name: Cache client common node_modules
+        run: |
+          npm install --force
+          npx cypress install
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/common
+      - name: Cache react node_modules
+        run: npm install --force
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/react
+      - name: Cache vue node_modules
+        run: npm install
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/vue
+
+      - name: 'mvn: install JHipster'
+        run: $JHI_SCRIPTS/10-install-jhipster.sh
+        continue-on-error: true
+
+      # maven
+      - name: 'mvn: config'
+        run: $JHI_SCRIPTS/11-generate-config.sh
+        continue-on-error: true
+      - name: 'mvn: project'
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
+        continue-on-error: true
+      - name: 'mvn: replace version in generated project'
+        run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
+        continue-on-error: true
+      - name: 'mvn: install workspaces deps'
+        run: npm install --force
+        continue-on-error: true
+      - name: 'mvn: build cache'
+        run: npm run backend:build-cache || true
+        continue-on-error: true
+
+      # gradle
+      - name: 'gradle: config'
+        run: $JHI_SCRIPTS/11-generate-config.sh
+        continue-on-error: true
+      - name: 'gradle: project'
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
+        continue-on-error: true
+      - name: 'gradle: replace version in generated project'
+        run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
+        continue-on-error: true
+      - name: 'gradle: install workspaces deps'
+        run: npm install --force
+        continue-on-error: true
+      - name: 'gradle: build cache'
+        run: npm run backend:build-cache || true
+        continue-on-error: true

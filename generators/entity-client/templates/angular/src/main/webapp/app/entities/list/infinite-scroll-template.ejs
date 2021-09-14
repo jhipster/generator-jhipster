@@ -108,13 +108,12 @@
             last: 0
         };
         this.page = 0;
-        if (query) {
-            this.predicate = '_score';
-            this.ascending = false;
-        } else {
+    <%_ if (notSortableFieldsAfterSearch) { _%>
+        if (query && [<%- notSortableFieldsAfterSearch %>].includes(this.predicate)) {
             this.predicate = '<%- primaryKey.name %>';
             this.ascending = true;
         }
+    <%_ } _%>
         this.currentSearch = query;
         this.loadAll();
     }

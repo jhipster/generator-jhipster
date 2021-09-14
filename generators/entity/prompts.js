@@ -41,21 +41,8 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
 
-const {
-  BIG_DECIMAL,
-  BOOLEAN,
-  DOUBLE,
-  DURATION,
-  ENUM,
-  FLOAT,
-  INTEGER,
-  INSTANT,
-  LOCAL_DATE,
-  LONG,
-  STRING,
-  UUID,
-  ZONED_DATE_TIME,
-} = CommonDBTypes;
+const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME } =
+  CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { ANY, IMAGE, TEXT } = BlobTypes;
 
@@ -610,10 +597,12 @@ function askForField() {
         if (!/^[A-Za-z0-9_]*$/.test(input)) {
           return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
-        if (context.enums.includes(input)) {
+        if (context.enums && context.enums.includes(input)) {
           context.existingEnum = true;
-        } else {
+        } else if (context.enums) {
           context.enums.push(input);
+        } else {
+          context.enums = [input];
         }
         return true;
       },

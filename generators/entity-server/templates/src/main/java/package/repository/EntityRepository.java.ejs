@@ -24,46 +24,40 @@ import <%= packageName %>.domain.<%= persistClass %>;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 import org.springframework.data.jpa.repository.*;
-    <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (relationshipsContainEagerLoad) { _%>
 import org.springframework.data.repository.query.Param;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
-<%_ if (searchEngine === 'couchbase') { _%>
-import <%= packageName %>.repository.search.SearchCouchbaseRepository;
-<%_ } _%>
-<%_ if (databaseType === 'couchbase' && relationshipsContainEagerLoad === true) { _%>
-import org.springframework.data.couchbase.core.query.Query;
-<%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_
-if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') {
-    let importList = fieldsContainOwnerManyToMany;
-    for (r of relationships) {
-        if (r.relationshipType === 'many-to-one' && r.otherEntityName === 'user') {
-            importList = true;
-        }
+if (databaseTypeSql || databaseTypeMongodb) {
+  let importList = fieldsContainOwnerManyToMany;
+  for (r of relationships) {
+    if (r.relationshipManyToOne && r.otherEntityUser) {
+      importList = true;
     }
+  }
 _%>
-    <%_ if (importList) { _%>
+  <%_ if (importList) { _%>
 import java.util.List;
-    <%_ } _%>
-    <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ } _%>
+  <%_ if (relationshipsContainEagerLoad) { _%>
 import java.util.Optional;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (primaryKey.type === 'UUID') { _%>
+<%_ if (primaryKey.typeUUID) { _%>
 
 import java.util.UUID;
 <%_ } _%>
@@ -75,46 +69,50 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
-    <%_ for (const relationship of relationships) {
-        if (relationship.relationshipType === 'many-to-one' && relationship.otherEntityName === 'user' && databaseType === 'sql') { _%>
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+  <%_
+  for (const relationship of relationships) {
+    if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
 
-    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationType === 'oauth2') { %>preferredUsername<% } else { %>username<% } %>}")
+    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationTypeOauth2) { %>preferredUsername<% } else { %>username<% } %>}")
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
-    <%_ } } _%>
-    <%_ if (relationshipsContainEagerLoad) {
-        if (databaseType === 'sql') { _%>
+    <%_ } _%>
+  <%_ } _%>
+  <%_
+  if (relationshipsContainEagerLoad) {
+    if (databaseTypeSql) { _%>
 
     @Query(value = "select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
-    for (const relationship of relationships) {
+      for (const relationship of relationships) {
         if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
-    } %>",
+      } %>",
         countQuery = "select count(distinct <%= entityInstanceDbSafe %>) from <%= persistClass %> <%= entityInstanceDbSafe %>")
     Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
-    for (const relationship of relationships) {
+      for (const relationship of relationships) {
         if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
-    } %>")
+      } %>")
     List<<%= persistClass %>> findAllWithEagerRelationships();
 
     @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
-    for (const relationship of relationships) {
+      for (const relationship of relationships) {
         if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
-    } %> where <%= entityInstanceDbSafe %>.id =:id")
+      } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(@Param("id") <%= primaryKey.type %> id);
     <%_
-        } else if (databaseType === 'mongodb' || databaseType === 'couchbase')  { _%>
+    } else if (databaseTypeMongodb)  { _%>
 
-    @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    @Query("{}")
     Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    @Query("{}")
     List<<%= persistClass %>> findAllWithEagerRelationships();
 
-    @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    @Query("{'id': ?0}")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
     <%_
-        }
-    } _%>
+    }
+  }
+  _%>
 }

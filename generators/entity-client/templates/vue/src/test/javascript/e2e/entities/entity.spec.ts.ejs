@@ -128,35 +128,22 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%_ if (field.fieldTypeNumeric) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('5');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('5');
 
     <%_ } else if (field.fieldTypeLocalDate) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('2001-01-01');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2001-01-01');
 
     <%_ } else if (field.fieldTypeTimed) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('01/01/2001' + protractor.Key.TAB + '02:30AM');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2001-01-01T02:30');
 
     <%_ } else if (field.fieldTypeDuration) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('PT12S');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT12S');
 
     <%_ } else if (field.fieldTypeBoolean) { _%>
-      const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
-      if (selected<%= fieldNameCapitalized %>) {
-        await updatePage.<%= fieldName %>Input.click();
-        expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.false;
-      } else {
-        await updatePage.<%= fieldName %>Input.click();
-        expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.true;
-      }
+      await updatePage.<%= fieldName %>Input.click();
 
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
       await waitUntilDisplayed(updatePage.<%= fieldName %>Input);
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldName %>');
-
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/<%= fieldName %>/);
 
     <%_ } else if (field.fieldTypeBinary) { _%>
       await waitUntilDisplayed(updatePage.<%= fieldName %>Input);
@@ -167,15 +154,12 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%_ } else if (field.fieldTypeUUID){ _%>
       await updatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade974');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
 
     <%_ } else if (field.fieldTypeString && fieldValidateSampleString) { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateSampleString %>');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateSampleString %>');
 
     <%_ } else { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldName %>');
-      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/<%= fieldName %>/);
 
     <%_ } _%>
   <%_ }); _%>
@@ -263,52 +247,37 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ if (field.fieldTypeNumeric) { _%>
           await clear(updatePage.<%= fieldName %>Input);
           await updatePage.<%= fieldName %>Input.sendKeys('6');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('6');
 
     <%_ } else if (field.fieldTypeLocalDate) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('2019-01-01');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2019-01-01');
 
     <%_ } else if (field.fieldTypeTimed) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('01/01/2019' + protractor.Key.TAB + '02:30AM');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2019-01-01T02:30');
 
     <%_ } else if (field.fieldTypeDuration) { _%>
           await clear(updatePage.<%= fieldName %>Input);
           await updatePage.<%= fieldName %>Input.sendKeys('PT14S');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('PT14S');
 
     <%_ } else if (field.fieldTypeBoolean) { _%>
-          const selected<%= fieldNameCapitalized %> = await updatePage.<%= fieldName %>Input.isSelected();
-          if (selected<%= fieldNameCapitalized %>) {
-            await updatePage.<%= fieldName %>Input.click();
-            expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.false;
-          } else {
-            await updatePage.<%= fieldName %>Input.click();
-            expect(await updatePage.<%= fieldName %>Input.isSelected()).to.be.true;
-          }
+          await updatePage.<%= fieldName %>Input.click();
 
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeText) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('updated<%= fieldName %>');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/updated<%= fieldName %>/);
 
     <%_ } else if (field.fieldTypeUUID) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade978');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
 
     <%_ } else if (field.fieldTypeString && fieldValidateModifiedString) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateModifiedString %>');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateModifiedString %>');
 
     <%_ } else if (!fieldIsEnum && !field.fieldTypeBinary) { _%>
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('modified');
-          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/modified/);
 
     <%_ } _%>
   <%_ }); _%>

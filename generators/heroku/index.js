@@ -24,19 +24,26 @@ const ChildProcess = require('child_process');
 const util = require('util');
 const chalk = require('chalk');
 const glob = require('glob');
-
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
-
 const constants = require('../generator-constants');
+const cacheProviderOptions = require('../../jdl/jhipster/cache-types');
+const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
+const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { GENERATOR_HEROKU } = require('../generator-list');
+const { MARIADB, MYSQL, POSTGRESQL } = require('../../jdl/jhipster/database-types');
+const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 
+const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
 const execCmd = util.promisify(ChildProcess.exec);
 
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('skip-build', {
       desc: 'Skips building the application',
@@ -58,7 +65,7 @@ module.exports = class extends BaseBlueprintGenerator {
     this.herokuSkipBuild = this.options.skipBuild;
     this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_HEROKU);
   }
 
   _initializing() {
@@ -67,24 +74,19 @@ module.exports = class extends BaseBlueprintGenerator {
         this.checkInvocationFromCLI();
       },
 
+      loadCommonConfig() {
+        this.loadAppConfig();
+        this.loadServerConfig();
+        this.loadPlatformConfig();
+      },
+
       initializing() {
         this.log(chalk.bold('Heroku configuration is starting'));
         const configuration = this.config;
         this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = configuration.get('baseName');
-        this.packageName = configuration.get('packageName');
-        this.packageFolder = configuration.get('packageFolder');
-        this.cacheProvider = configuration.get('cacheProvider') || 'no';
-        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = configuration.get('databaseType');
-        this.prodDatabaseType = configuration.get('prodDatabaseType');
-        this.searchEngine = configuration.get('searchEngine');
+        this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
+        this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
         this.frontendAppName = this.getFrontendAppName();
-        this.buildTool = configuration.get('buildTool');
-        this.applicationType = configuration.get('applicationType');
-        this.reactive = configuration.get('reactive') || false;
-        this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
-        this.authenticationType = configuration.get('authenticationType');
         this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
         this.herokuDeployType = configuration.get('herokuDeployType');
@@ -221,7 +223,7 @@ module.exports = class extends BaseBlueprintGenerator {
       },
       askForOkta() {
         if (this.abort) return null;
-        if (this.authenticationType !== 'oauth2') return null;
+        if (this.authenticationType !== OAUTH2) return null;
         if (this.useOkta) return null;
         const prompts = [
           {
@@ -309,10 +311,30 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._configuring();
   }
 
+  // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadAppConfig();
+        this.loadDerivedAppConfig();
+        this.loadClientConfig();
+        this.loadDerivedClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+        this.loadPlatformConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
+
   _default() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'heroku');
+        statistics.sendSubGenEvent('generator', GENERATOR_HEROKU);
       },
 
       gitInit() {
@@ -476,7 +498,7 @@ module.exports = class extends BaseBlueprintGenerator {
         };
 
         this.log(chalk.bold('\nProvisioning addons'));
-        if (this.searchEngine === 'elasticsearch') {
+        if (this.searchEngine === ELASTICSEARCH) {
           ChildProcess.exec(
             `heroku addons:create bonsai:sandbox --as BONSAI --app ${this.herokuAppName}`,
             addonCreateCallback.bind(this, 'Elasticsearch')
@@ -490,11 +512,11 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         let dbAddOn;
-        if (this.prodDatabaseType === 'postgresql') {
+        if (this.prodDatabaseType === POSTGRESQL) {
           dbAddOn = 'heroku-postgresql --as DATABASE';
-        } else if (this.prodDatabaseType === 'mysql') {
+        } else if (this.prodDatabaseType === MYSQL) {
           dbAddOn = 'jawsdb:kitefin --as DATABASE';
-        } else if (this.prodDatabaseType === 'mariadb') {
+        } else if (this.prodDatabaseType === MARIADB) {
           dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
         }
 
@@ -508,9 +530,9 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         let cacheAddOn;
-        if (this.cacheProvider === 'memcached') {
+        if (this.cacheProvider === MEMCACHED) {
           cacheAddOn = 'memcachier:dev --as MEMCACHIER';
-        } else if (this.cacheProvider === 'redis') {
+        } else if (this.cacheProvider === REDIS) {
           cacheAddOn = 'heroku-redis:hobby-dev --as REDIS';
         }
 
@@ -529,12 +551,13 @@ module.exports = class extends BaseBlueprintGenerator {
       configureJHipsterRegistry() {
         if (this.abort || this.herokuAppExists) return undefined;
 
-        if (this.serviceDiscoveryType === 'eureka') {
+        if (this.serviceDiscoveryType === EUREKA) {
           const prompts = [
             {
               type: 'input',
               name: 'herokuJHipsterRegistryApp',
               message: 'What is the name of your JHipster Registry Heroku application?',
+              default: 'jhipster-registry',
             },
             {
               type: 'input',
@@ -546,6 +569,7 @@ module.exports = class extends BaseBlueprintGenerator {
               type: 'input',
               name: 'herokuJHipsterRegistryPassword',
               message: 'What is your JHipster Registry password?',
+              default: 'password',
             },
           ];
 
@@ -570,7 +594,16 @@ module.exports = class extends BaseBlueprintGenerator {
         }
         return undefined;
       },
+    };
+  }
 
+  get default() {
+    if (useBlueprints) return;
+    return this._default();
+  }
+
+  _writing() {
+    return {
       copyHerokuFiles() {
         if (this.abort) return;
 
@@ -580,7 +613,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
         this.template('Procfile.ejs', 'Procfile');
         this.template('system.properties.ejs', 'system.properties');
-        if (this.buildTool === 'gradle') {
+        if (this.buildTool === GRADLE) {
           this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
         }
         if (this.useOkta) {
@@ -595,14 +628,14 @@ module.exports = class extends BaseBlueprintGenerator {
 
       addHerokuBuildPlugin() {
         if (this.abort) return;
-        if (this.buildTool !== 'gradle') return;
+        if (this.buildTool !== GRADLE) return;
         this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '1.0.4');
         this.applyFromGradleScript('gradle/heroku');
       },
 
       addHerokuMavenProfile() {
         if (this.abort) return;
-        if (this.buildTool === 'maven') {
+        if (this.buildTool === MAVEN) {
           this.render('pom-profile.xml.ejs', profile => {
             this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
           });
@@ -611,9 +644,9 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get writing() {
     if (useBlueprints) return;
-    return this._default();
+    return this._writing();
   }
 
   _end() {
@@ -697,7 +730,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             let buildpack = 'heroku/java';
             let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
-            if (this.buildTool === 'gradle') {
+            if (this.buildTool === GRADLE) {
               buildpack = 'heroku/gradle';
               configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
             }
@@ -766,7 +799,7 @@ module.exports = class extends BaseBlueprintGenerator {
         } else {
           this.log(chalk.bold('\nDeploying application'));
           let jarFileWildcard = 'target/*.jar';
-          if (this.buildTool === 'gradle') {
+          if (this.buildTool === GRADLE) {
             jarFileWildcard = 'build/libs/*.jar';
           }
 

@@ -1,0 +1,98 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_
+  // Register sections and max allowed fragments, 0 for unlimited.
+  fragments.registerSections({
+    parentSection: 1,
+    repositoriesSection: 0,
+    pluginRepositoriesSection: 0,
+    propertiesSection: 0,
+    dependenciesSection: 0,
+    buildPluginsSection: 0,
+    buildPluginManagementPluginsSection: 0,
+    profilesSection: 0,
+  });
+-&>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId><%= packageName %></groupId>
+    <artifactId><%= dasherizedBaseName %></artifactId>
+    <version><%= JAVA_APP_VERSION %></version>
+    <name><%= humanizedBaseName %></name>
+    <description><%= projectName %> generated with generator-jhipster@<%= jhipsterVersion %></description>
+    <packaging>jar</packaging>
+
+<&- fragments.parentSection('\n\n') -&>
+<&_ if (fragments.repositoriesSection()) { -&>
+    <repositories>
+<&- fragments.repositoriesSection() -&>
+    </repositories>
+
+<&_ } -&>
+<&_ if (fragments.pluginRepositoriesSection()) { -&>
+    <pluginRepositories>
+<&- fragments.pluginRepositoriesSection() -&>
+    </pluginRepositories>
+
+<&_ } -&>
+    <properties>
+        <java.version><%= JAVA_VERSION %></java.version>
+
+        <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+<&- fragments.propertiesSection() -&>
+    </properties>
+
+    <dependencies>
+<&- fragments.dependenciesSection() -&>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+            </plugin>
+<&- fragments.buildPluginsSection() -&>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+<&- fragments.buildPluginManagementPluginsSection() -&>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <dependencies>
+<&- fragments.profilesSection() -&>
+    </dependencies>
+</project>

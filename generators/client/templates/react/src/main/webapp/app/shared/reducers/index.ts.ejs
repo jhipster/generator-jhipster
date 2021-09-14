@@ -16,58 +16,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { combineReducers } from 'redux';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation) { _%>
-import locale, { LocaleState } from './locale';
+import locale from './locale';
 <%_ } _%>
-import authentication, { AuthenticationState } from './authentication';
-import applicationProfile, { ApplicationProfileState } from './application-profile';
+import authentication from './authentication';
+import applicationProfile from './application-profile';
 
-import administration, { AdministrationState } from 'app/modules/administration/administration.reducer';
+import administration from 'app/modules/administration/administration.reducer';
 <%_ if (!skipUserManagement) { _%>
-import userManagement, { UserManagementState } from 'app/modules/administration/user-management/user-management.reducer';
+import userManagement from 'app/modules/administration/user-management/user-management.reducer';
 <%_ } else if (authenticationTypeOauth2) { _%>
-import userManagement, { UserManagementState } from './user-management';
+import userManagement from './user-management';
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
-import register, { RegisterState } from 'app/modules/account/register/register.reducer';
-import activate, { ActivateState } from 'app/modules/account/activate/activate.reducer';
-import password, { PasswordState } from 'app/modules/account/password/password.reducer';
-import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
-import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
+import register from 'app/modules/account/register/register.reducer';
+import activate from 'app/modules/account/activate/activate.reducer';
+import password from 'app/modules/account/password/password.reducer';
+import settings from 'app/modules/account/settings/settings.reducer';
+import passwordReset from 'app/modules/account/password-reset/password-reset.reducer';
   <%_ if (authenticationTypeSession) { _%>
-import sessions, { SessionsState } from 'app/modules/account/sessions/sessions.reducer';
+import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
 <%_ } _%>
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
-export interface IRootState {
-  readonly authentication: AuthenticationState;
-<%_ if (enableTranslation) { _%>
-  readonly locale: LocaleState;
-<%_ } _%>
-  readonly applicationProfile: ApplicationProfileState;
-  readonly administration: AdministrationState;
-<%_ if (!skipUserManagement || authenticationTypeOauth2) { _%>
-  readonly userManagement: UserManagementState;
-<%_ } _%>
-<%_ if (!skipUserManagement) { _%>
-  readonly register: RegisterState;
-  readonly activate: ActivateState;
-  readonly passwordReset: PasswordResetState;
-  readonly password: PasswordState;
-  readonly settings: SettingsState;
-  <%_ if (authenticationTypeSession) { _%>
-  readonly sessions: SessionsState;
-  <%_ } _%>
-<%_ } _%>
-  /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
-  readonly loadingBar: any;
-}
-
-const rootReducer = combineReducers<IRootState>({
+const rootReducer = {
   authentication,
 <%_ if (enableTranslation) { _%>
   locale,
@@ -89,6 +64,6 @@ const rootReducer = combineReducers<IRootState>({
 <%_ } _%>
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
-});
+};
 
 export default rootReducer;
