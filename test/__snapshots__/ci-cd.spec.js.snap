@@ -1129,7 +1129,7 @@ jobs:
                   node-version: 14.17.6
             - uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11.x'
             - name: Install node.js packages
               run: npm install
@@ -1216,7 +1216,7 @@ jobs:
                   node-version: 14.17.6
             - uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11.x'
             - name: Install node.js packages
               run: npm install
@@ -1380,7 +1380,7 @@ jobs:
                   node-version: 14.17.6
             - uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11.x'
             - name: Install node.js packages
               run: npm install
@@ -1461,7 +1461,7 @@ jobs:
                   node-version: 14.17.6
             - uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11.x'
             - name: Install node.js packages
               run: npm install
@@ -1647,7 +1647,7 @@ jobs:
                   node-version: 14.17.6
             - uses: actions/setup-java@v2
               with:
-                  distribution: 'adopt'
+                  distribution: 'temurin'
                   java-version: '11.x'
             - name: Install node.js packages
               run: npm install
