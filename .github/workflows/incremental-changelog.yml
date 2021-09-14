@@ -90,7 +90,7 @@ jobs:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.6
