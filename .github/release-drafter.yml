@@ -3,6 +3,8 @@ template: |
 
   $CHANGES
 
+exclude-contributors:
+  - 'dependabot'
 categories:
   - title: 💎 Features & Enhancements
     labels:
