@@ -244,6 +244,7 @@ module.exports = class extends BaseBlueprintGenerator {
             default: 1,
           },
           {
+            when: answers => answers.useOkta,
             type: 'input',
             name: 'oktaAdminLogin',
             message: 'Login (valid email) for the JHipster Admin user:',
@@ -255,6 +256,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
           },
           {
+            when: answers => answers.useOkta,
             type: 'confirm',
             name: 'oktaAdminPassword',
             message: `${chalk.blue('Take note of this password!')} You will need it on your first login: ${chalk.blue(
