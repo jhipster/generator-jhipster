@@ -76,7 +76,7 @@ module.exports = async (config, options, targetOptions) => {
   if (config.devServer) {
     config.devServer.proxy = proxyConfig({ tls });
   }
-<%_ if (!this.applicationTypeMicroservice) { _%>
+
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
       new BrowserSyncPlugin(
@@ -85,7 +85,7 @@ module.exports = async (config, options, targetOptions) => {
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= serverPort %>'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
             <%_ if (websocket === 'spring-websocket') { _%>
             ws: true,
             <%_ } _%>
@@ -113,7 +113,6 @@ module.exports = async (config, options, targetOptions) => {
       )
     );
   }
-<%_ } _%>
 
   if (config.mode === 'production') {
     config.plugins.push(

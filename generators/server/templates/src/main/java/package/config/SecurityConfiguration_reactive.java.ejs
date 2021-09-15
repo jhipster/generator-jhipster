@@ -277,6 +277,14 @@ public class SecurityConfiguration {
             .pathMatchers("/api/auth-info").permitAll()
             .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
+<%_ if (applicationTypeGateway) { _%>
+  <%_ if (microfrontend && authenticationTypeJwt) { _%>
+            // microfrontend resources are loaded by webpack without a bearer-token, they need to be public
+            .pathMatchers("/services/*/*.js").permitAll()
+            .pathMatchers("/services/*/*.js.map").permitAll()
+  <%_ } _%>
+            .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+<%_ } _%>
 <%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
             .pathMatchers("/services/**").authenticated()
 <%_ } _%>

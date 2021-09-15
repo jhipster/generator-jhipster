@@ -46,7 +46,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types');
 const { getBase64Secret, getRandomHex } = require('../utils');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const websocketTypes = require('../../jdl/jhipster/websocket-types');
@@ -482,7 +482,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           }
         });
         scriptsStorage.set({
-          'docker:app:up': `docker-compose -f ${this.DOCKER_DIR}app.yml up -d ${this.dasherizedBaseName}-app`,
+          'docker:app:up': `docker-compose -f ${this.DOCKER_DIR}app.yml up -d`,
           'docker:others:await': dockerAwaitScripts.join(' && '),
           'predocker:others:up': dockerBuild.join(' && '),
           'docker:others:up': dockerOthersUp.join(' && '),
@@ -503,6 +503,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         let e2ePackage = 'target/e2e';
         if (buildTool === MAVEN) {
           scriptsStorage.set({
+            'app:start': './mvnw',
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
@@ -519,6 +520,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
           e2ePackage = 'e2e';
           scriptsStorage.set({
+            'app:start': './gradlew',
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
@@ -602,7 +604,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     }
 
     // Generate JWT secret key if key does not already exist in config
-    if ((config.authenticationType === JWT || config.applicationType === MICROSERVICE) && config.jwtSecretKey === undefined) {
+    if (
+      (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
+      config.jwtSecretKey === undefined
+    ) {
       config.jwtSecretKey = getBase64Secret.call(this, null, 64);
     }
     // Generate remember me key if key does not already exist in config

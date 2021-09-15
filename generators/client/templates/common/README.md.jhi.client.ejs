@@ -149,6 +149,40 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
+<%_ if (microfrontend) { -%>
+### Developing Microfrontend
+
+Microservices doesn't contain every required backend feature to allow microfrontends to run alone.
+You must start a pre-built gateway version or from source.
+
+Start gateway from source:
+
+```
+cd gateway
+npm run docker:db:up # start database if necessary
+npm run docker:others:up # start service discovery and authentication service if necessary
+npm run app:start # alias for ./(mvnw|gradlew)
+```
+
+Microfrontend's `build-watch` script is configured to watch and compile microfrontend's sources and synchronizes with gateway's frontend.
+Start it using:
+
+```
+cd microfrontend
+npm run docker:db:up # start database if necessary
+npm run build-watch
+```
+
+It's possible to run microfrontend's frontend standalone using:
+
+```
+cd microfrontend
+npm run docker:db:up # start database if necessary
+npm watch # alias for `npm start` and `npm run backend:start` in parallel
+```
+
+<%_ } -%>
+
 <&_ } -&>
 <&_ if (fragment.testingSection) { -&>
 ### Client tests

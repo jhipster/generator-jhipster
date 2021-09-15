@@ -35,7 +35,7 @@ import { <%= entityAngularName %>RoutingModule } from './route/<%= entityFileNam
 
 <%_ if (applicationTypeMicroservice && enableTranslation) { _%>
 function translatePartialLoader(http: HttpClient, applicationConfigService: ApplicationConfigService): TranslateLoader {
-  const prefix = applicationConfigService.getEndpointFor('i18n/', '<%= microserviceName %>');
+  const prefix = applicationConfigService.isMicrofrontend() ? 'i18n/' : applicationConfigService.getEndpointFor('i18n/', '<%= microserviceName %>');
   return new TranslateHttpLoader(http, prefix, `.json?_=${I18N_HASH}`);
 }
 
