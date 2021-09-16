@@ -29,7 +29,7 @@
   "devDependencies": {
     "@testing-library/react": "12.1.0",
     "@types/jest": "27.0.1",
-    "@types/lodash": "4.14.172",
+    "@types/lodash": "4.14.173",
     "@types/node": "16.9.1",
     "@types/react": "17.0.21",
     "@types/react-dom": "17.0.9",
