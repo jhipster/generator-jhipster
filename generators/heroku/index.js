@@ -244,6 +244,7 @@ module.exports = class extends BaseBlueprintGenerator {
             default: 1,
           },
           {
+            when: answers => answers.useOkta,
             type: 'input',
             name: 'oktaAdminLogin',
             message: 'Login (valid email) for the JHipster Admin user:',
@@ -255,6 +256,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
           },
           {
+            when: answers => answers.useOkta,
             type: 'confirm',
             name: 'oktaAdminPassword',
             message: `${chalk.blue('Take note of this password!')} You will need it on your first login: ${chalk.blue(
@@ -391,7 +393,7 @@ module.exports = class extends BaseBlueprintGenerator {
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
         this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-        const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
+        const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, { timeout: 6000 }, (err, stdout, stderr) => {
           if (err) {
             if (stderr.includes('is already taken')) {
               const prompts = [
@@ -458,7 +460,11 @@ module.exports = class extends BaseBlueprintGenerator {
               });
             } else {
               this.abort = true;
-              this.log.error(err);
+              if (stderr.includes('Invalid credentials')) {
+                this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+              } else {
+                this.log.error(err);
+              }
               done();
             }
           } else {
