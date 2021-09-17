@@ -71,7 +71,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: auto
+    default: problem_spring-0.27.0
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
