@@ -80,7 +80,7 @@
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --"
   },
   "dependencies": {
-    "aws-sdk": "2.987.0",
+    "aws-sdk": "2.991.0",
     "axios": "0.21.4",
     "chalk": "4.1.2",
     "chevrotain": "9.0.2",
