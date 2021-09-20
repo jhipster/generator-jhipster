@@ -37,6 +37,9 @@ runs:
   steps:
     - name: 'MERGE: Install base generator-jhipster'
       run: |
+        if [[ "$JHI_CLI_PACKAGE" == "" ]]; then
+          JHI_CLI_PACKAGE=generator-jhipster
+        fi
         mkdir -p "${{ github.workspace }}/base/$JHI_CLI_PACKAGE"
         cd "${{ github.workspace }}/base/$JHI_CLI_PACKAGE"
         git clone "${{ github.workspace }}/$JHI_CLI_PACKAGE" .
