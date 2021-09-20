@@ -120,9 +120,6 @@ jobs:
       - name: 'mvn: project'
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
         continue-on-error: true
-      - name: 'mvn: replace version in generated project'
-        run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
-        continue-on-error: true
       - name: 'mvn: install workspaces deps'
         run: npm install --force
         continue-on-error: true
@@ -136,9 +133,6 @@ jobs:
         continue-on-error: true
       - name: 'gradle: project'
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
-        continue-on-error: true
-      - name: 'gradle: replace version in generated project'
-        run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
         continue-on-error: true
       - name: 'gradle: install workspaces deps'
         run: npm install --force
