@@ -120,6 +120,24 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
       },
 
+      loadEnvironmentVariables() {
+        if (process.env.JHI_BOM_VERSION) {
+          this.jhiBomVersion = process.env.JHI_BOM_VERSION;
+          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
+        }
+
+        this.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+        if (this.defaultPackaging === 'war') {
+          this.info(`Using ${this.defaultPackaging} as default packaging`);
+        }
+
+        const JHI_PROFILE = process.env.JHI_PROFILE;
+        this.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
+        if (JHI_PROFILE) {
+          this.info(`Using ${this.defaultEnvironment} as default profile`);
+        }
+      },
+
       setupServerconsts() {
         // Make constants available in templates
         this.MAIN_DIR = constants.MAIN_DIR;
@@ -165,7 +183,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
         this.JIB_VERSION = constants.JIB_VERSION;
-        this.JHIPSTER_DEPENDENCIES_VERSION = constants.JHIPSTER_DEPENDENCIES_VERSION;
+        this.JHIPSTER_DEPENDENCIES_VERSION = this.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
         this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
         this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
@@ -403,10 +421,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = this.serverPort;
-        packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
-        if (process.env.JHI_PROFILE) {
-          packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
-        }
+        packageJsonConfigStorage.packaging = this.defaultPackaging;
+        packageJsonConfigStorage.default_environment = this.defaultEnvironment;
       },
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');

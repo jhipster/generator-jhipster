@@ -133,6 +133,10 @@ runs:
         echo "SPRING_JPA_SHOW_SQL=false" >> $GITHUB_ENV
         echo "NG_CLI_ANALYTICS=ci" >> $GITHUB_ENV
 
+        if [[ "${{inputs.jhipster-bom-branch}}" != "release" && "${{inputs.jhipster-bom-branch}}" != "ignore" ]]; then
+          echo "JHI_BOM_VERSION=0.0.0-CICD" >> $GITHUB_ENV
+        fi
+
         # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
         echo "MAVEN_OPTS=-Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120" >> $GITHUB_ENV
 
