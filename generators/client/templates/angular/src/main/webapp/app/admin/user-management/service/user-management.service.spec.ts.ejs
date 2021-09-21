@@ -30,65 +30,63 @@ import { User } from '../user-management.model';
 
 import { UserManagementService } from './user-management.service';
 
-describe('Service Tests', () => {
-  describe('User Service', () => {
-    let service: UserManagementService;
-    let httpMock: HttpTestingController;
+describe('User Service', () => {
+  let service: UserManagementService;
+  let httpMock: HttpTestingController;
 
-    beforeEach(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-      });
-
-      service = TestBed.inject(UserManagementService);
-      httpMock = TestBed.inject(HttpTestingController);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
     });
 
-    afterEach(() => {
-      httpMock.verify();
-    });
+    service = TestBed.inject(UserManagementService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
 
-    describe('Service methods', () => {
-      it('should return User', () => {
-        let expectedResult: string | undefined;
+  afterEach(() => {
+    httpMock.verify();
+  });
 
-        service.find('user').subscribe(received => {
-          expectedResult = received.login;
-        });
+  describe('Service methods', () => {
+    it('should return User', () => {
+      let expectedResult: string | undefined;
 
-        const req = httpMock.expectOne({ method: 'GET' });
-        req.flush(new User(<%- tsKeyId %>, 'user'));
-        expect(expectedResult).toEqual('user');
+      service.find('user').subscribe(received => {
+        expectedResult = received.login;
       });
+
+      const req = httpMock.expectOne({ method: 'GET' });
+      req.flush(new User(<%- tsKeyId %>, 'user'));
+      expect(expectedResult).toEqual('user');
+    });
 
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
-      it('should return Authorities', () => {
-        let expectedResult: string[] = [];
+    it('should return Authorities', () => {
+      let expectedResult: string[] = [];
 
-        service.authorities().subscribe(authorities => {
-          expectedResult = authorities;
-        });
-        const req = httpMock.expectOne({ method: 'GET' });
-
-        req.flush([Authority.USER, Authority.ADMIN]);
-        expect(expectedResult).toEqual([Authority.USER, Authority.ADMIN]);
+      service.authorities().subscribe(authorities => {
+        expectedResult = authorities;
       });
+      const req = httpMock.expectOne({ method: 'GET' });
+
+      req.flush([Authority.USER, Authority.ADMIN]);
+      expect(expectedResult).toEqual([Authority.USER, Authority.ADMIN]);
+    });
 <%_ } _%>
 
-      it('should propagate not found response', () => {
-        let expectedResult = 0;
+    it('should propagate not found response', () => {
+      let expectedResult = 0;
 
-        service.find('user').subscribe({
-          error: (error: HttpErrorResponse) => expectedResult = error.status
-        });
-
-        const req = httpMock.expectOne({ method: 'GET' });
-        req.flush('Invalid request parameters', {
-          status: 404,
-          statusText: 'Bad Request',
-        });
-        expect(expectedResult).toEqual(404);
+      service.find('user').subscribe({
+        error: (error: HttpErrorResponse) => expectedResult = error.status
       });
+
+      const req = httpMock.expectOne({ method: 'GET' });
+      req.flush('Invalid request parameters', {
+        status: 404,
+        statusText: 'Bad Request',
+      });
+      expect(expectedResult).toEqual(404);
     });
   });
 });
