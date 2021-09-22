@@ -255,21 +255,14 @@ module.exports = class extends BaseBlueprintGenerator {
               return true;
             },
           },
-          {
-            when: answers => answers.useOkta,
-            type: 'confirm',
-            name: 'oktaAdminPassword',
-            message: `${chalk.blue('Take note of this password!')} You will need it on your first login: ${chalk.blue(
-              this.randomPassword
-            )}`,
-            default: true,
-          },
         ];
 
         return this.prompt(prompts).then(props => {
           this.useOkta = props.useOkta;
-          this.oktaAdminLogin = props.oktaAdminLogin;
-          this.oktaAdminPassword = this.randomPassword;
+          if (this.useOkta) {
+            this.oktaAdminLogin = props.oktaAdminLogin;
+            this.oktaAdminPassword = this.randomPassword;
+          }
         });
       },
     };
@@ -875,6 +868,13 @@ module.exports = class extends BaseBlueprintGenerator {
           }
         }
       },
+      printOktaAdminPassword() {
+        if (this.abort) return;
+
+        if (this.oktaAdminPassword) {
+          this.log(chalk.blue(`\nTake note of this password! You will need it on your first login: ${this.oktaAdminPassword}`))
+        }
+      }
     };
   }
 
