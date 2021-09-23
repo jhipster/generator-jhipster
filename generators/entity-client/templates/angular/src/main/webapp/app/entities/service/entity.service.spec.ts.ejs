@@ -213,7 +213,7 @@ _%>
             req.flush(returnedFromService);
             expect(expectedResult).toMatchObject(expected);
         });
-    <%_ } _%>
+<%_ } _%>
 
         it('should return a list of <%= entityAngularName %>', () => {
             const returnedFromService = Object.assign({
@@ -252,7 +252,7 @@ _%>
             expect(expectedResult).toContainEqual(expected);
         });
 
-    <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
         it('should delete a <%= entityAngularName %>', () => {
             service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
@@ -260,7 +260,7 @@ _%>
             req.flush({ status: 200 });
             expect(expectedResult);
         });
-    <%_ } _%>
+<%_ } _%>
 
         describe('add<%= entityAngularName %>ToCollectionIfMissing', () => {
             it('should add a <%= entityAngularName %> to an empty array', () => {
