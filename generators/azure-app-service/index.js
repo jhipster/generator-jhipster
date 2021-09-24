@@ -92,6 +92,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.azureAppInsightsInstrumentationKey = '';
         this.azureGroupId = '';
       },
+      loadConstants() {
+        this.JAVA_VERSION = constants.JAVA_VERSION;
+      },
     };
   }
 

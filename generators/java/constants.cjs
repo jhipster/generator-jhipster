@@ -20,7 +20,7 @@ const { MAVEN: BUILD_TOOL_MAVEN, MAVEN_DESCRIPTION, BUILD_DESTINATION_VALUE } = 
 const { GRADLE: BUILD_TOOL_GRADLE, GRADLE_DESCRIPTION } = require('../gradle/constants.cjs');
 
 const JAVA_VERSION = '11';
-const JAVA_COMPATIBLE_VERSIONS = ['1.8', '1.9', '10', '11', '12', '13', '14', '15', '16'];
+const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17'];
 const JAVA_APP_VERSION = '0.0.1-SNAPSHOT';
 const JAVA_SOURCE_DIR = 'src/main/java/';
 const JAVA_RESOURCE_DIR = 'src/main/resources/';

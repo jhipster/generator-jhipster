@@ -1379,8 +1379,8 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK 8 to 17.</message>
-                                <version>[1.8,18)</version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK <%= JAVA_COMPATIBLE_VERSIONS[0] %> to <%= JAVA_COMPATIBLE_VERSIONS[JAVA_COMPATIBLE_VERSIONS.length -1] %>.</message>
+                                <version><%= JAVA_COMPATIBLE_VERSIONS.map(version => parseInt(version)).map(version => `[${version},${version +1})`).join(',') %></version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>
