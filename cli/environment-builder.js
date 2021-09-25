@@ -43,6 +43,7 @@ module.exports = class EnvironmentBuilder {
       jhipsterSharedData: new SharedData(),
     };
     const env = Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
+    env.setMaxListeners(0);
     return new EnvironmentBuilder(env);
   }
 
