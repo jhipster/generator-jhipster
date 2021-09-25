@@ -80,7 +80,7 @@ describe('Account Service test suite', () => {
 
   it('should init service and check for authority after retrieving account but getAccount failed', async () => {
 <%_ if (communicationSpringWebsocket) { _%>
-    const trackerService = new TrackerService(null);
+    const trackerService = new TrackerService(null<%_ if (authenticationTypeSession) { _%>,null<%_ } %>);
     trackerService.connect = jest.fn();
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
@@ -96,7 +96,7 @@ describe('Account Service test suite', () => {
 
   it('should init service and check for authority after retrieving account', async () => {
 <%_ if (communicationSpringWebsocket) { _%>
-    const trackerService = new TrackerService(null);
+    const trackerService = new TrackerService(null<%_ if (authenticationTypeSession) { _%>,null<%_ } %>);
     trackerService.connect = jest.fn();
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>

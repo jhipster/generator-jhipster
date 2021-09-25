@@ -59,7 +59,7 @@ const i18n = config.initI18N(Vue);
 const store = config.initVueXStore(Vue);
 
 <%_ if (communicationSpringWebsocket) { _%>
-const trackerService = new TrackerService(router);
+const trackerService = new TrackerService(router<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
