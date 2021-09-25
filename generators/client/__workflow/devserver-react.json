@@ -3,7 +3,7 @@
     {
       "app-sample": "react-default",
       "cache": "react",
-      "entity": "sqlfull",
+      "entity": "sqllight",
       "environment": "prod",
       "war": 0,
       "e2e": 1,
