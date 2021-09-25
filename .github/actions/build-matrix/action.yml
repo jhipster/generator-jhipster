@@ -55,6 +55,9 @@ outputs:
   workspaces:
     description: 'Workspaces files has changed'
     value: ${{ steps.build.outputs.workspaces }}
+  e2e:
+    description: 'E2E files has changed'
+    value: ${{ steps.build.outputs.e2e }}
   any:
     description: 'Any files has changed'
     value: ${{ steps.build.outputs.any }}
@@ -71,12 +74,14 @@ runs:
         SERVER=false
         COMMON=false
         WORKSPACES=false
+        E2E=false
         ANY=false
         if [[ "true" == "${{inputs.skip-workflow}}" ]]; then
           echo "::set-output name=client::${CLIENT}"
           echo "::set-output name=server::${SERVER}"
           echo "::set-output name=common::${COMMON}"
           echo "::set-output name=workspaces::${WORKSPACES}"
+          echo "::set-output name=e2e::${E2E}"
           echo "::set-output name=any::${ANY}"
           echo "::set-output name=matrix::{}"
           exit 0
@@ -118,7 +123,7 @@ runs:
         echo "::group::Check Client"
         git -c color.ui=always diff --exit-code @~1 -- \
           'generators/*client/**' \
-          || CLIENT=true ANY=true
+          || CLIENT=true E2E=true ANY=true
         echo "::endgroup::"
 
         echo "::group::Check Server"
@@ -126,7 +131,7 @@ runs:
           'generators/*server/**' \
           'generators/database-changelog' \
           'generators/database-changelog-liquibase' \
-          || SERVER=true ANY=true
+          || SERVER=true E2E=true ANY=true
         echo "::endgroup::"
 
         echo "::group::Check Common"
@@ -137,7 +142,6 @@ runs:
           'generators/app' \
           'generators/bootstrap' \
           'generators/common' \
-          'generators/cypress' \
           'generators/entities' \
           'generators/entity' \
           'generators/entity-i18n' \
@@ -145,15 +149,23 @@ runs:
           'lib' \
           'test-integration' \
           'utils' \
-          || CLIENT=true SERVER=true COMMON=true ANY=true
+          || CLIENT=true SERVER=true COMMON=true E2E=true ANY=true
+        echo "::endgroup::"
+
+        echo "::group::Check E2E"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/cypress' \
+          || E2E=true ANY=true
         echo "::endgroup::"
 
         echo "::group::Check Workspaces"
         git -c color.ui=always diff --exit-code @~1 -- \
           'generators/workspaces' \
           'generators/docker-compose' \
-          || WORKSPACES=true ANY=true
+          || WORKSPACES=true E2E=true ANY=true
         echo "::endgroup::"
+
+        echo '{}' > matrix.json
 
         if [[ "true" == "$ANGULAR" || "true" == "$CLIENT_COMMON" ]]; then
           echo "::group::Workflows Angular"
@@ -180,6 +192,7 @@ runs:
         echo "::set-output name=server::${SERVER}"
         echo "::set-output name=common::${COMMON}"
         echo "::set-output name=workspaces::${WORKSPACES}"
+        echo "::set-output name=e2e::${E2E}"
         echo "::set-output name=any::${ANY}"
 
         MATRIX=$(cat matrix.json)
