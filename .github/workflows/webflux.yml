@@ -40,9 +40,22 @@ on:
       - 'generators/*client/templates/react/**'
       - 'generators/*client/templates/vue/**'
 jobs:
+  build-matrix:
+    runs-on: ubuntu-20.04
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - name: 'SETUP: Checkout generator-jhipster'
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 2
+      - name: 'Build matrix'
+        id: build
+        uses: ./.github/actions/build-matrix
   applications:
     name: ${{ matrix.app-sample }}
     runs-on: ${{ matrix.os }}
+    needs: build-matrix
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
@@ -56,7 +69,8 @@ jobs:
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
-      !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')
+      !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci') &&
+      needs.build-matrix.outputs.any == 'true'
     timeout-minutes: 40
     strategy:
       fail-fast: false
@@ -218,10 +232,10 @@ jobs:
         run: npm run ci:e2e:prepare
       - name: 'TESTS: backend'
         id: backend
-        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server == 'true'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend'
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.equals != 'true' && needs.build-matrix.outputs.client == 'true'
         run: npm run ci:frontend:test
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'

@@ -25,7 +25,7 @@ inputs:
     required: false
     default: workflow
   skip-workflow:
-    description: 'Application path'
+    description: 'Skip the workflow'
     required: false
     default: >-
       ${{
@@ -83,6 +83,17 @@ runs:
           echo "::set-output name=workspaces::${WORKSPACES}"
           echo "::set-output name=e2e::${E2E}"
           echo "::set-output name=any::${ANY}"
+          echo "::set-output name=matrix::{}"
+          exit 0
+        fi
+
+        if [[ "true" == "${{github.event.pull_request && 'true'}}" ]]; then
+          echo "::set-output name=client::true"
+          echo "::set-output name=server::true"
+          echo "::set-output name=common::true"
+          echo "::set-output name=workspaces::true"
+          echo "::set-output name=e2e::true"
+          echo "::set-output name=any::true"
           echo "::set-output name=matrix::{}"
           exit 0
         fi
