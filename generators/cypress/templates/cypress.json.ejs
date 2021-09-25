@@ -28,5 +28,9 @@
   "chromeWebSecurity": <% if(authenticationTypeOauth2) { %>false<% } else { %>true<% } %>,
   "viewportWidth": 1200,
   "viewportHeight": 720,
-  "retries": 2
+  "retries": 2<%_ if (authenticationTypeJwt) { _%>,
+  "env": {
+    "jwtStorageName": "<%= jhiPrefixDashed %>-authenticationToken"
+  }
+<%_ } _%>
 }

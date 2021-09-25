@@ -40,6 +40,10 @@ describe('<%= entityClass %> e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('XSRF-TOKEN', 'JSESSIONID');
+  })
+
   afterEach(() => {
     cy.oauthLogout();
     cy.clearCache();
@@ -98,6 +102,27 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
     describe('with existing rows', () => {
+<% if (!skipCreateTest && !readOnly) { %>
+      let row: any;
+      beforeEach(() => {
+        cy.apiRequest({
+          method: 'POST',
+          url: '/<%= baseApi + entityApiUrl %>',
+          body: <%- JSON.stringify(generateTestEntity(fields.filter(f => !f.autoGenerate && !f.nullable).map(field => field.reference))) %>,
+        }).then(({ body }) => {
+          row = body;
+        });
+      });
+
+      afterEach(() => {
+        if (!row) return;
+        cy.apiRequest({
+          method: 'DELETE',
+          url: `/<%= baseApi + entityApiUrl %>/${row.<%= primaryKey.name %>}`,
+        });
+      });
+
+<%_ } _%>
       beforeEach(function() {
         cy.visit(<%= entityInstance %>PageUrl);
         cy.wait('@entitiesRequest').then(({ response }) => {
@@ -146,6 +171,9 @@ describe('<%= entityClass %> e2e test', () => {
           expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
+  <% if (!skipCreateTest) { %>
+        row = undefined;
+  <%_ } _%>
       });
 <%_ } _%>
     });
