@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository.search;
+package <%= entityAbsolutePackage %>.repository.search;
 
-import <%= packageName %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 
 <%_ if (!paginationNo) { _%>
   <%_ if (!reactive) { _%>
