@@ -76,17 +76,17 @@ export default [
       name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
       component: <%= jhiPrefixCapitalized %>ConfigurationComponent,
       meta: { authorities: [Authority.ADMIN] }
-    }
+    },
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>,
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     {
       path: '/admin/gateway',
       name: '<%= jhiPrefixCapitalized %>GatewayComponent',
       component: <%= jhiPrefixCapitalized %>GatewayComponent,
       meta: { authorities: [Authority.ADMIN] }
-    }
+    },
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>,
+<%_ if (communicationSpringWebsocket) { _%>
     {
       path: '/admin/tracker',
       name: '<%= jhiPrefixCapitalized %>TrackerComponent',
