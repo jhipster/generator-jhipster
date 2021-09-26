@@ -7,12 +7,12 @@ dependencies:
 <%_ } else if (app.prodDatabaseTypePostgres) { _%>
   - name: postgresql
     version: <%= HELM_POSTGRESQL %>
-    repository: https://charts.helm.sh/stable
+    repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 <%_ } else if (app.prodDatabaseTypeMariadb) { _%>
   - name: mariadb
     version: <%= HELM_MARIADB %>
-    repository: https://charts.helm.sh/stable
+    repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
 <%_ } else if (app.prodDatabaseTypeMongodb) { _%>
   - name: mongodb-replicaset
