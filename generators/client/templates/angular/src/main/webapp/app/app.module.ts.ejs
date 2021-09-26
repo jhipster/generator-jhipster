@@ -113,6 +113,9 @@ import { ErrorComponent } from './layouts/error/error.component';
 })
 export class AppModule {
   constructor(applicationConfigService: ApplicationConfigService, iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, translateService: TranslateService, sessionStorageService: SessionStorageService<% } %>) {
+<%_ if (applicationTypeMicroservice) { _%>
+    applicationConfigService.setMicrofrontend();
+<%_ } _%>
     applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);
     iconLibrary.addIcons(...fontAwesomeIcons);

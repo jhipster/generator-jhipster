@@ -1,6 +1,7 @@
 const assert = require('assert');
 const helpers = require('yeoman-test');
 const { appDefaultConfig } = require('../../generators/generator-defaults');
+const { CYPRESS } = require('../../jdl/jhipster/test-framework-types');
 
 const mockedComposedGenerators = ['jhipster:common', 'jhipster:client', 'jhipster:languages', 'jhipster:cypress'];
 
@@ -94,7 +95,7 @@ describe('jhipster:client composing', () => {
 
   describe('with cypress', () => {
     let runResult;
-    const options = { testFrameworks: ['cypress'] };
+    const options = { testFrameworks: [CYPRESS] };
     before(() => {
       return helpers
         .create(require.resolve('../../generators/client'))

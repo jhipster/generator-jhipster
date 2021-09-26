@@ -18,31 +18,31 @@
 -%>
 
 <%_
-    let uuidConversionNeeded = (reactive && !(prodDatabaseType === 'postgresql'));
+    let uuidConversionNeeded = (reactive && !prodDatabaseTypePostgres);
 _%>
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import io.r2dbc.spi.ConnectionFactory;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import org.springframework.context.annotation.Profile;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import org.springframework.core.env.Environment;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -64,7 +64,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 <%_ } _%>
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
 import java.sql.SQLException;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -85,18 +85,18 @@ import java.util.UUID;
 
 @Configuration
 <%_ if (reactive) { _%>
-@EnableR2dbcRepositories("<%= packageName %>.repository")
+@EnableR2dbcRepositories({<%- domains.map(domain => `"${domain}.repository"`).join(', ') %>})
 <%_ } else { _%>
-@EnableJpaRepositories("<%= packageName %>.repository")
+@EnableJpaRepositories({<%- domains.map(domain => `"${domain}.repository"`).join(', ') %>})
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 @EnableTransactionManagement
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 public class DatabaseConfiguration {
 
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private final Environment env;
@@ -175,10 +175,10 @@ public class DatabaseConfiguration {
         converters.add(DurationReadConverter.INSTANCE);
         converters.add(ZonedDateTimeReadConverter.INSTANCE);
         converters.add(ZonedDateTimeWriteConverter.INSTANCE);
-        <%_ if (uuidConversionNeeded) { _%>
+  <%_ if (uuidConversionNeeded) { _%>
         converters.add(StringToUUIDConverter.INSTANCE);
         converters.add(UUIDToStringConverter.INSTANCE);
-        <%_ } _%>
+  <%_ } _%>
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),

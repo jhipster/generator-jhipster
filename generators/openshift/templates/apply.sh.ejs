@@ -21,22 +21,22 @@
 # in proper order. 'oc process' processes the template as resources which is again piped to
 # 'oc apply' to create those resources in OpenShift namespace
 oc process -f <%- directoryPath %>ocp/registry/scc-config.yml | oc apply -f -
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 oc process -f <%- directoryPath %>ocp/registry/application-configmap.yml | oc apply -f -
 oc process -f <%- directoryPath %>ocp/registry/jhipster-registry.yml | oc apply -f -
-<%_ } _%> <%_ if (serviceDiscoveryType === 'consul') {  _%>
+<%_ } _%> <%_ if (serviceDiscoveryConsul) {  _%>
 oc process -f <%- directoryPath %>ocp/registry/application-configmap.yml | oc apply -f -
 oc process -f <%- directoryPath %>ocp/registry/consul.yml | oc apply -f -
-<%_ } _%> <%_ if (useKafka === true) { _%>
+<%_ } _%> <%_ if (useKafka) { _%>
 oc process -f <%- directoryPath %>ocp/messagebroker/kafka.yml | oc apply -f -
-<%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
+<%_ } _%> <%_ if (monitoringPrometheus) { _%>
 oc process -f <%- directoryPath %>ocp/monitoring/jhipster-metrics.yml | oc apply -f -
 <%_ } _%> <%_ for (var i = 0; i < appConfigs.length; i++) {
 const appName = appConfigs[i].baseName.toLowerCase();
 app = appConfigs[i];
-if (app.prodDatabaseType !== 'no') { _%>
+if (!app.databaseTypeNo) { _%>
 oc process -f <%- directoryPath %>ocp/<%- appName %>/<%- appName %>-<%- app.prodDatabaseType %>.yml | oc apply -f -
-<%_ } _%> <%_ if (app.searchEngine === 'elasticsearch') { _%>
+<%_ } _%> <%_ if (app.searchEngineElasticsearch) { _%>
 oc process -f <%- directoryPath %>ocp/<%- appName %>/<%- appName %>-elasticsearch.yml | oc apply -f -
 <%_ } _%>
 oc process -f <%- directoryPath %>ocp/<%- appName %>/<%- appName %>-deployment.yml | oc apply -f -

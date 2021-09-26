@@ -39,8 +39,8 @@ const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.option('skip-build', {
       desc: 'Skips building the application',
@@ -487,10 +487,9 @@ which is free for the first 30 days`);
   }
 
   _computeDerivedConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
-    this.loadAppConfig();
-    this.loadServerConfig();
-    super.loadDerivedServerConfig(config, dest);
-    super.loadDerivedAppConfig(config, dest);
+    this.loadAppConfig(config, dest);
+    this.loadServerConfig(config, dest);
+    super.loadDerivedAppConfig(dest);
     dest.azureAppInsightsInstrumentationKeyEmpty = config.azureAppInsightsInstrumentationKey === '';
   }
 

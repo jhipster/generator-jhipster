@@ -1,0 +1,67 @@
+'theme: cli':
+  - cli/*
+
+'theme: CI Builds':
+  - .github/**/*
+  - azure-pipelines.yml
+
+'theme: dependencies':
+  - package.json
+  - '**/package.json'
+  - package-lock.json
+
+'theme: front':
+  - generators/common/**
+  - generators/entity/**
+  - generators/*client/*
+  - generators/*client/needle-api/**
+  - generators/*client/templates/common/**
+
+'theme: angular':
+  - generators/**/*-angular.*
+  - generators/*client/templates/angular/**/*
+
+'theme: react':
+  - generators/**/*-react.*
+  - generators/*client/templates/react/**/*
+
+'theme: vue':
+  - generators/**/*-vue.*
+  - generators/*client/templates/vue/**/*
+
+'theme: jhipster-internals':
+  - generators/*.*
+  - generators/app/**
+  - generators/base/**
+  - generators/bootstrap/**
+
+'theme: i18n':
+  - generators/languages/**/*
+  - generators/entity-i18n/**/*
+
+'theme: java':
+  - generators/common/**
+  - generators/entity/**
+  - generators/server/**/*
+  - generators/entity-server/**/*
+
+'theme: upgrade':
+  - generators/upgrade/**/*
+
+'theme: docker :whale:':
+  - Dockerfile
+  - generators/docker*.js
+  - generators/docker-compose/**/*
+'theme: maven':
+  - generators/maven/**/*
+
+'theme: gradle':
+  - generators/gradle/**/*
+'theme: aws':
+  - generators/aws/**/*
+'theme: Heroku':
+  - generators/heroku/**/*
+'theme: kubernetes':
+  - generators/kubernetes/**/*
+  - generators/kubernetes-helm/**/*
+  - generators/kubernetes-knative/**/*

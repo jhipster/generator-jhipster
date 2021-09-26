@@ -1,10 +1,8 @@
 const expect = require('expect');
 const path = require('path');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
-
-const {
-  SUPPORTED_CLIENT_FRAMEWORKS: { REACT },
-} = require('../../generators/generator-constants');
+const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+const { REACT } = require('../../jdl/jhipster/client-framework-types');
 
 const commonOptions = { clientFramework: REACT };
 
@@ -16,7 +14,7 @@ describe('JHipster vue generator', () => {
           .create(path.join(__dirname, '../../generators/client'))
           .withOptions({
             skipInstall: true,
-            auth: 'oauth2',
+            auth: OAUTH2,
             microfrontend: true,
             enableTranslation: true,
             nativeLanguage: 'en',

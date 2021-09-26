@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%= entityAbsolutePackage %>.web.rest;
 
 <%_
 
@@ -57,11 +57,14 @@ if (databaseTypeSql && !reactive) {
 }
 
 _%>
+<%_ if (entityAbsolutePackage !== packageName) { _%>
+import <%= packageName %>.web.rest.TestUtil;
+<% } %>
 <%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_
 var imported = [];
 for (relationship of relationships) { // import entities in required relationships
@@ -70,34 +73,34 @@ for (relationship of relationships) { // import entities in required relationshi
   const isUsingMapsIdL1 = relationship.id;
   if (imported.indexOf(otherEntityNameCapitalized) === -1) {
     if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
+import <%= entityAbsolutePackage %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
 <%_
           imported.push(otherEntityNameCapitalized);
     }
   }
 } _%>
 <%_ if (saveUserSnapshot) { _%>
-import <%= packageName %>.repository.UserRepository;
+import <%= entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.service.EntityManager;
+import <%= entityAbsolutePackage %>.service.EntityManager;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
-import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (!serviceNo && fieldsContainOwnerManyToMany) { _%>
-import <%= packageName %>.service.<%= entityClass %>Service;
+import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 <%_ } _%>
 <%_ if (dtoMapstruct) { _%>
-import <%= packageName %>.service.dto.<%= dtoClass %>;
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
-import <%= packageName %>.service.criteria.<%= entityClass %>Criteria;
+import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) { _%>
@@ -216,7 +219,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 <%_ for (const field of fields.filter(field => !field.transient)) {
   if (field.fieldIsEnum) { _%>
-import <%= packageName %>.domain.enumeration.<%= field.fieldType %>;
+import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ }
 } _%>
 /**
@@ -447,9 +450,9 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 <%_ } if (searchEngineElasticsearch) { _%>
 
     /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
+     * This repository is mocked in the <%= entityAbsolutePackage %>.repository.search test package.
      *
-     * @see <%= packageName %>.repository.search.<%= entityClass %>SearchRepositoryMockConfiguration
+     * @see <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepositoryMockConfiguration
      */
     @Autowired
     private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
@@ -886,7 +889,7 @@ _%>
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
-<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j) { %>
+<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
@@ -1164,7 +1167,7 @@ _%>
         <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
     }
     <%_ } else { _%>
-        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);        
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
     <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
@@ -1739,7 +1742,7 @@ _%>
   <%_ } else if (searchEngineCouchbase) { _%>
 
         // Wait for the <%= entityInstance %> to be indexed
-        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (reactive) { %>.collectList().block()<% } %>);
+        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search("id:" + <%= entityInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (reactive) { %>.collectList().block()<% } %>);
   <%_ } _%>
 
         // Search the <%= entityInstance %>

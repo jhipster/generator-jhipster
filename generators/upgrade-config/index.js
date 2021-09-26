@@ -21,8 +21,8 @@ const BaseGenerator = require('../generator-base');
 const { parseBluePrints } = require('../../utils/blueprint');
 
 module.exports = class extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     if (this.options.help) {
       return;

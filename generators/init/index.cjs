@@ -18,20 +18,29 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const simpleGit = require('simple-git');
-const { generateMixedChain } = require('generator-jhipster/support');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+  INSTALL_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_INIT } = require('../generator-list');
-const { SKIP_COMMIT_HOOK } = require('./constants.cjs');
+const { PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE, SKIP_COMMIT_HOOK } = require('./constants.cjs');
 const { files, commitHooksFiles } = require('./files.cjs');
-const { defaultConfig } = require('./config.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 
 const MixedChain = generateMixedChain(GENERATOR_INIT);
 
 module.exports = class extends MixedChain {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+  constructor(args, options, features) {
+    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -40,6 +49,9 @@ module.exports = class extends MixedChain {
     }
 
     if (this.options.help) return;
+
+    // Application context for templates
+    this.application = {};
 
     if (this.options.defaults) {
       this.configureChain();
@@ -56,7 +68,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -74,23 +86,22 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _prompting() {
+  get prompting() {
     return {
       async showPrompts() {
         if (this.shouldSkipPrompts()) return;
         await this.prompt(
           [
             {
-              name: 'prettierDefaultIndent',
-              when: () => !this.abort,
-              type: 'number',
+              name: PRETTIER_DEFAULT_INDENT,
+              type: 'input',
               message: 'What is the default indentation?',
-              default: defaultConfig.prettierDefaultIndent,
+              default: () => this.sharedData.getConfigDefaultValue(PRETTIER_DEFAULT_INDENT, PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE),
             },
           ],
           this.config
@@ -99,12 +110,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._prompting();
+    return this.prompting;
   }
 
-  _configuring() {
+  get configuring() {
     return {
       configure() {
         this.configureInit();
@@ -112,24 +123,21 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._configuring();
+    return this.configuring;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
-      },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
+        this.loadChainConfig(this.application);
       },
       loadDependabotDependencies() {
         this.loadDependabotDependencies(this.fetchFromInstalledJHipster(GENERATOR_INIT, 'templates', 'package.json'));
@@ -137,49 +145,65 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get preparing() {
     return {
-      async writeFiles() {
-        if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
-      },
-      async writeCommitHookFiles() {
-        if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
-        await this.writeFilesToDisk(commitHooksFiles);
+      prepareDerivedProperties() {
+        this.prepareChainDerivedProperties(this.application);
       },
     };
   }
 
-  get writing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.preparing;
   }
 
-  _postWriting() {
+  get writing() {
+    return {
+      async writeFiles() {
+        if (this.shouldSkipFiles()) return;
+        await this.writeFiles({ sections: files, context: this.application });
+      },
+      async writeCommitHookFiles() {
+        if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
+        await this.writeFiles({ sections: commitHooksFiles, context: this.application });
+      },
+    };
+  }
+
+  get [WRITING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.writing;
+  }
+
+  get postWriting() {
     return {
       addCommitHookDependencies() {
-        if (this.shouldSkipFiles() || this[SKIP_COMMIT_HOOK]) return;
+        if (this.shouldSkipFiles() || this.shouldSkipCommitHook()) return;
         this.packageJson.merge({
+          scripts: {
+            prepare: 'husky install',
+          },
           devDependencies: {
-            husky: this.dependabotDependencies.husky,
-            'lint-staged': this.dependabotDependencies['lint-staged'],
+            husky: this.nodeDependencies.husky,
+            'lint-staged': this.nodeDependencies['lint-staged'],
           },
         });
       },
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._postWriting();
+    return this.postWriting;
   }
 
-  _install() {
+  get install() {
     return {
       // Initialize git repository before package manager install for commit hooks
       async initGitRepo() {
@@ -189,7 +213,7 @@ module.exports = class extends MixedChain {
           return;
         }
         try {
-          const git = this._createGit();
+          const git = this.createGit();
           this.gitInitialized = (await git.checkIsRepo()) || ((await git.init()) && true);
           this.log(chalk.green.bold('Git repository initialized.'));
         } catch (error) {
@@ -199,12 +223,12 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get install() {
+  get [INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._install();
+    return this.install;
   }
 
-  _end() {
+  get end() {
     return {
       /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
@@ -214,7 +238,7 @@ module.exports = class extends MixedChain {
           return;
         }
         this.debug('Committing files to git');
-        const git = this._createGit();
+        const git = this.createGit();
         const repositoryRoot = await git.revparse(['--show-toplevel']);
         let result = await git.log(['-n', '1', '--', '.']).catch(() => {});
         if (result && result.total > 0) {
@@ -244,19 +268,16 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._end();
+    return this.end;
   }
 
   /*
    * Start of local public API, blueprints may override to customize the generator behavior.
    */
 
-  _createGit() {
-    return simpleGit({ baseDir: this.destinationPath() }).env({
-      ...process.env,
-      LANG: 'en',
-    });
+  shouldSkipCommitHook() {
+    return this.application[SKIP_COMMIT_HOOK];
   }
 };

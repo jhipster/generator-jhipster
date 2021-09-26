@@ -45,8 +45,8 @@ const TYPE_UUID = CommonDBTypes.UUID;
 let useBlueprints;
 
 module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     // This adds support for a `--auth` flag
     this.option('auth', {
@@ -196,7 +196,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadClientConfig();
         this.loadDerivedClientConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadPlatformConfig();
         this.loadTranslationConfig();
       },
@@ -260,15 +259,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
         this.styleSheetExt = 'scss';
         this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
-
-        // Application name modified, using each technology's conventions
-        this.camelizedBaseName = _.camelCase(this.baseName);
-        this.frontendAppName = this.getFrontendAppName();
-        this.hipster = this.getHipster(this.baseName);
-        this.capitalizedBaseName = _.upperFirst(this.baseName);
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.lowercaseBaseName = this.baseName.toLowerCase();
-        this.humanizedBaseName = this.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(this.baseName);
 
         if (this.authenticationType === OAUTH2 || this.databaseType === NO_DATABASE) {
           this.skipUserManagement = true;

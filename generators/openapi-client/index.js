@@ -16,25 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/* eslint-disable consistent-return */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list');
+const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
 const prompts = require('./prompts');
 const { writeFiles, customizeFiles } = require('./files');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
-module.exports = class extends BaseGenerator {
-  constructor(args, opts) {
-    super(args, opts);
-    this.option('regen', {
+let useBlueprints;
+
+module.exports = class extends BaseBlueprintGenerator {
+  constructor(args, options, features) {
+    super(args, options, features);
+    this.option(OpenAPIOptionsNames.REGEN, {
       desc: 'Regenerates all saved clients',
       type: Boolean,
-      defaults: false,
+      defaults: OpenAPIDefaultValues.REGEN,
     });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_OPENAPI_CLIENT);
   }
 
-  get initializing() {
+  _initializing() {
     return {
+      ...super._initializing(),
       validateFromCli() {
         this.checkInvocationFromCLI();
       },
@@ -48,7 +54,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get prompting() {
+  get initializing() {
+    if (useBlueprints) return;
+    return this._initializing();
+  }
+
+  _prompting() {
     return {
       askActionType: prompts.askActionType,
       askExistingAvailableDocs: prompts.askExistingAvailableDocs,
@@ -56,7 +67,12 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get configuring() {
+  get prompting() {
+    if (useBlueprints) return;
+    return this._prompting();
+  }
+
+  _configuring() {
     return {
       determineApisToGenerate() {
         this.clientsToGenerate = {};
@@ -84,33 +100,66 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get writing() {
+  get configuring() {
+    if (useBlueprints) return;
+    return this._configuring();
+  }
+
+  _writing() {
     return writeFiles();
   }
 
-  get postWriting() {
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _postWriting() {
     return customizeFiles();
   }
 
+  get postWriting() {
+    if (useBlueprints) return;
+    return this._postWriting();
+  }
+
+  _install() {
+    return {
+      executeOpenApiClient() {
+        this.clientPackageManager = this.config.get('clientPackageManager');
+        const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
+        if (stderr) {
+          this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
+        }
+        Object.keys(this.clientsToGenerate).forEach(cliName => {
+          this.log(chalk.green(`\nGenerating client for ${cliName}`));
+          const generatorName = this.clientsToGenerate[cliName].generatorName;
+          const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
+          if (!stderr) {
+            this.success(`Succesfully generated ${cliName} ${generatorName} client`);
+          } else {
+            this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
+          }
+        });
+      },
+    };
+  }
+
   install() {
-    this.clientPackageManager = this.config.get('clientPackageManager');
-    const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} install`, { silent: this.silent });
-    if (stderr) {
-      this.log(`Something went wrong while running npm install: ${stdout} ${stderr}`);
-    }
-    Object.keys(this.clientsToGenerate).forEach(cliName => {
-      this.log(chalk.green(`\nGenerating client for ${cliName}`));
-      const generatorName = this.clientsToGenerate[cliName].generatorName;
-      const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
-      if (!stderr) {
-        this.success(`Succesfully generated ${cliName} ${generatorName} client`);
-      } else {
-        this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
-      }
-    });
+    if (useBlueprints) return;
+    return this._install();
+  }
+
+  _end() {
+    return {
+      tearDown() {
+        this.log('End of openapi-client generator');
+      },
+    };
   }
 
   end() {
-    this.log('End of openapi-client generator');
+    if (useBlueprints) return;
+    return this._end();
   }
 };

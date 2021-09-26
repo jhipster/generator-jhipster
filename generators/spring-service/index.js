@@ -21,13 +21,16 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { GENERATOR_SPRING_SERVICE } = require('../generator-list');
 
+const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
 
     this.argument('name', { type: String, required: true });
     this.name = this.options.name;
@@ -39,7 +42,7 @@ module.exports = class extends BaseBlueprintGenerator {
     });
     this.defaultOption = this.options.default;
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('spring-service', { arguments: [this.name] });
+    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -52,10 +55,10 @@ module.exports = class extends BaseBlueprintGenerator {
       initializing() {
         this.log(`The service ${this.name} is being created.`);
         const configuration = this.config;
-        this.baseName = configuration.get('baseName');
-        this.packageName = configuration.get('packageName');
-        this.packageFolder = configuration.get('packageFolder');
-        this.databaseType = configuration.get('databaseType');
+        this.baseName = configuration.get(BASE_NAME);
+        this.packageName = configuration.get(PACKAGE_NAME);
+        this.packageFolder = configuration.get(PACKAGE_FOLDER);
+        this.databaseType = configuration.get(DATABASE_TYPE);
       },
     };
   }
@@ -96,10 +99,24 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadDerivedServerConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
+  }
+
+  // Public API method used by the getter and also by Blueprints
   _default() {
     return {
       insight() {
-        statistics.sendSubGenEvent('generator', 'service', { interface: this.useInterface });
+        statistics.sendSubGenEvent('generator', GENERATOR_SPRING_SERVICE, { interface: this.useInterface });
       },
     };
   }

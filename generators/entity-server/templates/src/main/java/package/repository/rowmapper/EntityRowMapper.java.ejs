@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository.rowmapper;
+package <%= entityAbsolutePackage %>.repository.rowmapper;
 
 <%_ if (fieldsContainBigDecimal) { _%>
 import java.math.BigDecimal;
@@ -35,11 +35,11 @@ import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
 
-import <%= packageName %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
-import <%= packageName %>.domain.enumeration.<%= element %>;
+import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
-import <%= packageName %>.service.ColumnConverter;
+import <%= entityAbsolutePackage %>.service.ColumnConverter;
 
 import io.r2dbc.spi.Row;
 

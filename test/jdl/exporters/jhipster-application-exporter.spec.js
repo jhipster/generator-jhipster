@@ -24,6 +24,13 @@ const fs = require('fs');
 const path = require('path');
 const { exportApplication, exportApplications } = require('../../../jdl/exporters/applications/jhipster-application-exporter');
 
+const { MONOLITH } = require('../../../jdl/jhipster/application-types');
+const { MAVEN } = require('../../../jdl/jhipster/build-tool-types');
+const { EHCACHE } = require('../../../jdl/jhipster/cache-types');
+const { JWT } = require('../../../jdl/jhipster/authentication-types');
+const { ANGULAR_X } = require('../../../jdl/jhipster/client-framework-types');
+const { SQL, H2_DISK, MYSQL } = require('../../../jdl/jhipster/database-types');
+
 describe('JHipsterApplicationExporter', () => {
   describe('exportApplication', () => {
     context('when passing valid arguments', () => {
@@ -33,18 +40,18 @@ describe('JHipsterApplicationExporter', () => {
         before(() => {
           exportApplication({
             'generator-jhipster': {
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
+              applicationType: MONOLITH,
+              authenticationType: JWT,
               baseName: 'toto',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
+              buildTool: MAVEN,
+              cacheProvider: EHCACHE,
+              clientFramework: ANGULAR_X,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
               creationTimestamp: 'new',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
+              databaseType: SQL,
+              devDatabaseType: H2_DISK,
               enableHibernateCache: true,
               enableSwaggerCodegen: false,
               enableTranslation: false,
@@ -54,7 +61,7 @@ describe('JHipsterApplicationExporter', () => {
               messageBroker: false,
               packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
-              prodDatabaseType: 'mysql',
+              prodDatabaseType: MYSQL,
               searchEngine: false,
               serverPort: '8080',
               serviceDiscoveryType: false,
@@ -98,18 +105,18 @@ describe('JHipsterApplicationExporter', () => {
           );
           exportApplication({
             'generator-jhipster': {
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
+              applicationType: MONOLITH,
+              authenticationType: JWT,
               baseName: 'toto',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
+              buildTool: MAVEN,
+              cacheProvider: EHCACHE,
+              clientFramework: ANGULAR_X,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
               creationTimestamp: 'new',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
+              databaseType: SQL,
+              devDatabaseType: H2_DISK,
               enableHibernateCache: true,
               enableSwaggerCodegen: false,
               enableTranslation: false,
@@ -119,7 +126,7 @@ describe('JHipsterApplicationExporter', () => {
               messageBroker: false,
               packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
-              prodDatabaseType: 'mysql',
+              prodDatabaseType: MYSQL,
               searchEngine: false,
               serverPort: '8080',
               serviceDiscoveryType: false,
@@ -146,17 +153,17 @@ describe('JHipsterApplicationExporter', () => {
           expect(content).to.deep.equal({
             test: 1234,
             'generator-jhipster': {
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
+              applicationType: MONOLITH,
+              authenticationType: JWT,
               baseName: 'toto',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
+              buildTool: MAVEN,
+              cacheProvider: EHCACHE,
+              clientFramework: ANGULAR_X,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
+              databaseType: SQL,
+              devDatabaseType: H2_DISK,
               enableHibernateCache: true,
               enableSwaggerCodegen: false,
               enableTranslation: false,
@@ -166,7 +173,7 @@ describe('JHipsterApplicationExporter', () => {
               messageBroker: false,
               packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
-              prodDatabaseType: 'mysql',
+              prodDatabaseType: MYSQL,
               searchEngine: false,
               serverPort: '8080',
               serviceDiscoveryType: false,
@@ -199,18 +206,18 @@ describe('JHipsterApplicationExporter', () => {
         exportApplications([
           {
             'generator-jhipster': {
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
+              applicationType: MONOLITH,
+              authenticationType: JWT,
               baseName: 'toto',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
+              buildTool: MAVEN,
+              cacheProvider: EHCACHE,
+              clientFramework: ANGULAR_X,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
               creationTimestamp: 'new',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
+              databaseType: SQL,
+              devDatabaseType: H2_DISK,
               enableHibernateCache: true,
               enableSwaggerCodegen: false,
               enableTranslation: false,
@@ -220,7 +227,7 @@ describe('JHipsterApplicationExporter', () => {
               messageBroker: false,
               packageFolder: 'com/mathieu/toto',
               packageName: 'com.mathieu.toto',
-              prodDatabaseType: 'mysql',
+              prodDatabaseType: MYSQL,
               searchEngine: false,
               serverPort: '8080',
               serviceDiscoveryType: false,
@@ -237,17 +244,17 @@ describe('JHipsterApplicationExporter', () => {
           {
             'generator-jhipster': {
               applicationType: 'monolith',
-              authenticationType: 'jwt',
+              authenticationType: JWT,
               baseName: 'titi',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
+              buildTool: MAVEN,
+              cacheProvider: EHCACHE,
+              clientFramework: ANGULAR_X,
               clientTheme: 'none',
               clientThemeVariant: '',
               clientPackageManager: 'npm',
               creationTimestamp: 'new',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
+              databaseType: SQL,
+              devDatabaseType: H2_DISK,
               enableHibernateCache: true,
               enableSwaggerCodegen: false,
               enableTranslation: false,
@@ -257,7 +264,7 @@ describe('JHipsterApplicationExporter', () => {
               messageBroker: false,
               packageFolder: 'com/mathieu/titi',
               packageName: 'com.mathieu.titi',
-              prodDatabaseType: 'mysql',
+              prodDatabaseType: MYSQL,
               searchEngine: false,
               serverPort: '8080',
               serviceDiscoveryType: false,

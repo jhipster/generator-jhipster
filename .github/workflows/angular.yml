@@ -70,6 +70,8 @@ jobs:
           - ngx-mariadb-oauth2-infinispan
           - ngx-mongodb-kafka-cucumber
           - ngx-h2mem-ws-nol2
+          - ngx-couchbase
+          - ngx-gradle-couchbase-search
           - ngx-gradle-fr
           - ngx-gradle-mysql-es-noi18n-mapsid
           - ngx-gradle-mariadb-oauth2-infinispan
@@ -115,6 +117,18 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 0
+          - app-sample: ngx-couchbase
+            entity: couchbase
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-sample: ngx-gradle-couchbase-search
+            entity: couchbase
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 1
           - app-sample: ngx-gradle-fr
             entity: sql
             environment: prod
@@ -164,12 +178,12 @@ jobs:
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
-      - uses: actions/setup-node@v2.3.0
+      - uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.6
@@ -214,8 +228,6 @@ jobs:
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
-      - name: 'GENERATION: replace version in generated project'
-        run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------

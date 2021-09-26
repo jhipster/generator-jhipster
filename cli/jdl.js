@@ -54,6 +54,7 @@ module.exports = ([jdlFiles = []], options = {}, env, forkProcess) => {
   }
   const promises = jdlFiles.map(toJdlFile).map(filename => {
     if (!fs.existsSync(filename)) {
+      logger.info(`File not found: ${filename}. Attempting download from jdl-samples repository`);
       return download([[filename]], options);
     }
     return Promise.resolve(filename);

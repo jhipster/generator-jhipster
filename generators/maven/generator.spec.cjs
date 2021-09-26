@@ -37,7 +37,7 @@ describe(`JHipster ${generator} generator`, () => {
     customPrompts: {},
     generatorPath,
   });
-  describe('blueprint support', () => testBlueprintSupport('maven'));
+  describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
     let runResult;
     before(async () => {

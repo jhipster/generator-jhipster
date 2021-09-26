@@ -19,24 +19,30 @@
 const expect = require('expect');
 const path = require('path');
 
-const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
 const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
-const { requiredConfig, defaultConfig } = require('./config.cjs');
+
+const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
+const { defaultConfig, requiredConfig } = require('./config.cjs');
+const { GENERATOR_JAVA } = require('../generator-list');
 
 const generatorPath = path.join(__dirname, 'index.cjs');
+const generator = path.basename(__dirname);
 
-describe('JHipster java generator', () => {
+describe(`JHipster ${generator} generator`, () => {
+  it('generator-list constant matches folder name', () => {
+    expect(GENERATOR_JAVA).toBe(generator);
+  });
   basicTests({
     requiredConfig,
     defaultConfig,
     customPrompts: {
       packageName: 'my.custom.package.name',
-      buildTool: 'any',
       prettierJavaIndent: 2,
+      buildTool: 'any',
     },
     generatorPath,
   });
-  describe('blueprint support', () => testBlueprintSupport('java'));
+  describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
       let runResult;

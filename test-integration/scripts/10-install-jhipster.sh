@@ -49,12 +49,12 @@ fi
 #-------------------------------------------------------------------------------
 cd "$HOME"
 if [[ "$JHI_REPO" == *"/generator-jhipster" || "$JHI_GEN_BRANCH" == "local" ]]; then
-    echo "*** generator-jhipster: use local version at JHI_HOME=$JHI_HOME"
+    echo "*** generator-jhipster or executable: use local version at JHI_CLI_PACKAGE_PATH=$JHI_CLI_PACKAGE_PATH"
 
-    cd "$JHI_HOME"
+    cd "$JHI_CLI_PACKAGE_PATH"
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     npm ci
-    npm install -g "$JHI_HOME"
+    npm install -g "$JHI_CLI_PACKAGE_PATH"
 
 elif [[ "$JHI_GEN_BRANCH" == "release" ]]; then
     echo "*** generator-jhipster: use release version"

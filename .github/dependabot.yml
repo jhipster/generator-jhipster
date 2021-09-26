@@ -11,7 +11,9 @@ updates:
     ignore:
       # ESM only version
       - dependency-name: 'p-queue'
-        versions: '>=7'
+        versions: ['>=7']
+      - dependency-name: 'os-locale'
+        versions: ['>=6']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'
@@ -22,6 +24,12 @@ updates:
     labels:
       - 'theme: angular'
       - 'theme: dependencies'
+    ignore:
+      # Must match @angular-devkit/build-webpack dependency https://github.com/angular/angular-cli/blob/master/packages/angular_devkit/build_webpack/package.json#L16
+      - dependency-name: 'webpack'
+      # https://github.com/ng-bootstrap/ng-bootstrap/issues/3899
+      - dependency-name: 'bootstrap'
+        versions: ['>=5']
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/templates/'
@@ -51,6 +59,10 @@ updates:
     labels:
       - 'theme: react'
       - 'theme: dependencies'
+    ignore:
+      # https://github.com/reactstrap/reactstrap/issues/1748
+      - dependency-name: 'bootstrap'
+        versions: ['>=5']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/vue/'
@@ -61,6 +73,13 @@ updates:
     labels:
       - 'theme: vue'
       - 'theme: dependencies'
+    ignore:
+      # vue-cli peer-deps https://github.com/vuejs/vue-cli/issues/6374
+      - dependency-name: 'eslint'
+        versions: ['>=7']
+      # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
+      - dependency-name: 'bootstrap'
+        versions: ['>=5']
 
   - package-ecosystem: 'github-actions'
     directory: '/'

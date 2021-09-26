@@ -40,12 +40,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [14.16.0]
+        node_version: [14.17.6]
         os: [ubuntu-20.04]
         cache: [other]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.3.0
+      - uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node_version }}
       - name: 'SETUP: load npm cache'

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%= entityAbsolutePackage %>.service;
 
 <%_
 const serviceClassName = entityClass + 'QueryService';
@@ -44,16 +44,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tech.jhipster.service.QueryService;
 
-import <%= packageName %>.domain.<%= persistClass %>;
-import <%= packageName %>.domain.*; // for static metamodels
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.*; // for static metamodels
+import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
-import <%= packageName %>.service.criteria.<%= entityClass %>Criteria;
+import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ if (dtoMapstruct) { _%>
-import <%= packageName %>.service.dto.<%= dtoClass %>;
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 
 /**
@@ -125,6 +125,10 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
     protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= persistClass %>> specification = Specification.where(null);
         if (criteria != null) {
+            // This has to be called first, because the distinct method returns null
+            if (criteria.getDistinct() != null) {
+                specification = specification.and(distinct(criteria.getDistinct()));
+            }
             if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
                 specification = specification.and(<%= getSpecificationBuilder(primaryKey.type) %>(criteria.get<%= primaryKey.nameCapitalized %>(), <%= persistClass %>_.<%= primaryKey.name %>));
             }

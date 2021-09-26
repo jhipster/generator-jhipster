@@ -21,9 +21,6 @@ package <%= packageName %>.config;
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
-<%_ if (applicationType === 'gateway' && databaseType !== 'cassandra') { _%>
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -38,8 +35,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
-@ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
+@Configuration
 public class DatabaseConfiguration {
 
     @Bean

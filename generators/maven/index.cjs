@@ -18,7 +18,8 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const { generateMixedChain } = require('generator-jhipster/support');
+const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const { INITIALIZING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs');
 
 const { GENERATOR_JAVA, GENERATOR_MAVEN } = require('../generator-list');
 const { files } = require('./files.cjs');
@@ -28,8 +29,8 @@ const { BUILD_TOOL, BUILD_DESTINATION } = require('../java/constants.cjs');
 const MixedChain = generateMixedChain(GENERATOR_JAVA);
 
 module.exports = class extends MixedChain {
-  constructor(args, opts, features) {
-    super(args, opts, { jhipsterModular: true, unique: 'namespace', ...features });
+  constructor(args, options, features) {
+    super(args, options, { jhipsterModular: true, unique: 'namespace', ...features });
 
     // Register options available to cli.
     if (!this.fromBlueprint) {
@@ -44,6 +45,9 @@ module.exports = class extends MixedChain {
       [BUILD_DESTINATION]: BUILD_DESTINATION_VALUE,
     });
 
+    // Application context for templates
+    this.application = {};
+
     if (this.options.defaults) {
       this.configureChain();
     }
@@ -56,7 +60,7 @@ module.exports = class extends MixedChain {
     }
   }
 
-  _initializing() {
+  get initializing() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -74,44 +78,54 @@ module.exports = class extends MixedChain {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._initializing();
+    return this.initializing;
   }
 
-  _loading() {
+  get loading() {
     return {
       configureChain() {
         this.configureChain();
       },
       loadConstants() {
-        this.loadChainConstants();
+        this.loadChainConstants(this.application);
       },
       loadConfig() {
-        this.loadChainConfig();
-      },
-      loadDerivedConfig() {
-        this.loadDerivedChainConfig();
+        this.loadChainConfig(this.application);
       },
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._loading();
+    return this.loading;
   }
 
-  _writing() {
+  get preparing() {
     return {
-      async writeFiles() {
-        if (this.shouldSkipFiles()) return;
-        await this.writeFilesToDisk(files);
+      prepareDerivedProperties() {
+        this.prepareChainDerivedProperties(this.application);
       },
     };
+  }
+
+  get [PREPARING_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this.preparing;
   }
 
   get writing() {
+    return {
+      async writeFiles() {
+        if (this.shouldSkipFiles()) return;
+        await this.writeFiles({ sections: files, context: this.application });
+      },
+    };
+  }
+
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
-    return this._writing();
+    return this.writing;
   }
 };

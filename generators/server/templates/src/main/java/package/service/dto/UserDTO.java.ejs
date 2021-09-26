@@ -18,11 +18,11 @@
 -%>
 package <%= packageName %>.service.dto;
 
-<%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
-<%_ if (user.primaryKey.type === 'UUID') { _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -39,21 +39,21 @@ public class <%= asDto('User') %> {
     private String <%= field.fieldName %>;
 <%_ } _%>
 
-    <%_ if (databaseType !== 'no') { _%>
+<%_ if (!databaseTypeNo) { _%>
     public <%= asDto('User') %>() {
         // Empty constructor needed for Jackson.
     }
 
     public <%= asDto('User') %>(<%= asEntity('User') %> user) {
         this.id = user.getId();
-        // Customize it here if you need, or not, firstName/lastName/etc 
+        // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
-<%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
         this.<%= field.fieldName %> = user.get<%= javaBeanCase(field.fieldName) %>();
-<%_ } _%>
+  <%_ } _%>
     }
 
-    <%_ } _%>
+<%_ } _%>
     public <%= user.primaryKey.type %> getId() {
         return id;
     }

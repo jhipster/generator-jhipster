@@ -34,17 +34,18 @@ plugins {
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
-    <%_ if (enableSwaggerCodegen) { _%>
+<%_ if (enableSwaggerCodegen) { _%>
     id "org.openapi.generator"
-    <%_ } _%>
-    <%_ if (!skipClient) { _%>
+<%_ } _%>
+<%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node"
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     id "org.liquibase.gradle"
-    <%_ } _%>
+<%_ } _%>
     id "org.sonarqube"
     id "io.spring.nohttp"
+    id "com.github.andygoossens.gradle-modernizer-plugin"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -55,7 +56,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15" || "16"
+assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15" || "16" || "17"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -128,7 +129,16 @@ test {
     reports.html.enabled = false
 }
 
+modernizer {
+    failOnViolations = true
+    includeTestClasses = true
+}
+
 task integrationTest(type: Test) {
+<%_ if (databaseTypeCouchbase) { _%>
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
+<%_ } _%>
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
@@ -454,7 +464,11 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    <%_ if (reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+    <%_ } else { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+    <%_ } _%>
     implementation "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType) { _%>
@@ -473,6 +487,11 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    <%_ } _%>
+    <%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+    implementation "com.playtika.reactivefeign:feign-reactor-webclient"
+    implementation "com.playtika.reactivefeign:feign-reactor-cloud"
+    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
     <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
     <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
@@ -503,7 +522,6 @@ dependencies {
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
-    implementation "com.couchbase.client:encryption"
     <%_ } _%>
     implementation ("io.springfox:springfox-oas")
     implementation ("io.springfox:springfox-swagger2")

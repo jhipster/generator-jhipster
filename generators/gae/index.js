@@ -37,8 +37,8 @@ const NO_CACHE_PROVIDER = cacheProviders.NO;
 
 let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts);
+  constructor(args, options, features) {
+    super(args, options, features);
     useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_GAE);
   }
 
@@ -611,10 +611,6 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._prompting();
   }
 
-  get default() {
-    return {};
-  }
-
   _configuring() {
     return {
       insight() {
@@ -754,6 +750,19 @@ module.exports = class extends BaseBlueprintGenerator {
   get configuring() {
     if (useBlueprints) return;
     return this._configuring();
+  }
+
+  _loading() {
+    return {
+      loadSharedConfig() {
+        this.loadDerivedAppConfig();
+      },
+    };
+  }
+
+  get loading() {
+    if (useBlueprints) return;
+    return this._loading();
   }
 
   _writing() {

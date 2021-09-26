@@ -80,6 +80,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -240,7 +241,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -462,6 +463,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -658,6 +664,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: postgresql
+  version: ^6.5.3
+  repository: https://charts.bitnami.com/bitnami
+  condition: postgresql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -665,7 +676,7 @@ maintainers:
     "contents": "dependencies:
   - name: postgresql
     version: ^6.5.3
-    repository: https://charts.helm.sh/stable
+    repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 ",
     "stateCleared": "modified",
@@ -1001,6 +1012,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -1161,7 +1173,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -1370,6 +1382,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -1684,6 +1701,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -1844,7 +1862,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -2066,6 +2084,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -2315,6 +2338,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -2574,6 +2602,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -2734,7 +2763,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -2943,6 +2972,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -3269,6 +3303,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -3429,7 +3464,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -3690,6 +3725,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -3939,6 +3979,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mariadb
+  version: ^6.12.2
+  repository: https://charts.bitnami.com/bitnami
+  condition: mariadb.enabled
 ",
     "stateCleared": "modified",
   },
@@ -3946,7 +3991,7 @@ maintainers:
     "contents": "dependencies:
   - name: mariadb
     version: ^6.12.2
-    repository: https://charts.helm.sh/stable
+    repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
 ",
     "stateCleared": "modified",
@@ -4147,6 +4192,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mongodb-replicaset
+  version: ^3.10.1
+  repository: https://charts.helm.sh/stable
+  condition: mongodb.enabled
 ",
     "stateCleared": "modified",
   },
@@ -4346,6 +4396,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -4542,6 +4597,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: postgresql
+  version: ^6.5.3
+  repository: https://charts.bitnami.com/bitnami
+  condition: postgresql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -4549,7 +4609,7 @@ maintainers:
     "contents": "dependencies:
   - name: postgresql
     version: ^6.5.3
-    repository: https://charts.helm.sh/stable
+    repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 ",
     "stateCleared": "modified",
@@ -4885,18 +4945,27 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: prometheus-community
+  version: ^9.2.0
+  repository: https://prometheus-community.github.io/helm-charts
+  condition: prometheus.enabled
+- name: grafana
+  version: ^4.0.0
+  repository: https://grafana.github.io/helm-charts
+  condition: prometheus.enabled
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/requirements.yml": Object {
     "contents": "dependencies:
-  - name: prometheus
+  - name: prometheus-community
     version: ^9.2.0
-    repository: https://charts.helm.sh/stable
+    repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
   - name: grafana
     version: ^4.0.0
-    repository: https://charts.helm.sh/stable
+    repository: https://grafana.github.io/helm-charts
     condition: prometheus.enabled
 ",
     "stateCleared": "modified",
@@ -5130,7 +5199,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -7639,6 +7708,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -7908,6 +7982,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -8068,7 +8143,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -8278,6 +8353,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -8545,6 +8625,7 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
 ",
     "stateCleared": "modified",
   },
@@ -8705,7 +8786,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -8915,6 +8996,11 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+- name: mysql
+  version: ^1.4.0
+  repository: https://charts.helm.sh/stable
+  condition: mysql.enabled
 ",
     "stateCleared": "modified",
   },
@@ -9421,7 +9507,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9704,7 +9790,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:13.3
+          image: postgres:13.4
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -9959,7 +10045,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -10301,7 +10387,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -10575,7 +10661,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -10919,7 +11005,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11145,7 +11231,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11392,7 +11478,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -11734,7 +11820,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12008,7 +12094,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -12367,7 +12453,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -12620,7 +12706,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mariadb
-          image: mariadb:10.6.1
+          image: mariadb:10.6.4
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -13006,7 +13092,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.6
+          image: mongo:4.4.8
           command:
             - /work-dir/peer-finder
           args:
@@ -13036,7 +13122,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.6
+          image: mongo:4.4.8
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -13301,7 +13387,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04
+          image: mcr.microsoft.com/mssql/server:2019-CU12-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -13505,7 +13591,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -13788,7 +13874,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:13.3
+          image: postgres:13.4
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -14043,7 +14129,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -16737,7 +16823,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:8.0.1
+          image: grafana/grafana:8.1.3
           ports:
             - containerPort: 3000
               name: http
@@ -17028,7 +17114,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -17303,7 +17389,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -17619,7 +17705,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -17874,7 +17960,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:
@@ -18216,7 +18302,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mysql:8.0.25
+          image: mysql:8.0.26
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -18499,7 +18585,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: jhipster-registry
-          image: jhipster/jhipster-registry:v6.8.0
+          image: jhipster/jhipster-registry:v7.0.0
           ports:
             - containerPort: 8761
           env:

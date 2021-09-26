@@ -56,9 +56,9 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
         microservices
             .stream()
             .filter(this::isNotGateway)
-            <%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
             .filter(this::isNotConsul)
-            <%_ } _%>
+<%_ } _%>
             .forEach(microservice -> swaggerResources.add(swaggerResource(microservice, getMicroserviceApiDocs(microservice))));
         return swaggerResources;
     }
@@ -75,16 +75,16 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
         return !name.equalsIgnoreCase(gatewayName);
     }
 
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryConsul) { _%>
     private boolean isNotConsul(String name) {
         return !name.equalsIgnoreCase("consul");
     }
 
-    <%_ } _%>
+<%_ } _%>
     private String getMicroserviceApiDocs(String name) {
         return "/services/".concat(name).concat("/v3/api-docs");
     }
-    
+
     private String getMicroserviceName(Route route) {
         return route.getUri().toString().replace("lb://", "").toLowerCase();
     }

@@ -24,6 +24,8 @@ const prompts = require('./prompts');
 const statistics = require('../statistics');
 const constants = require('../generator-constants');
 const { translationDefaultConfig } = require('../generator-defaults');
+const { GENERATOR_LANGUAGES } = require('../generator-list');
+const { clientI18nFiles } = require('./files');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -32,8 +34,8 @@ const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'namespace' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'namespace', ...features });
 
     this.option('skip-prompts', {
       desc: 'Skip prompts',
@@ -175,6 +177,9 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _loading() {
     return {
+      setDefaultConfig() {
+        this.setConfigDefaults();
+      },
       getSharedConfigOptions() {
         this.loadAppConfig();
         this.loadDerivedAppConfig();
@@ -182,7 +187,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.loadDerivedClientConfig();
         this.loadPlatformConfig();
         this.loadServerConfig();
-        this.loadDerivedServerConfig();
         this.loadTranslationConfig();
       },
     };
@@ -205,8 +209,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         // Make dist dir available in templates
         this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-
-        this.capitalizedBaseName = _.upperFirst(this.baseName);
       },
     };
   }
@@ -221,7 +223,7 @@ module.exports = class extends BaseBlueprintGenerator {
       ...super._missingPreDefault(),
 
       insight() {
-        statistics.sendSubGenEvent('generator', 'languages');
+        statistics.sendSubGenEvent('generator', GENERATOR_LANGUAGES);
       },
     };
   }
@@ -234,17 +236,34 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      async writeClientTranslations() {
+        if (this.skipClient) return;
+        // make it Promise.all() when `this.lang = lang;` can be dropped.
+        for (const lang of this.languagesToApply) {
+          this.lang = lang;
+          await this.writeFiles({ sections: clientI18nFiles });
+        }
+      },
       translateFile() {
         this.languagesToApply.forEach(language => {
-          if (!this.skipClient) {
-            this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
-          }
           if (!this.skipServer) {
             this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language, constants.SERVER_TEST_RES_DIR);
           }
           statistics.sendSubGenEvent('languages/language', language);
         });
       },
+
+      ...super._missingPostWriting(),
+    };
+  }
+
+  get writing() {
+    if (useBlueprints) return;
+    return this._writing();
+  }
+
+  _postWriting() {
+    return {
       write() {
         if (!this.skipClient) {
           this.updateLanguagesInDayjsConfiguation(this.languages);
@@ -272,8 +291,8 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get postWriting() {
     if (useBlueprints) return;
-    return this._writing();
+    return this._postWriting();
   }
 };

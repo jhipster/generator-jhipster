@@ -30,8 +30,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const environment = require('./environment');
+const proxyConfig = require('./proxy.conf');
 
-const tls = process.env.TLS;
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
@@ -70,7 +70,13 @@ module.exports = async (config, options, targetOptions) => {
       })
     );
   }
-<%_ if (!this.applicationTypeMicroservice) { _%>
+
+  // configuring proxy for back end service
+  const tls = Boolean(config.devServer && config.devServer.https);
+  if (config.devServer) {
+    config.devServer.proxy = proxyConfig({ tls });
+  }
+
   if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
       new BrowserSyncPlugin(
@@ -79,7 +85,7 @@ module.exports = async (config, options, targetOptions) => {
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= serverPort %>'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
             <%_ if (websocket === 'spring-websocket') { _%>
             ws: true,
             <%_ } _%>
@@ -107,7 +113,6 @@ module.exports = async (config, options, targetOptions) => {
       )
     );
   }
-<%_ } _%>
 
   if (config.mode === 'production') {
     config.plugins.push(

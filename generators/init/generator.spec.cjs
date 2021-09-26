@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const path = require('path');
 const expect = require('expect');
+const path = require('path');
 const { access } = require('fs/promises');
 
 const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
@@ -42,6 +42,7 @@ describe(`JHipster ${generator} generator`, () => {
     },
     contextBuilder,
   });
+  describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
       let runResult;
@@ -76,7 +77,7 @@ describe(`JHipster ${generator} generator`, () => {
         await expect(access(path.resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
       });
       it('should create 1 commit', async () => {
-        const git = runResult.generator._createGit();
+        const git = runResult.generator.createGit();
         await expect(git.log()).resolves.toMatchObject({
           total: 1,
           latest: { message: expect.stringMatching(/^Initial version of/) },
@@ -99,14 +100,13 @@ describe(`JHipster ${generator} generator`, () => {
         runResult = await runResult.create(generatorPath).withOptions({ skipPrettier: true, jhipsterVersion: '1.0.0' }).run();
       });
       it('should have 1 commit', async () => {
-        const git = runResult.generator._createGit();
+        const git = runResult.generator.createGit();
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
       it('should have uncommited files', async () => {
-        const git = runResult.generator._createGit();
+        const git = runResult.generator.createGit();
         await expect(git.diff()).resolves.toMatch(/\+ {4}"jhipsterVersion": "1\.0\.0"/);
       });
     });
   });
-  describe('blueprint support', () => testBlueprintSupport('init'));
 });

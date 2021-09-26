@@ -43,7 +43,7 @@ const {
   GENERATOR_ENTITIES,
   GENERATOR_ENTITY,
   GENERATOR_ENTITY_CLIENT,
-  GENERATOR_ENTITY_I18N,
+  GENERATOR_ENTITY_I_18_N,
   GENERATOR_ENTITY_SERVER,
 } = require('../generator-list');
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = require('../../jdl/jhipster/field-types');
@@ -68,8 +68,8 @@ const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
-  constructor(args, opts) {
-    super(args, opts, { unique: 'argument' });
+  constructor(args, options, features) {
+    super(args, options, { unique: 'argument', ...features });
 
     // This makes `name` a required argument.
     this.argument('name', {
@@ -535,7 +535,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             skipInstall: this.options.skipInstall,
           });
           if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster(GENERATOR_ENTITY_I18N, this.arguments, {
+            this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
               context,
               skipInstall: this.options.skipInstall,
             });
@@ -586,6 +586,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
       prepareEntityForTemplates() {
         const entity = this.context;
         prepareEntityForTemplates(entity, this);
+      },
+
+      loadDomain() {
+        const entity = this.context;
+        const { entityPackage, packageName, packageFolder, persistClass } = entity;
+        let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
+        if (entityPackage) {
+          entityAbsolutePackage = [packageName, entityPackage].join('.');
+          entityAbsoluteFolder = path.join(packageFolder, entityPackage);
+        }
+        entity.entityAbsolutePackage = entityAbsolutePackage;
+        entity.entityAbsoluteFolder = entityAbsoluteFolder;
+        entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
       },
     };
   }
@@ -791,8 +804,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 (this.context.paginate !== PAGINATION &&
                   relationship.relationshipType === 'many-to-many' &&
                   relationship.ownerSide === true)) &&
-              // Neo4j eagerly loads relations by default
-              this.context.databaseType !== NEO4J;
+              // Neo4j & Couchbase eagerly loads relations by default
+              ![NEO4J, COUCHBASE].includes(this.context.databaseType);
           });
         this.context.relationshipsContainEagerLoad = this.context.relationships.some(relationship => relationship.relationshipEagerLoad);
         this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
@@ -983,6 +996,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
       } else {
         this.entityConfig.clientRootFolder = context.options.clientRootFolder;
       }
+    }
+    if (context.options.skipClient !== undefined) {
+      this.entityConfig.skipClient = context.options.skipClient;
+    }
+    if (context.options.skipServer !== undefined) {
+      this.entityConfig.skipServer = context.options.skipServer;
     }
     dest.experimental = context.options.experimental;
 

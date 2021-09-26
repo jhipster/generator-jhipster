@@ -98,7 +98,11 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
-    const generated = field.createRandexp().gen();
+    const re = field.createRandexp();
+    if (!re) {
+      return undefined;
+    }
+    const generated = re.gen();
     if (type === 'csv' || type === 'cypress') {
       data = generated.replace(/"/g, '');
     } else {
@@ -357,7 +361,17 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   const faker = entityWithConfig.faker;
-  field.createRandexp = () => faker.createRandexp(field.fieldValidateRulesPattern);
+  field.createRandexp = () => {
+    // check if regex is valid. If not, issue warning and we skip fake data generation.
+    try {
+      // eslint-disable-next-line no-new
+      new RegExp(field.fieldValidateRulesPattern);
+    } catch (e) {
+      generator.warning(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
+      return undefined;
+    }
+    return faker.createRandexp(field.fieldValidateRulesPattern);
+  };
 
   field.uniqueValue = [];
 

@@ -24,19 +24,19 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <%_ const isAutoIncrementDB = reactive || prodDatabaseType === 'mysql'; _%>
-    <%_ if (!isAutoIncrementDB) { _%>
+<%_ const isAutoIncrementDB = reactive || prodDatabaseTypeMysql; _%>
+<%_ if (!isAutoIncrementDB) { _%>
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
     </changeSet>
-    <%_ } _%>
+<%_ } _%>
 
     <!--
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-<%_ if (!skipUserManagement || authenticationType === 'oauth2') {
+<%_ if (!skipUserManagement || authenticationTypeOauth2) {
         const idField = user.primaryKey.fields[0];
 _%>
         <createTable tableName="<%= user.entityTableName %>">
@@ -46,9 +46,9 @@ _%>
             <column name="login" type="varchar(50)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
-            <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
             <column name="password_hash" type="varchar(60)"/>
-            <%_ } _%>
+  <%_ } _%>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(191)">
@@ -59,19 +59,19 @@ _%>
                 <constraints nullable="false" />
             </column>
             <column name="lang_key" type="varchar(10)"/>
-            <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
             <column name="activation_key" type="varchar(20)"/>
             <column name="reset_key" type="varchar(20)"/>
-            <%_ } _%>
+  <%_ } _%>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp"/>
-            <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
             <column name="reset_date" type="timestamp">
                 <constraints nullable="true"/>
             </column>
-            <%_ } _%>
+  <%_ } _%>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
@@ -92,7 +92,7 @@ _%>
         </createTable>
 
         <addPrimaryKey columnNames="user_id, authority_name" tableName="<%= user.entityTableName %>_authority"/>
-    <%_ if (authenticationType === 'session') { _%>
+  <%_ if (authenticationTypeSession) { _%>
 
         <createTable tableName="<%= jhiTablePrefix %>_persistent_token">
             <column name="series" type="varchar(20)">
@@ -106,7 +106,7 @@ _%>
             <column name="ip_address" type="varchar(39)"/>
             <column name="user_agent" type="varchar(255)"/>
         </createTable>
-    <%_ } _%>
+  <%_ } _%>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
                                  baseTableName="<%= user.entityTableName %>_authority"
@@ -120,27 +120,28 @@ _%>
                                  referencedColumnNames="id"
                                  referencedTableName="<%= user.entityTableName %>"/>
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
                                 tableName="<%= user.entityTableName %>"/>
-    <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
+  <%_ } _%>
+  <%_ if (authenticationTypeSession) { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="<%= jhiTablePrefix %>_persistent_token"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= user.entityTableName %>"/>
-    <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
+  <%_ } _%>
+  <%_ if (!authenticationTypeOauth2 || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  tableName="<%= user.entityTableName %>">
-            <%_ if (prodDatabaseType === 'postgresql') { _%>
+                  tableName="<%= user.entityTableName %>"
+                  usePreparedStatements="true">
+    <%_ if (prodDatabaseTypePostgres) { _%>
             <column name="id" type="<%= idField.loadColumnType %>"/>
-            <%_ } _%>
+    <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
@@ -148,16 +149,18 @@ _%>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  tableName="<%= jhiTablePrefix %>_authority">
+                  tableName="<%= jhiTablePrefix %>_authority"
+                  usePreparedStatements="true">
             <column name="name" type="string"/>
         </loadData>
         <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  tableName="<%= jhiTablePrefix %>_user_authority">
+                  tableName="<%= jhiTablePrefix %>_user_authority"
+                  usePreparedStatements="true">
             <column name="user_id" type="<%= idField.loadColumnType %>"/>
         </loadData>
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
     </changeSet>
 

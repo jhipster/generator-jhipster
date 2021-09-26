@@ -29,10 +29,10 @@ module.exports = class extends needleClientBase {
     const entityEntry =
       // prettier-ignore
       this.generator.stripMargin(
-                `<b-dropdown-item to="/${routerName}">
-|                        <font-awesome-icon icon="asterisk" />
-|                        <span${menuI18nTitle}>${entityTranslationValue}</span>
-|                    </b-dropdown-item>`);
+                `|<b-dropdown-item to="/${routerName}">
+|            <font-awesome-icon icon="asterisk" />
+|            <span${menuI18nTitle}>${entityTranslationValue}</span>
+|          </b-dropdown-item>`);
 
     const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-menu', entityEntry);
     this.addBlockContentToFile(rewriteFileModel, errorMessage);

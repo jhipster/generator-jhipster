@@ -1,10 +1,10 @@
-package <%= packageName %>.service.criteria;
+package <%= entityAbsolutePackage %>.service.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
 <%_ for (const field of fields) { if (field.fieldIsEnum === true) { _%>
-import <%= packageName %>.domain.enumeration.<%= field.fieldType %>;
+import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } } _%>
 import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
@@ -68,8 +68,8 @@ filterVariables.push({ filterType : oauthAwareReferenceFilterType,
 });
 _%>
 /**
- * Criteria class for the {@link <%= packageName %>.domain.<%= persistClass %>} entity. This class is used
- * in {@link <%= packageName %>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
+ * Criteria class for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity. This class is used
+ * in {@link <%= entityAbsolutePackage %>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /<%= entityApiUrl %>?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
@@ -105,6 +105,8 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
     private <%- filterVariable.filterType %> <%= filterVariable.name %>;
 <%_ }); _%>
 
+    private Boolean distinct;
+
     public <%= entityClass %>Criteria() {
     }
 
@@ -112,6 +114,7 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ filterVariables.forEach((filterVariable) => { _%>
         this.<%= filterVariable.name %> = other.<%= filterVariable.name %> == null ? null : other.<%= filterVariable.name %>.copy();
 <%_ }); _%>
+        this.distinct = other.distinct;
     }
 
     @Override
@@ -137,6 +140,14 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
 
 <%_ }); _%>
 
+    public Boolean getDistinct() {
+        return distinct;
+    }
+
+    public void setDistinct(Boolean distinct) {
+        this.distinct = distinct;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -148,25 +159,18 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
         final <%= entityClass %>Criteria that = (<%= entityClass %>Criteria) o;
         return
 <%_ filterVariables.forEach((filterVariable, index) => { _%>
-  <%_ if (filterVariables.length === index + 1) { _%>
-            Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>);
-  <%_ } else { _%>
             Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>) &&
-  <%_ } _%>
 <%_ }); _%>
+            Objects.equals(distinct, that.distinct);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
 <%_ filterVariables.forEach((filterVariable, index) => { _%>
-  <%_ if (filterVariables.length === (index + 1)) { _%>
-        <%= filterVariable.name %>
-  <%_ } else { _%>
         <%= filterVariable.name %>,
-  <%_ } _%>
 <%_ }); _%>
-        );
+        distinct);
     }
 
     // prettier-ignore
@@ -176,6 +180,7 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ filterVariables.forEach((field) => { _%>
             (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
 <%_ }); _%>
+            (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
 

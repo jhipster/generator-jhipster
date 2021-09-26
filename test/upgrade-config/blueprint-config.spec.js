@@ -2,6 +2,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+const { MONOLITH } = require('../../jdl/jhipster/application-types');
 
 describe('JHipster blueprint config migration', () => {
   const blueprintNames = ['generator-jhipster-myblueprint'];
@@ -18,7 +19,7 @@ describe('JHipster blueprint config migration', () => {
                 promptValues: {
                   nativeLanguage: 'en',
                 },
-                applicationType: 'monolith',
+                applicationType: MONOLITH,
                 baseName: 'myblueprint',
               },
               'generator-jhipster': {
@@ -26,7 +27,7 @@ describe('JHipster blueprint config migration', () => {
                   nativeLanguage: 'en',
                 },
                 jhipsterVersion: '6.6.0',
-                applicationType: 'monolith',
+                applicationType: MONOLITH,
                 baseName: 'myblueprint',
                 blueprints: [
                   {
@@ -53,7 +54,7 @@ describe('JHipster blueprint config migration', () => {
               nativeLanguage: 'en',
             },
             jhipsterVersion: '6.6.0',
-            applicationType: 'monolith',
+            applicationType: MONOLITH,
             baseName: 'myblueprint',
             blueprints: [
               {

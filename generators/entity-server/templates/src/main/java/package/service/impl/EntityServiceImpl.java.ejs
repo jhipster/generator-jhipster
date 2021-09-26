@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service<% if (serviceImpl) { %>.impl<% } %>;
+package <%= entityAbsolutePackage %>.service<% if (serviceImpl) { %>.impl<% } %>;
 
 <%_
 const serviceClassName = serviceImpl ? entityClass + 'ServiceImpl' : entityClass + 'Service';
@@ -34,19 +34,19 @@ const searchRepository = entityInstance  + 'SearchRepository';
 
 _%>
 <%_ if (serviceImpl) { _%>
-import <%= packageName %>.service.<%= entityClass %>Service;
+import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 <%_ } _%>
-import <%= packageName %>.domain.<%= persistClass %>;
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (isUsingMapsId === true) { _%>
-import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (dtoMapstruct) { _%>
-import <%= packageName %>.service.dto.<%= dtoClass %>;
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -257,7 +257,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: false, fromResource: false}); -%>
   <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(<% if (searchEngineElasticsearch) { %>query<% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable)<%_ if (!dtoMapstruct) { _%>;<% } else { %>
+        return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable)<%_ if (!dtoMapstruct) { _%>;<% } else { %>
             .map(<%= entityToDtoReference %>);
   <%_ } } _%>
     }

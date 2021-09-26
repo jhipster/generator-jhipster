@@ -1,9 +1,11 @@
 const expect = require('expect');
 const path = require('path');
 const sinon = require('sinon');
+const { existsSync } = require('fs');
 
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
+const { PRIORITY_NAMES } = require('../../lib/constants/priorities.cjs');
 
 const testOptions = data => {
   const { generatorPath, customOptions, contextBuilder = () => helpers.create(generatorPath) } = data;
@@ -19,7 +21,17 @@ const testOptions = data => {
 };
 
 const basicTests = data => {
-  const { generatorPath, customPrompts, requiredConfig, defaultConfig, contextBuilder = () => helpers.create(generatorPath) } = data;
+  const {
+    generatorPath,
+    customPrompts,
+    requiredConfig,
+    defaultConfig,
+    templateContext = 'application',
+    contextBuilder = () => helpers.create(generatorPath),
+  } = data;
+  const getContext = generator => {
+    return templateContext ? generator[templateContext] : generator;
+  };
   describe('with default options', () => {
     let runResult;
     before(async () => {
@@ -28,8 +40,8 @@ const basicTests = data => {
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
-    it('should load default config into the generator', () => {
-      expect(runResult.generator).toEqual(expect.objectContaining(defaultConfig));
+    it('should load default config into the context', () => {
+      expect(getContext(runResult.generator)).toEqual(expect.objectContaining(defaultConfig));
     });
   });
   describe('with defaults option', () => {
@@ -40,8 +52,8 @@ const basicTests = data => {
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
-    it('should load default config into the generator', () => {
-      expect(runResult.generator).toEqual(expect.objectContaining(requiredConfig));
+    it('should load default config into the context', () => {
+      expect(getContext(runResult.generator)).toEqual(expect.objectContaining(requiredConfig));
     });
   });
   describe('with configure option', () => {
@@ -66,8 +78,8 @@ const basicTests = data => {
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
-      it('should load default config with prompt values into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
+      it('should load default config with prompt values into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and defaults option', () => {
@@ -77,8 +89,8 @@ const basicTests = data => {
       it('should not show prompts and write default config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
-      it('should load default config into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
+      it('should load default config into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and skipPrompts option', () => {
@@ -89,8 +101,8 @@ const basicTests = data => {
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
       });
-      it('should load default config and required config into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
+      it('should load default config and required config into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig }));
       });
     });
     describe('and existing config', () => {
@@ -102,8 +114,8 @@ const basicTests = data => {
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
       });
-      it('should load default config and required config into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
+      it('should load default config and required config into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...requiredConfig, ...existing }));
       });
     });
     describe('and askAnswered option on an existing project', () => {
@@ -117,8 +129,8 @@ const basicTests = data => {
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
-      it('should load default config and prompt values into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
+      it('should load default config and prompt values into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts }));
       });
     });
     describe('and add option on an existing project', () => {
@@ -133,46 +145,55 @@ const basicTests = data => {
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
       });
-      it('should load default config and prompt values into the generator', () => {
-        expect(runResult.generator).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }));
+      it('should load default config and prompt values into the context', () => {
+        expect(getContext(runResult.generator)).toEqual(expect.objectContaining({ ...defaultConfig, ...customPrompts, ...existingConfig }));
       });
     });
   });
 };
 
-const testBlueprintSupport = generatorName => {
-  const priorities = [
-    'initializing',
-    'prompting',
-    'configuring',
-    'composing',
-    'loading',
-    'preparing',
-    'preparingFields',
-    'preparingRelationships',
-    'postWriting',
-    'preConflicts',
-    'writing',
-    'install',
-    'end',
-  ];
+const testBlueprintSupport = (generatorName, skipSbsBlueprint = false) => {
+  let generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.cjs`);
+  if (!existsSync(generatorPath)) {
+    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
+  }
   const addSpies = generator => {
+    const { taskPrefix = '' } = generator.features;
+    const apiPrefix = taskPrefix ? '' : '_';
     const prioritiesSpy = sinon.spy();
     let prioritiesCount = 0;
-    priorities.forEach(priority => {
-      if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), priority)) {
+    PRIORITY_NAMES.forEach(priority => {
+      let callback;
+      if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${taskPrefix}${priority}`)) {
         prioritiesCount++;
+        callback = prioritiesSpy;
+      } else {
+        callback = () => {
+          throw new Error(`${apiPrefix}${priority} should not be called`);
+        };
       }
-      generator[`_${priority}`] = prioritiesSpy;
+      const property = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${apiPrefix}${priority}`);
+      if (property && property.value && typeof property.value === 'function') {
+        generator[`${apiPrefix}${priority}`] = callback;
+      } else {
+        Object.defineProperty(generator, `${apiPrefix}${priority}`, {
+          get() {
+            callback();
+            return {};
+          },
+          enumerable: true,
+          configurable: true,
+        });
+      }
     });
-    return [prioritiesSpy, prioritiesCount];
+    return { prioritiesSpy, prioritiesCount };
   };
   describe('with blueprint', () => {
     let result;
     let spy;
     before(async () => {
       result = await helpers
-        .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
+        .run(generatorPath)
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withOptions({ blueprint: 'foo', skipChecks: true })
         .on('ready', generator => {
@@ -183,15 +204,18 @@ const testBlueprintSupport = generatorName => {
       expect(result.mockedGenerators[`jhipster-foo:${generatorName}`].callCount).toBe(1);
     });
     it('should not call any priority', () => {
-      expect(spy[0].callCount).toBe(0);
+      expect(spy.prioritiesSpy.callCount).toBe(0);
     });
   });
   describe('with sbs blueprint', () => {
     let result;
     let spy;
-    before(async () => {
+    before(async function () {
+      if (skipSbsBlueprint) {
+        this.skip();
+      }
       const context = helpers
-        .run(path.join(__dirname, `../../generators/${generatorName}/index.cjs`))
+        .run(generatorPath)
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withOptions({ blueprint: 'foo-sbs', skipChecks: true })
         .on('ready', generator => {
@@ -213,7 +237,7 @@ const testBlueprintSupport = generatorName => {
       expect(result.mockedGenerators[`jhipster-foo-sbs:${generatorName}`].callCount).toBe(1);
     });
     it('should call every priority', () => {
-      expect(spy[0].callCount).toBe(spy[1]);
+      expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
     });
   });
 };

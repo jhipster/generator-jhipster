@@ -29,13 +29,12 @@ metadata:
   namespace: <%= openshiftNamespace %>
   annotations:
     description: This template defines objects that are required to spin up a kafka and zookeeper pod
-    tags: kafka, jhipster-kafka<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
+    tags: kafka, jhipster-kafka<% if (storageTypePersistent) { %> ,persistent <% } %> <% if (storageTypeEphemeral) { %> ,ephemeral <% } %>
     openshift.io/display-name: jhipster-kafka-template
     openshift.io/long-description: >-
-        This template provides objects that are required to spin up a kafka and zookeeper pod.<% if (storageType ==
-        'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+        This template provides objects that are required to spin up a kafka and zookeeper pod.<% if (storageTypePersistent) { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
         Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %>
-        <% if (storageType === 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
+        <% if (storageTypeEphemeral) { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
   app: jhipster-kafka
@@ -66,7 +65,7 @@ parameters:
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
@@ -79,7 +78,7 @@ objects:
         requests:
           storage: "${VOLUME_CAPACITY}"
 <%_ } _%>
-<%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
@@ -124,13 +123,13 @@ objects:
         spec:
           volumes:
           - name: ${ZK_APPLICATION_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
             persistentVolumeClaim:
               claimName: ${ZK_APPLICATION_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageTypeEphemeral) { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           containers:
           - name: ${ZK_APPLICATION_NAME}
             image: <%= DOCKER_ZOOKEEPER %>
@@ -199,13 +198,13 @@ objects:
         spec:
           volumes:
           - name: ${APPLICATION_NAME}-data
-            <%_ if (storageType === 'persistent') { _%>
+<%_ if (storageTypePersistent) { _%>
             persistentVolumeClaim:
               claimName: ${APPLICATION_NAME}
-            <%_ } _%>
-            <%_ if (storageType === 'ephemeral') { _%>
+<%_ } _%>
+<%_ if (storageTypeEphemeral) { _%>
             emptyDir: {}
-            <%_ } _%>
+<%_ } _%>
           containers:
           - name: ${APPLICATION_NAME}
             image: <%= DOCKER_KAFKA %>

@@ -432,8 +432,8 @@ class JDLProcessor {
         applicationWithEntities.config.applications = Object.fromEntries(
           relatedApplications.map(([baseName, config]) => {
             config.gatewayServerPort = gatewayServerPort;
-            const { serverPort, applicationIndex } = config;
-            return [baseName, { serverPort, applicationIndex }];
+            const { serverPort, applicationIndex, devServerPort } = config;
+            return [baseName, { serverPort, applicationIndex, devServerPort }];
           })
         );
       }

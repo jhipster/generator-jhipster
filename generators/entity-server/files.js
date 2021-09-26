@@ -25,6 +25,7 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipste
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { MapperTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 const { EHCACHE, CAFFEINE, INFINISPAN, REDIS } = require('../../jdl/jhipster/cache-types');
+const { writeEntityCouchbaseFiles } = require('./files-couchbase');
 
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
@@ -52,16 +53,6 @@ const serverFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.searchEngine === COUCHBASE && !generator.skipDbChangelog,
-      path: SERVER_MAIN_RES_DIR,
-      templates: [
-        {
-          file: 'config/couchmove/changelog/entity.fts',
-          renameTo: generator => `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.fts`,
-        },
-      ],
-    },
   ],
   server: [
     {
@@ -69,11 +60,11 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi`,
         },
         {
           file: 'package/domain/Entity.java.jhi.javax_validation',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.javax_validation`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_validation`,
         },
       ],
     },
@@ -83,7 +74,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.spring_data_reactive',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_reactive`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_reactive`,
         },
       ],
     },
@@ -93,7 +84,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.spring_data_cassandra',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_cassandra`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_cassandra`,
         },
       ],
     },
@@ -103,7 +94,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.spring_data_neo4j',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_neo4j`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_neo4j`,
         },
       ],
     },
@@ -113,7 +104,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.javax_persistence',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.javax_persistence`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_persistence`,
         },
       ],
     },
@@ -123,17 +114,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.spring_data_mongodb',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_mongodb`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeCouchbase,
-      path: SERVER_MAIN_SRC_DIR,
-      templates: [
-        {
-          file: 'package/domain/Entity.java.jhi.spring_data_couchbase',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_couchbase`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_mongodb`,
         },
       ],
     },
@@ -143,7 +124,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.hibernate_cache',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.hibernate_cache`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.hibernate_cache`,
         },
       ],
     },
@@ -153,7 +134,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.elastic_search',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.elastic_search`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.elastic_search`,
         },
       ],
     },
@@ -163,7 +144,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/web/rest/EntityResource.java',
-          renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/web/rest/${generator.entityClass}Resource.java`,
         },
       ],
     },
@@ -173,11 +154,11 @@ const serverFiles = {
       templates: [
         {
           file: 'package/service/criteria/EntityCriteria.java',
-          renameTo: generator => `${generator.packageFolder}/service/criteria/${generator.entityClass}Criteria.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/criteria/${generator.entityClass}Criteria.java`,
         },
         {
           file: 'package/service/EntityQueryService.java',
-          renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}QueryService.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/${generator.entityClass}QueryService.java`,
         },
       ],
     },
@@ -187,27 +168,27 @@ const serverFiles = {
       templates: [
         {
           file: 'package/repository/search/EntitySearchRepository.java',
-          renameTo: generator => `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepository.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/search/${generator.entityClass}SearchRepository.java`,
         },
       ],
     },
     {
-      condition: generator => !generator.reactive && !generator.embedded,
+      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/repository/EntityRepository.java',
-          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}Repository.java`,
         },
       ],
     },
     {
-      condition: generator => generator.reactive && !generator.embedded,
+      condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/repository/EntityRepository_reactive.java',
-          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}Repository.java`,
         },
       ],
     },
@@ -217,11 +198,11 @@ const serverFiles = {
       templates: [
         {
           file: 'package/repository/EntityRepositoryInternalImpl_reactive.java',
-          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
         },
         {
           file: 'package/repository/rowmapper/EntityRowMapper.java',
-          renameTo: generator => `${generator.packageFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`,
         },
       ],
     },
@@ -231,11 +212,11 @@ const serverFiles = {
       templates: [
         {
           file: 'package/service/EntityService.java',
-          renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}Service.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/${generator.entityClass}Service.java`,
         },
         {
           file: 'package/service/impl/EntityServiceImpl.java',
-          renameTo: generator => `${generator.packageFolder}/service/impl/${generator.entityClass}ServiceImpl.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/impl/${generator.entityClass}ServiceImpl.java`,
         },
       ],
     },
@@ -245,7 +226,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/service/impl/EntityServiceImpl.java',
-          renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}Service.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/${generator.entityClass}Service.java`,
         },
       ],
     },
@@ -255,15 +236,15 @@ const serverFiles = {
       templates: [
         {
           file: 'package/service/dto/EntityDTO.java',
-          renameTo: generator => `${generator.packageFolder}/service/dto/${generator.asDto(generator.entityClass)}.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/dto/${generator.asDto(generator.entityClass)}.java`,
         },
         {
           file: 'package/service/mapper/BaseEntityMapper.java',
-          renameTo: generator => `${generator.packageFolder}/service/mapper/EntityMapper.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/mapper/EntityMapper.java`,
         },
         {
           file: 'package/service/mapper/EntityMapper.java',
-          renameTo: generator => `${generator.packageFolder}/service/mapper/${generator.entityClass}Mapper.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/mapper/${generator.entityClass}Mapper.java`,
         },
       ],
     },
@@ -283,7 +264,7 @@ const serverFiles = {
               SERVER_TEST_SRC_DIR,
             },
           },
-          renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIT.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/web/rest/${generator.entityClass}ResourceIT.java`,
         },
       ],
     },
@@ -294,7 +275,7 @@ const serverFiles = {
         {
           file: 'package/repository/search/EntitySearchRepositoryMockConfiguration.java',
           renameTo: generator =>
-            `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`,
+            `${generator.entityAbsoluteFolder}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`,
         },
       ],
     },
@@ -314,7 +295,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/domain/EntityTest.java',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}Test.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}Test.java`,
         },
       ],
     },
@@ -324,7 +305,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/service/dto/EntityDTOTest.java',
-          renameTo: generator => `${generator.packageFolder}/service/dto/${generator.asDto(generator.entityClass)}Test.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/dto/${generator.asDto(generator.entityClass)}Test.java`,
         },
       ],
     },
@@ -334,7 +315,7 @@ const serverFiles = {
       templates: [
         {
           file: 'package/service/mapper/EntityMapperTest.java',
-          renameTo: generator => `${generator.packageFolder}/service/mapper/${generator.entityClass}MapperTest.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/service/mapper/${generator.entityClass}MapperTest.java`,
         },
       ],
     },
@@ -369,6 +350,7 @@ function writeFiles() {
           ...utils.getEnumInfo(field, this.clientRootFolder),
           frontendAppName: this.frontendAppName,
           packageName: this.packageName,
+          entityAbsolutePackage: this.entityAbsolutePackage || this.packageName,
         };
         // eslint-disable-next-line no-console
         if (!this.skipServer) {
@@ -377,7 +359,7 @@ function writeFiles() {
           )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`;
           this.template(
             pathToTemplateFile,
-            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
+            `${SERVER_MAIN_SRC_DIR}${this.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
             this,
             {},
             enumInfo
@@ -385,13 +367,14 @@ function writeFiles() {
         }
       });
     },
+    ...writeEntityCouchbaseFiles(),
   };
 }
 
 function customizeFiles() {
   if (this.databaseType === SQL) {
     if ([EHCACHE, CAFFEINE, INFINISPAN, REDIS].includes(this.cacheProvider) && this.enableHibernateCache) {
-      this.addEntityToCache(this.asEntity(this.entityClass), this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
+      this.addEntityToCache(this.entityAbsoluteClass, this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
     }
   }
 }

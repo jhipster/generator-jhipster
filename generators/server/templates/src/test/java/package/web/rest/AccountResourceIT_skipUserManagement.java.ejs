@@ -18,11 +18,11 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
-<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+<%_ if (reactive && searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
-<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+<%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
@@ -63,32 +63,32 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
-class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
     @Autowired
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     private MockMvc restAccountMockMvc;
-    <%_ } else { _%>
+<%_ } else { _%>
     private WebTestClient accountWebTestClient;
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch && reactive) { _%>
 
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
-    <%_ } _%>
+<%_ } _%>
 
     @Test
     @WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)
     void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
-        <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
-        <%_ } else { _%>
+<%_ } else { _%>
         accountWebTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -97,29 +97,29 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
             .expectBody()
             .jsonPath("$.login").isEqualTo(TEST_USER_LOGIN)
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
     @WithUnauthenticatedMockUser
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
         restAccountMockMvc.perform(get("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(""));
-    <%_ } else { _%>
+<%_ } else { _%>
     void testNonAuthenticatedUser() {
-        webTestClient.get().uri("/api/authenticate")
+        accountWebTestClient.get().uri("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody().isEmpty();
-    <%_ } _%>
+<%_ } _%>
     }
 
     @Test
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
         restAccountMockMvc.perform(get("/api/authenticate")
             .with(request -> {
@@ -129,14 +129,14 @@ class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends Abstrac
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
-    <%_ } else { _%>
+<%_ } else { _%>
     void testAuthenticatedUser() {
-        webTestClient
+        accountWebTestClient
             .get().uri("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
-    <%_ } _%>
+<%_ } _%>
     }
 }

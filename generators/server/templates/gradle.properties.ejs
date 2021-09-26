@@ -28,20 +28,20 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
 mapstructVersion=1.4.2.Final
-archunitJunit5Version=0.19.0
+archunitJunit5Version=0.21.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
-<%_ if (cacheProvider === 'caffeine') { _%>
-caffeineVersion=3.0.2
+<%_ if (cacheProviderCaffeine) { _%>
+caffeineVersion=3.0.3
 typesafeConfigVersion=1.4.1
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibaseHibernate5Version=4.4.2
+<%_ if (databaseTypeSql && !reactive) { _%>
+liquibaseHibernate5Version=4.4.3
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
-<%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=1.9.4
 <%_ } _%>
 
@@ -50,13 +50,13 @@ blockhoundJunitPlatformVersion=1.0.6.RELEASE
 junitPlatformLauncherVersion=1.7.2
 <%_ } _%>
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
 jaxbRuntimeVersion=2.3.3
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %>
-cassandraDriverVersion=4.11.2
+cassandraDriverVersion=4.11.3
 <%_ } _%>
 
 # gradle plugin version
@@ -65,16 +65,20 @@ gitPropertiesPluginVersion=2.3.1
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=3.1.0
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 liquibasePluginVersion=2.0.4
 <%_ } _%>
 sonarqubePluginVersion=3.3
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=5.1.1
+openapiPluginVersion=5.2.1
 <%_ } _%>
-noHttpPluginVersion=0.0.8
-checkstyleVersion=8.43
-
+noHttpCheckstyleVersion=0.0.9
+checkstyleVersion=9.0
+modernizerPluginVersion=1.6.0
+<%_ if (enableGradleEnterprise) { _%>
+gradleEnterprisePluginVersion=3.6.4
+gradleCommonCustomUserDataPluginVersion=1.4.2
+<%_ } _%>
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 
 ## below are some of the gradle performance improvement settings that can be used as required, these are not enabled by default

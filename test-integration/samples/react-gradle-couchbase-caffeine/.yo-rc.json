@@ -12,7 +12,7 @@
     "databaseType": "couchbase",
     "devDatabaseType": "couchbase",
     "prodDatabaseType": "couchbase",
-    "searchEngine": false,
+    "searchEngine": "couchbase",
     "messageBroker": false,
     "serviceDiscoveryType": false,
     "buildTool": "gradle",

@@ -21,7 +21,7 @@ package <%= packageName %>.service.mapper;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-<%_ if (user.primaryKey.type === 'UUID') { _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -43,11 +43,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
-    <%_ } else { _%>
+<%_ } else { _%>
     private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
-    <%_ } _%>
+<%_ } _%>
 
     private UserMapper userMapper;
     private <%= asEntity('User') %> user;
@@ -58,16 +58,16 @@ class UserMapperTest {
         userMapper = new UserMapper();
         user = new <%= asEntity('User') %>();
         user.setLogin(DEFAULT_LOGIN);
-        <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         user.setPassword(RandomStringUtils.random(60));
-        <%_ } _%>
+<%_ } _%>
         user.setActivated(true);
         user.setEmail("johndoe@localhost");
         user.setFirstName("john");
         user.setLastName("doe");
-        <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
         user.setImageUrl("image_url");
-        <%_ } _%>
+<%_ } _%>
         user.setLangKey("en");
 
         userDto = new <%= asDto('AdminUser') %>(user);
@@ -115,12 +115,12 @@ class UserMapperTest {
           .size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isNotEmpty();
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
         assertThat(users.get(0).getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
-        <%_ } _%>
-        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
         assertThat(users.get(0).getAuthorities().iterator().next()).isEqualTo("ADMIN");
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test
@@ -150,12 +150,12 @@ class UserMapperTest {
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();
         assertThat(user.getAuthorities()).isNotEmpty();
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
         assertThat(user.getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
-        <%_ } _%>
-        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
         assertThat(user.getAuthorities().iterator().next()).isEqualTo("ADMIN");
-        <%_ } _%>
+<%_ } _%>
     }
 
     @Test

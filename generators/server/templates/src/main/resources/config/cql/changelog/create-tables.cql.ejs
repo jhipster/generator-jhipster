@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (databaseType === 'cassandra' && (!skipUserManagement || authenticationType === 'oauth2')) { _%>
+<%_ if (databaseTypeCassandra && (!skipUserManagement || authenticationTypeOauth2)) { _%>
 CREATE TABLE IF NOT EXISTS user (
     id text,
     login text,

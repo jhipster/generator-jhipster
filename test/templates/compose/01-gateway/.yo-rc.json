@@ -16,7 +16,7 @@
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
     "jwtSecretKey": "SECRET--50",
-        "applicationType": "gateway",
+    "applicationType": "gateway",
     "testFrameworks": [
       "gatling"
     ],
