@@ -65,10 +65,10 @@ jobs:
         cache: [vue]
         app-sample:
           - vue-default
-          - vue-noi18n
+          - vue-noi18n-ws-oauth2
           - vue-fulli18n-es
           - vue-gateway
-          - vue-gradle-session
+          - vue-gradle-ws-session
           - vue-ws-theme
           - vue-oauth2
           - vue-mongodb-kafka-cucumber
@@ -79,7 +79,7 @@ jobs:
             environment: prod
             war: 0
             e2e: 1
-          - app-sample: vue-noi18n
+          - app-sample: vue-noi18n-ws-oauth2
             entity: sqlfull
             environment: prod
             war: 0
@@ -94,7 +94,7 @@ jobs:
             environment: dev
             war: 0
             e2e: 1
-          - app-sample: vue-gradle-session
+          - app-sample: vue-gradle-ws-session
             entity: sql
             environment: dev
             war: 0
