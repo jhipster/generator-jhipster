@@ -6,7 +6,7 @@ import { Observable, Observer } from 'rxjs';
 
 import * as config from '@/shared/config/config';
 import <%=jhiPrefixCapitalized%>Tracker from '@/admin/tracker/tracker.vue';
-import <%=jhiPrefixCapitalized%>TrackerClass from '@/admin/tracker/tracker.component';
+import <%=jhiPrefixCapitalized%>TrackerComponent from '@/admin/tracker/tracker.component';
 import TrackerService from '@/admin/tracker/tracker.service';
 
 const localVue = createLocalVue();
@@ -25,14 +25,14 @@ const axiosStub = {
 };
 
 describe('<%=jhiPrefixCapitalized%>Tracker', () => {
-  let wrapper: Wrapper<<%=jhiPrefixCapitalized%>TrackerClass>;
-  let <%=jhiPrefix%>Tracker: <%=jhiPrefixCapitalized%>TrackerClass;
+  let wrapper: Wrapper<<%=jhiPrefixCapitalized%>TrackerComponent>;
+  let <%=jhiPrefix%>TrackerView: <%=jhiPrefixCapitalized%>TrackerComponent;
 
   beforeEach(() => {
     axiosStub.get.resolves({ data: {} });
     trackerServiceStub = sinon.createStubInstance<TrackerService>(TrackerService);
     trackerServiceStub.receive = sinon.stub().callsFake(() => new Observable(observer => listenerObserver = observer));
-    wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerClass>(<%=jhiPrefixCapitalized%>Tracker, {
+    wrapper = shallowMount<<%=jhiPrefixCapitalized%>TrackerComponent>(<%=jhiPrefixCapitalized%>Tracker, {
       store,
 <%_ if (enableTranslation) { _%>
       i18n,
@@ -42,7 +42,7 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
         trackerService: () => trackerServiceStub
       }
     });
-    <%=jhiPrefix%>Tracker = wrapper.vm;
+    <%=jhiPrefix%>TrackerView = wrapper.vm;
   });
 
   it('should subscribe', () => {
@@ -60,14 +60,14 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
   it('should add new activity', () => {
     // GIVEN
     const activity1 = { page: 'login', sessionId: '123' };
-    <%=jhiPrefix%>Tracker.activities = [activity1];
+    <%=jhiPrefix%>TrackerView.activities = [activity1];
 
     // WHEN
     const activity2 = { page: 'login', sessionId: '456' };
     listenerObserver.next(activity2);
 
     // THEN
-    expect(<%=jhiPrefix%>Tracker.activities).toEqual([activity1, activity2]);
+    expect(<%=jhiPrefix%>TrackerView.activities).toEqual([activity1, activity2]);
   });
 
   it('should not add logout activity', () => {
@@ -75,29 +75,29 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
     listenerObserver.next({ page: 'logout', sessionId: '123' });
 
     // THEN
-    expect(<%=jhiPrefix%>Tracker.activities).toEqual([]);
+    expect(<%=jhiPrefix%>TrackerView.activities).toEqual([]);
   });
 
   it('should update user activity', () => {
     // GIVEN
-    <%=jhiPrefix%>Tracker.activities = [{ page: 'login', sessionId: '123' }];
+    <%=jhiPrefix%>TrackerView.activities = [{ page: 'login', sessionId: '123' }];
 
     // WHEN
     const activity = { page: 'login', sessionId: '123' };
     listenerObserver.next(activity);
 
     // THEN
-    expect(<%=jhiPrefix%>Tracker.activities).toEqual([activity]);
+    expect(<%=jhiPrefix%>TrackerView.activities).toEqual([activity]);
   });
 
   it('should remove user activity', () => {
     // GIVEN
-    <%=jhiPrefix%>Tracker.activities = [{ page: 'login', sessionId: '123' }];
+    <%=jhiPrefix%>TrackerView.activities = [{ page: 'login', sessionId: '123' }];
 
     // WHEN
     listenerObserver.next({ page: 'logout', sessionId: '123' });
 
     // THEN
-    expect(<%=jhiPrefix%>Tracker.activities).toEqual([]);
+    expect(<%=jhiPrefix%>TrackerView.activities).toEqual([]);
   });
 });

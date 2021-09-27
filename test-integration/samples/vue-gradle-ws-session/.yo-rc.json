@@ -28,7 +28,7 @@
     "prodDatabaseType": "postgresql",
     "buildTool": "gradle",
     "serverSideOptions": [],
-    "websocket": false,
+    "websocket": "spring-websocket",
     "searchEngine": false,
     "messageBroker": false,
     "enableSwaggerCodegen": false,

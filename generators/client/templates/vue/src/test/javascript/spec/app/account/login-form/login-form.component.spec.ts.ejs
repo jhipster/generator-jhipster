@@ -50,7 +50,7 @@ describe('LoginForm Component', () => {
         <%_ } _%>
         localVue,
         provide: {
-          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationTypeSession) { %> { get: () => {} }, <% } %><% if (communicationSpringWebsocket) { %>new TrackerService(router), <% } %>router)
+          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationTypeSession) { %> { get: () => {} }, <% } %><% if (communicationSpringWebsocket) { %>new TrackerService(router<%_ if (authenticationTypeSession) { _%>,{ get: jest.fn()}<%_ } %>), <% } %>router)
         }
       });
     loginForm = wrapper.vm;
