@@ -1862,16 +1862,22 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    */
   generateKeyStore() {
     const done = this.async();
-    const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
+    
+    let keystoreFolder = `${SERVER_MAIN_RES_DIR}config/tls/`;
+    if (this.destinationPath) {
+      keystoreFolder = this.destinationPath(keystoreFolder);
+    }
+    const keyStoreFile = `${keystoreFolder}/keystore.p12`;
+    
     if (this.fs.exists(keyStoreFile)) {
       this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
       done();
     } else {
       try {
-        shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+        shelljs.mkdir('-p', keystoreFolder);
       } catch (error) {
         // noticed that on windows the shelljs.mkdir tends to sometimes fail
-        fs.mkdir(`${SERVER_MAIN_RES_DIR}config/tls`, { recursive: true }, err => {
+        fs.mkdir(keystoreFolder, { recursive: true }, err => {
           if (err) throw err;
         });
       }
