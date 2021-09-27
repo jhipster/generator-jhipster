@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const os = require('os');
 const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
@@ -302,10 +301,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       prepareForTemplates() {
         // Application name modified, using each technology's conventions
         this.frontendAppName = this.getFrontendAppName();
-        this.camelizedBaseName = _.camelCase(this.baseName);
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.lowercaseBaseName = this.baseName.toLowerCase();
-        this.humanizedBaseName = _.startCase(this.baseName);
         this.mainClass = this.getMainClassName();
         this.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(this.cacheProvider);
         this.testsNeedCsrf = [OAUTH2, SESSION].includes(this.authenticationType);
