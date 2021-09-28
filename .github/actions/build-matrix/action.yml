@@ -176,7 +176,7 @@ runs:
           || WORKSPACES=true E2E=true ANY=true
         echo "::endgroup::"
 
-        echo '{}' > matrix.json
+        echo '{ "include" : [] }' > matrix.json
 
         if [[ "true" == "$ANGULAR" || "true" == "$CLIENT_COMMON" ]]; then
           echo "::group::Workflows Angular"
