@@ -87,7 +87,7 @@ runs:
           exit 0
         fi
 
-        if [[ "true" == "${{github.event.pull_request && 'true'}}" ]]; then
+        if [[ "true" == "${{github.event.pull_request || 'true'}}" ]]; then
           echo "::set-output name=client::true"
           echo "::set-output name=server::true"
           echo "::set-output name=common::true"
