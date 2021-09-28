@@ -74,6 +74,10 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
     }
 });
 _%>
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
@@ -81,6 +85,9 @@ _%>
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
     isSaving = false;
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+    <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+<%_ }); _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && !rel.otherEntityUser); _%>
