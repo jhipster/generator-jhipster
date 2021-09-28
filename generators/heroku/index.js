@@ -868,13 +868,6 @@ module.exports = class extends BaseBlueprintGenerator {
           }
         }
       },
-      printOktaAdminPassword() {
-        if (this.abort) return;
-
-        if (this.oktaAdminPassword) {
-          this.log(chalk.blue(`\nTake note of this password! You will need it on your first login: ${this.oktaAdminPassword}`));
-        }
-      },
     };
   }
 
