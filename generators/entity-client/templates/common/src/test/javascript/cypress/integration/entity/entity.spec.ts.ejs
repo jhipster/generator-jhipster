@@ -102,7 +102,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
     describe('with existing rows', () => {
-<% if (!skipCreateTest && !readOnly) { %>
+<% if (cypressBootstrapEntities && !skipCreateTest && !readOnly) { %>
       let row: any;
       beforeEach(() => {
         cy.apiRequest({
@@ -171,7 +171,7 @@ describe('<%= entityClass %> e2e test', () => {
           expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
-  <% if (!skipCreateTest) { %>
+  <% if (cypressBootstrapEntities && !skipCreateTest) { %>
         row = undefined;
   <%_ } _%>
       });

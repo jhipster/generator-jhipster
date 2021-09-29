@@ -25,6 +25,7 @@ const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
+const { SQL } = require('../../jdl/jhipster/database-types');
 
 let useBlueprints;
 
@@ -51,6 +52,11 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!this.embedded) {
           this.tsKeyType = this.getTypescriptKeyType(this.primaryKey.type);
         }
+      },
+
+      setupCypress() {
+        const entity = this.entity;
+        this.cypressBootstrapEntities = !entity.reactive || entity.databaseType !== SQL;
       },
     };
   }
