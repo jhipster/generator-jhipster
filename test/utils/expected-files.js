@@ -675,6 +675,8 @@ const expectedFiles = {
 
   oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/login/logout.model.ts`],
 
+  management: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/management/SecurityMetersService.java`],
+
   messageBroker: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaProperties.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,
