@@ -105,7 +105,7 @@ function _derivedProperties(entityWithConfig) {
 }
 
 function prepareEntityForTemplates(entityWithConfig, generator) {
-  const entityName = entityWithConfig.name;
+  const entityName = _.upperFirst(entityWithConfig.name);
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
@@ -128,8 +128,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.skipServer = true;
   }
 
+  entityWithConfig.builtInUser = generator.isBuiltInUser(entityName);
+
   _.defaults(entityWithConfig, {
-    entityNameCapitalized: _.upperFirst(entityName),
+    entityNameCapitalized: entityName,
     entityClass: _.upperFirst(entityName),
     entityInstance: _.lowerFirst(entityName),
     entityTableName: generator.getTableName(entityName),

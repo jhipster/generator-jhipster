@@ -18,10 +18,16 @@ const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/
 
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
-const requiredOtherEntities = requiredRelationships.map(rel => rel.otherEntity);
-const otherEntities = Object.values(differentRelationships).map(rels => rels[0].otherEntity);
+const requiredOtherEntities = _.uniq(requiredRelationships.map(rel => rel.otherEntity));
+const otherEntities = _.uniq(Object.values(differentRelationships).map(rels => rels[0].otherEntity));
 // We cannot generate a required entity with relationship with required relationships.
-const skipCreateTest = (requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired || rel.id) || !entityFakeData) ? '.skip' : '';
+const skipCreateTest =
+  (
+    !cypressBootstrapEntities ||
+    requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity) ||
+    requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired) ||
+    !entityFakeData
+  ) ? '.skip' : '';
 _%>
 
 describe('<%= entityClass %> e2e test', () => {
@@ -30,10 +36,11 @@ describe('<%= entityClass %> e2e test', () => {
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityUrl %>(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
+  const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(fields.filter(f => !f.autoGenerate && !f.nullable).map(field => field.reference))) %>;
 
   let <%= entityInstance %>: any;
 <%_ for (otherEntity of requiredOtherEntities) { _%>
-  let <%= otherEntity.entityInstance %>: any;
+  <%_ if (skipCreateTest) { _%>// <%_ } _%>let <%= otherEntity.entityInstance %>: any;
 <%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -62,6 +69,9 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ } _%>
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
+  <%_ if (skipCreateTest) { _%>
+  /*
+  <%_ } _%>
   beforeEach(() => {
   <%_ for (otherEntity of requiredOtherEntities) { _%>
     // create an instance at the required relationship entity:
@@ -74,15 +84,23 @@ describe('<%= entityClass %> e2e test', () => {
     });
   <%_ } _%>
   });
+  <%_ if (skipCreateTest) { _%>
+   */
+  <%_ } _%>
 
 <%_ } _%>
   beforeEach(() => {
     cy.intercept('GET', '/<%= baseApi + entityApiUrl %>+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/<%= baseApi + entityApiUrl %>').as('postEntityRequest');
     cy.intercept('DELETE', '/<%= baseApi + entityApiUrl %>/*').as('deleteEntityRequest');
-<%_ if (requiredOtherEntities.length > 0) { _%>
+  });
 
-    // Simulate relationships api for better performance and reproductivity.
+<%_ if (requiredOtherEntities.length > 0) { _%>
+  <%_ if (skipCreateTest) { _%>
+  /*
+  <%_ } _%>
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
   <%_ for (otherEntity of otherEntities) { _%>
     cy.intercept('GET', '/<%= baseApi + otherEntity.entityApiUrl %>', {
       statusCode: 200,
@@ -90,9 +108,12 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
   <%_ } _%>
-<%_ } _%>
   });
+  <%_ if (skipCreateTest) { _%>
+   */
+  <%_ } _%>
 
+<%_ } _%>
   afterEach(() => {
     if (<%= entityInstance %>) {
       cy.apiRequest({
@@ -105,6 +126,9 @@ describe('<%= entityClass %> e2e test', () => {
   });
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
+  <%_ if (skipCreateTest) { _%>
+  /*
+  <%_ } _%>
   afterEach(() => {
   <%_ for (otherEntity of requiredOtherEntities) { _%>
     if (<%= otherEntity.entityInstance %>) {
@@ -117,6 +141,9 @@ describe('<%= entityClass %> e2e test', () => {
     }
   <%_ } _%>
   });
+  <%_ if (skipCreateTest) { _%>
+   */
+  <%_ } _%>
 
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -164,37 +191,62 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
     describe('with existing value', () => {
-<% if (cypressBootstrapEntities && !skipCreateTest && !readOnly) { %>
+<% if (cypressBootstrapEntities && !readOnly) { %>
+  <%_ if (skipCreateTest) { _%>
+      /*
+  <%_ } _%>
       beforeEach(() => {
         cy.apiRequest({
           method: 'POST',
           url: '/<%= baseApi + entityApiUrl %>',
-          body: <%- JSON.stringify(generateTestEntity(fields.filter(f => !f.autoGenerate && !f.nullable).map(field => field.reference))) %>,
+  <% if (requiredRelationships.length > 0) { %>
+          body: {
+            ...<%= entityInstance %>Sample,
+    <%_ for (relationship of requiredRelationships) { _%>
+            <%= relationship.relationshipName %>: <%= relationship.otherEntity.entityInstance %>,
+    <%_ } _%>
+          },
+  <%_ } else { _%>
+          body: <%= entityInstance %>Sample,
+  <%_ } _%>
         }).then(({ body }) => {
           <%= entityInstance %> = body;
 
           cy.intercept(
             {
               method: 'GET',
-              url: '/<%= baseApi + entityApiUrl %>',
+              url: '/<%= baseApi + entityApiUrl %>+(?*|)',
               times: 1,
             },
             {
               statusCode: 200,
               body: [<%= entityInstance %>],
             }
-          ).as('entityRequestInternal');
+          ).as('entitiesRequestInternal');
         });
 
         cy.visit(<%= entityInstance %>PageUrl);
 
-        cy.wait('@entityRequestInternal');
+        cy.wait('@entitiesRequestInternal');
       });
+  <%_ if (skipCreateTest) { _%>
+       */
+
+      beforeEach(function () {
+        cy.visit(<%= entityInstance %>PageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
+      });
+  <%_ } _%>
 <%_ } else { _%>
       beforeEach(function () {
         cy.visit(<%= entityInstance %>PageUrl);
 
-        cy.wait('@entityRequest').then(({ response }) => {
+        cy.wait('@entitiesRequest').then(({ response }) => {
           if (response!.body.length === 0) {
             this.skip();
           }
@@ -203,7 +255,7 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ } _%>
 
       it('detail button click should load details <%= entityClass %> page', () => {
-        cy.get(entityDetailsButtonSelector).first().click({force: true});
+        cy.get(entityDetailsButtonSelector).first().click();
         cy.getEntityDetailsHeading('<%= entityInstance %>');
         cy.get(entityDetailsBackButtonSelector).click({force: true});
         cy.wait('@entitiesRequest').then(({ response }) => {
@@ -214,7 +266,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ if (!readOnly) { _%>
       it('edit button click should load edit <%= entityClass %> page', () => {
-        cy.get(entityEditButtonSelector).first().click({force: true});
+        cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click({force: true});
@@ -228,7 +280,7 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ if (clientFrameworkReact) { _%>
         cy.intercept('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
   <%_ } _%>
-        cy.get(entityDeleteButtonSelector).last().click({force: true});
+        cy.get(entityDeleteButtonSelector).last().click();
   <%_ if (clientFrameworkReact) { _%>
         cy.wait('@dialogDeleteRequest');
   <%_ } _%>
@@ -241,7 +293,7 @@ describe('<%= entityClass %> e2e test', () => {
           expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
-  <% if (cypressBootstrapEntities && !skipCreateTest) { %>
+  <% if (cypressBootstrapEntities) { %>
         <%= entityInstance %> = undefined;
   <%_ } _%>
       });
