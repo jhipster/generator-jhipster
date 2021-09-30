@@ -451,6 +451,10 @@ const baseServerFiles = {
           file: 'package/security/jwt/JWTFilter.java',
           renameTo: generator => `${generator.javaDir}security/jwt/JWTFilter.java`,
         },
+        {
+          file: 'package/management/SecurityMetersService.java',
+          renameTo: generator => `${generator.javaDir}management/SecurityMetersService.java`,
+        },
       ],
     },
     {
