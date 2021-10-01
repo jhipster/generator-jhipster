@@ -51,6 +51,8 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
   <%_ } _%>
 <%_ } _%>
 
+import AlertService from '@/shared/alert/alert.service';
+
 <%_ const importEntitiesSeen = [entityAngularName];
   let hasManyToMany = false;
   for (relationship of relationships) { _%>
@@ -124,6 +126,8 @@ _%>
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
+  @Inject('alertService') private alertService: () => AlertService;
+
   public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
   <%_
     const entitiesSeen = [entityAngularName];
@@ -199,7 +203,10 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
           variant: 'info',
           solid: true,
           autoHideDelay: 5000,
-        });
+        })
+      }).catch(error => {
+          this.isSaving = false;
+          this.alertService().showHttpError(this,error.response);
       });
     } else {
       this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
@@ -217,7 +224,10 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
           solid: true,
           autoHideDelay: 5000,
         });
-      });
+      }).catch(error => {
+          this.isSaving = false;
+          this.alertService().showHttpError(this,error.response);
+      });;
     }
   }
 
@@ -264,6 +274,8 @@ _%>
       res.<%= fieldName %> = new Date(res.<%= fieldName %>);
 <%_ } } _%>
       this.<%= entityInstance %> = res;
+    }).catch(error => {
+      this.alertService().showHttpError(this,error.response);
     });
   }
 
