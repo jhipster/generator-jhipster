@@ -75,7 +75,7 @@ describe('<%= entityClass %> e2e test', () => {
   beforeEach(() => {
   <%_ for (otherEntity of requiredOtherEntities) { _%>
     // create an instance at the required relationship entity:
-    cy.apiRequest({
+    cy.authenticatedRequest({
       method: 'POST',
       url: '/<%= baseApi + otherEntity.entityApiUrl %>',
       body: <%- JSON.stringify(generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate).map(field => field.reference))) %>,
@@ -116,7 +116,7 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ } _%>
   afterEach(() => {
     if (<%= entityInstance %>) {
-      cy.apiRequest({
+      cy.authenticatedRequest({
         method: 'DELETE',
         url: `/<%= baseApi + entityApiUrl %>/${<%= entityInstance %>.<%= primaryKey.name %>}`,
       }).then(() => {
@@ -132,7 +132,7 @@ describe('<%= entityClass %> e2e test', () => {
   afterEach(() => {
   <%_ for (otherEntity of requiredOtherEntities) { _%>
     if (<%= otherEntity.entityInstance %>) {
-      cy.apiRequest({
+      cy.authenticatedRequest({
         method: 'DELETE',
         url: `/<%= baseApi + otherEntity.entityApiUrl %>/${<%= otherEntity.entityInstance %>.<%= otherEntity.primaryKey.name %>}`,
       }).then(() => {
@@ -196,7 +196,7 @@ describe('<%= entityClass %> e2e test', () => {
       /* Disabled due to incompatibility
   <%_ } _%>
       beforeEach(() => {
-        cy.apiRequest({
+        cy.authenticatedRequest({
           method: 'POST',
           url: '/<%= baseApi + entityApiUrl %>',
   <% if (requiredRelationships.length > 0) { %>
