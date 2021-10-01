@@ -70,7 +70,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
-  /*
+  /* Disabled due to incompatibility
   <%_ } _%>
   beforeEach(() => {
   <%_ for (otherEntity of requiredOtherEntities) { _%>
@@ -97,7 +97,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
-  /*
+  /* Disabled due to incompatibility
   <%_ } _%>
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
@@ -127,7 +127,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
-  /*
+  /* Disabled due to incompatibility
   <%_ } _%>
   afterEach(() => {
   <%_ for (otherEntity of requiredOtherEntities) { _%>
@@ -191,9 +191,9 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ } _%>
     describe('with existing value', () => {
-<% if (cypressBootstrapEntities && !readOnly) { %>
+<% if (!readOnly) { %>
   <%_ if (skipCreateTest) { _%>
-      /*
+      /* Disabled due to incompatibility
   <%_ } _%>
       beforeEach(() => {
         cy.apiRequest({
@@ -232,17 +232,9 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ if (skipCreateTest) { _%>
        */
 
-      beforeEach(function () {
-        cy.visit(<%= entityInstance %>PageUrl);
-
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          if (response!.body.length === 0) {
-            this.skip();
-          }
-        });
-      });
   <%_ } _%>
-<%_ } else { _%>
+<%_ } _%>
+<%_ if (readOnly || skipCreateTest) { _%>
       beforeEach(function () {
         cy.visit(<%= entityInstance %>PageUrl);
 
