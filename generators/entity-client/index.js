@@ -56,7 +56,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
       setupCypress() {
         const entity = this.entity;
-        this.cypressBootstrapEntities = !entity.reactive || entity.databaseType !== SQL;
+        this.cypressBootstrapEntities =
+          (!entity.reactive || entity.databaseType !== SQL) &&
+          !(this.jhipsterConfig.clientFramework === ANGULAR && entity.paginationInfiniteScroll);
       },
     };
   }
