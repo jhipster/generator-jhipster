@@ -52,7 +52,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub, alertService: () => new AlertService() } });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub, alertService: () => new AlertService(), } });
       comp = wrapper.vm;
     });
 

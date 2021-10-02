@@ -72,7 +72,7 @@ describe('Component Tests', () => {
         stubs: {<%_ if (!paginationNo) { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-          alertService: () => new AlertService() 
+          alertService: () => new AlertService(),
         }
       });
       comp = wrapper.vm;

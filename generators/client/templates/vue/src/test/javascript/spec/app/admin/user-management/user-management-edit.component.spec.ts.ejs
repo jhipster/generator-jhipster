@@ -44,7 +44,7 @@ describe('UserManagementEdit Component', () => {
       localVue,
       provide: {
         userService: () => new UserManagementService(),
-        alertService: () => new AlertService()
+        alertService: () => new AlertService(),
       }
     });
     userManagementEdit = wrapper.vm;

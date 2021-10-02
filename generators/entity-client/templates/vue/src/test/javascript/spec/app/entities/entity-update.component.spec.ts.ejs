@@ -91,7 +91,7 @@ describe('Component Tests', () => {
         router,
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
-          alertService: () => new AlertService() 
+          alertService: () => new AlertService(),
 <%_
   const entitiesSeen = [entityAngularName];
   for (relationship of relationships) { _%>
