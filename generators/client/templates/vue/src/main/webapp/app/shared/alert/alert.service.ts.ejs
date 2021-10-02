@@ -1,0 +1,61 @@
+import Vue from 'vue';
+
+export default class AlertService {
+  public showError(instance: Vue, message: string, params?: any) {
+    <%_ if (enableTranslation) { _%>
+    const alertMessage = instance.$t(message, params);
+    <%_ } else {_%>
+    const alertMessage = message;
+    <%_ } _%>
+    instance.$root.$bvToast.toast(alertMessage.toString(), {
+      toaster: 'b-toaster-top-center',
+      title: 'Error',
+      variant: 'danger',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  }
+
+  public showHttpError(instance: Vue, httpErrorResponse: any) {
+    switch (httpErrorResponse.status) {
+      case 0:
+        this.showError(instance,<% if (enableTranslation) { %> 'error.server.not.reachable'<% } else { %> 'Server not reachable'<% } %>);
+        break;
+
+      case 400: {
+        const arr = Object.keys(httpErrorResponse.headers);
+        let errorHeader: string | null = null;
+<%_ if (enableTranslation) { _%>
+            let entityKey: string | null = null;
+<%_ } _%>
+        for (const entry of arr) {
+          if (entry.toLowerCase().endsWith('app-error')) {
+            errorHeader = httpErrorResponse.headers[entry];
+<%_ if (enableTranslation) { _%>
+            } else if (entry.toLowerCase().endsWith('app-params')) {
+              entityKey = httpErrorResponse.headers[entry];
+<%_ } _%>
+            }
+        }
+        if (errorHeader) {
+<%_ if (enableTranslation) { _%>
+          const alertData = entityKey ? { entityName: instance.$t(`global.menu.entities.${entityKey}`) } : undefined;
+<%_ } _%>
+          this.showError(instance, errorHeader<% if (enableTranslation) { %>, alertData<% } %>);
+        } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {  
+          this.showError(instance, <% if (enableTranslation) { %>httpErrorResponse.data.message<% } else { %>'Validation error'<% } %>);
+        } else {
+          this.showError(instance, httpErrorResponse.data.message);
+        }
+        break;
+      }
+
+      case 404:
+        this.showError(instance, <% if (enableTranslation) { %>'error.http.404'<% } else { %>'Not found'<% } %>);
+        break;
+
+      default:
+        this.showError(instance, httpErrorResponse.data.message);
+    }
+  }
+}

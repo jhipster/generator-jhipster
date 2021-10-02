@@ -2,6 +2,7 @@ import { email, maxLength, minLength, required } from 'vuelidate/lib/validators'
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
+import AlertService from '@/shared/alert/alert.service';
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -37,6 +38,8 @@ const validations: any = {
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
+  @Inject('alertService') private alertService: () => AlertService;
+
   public userAccount: IUser;
   public isSaving = false;
   public authorities: any[] = [];
@@ -87,6 +90,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
           solid: true,
           autoHideDelay: 5000,
         });
+      }).catch(error => {
+        this.isSaving = true;
+        this.alertService().showHttpError(this,error.response);
       });
     } else {
 <%_ if (!enableTranslation) { _%>
@@ -101,6 +107,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
           solid: true,
           autoHideDelay: 5000,
         });
+      }).catch(error => {
+        this.isSaving = true;
+        this.alertService().showHttpError(this,error.response);
       });
     }
   }

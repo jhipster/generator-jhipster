@@ -27,6 +27,7 @@ import * as config from '@/shared/config/config';
 import <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
 
@@ -70,7 +71,8 @@ describe('Component Tests', () => {
         localVue,
         stubs: {<%_ if (!paginationNo) { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
-          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+          alertService: () => new AlertService(),
         }
       });
       comp = wrapper.vm;
