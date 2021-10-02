@@ -29,6 +29,7 @@ import <%= entityAngularName %>DetailComponent from '@/entities/<%= entityFolder
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import router from '@/router';
+import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -51,7 +52,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub } });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub, alertService: () => new AlertService() } });
       comp = wrapper.vm;
     });
 

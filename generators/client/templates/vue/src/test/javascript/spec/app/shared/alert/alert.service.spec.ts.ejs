@@ -1,0 +1,124 @@
+import sinon from 'sinon';
+
+import AlertService from '@/shared/alert/alert.service';
+import Vue from 'vue';
+import { createLocalVue, mount, shallowMount } from '@vue/test-utils';
+<%_ if (enableTranslation) { _%>
+const translationStub = sinon.stub();
+<%_ } _%> 
+const toastStub = sinon.stub();
+
+const vueInstance = {
+  <% if (enableTranslation) { %>$t: translationStub,<% } %>
+  $root: {
+    $bvToast: {
+      toast: toastStub,
+    },
+  },
+};
+
+describe('Alert Service test suite', () => {
+  let alertService: AlertService;
+
+  beforeEach(() => {
+    <%_ if (enableTranslation) { _%>
+    translationStub.reset();
+    <%_ } _%> 
+    toastStub.reset();
+    alertService = new AlertService();
+  });
+
+  it('should show error toast with translation/message', async () => {
+    const message = 'translatedMessage';
+    <%_ if (enableTranslation) { _%>
+    const translationKey = 'err.code';
+
+    // GIVEN
+    translationStub.withArgs(translationKey).returns(message);
+    <%_ } _%>
+    
+    // WHEN
+    alertService.showError((<any>vueInstance) as Vue, <% if (enableTranslation) { %>translationKey<%} else {%>message<% } %>);
+
+    //THEN
+    <%_ if (enableTranslation) { _%>
+    expect(translationStub.withArgs(translationKey).callCount).toEqual(1);
+    <%_ } _%>
+    expect(
+      toastStub.calledOnceWith(message, {
+        toaster: 'b-toaster-top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      })
+    ).toBeTruthy();
+  });
+
+  it('should show not reachable toast when http status = 0', async () => {
+    <%_ if (enableTranslation) { _%>
+    const translationKey = 'error.server.not.reachable';
+    <%_ } _%>
+    const message = 'Server not reachable';
+    const httpErrorResponse = {
+      status: 0,
+    };
+    <%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.withArgs(translationKey).returns(message);
+    <%_ } _%>
+
+    // WHEN
+    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+
+    //THEN
+    <%_ if (enableTranslation) { _%>
+    expect(translationStub.withArgs(translationKey).callCount).toEqual(1);
+    <%_ } _%>
+    expect(
+      toastStub.calledOnceWith(message, {
+        toaster: 'b-toaster-top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      })
+    ).toBeTruthy();
+  });
+
+  it('should show parameterized error toast when http status = 400 and entity headers', async () => {
+    <%_ if (enableTranslation) { _%>
+    const translationKey = 'error.update';
+    <%_ } _%>
+    const message = 'Updation Error';
+    const httpErrorResponse = {
+      status: 400,
+      headers: {
+        'x-jhipsterapp-error': <% if (enableTranslation) { %>translationKey<% } else {%>message<% } %>,
+        'x-jhipsterapp-params': 'dummyEntity',
+      },
+    };
+    <%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.withArgs(translationKey).returns(message);
+    translationStub.withArgs('global.menu.entities.dummyEntity').returns('DummyEntity');
+    <%_ } _%>
+
+    // WHEN
+    alertService.showHttpError((<any>vueInstance) as Vue, httpErrorResponse);
+
+    //THEN
+    <%_ if (enableTranslation) { _%>
+    expect(translationStub.withArgs(translationKey, { entityName: 'DummyEntity' }).callCount).toEqual(1);
+    <%_ } _%>
+    expect(
+      toastStub.calledOnceWith(message, {
+        toaster: 'b-toaster-top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+        autoHideDelay: 5000,
+      })
+    ).toBeTruthy();
+  });
+});
