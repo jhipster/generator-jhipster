@@ -29,7 +29,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
-            github.issues.listLabelsOnIssue({...issue}).then(response => {
+            github.rest.issues.listLabelsOnIssue({...issue}).then(response => {
               const labels = response.data
               let missingLabel = [], missingArea = true, missingTheme = true
               for (const label of labels) {
@@ -47,6 +47,6 @@ jobs:
                 missingLabel.push('theme: undefined')
               }
               if (missingArea || missingTheme) {
-                  github.issues.addLabels({...issue, labels: missingLabel})
+                  github.rest.issues.addLabels({...issue, labels: missingLabel})
               }
             })
