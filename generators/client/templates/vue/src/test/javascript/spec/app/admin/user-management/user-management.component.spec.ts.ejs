@@ -59,7 +59,7 @@ describe('UserManagement Component', () => {
       },
       provide: {
         userService: () => new UserManagementService(),
-        alertService: () => new AlertService()
+        alertService: () => new AlertService(),
       }
     });
     userManagement = wrapper.vm;
