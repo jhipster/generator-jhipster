@@ -11,6 +11,7 @@ import UserManagementView from '@/admin/user-management/user-management-view.vue
 import UserManagementViewClass from '@/admin/user-management/user-management-view.component';
 import UserManagementService from '@/admin/user-management/user-management.service';
 import {Authority} from '@/shared/security/authority';
+import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
 
@@ -32,7 +33,7 @@ describe('UserManagementView Component', () => {
   let userManagementView: UserManagementViewClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userService: () => new UserManagementService() } });
+    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userService: () => new UserManagementService(), alertService: () => new AlertService() } });
     userManagementView = wrapper.vm;
   });
 

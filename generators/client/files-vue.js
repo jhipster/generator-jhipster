@@ -232,6 +232,7 @@ const vueFiles = {
         'spec/app/core/error/error.component.spec.ts',
         'spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts',
         'spec/app/core/ribbon/ribbon.component.spec.ts',
+        'spec/app/shared/alert/alert.service.spec.ts',
         'spec/app/shared/config/axios-interceptor.spec.ts',
         'spec/app/shared/data/data-utils.service.spec.ts',
       ],
