@@ -1,0 +1,37 @@
+name: Package lock maintenance
+on:
+  schedule:
+    - cron: 0 0 * * 6
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Bump transitional dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2.4.0
+        with:
+          node-version: '14'
+      - run: npm install -g npm@latest
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/cache@v2.1.6
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Create commit
+        run: |
+          rm package-lock.json
+          npm install
+          git add .
+          ./test-integration/scripts/04-git-config.sh
+          git commit -a -m "Bump transitional dependencies" || true
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3.8.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Bump transitional dependencies'
+          title: 'Bump transitional dependencies'
+          body: Weekly transitional dependencies bump.
+          labels: 'theme: dependencies'
