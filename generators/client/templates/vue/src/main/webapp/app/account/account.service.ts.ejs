@@ -33,7 +33,7 @@ export default class AccountService {
 
   public retrieveProfiles(): Promise<boolean> {
     return new Promise(resolve => {
-      axios.get('management/info').then(res => {
+      axios.get<any>('management/info').then(res => {
         if (res.data && res.data.activeProfiles) {
           this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
           this.store.commit('setActiveProfiles', res.data['activeProfiles']);
@@ -46,7 +46,7 @@ export default class AccountService {
   public retrieveAccount(): Promise<boolean> {
     return new Promise(resolve => {
       axios
-        .get('api/account').then((response) => {
+        .get<any>('api/account').then((response) => {
         this.store.commit('authenticate');
         const account = response.data;
         if (account) {
