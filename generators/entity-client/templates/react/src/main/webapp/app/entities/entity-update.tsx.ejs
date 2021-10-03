@@ -280,7 +280,7 @@ _%>
       <%_ if (enableTranslation) { _%>
                 {translate("<%= enumPrefix %>"+<%= _.lowerFirst(fieldType) %>)}
       <%_ } else { _%>
-                {_.lowerFirst(fieldType)}
+                {<%= _.lowerFirst(fieldType) %>}
       <%_ } _%>
               </option>))}
           </ValidatedField>
