@@ -34,12 +34,9 @@ _%>
                         <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= fieldName %>"><%= fieldNameHumanized %></label>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
-    <%_ const enumPrefix = frontendAppName + '.'+ fieldType;
-      const values = field.enumValues;
-      for (key in values) {
-        const enumValue = values[key]; _%>
-                            <option value="<%= enumValue.name %>" v-bind:label="$t('<%=enumPrefix%>.<%= enumValue.name %>')"><%= enumValue.value %></option>
-    <%_ } _%>
+    <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
+                            <option v-for="<%= _.lowerFirst(fieldName) %> in <%= _.lowerFirst(fieldName)%>Values" v-bind:key="<%= _.lowerFirst(fieldName) %>" v-bind:value="<%= _.lowerFirst(fieldName) %>" v-bind:label="$t('<%= enumPrefix %>.'+<%= _.lowerFirst(fieldName) %>)">{{ <%= fieldName %> }}</option>
+    
                         </select>
   <%_ } else { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>

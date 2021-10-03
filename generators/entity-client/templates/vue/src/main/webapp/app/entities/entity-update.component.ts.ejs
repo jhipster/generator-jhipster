@@ -78,6 +78,10 @@ import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityMo
 <%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
 const validations: any = {
   <%= entityInstance %>: {
@@ -148,6 +152,9 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%> = [];
   <%_ } _%>
   <%_ entitiesSeen.push(otherEntityAngularName);entitiesSeen.push(otherEntityNamePlural); } } _%>
+  <%_ enumImports.forEach( (importedPath, importedType) => { _%>
+  public <%- _.lowerFirst(importedType) %>Values : string[] = Object.keys(<%- importedType %>);
+  <%_ }); _%>
   public isSaving = false;
   public currentLanguage = '';
 
