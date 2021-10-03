@@ -35,7 +35,7 @@ _%>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-                            <option v-for="<%= _.lowerFirst(fieldName) %> in <%= _.lowerFirst(fieldName)%>Values" v-bind:key="<%= _.lowerFirst(fieldName) %>" v-bind:value="<%= _.lowerFirst(fieldName) %>" v-bind:label="$t('<%= enumPrefix %>.'+<%= _.lowerFirst(fieldName) %>)">{{ <%= fieldName %> }}</option>
+                            <option v-for="<%= _.lowerFirst(fieldName) %> in <%= _.lowerFirst(fieldName)%>Values" :key="<%= _.lowerFirst(fieldName) %>" v-bind:value="<%= _.lowerFirst(fieldName) %>" v-bind:label="$t('<%= enumPrefix %>.'+<%= _.lowerFirst(fieldName) %>)">{{ <%= fieldName %> }}</option>
     
                         </select>
   <%_ } else { _%>
