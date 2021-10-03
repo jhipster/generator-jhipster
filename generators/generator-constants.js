@@ -46,7 +46,8 @@ const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
-const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
+// const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v7.1.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.5.0';
 const DOCKER_JAVA_JRE = 'eclipse-temurin:11-jre-focal';
 const DOCKER_MYSQL = 'mysql:8.0.26';
