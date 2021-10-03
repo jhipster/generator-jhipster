@@ -30,78 +30,76 @@ import { DataUtils } from 'app/core/util/data-util.service';
 
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 
-describe('Component Tests', () => {
-    describe('<%= entityAngularName %> Management Detail Component', () => {
-        let comp: <%= entityAngularName %>DetailComponent;
-        let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
+describe('<%= entityAngularName %> Management Detail Component', () => {
+    let comp: <%= entityAngularName %>DetailComponent;
+    let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
 <%_ if (fieldsContainBlob) { _%>
-        let dataUtils: DataUtils;
+    let dataUtils: DataUtils;
 <%_ } _%>
 
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                declarations: [<%= entityAngularName %>DetailComponent],
-                providers: [
-                    {
-                        provide: ActivatedRoute,
-                        useValue: { data: of({ <%= entityInstance %>: <%- testEntity %> }) }
-                    }
-                ]
-            })
-            .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
-            .compileComponents();
-            fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
-            comp = fixture.componentInstance;
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [<%= entityAngularName %>DetailComponent],
+            providers: [
+                {
+                    provide: ActivatedRoute,
+                    useValue: { data: of({ <%= entityInstance %>: <%- testEntity %> }) }
+                }
+            ]
+        })
+        .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
+        .compileComponents();
+        fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
+        comp = fixture.componentInstance;
 <%_ if (fieldsContainBlob) { _%>
-            dataUtils = TestBed.inject(DataUtils);
-            jest.spyOn(window, 'open').mockImplementation(() => null);
-<%_ } _%>
-        });
-
-        describe('OnInit', () => {
-            it('Should load <%= entityInstance %> on init', () => {
-                // WHEN
-                comp.ngOnInit();
-
-                // THEN
-                expect(comp.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
-            });
-        });
-
-<%_ if (fieldsContainBlob) { _%>
-        describe('byteSize', () => {
-            it('Should call byteSize from DataUtils', () => {
-                // GIVEN
-                jest.spyOn(dataUtils, 'byteSize');
-                const fakeBase64 = 'fake base64';
-
-                // WHEN
-                comp.byteSize(fakeBase64);
-
-                // THEN
-                expect(dataUtils.byteSize).toBeCalledWith(fakeBase64);
-            });
-        });
-
-        describe('openFile', () => {
-            it('Should call openFile from DataUtils', () => {
-                const newWindow = { ...window };
-                newWindow.document.write = jest.fn();
-                window.open = jest.fn(() => newWindow);
-                window.onload = jest.fn(() => newWindow);
-                window.URL.createObjectURL = jest.fn();
-                // GIVEN
-                jest.spyOn(dataUtils, 'openFile');
-                const fakeContentType = 'fake content type';
-                const fakeBase64 = 'fake base64';
-
-                // WHEN
-                comp.openFile(fakeBase64, fakeContentType);
-
-                // THEN
-                expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
-            });
-        });
+        dataUtils = TestBed.inject(DataUtils);
+        jest.spyOn(window, 'open').mockImplementation(() => null);
 <%_ } _%>
     });
+
+    describe('OnInit', () => {
+        it('Should load <%= entityInstance %> on init', () => {
+            // WHEN
+            comp.ngOnInit();
+
+            // THEN
+            expect(comp.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
+        });
+    });
+
+<%_ if (fieldsContainBlob) { _%>
+    describe('byteSize', () => {
+        it('Should call byteSize from DataUtils', () => {
+            // GIVEN
+            jest.spyOn(dataUtils, 'byteSize');
+            const fakeBase64 = 'fake base64';
+
+            // WHEN
+            comp.byteSize(fakeBase64);
+
+            // THEN
+            expect(dataUtils.byteSize).toBeCalledWith(fakeBase64);
+        });
+    });
+
+    describe('openFile', () => {
+        it('Should call openFile from DataUtils', () => {
+            const newWindow = { ...window };
+            newWindow.document.write = jest.fn();
+            window.open = jest.fn(() => newWindow);
+            window.onload = jest.fn(() => newWindow);
+            window.URL.createObjectURL = jest.fn();
+            // GIVEN
+            jest.spyOn(dataUtils, 'openFile');
+            const fakeContentType = 'fake content type';
+            const fakeBase64 = 'fake base64';
+
+            // WHEN
+            comp.openFile(fakeBase64, fakeContentType);
+
+            // THEN
+            expect(dataUtils.openFile).toBeCalledWith(fakeBase64, fakeContentType);
+        });
+    });
+<%_ } _%>
 });
