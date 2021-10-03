@@ -23,7 +23,7 @@ export default class ConfigurationService {
 
   public loadEnvConfiguration(): Promise<any> {
     return new Promise(resolve => {
-      axios.get('management/env').then(res => {
+      axios.get<any>('management/env').then(res => {
         const properties = {};
         const propertySources = res.data['propertySources'];
 
