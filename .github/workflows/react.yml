@@ -44,6 +44,9 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
+      client: ${{ steps.build.outputs.client }}
+      server: ${{ steps.build.outputs.server }}
+      any: ${{ steps.build.outputs.any }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
         uses: actions/checkout@v2.3.4
@@ -70,7 +73,7 @@ jobs:
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
       !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci') &&
-      needs.build-matrix.outputs.any == 'true'
+      needs.build-matrix.outputs.any != 'false'
     timeout-minutes: 40
     strategy:
       fail-fast: false
@@ -146,7 +149,7 @@ jobs:
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
-      - uses: actions/setup-node@v2.4.0
+      - uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
@@ -223,10 +226,10 @@ jobs:
         run: npm run ci:e2e:prepare
       - name: 'TESTS: backend'
         id: backend
-        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server == 'true'
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend'
-        if: steps.compare.outputs.equals != 'true' && needs.build-matrix.outputs.client == 'true'
+        if: steps.compare.outputs.equals != 'true' && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'

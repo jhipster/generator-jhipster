@@ -7,12 +7,15 @@ import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileNam
 import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
 
 @Component({
   mixins: [Vue2Filters.mixin]
 })
 export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || paginationInfiniteScroll) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
+  @Inject('alertService') private alertService: () => AlertService;
+
 <%_ if (searchEngine) { _%>
   public currentSearch = '';
 <%_ } _%>
@@ -114,6 +117,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ } _%>
       }, err => {
         this.isFetching = false;
+        this.alertService().showHttpError(this,err.response);
       });
       return;
     }
@@ -146,6 +150,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
 <%_ } _%>
     }, err => {
       this.isFetching = false;
+      this.alertService().showHttpError(this,err.response);
     });
   }
 
@@ -182,6 +187,8 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       this.retrieveAll<%= entityAngularName %>s();
   <%_ } _%>
       this.closeDialog();
+    }).catch(error => {
+      this.alertService().showHttpError(this,error.response);
     });
   }
 

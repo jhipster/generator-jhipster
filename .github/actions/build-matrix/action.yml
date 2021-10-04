@@ -39,28 +39,28 @@ inputs:
 outputs:
   matrix:
     description: 'Build Matrix'
-    value: ${{ steps.build.outputs.matrix }}
+    value: ${{ steps.build-matrix.outputs.matrix }}
   skip-workflow:
     description: 'Skip workflow'
     value: ${{ inputs.skip-workflow }}
   client:
     description: 'Client files has changed'
-    value: ${{ steps.build.outputs.client }}
+    value: ${{ steps.build-changes.outputs.client }}
   common:
     description: 'Common files has changed'
-    value: ${{ steps.build.outputs.common }}
+    value: ${{ steps.build-changes.outputs.common }}
   server:
     description: 'Server files has changed'
-    value: ${{ steps.build.outputs.server }}
+    value: ${{ steps.build-changes.outputs.server }}
   workspaces:
     description: 'Workspaces files has changed'
-    value: ${{ steps.build.outputs.workspaces }}
+    value: ${{ steps.build-changes.outputs.workspaces }}
   e2e:
     description: 'E2E files has changed'
-    value: ${{ steps.build.outputs.e2e }}
+    value: ${{ steps.build-changes.outputs.e2e }}
   any:
     description: 'Any files has changed'
-    value: ${{ steps.build.outputs.any }}
+    value: ${{ steps.build-changes.outputs.any }}
 runs:
   using: 'composite'
   steps:
@@ -68,7 +68,7 @@ runs:
       with:
         node-version: 14
     - name: 'Check changes'
-      id: build
+      id: build-changes
       run: |
         CLIENT=false
         SERVER=false
@@ -77,6 +77,11 @@ runs:
         E2E=false
         ANY=false
         if [[ "true" == "${{inputs.skip-workflow}}" ]]; then
+          echo "::set-output name=angular::false"
+          echo "::set-output name=react::false"
+          echo "::set-output name=vue::false"
+          echo "::set-output name=client-common::false"
+
           echo "::set-output name=client::${CLIENT}"
           echo "::set-output name=server::${SERVER}"
           echo "::set-output name=common::${COMMON}"
@@ -88,6 +93,11 @@ runs:
         fi
 
         if [[ "true" == "${{github.event.pull_request || 'true'}}" ]]; then
+          echo "::set-output name=angular::true"
+          echo "::set-output name=react::true"
+          echo "::set-output name=vue::true"
+          echo "::set-output name=client-common::true"
+
           echo "::set-output name=client::true"
           echo "::set-output name=server::true"
           echo "::set-output name=common::true"
@@ -176,28 +186,10 @@ runs:
           || WORKSPACES=true E2E=true ANY=true
         echo "::endgroup::"
 
-        echo '{ "include" : [] }' > matrix.json
-
-        if [[ "true" == "$ANGULAR" || "true" == "$CLIENT_COMMON" ]]; then
-          echo "::group::Workflows Angular"
-          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-angular.json
-          cat matrix.json
-          echo "::endgroup::"
-        fi
-
-        if [[ "true" == "$REACT" || "true" == "$CLIENT_COMMON" ]]; then
-          echo "::group::Workflows React"
-          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-react.json
-          cat matrix.json
-          echo "::endgroup::"
-        fi
-
-        if [[ "true" == "$VUE" || "true" == "$CLIENT_COMMON" ]]; then
-          echo "::group::Workflows Vue"
-          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-vue.json
-          cat matrix.json
-          echo "::endgroup::"
-        fi
+        echo "::set-output name=angular::${ANGULAR}"
+        echo "::set-output name=react::${REACT}"
+        echo "::set-output name=vue::${VUE}"
+        echo "::set-output name=client-common::${CLIENT_COMMON}"
 
         echo "::set-output name=client::${CLIENT}"
         echo "::set-output name=server::${SERVER}"
@@ -205,6 +197,33 @@ runs:
         echo "::set-output name=workspaces::${WORKSPACES}"
         echo "::set-output name=e2e::${E2E}"
         echo "::set-output name=any::${ANY}"
+      shell: bash
+
+    - name: 'Build matrix'
+      id: build-matrix
+      run: |
+        echo '{ "include" : [] }' > matrix.json
+
+        if [[ "true" == "${{ steps.build-changes.outputs.angular }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
+          echo "::group::Workflows Angular"
+          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-angular.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
+
+        if [[ "true" == "${{ steps.build-changes.outputs.react }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
+          echo "::group::Workflows React"
+          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-react.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
+
+        if [[ "true" == "${{ steps.build-changes.outputs.vue }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
+          echo "::group::Workflows Vue"
+          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-vue.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
 
         MATRIX=$(cat matrix.json)
         rm matrix.json

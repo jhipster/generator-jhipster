@@ -77,6 +77,9 @@ updates:
       # vue-cli peer-deps https://github.com/vuejs/vue-cli/issues/6374
       - dependency-name: 'eslint'
         versions: ['>=7']
+      # vue3 dependency
+      - dependency-name: 'vue-loader'
+        versions: ['>=16']
       # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
       - dependency-name: 'bootstrap'
         versions: ['>=5']

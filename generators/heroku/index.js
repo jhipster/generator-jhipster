@@ -255,21 +255,14 @@ module.exports = class extends BaseBlueprintGenerator {
               return true;
             },
           },
-          {
-            when: answers => answers.useOkta,
-            type: 'confirm',
-            name: 'oktaAdminPassword',
-            message: `${chalk.blue('Take note of this password!')} You will need it on your first login: ${chalk.blue(
-              this.randomPassword
-            )}`,
-            default: true,
-          },
         ];
 
         return this.prompt(prompts).then(props => {
           this.useOkta = props.useOkta;
-          this.oktaAdminLogin = props.oktaAdminLogin;
-          this.oktaAdminPassword = this.randomPassword;
+          if (this.useOkta) {
+            this.oktaAdminLogin = props.oktaAdminLogin;
+            this.oktaAdminPassword = this.randomPassword;
+          }
         });
       },
     };
@@ -785,7 +778,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
               }
               if (curlAvailable && jqAvailable) {
-                this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.'));
+                this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users for JHipster.'));
                 try {
                   await execCmd('./provision-okta-addon.sh');
                   this.log(chalk.bold('\nOkta configured successfully!'));
@@ -856,7 +849,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
               }
               if (curlAvailable && jqAvailable) {
-                this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with JHipster.'));
+                this.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users for JHipster.'));
                 try {
                   await execCmd('./provision-okta-addon.sh');
                   this.log(chalk.bold('\nOkta configured successfully!'));

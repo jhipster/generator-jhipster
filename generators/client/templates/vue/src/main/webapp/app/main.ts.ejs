@@ -24,6 +24,7 @@ import UserManagementService from '@/admin/user-management/user-management.servi
 <%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
+import AlertService from './shared/alert/alert.service';
 
 import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
@@ -120,7 +121,8 @@ new Vue({
     translationService: () => translationService,
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    accountService: () => accountService
+    accountService: () => accountService,
+    alertService: () => new AlertService()
 
   },
 <%_ if (enableTranslation) { _%>    i18n,<%_ } _%>

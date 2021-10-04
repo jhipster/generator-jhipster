@@ -80,8 +80,8 @@
     "update-snapshots": "npm run update-snapshot -- test generators"
   },
   "dependencies": {
-    "aws-sdk": "2.995.0",
-    "axios": "0.21.4",
+    "aws-sdk": "2.999.0",
+    "axios": "0.22.0",
     "chalk": "4.1.2",
     "chevrotain": "9.0.2",
     "commander": "8.2.0",
@@ -109,7 +109,7 @@
     "randexp": "0.5.3",
     "semver": "7.3.5",
     "shelljs": "0.8.4",
-    "simple-git": "2.45.1",
+    "simple-git": "2.46.0",
     "then-request": "6.0.2",
     "uuid": "8.3.2",
     "winston": "3.3.3",
@@ -126,7 +126,7 @@
     "eslint-plugin-import": "2.24.2",
     "eslint-plugin-mocha": "9.0.0",
     "eslint-plugin-prettier": "4.0.0",
-    "expect": "27.2.2",
+    "expect": "27.2.4",
     "fs-extra": "10.0.0",
     "jsdoc": "3.6.7",
     "mocha": "9.1.2",
