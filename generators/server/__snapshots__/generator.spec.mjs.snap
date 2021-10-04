@@ -378,6 +378,10 @@ Object {
           "file": "package/security/jwt/JWTFilter.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/management/SecurityMetersService.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {

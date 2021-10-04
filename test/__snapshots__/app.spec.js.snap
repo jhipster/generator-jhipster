@@ -209,6 +209,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/service/EmailAlreadyUsedException.java": Object {
     "stateCleared": "modified",
   },
@@ -632,6 +635,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -1994,6 +2000,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -3317,6 +3326,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -5912,6 +5924,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -7223,6 +7238,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -8553,6 +8571,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -9863,6 +9884,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -10805,6 +10829,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -12120,6 +12147,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -13403,6 +13433,9 @@ Object {
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -14678,6 +14711,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
