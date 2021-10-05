@@ -34,7 +34,7 @@
     "jest": "27.2.4",
     "jest-preset-angular": "10.0.1",
     "jest-date-mock": "1.0.8",
-    "jest-junit": "12.3.0",
+    "jest-junit": "13.0.0",
     "jest-sonar-reporter": "2.0.0",
     "merge-jsons-webpack-plugin": "1.0.21",
     "rimraf": "3.0.2",
