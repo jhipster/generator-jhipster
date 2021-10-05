@@ -1602,8 +1602,16 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
+          file: 'package/management/SecurityMetersServiceTests.java',
+          renameTo: generator => `${generator.testDir}management/SecurityMetersServiceTests.java`,
+        },
+        {
           file: 'package/security/jwt/TokenProviderTest.java',
           renameTo: generator => `${generator.testDir}security/jwt/TokenProviderTest.java`,
+        },
+        {
+          file: 'package/security/jwt/TokenProviderSecurityMetersTests.java',
+          renameTo: generator => `${generator.testDir}security/jwt/TokenProviderSecurityMetersTests.java`,
         },
         {
           file: 'package/security/jwt/JWTFilterTest.java',

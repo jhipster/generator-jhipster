@@ -1220,6 +1220,9 @@ Object {
   "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapper.java": Object {
     "stateCleared": "modified",
   },
@@ -1236,6 +1239,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -2536,6 +2542,9 @@ Object {
   "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/repository/timezone/DateTimeWrapper.java": Object {
     "stateCleared": "modified",
   },
@@ -2552,6 +2561,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
