@@ -11,12 +11,6 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
   ".prettierignore": Object {
     "stateCleared": "modified",
   },
@@ -173,6 +167,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -207,9 +204,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/service/EmailAlreadyUsedException.java": Object {
@@ -392,10 +386,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -461,12 +455,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -610,6 +598,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -641,9 +632,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -829,10 +817,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -907,12 +895,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
@@ -1820,12 +1802,6 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
     "stateCleared": "modified",
   },
@@ -1979,6 +1955,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -2010,9 +1989,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -3038,10 +3014,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -3143,12 +3119,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -3313,6 +3283,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -3344,9 +3317,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -4327,13 +4297,13 @@ Object {
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/DomainUserDetailsServiceIT.java": Object {
@@ -4345,10 +4315,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -4444,12 +4414,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -5756,12 +5720,6 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
     "stateCleared": "modified",
   },
@@ -5915,6 +5873,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -5946,9 +5907,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -6974,10 +6932,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -7078,12 +7036,6 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
-    "stateCleared": "modified",
-  },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
     "stateCleared": "modified",
   },
@@ -7237,6 +7189,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -7268,9 +7223,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -8296,10 +8248,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -8398,12 +8350,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {
@@ -8574,6 +8520,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -8605,9 +8554,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -9633,10 +9579,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -9732,12 +9678,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -9893,6 +9833,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -9924,9 +9867,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -10580,10 +10520,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -10685,12 +10625,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -10846,6 +10780,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -10877,9 +10814,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -11905,10 +11839,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -12007,12 +11941,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -12168,6 +12096,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -12199,9 +12130,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -13197,10 +13125,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -13299,12 +13227,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -13460,6 +13382,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -13491,9 +13416,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -14471,10 +14393,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
@@ -14585,12 +14507,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -14746,6 +14662,9 @@ Object {
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": Object {
     "stateCleared": "modified",
   },
@@ -14777,9 +14696,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/package-info.java": Object {
@@ -15808,10 +15724,10 @@ Object {
   "src/test/java/com/mycompany/myapp/security/jwt/JWTFilterTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java": Object {
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenProviderTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/service/MailServiceIT.java": Object {
