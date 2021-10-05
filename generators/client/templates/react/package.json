@@ -39,7 +39,7 @@
     "@types/webpack-env": "1.16.2",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
-    "autoprefixer": "10.3.6",
+    "autoprefixer": "10.3.7",
     "browser-sync": "2.27.5",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "9.0.1",
