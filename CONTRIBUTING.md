@@ -83,7 +83,7 @@ chances of your issue being dealt with quickly:
 
 You can use `jhipster info` to provide us the information we need.
 
-Click [here](issue-template) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
+Click [here][issue-template] to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
 
 You can run `jhipster info` in your project folder to get most of the above required info.
 
@@ -252,8 +252,8 @@ jhipster --with-entities
 You should see your changes reflected in the generated project.
 
 Note: The generated project might not build properly in case the generator is using a
-snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
-this case clone the jhipster/jhipster project and build it using:
+snapshot version of [jhipster/jhipster-bom](https://github.com/jhipster/jhipster-bom). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+this case clone the jhipster/jhipster-bom project and build it using:
 
 ```shell script
 ./mvnw clean install -Dgpg.skip=true
