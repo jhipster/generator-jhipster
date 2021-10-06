@@ -56,7 +56,7 @@ jobs:
         id: build
         uses: ./.github/actions/build-matrix
   applications:
-    name: ${{ matrix.app-sample }}
+    name: ${{ matrix.suite }}
     runs-on: ${{ matrix.os }}
     needs: build-matrix
     defaults:
@@ -80,59 +80,70 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         cache: [angular]
-        app-sample:
+        suite:
           - webflux-mongodb
           - webflux-mongodb-es-session
           - webflux-mongodb-oauth2
           - webflux-gateway-jwt
           - webflux-gateway-oauth2
           - webflux-psql
+          - webflux-psql-additional
           - webflux-mariadb-gradle
           - webflux-couchbase
         include:
-          - app-sample: webflux-mongodb
+          - suite: webflux-mongodb
+            app-sample: webflux-mongodb
             entity: mongodb
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: webflux-mongodb-es-session
+          - suite: webflux-mongodb-es-session
+            app-sample: webflux-mongodb-es-session
             entity: mongodb
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: webflux-mongodb-oauth2
+          - suite: webflux-mongodb-oauth2
+            app-sample: webflux-mongodb-oauth2
             entity: mongodb
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: webflux-gateway-jwt
+          - suite: webflux-gateway-jwt
+            app-sample: webflux-gateway-jwt
             entity: none
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-sample: webflux-gateway-oauth2
+          - suite: webflux-gateway-oauth2
+            app-sample: webflux-gateway-oauth2
             entity: none
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: webflux-psql
+          - suite: webflux-psql
+            app-sample: webflux-psql
             entity: sql
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-sample: webflux-mariadb-gradle
+          - suite: webflux-psql-additional
+            jdl-sample: webflux-psql,custom-domain
+          - suite: webflux-mariadb-gradle
+            app-sample: webflux-mariadb-gradle
             entity: sqllight
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-sample: webflux-couchbase
+          - suite: webflux-couchbase
+            app-sample: webflux-couchbase
             entity: couchbase
             environment: prod
             war: 0
@@ -151,11 +162,12 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          entities-sample: ${{ matrix.entity }}
-          application-sample: ${{ matrix.app-sample }}
-          application-environment: ${{ matrix.environment }}
+          entities-sample: ${{ matrix.entity || 'none' }}
+          jdl-sample: ${{ matrix.jdl-sample || '' }}
+          application-sample: ${{ matrix.app-sample || 'jdl' }}
+          application-environment: ${{ matrix.environment || 'prod' }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
-          enable-testcontainers: ${{ matrix.testcontainers == 1 }}
+          enable-testcontainers: ${{ matrix.testcontainers != 0 }}
       - uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ steps.setup.outputs.node-version }}

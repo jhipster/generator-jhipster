@@ -1,0 +1,8 @@
+application {
+  config {
+    reactive true
+    testFrameworks [cypress]
+    creationTimestamp 1617901618886
+  }
+  entities *
+}
