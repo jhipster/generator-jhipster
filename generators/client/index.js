@@ -25,6 +25,8 @@ const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const { writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
+const { clientI18nFiles } = require('../languages/files');
+
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -264,6 +266,19 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           this.skipUserManagement = true;
         }
       },
+
+      async loadNativeLanguage() {
+        if (!this.jhipsterConfig.baseName) return;
+        const context = {};
+        this.loadAppConfig(undefined, context);
+        this.loadDerivedAppConfig(context);
+        this.loadClientConfig(undefined, context);
+        this.loadDerivedClientConfig(context);
+        this.loadServerConfig(undefined, context);
+        this.loadPlatformConfig(undefined, context);
+        this.loadTranslationConfig(undefined, context);
+        await this._loadClientTranslations(context);
+      },
     };
   }
 
@@ -398,5 +413,59 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   get end() {
     if (useBlueprints) return;
     return this._end();
+  }
+
+  /**
+   * @experimental
+   * Load client native translation.
+   */
+  async _loadClientTranslations(configContext = this) {
+    configContext.clientTranslations = this.configOptions.clientTranslations;
+    if (configContext.clientTranslations) {
+      this.clientTranslations = configContext.clientTranslations;
+      return;
+    }
+    const { nativeLanguage } = configContext;
+    this.clientTranslations = configContext.clientTranslations = this.configOptions.clientTranslations = {};
+    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates/');
+
+    // Prepare and load en translation
+    const translationFiles = await this.writeFiles({
+      sections: clientI18nFiles,
+      rootTemplatesPath,
+      context: {
+        ...configContext,
+        lang: 'en',
+        clientSrcDir: '__tmp__',
+      },
+    });
+
+    // Prepare and load native translation
+    configContext.lang = configContext.nativeLanguage;
+    if (nativeLanguage && nativeLanguage !== 'en') {
+      translationFiles.push(
+        ...(await this.writeFiles({
+          sections: clientI18nFiles,
+          rootTemplatesPath,
+          context: {
+            ...configContext,
+            lang: configContext.nativeLanguage,
+            clientSrcDir: '__tmp__',
+          },
+        }))
+      );
+    }
+    for (const translationFile of translationFiles) {
+      _.merge(this.clientTranslations, this.readDestinationJSON(translationFile));
+      delete this.env.sharedFs.get(translationFile).state;
+    }
+  }
+
+  /**
+   * @experimental
+   * Get translation value for a key.
+   */
+  _getClientTranslation(translationKey) {
+    return _.get(this.clientTranslations, translationKey, `Translation missing for ${translationKey}`);
   }
 };
