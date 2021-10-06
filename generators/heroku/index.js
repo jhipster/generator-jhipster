@@ -295,7 +295,6 @@ module.exports = class extends BaseBlueprintGenerator {
           herokuJavaVersion: this.herokuJavaVersion,
           useOkta: this.useOkta,
           oktaAdminLogin: this.oktaAdminLogin,
-          oktaAdminPassword: this.oktaAdminPassword,
         });
       },
     };
