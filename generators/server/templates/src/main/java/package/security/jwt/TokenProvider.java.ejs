@@ -34,12 +34,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import tech.jhipster.config.JHipsterProperties;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.SignatureException;
 <%_ if (reactive) { _%>
 import io.jsonwebtoken.jackson.io.JacksonSerializer;
 <%_ } _%>
 import io.jsonwebtoken.security.Keys;
+
+import <%= packageName %>.management.SecurityMetersService;
 
 @Component
 public class TokenProvider {
@@ -56,7 +60,9 @@ public class TokenProvider {
 
     private final long tokenValidityInMillisecondsForRememberMe;
 
-    public TokenProvider(JHipsterProperties jHipsterProperties) {
+    private final SecurityMetersService securityMetersService;
+
+    public TokenProvider(JHipsterProperties jHipsterProperties, SecurityMetersService securityMetersService) {
         byte[] keyBytes;
         String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
         if (!ObjectUtils.isEmpty(secret)) {
@@ -75,6 +81,8 @@ public class TokenProvider {
         this.tokenValidityInMillisecondsForRememberMe =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt()
                 .getTokenValidityInSecondsForRememberMe();
+
+        this.securityMetersService = securityMetersService;
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
@@ -118,11 +126,28 @@ public class TokenProvider {
     public boolean validateToken(String authToken) {
         try {
             jwtParser.parseClaimsJws(authToken);
+
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            log.info("Invalid JWT token.");
-            log.trace("Invalid JWT token trace.", e);
+        } catch (ExpiredJwtException e) {
+            this.securityMetersService.trackTokenExpired();
+
+            log.trace("Invalid JWT token.", e);
+        } catch (UnsupportedJwtException e) {
+            this.securityMetersService.trackTokenUnsupported();
+
+            log.trace("Invalid JWT token.", e);
+        } catch (MalformedJwtException e) {
+            this.securityMetersService.trackTokenMalformed();
+
+            log.trace("Invalid JWT token.", e);
+        } catch (SignatureException e) {
+            this.securityMetersService.trackTokenInvalidSignature();
+
+            log.trace("Invalid JWT token.", e);
+        } catch (IllegalArgumentException e) { // TODO: should we let it bubble (no catch), to avoid defensive programming and follow the fail-fast principle?
+            log.error("Token validation error {}", e.getMessage());
         }
+
         return false;
     }
 }
