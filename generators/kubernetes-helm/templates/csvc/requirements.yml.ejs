@@ -6,12 +6,12 @@ dependencies:
     condition: kafka.enabled
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
-  - name: prometheus
+  - name: prometheus-community
     version: <%= HELM_PROMETHEUS %>
-    repository: https://charts.helm.sh/stable
+    repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
   - name: grafana
     version: <%= HELM_GRAFANA %>
-    repository: https://charts.helm.sh/stable
+    repository: https://grafana.github.io/helm-charts
     condition: prometheus.enabled
 <%_ } _%>

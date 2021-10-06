@@ -55,6 +55,7 @@ import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClie
     <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
   <%_ } _%>
 <%_ } _%>
+import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
 
@@ -90,6 +91,7 @@ describe('Component Tests', () => {
         router,
         provide: {
           <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+          alertService: () => new AlertService(),
 <%_
   const entitiesSeen = [entityAngularName];
   for (relationship of relationships) { _%>

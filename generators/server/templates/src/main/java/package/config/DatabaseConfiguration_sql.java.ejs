@@ -85,9 +85,9 @@ import java.util.UUID;
 
 @Configuration
 <%_ if (reactive) { _%>
-@EnableR2dbcRepositories("<%= packageName %>.repository")
+@EnableR2dbcRepositories({<%- domains.map(domain => `"${domain}.repository"`).join(', ') %>})
 <%_ } else { _%>
-@EnableJpaRepositories("<%= packageName %>.repository")
+@EnableJpaRepositories({<%- domains.map(domain => `"${domain}.repository"`).join(', ') %>})
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 @EnableTransactionManagement

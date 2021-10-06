@@ -15,3 +15,20 @@ sources:
 maintainers:
 - name: Team JHipster
   email:
+dependencies:
+<%_ if (useKafka) { _%>
+- name: kafka
+  version: <%= HELM_KAFKA %>
+  repository: https://charts.helm.sh/incubator
+  condition: kafka.enabled
+<%_ } _%>
+<%_ if (monitoringPrometheus) { _%>
+- name: prometheus-community
+  version: <%= HELM_PROMETHEUS %>
+  repository: https://prometheus-community.github.io/helm-charts
+  condition: prometheus.enabled
+- name: grafana
+  version: <%= HELM_GRAFANA %>
+  repository: https://grafana.github.io/helm-charts
+  condition: prometheus.enabled
+<%_ } _%>

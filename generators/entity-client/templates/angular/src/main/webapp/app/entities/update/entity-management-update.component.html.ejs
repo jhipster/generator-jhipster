@@ -54,10 +54,8 @@ _%>
         <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
         <%_ const values = field.enumValues;
-            for (key in values) {
-                const enumValue = values[key]; _%>
-                        <option value="<%= enumValue.name %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.<%= enumValue.name %>' | translate }}<% } else { %><%= enumValue.value %><% } %></option>
-        <%_ } _%>
+            const enumImports = generateEntityClientEnumImports(fields); _%> 
+                        <option *ngFor="let <%= _.lowerFirst(fieldType) %> of <%- _.lowerFirst(fieldType) %>Values" [value]="<%= _.lowerFirst(fieldType) %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.' + <%= _.lowerFirst(fieldType) %> | translate }}<% } else { %><%= _.lowerFirst(fieldType) %><% } %></option>
                     </select>
     <%_ } else { _%>
         <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>

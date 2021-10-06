@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.dto;
+package <%= entityAbsolutePackage %>.service.dto;
 
 import java.util.Objects;
 <%_ if (typeof javadoc !== 'undefined') { _%>
@@ -57,11 +57,11 @@ import java.util.UUID;
 import javax.persistence.Lob;
 <%_ } _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
-import <%= packageName %>.domain.enumeration.<%= element %>;
+import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
 /**
- * A DTO for the {@link <%= packageName %>.domain.<%= persistClass %>} entity.
+ * A DTO for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity.
  */
 <%_ if (typeof javadoc !== 'undefined') { _%>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")

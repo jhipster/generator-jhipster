@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const os = require('os');
 const prompts = require('./prompts');
 const { GENERATOR_COMMON, GENERATOR_LANGUAGES, GENERATOR_SERVER } = require('../generator-list');
@@ -120,6 +119,24 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
       },
 
+      loadEnvironmentVariables() {
+        if (process.env.JHI_BOM_VERSION) {
+          this.jhiBomVersion = process.env.JHI_BOM_VERSION;
+          this.info(`Using JHipster BOM version ${process.env.JHI_BOM_VERSION}`);
+        }
+
+        this.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+        if (this.defaultPackaging === 'war') {
+          this.info(`Using ${this.defaultPackaging} as default packaging`);
+        }
+
+        const JHI_PROFILE = process.env.JHI_PROFILE;
+        this.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
+        if (JHI_PROFILE) {
+          this.info(`Using ${this.defaultEnvironment} as default profile`);
+        }
+      },
+
       setupServerconsts() {
         // Make constants available in templates
         this.MAIN_DIR = constants.MAIN_DIR;
@@ -165,7 +182,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
         this.JIB_VERSION = constants.JIB_VERSION;
-        this.JHIPSTER_DEPENDENCIES_VERSION = constants.JHIPSTER_DEPENDENCIES_VERSION;
+        this.JHIPSTER_DEPENDENCIES_VERSION = this.jhiBomVersion || constants.JHIPSTER_DEPENDENCIES_VERSION;
         this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
         this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
         this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
@@ -302,10 +319,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       prepareForTemplates() {
         // Application name modified, using each technology's conventions
         this.frontendAppName = this.getFrontendAppName();
-        this.camelizedBaseName = _.camelCase(this.baseName);
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.lowercaseBaseName = this.baseName.toLowerCase();
-        this.humanizedBaseName = _.startCase(this.baseName);
         this.mainClass = this.getMainClassName();
         this.cacheManagerIsAvailable = [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(this.cacheProvider);
         this.testsNeedCsrf = [OAUTH2, SESSION].includes(this.authenticationType);
@@ -358,6 +371,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.user = this.configOptions.sharedEntities.User;
       },
 
+      loadDomains() {
+        if (!this.configOptions.sharedEntities) return;
+        this.domains = [
+          ...new Set(
+            Object.entries(this.configOptions.sharedEntities).map(([_name, entity]) => entity.entityAbsolutePackage || this.packageName)
+          ),
+        ];
+      },
+
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
           app: {
@@ -403,10 +425,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = this.serverPort;
-        packageJsonConfigStorage.packaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
-        if (process.env.JHI_PROFILE) {
-          packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
-        }
+        packageJsonConfigStorage.packaging = this.defaultPackaging;
+        packageJsonConfigStorage.default_environment = this.defaultEnvironment;
       },
       packageJsonDockerScripts() {
         const scriptsStorage = this.packageJson.createStorage('scripts');

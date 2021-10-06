@@ -43,7 +43,7 @@
 <%_ } _%>
   });
 -&>
-package <%= packageName %>.domain;
+package <%= entityAbsolutePackage %>.domain;
 
 <&- fragments.staticImportSection() -&>
 <&- fragments.importSection() -&>
@@ -77,7 +77,7 @@ import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
 
-import <%= packageName %>.domain.enumeration.<%= element %>;
+import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
 <%_ if (typeof javadoc === 'undefined') { _%>

@@ -19,7 +19,7 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
     ls -la "$JHI_FOLDER_APP"/
-    jhipster import-jdl *.jdl --no-insight $@
+    eval "$JHI_CLI import-jdl *.jdl --no-insight $@"
 
 elif [[ "$JHI_APP" == "jdl" ]]; then
     #-------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ elif [[ "$JHI_APP" == "jdl" ]]; then
     ls -la "$JHI_FOLDER_APP"/
 
     cd "$JHI_FOLDER_APP"
-    jhipster import-jdl *.jdl --no-insight $@
+    eval "$JHI_CLI import-jdl *.jdl --no-insight $@"
 
 else
     #-------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ else
     fi
 
     cd "$JHI_FOLDER_APP"
-    jhipster --force --no-insight --skip-checks --with-entities $@
+    eval "$JHI_CLI --force --no-insight --skip-checks --with-entities $@"
 
 fi
 

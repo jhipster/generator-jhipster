@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.mapper;
+package <%= entityAbsolutePackage %>.service.mapper;
 
 <%_
 let existingMappings = [];
@@ -38,8 +38,8 @@ _%>
 import java.util.Set;
 <%_ } _%>
 
-import <%= packageName %>.domain.*;
-import <%= packageName %>.service.dto.<%= dtoClass %>;
+import <%= entityAbsolutePackage %>.domain.*;
+import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 
 import org.mapstruct.*;
 <%_ if (uuidMapMethod) { _%>

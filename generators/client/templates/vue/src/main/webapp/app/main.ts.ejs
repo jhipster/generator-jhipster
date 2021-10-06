@@ -24,6 +24,7 @@ import UserManagementService from '@/admin/user-management/user-management.servi
 <%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
+import AlertService from './shared/alert/alert.service';
 
 import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
@@ -59,7 +60,7 @@ const i18n = config.initI18N(Vue);
 const store = config.initVueXStore(Vue);
 
 <%_ if (communicationSpringWebsocket) { _%>
-const trackerService = new TrackerService(router);
+const trackerService = new TrackerService(router<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
@@ -120,7 +121,8 @@ new Vue({
     translationService: () => translationService,
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    accountService: () => accountService
+    accountService: () => accountService,
+    alertService: () => new AlertService()
 
   },
 <%_ if (enableTranslation) { _%>    i18n,<%_ } _%>

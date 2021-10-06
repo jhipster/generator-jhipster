@@ -2738,6 +2738,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.microfrontend = config.microfrontend;
     dest.gatewayServerPort = config.gatewayServerPort;
 
+    dest.capitalizedBaseName = config.capitalizedBaseName;
+    dest.dasherizedBaseName = config.dasherizedBaseName;
+    dest.humanizedBaseName = config.humanizedBaseName;
+    dest.projectDescription = config.projectDescription;
+
     dest.testFrameworks = config.testFrameworks || [];
     dest.cypressCoverage = config.cypressCoverage;
 
@@ -2762,10 +2767,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (dest.baseName) {
       dest.camelizedBaseName = _.camelCase(dest.baseName);
       dest.hipster = this.getHipster(dest.baseName);
-      dest.capitalizedBaseName = _.upperFirst(dest.baseName);
-      dest.dasherizedBaseName = _.kebabCase(dest.baseName);
+      dest.capitalizedBaseName = dest.capitalizedBaseName || _.upperFirst(dest.baseName);
+      dest.dasherizedBaseName = dest.dasherizedBaseName || _.kebabCase(dest.baseName);
       dest.lowercaseBaseName = dest.baseName.toLowerCase();
-      dest.humanizedBaseName = dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName);
+      dest.humanizedBaseName =
+        dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
+      dest.projectDescription = dest.projectDescription || `Description for ${this.baseName}`;
     }
   }
 

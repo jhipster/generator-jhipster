@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%= entityAbsolutePackage %>.service;
 
 <%_
 const serviceClassName = entityClass + 'QueryService';
@@ -44,16 +44,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tech.jhipster.service.QueryService;
 
-import <%= packageName %>.domain.<%= persistClass %>;
-import <%= packageName %>.domain.*; // for static metamodels
-import <%= packageName %>.repository.<%= entityClass %>Repository;
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%= entityAbsolutePackage %>.domain.*; // for static metamodels
+import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
-import <%= packageName %>.service.criteria.<%= entityClass %>Criteria;
+import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ if (dtoMapstruct) { _%>
-import <%= packageName %>.service.dto.<%= dtoClass %>;
-import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 
 /**

@@ -61,5 +61,14 @@ gradleEnterprise {
         publishAlways()
     }
 }
+
+buildCache {
+    local { enabled = true }
+    remote(HttpBuildCache) {
+        push = true
+        enabled = false // Disabled as this might not always desired
+        url = '<%= gradleEnterpriseHost %>/cache/' // note the trailing slash!
+    }
+}
 <%_ } _%>  
 rootProject.name = "<%= dasherizedBaseName %>"

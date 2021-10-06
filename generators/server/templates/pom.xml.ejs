@@ -28,6 +28,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name><%= humanizedBaseName %></name>
+    <description><%= projectDescription %></description>
 
     <repositories>
 <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
@@ -104,7 +105,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
   <%_ if (!reactive) { _%>
-        <liquibase-hibernate5.version>4.4.3</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
   <%_ if (devDatabaseTypeH2Disk) { _%>
         <h2.version>1.4.200</h2.version>

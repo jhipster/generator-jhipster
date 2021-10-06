@@ -32,72 +32,70 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 
 import { <%= entityAngularName %>RoutingResolveService } from './<%= entityFileName %>-routing-resolve.service';
 
-describe('Service Tests', () => {
-  describe('<%= entityAngularName %> routing resolve service', () => {
-    let mockRouter: Router;
-    let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
-    let routingResolveService: <%= entityAngularName %>RoutingResolveService;
-    let service: <%= entityAngularName %>Service;
-    let result<%= entityAngularName %>: I<%= entityAngularName %> | undefined;
+describe('<%= entityAngularName %> routing resolve service', () => {
+  let mockRouter: Router;
+  let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
+  let routingResolveService: <%= entityAngularName %>RoutingResolveService;
+  let service: <%= entityAngularName %>Service;
+  let result<%= entityAngularName %>: I<%= entityAngularName %> | undefined;
 
-    beforeEach(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        providers: [Router, ActivatedRouteSnapshot],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [Router, ActivatedRouteSnapshot],
+    });
+    mockRouter = TestBed.inject(Router);
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    routingResolveService = TestBed.inject(<%= entityAngularName %>RoutingResolveService);
+    service = TestBed.inject(<%= entityAngularName %>Service);
+    result<%= entityAngularName %> = undefined;
+  });
+
+  describe('resolve', () => {
+    it('should return I<%= entityAngularName %> returned by find', () => {
+      // GIVEN
+      service.find = jest.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
+      mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
+
+      // WHEN
+      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+        result<%= entityAngularName %> = result;
       });
-      mockRouter = TestBed.inject(Router);
-      mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
-      routingResolveService = TestBed.inject(<%= entityAngularName %>RoutingResolveService);
-      service = TestBed.inject(<%= entityAngularName %>Service);
-      result<%= entityAngularName %> = undefined;
+
+      // THEN
+      expect(service.find).toBeCalledWith(<%- tsKeyId %>);
+      expect(result<%= entityAngularName %>).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
     });
 
-    describe('resolve', () => {
-      it('should return I<%= entityAngularName %> returned by find', () => {
-        // GIVEN
-        service.find = jest.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
-        mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
+    it('should return new I<%= entityAngularName %> if id is not provided', () => {
+      // GIVEN
+      service.find = jest.fn();
+      mockActivatedRouteSnapshot.params = {};
 
-        // WHEN
-        routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-          result<%= entityAngularName %> = result;
-        });
-
-        // THEN
-        expect(service.find).toBeCalledWith(<%- tsKeyId %>);
-        expect(result<%= entityAngularName %>).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
+      // WHEN
+      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+        result<%= entityAngularName %> = result;
       });
 
-      it('should return new I<%= entityAngularName %> if id is not provided', () => {
-        // GIVEN
-        service.find = jest.fn();
-        mockActivatedRouteSnapshot.params = {};
+      // THEN
+      expect(service.find).not.toBeCalled();
+      expect(result<%= entityAngularName %>).toEqual(new <%= entityAngularName %>());
+    });
 
-        // WHEN
-        routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-          result<%= entityAngularName %> = result;
-        });
+    it('should route to 404 page if data not found in server', () => {
+      // GIVEN
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as <%= entityAngularName %>})));
+      mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
-        // THEN
-        expect(service.find).not.toBeCalled();
-        expect(result<%= entityAngularName %>).toEqual(new <%= entityAngularName %>());
+      // WHEN
+      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+        result<%= entityAngularName %> = result;
       });
 
-      it('should route to 404 page if data not found in server', () => {
-        // GIVEN
-        jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as <%= entityAngularName %>})));
-        mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
-
-        // WHEN
-        routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-          result<%= entityAngularName %> = result;
-        });
-
-        // THEN
-        expect(service.find).toBeCalledWith(<%- tsKeyId %>);
-        expect(result<%= entityAngularName %>).toEqual(undefined);
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
-      });
+      // THEN
+      expect(service.find).toBeCalledWith(<%- tsKeyId %>);
+      expect(result<%= entityAngularName %>).toEqual(undefined);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });
   });
 });

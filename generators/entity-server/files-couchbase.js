@@ -37,7 +37,7 @@ const entityCouchbaseFiles = {
       templates: [
         {
           file: 'package/domain/Entity.java.jhi.spring_data_couchbase',
-          renameTo: generator => `${generator.packageFolder}/domain/${generator.persistClass}.java.jhi.spring_data_couchbase`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_couchbase`,
         },
       ],
     },
@@ -47,7 +47,7 @@ const entityCouchbaseFiles = {
       templates: [
         {
           file: 'package/repository/EntityRepository.java',
-          renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`,
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}Repository.java`,
         },
       ],
     },
