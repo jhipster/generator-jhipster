@@ -30,6 +30,7 @@ const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const { addSectionsCondition, mergeSections } = require('../utils');
 const { writeCouchbaseFiles } = require('./files-couchbase');
+const { writeSqlFiles } = require('./files-sql');
 
 /* Constants use throughout */
 const NO_DATABASE = databaseTypes.NO;
@@ -1736,6 +1737,8 @@ function writeFiles() {
     },
 
     ...writeCouchbaseFiles(),
+
+    ...writeSqlFiles(),
   };
 }
 

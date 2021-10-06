@@ -59,7 +59,7 @@ import org.springframework.r2dbc.core.RowsFetchSpec;
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <% relationships.forEach(function(rel) {
   if (rel.relationshipManyToMany && rel.ownerSide) { _%>
-import <%= entityAbsolutePackage %>.domain.<%= asEntity(rel.otherEntityNameCapitalized) %>;
+import <%= rel.otherEntity.entityAbsolutePackage %>.domain.<%= rel.otherEntity.persistClass %>;
   <%_ } _%>
 <%_ }); _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
@@ -67,12 +67,15 @@ import <%= entityAbsolutePackage %>.domain.<%= asEntity(rel.otherEntityNameCapit
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
-<%_ reactiveUniqueEntityTypes.forEach(function(element) { _%>
-import <%= entityAbsolutePackage %>.repository.rowmapper.<%= element %>RowMapper;
+<%_ [...reactiveOtherEntities, entity].forEach(otherEntity => { _%>
+import <%= otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%= otherEntity.entityClass %>RowMapper;
+  <%_ if (otherEntity.entityPackage !== entityPackage) { _%>
+import <%= otherEntity.entityAbsolutePackage %>.repository.<%= otherEntity.entityClass %>SqlHelper;
+  <%_ } _%>
 <%_ }); _%>
-import <%= entityAbsolutePackage %>.service.EntityManager;
+import <%= packageName %>.service.EntityManager;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
-import <%= entityAbsolutePackage %>.service.EntityManager.LinkTable;
+import <%= packageName %>.service.EntityManager.LinkTable;
 <%_ } _%>
 
 import reactor.core.publisher.Flux;
@@ -246,24 +249,4 @@ _%>
     }
 
 <%_ } _%>
-}
-
-class <%= entityClass %>SqlHelper {
-    static List<Expression> getColumns(Table table, String columnPrefix) {
-        List<Expression> columns = new ArrayList<>();
-<%_ fields.forEach(function(field) {
-    let col = field.fieldNameAsDatabaseColumn;
-    _%>
-        columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
-   <%_  if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
-        columns.add(Column.aliased("<%= col %>_content_type", table, columnPrefix + "_<%= col %>_content_type"));
-   <%_  } _%>
-<%_ }); _%>
-
-<%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
-        columns.add(Column.aliased("<%= getColumnName(rel.relationshipName) %>_id", table, columnPrefix + "_<%= getColumnName(rel.relationshipName) %>_id"));
-<%_ }); _%>
-        return columns;
-    }
-
 }

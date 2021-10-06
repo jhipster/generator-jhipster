@@ -157,6 +157,7 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       processUniqueEntityTypes() {
+        this.reactiveOtherEntities = new Set(this.reactiveEagerRelations.map(rel => rel.otherEntity));
         this.reactiveUniqueEntityTypes = new Set(this.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
         this.reactiveUniqueEntityTypes.add(this.entityClass);
       },

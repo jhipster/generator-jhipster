@@ -752,6 +752,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.user = this.configOptions.sharedEntities.User;
       },
 
+      loadOtherEntities() {
+        this.context.otherEntities = _.uniq(this.context.relationships.map(rel => rel.otherEntity));
+      },
+
       processOtherReferences() {
         this.context.otherReferences = this.context.otherRelationships.map(relationship => relationship.reference);
         this.context.allReferences

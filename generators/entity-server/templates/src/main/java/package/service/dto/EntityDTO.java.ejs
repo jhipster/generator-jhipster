@@ -60,6 +60,10 @@ import javax.persistence.Lob;
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
+<%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityPackage !== entityPackage)) { _%>
+import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoClass}` %>;
+<%_ } _%>
+
 /**
  * A DTO for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity.
  */

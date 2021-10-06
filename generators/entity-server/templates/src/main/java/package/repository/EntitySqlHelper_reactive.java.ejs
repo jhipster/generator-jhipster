@@ -1,0 +1,46 @@
+<%#
+ Copyright 2013-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= entityAbsolutePackage %>.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.relational.core.sql.Column;
+import org.springframework.data.relational.core.sql.Expression;
+import org.springframework.data.relational.core.sql.Table;
+
+public class <%= entityClass %>SqlHelper {
+
+    public static List<Expression> getColumns(Table table, String columnPrefix) {
+        List<Expression> columns = new ArrayList<>();
+<%_ fields.forEach(function(field) {
+    let col = field.fieldNameAsDatabaseColumn;
+    _%>
+        columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
+   <%_  if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
+        columns.add(Column.aliased("<%= col %>_content_type", table, columnPrefix + "_<%= col %>_content_type"));
+   <%_  } _%>
+<%_ }); _%>
+
+<%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
+        columns.add(Column.aliased("<%= getColumnName(rel.relationshipName) %>_id", table, columnPrefix + "_<%= getColumnName(rel.relationshipName) %>_id"));
+<%_ }); _%>
+        return columns;
+    }
+}
