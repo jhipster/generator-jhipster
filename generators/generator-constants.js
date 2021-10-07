@@ -22,7 +22,7 @@ const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-type
 const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
-const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
+const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17'];
 
 // Version of Node, NPM
