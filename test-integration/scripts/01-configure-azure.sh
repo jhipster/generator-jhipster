@@ -14,7 +14,17 @@ if [[ "$JHI_E2E" == "" ]]; then
 fi
 
 # hhttps://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#java
-if [[ "$JHI_JDK" = "11" ]]; then
+if [[ "$JHI_JDK" = "17" ]]; then
+    echo "*** Using OpenJDK 17"
+    sudo add-apt-repository ppa:openjdk-r/ppa -y
+    sudo apt-get update -q
+    sudo apt-get install -y openjdk-17-jdk
+    ls /usr/lib/jvm/ -la
+    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    echo "##vso[task.setvariable variable=JAVA_HOME]/usr/lib/jvm/java-17-openjdk-amd64"
+    java -version
+    javadoc --version
+elif [[ "$JHI_JDK" = "11" ]]; then
     echo "*** Using OpenJDK 11"
     echo "##vso[task.setvariable variable=JAVA_HOME]$JAVA_HOME_11_X64"
     echo "##vso[task.setvariable variable=PATH]$JAVA_HOME_11_X64\bin$PATH"
