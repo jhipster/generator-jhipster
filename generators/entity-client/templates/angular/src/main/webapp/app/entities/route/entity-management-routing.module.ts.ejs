@@ -33,7 +33,7 @@ const <%= entityInstance %>Route: Routes = [
         component: <%= entityAngularName %>Component,
 <%_ if (paginationPagination) { _%>
         data: {
-            defaultSort: 'id,asc',
+            defaultSort: '<%- primaryKey.name %>,asc',
         },
 <%_ } _%>
         canActivate: [UserRouteAccessService]
