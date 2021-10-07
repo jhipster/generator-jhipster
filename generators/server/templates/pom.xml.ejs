@@ -1430,6 +1430,7 @@
                         </execution>
                     </executions>
                 </plugin>
+<%_ if (!reactive) { _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -1473,6 +1474,7 @@
                         </execution>
                     </executions>
                 </plugin>
+<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
                 <plugin>
                     <!--
@@ -1991,6 +1993,122 @@
                                     <id>repackage</id>
                                     <goals>
                                         <goal>repackage</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+<%_ } _%>
+<%_ if (reactive) { _%>
+        <profile>
+            <id>surefire-java13-</id>
+            <activation>
+                <jdk>(,13]</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                            <configuration>
+                                <!-- Force alphabetical order to have a reproducible build -->
+                                <runOrder>alphabetical</runOrder>
+                                <excludes>
+                                    <exclude>**/*IT*</exclude>
+                                    <exclude>**/*IntTest*</exclude>
+                                </excludes>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${maven-failsafe-plugin.version}</version>
+                            <configuration>
+                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                                <!-- Force alphabetical order to have a reproducible build -->
+                                <runOrder>alphabetical</runOrder>
+                                <includes>
+                                    <include>**/*IT*</include>
+                                    <include>**/*IntTest*</include>
+                                </includes>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>integration-test</id>
+                                    <goals>
+                                        <goal>integration-test</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>verify</id>
+                                    <goals>
+                                        <goal>verify</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>surefire-java13+</id>
+            <activation>
+                <jdk>(13,]</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                            <configuration>
+                                <!-- Force alphabetical order to have a reproducible build -->
+                                <runOrder>alphabetical</runOrder>
+                                <excludes>
+                                    <exclude>**/*IT*</exclude>
+                                    <exclude>**/*IntTest*</exclude>
+                                </excludes>
+                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                                <argLine>-XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${maven-failsafe-plugin.version}</version>
+                            <configuration>
+                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                                <!-- Force alphabetical order to have a reproducible build -->
+                                <runOrder>alphabetical</runOrder>
+                                <includes>
+                                    <include>**/*IT*</include>
+                                    <include>**/*IntTest*</include>
+                                </includes>
+                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                                <argLine>-XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>integration-test</id>
+                                    <goals>
+                                        <goal>integration-test</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>verify</id>
+                                    <goals>
+                                        <goal>verify</goal>
                                     </goals>
                                 </execution>
                             </executions>

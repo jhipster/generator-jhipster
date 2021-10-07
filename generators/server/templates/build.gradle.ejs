@@ -127,6 +127,14 @@ test {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
+<%_ if (reactive) { _%>
+
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+        jvmArgs += [
+            "-XX:+AllowRedefinitionToAddDeleteMethods"
+        ]
+    }
+<%_ } _%>
 }
 
 modernizer {
@@ -164,6 +172,14 @@ task integrationTest(type: Test) {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
+<%_ if (reactive) { _%>
+
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+        jvmArgs += [
+            "-XX:+AllowRedefinitionToAddDeleteMethods"
+        ]
+    }
+<%_ } _%>
 }
 <%_ if (cucumberTests) { _%>
 
