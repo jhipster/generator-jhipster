@@ -104,7 +104,7 @@ if (databaseTypeSql) {
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
 
     @Override
-    Mono<Void> deleteById(Long id);
+    Mono<Void> deleteById(<%= primaryKey.type %> id);
 
   <%_ } _%>
 
@@ -138,7 +138,7 @@ if (databaseTypeSql) {
     Flux<<%= persistClass %>> findAll();
 
     @Override
-    Mono<<%= persistClass %>> findById(Long id);
+    Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
 
     @Override
     <S extends <%= persistClass %>> Mono<S> save(S entity);
@@ -165,7 +165,7 @@ interface <%= entityClass %>RepositoryInternal {
 
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
 
-    Mono<Void> deleteById(Long id);
+    Mono<Void> deleteById(<%= primaryKey.type %> id);
   <%_ } _%>
 
 }
