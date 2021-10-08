@@ -28,13 +28,6 @@
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "jpaFilteringRelationship",
-      "otherEntityRelationshipName": "requiredOneToMany",
-      "relationshipName": "requiredOneToManyOtherSide",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "jpaFilteringRelationship",
       "otherEntityRelationshipName": "oneToMany",
       "relationshipName": "oneToManyOtherSide",
       "otherEntityField": "id"
