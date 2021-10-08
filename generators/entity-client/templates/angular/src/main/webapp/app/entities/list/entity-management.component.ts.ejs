@@ -153,7 +153,14 @@ _%>
 
     <%_ } else if (paginationInfiniteScroll) { _%>
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
-        this.links = this.parseLinks.parse(headers.get('link') ?? '');
+        const linkHeader = headers.get('link');
+        if (linkHeader) {
+            this.links = this.parseLinks.parse(linkHeader);
+        } else {
+            this.links = {
+                last: 0,
+            };
+        }
         if (data) {
             for (const d of data) {
                 this.<%= entityInstancePlural %>.push(d);
