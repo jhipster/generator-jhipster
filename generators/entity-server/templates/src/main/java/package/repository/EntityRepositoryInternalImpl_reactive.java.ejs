@@ -149,7 +149,7 @@ _%>
 
     @Override
     public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
-        return createQuery(null, where("<%= primaryKey.nameCapitalized %>").is(id)).one();
+        return createQuery(null, where("<%= primaryKey.name %>").is(id)).one();
     }
 
 <%_ if (fieldsContainOwnerManyToMany) { _%>
