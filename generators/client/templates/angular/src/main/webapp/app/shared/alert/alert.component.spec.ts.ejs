@@ -24,43 +24,41 @@ import { AlertService } from 'app/core/util/alert.service';
 
 import { AlertComponent } from './alert.component';
 
-describe('Component Tests', () => {
-  describe('Alert Component', () => {
-    let comp: AlertComponent;
-    let fixture: ComponentFixture<AlertComponent>;
-    let mockAlertService: AlertService;
+describe('Alert Component', () => {
+  let comp: AlertComponent;
+  let fixture: ComponentFixture<AlertComponent>;
+  let mockAlertService: AlertService;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          declarations: [AlertComponent],
-          providers: [AlertService],
-        })
-          .overrideTemplate(AlertComponent, '')
-          .compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [AlertComponent],
+        providers: [AlertService],
       })
-    );
+        .overrideTemplate(AlertComponent, '')
+        .compileComponents();
+    })
+  );
 
-    beforeEach(() => {
-      fixture = TestBed.createComponent(AlertComponent);
-      comp = fixture.componentInstance;
-      mockAlertService = TestBed.inject(AlertService);
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AlertComponent);
+    comp = fixture.componentInstance;
+    mockAlertService = TestBed.inject(AlertService);
+  });
 
-    it('Should call alertService.get on init', () => {
-      // WHEN
-      comp.ngOnInit();
+  it('Should call alertService.get on init', () => {
+    // WHEN
+    comp.ngOnInit();
 
-      // THEN
-      expect(mockAlertService.get).toHaveBeenCalled();
-    });
+    // THEN
+    expect(mockAlertService.get).toHaveBeenCalled();
+  });
 
-    it('Should call alertService.clear on destroy', () => {
-      // WHEN
-      comp.ngOnDestroy();
+  it('Should call alertService.clear on destroy', () => {
+    // WHEN
+    comp.ngOnDestroy();
 
-      // THEN
-      expect(mockAlertService.clear).toHaveBeenCalled();
-    });
+    // THEN
+    expect(mockAlertService.clear).toHaveBeenCalled();
   });
 });

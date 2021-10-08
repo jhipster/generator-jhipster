@@ -31,144 +31,142 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from './login.service';
 import { LoginComponent } from './login.component';
 
-describe('Component Tests', () => {
-  describe('LoginComponent', () => {
-    let comp: LoginComponent;
-    let fixture: ComponentFixture<LoginComponent>;
-    let mockRouter: Router;
-    let mockAccountService: AccountService;
-    let mockLoginService: LoginService;
+describe('LoginComponent', () => {
+  let comp: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
+  let mockRouter: Router;
+  let mockAccountService: AccountService;
+  let mockLoginService: LoginService;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          declarations: [LoginComponent],
-          providers: [
-            FormBuilder,
-            AccountService,
-            Router,
-            {
-              provide: LoginService,
-              useValue: {
-                login: jest.fn(() => of({})),
-              },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [LoginComponent],
+        providers: [
+          FormBuilder,
+          AccountService,
+          Router,
+          {
+            provide: LoginService,
+            useValue: {
+              login: jest.fn(() => of({})),
             },
-          ],
-        })
-          .overrideTemplate(LoginComponent, '')
-          .compileComponents();
+          },
+        ],
       })
-    );
+        .overrideTemplate(LoginComponent, '')
+        .compileComponents();
+    })
+  );
 
-    beforeEach(() => {
-      fixture = TestBed.createComponent(LoginComponent);
-      comp = fixture.componentInstance;
-      mockRouter = TestBed.inject(Router);
-      mockLoginService = TestBed.inject(LoginService);
-      mockAccountService = TestBed.inject(AccountService);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(LoginComponent);
+    comp = fixture.componentInstance;
+    mockRouter = TestBed.inject(Router);
+    mockLoginService = TestBed.inject(LoginService);
+    mockAccountService = TestBed.inject(AccountService);
+  });
+
+  describe('ngOnInit', () => {
+    it('Should call accountService.identity on Init', () => {
+      // GIVEN
+      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+
+      // WHEN
+      comp.ngOnInit();
+
+      // THEN
+      expect(mockAccountService.identity).toHaveBeenCalled();
     });
 
-    describe('ngOnInit', () => {
-      it('Should call accountService.identity on Init', () => {
-        // GIVEN
-        mockAccountService.identity = jest.fn(() => of(null));
-        mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+    it('Should call accountService.isAuthenticated on Init', () => {
+      // GIVEN
+      mockAccountService.identity = jest.fn(() => of(null));
 
-        // WHEN
-        comp.ngOnInit();
+      // WHEN
+      comp.ngOnInit();
 
-        // THEN
-        expect(mockAccountService.identity).toHaveBeenCalled();
-      });
-
-      it('Should call accountService.isAuthenticated on Init', () => {
-        // GIVEN
-        mockAccountService.identity = jest.fn(() => of(null));
-
-        // WHEN
-        comp.ngOnInit();
-
-        // THEN
-        expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
-      });
-
-      it('should navigate to home page on Init if authenticated=true', () => {
-        // GIVEN
-        mockAccountService.identity = jest.fn(() => of(null));
-        mockAccountService.getAuthenticationState = jest.fn(() => of(null));
-        mockAccountService.isAuthenticated = () => true;
-
-        // WHEN
-        comp.ngOnInit();
-
-        // THEN
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
-      });
+      // THEN
+      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
     });
 
-    describe('ngAfterViewInit', () => {
-      it('shoult set focus to username input after the view has been initialized', () => {
-        // GIVEN
-        const node = {
-          focus: jest.fn(),
-        };
-        comp.username = new ElementRef(node);
+    it('should navigate to home page on Init if authenticated=true', () => {
+      // GIVEN
+      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+      mockAccountService.isAuthenticated = () => true;
 
-        // WHEN
-        comp.ngAfterViewInit();
+      // WHEN
+      comp.ngOnInit();
 
-        // THEN
-        expect(node.focus).toHaveBeenCalled();
+      // THEN
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+    });
+  });
+
+  describe('ngAfterViewInit', () => {
+    it('shoult set focus to username input after the view has been initialized', () => {
+      // GIVEN
+      const node = {
+        focus: jest.fn(),
+      };
+      comp.username = new ElementRef(node);
+
+      // WHEN
+      comp.ngAfterViewInit();
+
+      // THEN
+      expect(node.focus).toHaveBeenCalled();
+    });
+  });
+
+  describe('login', () => {
+    it('should authenticate the user and navigate to home page', () => {
+      // GIVEN
+      const credentials = {
+        username: 'admin',
+        password: 'admin',
+        rememberMe: true,
+      };
+
+      comp.loginForm.patchValue({
+        username: 'admin',
+        password: 'admin',
+        rememberMe: true,
       });
+
+      // WHEN
+      comp.login();
+
+      // THEN
+      expect(comp.authenticationError).toEqual(false);
+      expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
     });
 
-    describe('login', () => {
-      it('should authenticate the user and navigate to home page', () => {
-        // GIVEN
-        const credentials = {
-          username: 'admin',
-          password: 'admin',
-          rememberMe: true,
-        };
+    it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
+      // GIVEN
+      jest.spyOn(mockRouter, 'getCurrentNavigation').mockReturnValue({} as Navigation);
 
-        comp.loginForm.patchValue({
-          username: 'admin',
-          password: 'admin',
-          rememberMe: true,
-        });
+      // WHEN
+      comp.login();
 
-        // WHEN
-        comp.login();
+      // THEN
+      expect(comp.authenticationError).toEqual(false);
+      expect(mockRouter.navigate).not.toHaveBeenCalled();
+    });
 
-        // THEN
-        expect(comp.authenticationError).toEqual(false);
-        expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
-      });
+    it('should stay on login form and show error message on login error', () => {
+      // GIVEN
+      mockLoginService.login = jest.fn(() => throwError({}));
 
-      it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
-        // GIVEN
-        jest.spyOn(mockRouter, 'getCurrentNavigation').mockReturnValue({} as Navigation);
+      // WHEN
+      comp.login();
 
-        // WHEN
-        comp.login();
-
-        // THEN
-        expect(comp.authenticationError).toEqual(false);
-        expect(mockRouter.navigate).not.toHaveBeenCalled();
-      });
-
-      it('should stay on login form and show error message on login error', () => {
-        // GIVEN
-        mockLoginService.login = jest.fn(() => throwError({}));
-
-        // WHEN
-        comp.login();
-
-        // THEN
-        expect(comp.authenticationError).toEqual(true);
-        expect(mockRouter.navigate).not.toHaveBeenCalled();
-      });
+      // THEN
+      expect(comp.authenticationError).toEqual(true);
+      expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
   });
 });
