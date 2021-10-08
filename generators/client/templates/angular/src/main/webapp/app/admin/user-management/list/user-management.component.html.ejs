@@ -104,9 +104,9 @@
             </div>
           </td>
 <%_ if (!databaseTypeCassandra) { _%>
-          <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ user.createdDate | date: 'dd MMM yyyy HH:mm' }}</td>
           <td>{{ user.lastModifiedBy }}</td>
-          <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ user.lastModifiedDate | date: 'dd MMM yyyy HH:mm' }}</td>
 <%_ } _%>
           <td class="text-right">
             <div class="btn-group">
