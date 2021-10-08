@@ -334,7 +334,7 @@ describe('<%= entityClass %> e2e test', () => {
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
   _%>
-       cy.get(`[data-cy="<%= relationship.relationshipFieldName %>"]`).select(1);
+       cy.get(`[data-cy="<%= relationship.relationshipFieldName %>"]`).select(<%= relationship.collection ? '[0]' : '1' %>);
   <%_ } _%>
 
   <%_ if (fieldsContainBlobOrImage) { _%>
