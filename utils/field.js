@@ -129,9 +129,12 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     });
   } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE].includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
-    const isoDate = faker.date.recent(1, changelogDate).toISOString();
+    const date = faker.date.recent(1, changelogDate);
+    const isoDate = date.toISOString();
     if (field.fieldType === LOCAL_DATE) {
       data = isoDate.split('T')[0];
+    } else if (type === 'json-serializable') {
+      data = date;
     } else {
       // Write the date without milliseconds so Java can parse it
       // See https://stackoverflow.com/a/34053802/150868
@@ -152,6 +155,10 @@ const generateFakeDataForField = (field, faker, changelogDate, type = 'csv') => 
     data = faker.datatype.uuid();
   } else if (field.fieldType === BOOLEAN) {
     data = faker.datatype.boolean();
+  }
+
+  if (field.fieldType === BYTES && type === 'json-serializable') {
+    data = Buffer.from(data).toString('base64');
   }
 
   // Validation rules
@@ -289,6 +296,9 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
 
   field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
   field.fieldWithContentType = (fieldType === BYTES || fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
+  if (field.fieldWithContentType) {
+    field.contentTypeFieldName = `${field.fieldName}ContentType`;
+  }
 
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = _.snakeCase(field.fieldName);
