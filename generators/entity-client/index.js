@@ -24,7 +24,7 @@ const { entityClientI18nFiles } = require('../entity-i18n/files');
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
-  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
+  SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT, VUE },
 } = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
 const { SQL } = require('../../jdl/jhipster/database-types');
@@ -72,7 +72,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
       setupCypress() {
         const entity = this.entity;
-        this.cypressBootstrapEntities = !entity.reactive || entity.databaseType !== SQL;
+        this.cypressBootstrapEntities =
+          (!entity.reactive || entity.databaseType !== SQL) &&
+          (this.clientFramework !== VUE || !entity.relationships.some(rel => rel.relationshipRequired && rel.collection));
       },
     };
   }
