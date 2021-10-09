@@ -460,6 +460,7 @@ const files = {
       templates: [
         'account/activate/activate.component.spec.ts',
         'account/password/password.component.spec.ts',
+        'account/password/password.service.spec.ts',
         'account/password/password-strength-bar/password-strength-bar.component.spec.ts',
         'account/password-reset/init/password-reset-init.component.spec.ts',
         'account/password-reset/finish/password-reset-finish.component.spec.ts',
