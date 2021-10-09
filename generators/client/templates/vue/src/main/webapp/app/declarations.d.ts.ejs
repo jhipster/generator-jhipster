@@ -25,3 +25,17 @@ declare const VERSION: string;
 <%_ if (enableTranslation) { _%>
 declare const I18N_HASH: string;
 <%_ } _%>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of remotes) { _%>
+
+declare module '@<%= remote.lowercaseBaseName %>/entities-router' {
+  const _default: [];
+  export default _default;
+}
+
+declare module '@<%= remote.lowercaseBaseName %>/entities-menu' {
+  const _default: unknown;
+  export default _default;
+}
+  <%_ } _%>
+<%_ } _%>

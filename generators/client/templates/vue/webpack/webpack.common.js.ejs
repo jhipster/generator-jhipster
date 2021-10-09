@@ -31,7 +31,7 @@ module.exports = async (env, options) => {
       mode: options.mode,
       context: resolve(),
       entry: {
-        app: './<%= CLIENT_MAIN_SRC_DIR %>app/main.ts',
+        app: './<%= CLIENT_MAIN_SRC_DIR %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
       },
       output: {
         path: resolve('<%= DIST_DIR %>'),

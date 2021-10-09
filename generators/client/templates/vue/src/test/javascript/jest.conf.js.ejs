@@ -11,12 +11,15 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>', '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/router', '.*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
-    '.*\\.(vue)$': 'vue-jest',
+    '.*\\.(vue)$': '<%= microfrontend ? '@vue/vue2-jest' : 'vue-jest' %>',
     '^.+\\.tsx?$': 'ts-jest',
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1',
     ...pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
+<%_ if (applicationTypeGateway) { _%>
+    '^@(<%= remotes.map(remote => remote.lowercaseBaseName).join('|') %>)/(.*)$': '<rootDir>/src/test/javascript/spec/app/microfrontends/$2',
+<%_ } _%>
   },
   reporters: [
     'default',

@@ -1,4 +1,18 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
+<%_ if (applicationTypeMicroservice) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
 
 @Component
-export default class EntitiesMenu extends Vue {}
+export default class EntitiesMenu extends Vue {
+<%_ if (applicationTypeMicroservice) { _%>
+  @Inject({ default: true }) private readonly microfrontendI18n!: string;
+  @Inject('translationService') private translationService: () => TranslationService;
+
+  created(): void {
+    if (this.microfrontendI18n) {
+      this.translationService().loadTranslations('<%= endpointPrefix %>/', I18N_HASH);
+    }
+  }
+<%_ } _%>
+}

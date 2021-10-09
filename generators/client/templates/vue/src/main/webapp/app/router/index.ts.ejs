@@ -15,6 +15,12 @@ import account from "@/router/account";
 import admin from "@/router/admin";
 import entities from "@/router/entities";
 import pages from "@/router/pages";
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+  <%_ for (const remote of remotes) { _%>
+import <%= remote.lowercaseBaseName %>Router from '@<%= remote.lowercaseBaseName %>/entities-router';
+  <%_ } _%>
+<%_ } _%>
 
 Vue.use(Router);
 
@@ -44,6 +50,11 @@ export default new Router({
 <%_ } _%>
     ...admin,
     ...entities,
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of remotes) { _%>
+    ...<%= remote.lowercaseBaseName %>Router,
+  <%_ } _%>
+<%_ } _%>
     ...pages
   ]
 });

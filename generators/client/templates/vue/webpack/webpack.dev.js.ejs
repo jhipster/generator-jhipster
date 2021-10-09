@@ -58,7 +58,7 @@ module.exports = (env, options) => ({
 <%_ } _%>
           '/auth'
         ],
-        target: 'http://127.0.0.1:<%= serverPort %>',
+        target: 'http://localhost:<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
         secure: false,
       },
 <%_ if (communicationSpringWebsocket) { _%>
@@ -66,7 +66,7 @@ module.exports = (env, options) => ({
         context: [
           '/websocket'
         ],
-        target: 'ws://127.0.0.1:<%= serverPort %>',
+        target: 'ws://localhost:<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
         ws: true
       }
 <%_ } _%>
@@ -83,7 +83,7 @@ module.exports = (env, options) => ({
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: 'http://localhost:<%= devServerPort %>',
+          target: `http://localhost:${options.watch ? '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
 <%_ if (communicationSpringWebsocket) { _%>
           ws: true,
 <%_ } _%>

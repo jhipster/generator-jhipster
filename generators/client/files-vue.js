@@ -63,6 +63,26 @@ const vueFiles = {
       ],
     },
   ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js.jhi.vue'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      path: VUE_DIR,
+      templates: ['index.ts'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      path: CLIENT_TEST_SRC_DIR,
+      templates: [
+        'spec/app/microfrontends/entities-menu.component.ts',
+        'spec/app/microfrontends/entities-menu.vue',
+        'spec/app/microfrontends/entities-router.ts',
+      ],
+    },
+  ],
   sass: [
     {
       path: CLIENT_MAIN_SRC_DIR,

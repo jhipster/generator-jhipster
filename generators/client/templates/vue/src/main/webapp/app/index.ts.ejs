@@ -16,22 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "extends": "./tsconfig",
-  "compilerOptions": {
-    "outDir": "<%= BUILD_DIR %>out-tsc/spec",
-<%_ if (microfrontend && applicationTypeGateway) { _%>
-    "paths": {
-  <%_ for (const remote of remotes) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["<%= CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/*"],
-  <%_ } _%>
-      "@/*": ["*"]
-    },
-<%_ } _%>
-    "types": ["jest", "node"]
-  },
-  "include": [
-    "<%= CLIENT_MAIN_SRC_DIR %>app/**/*",
-    "<%= CLIENT_TEST_SRC_DIR %>spec/**/*"
-  ]
-}
+import('./main');

@@ -2,6 +2,9 @@ import axios from 'axios';
 import VueI18n from 'vue-i18n';
 import { Store } from 'vuex';
 import dayjs from 'dayjs';
+<%_ if (microfrontend) { _%>
+import deepmerge from 'deepmerge';
+<%_ } _%>
 
 export default class TranslationService {
   private store: Store<unknown>;
@@ -11,6 +14,21 @@ export default class TranslationService {
     this.store = store;
     this.i18n = i18n;
   }
+<%_ if (microfrontend) { _%>
+
+  public loadTranslations(prefix: string, hash: string) {
+    const currentLanguage = this.store.getters.currentLanguage;
+    if (this.i18n) {
+      const translations = this.i18n.messages[currentLanguage];
+      axios.get(`${prefix}i18n/${currentLanguage}.json?_=${hash}`).then((res: any) => {
+        if (res.data) {
+          this.i18n.setLocaleMessage(currentLanguage, deepmerge(translations, res.data));
+          this.store.commit('currentLanguage', currentLanguage);
+        }
+      });
+    }
+  }
+<%_ } _%>
 
   public refreshTranslation(newLanguage: string) {
     let currentLanguage = this.store.getters.currentLanguage;

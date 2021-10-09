@@ -595,6 +595,18 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               'concurrently -k -s first "npm run backend:start" "npm start" "wait-on http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"',
           });
         }
+        // Vue eagerly loads remotes, wait for it.
+        if (this.microfrontend && this.applicationTypeGateway && this.clientFrameworkVue) {
+          const remotesScript = this.remotes
+            .map(
+              app =>
+                `echo "Waiting for microfrontend ${app.baseName} to start" && wait-on http-get://localhost:$npm_package_config_backend_port/${app.endpointPrefix}/remoteEntry.js && echo "Microfrontend ${app.baseName} started"`
+            )
+            .join(' && ');
+          scriptsStorage.set({
+            'ci:server:await': `${scriptsStorage.get('ci:server:await')} && ${remotesScript}`,
+          });
+        }
       },
     };
   }

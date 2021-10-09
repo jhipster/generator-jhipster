@@ -28,6 +28,7 @@ const { PaginationTypes, ServiceTypes } = require('../jdl/jhipster/entity-option
 const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 const { OAUTH2 } = require('../jdl/jhipster/authentication-types');
+const { ANGULAR_X } = require('../jdl/jhipster/client-framework-types');
 const { CommonDBTypes } = require('../jdl/jhipster/field-types');
 
 const { BOOLEAN, LONG, STRING, UUID } = CommonDBTypes;
@@ -204,10 +205,13 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
   }
 
-  const { microserviceName, entityFileName } = entityWithConfig;
+  const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
   entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
   entityWithConfig.entityPage =
-    entityWithConfig.applicationType === MICROSERVICE && microserviceName
+    microfrontend &&
+    microserviceName &&
+    entityWithConfig.clientFramework !== ANGULAR_X &&
+    (entityWithConfig.applicationType === MICROSERVICE || entityWithConfig.applicationType === GATEWAY)
       ? `${microserviceName.toLowerCase()}/${entityFileName}`
       : `${entityFileName}`;
 
@@ -456,6 +460,9 @@ function loadRequiredConfigIntoEntity(entity, config) {
     jhiPrefix: config.jhiPrefix,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
+    microfrontend: config.microfrontend,
+    // Workaround different paths
+    clientFramework: config.clientFramework,
   });
   return entity;
 }

@@ -202,12 +202,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadTranslationConfig();
       },
 
-      checkMicrofrontend() {
-        if (this.microfrontend && !this.clientFrameworkAngular) {
-          throw new Error(`Microfrontend requires ${ANGULAR} client framework.`);
-        }
-      },
-
       validateSkipServer() {
         if (
           this.jhipsterConfig.skipServer &&
@@ -301,7 +295,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       },
 
       loadEntities() {
-        if (!this.configOptions.sharedEntities) {
+        if (!this.configOptions.sharedEntities || (this.applicationTypeGateway && this.microfrontend)) {
           this.localEntities = [];
           return;
         }
@@ -393,7 +387,18 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
       microfrontend() {
         if (!this.microfrontend) return;
-        this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
+        if (this.clientFrameworkAngular) {
+          this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
+        } else if (this.clientFrameworkVue) {
+          this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })");
+          this.packageJson.merge({
+            dependencies: {
+              deepmerge: this.dependabotPackageJson.dependencies.deepmerge,
+            },
+          });
+        } else {
+          throw new Error(`Client framework ${this.clientFramework} doesn't support microfrontends`);
+        }
       },
     };
   }
