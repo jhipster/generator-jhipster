@@ -195,15 +195,15 @@ _%>
   <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
                     <div class="form-group">
                         <label v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
                             <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>
   <%_ if (relationship.relationshipValidate) { _%>
-                    <div v-if="$v.<%= entityInstance %>.<%= relationshipName %>.$anyDirty && $v.<%= entityInstance %>.<%= relationshipName %>.$invalid">
+                    <div v-if="$v.<%= entityInstance %>.<%= relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.$anyDirty && $v.<%= entityInstance %>.<%= relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.$invalid">
     <%_ if (relationshipRequired) { _%>
-                        <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= relationshipName %>.required" v-text="$t('entity.validation.required')">
+                        <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= relationship.collection ? relationshipFieldNamePlural : relationshipFieldName %>.required" v-text="$t('entity.validation.required')">
                             This field is required.
                         </small>
     <%_ } _%>

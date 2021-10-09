@@ -113,7 +113,7 @@ _%>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
-    <%= relationship.relationshipFieldName %>: {
+    <%= relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: {
       required
     },
   <%_ } _%>
