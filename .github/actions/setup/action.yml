@@ -152,6 +152,8 @@ runs:
 
         # https://github.com/actions/virtual-environments/issues/1499#issuecomment-689467080
         echo "MAVEN_OPTS=-Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120" >> $GITHUB_ENV
+        # Use java backward compatible locale values https://bugs.openjdk.java.net/browse/JDK-8267069
+        echo "java.locale.useOldISOCodes=true" >> $GITHUB_ENV
 
         echo "::set-output name=application-path::${{inputs.application-path}}"
         echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"

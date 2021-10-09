@@ -35,6 +35,7 @@ cache:
 env:
   global:
     - NODE_VERSION=<%= NODE_VERSION %>
+    - JHI_JDK=<%= JAVA_VERSION %>
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -47,13 +48,17 @@ env:
 <%_ } _%>
 before_install:
   - |
-    if [[ $JHI_JDK = '8' ]]; then
-      echo '*** Using OpenJDK 8'
-    else
-      echo '*** Using OpenJDK 11 by default'
+    if [[ $JHI_JDK = '17' ]]; then
+      echo '*** Using OpenJDK 17'
       sudo add-apt-repository ppa:openjdk-r/ppa -y
       sudo apt-get update -q
-      sudo apt-get install -y openjdk-11-jdk -y
+      sudo apt-get install -y openjdk-17-jdk -y
+      sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+      java -version
+    else
+      echo '*** Using OpenJDK 11 by default'
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-11-jdk
       sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
       java -version
     fi

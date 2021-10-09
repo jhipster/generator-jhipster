@@ -22,7 +22,8 @@ const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-type
 const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
-const JAVA_VERSION = '11'; // Java version is forced to be 11. We keep the variable as it might be useful in the future.
+const JAVA_VERSION = '11';
+const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17'];
 
 // Version of Node, NPM
 const NODE_VERSION = '14.17.6';
@@ -247,10 +248,13 @@ const LANGUAGES = [
     name: 'Indonesian',
     dispName: 'Bahasa Indonesia',
     /*
-           To fix a nasty bug in the JDK ("Indonesian Locale does not comply with ISO 639")
+           JDK <17 ("Indonesian Locale does not comply with ISO 639")
            The locale is set to "in" for Indonesia
            See https://bugs.openjdk.java.net/browse/JDK-6457127
            And https://github.com/jhipster/generator-jhipster/issues/9494
+           Java 17 supports 'id' locale, for compatibility with java 11, we will keep legacy 'in' value while we support java 11.
+           When running with java 17 users must set 'java.locale.useOldISOCodes=true' environment variable.
+           See https://bugs.openjdk.java.net/browse/JDK-8267069. 
         */
     value: 'in',
     localeId: 'id',
@@ -379,6 +383,7 @@ const constants = {
   DOCKER_PROMETHEUS_ALERTMANAGER,
   DOCKER_GRAFANA,
   JAVA_VERSION,
+  JAVA_COMPATIBLE_VERSIONS,
   KAFKA_VERSION,
   GRADLE_VERSION,
 

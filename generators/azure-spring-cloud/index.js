@@ -82,6 +82,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');
         this.azureSpringCloudDeploymentType = this.config.get('azureSpringCloudDeploymentType');
       },
+      loadConstants() {
+        this.JAVA_VERSION = constants.JAVA_VERSION;
+      },
     };
   }
 

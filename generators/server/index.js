@@ -176,6 +176,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
         this.JAVA_VERSION = constants.JAVA_VERSION;
+        this.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
 
         this.NODE_VERSION = constants.NODE_VERSION;
         this.NPM_VERSION = constants.NPM_VERSION;
@@ -595,6 +596,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _end() {
     return {
+      checkLocaleValue() {
+        if (this.languages && this.languages.includes('in')) {
+          this.warning(
+            "For jdk 17 compatibility 'in' locale value should set 'java.locale.useOldISOCodes=true' environment variable. Refer to https://bugs.openjdk.java.net/browse/JDK-8267069"
+          );
+        }
+      },
+
       end() {
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 

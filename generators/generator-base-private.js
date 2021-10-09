@@ -29,16 +29,13 @@ const https = require('https');
 const { reproducibleConfigForTests: projectNameReproducibleConfigForTests } = require('./project-name/config.cjs');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
-const constants = require('./generator-constants');
+const { JAVA_COMPATIBLE_VERSIONS, SERVER_TEST_SRC_DIR, SUPPORTED_CLIENT_FRAMEWORKS } = require('./generator-constants');
 const { languageToJavaLanguage } = require('./utils');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 const { stringify } = require('../utils');
 
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
+const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
 const dbTypes = require('../jdl/jhipster/field-types');
 const { REQUIRED } = require('../jdl/jhipster/validations');
 
@@ -809,17 +806,12 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         this.warning('Java is not found on your computer.');
       } else {
         const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-        if (
-          !javaVersion.match(new RegExp('16')) &&
-          !javaVersion.match(new RegExp('15')) &&
-          !javaVersion.match(new RegExp('14')) &&
-          !javaVersion.match(new RegExp('13')) &&
-          !javaVersion.match(new RegExp('12')) &&
-          !javaVersion.match(new RegExp('11')) &&
-          !javaVersion.match(new RegExp('1.8'.replace('.', '\\.')))
-        ) {
+        if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
+          const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.reverse();
           this.warning(
-            `Java 8, 11, 12, 13, 14, 15 or 16 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`
+            `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
+              javaVersion
+            )}`
           );
         }
       }

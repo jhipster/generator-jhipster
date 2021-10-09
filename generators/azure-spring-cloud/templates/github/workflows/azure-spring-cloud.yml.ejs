@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 11
+    - name: Set up JDK <%= JAVA_VERSION %>
       uses: actions/setup-java@v2
       with:
         distribution: 'temurin'
-        java-version: 11
+        java-version: <%= JAVA_VERSION %>
     - name: Cache Maven archetypes
       uses: actions/cache@v1
       with:

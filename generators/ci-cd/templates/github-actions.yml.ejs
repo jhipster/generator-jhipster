@@ -62,7 +62,7 @@ if (!skipServer) { _%>
             - uses: actions/setup-java@v2
               with:
                   distribution: 'temurin'
-                  java-version: '11.x'
+                  java-version: <%= JAVA_VERSION %>
 <%_ }
 if (!skipClient) { _%>
             - name: Install node.js packages
