@@ -131,10 +131,15 @@ Cypress.Commands.add('authenticatedRequest', (data: any) => {
 
 <%_ if (!authenticationTypeOauth2) { _%>
 Cypress.Commands.add('login', (username: string, password: string) => {
-  cy.clickOnLoginItem();
-  cy.get(usernameLoginSelector).type(username);
-  cy.get(passwordLoginSelector).type(password);
-  cy.get(submitLoginSelector).click();
+  cy.session([username, password], () => {
+    cy.visit('');
+    cy.clickOnLoginItem();
+    cy.get(usernameLoginSelector).type(username);
+    cy.get(passwordLoginSelector).type(password);
+    cy.get(submitLoginSelector).click();
+    cy.get(entityItemSelector).should('exist');
+  });
+  cy.visit('');
 });
 
 <%_ } _%>

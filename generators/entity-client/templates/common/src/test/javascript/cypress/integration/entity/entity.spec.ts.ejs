@@ -43,30 +43,10 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ if (skipCreateTest) { _%>// <%_ } _%>let <%= otherEntity.entityInstance %>: any;
 <%_ } _%>
 
-<%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
-    cy.getOauth2Data();
-    cy.get('@oauth2Data').then(oauth2Data => {
-      cy.oauthLogin(oauth2Data, username, password);
-    });
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
-    cy.visit('');
-    cy.get(entityItemSelector).should('exist');
-  });
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('XSRF-TOKEN', 'JSESSIONID');
-  })
-<%_ } else { _%>
-  before(() => {
-    cy.window().then((win) => {
-      win.sessionStorage.clear()
-    });
-    cy.visit('');
     cy.login(username, password);
     cy.get(entityItemSelector).should('exist');
   });
-<%_ } _%>
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
@@ -146,11 +126,16 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ } _%>
 
 <%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
 
+<%_ if (authenticationTypeOauth2) { _%>
   afterEach(() => {
-    cy.oauthLogout();
     cy.clearCache();
+  });
+<%_ } else { _%>
+  afterEach(() => {
+    cy.window().then((win) => {
+      win.sessionStorage.clear();
+    });
   });
 <%_ } _%>
 

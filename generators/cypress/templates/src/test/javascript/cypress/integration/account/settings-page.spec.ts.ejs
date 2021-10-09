@@ -27,20 +27,14 @@ describe('/account/settings', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
 
-  before(() => {
+  beforeEach(() => {
     cy.window().then((win) => {
-      win.sessionStorage.clear()
+      win.sessionStorage.clear();
     });
-<%_ if (authenticationTypeSession) { _%>
-    cy.clearCookie('SESSION');
-<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.login('user', 'user');
     cy.clickOnSettingsItem();
-  })
-
-  beforeEach(() => {
     cy.intercept('POST', '/api/account').as('settingsSave');
   });
 
@@ -72,23 +66,9 @@ describe('/account/settings', () => {
     cy.visit('');
     cy.login(username, password);
     cy.clickOnSettingsItem();
-    cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-    cy.get(submitSettingsSelector).click({force: true});
+    cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
+    cy.get(submitSettingsSelector).click({ force: true });
+    cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(400));
     cy.clickOnLogoutItem();
-
-    // try to reuse email used in admin account
-    cy.window().then((win) => {
-      win.sessionStorage.clear()
-    });
-    cy.visit('');
-    cy.intercept('POST', '/api/account').as('settingsNotSave');
-    cy.login('user', 'user');
-    cy.clickOnSettingsItem();
-    cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-    cy.get(submitSettingsSelector).click({force: true});
-    // Fix in future version of cypress
-    // => https://glebbahmutov.com/blog/cypress-intercept-problems/#no-overwriting-interceptors
-    // => https://github.com/cypress-io/cypress/issues/9302
-    // cy.wait('@settingsNotSave').then(({ response }) => expect(response.statusCode).to.equal(400));
   });
 })

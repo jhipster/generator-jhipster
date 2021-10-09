@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import {
+  entityItemSelector,
 <%_ if (!skipUserManagement) { _%>
   userManagementPageHeadingSelector,
 <%_ } _%>
@@ -34,29 +35,20 @@ describe('/admin', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
 
-<%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
-    cy.getOauth2Data();
-    cy.get('@oauth2Data').then(oauth2Data => {
-      cy.oauthLogin(oauth2Data, username, password);
-    });
+    cy.login(username, password);
+    cy.get(entityItemSelector).should('exist');
   });
 
+<%_ if (authenticationTypeOauth2) { _%>
   afterEach(() => {
-    cy.oauthLogout();
     cy.clearCache();
   });
 <%_ } else { _%>
-  before(() => {
+  afterEach(() => {
     cy.window().then((win) => {
-      win.sessionStorage.clear()
+      win.sessionStorage.clear();
     });
-  <%_ if (authenticationTypeSession) { _%>
-    cy.clearCookie('SESSION');
-  <%_ } _%>
-    cy.clearCookies();
-    cy.visit('');
-    cy.login(username, password);
   });
 <%_ } _%>
 

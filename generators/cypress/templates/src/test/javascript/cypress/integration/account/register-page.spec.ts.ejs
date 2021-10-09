@@ -27,19 +27,14 @@ import {
 } from '../../support/commands';
 
 describe('/account/register', () => {
-  before(() => {
+
+  beforeEach(() => {
     cy.window().then((win) => {
-      win.sessionStorage.clear()
+      win.sessionStorage.clear();
     });
-<%_ if (authenticationTypeSession) { _%>
-    cy.clearCookie('SESSION');
-<%_ } _%>
     cy.clearCookies();
     cy.visit('');
     cy.clickOnRegisterItem();
-  });
-
-  beforeEach(() => {
     cy.intercept('POST', '/api/register').as('registerSave');
   });
 
@@ -62,6 +57,9 @@ describe('/account/register', () => {
   });
 
   it('requires email', () => {
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
     cy.get(emailRegisterSelector)
       .should('have.class', classInvalid)
       .type('testtest.fr');
@@ -73,6 +71,9 @@ describe('/account/register', () => {
   });
 
   it('requires email in correct format', () => {
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
     cy.get(emailRegisterSelector)
       .should('have.class', classInvalid)
       .type('test@test.fr');
@@ -84,6 +85,9 @@ describe('/account/register', () => {
   });
 
   it('requires first password', () => {
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
     cy.get(firstPasswordRegisterSelector)
       .should('have.class', classInvalid)
       .type('test@test.fr');
@@ -95,6 +99,9 @@ describe('/account/register', () => {
   });
 
   it('requires password and confirm password to be same', () => {
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
     cy.get(firstPasswordRegisterSelector)
       .should('have.class', classInvalid)
       .type('test');
@@ -114,6 +121,9 @@ describe('/account/register', () => {
   });
 
   it('requires password and confirm password have not the same value', () => {
+    <%_ if (clientFrameworkReact) { _%>
+    cy.get(submitRegisterSelector).click({ force: true });
+    <%_ } _%>
     cy.get(firstPasswordRegisterSelector)
       .should('have.class', classInvalid)
       .type('test');
