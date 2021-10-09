@@ -31,13 +31,6 @@
     {
       "relationshipType": "one-to-many",
       "otherEntityName": "jpaFilteringOtherSide",
-      "otherEntityRelationshipName": "requiredOneToManyOtherSide",
-      "relationshipValidateRules": "required",
-      "relationshipName": "requiredOneToMany"
-    },
-    {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "oneToManyOtherSide",
       "relationshipName": "oneToMany"
     },
