@@ -33,7 +33,7 @@ import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContai
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-import { <%- importedType %> } from '<%- importedPath.replace('app/', '@/') %>';
+import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 const error = {

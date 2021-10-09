@@ -102,6 +102,10 @@ import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateT
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
 export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: string}>) => {
   const dispatch = useAppDispatch();
@@ -115,7 +119,9 @@ export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: str
   const loading = useAppSelector(state => state.<%= entityInstance %>.loading);
   const updating = useAppSelector(state => state.<%= entityInstance %>.updating);
   const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
-
+  <%_ enumImports.forEach( (importedPath, importedType) => { _%>
+  const <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+  <%_ }); _%>
   const handleClose = () => {
     props.history.push('/<%= entityFileName %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
   }
@@ -265,21 +271,18 @@ _%>
             type="date"
             <%- include('react_validators'); %>
           />
-  <%_ } else if (field.fieldIsEnum) {
-      const enumValues = field.enumValues;
-  _%>
+  <%_ } else if (field.fieldIsEnum) {_%>
             type="select"
           >
-    <%_ const enumPrefix = frontendAppName + '.'+ fieldType;
-      enumValues.forEach(enumValue => { _%>
-              <option value="<%= enumValue.name %>">
+          <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
+          {<%= _.lowerFirst(fieldType) %>Values.map(<%= _.lowerFirst(fieldType) %> => (
+              <option value={<%= _.lowerFirst(fieldType) %>} key={<%= _.lowerFirst(fieldType) %>}>
       <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>.<%= enumValue.name %>")}
+                {translate("<%= enumPrefix %>"+<%= _.lowerFirst(fieldType) %>)}
       <%_ } else { _%>
-                <%= enumValue.value %>
+                {<%= _.lowerFirst(fieldType) %>}
       <%_ } _%>
-              </option>
-    <%_ }); _%>
+              </option>))}
           </ValidatedField>
   <%_ } else if (field.fieldTypeNumeric) { _%>
             type="text"

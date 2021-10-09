@@ -32,7 +32,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
-import { <%- importedType %> } from '<%- importedPath.replace('app/', '@/'); %>';
+import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 export interface I<%= entityAngularName %> {
     <%_ variablesWithTypes.forEach(variablesWithType => { _%>
