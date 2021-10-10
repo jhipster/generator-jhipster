@@ -1032,6 +1032,9 @@ Object {
   "src/main/webapp/app/account/register/register.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/register/register.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -2259,6 +2262,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.service.ts": Object {
@@ -3577,6 +3583,9 @@ Object {
   "src/main/webapp/app/account/register/register.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/register/register.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -4879,6 +4888,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.service.ts": Object {
@@ -6206,6 +6218,9 @@ Object {
   "src/main/webapp/app/account/register/register.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/register/register.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -7526,6 +7541,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.service.ts": Object {
@@ -8863,6 +8881,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.service.ts": Object {
@@ -11128,6 +11149,9 @@ Object {
   "src/main/webapp/app/account/register/register.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/register/register.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -12447,6 +12471,9 @@ Object {
   "src/main/webapp/app/account/register/register.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/register/register.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -13739,6 +13766,9 @@ Object {
   "src/main/webapp/app/account/register/register.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/register/register.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -15026,6 +15056,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/register/register.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/register/register.service.ts": Object {

@@ -43,6 +43,7 @@ Array [
   "src/main/webapp/app/account/register/register.component.ts",
   "src/main/webapp/app/account/register/register.model.ts",
   "src/main/webapp/app/account/register/register.route.ts",
+  "src/main/webapp/app/account/register/register.service.spec.ts",
   "src/main/webapp/app/account/register/register.service.ts",
   "src/main/webapp/app/account/settings/settings.component.html",
   "src/main/webapp/app/account/settings/settings.component.spec.ts",

@@ -467,6 +467,7 @@ const files = {
         'account/password-reset/finish/password-reset-finish.component.spec.ts',
         'account/password-reset/finish/password-reset-finish.service.spec.ts',
         'account/register/register.component.spec.ts',
+        'account/register/register.service.spec.ts',
         'account/settings/settings.component.spec.ts',
       ],
     },
