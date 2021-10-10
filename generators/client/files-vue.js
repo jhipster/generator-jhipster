@@ -25,6 +25,7 @@ const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
 module.exports = {
+  cleanup,
   writeFiles,
   customizeFiles,
 };
@@ -37,15 +38,11 @@ const vueFiles = {
         'tsconfig.json',
         '.postcssrc.js',
         '.eslintrc.js',
-        'webpack/env.js',
-        'webpack/dev.env.js',
-        'webpack/prod.env.js',
+        'webpack/config.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
         'webpack/vue.utils.js',
-        'webpack/loader.conf.js',
-        'webpack/utils.js',
       ],
     },
     {
@@ -322,6 +319,18 @@ const vueFiles = {
     },
   ],
 };
+
+function cleanup() {
+  if (!this.clientFrameworkVue) return;
+
+  if (this.isJhipsterVersionLessThan('7.3.1')) {
+    this.removeFile('webpack/env.js');
+    this.removeFile('webpack/dev.env.js');
+    this.removeFile('webpack/prod.env.js');
+    this.removeFile('webpack/utils.js');
+    this.removeFile('webpack/loader.conf.js');
+  }
+}
 
 function writeFiles() {
   // write Vue files

@@ -215,8 +215,7 @@ const expectedFiles = {
   ],
 
   webpack: [
-    `${CLIENT_WEBPACK_DIR}/loader.conf.js`,
-    `${CLIENT_WEBPACK_DIR}/utils.js`,
+    `${CLIENT_WEBPACK_DIR}/config.js`,
     `${CLIENT_WEBPACK_DIR}/vue.utils.js`,
     `${CLIENT_WEBPACK_DIR}/webpack.common.js`,
     `${CLIENT_WEBPACK_DIR}/webpack.dev.js`,
