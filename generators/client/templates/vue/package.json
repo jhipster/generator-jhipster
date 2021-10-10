@@ -52,7 +52,6 @@
     "merge-jsons-webpack-plugin": "1.0.21",
     "mini-css-extract-plugin": "2.4.2",
     "numeral": "2.0.6",
-    "portfinder": "1.0.28",
     "postcss": "8.3.9",
     "postcss-import": "14.0.2",
     "postcss-loader": "6.1.1",
