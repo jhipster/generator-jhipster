@@ -191,28 +191,7 @@ module.exports = class extends BaseBlueprintGenerator {
             type: 'list',
             name: 'herokuJavaVersion',
             message: 'Which Java version would you like to use to build and run your app ?',
-            choices: [
-              {
-                value: '1.8',
-                name: '1.8',
-              },
-              {
-                value: '11',
-                name: '11',
-              },
-              {
-                value: '12',
-                name: '12',
-              },
-              {
-                value: '13',
-                name: '13',
-              },
-              {
-                value: '14',
-                name: '14',
-              },
-            ],
+            choices: constants.JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
             default: 1,
           },
         ];
