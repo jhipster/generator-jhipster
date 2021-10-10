@@ -26,6 +26,7 @@ Array [
   "src/main/webapp/app/account/password-reset/init/password-reset-init.component.spec.ts",
   "src/main/webapp/app/account/password-reset/init/password-reset-init.component.ts",
   "src/main/webapp/app/account/password-reset/init/password-reset-init.route.ts",
+  "src/main/webapp/app/account/password-reset/init/password-reset-init.service.spec.ts",
   "src/main/webapp/app/account/password-reset/init/password-reset-init.service.ts",
   "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.html",
   "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.scss",

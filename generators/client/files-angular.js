@@ -463,6 +463,7 @@ const files = {
         'account/password/password.service.spec.ts',
         'account/password/password-strength-bar/password-strength-bar.component.spec.ts',
         'account/password-reset/init/password-reset-init.component.spec.ts',
+        'account/password-reset/init/password-reset-init.service.spec.ts',
         'account/password-reset/finish/password-reset-finish.component.spec.ts',
         'account/password-reset/finish/password-reset-finish.service.spec.ts',
         'account/register/register.component.spec.ts',
