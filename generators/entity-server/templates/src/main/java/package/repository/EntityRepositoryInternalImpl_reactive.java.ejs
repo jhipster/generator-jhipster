@@ -202,11 +202,15 @@ _%>
 
     @Override
     public Mono<Integer> update(<%= persistClass %> entity) {
-<%_ if (fields.length + reactiveEagerRelations.length > 0) { _%>
+<%_ if (fields.some(field => !field.id) || relationships.some(relationship => !relationship.id && relationship.ownerSide)) { _%>
         //fixme is this the proper way?
         return r2dbcEntityTemplate.update(entity).thenReturn(1);
 <%_ } else { _%>
-        // What can we update on this field?
+        /*
+         * Entity doesn't contain any updatable data, ignore update for compatibility.
+         * Otherwise it fails with `IllegalArgumentException: UPDATE contains no assignments`
+         * https://github.com/spring-projects/spring-data-r2dbc/issues/250#issuecomment-563122844
+         */
         return Mono.just(1);
 <%_ } _%>
     }
