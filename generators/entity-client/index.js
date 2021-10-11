@@ -75,9 +75,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.cypressBootstrapEntities = true;
 
         const entity = this.entity;
-        // Reactive with PostgreSQL doesn't allows insertion without data.
+        // Reactive with PostgreSQL doesn't allow insertion without data.
         this.workaroundRelationshipReactivePostgress = entity.reactive && entity.prodDatabaseType === POSTGRESQL;
-        // Reactive with MariaDB doesn't allows null value at Instant fields.
+        // Reactive with MariaDB doesn't allow null value at Instant fields.
         this.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
       },
     };
