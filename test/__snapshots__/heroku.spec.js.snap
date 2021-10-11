@@ -620,7 +620,7 @@ Object {
     \\"testFrameworks\\": [\\"gatling\\"],
     \\"herokuAppName\\": \\"jhipster-existing\\",
     \\"herokuDeployType\\": \\"git\\",
-    \\"herokuJavaVersion\\": 1
+    \\"herokuJavaVersion\\": \\"11\\"
   }
 }
 ",
@@ -672,7 +672,7 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": Object {
-    "contents": "java.runtime.version=1 ",
+    "contents": "java.runtime.version=11 ",
     "stateCleared": "modified",
   },
 }
