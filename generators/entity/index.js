@@ -594,7 +594,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
         if (entityPackage) {
           entityAbsolutePackage = [packageName, entityPackage].join('.');
-          entityAbsoluteFolder = path.join(packageFolder, entityPackage);
+          entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
         }
         entity.entityAbsolutePackage = entityAbsolutePackage;
         entity.entityAbsoluteFolder = entityAbsoluteFolder;

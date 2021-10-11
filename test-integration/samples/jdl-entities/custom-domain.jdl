@@ -1,11 +1,11 @@
 @ChangelogDate(20200804035400)
-@EntityPackage(custom)
+@EntityPackage("app.custom")
 entity CustomPackageParent {
   parentName String
 }
 
 @ChangelogDate(20200804035401)
-@EntityPackage(child)
+@EntityPackage("app.child")
 entity CustomPackageChild {
   childName String
 }
