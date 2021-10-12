@@ -25,27 +25,27 @@ concurrency:
 on:
   push:
     branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
+      - "dependabot/**"
+      - "skip_ci*"
     paths:
-      - 'generators/*client/**'
+      - "generators/*client/**"
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
-      - '*'
+      - "*"
     paths:
-      - 'generators/*client/**'
+      - "generators/*client/**"
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
     steps:
-      - name: 'SETUP: Checkout generator-jhipster'
+      - name: "SETUP: Checkout generator-jhipster"
         uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 2
-      - name: 'Build matrix'
+      - name: "Build matrix"
         id: build
         uses: ./.github/actions/build-matrix
         with:
@@ -65,12 +65,12 @@ jobs:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
       #----------------------------------------------------------------------
-      - name: 'SETUP: Checkout generator-jhipster'
+      - name: "SETUP: Checkout generator-jhipster"
         uses: actions/checkout@v2.3.4
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
+      - name: "SETUP: environment"
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
@@ -83,11 +83,12 @@ jobs:
       - uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
+          cache: npm
       - uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: ${{ steps.setup.outputs.java-version }}
-      - name: 'SETUP: load npm cache'
+      - name: "SETUP: load npm cache"
         uses: actions/cache@v2.1.6
         with:
           path: |
@@ -98,7 +99,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load maven cache'
+      - name: "SETUP: load maven cache"
         uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
@@ -106,7 +107,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load gradle cache'
+      - name: "SETUP: load gradle cache"
         if: contains(matrix.app-sample, 'gradle')
         uses: actions/cache@v2.1.6
         with:
@@ -117,43 +118,43 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
-      - name: 'TOOLS: configure tools installed by the system'
+      - name: "TOOLS: configure tools installed by the system"
         run: $JHI_SCRIPTS/03-system.sh
-      - name: 'TOOLS: configure git'
+      - name: "TOOLS: configure git"
         run: $JHI_SCRIPTS/04-git-config.sh
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
+      - name: "GENERATION: install JHipster"
         run: $JHI_SCRIPTS/10-install-jhipster.sh
-      - name: 'GENERATION: config'
+      - name: "GENERATION: config"
         run: $JHI_SCRIPTS/11-generate-config.sh
-      - name: 'GENERATION: project'
+      - name: "GENERATION: project"
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
-      - name: 'GENERATION: jhipster info'
+      - name: "GENERATION: jhipster info"
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - name: 'E2E: Run'
+      - name: "E2E: Run"
         id: e2e
         run: npm run e2e:devserver --if-present
-      - name: 'E2E: Teardown'
+      - name: "E2E: Teardown"
         if: always() && matrix.e2e == 1 && steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:teardown
-      - name: 'BACKEND: Store failure logs'
+      - name: "BACKEND: Store failure logs"
         uses: actions/upload-artifact@v2
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
-      - name: 'E2E: Store failure screenshots'
+      - name: "E2E: Store failure screenshots"
         uses: actions/upload-artifact@v2
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
-      - name: 'ANALYSIS: Sonar analysis'
+      - name: "ANALYSIS: Sonar analysis"
         if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 0
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:

@@ -22,11 +22,11 @@ on:
   workflow_dispatch:
     inputs:
       key:
-        description: 'Cache key'
+        description: "Cache key"
         required: false
-        default: '-new'
+        default: "-new"
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 jobs:
   npm_cache:
     name: Create cache
@@ -35,11 +35,11 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     steps:
-      - name: 'SETUP: Checkout generator-jhipster'
+      - name: "SETUP: Checkout generator-jhipster"
         uses: actions/checkout@v2
         with:
           path: generator-jhipster
-      - name: 'SETUP: environment'
+      - name: "SETUP: environment"
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
@@ -48,7 +48,8 @@ jobs:
       - uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
-      - name: 'SETUP: load npm cache'
+          cache: npm
+      - name: "SETUP: load npm cache"
         uses: actions/cache@v2.1.6
         with:
           path: |
@@ -57,14 +58,14 @@ jobs:
           key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
           restore-keys: |
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load maven cache'
+      - name: "SETUP: load maven cache"
         uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
           restore-keys: |
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load gradle cache'
+      - name: "SETUP: load gradle cache"
         uses: actions/cache@v2.1.6
         with:
           path: |
@@ -75,7 +76,7 @@ jobs:
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
 
       # generator-jhipster npm
-      - name: 'Install generator-jhipster npm version'
+      - name: "Install generator-jhipster npm version"
         run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
       - name: Cache generator-jhipster node_modules
         run: npm ci
@@ -109,34 +110,34 @@ jobs:
         continue-on-error: true
         working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/templates/vue
 
-      - name: 'mvn: install JHipster'
+      - name: "mvn: install JHipster"
         run: $JHI_SCRIPTS/10-install-jhipster.sh
         continue-on-error: true
 
       # maven
-      - name: 'mvn: config'
+      - name: "mvn: config"
         run: $JHI_SCRIPTS/11-generate-config.sh
         continue-on-error: true
-      - name: 'mvn: project'
+      - name: "mvn: project"
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
         continue-on-error: true
-      - name: 'mvn: install workspaces deps'
+      - name: "mvn: install workspaces deps"
         run: npm install --force
         continue-on-error: true
-      - name: 'mvn: build cache'
+      - name: "mvn: build cache"
         run: npm run backend:build-cache || true
         continue-on-error: true
 
       # gradle
-      - name: 'gradle: config'
+      - name: "gradle: config"
         run: $JHI_SCRIPTS/11-generate-config.sh
         continue-on-error: true
-      - name: 'gradle: project'
+      - name: "gradle: project"
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install --workspaces
         continue-on-error: true
-      - name: 'gradle: install workspaces deps'
+      - name: "gradle: install workspaces deps"
         run: npm install --force
         continue-on-error: true
-      - name: 'gradle: build cache'
+      - name: "gradle: build cache"
         run: npm run backend:build-cache || true
         continue-on-error: true

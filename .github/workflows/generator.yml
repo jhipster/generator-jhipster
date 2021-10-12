@@ -25,11 +25,11 @@ concurrency:
 on:
   push:
     branches-ignore:
-      - 'dependabot/**'
+      - "dependabot/**"
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
-      - '*'
+      - "*"
 jobs:
   generator-jhipster:
     if: >-
@@ -48,7 +48,8 @@ jobs:
       - uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ matrix.node_version }}
-      - name: 'SETUP: load npm cache'
+          cache: npm
+      - name: "SETUP: load npm cache"
         uses: actions/cache@v2.1.6
         with:
           path: |
@@ -58,7 +59,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
-      - name: 'install required npm version'
+      - name: "install required npm version"
         run: npm install -g npm@$(node -e "console.log(require('./generators/generator-constants').NPM_VERSION);")
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         shell: bash
@@ -71,8 +72,4 @@ jobs:
       - run: npm run prettier:check
       - run: npm test
         if: >-
-          !contains(github.event.head_commit.message, '[ci skip]') &&
-          !contains(github.event.head_commit.message, '[skip ci]') &&
-          !contains(github.event.pull_request.title, '[skip ci]') &&
-          !contains(github.event.pull_request.title, '[ci skip]') &&
-          (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
+          !contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]') && (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))

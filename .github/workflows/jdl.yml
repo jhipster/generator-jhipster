@@ -25,16 +25,16 @@ concurrency:
 on:
   push:
     branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
+      - "dependabot/**"
+      - "skip_ci*"
     paths-ignore:
-      - 'package*.json'
+      - "package*.json"
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
-      - '*'
+      - "*"
     paths-ignore:
-      - 'package*.json'
+      - "package*.json"
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
@@ -44,11 +44,11 @@ jobs:
       server: ${{ steps.build.outputs.server }}
       any: ${{ steps.build.outputs.any }}
     steps:
-      - name: 'SETUP: Checkout generator-jhipster'
+      - name: "SETUP: Checkout generator-jhipster"
         uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 2
-      - name: 'Build matrix'
+      - name: "Build matrix"
         id: build
         uses: ./.github/actions/build-matrix
   applications:
@@ -59,13 +59,7 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     if: >-
-      !contains(github.event.head_commit.message, '[ci skip]') &&
-      !contains(github.event.head_commit.message, '[skip ci]') &&
-      !contains(github.event.pull_request.title, '[skip ci]') &&
-      !contains(github.event.pull_request.title, '[ci skip]') &&
-      github.event.action != 'closed' &&
-      !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci') &&
-      needs.build-matrix.outputs.any != 'false'
+      !contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]') && github.event.action != 'closed' && !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci') && needs.build-matrix.outputs.any != 'false'
     timeout-minutes: 40
     strategy:
       fail-fast: false
@@ -91,12 +85,12 @@ jobs:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
       #----------------------------------------------------------------------
-      - name: 'SETUP: Checkout generator-jhipster'
+      - name: "SETUP: Checkout generator-jhipster"
         uses: actions/checkout@v2.3.4
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
+      - name: "SETUP: environment"
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
@@ -107,11 +101,12 @@ jobs:
       - uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
+          cache: npm
       - uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: ${{ steps.setup.outputs.java-version }}
-      - name: 'SETUP: load npm cache'
+      - name: "SETUP: load npm cache"
         uses: actions/cache@v2.1.6
         with:
           path: |
@@ -122,7 +117,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load maven cache'
+      - name: "SETUP: load maven cache"
         uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
@@ -130,7 +125,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load gradle cache'
+      - name: "SETUP: load gradle cache"
         if: contains(matrix.app-sample, 'gradle')
         uses: actions/cache@v2.1.6
         with:
@@ -141,39 +136,39 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
-      - name: 'TOOLS: configure tools installed by the system'
+      - name: "TOOLS: configure tools installed by the system"
         run: $JHI_SCRIPTS/03-system.sh
-      - name: 'TOOLS: configure git'
+      - name: "TOOLS: configure git"
         run: $JHI_SCRIPTS/04-git-config.sh
       # Update global NPM for workspaces support
-      - name: 'Install required NPM version'
+      - name: "Install required NPM version"
         run: npm install -g npm@${{ steps.setup.outputs.npm-version }} || true
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
+      - name: "GENERATION: install JHipster"
         run: $JHI_SCRIPTS/10-install-jhipster.sh
-      - name: 'GENERATION: config'
+      - name: "GENERATION: config"
         run: $JHI_SCRIPTS/11-generate-config.sh
-      - name: 'GENERATION: project'
+      - name: "GENERATION: project"
         run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
-      - name: 'GENERATION: workspace git'
+      - name: "GENERATION: workspace git"
         run: |
           git add .
           git commit -m "Commit workspaces"
-      - name: 'GENERATION: jhipster info'
+      - name: "GENERATION: jhipster info"
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
-      - name: 'MERGE: generate base'
+      - name: "MERGE: generate base"
         continue-on-error: true
         id: base-app
         if: github.event.pull_request
         uses: ./generator-jhipster/.github/actions/compare-base
         with:
-          extra-args: '--skip-jhipster-dependencies ${{ matrix.extra-args }}'
-      - name: 'MERGE: compare changes'
+          extra-args: "--skip-jhipster-dependencies ${{ matrix.extra-args }}"
+      - name: "MERGE: compare changes"
         continue-on-error: true
         id: compare
         if: steps.base-app.outcome == 'success'
@@ -183,33 +178,33 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - name: 'TESTS: backend'
+      - name: "TESTS: backend"
         id: backend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
         run: npm run ci:backend:test
-      - name: 'TESTS: frontend'
+      - name: "TESTS: frontend"
         if: steps.compare.outputs.equals != 'true' && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
-      - name: 'TESTS: packaging'
+      - name: "TESTS: packaging"
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
-      - name: 'TESTS: Start docker-compose containers for e2e tests'
+      - name: "TESTS: Start docker-compose containers for e2e tests"
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare
-      - name: 'E2E: Run'
+      - name: "E2E: Run"
         id: e2e
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:run --if-present
-      - name: 'E2E: Teardown'
+      - name: "E2E: Teardown"
         if: always() && matrix.e2e == 1 && steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:teardown
-      - name: 'BACKEND: Store failure logs'
+      - name: "BACKEND: Store failure logs"
         uses: actions/upload-artifact@v2
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
-      - name: 'E2E: Store failure screenshots'
+      - name: "E2E: Store failure screenshots"
         uses: actions/upload-artifact@v2
         if: always() && steps.e2e.outcome == 'failure'
         with:
@@ -218,7 +213,7 @@ jobs:
       - name: Dump docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v2
-      - name: 'ANALYSIS: Sonar analysis'
+      - name: "ANALYSIS: Sonar analysis"
         if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 0
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
