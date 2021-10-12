@@ -27,7 +27,7 @@ const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
 const { GENERATOR_ENTITY_CLIENT } = require('../generator-list');
-const { SQL } = require('../../jdl/jhipster/database-types');
+const { POSTGRESQL, MARIADB } = require('../../jdl/jhipster/database-types');
 
 let useBlueprints;
 
@@ -71,8 +71,14 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       setupCypress() {
+        // Blueprints may disable cypress relationships by setting to false.
+        this.cypressBootstrapEntities = true;
+
         const entity = this.entity;
-        this.cypressBootstrapEntities = !entity.reactive || entity.databaseType !== SQL;
+        // Reactive with PostgreSQL doesn't allow insertion without data.
+        this.workaroundRelationshipReactivePostgress = entity.reactive && entity.prodDatabaseType === POSTGRESQL;
+        // Reactive with MariaDB doesn't allow null value at Instant fields.
+        this.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
       },
     };
   }

@@ -167,7 +167,7 @@ _%>
 <%_ }) _%>
 <%_ relFieldNames.forEach(rel => { _%>
 <%_ if (rel.relationshipManyToOne || (rel.ownerSide && rel.relationshipOneToOne))  { _%>
-        <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>Id.toString()),
+        <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>.toString()),
 <%_ } _%>
 <%_ }) _%>
     }
@@ -211,7 +211,7 @@ _%>
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
   if (rel.relationshipManyToOne || (rel.relationshipOneToOne && rel.ownerSide)) { _%>
-          <%= relationshipFieldName %>Id: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.id,
+          <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.id,
   <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
           <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
   <%_ } _%>
@@ -331,7 +331,7 @@ _%>
   <%_ if (rel.relationshipManyToOne || (rel.relationshipOneToOne && ownerSide)) { _%>
           <ValidatedField
             id="<%= entityFileName %>-<%= relationshipName %>"
-            name="<%= relationshipFieldName %>Id"
+            name="<%= relationshipFieldName %>"
             data-cy="<%= relationshipFieldName %>"
       <%_ if (enableTranslation) { _%>
             label={translate('<%= translationKey %>')}

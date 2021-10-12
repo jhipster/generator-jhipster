@@ -28,6 +28,14 @@ const skipCreateTest =
     requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired) ||
     !entityFakeData
   ) ? '.skip' : '';
+
+const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
+
+if (workaroundRelationshipReactivePostgress && sampleFields.length === 0) {
+  sampleFields.push(fields.find(f => !f.autoGenerate));
+} else if (workaroundInstantReactiveMariaDB) {
+  sampleFields.push(...fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant'));
+}
 _%>
 
 describe('<%= entityClass %> e2e test', () => {
@@ -36,7 +44,7 @@ describe('<%= entityClass %> e2e test', () => {
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityUrl %>(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(fields.filter(f => !f.autoGenerate && !f.nullable).map(field => field.reference))) %>;
+  const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(sampleFields.map(field => field.reference))) %>;
 
   let <%= entityInstance %>: any;
 <%_ for (otherEntity of requiredOtherEntities) { _%>
