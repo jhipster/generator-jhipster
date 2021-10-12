@@ -4,7 +4,7 @@ basedir=`dirname "$0"`
 
 if [ -f "$basedir/mvnw" ]; then
   builddir="target/node"
-  installCommand="$basedir/mvnw frontend:install-node-and-npm@install-node-and-npm"
+  installCommand="$basedir/mvnw -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
 else
   builddir=".gradle/npm"
   installCommand="$basedir/gradlew npmSetup"
