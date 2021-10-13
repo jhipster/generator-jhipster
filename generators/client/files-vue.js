@@ -76,7 +76,6 @@ const vueFiles = {
         'shared/security/authority.ts',
         'router/index.ts',
         'router/admin.ts',
-        'router/entities.ts',
         'router/pages.ts',
       ],
     },
