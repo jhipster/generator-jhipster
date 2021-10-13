@@ -204,6 +204,13 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
   }
 
+  const { microserviceName, entityFileName } = entityWithConfig;
+  entityWithConfig.entityApi = microserviceName ? `'services/${microserviceName.toLowerCase()}/` : '/';
+  entityWithConfig.entityPage =
+    entityWithConfig.applicationType === MICROSERVICE && microserviceName
+      ? `'${microserviceName.toLowerCase()}/${entityFileName}`
+      : `${entityFileName}`;
+
   const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
   entityWithConfig.saveUserSnapshot =
     entityWithConfig.applicationType === MICROSERVICE &&

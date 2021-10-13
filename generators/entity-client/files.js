@@ -478,7 +478,7 @@ function writeFiles() {
 }
 
 function addToMenu() {
-  if (this.skipClient) return;
+  if (this.skipClient || this.clientFrameworkVue) return;
 
   if (!this.embedded) {
     this.addEntityToModule();
@@ -494,17 +494,12 @@ function addToMenu() {
 
 function replaceTranslations() {
   if (this.clientFramework === VUE && !this.enableTranslation) {
+    utils.vueReplaceTranslation(this, [
+      `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+      `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
+    ]);
     if (!this.readOnly) {
-      utils.vueReplaceTranslation(this, [
-        `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-        `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
-        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
-      ]);
-    } else {
-      utils.vueReplaceTranslation(this, [
-        `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-        `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`,
-      ]);
+      utils.vueReplaceTranslation(this, [`app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`]);
     }
   }
 }
