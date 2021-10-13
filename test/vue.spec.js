@@ -735,9 +735,9 @@ describe('Vue applications', () => {
       );
     });
 
-    it('should contains admin service in main app file', () => {
+    it('should contains admin service in bootstrap app file', () => {
       assert.fileContent(
-        `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/bootstrap.ts`,
         "import HealthService from './admin/health/health.service';\n" +
           "import MetricsService from './admin/metrics/metrics.service';\n" +
           "import LogsService from './admin/logs/logs.service';\n" +
@@ -745,7 +745,7 @@ describe('Vue applications', () => {
       );
 
       assert.fileContent(
-        `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/bootstrap.ts`,
         '    healthService: () => new HealthService(),\n' +
           '    configurationService: () => new ConfigurationService(),\n' +
           '    logsService: () => new LogsService(),\n' +
