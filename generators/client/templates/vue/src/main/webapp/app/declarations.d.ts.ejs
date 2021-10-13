@@ -16,7 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-declare module '*.vue' {
-  import Vue from 'vue';
-  export default Vue;
-}
+// These constants are injected via webpack environment variables.
+// You can add more variables in webpack.common.js or in profile specific webpack.<dev|prod>.js files.
+// If you change the values in the webpack config files, you need to re run webpack to update the application
+
+declare const SERVER_API_URL: string;
+declare const VERSION: string;
+<%_ if (enableTranslation) { _%>
+declare const I18N_HASH: string;
+<%_ } _%>
