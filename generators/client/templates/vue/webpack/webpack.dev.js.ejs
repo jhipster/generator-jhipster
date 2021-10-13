@@ -31,18 +31,13 @@ module.exports = (env, options) => ({
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
-  entry: {
-    global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
-    main: './<%= MAIN_SRC_DIR %>app/main'
-  },
-  output: {
-    filename: 'app/[contenthash].bundle.js',
-    chunkFilename: 'app/[id].chunk.js'
-  },
   optimization: {
     moduleIds: 'named',
   },
   devServer: {
+<%_ if (microfrontend) { _%>
+    hot: config.dev.hotReload,
+<%_ } _%>
     static: {
       directory: './<%= DIST_DIR %>',
     },
@@ -80,14 +75,9 @@ module.exports = (env, options) => ({
     historyApiFallback: true
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
       base: '/',
       template: './<%= MAIN_SRC_DIR %>index.html',
-      chunks: ['vendors', 'main', 'global'],
-      chunksSortMode: 'manual',
-      inject: true
     }),
     new BrowserSyncPlugin(
       {
