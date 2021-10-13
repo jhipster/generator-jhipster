@@ -65,6 +65,7 @@ const vueFiles = {
         'shims-vue.d.ts',
         'constants.ts',
         'bootstrap.ts',
+        'declarations.d.ts',
         'main.ts',
         'shared/alert/alert.service.ts',
         'shared/config/axios-interceptor.ts',
