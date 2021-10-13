@@ -80,6 +80,10 @@ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
+<%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityPackage !== entityPackage)) { _%>
+import <%= otherEntity.entityAbsoluteClass %>;
+<%_ } _%>
+
 <%_ if (typeof javadoc === 'undefined') { _%>
 /**
  * A <%= persistClass %>.

@@ -16,7 +16,11 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     # Generate with JDL
     #-------------------------------------------------------------------------------
     mkdir -p "$JHI_FOLDER_APP"
-    cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
+    IFS=','
+    for i in `echo "$JHI_APP"`
+    do
+        cp -f "$JHI_SAMPLES"/"$i"/*.jdl "$JHI_FOLDER_APP"/
+    done
     cd "$JHI_FOLDER_APP"
     ls -la "$JHI_FOLDER_APP"/
     eval "$JHI_CLI import-jdl *.jdl --no-insight $@"
@@ -27,15 +31,25 @@ elif [[ "$JHI_APP" == "jdl" ]]; then
     #-------------------------------------------------------------------------------
     mkdir -p "$JHI_FOLDER_APP"
 
-    if [[ -f "$JHI_JDL_APP" ]]; then
-        cp -f "$JHI_JDL_APP" "$JHI_FOLDER_APP"/
+    IFS=','
+    for i in `echo "$JHI_JDL_APP"`
+    do
+        if [[ -f "$i" ]]; then
+            cp -f "$i" "$JHI_FOLDER_APP"/
 
-    elif [[ -d "$JHI_JDL_APP" ]]; then
-        cp -f "$JHI_JDL_APP"/*.jdl "$JHI_FOLDER_APP"/
+        elif [[ -d "$i" ]]; then
+            cp -f "$i"/*.jdl "$JHI_FOLDER_APP"/
 
-    else
-        cp -f "$JHI_JDL_SAMPLES"/"$JHI_JDL_APP"/*.jdl "$JHI_FOLDER_APP"/
-    fi
+        elif [[ -d "$JHI_SAMPLES/jdl-entities/$i" ]]; then
+            cp -f "$JHI_SAMPLES/jdl-entities/$i/*.jdl" "$JHI_FOLDER_APP"/
+
+        elif [[ -f "$JHI_SAMPLES/jdl-entities/$i.jdl" ]]; then
+            cp -f "$JHI_SAMPLES/jdl-entities/$i.jdl" "$JHI_FOLDER_APP"/
+
+        else
+            cp -f "$JHI_JDL_SAMPLES"/"$i"/*.jdl "$JHI_FOLDER_APP"/
+        fi
+    done
 
     ls -la "$JHI_FOLDER_APP"/
 

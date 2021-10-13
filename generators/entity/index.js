@@ -594,7 +594,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
         if (entityPackage) {
           entityAbsolutePackage = [packageName, entityPackage].join('.');
-          entityAbsoluteFolder = path.join(packageFolder, entityPackage);
+          entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
         }
         entity.entityAbsolutePackage = entityAbsolutePackage;
         entity.entityAbsoluteFolder = entityAbsoluteFolder;
@@ -750,6 +750,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (!this.configOptions.sharedEntities) return;
         // Make user entity available to templates.
         this.context.user = this.configOptions.sharedEntities.User;
+      },
+
+      loadOtherEntities() {
+        this.context.otherEntities = _.uniq(this.context.relationships.map(rel => rel.otherEntity));
       },
 
       processOtherReferences() {
