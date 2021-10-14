@@ -43,6 +43,6 @@
     "webpack": "5.50.0",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-merge": "5.8.0",
-    "webpack-notifier": "1.14.0"
+    "webpack-notifier": "1.14.1"
   }
 }
