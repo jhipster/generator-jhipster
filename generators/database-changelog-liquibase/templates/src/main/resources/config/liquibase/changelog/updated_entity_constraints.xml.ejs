@@ -42,7 +42,7 @@ if (hasFieldConstraint) { _%>
     _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= field.columnName %>"
-            columnDataType="<%= field.fieldType %>"/>
+            columnDataType="<%= field.columnType %>"/>
         <%_ if (field.shouldCreateContentType) { _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= field.columnName %>_content_type"
