@@ -422,6 +422,7 @@ const files = {
         'admin/configuration/configuration.service.spec.ts',
         'admin/health/modal/health-modal.component.spec.ts',
         'admin/health/health.component.spec.ts',
+        'admin/health/health.service.spec.ts',
         'admin/logs/logs.component.spec.ts',
         'admin/logs/logs.service.spec.ts',
         'admin/metrics/metrics.component.spec.ts',
