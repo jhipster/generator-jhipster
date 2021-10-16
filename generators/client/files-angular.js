@@ -460,6 +460,7 @@ const files = {
       path: ANGULAR_DIR,
       templates: [
         'account/activate/activate.component.spec.ts',
+        'account/activate/activate.service.spec.ts',
         'account/password/password.component.spec.ts',
         'account/password/password.service.spec.ts',
         'account/password/password-strength-bar/password-strength-bar.component.spec.ts',

@@ -386,6 +386,9 @@ Object {
   "src/main/webapp2/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },

@@ -15,6 +15,7 @@ Array [
   "src/main/webapp/app/account/activate/activate.component.spec.ts",
   "src/main/webapp/app/account/activate/activate.component.ts",
   "src/main/webapp/app/account/activate/activate.route.ts",
+  "src/main/webapp/app/account/activate/activate.service.spec.ts",
   "src/main/webapp/app/account/activate/activate.service.ts",
   "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.html",
   "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.spec.ts",

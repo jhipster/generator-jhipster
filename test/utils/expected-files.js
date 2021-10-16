@@ -376,6 +376,7 @@ const expectedFiles = {
     `${CLIENT_MAIN_SRC_DIR}app/entities/user/user.model.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/entities/user/user.service.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.component.spec.ts`,
+    `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/account/password-reset/finish/password-reset-finish.component.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/account/password-reset/finish/password-reset-finish.service.spec.ts`,
     `${CLIENT_MAIN_SRC_DIR}app/account/password-reset/init/password-reset-init.component.spec.ts`,

@@ -948,6 +948,9 @@ Object {
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -2181,6 +2184,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
@@ -3505,6 +3511,9 @@ Object {
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -4813,6 +4822,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
@@ -6146,6 +6158,9 @@ Object {
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -7472,6 +7487,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
@@ -8815,6 +8833,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
@@ -11086,6 +11107,9 @@ Object {
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -12411,6 +12435,9 @@ Object {
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -13709,6 +13736,9 @@ Object {
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
     "stateCleared": "modified",
   },
@@ -15002,6 +15032,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.route.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/account/activate/activate.service.spec.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/activate/activate.service.ts": Object {
