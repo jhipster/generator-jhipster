@@ -125,6 +125,9 @@ Object {
   "src/main/webapp/app/admin/health/health.route.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/health/health.service.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/health/health.service.ts": Object {
     "stateCleared": "modified",
   },

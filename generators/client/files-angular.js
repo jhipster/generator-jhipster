@@ -422,6 +422,7 @@ const files = {
         'admin/configuration/configuration.service.spec.ts',
         'admin/health/modal/health-modal.component.spec.ts',
         'admin/health/health.component.spec.ts',
+        'admin/health/health.service.spec.ts',
         'admin/logs/logs.component.spec.ts',
         'admin/logs/logs.service.spec.ts',
         'admin/metrics/metrics.component.spec.ts',
@@ -459,6 +460,7 @@ const files = {
       path: ANGULAR_DIR,
       templates: [
         'account/activate/activate.component.spec.ts',
+        'account/activate/activate.service.spec.ts',
         'account/password/password.component.spec.ts',
         'account/password/password.service.spec.ts',
         'account/password/password-strength-bar/password-strength-bar.component.spec.ts',
