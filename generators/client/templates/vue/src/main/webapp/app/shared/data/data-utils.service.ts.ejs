@@ -55,7 +55,9 @@ export default class JhiDataUtils extends Vue {
     });
     const objectURL = URL.createObjectURL(blob);
     const win = window.open(objectURL);
-    win!.onload = () => URL.revokeObjectURL(objectURL);
+    if (win) {
+      win.onload = () => URL.revokeObjectURL(objectURL);
+    }
   }
 
   /**
