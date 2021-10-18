@@ -159,8 +159,17 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
   jhipsterTemplatePath(...args) {
-    this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
-    return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
+    try {
+      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+      return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
+    } catch (error) {
+      this.warning(
+        `The Namespace ${this.options.namespace} is not correct. Please check your configuration and ensure your blueprint folder start with "generator-"`
+      );
+      this.log(error);
+    }
+
+    return null;
   }
 
   /**
