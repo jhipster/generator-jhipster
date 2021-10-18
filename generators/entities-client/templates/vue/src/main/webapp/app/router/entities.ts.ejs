@@ -20,27 +20,27 @@ export default [
     children: [
 <%_ for (entity of this.localEntities.filter(entity => !entity.embedded)) { _%>
       {
-        path: '<%= entity.entityPage %>',
+        path: '<%= entity.entityFileName %>',
         name: '<%= entity.entityAngularName %>',
         component: <%= entity.entityAngularName %>,
         meta: { authorities: [Authority.USER] },
       },
   <%_ if (!entity.readOnly) { _%>
       {
-        path: '<%= entity.entityPage %>/new',
+        path: '<%= entity.entityFileName %>/new',
         name: '<%= entity.entityAngularName %>Create',
         component: <%= entity.entityAngularName %>Update,
         meta: { authorities: [Authority.USER] },
       },
       {
-        path: '<%= entity.entityPage %>/:<%= entity.entityInstance %>Id/edit',
+        path: '<%= entity.entityFileName %>/:<%= entity.entityInstance %>Id/edit',
         name: '<%= entity.entityAngularName %>Edit',
         component: <%= entity.entityAngularName %>Update,
         meta: { authorities: [Authority.USER] },
       },
   <%_ } _%>
       {
-        path: '<%= entity.entityPage %>/:<%= entity.entityInstance %>Id/view',
+        path: '<%= entity.entityFileName %>/:<%= entity.entityInstance %>Id/view',
         name: '<%= entity.entityAngularName %>View',
         component: <%= entity.entityAngularName %>Details,
         meta: { authorities: [Authority.USER] },
