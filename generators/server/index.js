@@ -387,6 +387,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             Object.entries(this.configOptions.sharedEntities).map(([_name, entity]) => entity.entityAbsolutePackage || this.packageName)
           ),
         ];
+        if (this.domains.length === 0) {
+          this.domains = [this.packageName];
+        }
       },
 
       insight() {
