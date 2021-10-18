@@ -204,10 +204,10 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   }
 
   const { microserviceName, entityFileName } = entityWithConfig;
-  entityWithConfig.entityApi = microserviceName ? `'services/${microserviceName.toLowerCase()}/` : '/';
+  entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
   entityWithConfig.entityPage =
     entityWithConfig.applicationType === MICROSERVICE && microserviceName
-      ? `'${microserviceName.toLowerCase()}/${entityFileName}`
+      ? `${microserviceName.toLowerCase()}/${entityFileName}`
       : `${entityFileName}`;
 
   const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));

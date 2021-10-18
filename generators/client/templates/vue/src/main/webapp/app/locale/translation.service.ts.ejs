@@ -17,7 +17,7 @@ export default class TranslationService {
     currentLanguage = newLanguage ? newLanguage : '<%= nativeLanguage %>';
     if (this.i18n && !this.i18n.messages[currentLanguage]) {
       this.i18n.setLocaleMessage(currentLanguage, {});
-      axios.get(`i18n/${currentLanguage}.json?_=${I18N_HASH}`).then((res) => {
+      axios.get(`i18n/${currentLanguage}.json?_=${I18N_HASH}`).then((res: any) => {
         if (res.data) {
           dayjs.locale(currentLanguage);
           this.i18n.setLocaleMessage(currentLanguage, res.data);

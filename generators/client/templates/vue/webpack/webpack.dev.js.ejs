@@ -60,7 +60,6 @@ module.exports = (env, options) => ({
         ],
         target: 'http://127.0.0.1:<%= serverPort %>',
         secure: false,
-        headers: { host: 'localhost:9000' }
       },
 <%_ if (communicationSpringWebsocket) { _%>
       {
