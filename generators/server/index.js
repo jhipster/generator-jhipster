@@ -383,16 +383,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       loadDomains() {
         if (!this.configOptions.sharedEntities) return;
         this.domains = [
-          ...new Set(
-            [
-              this.packageName,
-              ...Object.values(this.configOptions.sharedEntities).map(entity => entity.entityAbsolutePackage).filter(packageName => packageName),
-            ]
-          ),
+          ...new Set([
+            this.packageName,
+            ...Object.values(this.configOptions.sharedEntities)
+              .map(entity => entity.entityAbsolutePackage)
+              .filter(packageName => packageName),
+          ]),
         ];
-        if (this.domains.length === 0) {
-          this.domains = [this.packageName];
-        }
       },
 
       insight() {
