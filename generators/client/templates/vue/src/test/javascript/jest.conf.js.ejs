@@ -1,31 +1,39 @@
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const config = require('../../../webpack/config');
+const { compilerOptions: { paths = {}, baseUrl = './' } } = require('../../../tsconfig.json');
 
 module.exports = {
+  rootDir: '../../../',
+  roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/src/test/javascript/spec/app/`],
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>', '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/router', '.*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
     '.*\\.(vue)$': 'vue-jest',
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1'
+    '^@/(.*)$': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1',
+    ...pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
   },
   reporters: [
     'default',
-    [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ]
+    [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ],
   ],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts)'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
-  rootDir: '../../../',
   globals: {
 <%_ if (enableTranslation) { _%>
     I18N_HASH: 'generated_hash',
 <%_ } _%>
     SERVER_API_URL: config.serverApiUrl,
     VERSION: config.version,
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.spec.json',
+    },
   },
   coverageThreshold: {
     global: {
@@ -33,6 +41,6 @@ module.exports = {
       branches: 60,
       functions: 70,
       lines: 80
-    }
-  }
+    },
+  },
 };
