@@ -856,19 +856,19 @@
             <scope>provided</scope>
         </dependency>
 <%_ } _%>
-<%_ if (devDatabaseTypeH2Any) { _%>
+<%_ if (!reactive) { _%>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
-  <%_ if (reactive) { _%>
+<%_ } _%>
+<%_ if (reactive) { _%>
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
-  <%_ } _%>
 <%_ } _%>
 <%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
         <dependency>

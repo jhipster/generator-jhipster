@@ -549,12 +549,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
-            'backend:start': './mvnw -P-webapp',
+            'backend:start': './mvnw -Pdev,-webapp',
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
-            'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild -Pprod,webapp',
+            'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
-            'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:unit:test': `./mvnw -ntp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
@@ -581,12 +581,16 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'java:jar:prod': 'npm run java:jar -- -Pprod',
           'java:war:dev': 'npm run java:war -- -Pdev,webapp',
           'java:war:prod': 'npm run java:war -- -Pprod',
-          'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
-          'java:docker:prod': 'npm run java:docker -- -Pprod',
-          'ci:backend:test': 'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
-          'ci:server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
+          'ci:backend:test':
+            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment,-webapp',
+          'ci:server:package:dev': 'npm run java:$npm_package_config_packaging -- -P$npm_package_config_default_environment,webapp',
+          'ci:server:package:prod': 'npm run java:$npm_package_config_packaging -- -P$npm_package_config_default_environment',
+          'ci:server:package': 'npm run ci:server:package:$npm_package_config_default_environment',
+          'ci:e2e:package:dev':
+            'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e,$npm_package_config_default_environment -Denforcer.skip=true',
+          'ci:e2e:package:prod': 'npm run ci:e2e:package:$npm_package_config_default_environment',
           'ci:e2e:package':
-            'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
+            'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e,$npm_package_config_default_environment -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
           'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });

@@ -399,7 +399,7 @@ You can also fully dockerize your application and all the services that it depen
 To achieve this, first build a docker image of your app by running:
 
 ```
-<% if (buildToolMaven) { %>./mvnw -Pprod,webapp verify jib:dockerBuild<% } %><% if (buildToolGradle) { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+<% if (buildToolMaven) { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildToolGradle) { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
 ```
 
 Then run:

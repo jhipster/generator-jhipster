@@ -72,12 +72,12 @@ if [[ "$JHI_SCRIPTS" == "" ]]; then
     JHI_SCRIPTS="$JHI_INTEG"/scripts
 fi
 
-# folder for app
+# folder for app
 if [[ "$JHI_FOLDER_APP" == "" ]]; then
     JHI_FOLDER_APP="$HOME"/app
 fi
 
-# jdk version
+# jdk version
 if [[ "$JHI_JDK" == "" ]]; then
     JHI_JDK=$(grep -o "JAVA_VERSION = '[^']*'" $JHI_HOME/generators/generator-constants.js | cut -f2 -d "'")
 fi

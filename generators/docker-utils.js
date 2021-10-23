@@ -86,7 +86,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
   this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
   if (opts.appConfig.buildTool === MAVEN) {
     imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-    this.dockerBuildCommand = './mvnw -ntp -Pprod,webapp verify jib:dockerBuild';
+    this.dockerBuildCommand = './mvnw -ntp -Pprod verify jib:dockerBuild';
   } else {
     imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
     this.dockerBuildCommand = './gradlew bootJar -Pprod jibDockerBuild';
