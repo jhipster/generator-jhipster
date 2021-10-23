@@ -104,31 +104,6 @@ export const classValid = <%_ if (clientFrameworkAngular) { _%>'ng-valid';
 <%_ } else if (clientFrameworkReact) { _%>'is-valid';
 <%_ } else { _%>'valid';<%_ } _%>
 
-Cypress.Commands.add('authenticatedRequest', (data: any) => {
-<%_ if (authenticationTypeJwt) { _%>
-  <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-  const bearerToken = JSON.parse(sessionStorage.getItem(Cypress.env('jwtStorageName')));
-  <%_ } else { _%>
-  const bearerToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
-  <%_ } _%>
-  return cy.request({
-    ...data,
-    auth: {
-      bearer: bearerToken,
-    },
-  });
-<%_ } else { _%>
-  return cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
-    return cy.request({
-        ...data,
-        headers: {
-          'X-XSRF-TOKEN': csrfCookie?.value,
-        },
-    });
-  });
-<%_ } _%>
-});
-
 <%_ if (!authenticationTypeOauth2) { _%>
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.clickOnLoginItem();
@@ -137,17 +112,14 @@ Cypress.Commands.add('login', (username: string, password: string) => {
   cy.get(submitLoginSelector).click();
 });
 
-<%_ } _%>
 declare global {
   namespace Cypress {
     interface Chainable {
-<%_ if (!authenticationTypeOauth2) { _%>
       login(username: string, password: string): Cypress.Chainable;
-<%_ } _%>
-      authenticatedRequest(data: any): Cypress.Chainable;
     }
   }
 }
+<%_ } _%>
 
 import 'cypress-audit/commands';
 // Convert this to a module instead of script (allows import/export)
