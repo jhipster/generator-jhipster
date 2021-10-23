@@ -246,20 +246,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-<%_ if (databaseTypeSql) { _%>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
@@ -850,7 +836,7 @@
   <%_ } else if (devDatabaseTypeOracle) { _%>
             <artifactId>oracle-xe</artifactId>
   <%_ } _%>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
 <%_ } _%>
 <%_ if (databaseTypeSql && devDatabaseType !== prodDatabaseType) { _%>
@@ -867,8 +853,22 @@
   <%_ } else if (prodDatabaseTypeOracle) { _%>
             <artifactId>oracle-xe</artifactId>
   <%_ } _%>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
+<%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>provided</scope>
+        </dependency>
+  <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <scope>provided</scope>
+        </dependency>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
         <dependency>
@@ -1683,6 +1683,23 @@
                     <artifactId>spring-boot-devtools</artifactId>
                     <optional>true</optional>
                 </dependency>
+<%_ if (databaseTypeSql && !devDatabaseTypeH2Any) { _%>
+                <dependency>
+                    <groupId>org.testcontainers</groupId>
+  <%_ if (devDatabaseTypeMysql) { _%>
+                    <artifactId>mysql</artifactId>
+  <%_ } else if (devDatabaseTypeMariadb) { _%>
+                    <artifactId>mariadb</artifactId>
+  <%_ } else if (devDatabaseTypePostgres) { _%>
+                    <artifactId>postgresql</artifactId>
+  <%_ } else if (devDatabaseTypeMssql) { _%>
+                    <artifactId>mssqlserver</artifactId>
+  <%_ } else if (devDatabaseTypeOracle) { _%>
+                    <artifactId>oracle-xe</artifactId>
+  <%_ } _%>
+                    <scope>test</scope>
+                </dependency>
+<%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
                 <dependency>
                     <groupId>com.h2database</groupId>
@@ -1840,6 +1857,23 @@
             <id>prod</id>
 <%_ if (databaseTypeSql || !reactive) { _%>
             <dependencies>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+                <dependency>
+                    <groupId>org.testcontainers</groupId>
+  <%_ if (prodDatabaseTypeMysql) { _%>
+                    <artifactId>mysql</artifactId>
+  <%_ } else if (prodDatabaseTypeMariadb) { _%>
+                    <artifactId>mariadb</artifactId>
+  <%_ } else if (prodDatabaseTypePostgres) { _%>
+                    <artifactId>postgresql</artifactId>
+  <%_ } else if (prodDatabaseTypeMssql) { _%>
+                    <artifactId>mssqlserver</artifactId>
+  <%_ } else if (prodDatabaseTypeOracle) { _%>
+                    <artifactId>oracle-xe</artifactId>
+  <%_ } _%>
+                    <scope>test</scope>
+                </dependency>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMysql) { _%>
                 <dependency>
