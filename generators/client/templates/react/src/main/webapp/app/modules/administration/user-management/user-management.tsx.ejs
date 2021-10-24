@@ -216,7 +216,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
         </tbody>
       </Table>
 <%_ if (!databaseTypeCassandra) { _%>
-        { totalItems ? (<div className={ users && users.length > 0 ? '' : 'd-none' }>
+        { totalItems ? (<div className={ users?.length > 0 ? '' : 'd-none' }>
           <Row className="justify-content-center">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
           </Row>
