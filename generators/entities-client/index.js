@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { writingTasks: vueWritingTasks, postWritingTasks: vuePostWritingTasks } = require('./files-vue');
 const { GENERATOR_ENTITIES_CLIENT } = require('../generator-list');
 
 let useBlueprints;
@@ -47,13 +46,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadSharedConfig() {
-        this.loadAppConfig();
-        this.loadDerivedAppConfig();
         this.loadClientConfig();
-        this.loadDerivedClientConfig();
-        this.loadServerConfig();
-        this.loadPlatformConfig();
-        this.loadTranslationConfig();
       },
     };
   }
@@ -70,39 +63,11 @@ module.exports = class extends BaseBlueprintGenerator {
         // Make user entity available to templates.
         this.user = this.configOptions.sharedEntities.User;
       },
-
-      loadEntities() {
-        if (!this.configOptions.sharedEntities) {
-          this.localEntities = [];
-          return;
-        }
-        this.localEntities = Object.values(this.configOptions.sharedEntities).filter(entity => !entity.builtIn);
-      },
     };
   }
 
   get default() {
     return useBlueprints ? undefined : this._default();
-  }
-
-  _writing() {
-    return {
-      ...vueWritingTasks,
-    };
-  }
-
-  get writing() {
-    return useBlueprints ? undefined : this._writing();
-  }
-
-  _postWriting() {
-    return {
-      ...vuePostWritingTasks,
-    };
-  }
-
-  get postWriting() {
-    return useBlueprints ? undefined : this._postWriting();
   }
 
   // Public API method used by the getter and also by Blueprints
