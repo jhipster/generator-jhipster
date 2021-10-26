@@ -177,13 +177,6 @@ spring:
           max-connections: 1000
   <%_ } _%>
 <%_ } _%>
-  main:
-    allow-circular-references: true
-<%_ if (!reactive) { _%>
-  mvc:
-    pathmatch:
-      matching-strategy: ant-path-matcher
-<%_ } _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
@@ -246,6 +239,12 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
+<%_ if (!reactive) { _%>
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+<%_ } _%>
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
   security:
     user:
