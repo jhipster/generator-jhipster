@@ -124,7 +124,7 @@
 <%_ if (databaseTypeCassandra) { _%>
         <!-- The cassandra driver version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <cassandra-driver.version>4.11.3</cassandra-driver.version>
+        <cassandra-driver.version>4.13.0</cassandra-driver.version>
 <%_ } _%>
         <archunit-junit5.version>0.22.0</archunit-junit5.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
@@ -139,6 +139,9 @@
         <!-- This needs to be pinned with the one from neo4j migrations otherwise an older incompatible version from
         spring fox is used-->
         <classgraph.version>4.8.87</classgraph.version>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+        <spring.mongodb.embedded.version>3.1.3</spring.mongodb.embedded.version>
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -321,6 +324,12 @@
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
 <%_ } _%>
         </dependency>
+<%_ if (!reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -512,15 +521,15 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
+  <%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
   <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -618,15 +627,15 @@
             <scope>test</scope>
         </dependency>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-        </dependency>
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         <dependency>
             <groupId>io.projectreactor.kafka</groupId>
             <artifactId>reactor-kafka</artifactId>
+        </dependency>
+  <%_ } else { _%>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
         </dependency>
   <%_ } _%>
         <dependency>
@@ -772,12 +781,6 @@
             <artifactId>feign-reactor-spring-configuration</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 %>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-data</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -854,17 +857,16 @@
             <scope>provided</scope>
         </dependency>
 <%_ } _%>
-<%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (reactive) { _%>
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } else { _%>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>
