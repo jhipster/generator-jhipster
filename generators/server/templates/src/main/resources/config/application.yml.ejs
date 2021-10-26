@@ -187,6 +187,11 @@ spring:
         pool:
           max-connections: 1000
   <%_ } _%>
+  <%_ if (!applicationTypeGateway && reactive) { _%>
+    mvc:
+      pathmatch:
+        matching-strategy: ant-path-matcher
+  <%_ } _%>
 <%_ } _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
