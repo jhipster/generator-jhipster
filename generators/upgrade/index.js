@@ -89,10 +89,9 @@ module.exports = class extends BaseGenerator {
     // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
     this.jhipsterOldVersion = this.config.get('jhipsterVersion');
 
-    // Verify 6.6.0 app blueprint bug
-    if (!this.config.existed && !this.options.blueprints && !this.options.help) {
-      this.error(
-        'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
+    if (!this.config.existed) {
+      throw new Error(
+        "Could not find a valid jhipster application configuration, check if '.yo-rc.json' file exists and 'generator-jhipster' key exists inside it."
       );
     }
   }
