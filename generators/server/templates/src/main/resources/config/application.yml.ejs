@@ -178,7 +178,7 @@ spring:
   <%_ } _%>
     main:
       allow-circular-references: true
-  <%_ if (!applicationTypeGateway && reactive) { _%>
+  <%_ if (!reactive) { _%>
     mvc:
       pathmatch:
         matching-strategy: ant-path-matcher
