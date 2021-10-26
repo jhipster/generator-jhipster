@@ -6,7 +6,7 @@
     "cypress": "8.6.0",
     "eslint-plugin-cypress": "2.12.1",
     "cypress-audit": "1.1.0",
-    "lighthouse": "8.5.1",
+    "lighthouse": "8.6.0",
     "nyc": "15.1.0"
   },
   "dependencies": {
