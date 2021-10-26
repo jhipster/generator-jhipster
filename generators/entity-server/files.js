@@ -201,6 +201,10 @@ const serverFiles = {
           renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
         },
         {
+          file: 'package/repository/EntitySqlHelper_reactive.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/${generator.entityClass}SqlHelper.java`,
+        },
+        {
           file: 'package/repository/rowmapper/EntityRowMapper.java',
           renameTo: generator => `${generator.entityAbsoluteFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`,
         },

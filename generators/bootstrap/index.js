@@ -237,6 +237,7 @@ module.exports = class extends BaseGenerator {
       relationships: [],
       changelogDate,
       fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
+      dto: true,
     };
 
     loadRequiredConfigIntoEntity(user, this.jhipsterConfig);

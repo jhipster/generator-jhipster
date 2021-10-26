@@ -38,8 +38,12 @@ _%>
 import java.util.Set;
 <%_ } _%>
 
-import <%= entityAbsolutePackage %>.domain.*;
+import <%= entityAbsoluteClass %>;
 import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+
+<%_ for (const otherEntity of _.uniq(dtoReferences.filter(ref => ref.relationship).map(ref => ref.relationship.otherEntity).filter(otherEntity => otherEntity.entityPackage !== entityPackage))) { _%>
+import <%= `${otherEntity.entityAbsolutePackage}.service.mapper.${otherEntity.entityClass}Mapper` %>;
+<%_ } _%>
 
 import org.mapstruct.*;
 <%_ if (uuidMapMethod) { _%>

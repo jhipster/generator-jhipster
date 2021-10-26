@@ -367,17 +367,28 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
       ...super._missingPreDefault(),
 
       loadUserManagementEntities() {
+        // TODO v8 move to preparingEntities priority.
         if (!this.configOptions.sharedEntities) return;
         // Make user entity available to templates.
-        this.user = this.configOptions.sharedEntities.User;
+        const user = (this.user = this.configOptions.sharedEntities.User);
+        if (!user) return;
+
+        const { packageName, packageFolder } = this;
+        const { persistClass } = user;
+        user.entityAbsolutePackage = packageName;
+        user.entityAbsoluteFolder = packageFolder;
+        user.entityAbsoluteClass = `${packageName}.domain.${persistClass}`;
       },
 
       loadDomains() {
         if (!this.configOptions.sharedEntities) return;
         this.domains = [
-          ...new Set(
-            Object.entries(this.configOptions.sharedEntities).map(([_name, entity]) => entity.entityAbsolutePackage || this.packageName)
-          ),
+          ...new Set([
+            this.packageName,
+            ...Object.values(this.configOptions.sharedEntities)
+              .map(entity => entity.entityAbsolutePackage)
+              .filter(packageName => packageName),
+          ]),
         ];
       },
 
