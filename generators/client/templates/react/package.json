@@ -21,7 +21,7 @@
     "react-transition-group": "4.4.2",
     "reactstrap": "8.10.0",
     "redux": "4.1.1",
-    "redux-thunk": "2.3.0",
+    "redux-thunk": "2.4.0",
     "sonar-scanner": "3.1.0",
     "tslib": "2.3.1",
     "uuid": "8.3.2"
