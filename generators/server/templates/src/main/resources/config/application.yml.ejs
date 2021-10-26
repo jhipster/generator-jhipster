@@ -188,13 +188,6 @@ spring:
           max-connections: 1000
   <%_ } _%>
 <%_ } _%>
-  main:
-    allow-circular-references: true
-<%_ if (!reactive) { _%>
-  mvc:
-    pathmatch:
-      matching-strategy: ant-path-matcher
-<%_ } _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
