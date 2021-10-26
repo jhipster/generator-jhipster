@@ -176,13 +176,13 @@ spring:
         pool:
           max-connections: 1000
   <%_ } _%>
-    main:
-      allow-circular-references: true
-  <%_ if (!reactive) { _%>
-    mvc:
-      pathmatch:
-        matching-strategy: ant-path-matcher
-  <%_ } _%>
+<%_ } _%>
+  main:
+    allow-circular-references: true
+<%_ if (!reactive) { _%>
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
 <%_ } _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
