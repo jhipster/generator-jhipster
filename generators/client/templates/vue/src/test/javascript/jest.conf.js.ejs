@@ -4,7 +4,7 @@ const { compilerOptions: { paths = {}, baseUrl = './' } } = require('../../../ts
 
 module.exports = {
   rootDir: '../../../',
-  roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/src/test/javascript/spec/app/`],
+  roots: ['<rootDir>', `<rootDir>/${baseUrl}`, `<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/app/`],
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
