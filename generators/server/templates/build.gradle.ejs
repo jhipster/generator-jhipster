@@ -419,10 +419,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+  <%_ } else { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -461,10 +461,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:oracle-xe"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.apache.kafka:kafka-clients"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.projectreactor.kafka:reactor-kafka"
+  <%_ } else { _%>
+    implementation "org.apache.kafka:kafka-clients"
   <%_ } _%>
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
@@ -523,9 +523,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
 <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
-<%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
-    implementation "org.springframework.security:spring-security-data"
-<%_ } _%>
     implementation "org.springframework.security:spring-security-web"
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
@@ -555,26 +552,26 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
 <%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "mysql:mysql-connector-java"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "dev.miku:r2dbc-mysql"
+  <%_ } else { _%>
+    liquibaseRuntime "mysql:mysql-connector-java"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypePostgres) { _%>
     implementation "org.postgresql:postgresql"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.postgresql:postgresql"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-postgresql"
+  <%_ } else { _%>
+    liquibaseRuntime "org.postgresql:postgresql"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMariadb) { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+  <%_ if (reactive) { _%>
+    implementation "org.mariadb:r2dbc-mariadb"
   <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb"
+    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMssql) { _%>
@@ -631,10 +628,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
   <%_ } _%>
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "com.h2database:h2"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-h2"
+  <%_ } else { _%>
+    liquibaseRuntime "com.h2database:h2"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeOracle) { _%>
