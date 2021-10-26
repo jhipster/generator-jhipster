@@ -85,11 +85,7 @@ _%>
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-  <%_ if (!reactive) { _%>
-      - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
-  <%_ } else { _%>
-      - SPRING_DATA_ELASTICSEARCH_CLIENT_REACTIVE_ENDPOINTS=<%= baseName.toLowerCase() %>-elasticsearch:9200
-  <%_ } _%>
+      - SPRING_ELASTICSEARCH_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
       - KAFKA_BOOTSTRAPSERVERS=kafka:9092
