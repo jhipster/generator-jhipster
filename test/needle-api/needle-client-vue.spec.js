@@ -154,12 +154,12 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
 
   it('menu contains the item in service import', () => {
     assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/bootstrap.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
       "import entityNameService from '@/entities/entityFolderName/entityFileName.service';"
     );
   });
 
   it('menu contains the item in service', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/bootstrap.ts`, 'entityInstanceService: () => new entityNameService(),');
+    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/main.ts`, 'entityInstanceService: () => new entityNameService(),');
   });
 });
