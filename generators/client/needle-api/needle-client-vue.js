@@ -129,7 +129,7 @@ module.exports = class extends needleClientBase {
 
   addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow('not added to import in main.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/bootstrap.ts`;
+    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
 
     // prettier-ignore
     const entityEntry = this.generator.stripMargin(
@@ -142,7 +142,7 @@ module.exports = class extends needleClientBase {
 
   addEntityServiceToMain(entityInstance, entityName) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to service in main.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/bootstrap.ts`;
+    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/main.ts`;
 
     // prettier-ignore
     const entityEntry = this.generator.stripMargin(

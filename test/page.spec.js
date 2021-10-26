@@ -64,10 +64,10 @@ describe('Page subgenerator', () => {
         );
         runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`, `path: '/pages/${pageFolderName}',`);
         runResult.assertFileContent(
-          `${CLIENT_MAIN_SRC_DIR}/app/bootstrap.ts`,
+          `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
           `import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
         );
-        runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/bootstrap.ts`, `${pageInstance}Service: () => new ${pageName}Service(),`);
+        runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}/app/main.ts`, `${pageInstance}Service: () => new ${pageName}Service(),`);
         runResult.assertFileContent(`${CLIENT_TEST_SRC_DIR}/protractor.conf.js`, "'./e2e/pages/**/*.spec.ts',");
       });
     };
