@@ -300,6 +300,14 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.userPrimaryKeyTypeUUID = this.user.primaryKey.type === TYPE_UUID;
       },
 
+      loadEntities() {
+        if (!this.configOptions.sharedEntities) {
+          this.localEntities = [];
+          return;
+        }
+        this.localEntities = Object.values(this.configOptions.sharedEntities).filter(entity => !entity.builtIn);
+      },
+
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
           app: {

@@ -51,6 +51,18 @@ const vueFiles = {
       templates: ['tsconfig.e2e.json'],
     },
   ],
+  entities: [
+    {
+      path: VUE_DIR,
+      templates: [
+        'entities/entities.component.ts',
+        'entities/entities.vue',
+        'entities/entities-menu.component.ts',
+        'entities/entities-menu.vue',
+        'router/entities.ts',
+      ],
+    },
+  ],
   sass: [
     {
       path: CLIENT_MAIN_SRC_DIR,
@@ -349,6 +361,7 @@ function customizeFiles() {
       'app/core/jhi-navbar/jhi-navbar.vue',
       'app/core/ribbon/ribbon.vue',
       'app/shared/jhi-item-count.vue',
+      'app/entities/entities-menu.vue',
     ]);
     if (this.withAdminUi) {
       utils.vueReplaceTranslation(this, [
