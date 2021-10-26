@@ -176,6 +176,8 @@ spring:
         pool:
           max-connections: 1000
   <%_ } _%>
+    main:
+      allow-circular-references: true
   <%_ if (!applicationTypeGateway && reactive) { _%>
     mvc:
       pathmatch:
