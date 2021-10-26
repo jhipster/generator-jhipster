@@ -310,7 +310,7 @@ dependencies {
     }<% } %>
     <%_ // This is useful for major Spring Boot migration
     if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
-    runtime "org.springframework.boot:spring-boot-properties-migrator"
+    runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
     <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
     <%_ if (cacheProvider !== 'no') { _%>
