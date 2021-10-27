@@ -91,7 +91,7 @@ module.exports = class extends BaseGenerator {
 
     if (!this.config.existed) {
       throw new Error(
-        "Could not find a valid jhipster application configuration, check if '.yo-rc.json' file exists and 'generator-jhipster' key exists inside it."
+        "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it."
       );
     }
   }
