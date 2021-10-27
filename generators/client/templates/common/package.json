@@ -3,10 +3,10 @@
     "@cypress/code-coverage": "3.9.11",
     "babel-loader": "8.2.3",
     "babel-plugin-istanbul": "6.1.1",
-    "cypress": "8.6.0",
+    "cypress": "8.7.0",
     "eslint-plugin-cypress": "2.12.1",
     "cypress-audit": "1.1.0",
-    "lighthouse": "8.5.1",
+    "lighthouse": "8.6.0",
     "nyc": "15.1.0"
   },
   "dependencies": {

@@ -21,6 +21,7 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 const { JWT, SESSION } = require('../jdl/jhipster/authentication-types');
+const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 
 const { formatDateForChangelog } = require('../utils/liquibase');
 
@@ -45,7 +46,10 @@ describe('Integration Test reproducibility', () => {
                 config.rememberMeKey =
                   'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
                 fse.writeJsonSync(yoFile, yoJson);
-              } else if (config.authenticationType === JWT && !config.jwtSecretKey) {
+              } else if (
+                (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
+                !config.jwtSecretKey
+              ) {
                 config.jwtSecretKey =
                   'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=';
                 fse.writeJsonSync(yoFile, yoJson);
@@ -55,7 +59,7 @@ describe('Integration Test reproducibility', () => {
           it('should contain creationTimestamp', () => {
             assert(config.creationTimestamp);
           });
-          if (config.authenticationType === JWT) {
+          if (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) {
             it('should contain jwtSecretKey', () => {
               assert(config.jwtSecretKey);
             });
