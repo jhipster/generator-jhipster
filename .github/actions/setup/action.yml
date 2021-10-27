@@ -63,7 +63,7 @@ inputs:
   generator-jhipster-branch:
     description: 'JHipster Generator branch'
     required: false
-    default: main
+    default: skip_ci-spring-boot_2.6.0
   jhipster-bom-repository:
     description: 'JHipster BOM repository'
     required: false
