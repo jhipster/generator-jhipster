@@ -21,7 +21,7 @@ const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const constants = require('../generator-constants');
 
-const { CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
+const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -338,7 +338,16 @@ const files = {
 module.exports = {
   writeFiles,
   files,
+  cleanup,
 };
+
+function cleanup() {
+  if (!this.clientFrameworkReact) return;
+
+  if (this.isJhipsterVersionLessThan('7.4.0') && this.enableI18nRTL) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
+  }
+}
 
 function writeFiles() {
   // write React files
