@@ -18,7 +18,6 @@
 -%>
 'use strict';
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
@@ -92,13 +91,6 @@ const webpackConfig = {
     }),
     // extract css into its own file
     new MiniCssExtractPlugin(),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      base: '/',
-      template: './<%= MAIN_SRC_DIR %>index.html',
-    }),
     // keep module.id stable when vendor modules does not change
     new ForkTsCheckerWebpackPlugin(
       {

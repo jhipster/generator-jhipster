@@ -3,6 +3,7 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
@@ -42,6 +43,45 @@ module.exports = async (env, options) => {
           vue$: 'vue/dist/vue.esm.js',
           '@': resolve('<%= CLIENT_MAIN_SRC_DIR %>app'),
         },
+      },
+      devServer: {
+<%_ if (microfrontend) { _%>
+        hot: config.dev.hotReload,
+<%_ } _%>
+        static: {
+          directory: './<%= DIST_DIR %>',
+        },
+        port: <%= devServerPort %>,
+        proxy: [
+          {
+            context: [
+              '/api',
+              '/services',
+              '/management',
+              '/swagger-resources',
+              '/v2/api-docs',
+              '/v3/api-docs',
+              '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
+              '/oauth2',
+              '/login',
+<%_ } _%>
+              '/auth'
+            ],
+            target: 'http://localhost:<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            secure: false,
+          },
+<%_ if (communicationSpringWebsocket) { _%>
+          {
+            context: [
+              '/websocket'
+            ],
+            target: 'ws://localhost:<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            ws: true
+          }
+<%_ } _%>
+        ],
+        historyApiFallback: true
       },
       cache: {
         // 1. Set cache type to filesystem
@@ -97,6 +137,10 @@ module.exports = async (env, options) => {
 <%_ } _%>
           VERSION: JSON.stringify(config.version),
           SERVER_API_URL: JSON.stringify(config.serverApiUrl),
+        }),
+        new HtmlWebpackPlugin({
+          base: '/',
+          template: './<%= MAIN_SRC_DIR %>index.html',
         }),
         new VueLoaderPlugin(),
         new CopyWebpackPlugin({
