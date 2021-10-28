@@ -35,7 +35,7 @@
     "axios-mock-adapter": "1.20.0",
     "autoprefixer": "10.3.7",
     "babel-core": "7.0.0-bridge.0",
-    "browser-sync": "2.27.6",
+    "browser-sync": "2.27.7",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "9.0.1",
     "css-loader": "6.5.0",
