@@ -281,7 +281,6 @@ configurations {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     maven { url 'https://repo.spring.io/milestone' }
