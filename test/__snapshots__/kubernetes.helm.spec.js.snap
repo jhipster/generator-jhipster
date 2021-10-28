@@ -70,7 +70,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -459,7 +458,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -1220,7 +1218,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -1735,7 +1732,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -2418,7 +2414,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -3167,7 +3162,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -4511,7 +4505,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -4883,7 +4876,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -4908,7 +4900,7 @@ maintainers:
 - name: Team JHipster
   email:
 dependencies:
-- name: prometheus-community
+- name: prometheus
   version: ^9.2.0
   repository: https://prometheus-community.github.io/helm-charts
   condition: prometheus.enabled
@@ -4921,7 +4913,7 @@ dependencies:
   },
   "csvc-helm/requirements.yaml": Object {
     "contents": "dependencies:
-  - name: prometheus-community
+  - name: prometheus
     version: ^9.2.0
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
@@ -7733,7 +7725,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -8236,7 +8227,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",

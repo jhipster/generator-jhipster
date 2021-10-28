@@ -6,7 +6,7 @@ dependencies:
     condition: kafka.enabled
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
-  - name: prometheus-community
+  - name: prometheus
     version: <%= HELM_PROMETHEUS %>
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
