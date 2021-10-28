@@ -144,4 +144,5 @@ function setupHelmConstants() {
   this.HELM_MYSQL = constants.HELM_MYSQL;
   this.HELM_POSTGRESQL = constants.HELM_POSTGRESQL;
   this.HELM_MOGODB_REPLICASET = constants.HELM_MOGODB_REPLICASET;
+  this.HELM_COUCHBASE_OPERATOR = constants.HELM_COUCHBASE_OPERATOR;
 }
