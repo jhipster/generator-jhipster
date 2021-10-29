@@ -18,7 +18,7 @@
 -%>
 import React, { useState, useEffect } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Table, Row, Badge } from 'reactstrap';
+import { Button, Table, Badge } from 'reactstrap';
 import {
   Translate,
   TextFormat,
@@ -217,10 +217,10 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
       </Table>
 <%_ if (!databaseTypeCassandra) { _%>
         { totalItems ? (<div className={ users?.length > 0 ? '' : 'd-none' }>
-          <Row className="justify-content-center">
+          <div className="justify-content-center d-flex">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
-          </Row>
-          <Row className="justify-content-center">
+          </div>
+          <div className="justify-content-center d-flex">
             <JhiPagination
               activePage={pagination.activePage}
               onSelect={handlePagination}
@@ -228,7 +228,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
               itemsPerPage={pagination.itemsPerPage}
               totalItems={totalItems}
             />
-          </Row>
+          </div>
         </div>) : '' }
 <%_ } _%>
     </div>

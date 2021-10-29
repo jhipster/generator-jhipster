@@ -21,7 +21,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form,<% } %>Col, Row, Table } from 'reactstrap';
+import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
   <%_ if (blobFields.length > 0) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
@@ -481,15 +481,15 @@ _%>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
         { totalItems ? (<div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
-          <Row className="justify-content-center">
+          <div className="justify-content-center d-flex">
             <JhiItemCount
               page={paginationState.activePage}
               total={totalItems}
               itemsPerPage={paginationState.itemsPerPage}
               <% { if (enableTranslation) { %>i18nEnabled<% }} %>
             />
-          </Row>
-          <Row className="justify-content-center">
+          </div>
+          <div className="justify-content-center d-flex">
             <JhiPagination
               activePage={paginationState.activePage}
               onSelect={handlePagination}
@@ -497,7 +497,7 @@ _%>
               itemsPerPage={paginationState.itemsPerPage}
               totalItems={totalItems}
             />
-          </Row>
+          </div>
         </div>) : '' }
   <% } _%>
 <%_ } _%>
