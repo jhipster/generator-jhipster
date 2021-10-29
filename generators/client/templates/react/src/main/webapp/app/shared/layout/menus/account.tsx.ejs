@@ -29,7 +29,7 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 import { NavDropdown } from './menu-components';
 
 
-const accountMenuItemsAuthenticated = (
+const accountMenuItemsAuthenticated = () => (
   <>
 <%_ if (!skipUserManagement) { _%>
     <MenuItem icon="wrench" to="/account/settings" data-cy="settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
@@ -42,7 +42,7 @@ const accountMenuItemsAuthenticated = (
   </>
   );
 
-const accountMenuItems = (
+const accountMenuItems = () => (
   <>
 <%_ if (!authenticationTypeOauth2) { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
@@ -57,7 +57,7 @@ const accountMenuItems = (
 
 export const AccountMenu = ({ isAuthenticated = false }) => (
   <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu" data-cy="accountMenu">
-    {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
+    {isAuthenticated ? accountMenuItemsAuthenticated() : accountMenuItems()}
   </NavDropdown>
 );
 
