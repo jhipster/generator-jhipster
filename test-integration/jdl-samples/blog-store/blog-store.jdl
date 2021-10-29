@@ -13,6 +13,7 @@ application {
     prodDatabaseType postgresql
     testFrameworks [cypress]
     creationTimestamp 1617901618886
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
   entities Blog, Post, Tag, Product
 }
@@ -27,7 +28,7 @@ application {
     searchEngine elasticsearch
     serverPort 8081
     creationTimestamp 1617901618887
-    jwtSecretKey "Yjk3ZmQzMDExNTJmYjczZDgxNzg5ODZhMGIyZTdkNGQ4MGFiNGU3OTUzYjI2MTM0NWYwYTRhNjc3NGM1MDFiMWZmMDkyYjk2NWNiNzRjMGVkYzczYjYyZmI1NzY4YzQyNjA3Yjk0ODQ2ODJhMGM5Mjg4NDgyMTEyMjVkN2U4YjU="
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
   entities Blog, Post, Tag
 }
@@ -44,7 +45,7 @@ application {
     enableHibernateCache false
     serverPort 8082
     creationTimestamp 1617901618888
-    jwtSecretKey "MmYyZDNhMDA0ZTU1ZjZhOTI2MTc0ZjgyZDFjMzcxNjI5YjAyZTNmMDFlNjYzOTlmYWYwODQwNTUzYzczYzgyM2M1OWFhNTVjNWQzZWVlNmFkMWNlMzg4OGQyMWRmZWY0YjkwMjY2NGYyM2VhYjE5OWViOThlZTUzMDgwZmM2N2U="
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
   entities Product
 }

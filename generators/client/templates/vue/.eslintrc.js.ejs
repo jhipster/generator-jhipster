@@ -30,6 +30,7 @@ module.exports = {
     ],
     parserOptions: {
       ecmaVersion: 2020,
+      project: ['./tsconfig.json'],
     },
     rules: {
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -41,5 +42,5 @@ module.exports = {
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-var-requires': 'off',
     },
-    "ignorePatterns": ["**/src/main docker/**/*.js"],
+    'ignorePatterns': ['<%= BUILD_DIR %>'],
   };

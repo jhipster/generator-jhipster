@@ -80,8 +80,8 @@
     "update-snapshots": "npm run update-snapshot -- test generators"
   },
   "dependencies": {
-    "aws-sdk": "2.1013.0",
-    "axios": "0.23.0",
+    "aws-sdk": "2.1017.0",
+    "axios": "0.24.0",
     "chalk": "4.1.2",
     "chevrotain": "9.1.0",
     "commander": "8.3.0",

@@ -67,7 +67,7 @@ spec:
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mongodb 27017)
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeCouchbase) { _%>
-                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase 8091)
+                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase-cluster-srv 8091)
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeNeo4j) { _%>
                   rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-neo4j 7474)
@@ -177,9 +177,14 @@ spec:
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeCouchbase) { _%>
         - name: SPRING_COUCHBASE_CONNECTION_STRING
-          value: "<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-couchbase-<%= i %>.<%= app.baseName.toLowerCase() %>-couchbase<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
-        - name: JHIPSTER_COUCHBASE_BUCKET_NAME
+          value: "<%= app.baseName.toLowerCase() %>-couchbase-cluster-srv"
+        - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME
           value: <%= app.baseName.toLowerCase() %>
+        - name: SPRING_COUCHBASE_BUCKET_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: couchbase-secret
+              key: password
 <%_ } _%>
 <%_ if (app.searchEngineElasticsearch) { _%>
         - name: SPRING_ELASTICSEARCH_REST_URIS

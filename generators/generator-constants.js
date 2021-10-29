@@ -95,6 +95,7 @@ const HELM_MYSQL = '^1.4.0';
 const HELM_MARIADB = '^6.12.2';
 const HELM_POSTGRESQL = '^6.5.3';
 const HELM_MOGODB_REPLICASET = '^3.10.1';
+const HELM_COUCHBASE_OPERATOR = '^2.2.1';
 
 // all constants used throughout all generators
 
@@ -254,7 +255,7 @@ const LANGUAGES = [
            And https://github.com/jhipster/generator-jhipster/issues/9494
            Java 17 supports 'id' locale, for compatibility with java 11, we will keep legacy 'in' value while we support java 11.
            When running with java 17 users must set 'java.locale.useOldISOCodes=true' environment variable.
-           See https://bugs.openjdk.java.net/browse/JDK-8267069. 
+           See https://bugs.openjdk.java.net/browse/JDK-8267069.
         */
     value: 'in',
     localeId: 'id',
@@ -425,6 +426,7 @@ const constants = {
   HELM_MARIADB,
   HELM_POSTGRESQL,
   HELM_MOGODB_REPLICASET,
+  HELM_COUCHBASE_OPERATOR,
 };
 
 module.exports = constants;

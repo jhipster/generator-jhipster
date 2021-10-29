@@ -4946,7 +4946,7 @@ maintainers:
 - name: Team JHipster
   email:
 dependencies:
-- name: prometheus-community
+- name: prometheus
   version: ^9.2.0
   repository: https://prometheus-community.github.io/helm-charts
   condition: prometheus.enabled
@@ -4959,7 +4959,7 @@ dependencies:
   },
   "csvc-knative/requirements.yml": Object {
     "contents": "dependencies:
-  - name: prometheus-community
+  - name: prometheus
     version: ^9.2.0
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
