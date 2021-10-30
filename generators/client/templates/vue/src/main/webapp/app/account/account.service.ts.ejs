@@ -88,9 +88,8 @@ export default class AccountService {
       const token = <%_ if (authenticationTypeJwt) { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
       if (!this.store.getters.account && !this.store.getters.logon && token) {
         return this.retrieveAccount();
-      } else {
-        return Promise.resolve(false);
       }
+      return Promise.resolve(false);
     }
 
     for (const authority of authorities) {
