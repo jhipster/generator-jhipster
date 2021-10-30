@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@angular/common": "12.2.12",
-    "bootstrap": "4.6.0",
+    "bootstrap": "4.6.1",
     "@fortawesome/angular-fontawesome": "0.9.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
@@ -29,7 +29,7 @@
     "copy-webpack-plugin": "9.0.1",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
-    "eslint-webpack-plugin": "3.0.1",
+    "eslint-webpack-plugin": "3.1.0",
     "folder-hash": "4.0.1",
     "jest": "27.3.1",
     "jest-preset-angular": "10.1.0",
