@@ -189,7 +189,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend'
-        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.client != 'false'
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-frontend-tests != 1 && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'
