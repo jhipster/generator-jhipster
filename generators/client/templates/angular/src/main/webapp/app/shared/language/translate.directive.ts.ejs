@@ -33,7 +33,7 @@ export class TranslateDirective implements OnChanges, OnInit, OnDestroy {
   @Input() <%= jhiPrefix %>Translate!: string;
   @Input() translateValues?: { [key: string]: unknown };
 
-  private readonly directiveDestroyed = new Subject<never>();
+  private readonly directiveDestroyed = new Subject();
 
   constructor(private el: ElementRef, private translateService: TranslateService) {}
 
@@ -51,7 +51,7 @@ export class TranslateDirective implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.directiveDestroyed.next();
+    this.directiveDestroyed.next(null);
     this.directiveDestroyed.complete();
   }
 
