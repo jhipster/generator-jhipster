@@ -81,12 +81,10 @@ jobs:
             extra-args: --workspaces --monorepository
             skip-backend-tests: 1
           - suite: blog-store-microfrontend
-            jdl-files: blog-store
-            extra-args: --workspaces --monorepository --microfrontend
+            extra-args: --workspaces --monorepository
             skip-backend-tests: 1
           - suite: vue-blog-store-microfrontend
-            jdl-files: blog-store
-            extra-args: --workspaces --monorepository --microfrontend --client-framework vue
+            extra-args: --workspaces --monorepository
             skip-backend-tests: 1
     steps:
       #----------------------------------------------------------------------
