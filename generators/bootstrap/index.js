@@ -20,12 +20,8 @@ const { State } = require('mem-fs-editor');
 const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
-const {
-  createEachFileTransform,
-  createConflicterStatusTransform,
-  createYoRcTransform,
-  createYoResolveTransform,
-} = require('yeoman-environment/lib/util/transform');
+const { transform } = require('p-transform');
+const { createConflicterStatusTransform, createYoRcTransform, createYoResolveTransform } = require('yeoman-environment/lib/util/transform');
 
 const { hasState, setModifiedFileState } = State;
 
@@ -147,63 +143,52 @@ module.exports = class extends BaseGenerator {
    * @param {Stream} [stream] - files stream, defaults to this.sharedFs.stream().
    * @return {Promise}
    */
-  _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
-    return new Promise((resolve, reject) => {
-      this.env.sharedFs.each(file => {
-        if (
-          file.contents &&
-          (path.basename(file.path) === '.yo-rc.json' ||
-            (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
-        ) {
-          if (!hasState(file) && !this.options.reproducibleTests) {
-            setModifiedFileState(file);
-          }
+  async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
+    this.env.sharedFs.each(file => {
+      if (
+        file.contents &&
+        (path.basename(file.path) === '.yo-rc.json' ||
+          (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
+      ) {
+        if (!hasState(file) && !this.options.reproducibleTests) {
+          setModifiedFileState(file);
         }
-      });
-      const yoResolveTranform = this.options.skipYoResolve ? [] : [createYoResolveTransform(this.env.conflicter)];
-      const transformStreams = [
-        // multi-step changes the file path, should be executed earlier in the pipeline
-        new MultiStepTransform(),
-        ...yoResolveTranform,
-        createYoRcTransform(),
-        createEachFileTransform(file => {
-          if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
-            file.conflicter = 'force';
-          }
-          return file;
-        }),
-      ];
-
-      if (this.jhipsterConfig.withGeneratedFlag) {
-        transformStreams.push(generatedAnnotationTransform(this));
       }
-
-      if (!skipPrettier) {
-        const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
-        // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-        // docker-compose modifies .yo-rc.json from others folder, match them all.
-        const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
-        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-        transformStreams.push(prettierFilter, prettierTransform(prettierOptions, this, this.options.ignoreErrors), prettierFilter.restore);
-      }
-
-      transformStreams.push(
-        createEachFileTransform(file => this.env.conflicter.checkForCollision(file), { ordered: false, maxParallel: 10 }),
-        createConflicterStatusTransform()
-      );
-
-      this.env.fs.commit(transformStreams, stream, (error, value) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-
-        // Force to empty Conflicter queue.
-        this.env.conflicter.queue.once('end', () => resolve(value));
-        this.env.conflicter.queue.run();
-      });
     });
+    const yoResolveTranform = this.options.skipYoResolve ? [] : [createYoResolveTransform(this.env.conflicter)];
+    const transformStreams = [
+      // multi-step changes the file path, should be executed earlier in the pipeline
+      new MultiStepTransform(),
+      ...yoResolveTranform,
+      createYoRcTransform(),
+      transform(file => {
+        if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
+          file.conflicter = 'force';
+        }
+        return file;
+      }, 'jhipster:config-files'),
+    ];
+
+    if (this.jhipsterConfig.withGeneratedFlag) {
+      transformStreams.push(generatedAnnotationTransform(this));
+    }
+
+    if (!skipPrettier) {
+      const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
+      // Prettier is clever, it uses correct rules and correct parser according to file extension.
+      const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
+      // docker-compose modifies .yo-rc.json from others folder, match them all.
+      const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
+      // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+      transformStreams.push(prettierFilter, prettierTransform(prettierOptions, this, this.options.ignoreErrors), prettierFilter.restore);
+    }
+
+    transformStreams.push(
+      transform(file => this.env.conflicter.checkForCollision(file), 'jhipster:conflicter'),
+      createConflicterStatusTransform()
+    );
+
+    await this.env.fs.commit(transformStreams, stream);
   }
 
   _createUserManagementEntities() {

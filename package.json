@@ -100,6 +100,7 @@
     "normalize-path": "3.0.0",
     "os-locale": "5.0.0",
     "p-queue": "6.6.2",
+    "p-transform": "1.1.0",
     "parse-gitignore": "1.0.1",
     "pluralize": "8.0.0",
     "prettier": "2.4.1",

@@ -18,7 +18,7 @@
  */
 const { State } = require('mem-fs-editor');
 const path = require('path');
-const { createFileTransform } = require('yeoman-environment/lib/util/transform');
+const { transform } = require('p-transform');
 const prettier = require('prettier');
 const prettierPluginJava = require('prettier-plugin-java');
 const prettierPluginPackagejson = require('prettier-plugin-packagejson');
@@ -26,53 +26,49 @@ const prettierPluginPackagejson = require('prettier-plugin-packagejson');
 const { isFileStateDeleted } = State;
 
 const prettierTransform = function (options, generator, ignoreErrors = false) {
-  return createFileTransform((file, encoding, callback) => {
+  return transform(async file => {
     if (isFileStateDeleted(file)) {
-      callback(null, file);
-      return Promise.resolve();
+      return file;
     }
     /* resolve from the projects config */
     let fileContent;
-    return prettier
-      .resolveConfig(file.relative)
-      .then(function (resolvedDestinationFileOptions) {
-        const prettierOptions = {
-          plugins: [],
-          // Config from disk
-          ...resolvedDestinationFileOptions,
-          // for better errors
-          filepath: file.relative,
-        };
-        if (options.packageJson) {
-          prettierOptions.plugins.push(prettierPluginPackagejson);
-        }
-        if (options.java) {
-          prettierOptions.plugins.push(prettierPluginJava);
-        }
-        fileContent = file.contents.toString('utf8');
-        const data = prettier.format(fileContent, prettierOptions);
-        file.contents = Buffer.from(data);
-        callback(null, file);
-      })
-      .catch(error => {
-        const errorMessage = `Error parsing file ${file.relative}: ${error}
+    try {
+      const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
+      const prettierOptions = {
+        plugins: [],
+        // Config from disk
+        ...resolvedDestinationFileOptions,
+        // for better errors
+        filepath: file.relative,
+      };
+      if (options.packageJson) {
+        prettierOptions.plugins.push(prettierPluginPackagejson);
+      }
+      if (options.java) {
+        prettierOptions.plugins.push(prettierPluginJava);
+      }
+      fileContent = file.contents.toString('utf8');
+      const data = prettier.format(fileContent, prettierOptions);
+      file.contents = Buffer.from(data);
+      return file;
+    } catch (error) {
+      const errorMessage = `Error parsing file ${file.relative}: ${error}
 
 At: ${fileContent
-          .split('\n')
-          .map((value, idx) => `${idx + 1}: ${value}`)
-          .join('\n')}`;
-        if (ignoreErrors) {
-          generator.warning(errorMessage);
-          callback(null, file);
-        } else {
-          callback(new Error(errorMessage));
-        }
-      });
-  });
+        .split('\n')
+        .map((value, idx) => `${idx + 1}: ${value}`)
+        .join('\n')}`;
+      if (ignoreErrors) {
+        generator.warning(errorMessage);
+        return file;
+      }
+      throw new Error(errorMessage);
+    }
+  }, 'jhipster:prettier');
 };
 
 const generatedAnnotationTransform = generator => {
-  return createFileTransform(function (file, encoding, callback) {
+  return transform(file => {
     if (
       !file.path.endsWith('package-info.java') &&
       !file.path.endsWith('MavenWrapperDownloader.java') &&
@@ -92,8 +88,8 @@ const generatedAnnotationTransform = generator => {
         file.contents = Buffer.from(newContent);
       }
     }
-    callback(null, file);
-  });
+    return file;
+  }, 'jhipster:generated-by-annotation');
 };
 
 module.exports = {
