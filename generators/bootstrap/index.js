@@ -21,7 +21,12 @@ const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
 const { transform } = require('p-transform');
-const { createConflicterStatusTransform, createYoRcTransform, createYoResolveTransform } = require('yeoman-environment/lib/util/transform');
+const {
+  createConflicterCheckTransform,
+  createConflicterStatusTransform,
+  createYoRcTransform,
+  createYoResolveTransform,
+} = require('yeoman-environment/lib/util/transform');
 
 const { hasState, setModifiedFileState } = State;
 
@@ -183,10 +188,7 @@ module.exports = class extends BaseGenerator {
       transformStreams.push(prettierFilter, prettierTransform(prettierOptions, this, this.options.ignoreErrors), prettierFilter.restore);
     }
 
-    transformStreams.push(
-      transform(file => this.env.conflicter.checkForCollision(file), 'jhipster:conflicter'),
-      createConflicterStatusTransform()
-    );
+    transformStreams.push(createConflicterCheckTransform(this.env.conflicter), createConflicterStatusTransform());
 
     await this.env.fs.commit(transformStreams, stream);
   }
