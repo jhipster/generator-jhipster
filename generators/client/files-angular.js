@@ -30,6 +30,7 @@ const files = {
   common: [
     {
       templates: [
+        '.npmrc',
         'package.json',
         'tsconfig.json',
         'tsconfig.app.json',
