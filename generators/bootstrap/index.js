@@ -18,7 +18,6 @@
  */
 const { State } = require('mem-fs-editor');
 const _ = require('lodash');
-const path = require('path');
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
@@ -149,17 +148,15 @@ module.exports = class extends BaseGenerator {
    * @return {Promise}
    */
   async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
-    this.env.sharedFs.each(file => {
-      if (
-        file.contents &&
-        (path.basename(file.path) === '.yo-rc.json' ||
-          (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
-      ) {
-        if (!hasState(file) && !this.options.reproducibleTests) {
+    // JDL writes directly to disk, set the file as modified so prettier will be applied
+    stream = stream.pipe(
+      patternSpy(file => {
+        if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
           setModifiedFileState(file);
         }
-      }
-    });
+      }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
+    );
+
     const yoResolveTranform = this.options.skipYoResolve ? [] : [createYoResolveTransform(this.env.conflicter)];
     const transformStreams = [
       // multi-step changes the file path, should be executed earlier in the pipeline
@@ -168,7 +165,7 @@ module.exports = class extends BaseGenerator {
       createYoRcTransform(),
       patternSpy(file => {
         file.conflicter = 'force';
-      }, '**/.jhipster/*.json').name('jhipster:config-files'),
+      }, '**/.jhipster/*.json').name('jhipster:config-files:force'),
     ];
 
     if (this.jhipsterConfig.withGeneratedFlag) {
