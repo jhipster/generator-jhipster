@@ -178,8 +178,7 @@ module.exports = class extends BaseGenerator {
     if (!skipPrettier) {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-      transformStreams.push(prettierTransform(prettierOptions, this, this.options.ignoreErrors, filterPatternForPrettier));
+      transformStreams.push(prettierTransform(prettierOptions, this, this.options.ignoreErrors));
     }
 
     transformStreams.push(createConflicterCheckTransform(this.env.conflicter), createConflicterStatusTransform());

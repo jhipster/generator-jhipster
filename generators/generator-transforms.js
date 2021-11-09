@@ -26,7 +26,11 @@ const { patternSpy } = require('yeoman-environment/transform');
 
 const { isFileStateDeleted } = State;
 
-const prettierTransform = function (options, generator, ignoreErrors = false, pattern) {
+const prettierTransform = function (options, generator, transformOptions = {}) {
+  if (typeof transformOptions === 'boolean') {
+    transformOptions = { ignoreErrors: transformOptions };
+  }
+  const { ignoreErrors = false, extensions = generator.getPrettierExtensions() } = transformOptions;
   return patternSpy(
     async file => {
       if (isFileStateDeleted(file)) {
@@ -67,7 +71,7 @@ At: ${fileContent
         throw new Error(errorMessage);
       }
     },
-    pattern,
+    `**/*.{${extensions}}`,
     { dot: true }
   ).name('jhipster:prettier');
 };
