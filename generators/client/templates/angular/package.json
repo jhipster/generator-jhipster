@@ -6,7 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@ng-bootstrap/ng-bootstrap": "10.0.0",
-    "@ngx-translate/core": "13.0.0",
+    "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "6.0.0",
     "ngx-cookie-service": "13.0.0",
     "ngx-infinite-scroll": "10.0.1",
