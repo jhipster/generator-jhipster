@@ -82,6 +82,11 @@ const vueFiles = {
         'spec/app/microfrontends/entities-router.ts',
       ],
     },
+    {
+      condition: generator => generator.applicationTypeMicroservice,
+      path: CLIENT_TEST_SRC_DIR,
+      templates: ['spec/app/entities/entities-menu.spec.ts'],
+    },
   ],
   sass: [
     {
