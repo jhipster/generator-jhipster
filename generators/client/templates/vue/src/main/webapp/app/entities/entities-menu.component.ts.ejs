@@ -6,7 +6,7 @@ import TranslationService from '@/locale/translation.service';
 @Component
 export default class EntitiesMenu extends Vue {
 <%_ if (applicationTypeMicroservice) { _%>
-  @Inject({ default: true }) private readonly microfrontendI18n!: string;
+  @Inject({ default: true }) private readonly microfrontendI18n!: boolean;
   @Inject('translationService') private translationService: () => TranslationService;
 
   created(): void {
