@@ -49,7 +49,7 @@ jobs:
       any: ${{ steps.build.outputs.any }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 2
       - name: 'Build matrix'
@@ -142,7 +142,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           path: generator-jhipster
           fetch-depth: 2

@@ -80,7 +80,7 @@
     "update-snapshots": "npm run update-snapshot -- test generators"
   },
   "dependencies": {
-    "aws-sdk": "2.1017.0",
+    "aws-sdk": "2.1023.0",
     "axios": "0.24.0",
     "chalk": "4.1.2",
     "chevrotain": "9.1.0",
@@ -119,7 +119,7 @@
   "devDependencies": {
     "chai": "4.3.4",
     "ejs-lint": "1.2.1",
-    "eslint": "8.1.0",
+    "eslint": "8.2.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-chai-friendly": "^0.7.1",
@@ -132,7 +132,7 @@
     "mocha": "9.1.3",
     "mocha-expect-snapshot": "1.1.1",
     "proxyquire": "2.1.3",
-    "sinon": "11.1.2",
+    "sinon": "12.0.1",
     "sinon-chai": "3.7.0",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "6.2.0"
