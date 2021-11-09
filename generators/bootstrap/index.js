@@ -17,16 +17,16 @@
  * limitations under the License.
  */
 const { State } = require('mem-fs-editor');
-const filter = require('gulp-filter');
 const _ = require('lodash');
 const path = require('path');
-const { transform } = require('p-transform');
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
   createYoRcTransform,
   createYoResolveTransform,
-} = require('yeoman-environment/lib/util/transform');
+  patternFilter,
+  patternSpy,
+} = require('yeoman-environment/transform');
 
 const { hasState, setModifiedFileState } = State;
 
@@ -102,7 +102,7 @@ module.exports = class extends BaseGenerator {
           this.debug('Skipping commit prettier');
           return;
         }
-        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc**', '.prettierignore'])), true);
+        await this._commitSharedFs(this.env.sharedFs.stream().pipe(patternFilter('**/{.prettierrc**,.prettierignore}')), true);
       },
       async commitFiles() {
         if (this.options.skipCommit) {
@@ -166,12 +166,9 @@ module.exports = class extends BaseGenerator {
       new MultiStepTransform(),
       ...yoResolveTranform,
       createYoRcTransform(),
-      transform(file => {
-        if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
-          file.conflicter = 'force';
-        }
-        return file;
-      }, 'jhipster:config-files'),
+      patternSpy(file => {
+        file.conflicter = 'force';
+      }, '**/.jhipster/*.json').name('jhipster:config-files'),
     ];
 
     if (this.jhipsterConfig.withGeneratedFlag) {
@@ -182,10 +179,7 @@ module.exports = class extends BaseGenerator {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
       const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-      // docker-compose modifies .yo-rc.json from others folder, match them all.
-      const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
-      // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-      transformStreams.push(prettierFilter, prettierTransform(prettierOptions, this, this.options.ignoreErrors), prettierFilter.restore);
+      transformStreams.push(prettierTransform(prettierOptions, this, this.options.ignoreErrors, filterPatternForPrettier));
     }
 
     transformStreams.push(createConflicterCheckTransform(this.env.conflicter), createConflicterStatusTransform());

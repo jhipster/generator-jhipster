@@ -18,57 +18,62 @@
  */
 const { State } = require('mem-fs-editor');
 const path = require('path');
-const { transform } = require('p-transform');
+const { passthrough } = require('p-transform');
 const prettier = require('prettier');
 const prettierPluginJava = require('prettier-plugin-java');
 const prettierPluginPackagejson = require('prettier-plugin-packagejson');
+const { patternSpy } = require('yeoman-environment/transform');
 
 const { isFileStateDeleted } = State;
 
-const prettierTransform = function (options, generator, ignoreErrors = false) {
-  return transform(async file => {
-    if (isFileStateDeleted(file)) {
-      return file;
-    }
-    /* resolve from the projects config */
-    let fileContent;
-    try {
-      const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
-      const prettierOptions = {
-        plugins: [],
-        // Config from disk
-        ...resolvedDestinationFileOptions,
-        // for better errors
-        filepath: file.relative,
-      };
-      if (options.packageJson) {
-        prettierOptions.plugins.push(prettierPluginPackagejson);
-      }
-      if (options.java) {
-        prettierOptions.plugins.push(prettierPluginJava);
-      }
-      fileContent = file.contents.toString('utf8');
-      const data = prettier.format(fileContent, prettierOptions);
-      file.contents = Buffer.from(data);
-      return file;
-    } catch (error) {
-      const errorMessage = `Error parsing file ${file.relative}: ${error}
-
-At: ${fileContent
-        .split('\n')
-        .map((value, idx) => `${idx + 1}: ${value}`)
-        .join('\n')}`;
-      if (ignoreErrors) {
-        generator.warning(errorMessage);
+const prettierTransform = function (options, generator, ignoreErrors = false, pattern) {
+  return patternSpy(
+    async file => {
+      if (isFileStateDeleted(file)) {
         return file;
       }
-      throw new Error(errorMessage);
-    }
-  }, 'jhipster:prettier');
+      /* resolve from the projects config */
+      let fileContent;
+      try {
+        const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
+        const prettierOptions = {
+          plugins: [],
+          // Config from disk
+          ...resolvedDestinationFileOptions,
+          // for better errors
+          filepath: file.relative,
+        };
+        if (options.packageJson) {
+          prettierOptions.plugins.push(prettierPluginPackagejson);
+        }
+        if (options.java) {
+          prettierOptions.plugins.push(prettierPluginJava);
+        }
+        fileContent = file.contents.toString('utf8');
+        const data = prettier.format(fileContent, prettierOptions);
+        file.contents = Buffer.from(data);
+        return file;
+      } catch (error) {
+        const errorMessage = `Error parsing file ${file.relative}: ${error}
+
+At: ${fileContent
+          .split('\n')
+          .map((value, idx) => `${idx + 1}: ${value}`)
+          .join('\n')}`;
+        if (ignoreErrors) {
+          generator.warning(errorMessage);
+          return file;
+        }
+        throw new Error(errorMessage);
+      }
+    },
+    pattern,
+    { dot: true }
+  ).name('jhipster:prettier');
 };
 
 const generatedAnnotationTransform = generator => {
-  return transform(file => {
+  return passthrough(file => {
     if (
       !file.path.endsWith('package-info.java') &&
       !file.path.endsWith('MavenWrapperDownloader.java') &&
@@ -88,7 +93,6 @@ const generatedAnnotationTransform = generator => {
         file.contents = Buffer.from(newContent);
       }
     }
-    return file;
   }, 'jhipster:generated-by-annotation');
 };
 
