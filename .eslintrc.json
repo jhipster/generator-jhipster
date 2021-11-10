@@ -26,6 +26,7 @@
     }
   ],
   "rules": {
+    "import/no-unresolved": [2, { "ignore": ["^#[\\w\\d/\\-]+$"] }],
     "prettier/prettier": "error",
     "linebreak-style": 0,
     "eol-last": 2,
