@@ -171,6 +171,7 @@ class CustomClaimConverterIT {
         claims.put("sub", "123");
         // AND
         ObjectNode user = mapper.createObjectNode();
+        user.put("preferred_username", USERNAME);
         user.put("name", FULL_NAME);
         mockHttpGetUserInfo(user);
 
@@ -190,6 +191,7 @@ class CustomClaimConverterIT {
         claims.put("sub", "123");
         // AND
         ObjectNode user = mapper.createObjectNode();
+        user.put("preferred_username", USERNAME);
         user.put("email", EMAIL);
         mockHttpGetUserInfo(user);
 
