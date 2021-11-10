@@ -22,6 +22,9 @@ const { compilerOptions: { paths = {}, baseUrl = './' } } = require('./tsconfig.
 const environment = require('./webpack/environment');
 
 module.exports = {
+  // Drop for jest-preset-angular final
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  resolver: 'jest-preset-angular/build/resolvers/ng-jest-resolver.js',
   globals: {
     ...environment,
   },
