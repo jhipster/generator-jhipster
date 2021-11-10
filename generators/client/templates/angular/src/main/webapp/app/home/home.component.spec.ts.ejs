@@ -17,15 +17,14 @@
  limitations under the License.
 -%>
 jest.mock('app/core/auth/account.service');
-<%_ if (!authenticationTypeOauth2) { _%>
-jest.mock('@angular/router');
-<% } else { %>
+<%_ if (authenticationTypeOauth2) { _%>
 jest.mock('app/login/login.service');
 <%_ } _%>
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 <%_ } _%>
 import { of<% if (!authenticationTypeOauth2) { %>, Subject<% } %> } from 'rxjs';
 
@@ -60,8 +59,16 @@ describe('Home Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+<%_ if (!authenticationTypeOauth2) { _%>
+        imports: [RouterTestingModule.withRoutes([])],
+<%_ } _%>
         declarations: [HomeComponent],
-        providers: [AccountService, <% if (!authenticationTypeOauth2) { %>Router<% } else { %>LoginService<% } %>],
+        providers: [
+          AccountService,
+<%_ if (authenticationTypeOauth2) { _%>
+          LoginService
+<%_ } _%>
+        ],
       })
         .overrideTemplate(HomeComponent, '')
         .compileComponents();
@@ -75,7 +82,10 @@ describe('Home Component', () => {
     mockAccountService.identity = jest.fn(() => of(null));
     mockAccountService.getAuthenticationState = jest.fn(() => of(null));
 <%_ if (!authenticationTypeOauth2) { _%>
+
     mockRouter = TestBed.inject(Router);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => of(true).toPromise());
+
 <%_ } else { _%>
     mockLoginService = TestBed.inject(LoginService);
 <%_ } _%>

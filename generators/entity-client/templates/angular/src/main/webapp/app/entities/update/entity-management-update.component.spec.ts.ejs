@@ -25,13 +25,12 @@ const allRelationshipsByEntityNeedingOptions = Object
 const testEntityPrimaryKey0 = generateTestEntityPrimaryKey(primaryKey, 0);
 const testEntityPrimaryKey1 = generateTestEntityPrimaryKey(primaryKey, 1);
 _%>
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject } from 'rxjs';
 
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
@@ -62,7 +61,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
+            imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
             declarations: [<%= entityAngularName %>UpdateComponent],
             providers: [FormBuilder, ActivatedRoute],
         })
