@@ -59,10 +59,6 @@ updates:
     labels:
       - 'theme: react'
       - 'theme: dependencies'
-    ignore:
-      # https://github.com/reactstrap/reactstrap/issues/1748
-      - dependency-name: 'bootstrap'
-        versions: ['>=5']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/vue/'

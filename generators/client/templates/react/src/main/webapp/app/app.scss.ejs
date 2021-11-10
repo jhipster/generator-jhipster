@@ -25,9 +25,6 @@
 <%_ if (!clientThemeNone) { _%>
 @import "~bootswatch/dist/<%= clientTheme %>/bootswatch";
 <%_ } _%>
-<%_ if (enableI18nRTL) { _%>
-@import '../content/scss/rtl.scss';
-<%_ } _%>
 body {
 <%_ if (clientThemeNone) { _%>
   background: #fafafa;

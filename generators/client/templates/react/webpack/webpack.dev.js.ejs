@@ -23,6 +23,9 @@ const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
 const sass = require('sass');
+<%_ if (enableI18nRTL) { _%>
+const postcssRTLCSS = require('postcss-rtlcss');
+<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -47,7 +50,20 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
     rules: [
       {
         test: /\.(sa|sc|c)ss$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', {
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+<%_ if (enableI18nRTL) { _%>
+            options: {
+              postcssOptions: {
+                plugins: [postcssRTLCSS()],
+              },
+            },
+<%_ } _%>
+          },
+          {
             loader: 'sass-loader',
             options: { implementation: sass }
           }
