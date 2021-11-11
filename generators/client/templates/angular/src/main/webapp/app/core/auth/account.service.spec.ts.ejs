@@ -97,7 +97,7 @@ describe('Account Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => of(true).toPromise());
+    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
 <%_ if (communicationSpringWebsocket) { _%>
 
     mockTrackerService = TestBed.inject(TrackerService);
