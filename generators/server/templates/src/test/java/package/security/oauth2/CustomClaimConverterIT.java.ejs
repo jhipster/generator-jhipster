@@ -51,6 +51,7 @@ class CustomClaimConverterIT {
     private static final String NAME = "John";
     private static final String FAMILY_NAME = "Doe";
     private static final String FULL_NAME = NAME + " " + FAMILY_NAME;
+    private static final String NAME_SUFFIX = "Sr.";
     private static final String EMAIL = "john.doe@gmail.com";
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -181,6 +182,27 @@ class CustomClaimConverterIT {
                 .containsEntry("preferred_username", USERNAME)
                 .containsEntry("given_name", NAME)
                 .containsEntry("family_name", FAMILY_NAME);
+        }).doesNotThrowAnyException();
+    }
+
+    @Test
+    void testConvert_withLastNameMultipleWords() {
+        // GIVEN
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", "123");
+        // AND
+        ObjectNode user = mapper.createObjectNode();
+        user.put("preferred_username", USERNAME);
+        user.put("name", FULL_NAME + " " + NAME_SUFFIX);
+        mockHttpGetUserInfo(user);
+
+        assertThatCode(() ->  {
+            Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+            System.out.println(convertedClaims);
+            assertThat(convertedClaims)
+                .containsEntry("preferred_username", USERNAME)
+                .containsEntry("given_name", NAME)
+                .containsEntry("family_name", FAMILY_NAME + " " + NAME_SUFFIX);
         }).doesNotThrowAnyException();
     }
 

@@ -1018,15 +1018,17 @@ public class UserService {
         <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %> user = new <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %>();
         Boolean activated = Boolean.TRUE;
         String sub = String.valueOf(details.get("sub"));
-        String username = String.valueOf(details.get("preferred_username")).toLowerCase();
-        // handle resource server JWT, where sub claim is email and uid is ID
+        String username = null;
+        if (details.get("preferred_username") != null) {
+            username = ((String) details.get("preferred_username")).toLowerCase();
+        }
         if (details.get("uid") != null) {
             user.setId((String) details.get("uid"));
             user.setLogin(sub);
         } else {
             user.setId(sub);
         }
-        if (details.get("preferred_username") != null) {
+        if (username != null) {
             user.setLogin(username);
         } else if (user.getLogin() == null) {
             user.setLogin(user.getId());
@@ -1044,7 +1046,7 @@ public class UserService {
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
-        } else if (sub.contains("|")) { // special handling for Auth0
+        } else if (sub.contains("|") && (username != null && username.contains("@")) { // special handling for Auth0
             user.setEmail(username);
         } else {
             user.setEmail(sub);

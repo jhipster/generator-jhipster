@@ -89,8 +89,23 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                 // Allow full name in a name claim - happens with Auth0
                 if (user.has("name")) {
                     String[] name = user.get("name").asText().split("\\s+");
-                    convertedClaims.put("given_name", name[0]);
-                    convertedClaims.put("family_name", name[1]);
+                    if (name.length > 0) {
+                        convertedClaims.put("given_name", name[0]);
+                        if (name.length == 2) {
+                            convertedClaims.put("family_name", name[1]);
+                        } else {
+                            StringBuilder lastName = new StringBuilder();
+                            int i = 1;
+                            while (i < name.length) {
+                                lastName.append(name[i]);
+                                i++;
+                                if (i < name.length) {
+                                    lastName.append(" ");
+                                }
+                            }
+                            convertedClaims.put("family_name", lastName.toString());
+                        }
+                    }
                 }
                 if (user.has("groups")) {
                     List<String> groups = StreamSupport.stream(user.get("groups").spliterator(), false)
