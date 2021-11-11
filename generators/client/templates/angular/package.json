@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "13.0.0",
+    "@angular/common": "13.0.1",
     "bootstrap": "4.6.1",
     "@fortawesome/angular-fontawesome": "0.10.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
@@ -17,7 +17,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular/cli": "13.0.1",
+    "@angular/cli": "13.0.2",
     "@angular-builders/custom-webpack": "13.0.0",
     "@angular-builders/jest": "13.0.0",
     "@angular-eslint/eslint-plugin": "13.0.0-alpha.0",
