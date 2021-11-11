@@ -355,7 +355,8 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     try {
       const content = languages.reduce(
-        (content, language) => `${content}import 'dayjs/${this.clientFrameworkAngular ? 'esm/' : ''}locale/${this.getDayjsLocaleId(language)}'\n`,
+        (content, language) =>
+          `${content}import 'dayjs/${this.clientFrameworkAngular ? 'esm/' : ''}locale/${this.getDayjsLocaleId(language)}'\n`,
         '// jhipster-needle-i18n-language-dayjs-imports - JHipster will import languages from dayjs here\n'
       );
 
