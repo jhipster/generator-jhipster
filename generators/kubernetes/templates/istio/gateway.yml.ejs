@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
 apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
@@ -64,9 +67,6 @@ spec:
         host: <%= config.baseName.toLowerCase() %>
   <%_ }); _%>
 <%_ } _%>
-  - match:
-    - uri:
-        prefix: /
-    route:
+  - route:
     - destination:
         host: <%= app.baseName.toLowerCase() %>
