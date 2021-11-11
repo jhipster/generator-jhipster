@@ -2632,7 +2632,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.language) {
       // workaround double options parsing, remove once generator supports skipping parse options
       const languages = options.language.flat();
-      this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
+      if (languages.length === 1 && languages[0] === 'false') {
+        this.jhipsterConfig.enableTranslation = false;
+      } else {
+        this.jhipsterConfig.languages = [...this.jhipsterConfig.languages, ...languages];
+      }
     }
     if (options.nativeLanguage) {
       if (typeof options.nativeLanguage === 'string') {
