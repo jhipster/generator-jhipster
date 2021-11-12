@@ -22,7 +22,7 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
-const writeReactFiles = require('./files-react').writeFiles;
+const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-react');
 const { cleanup: cleanupVue, writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
 const { clientI18nFiles } = require('../languages/files');
@@ -323,6 +323,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanupReact,
       cleanupVue,
 
       write() {

@@ -62,7 +62,7 @@ const commonFiles = {
       ],
     },
     {
-      condition: generator => generator.enableI18nRTL,
+      condition: generator => generator.enableI18nRTL && !generator.clientFrameworkReact,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['content/scss/rtl.scss'],
     },

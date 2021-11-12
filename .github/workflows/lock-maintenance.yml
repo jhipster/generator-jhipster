@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     name: Bump transitional dependencies
+    if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v2.4.1
@@ -23,7 +24,7 @@ jobs:
       - name: Create commit
         run: |
           rm package-lock.json
-          npm install
+          npm install || npm install --force
           git add .
           ./test-integration/scripts/04-git-config.sh
           git commit -a -m "Bump transitional dependencies" || true

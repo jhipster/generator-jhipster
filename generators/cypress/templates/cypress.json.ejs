@@ -26,6 +26,9 @@
   "pluginsFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index.ts",
   "screenshotsFolder": "<%= BUILD_DIR %>cypress/screenshots",
   "chromeWebSecurity": <% if(authenticationTypeOauth2) { %>false<% } else { %>true<% } %>,
+<%_ if (clientFrameworkReact) { _%>
+  "scrollBehavior": "center",
+<%_ } _%>
   "viewportWidth": 1200,
   "viewportHeight": 720,
   "retries": 2<%_ if (authenticationTypeJwt) { _%>,

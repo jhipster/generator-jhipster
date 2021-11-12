@@ -21,7 +21,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form,<% } %>Col, Row, Table } from 'reactstrap';
+import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
   <%_ if (blobFields.length > 0) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
@@ -289,7 +289,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
           </Button>
 <%_ if (!readOnly) { _%>
@@ -446,7 +446,7 @@ _%>
                       </td>
   <%_ } _%>
 <%_ } _%>
-                      <td className="text-right">
+                      <td className="text-end">
                         <div className="btn-group flex-btn-group-container">
                           <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="info" size="sm" data-cy="entityDetailsButton">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
@@ -481,15 +481,15 @@ _%>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
         { totalItems ? (<div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
-          <Row className="justify-content-center">
+          <div className="justify-content-center d-flex">
             <JhiItemCount
               page={paginationState.activePage}
               total={totalItems}
               itemsPerPage={paginationState.itemsPerPage}
               <% { if (enableTranslation) { %>i18nEnabled<% }} %>
             />
-          </Row>
-          <Row className="justify-content-center">
+          </div>
+          <div className="justify-content-center d-flex">
             <JhiPagination
               activePage={paginationState.activePage}
               onSelect={handlePagination}
@@ -497,7 +497,7 @@ _%>
               itemsPerPage={paginationState.itemsPerPage}
               totalItems={totalItems}
             />
-          </Row>
+          </div>
         </div>) : '' }
   <% } _%>
 <%_ } _%>
