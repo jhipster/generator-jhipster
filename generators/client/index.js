@@ -392,11 +392,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
           this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
         } else if (this.clientFrameworkVue) {
           this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })");
-          this.packageJson.merge({
-            dependencies: {
-              deepmerge: this.dependabotPackageJson.dependencies.deepmerge,
-            },
-          });
         } else {
           throw new Error(`Client framework ${this.clientFramework} doesn't support microfrontends`);
         }

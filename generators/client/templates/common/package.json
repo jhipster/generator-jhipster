@@ -10,7 +10,6 @@
     "nyc": "15.1.0"
   },
   "dependencies": {
-    "dayjs": "1.10.7",
-    "deepmerge": "4.2.2"
+    "dayjs": "1.10.7"
   }
 }
