@@ -214,7 +214,7 @@ function getLatestSolutionStackName(callback) {
   }
 
   function filterCriteria(element) {
-    return element.includes('Tomcat 8');
+    return element.includes('Tomcat 8.5 Corretto 11');
   }
 }
 
