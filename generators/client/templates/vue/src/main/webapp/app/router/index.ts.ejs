@@ -18,7 +18,7 @@ import pages from "@/router/pages";
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
   <%_ for (const remote of remotes) { _%>
-import <%= remote.lowercaseBaseName %>Router from '@<%= remote.lowercaseBaseName %>/entities-router';
+const <%= remote.lowercaseBaseName %>Router = await import('@<%= remote.lowercaseBaseName %>/entities-router').then(module => module.default).catch(() => []);
   <%_ } _%>
 <%_ } _%>
 
