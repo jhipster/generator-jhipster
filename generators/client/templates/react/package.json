@@ -50,7 +50,7 @@
     "eslint": "8.2.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-react": "7.27.0",
-    "eslint-webpack-plugin": "3.1.0",
+    "eslint-webpack-plugin": "3.1.1",
     "folder-hash": "4.0.1",
     "fork-ts-checker-webpack-plugin": "6.4.0",
     "html-webpack-plugin": "5.5.0",
