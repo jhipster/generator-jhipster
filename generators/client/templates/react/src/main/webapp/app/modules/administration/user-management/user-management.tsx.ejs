@@ -18,7 +18,7 @@
 -%>
 import React, { useState, useEffect } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Table, Row, Badge } from 'reactstrap';
+import { Button, Table, Badge } from 'reactstrap';
 import {
   Translate,
   TextFormat,
@@ -108,7 +108,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
       <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
         <Translate contentKey="userManagement.home.title">Users</Translate>
         <div className="d-flex justify-content-end">
-          <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
+          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
           </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity">
@@ -188,7 +188,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
                 ) : null}
               </td>
 <%_ } _%>
-              <td className="text-right">
+              <td className="text-end">
                 <div className="btn-group flex-btn-group-container">
                   <Button
                     tag={Link} to={`${match.url}/${user.login}`}
@@ -217,10 +217,10 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
       </Table>
 <%_ if (!databaseTypeCassandra) { _%>
         { totalItems ? (<div className={ users?.length > 0 ? '' : 'd-none' }>
-          <Row className="justify-content-center">
+          <div className="justify-content-center d-flex">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
-          </Row>
-          <Row className="justify-content-center">
+          </div>
+          <div className="justify-content-center d-flex">
             <JhiPagination
               activePage={pagination.activePage}
               onSelect={handlePagination}
@@ -228,7 +228,7 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
               itemsPerPage={pagination.itemsPerPage}
               totalItems={totalItems}
             />
-          </Row>
+          </div>
         </div>) : '' }
 <%_ } _%>
     </div>
