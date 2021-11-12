@@ -90,7 +90,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
@@ -197,7 +197,7 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 };

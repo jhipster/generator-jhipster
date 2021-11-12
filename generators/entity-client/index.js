@@ -53,7 +53,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
