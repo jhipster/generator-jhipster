@@ -48,7 +48,7 @@ export default class TranslationService {
     axios.defaults.headers.common['Accept-Language'] = lang;
     document.querySelector('html').setAttribute('lang', lang);
 <%_ if (enableI18nRTL) { _%>
-    this.updatePageDirection(currentLanguage);
+    this.updatePageDirection(lang);
 <%_ } _%>
   }
 <%_ if (enableI18nRTL) { _%>
