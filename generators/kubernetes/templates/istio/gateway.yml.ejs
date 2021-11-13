@@ -61,7 +61,9 @@ spec:
   <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
-        prefix: /<%= config.baseName.toLowerCase() %>/
+        prefix: /services/<%= config.baseName.toLowerCase() %>/
+    rewrite:
+      uri: /
     route:
     - destination:
         host: <%= config.baseName.toLowerCase() %>
