@@ -171,15 +171,15 @@ public class <%= entityClass %>Resource {
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%> 
-          if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
-              // Save users in case they are new and only exist in gateway 
-              userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
-          } 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
+            // Save users in case they are new and only exist in gateway 
+            userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
+        } 
       <%_ } else { _%> 
-          if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
-              // Save user in case it's new and only exists in gateway 
-              userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
-          } 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
+            // Save user in case it's new and only exists in gateway 
+            userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
+        } 
       <%_ } _%>
     <% } %>
   <%_ } _%>
@@ -241,15 +241,15 @@ public class <%= entityClass %>Resource {
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%> 
-          if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
-              // Save users in case they are new and only exist in gateway 
-              userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
-          } 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
+            // Save users in case they are new and only exist in gateway 
+            userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
+        } 
       <%_ } else { _%> 
-          if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
-              // Save user in case it's new and only exists in gateway 
-              userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
-          } 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
+            // Save user in case it's new and only exists in gateway 
+            userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
+        } 
       <%_ } _%>
     <% } %>
   <%_ } _%>
@@ -306,15 +306,15 @@ public class <%= entityClass %>Resource {
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%> 
-          if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
-              // Save users in case they are new and only exist in gateway 
-              userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
-          } 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
+            // Save users in case they are new and only exist in gateway 
+            userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
+        } 
       <%_ } else { _%> 
-          if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
-              // Save user in case it's new and only exists in gateway 
-              userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
-          } 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
+            // Save user in case it's new and only exists in gateway 
+            userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
+        } 
       <%_ } _%>
     <% } %>
   <%_ } _%>
