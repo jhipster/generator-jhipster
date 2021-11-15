@@ -221,9 +221,11 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 ### Set NPM to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link`.
+In your cloned `generator-jhipster` project, run `npm link` and then run `npm ci`.
 
-This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
+`npm link` will make a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
+
+`npm ci` will do a clean install of all of the project dependencies.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
