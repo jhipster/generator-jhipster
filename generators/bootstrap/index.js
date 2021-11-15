@@ -108,10 +108,10 @@ module.exports = class extends BaseGenerator {
           this.debug('Skipping commit files');
           return;
         }
-        await this._commitSharedFs();
         this.env.sharedFs.once('change', () => {
           this._queueCommit();
         });
+        await this._commitSharedFs();
       },
     };
   }
@@ -128,11 +128,11 @@ module.exports = class extends BaseGenerator {
     this.queueTask(
       {
         method: async () => {
-          await this._commitSharedFs();
           this.debug('Adding queueCommit event listener');
           this.env.sharedFs.once('change', () => {
             this._queueCommit();
           });
+          await this._commitSharedFs();
         },
       },
       {
@@ -157,6 +157,19 @@ module.exports = class extends BaseGenerator {
       }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
     );
 
+    const conflicterStatus = {
+      fileActions: [
+        {
+          key: 'i',
+          name: 'ignore, do not overwrite and remember (experimental)',
+          value: ({ relativeFilePath }) => {
+            this.env.fs.append(`${this.env.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
+            return 'skip';
+          },
+        },
+      ],
+    };
+
     const yoResolveTranform = this.options.skipYoResolve ? [] : [createYoResolveTransform(this.env.conflicter)];
     const transformStreams = [
       // multi-step changes the file path, should be executed earlier in the pipeline
@@ -178,7 +191,7 @@ module.exports = class extends BaseGenerator {
       transformStreams.push(prettierTransform(prettierOptions, this, this.options.ignoreErrors));
     }
 
-    transformStreams.push(createConflicterCheckTransform(this.env.conflicter), createConflicterStatusTransform());
+    transformStreams.push(createConflicterCheckTransform(this.env.conflicter, conflicterStatus), createConflicterStatusTransform());
 
     await this.env.fs.commit(transformStreams, stream);
   }
