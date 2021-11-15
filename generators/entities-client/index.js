@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, LOADING_PRIORITY, DEFAULT_PRIORITY, END_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 const { GENERATOR_ENTITIES_CLIENT } = require('../generator-list');
 
 module.exports = class extends BaseBlueprintGenerator {
@@ -41,7 +42,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     return this.delegateToBlueprint ? undefined : this._initializing();
   }
 
@@ -54,7 +55,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     return this.delegateToBlueprint ? undefined : this._loading();
   }
 
@@ -69,7 +70,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     return this.delegateToBlueprint ? undefined : this._default();
   }
 
@@ -84,7 +85,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     return this.delegateToBlueprint ? undefined : this._end();
   }
 };

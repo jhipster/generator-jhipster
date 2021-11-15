@@ -20,6 +20,14 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  DEFAULT_PRIORITY,
+  WRITING_PRIORITY,
+  PREPARING_RELATIONSHIPS_PRIORITY,
+  POST_WRITING_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
 const { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } = require('./files');
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { stringify } = require('../../utils');
@@ -72,7 +80,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -152,7 +160,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
@@ -197,7 +205,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get preparingRelationships() {
+  get [PREPARING_RELATIONSHIPS_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparingRelationships();
   }
@@ -212,7 +220,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -256,7 +264,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     if (this.options.skipWriting) {
       return {};
@@ -289,7 +297,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     if (this.options.skipWriting) {
       return {};

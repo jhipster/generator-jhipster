@@ -20,8 +20,12 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
-const writeFiles = require('./files').writeFiles;
+
 const BaseDockerGenerator = require('../generator-base-docker');
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
+const writeFiles = require('./files').writeFiles;
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
@@ -79,7 +83,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -88,7 +92,7 @@ module.exports = class extends BaseDockerGenerator {
     return super._prompting();
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -116,7 +120,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -262,7 +266,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
@@ -275,7 +279,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -284,7 +288,7 @@ module.exports = class extends BaseDockerGenerator {
     return writeFiles();
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }

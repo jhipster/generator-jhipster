@@ -123,6 +123,21 @@ Object {
     "PRIORITY_PREFIX": ">",
     "PROMPTING_PRIORITY": ">prompting",
     "WRITING_PRIORITY": ">writing",
+    "compat": Object {
+      "COMPOSING_PRIORITY": "composing",
+      "CONFIGURING_PRIORITY": "configuring",
+      "DEFAULT_PRIORITY": "default",
+      "END_PRIORITY": "end",
+      "INITIALIZING_PRIORITY": "initializing",
+      "INSTALL_PRIORITY": "install",
+      "LOADING_PRIORITY": "loading",
+      "POST_WRITING_PRIORITY": "postWriting",
+      "PREPARING_FIELDS_PRIORITY": "preparingFields",
+      "PREPARING_PRIORITY": "preparing",
+      "PREPARING_RELATIONSHIPS_PRIORITY": "preparingRelationships",
+      "PROMPTING_PRIORITY": "prompting",
+      "WRITING_PRIORITY": "writing",
+    },
   },
 }
 `;

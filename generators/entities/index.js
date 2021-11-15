@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, COMPOSING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
 const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 const { SQL } = require('../../jdl/jhipster/database-types');
 const { GENERATOR_ENTITIES, GENERATOR_ENTITIES_CLIENT, GENERATOR_ENTITY, GENERATOR_DATABASE_CHANGELOG } = require('../generator-list');
@@ -122,7 +124,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -164,7 +166,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get composing() {
+  get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
   }
@@ -191,7 +193,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -201,7 +203,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {};
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }

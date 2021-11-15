@@ -19,11 +19,15 @@
 /* eslint-disable consistent-return */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
+
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list');
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
 const prompts = require('./prompts');
 const { writeFiles, customizeFiles } = require('./files');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -57,7 +61,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -70,7 +74,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -103,7 +107,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -112,7 +116,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return writeFiles();
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -121,7 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return customizeFiles();
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }

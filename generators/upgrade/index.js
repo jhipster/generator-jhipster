@@ -24,7 +24,10 @@ const fs = require('fs');
 const gitignore = require('parse-gitignore');
 const path = require('path');
 const childProcess = require('child_process');
+
 const BaseGenerator = require('../generator-base');
+const { INITIALIZING_PRIORITY, CONFIGURING_PRIORITY, DEFAULT_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+
 const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -96,7 +99,7 @@ module.exports = class extends BaseGenerator {
     }
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();
@@ -218,7 +221,7 @@ module.exports = class extends BaseGenerator {
     else this.error(`Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     return {
       assertJHipsterProject() {
         if (!this.config.get('baseName')) {
@@ -423,7 +426,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     return {
       insight() {
         statistics.sendSubGenEvent('generator', 'upgrade');

@@ -20,6 +20,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const { CONFIGURING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, INSTALL_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const { GENERATOR_JHIPSTER } = require('../generator-constants');
 const {
   DeploymentTypes: { DOCKERCOMPOSE },
@@ -109,7 +112,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -126,7 +129,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -151,7 +154,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -185,7 +188,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
@@ -206,7 +209,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get install() {
+  get [INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._install();
   }

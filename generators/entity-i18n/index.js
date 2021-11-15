@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { DEFAULT_PRIORITY, WRITING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const { GENERATOR_ENTITY_I_18_N } = require('../generator-list');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
 
@@ -49,7 +51,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -59,7 +61,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return { ...writeFiles(), ...super._missingPostWriting() };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }

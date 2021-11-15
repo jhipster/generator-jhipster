@@ -17,10 +17,13 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, PREPARING_FIELDS_PRIORITY, POST_WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const constants = require('../generator-constants');
 const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { GENERATOR_ENTITY_SERVER } = require('../generator-list');
 const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { SQL } = require('../../jdl/jhipster/database-types');
@@ -53,7 +56,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -71,7 +74,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
@@ -100,7 +103,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get preparingFields() {
+  get [PREPARING_FIELDS_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparingFields();
   }
@@ -167,7 +170,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -180,7 +183,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -194,7 +197,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }

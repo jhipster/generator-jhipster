@@ -20,8 +20,12 @@ const os = require('os');
 const childProcess = require('child_process');
 const chalk = require('chalk');
 const glob = require('glob');
-const prompts = require('./prompts');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, DEFAULT_PRIORITY, END_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
+const prompts = require('./prompts');
 const statistics = require('../statistics');
 const { MEMCACHED } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
@@ -65,7 +69,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -74,7 +78,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return prompts.prompting;
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -114,7 +118,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -181,7 +185,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -231,7 +235,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

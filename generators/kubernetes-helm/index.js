@@ -19,9 +19,13 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const fs = require('fs');
+
+const BaseDockerGenerator = require('../generator-base-docker');
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, WRITING_PRIORITY, END_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const prompts = require('../kubernetes/prompts');
 const { writeFiles } = require('./files');
-const BaseDockerGenerator = require('../generator-base-docker');
 const { GENERATOR_KUBERNETES_HELM } = require('../generator-list');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
@@ -58,7 +62,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -82,7 +86,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -110,7 +114,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -128,7 +132,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -137,7 +141,7 @@ module.exports = class extends BaseDockerGenerator {
     return writeFiles();
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -184,7 +188,7 @@ module.exports = class extends BaseDockerGenerator {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }
