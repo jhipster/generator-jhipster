@@ -20,14 +20,6 @@ package <%= entityAbsolutePackage %>.web.rest;
 
 <%_
 const viaService = !serviceNo;
-
-let manyToManyWithUser = false;
-for (const relationship of relationships) {
-  if (relationship.otherEntityUser && relationship.relationshipManyToMany) {
-    manyToManyWithUser = true;
-    break;
-  }
-}
 _%>
 <%_ if (!dtoMapstruct || serviceNo) { _%>
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
@@ -177,17 +169,19 @@ public class <%= entityClass %>Resource {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
         }
   <%_ if (saveUserSnapshot) { _%>
-    <%_ if (manyToManyWithUser) { _%>
-        if (<%= instanceName %>.getUsers() != null) {
-            // Save users in case they are new and only exists in gateway
-            userRepository.saveAll(<%= instanceName %>.getUsers());
-        }
-    <%_ } else { _%>
-        if (<%= instanceName %>.getUser() != null) {
-            // Save user in case it's new and only exists in gateway
-            userRepository.save(<%= instanceName %>.getUser());
-        }
-    <%_ } _%>
+    <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
+      <%_ if (userRelationship.collection) { _%> 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
+            // Save users in case they are new and only exist in gateway 
+            userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
+        } 
+      <%_ } else { _%> 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
+            // Save user in case it's new and only exists in gateway 
+            userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
+        } 
+      <%_ } _%>
+    <% } %>
   <%_ } _%>
   <%_ for (field of primaryKey.fields.filter(f => f.autoGenerateByService)) { _%>
         <%= instanceName %>.set<%= field.fieldNameCapitalized %>(UUID.randomUUID());
@@ -245,17 +239,19 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
 
   <%_ if (saveUserSnapshot) { _%>
-    <%_ if (manyToManyWithUser) { _%>
-        if (<%= instanceName %>.getUsers() != null) {
-            // Save users in case they are new and only exists in gateway
-            userRepository.saveAll(<%= instanceName %>.getUsers());
-        }
-    <%_ } else { _%>
-        if (<%= instanceName %>.getUser() != null) {
-            // Save user in case it's new and only exists in gateway
-            userRepository.save(<%= instanceName %>.getUser());
-        }
-    <%_ } _%>
+    <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
+      <%_ if (userRelationship.collection) { _%> 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
+            // Save users in case they are new and only exist in gateway 
+            userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
+        } 
+      <%_ } else { _%> 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
+            // Save user in case it's new and only exists in gateway 
+            userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
+        } 
+      <%_ } _%>
+    <% } %>
   <%_ } _%>
 <%- include('/partials/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
   <%_ if (!reactive) { _%>
@@ -308,17 +304,19 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
 
   <%_ if (saveUserSnapshot) { _%>
-    <%_ if (manyToManyWithUser) { _%>
-            if (<%= instanceName %>.getUsers() != null) {
-                // Save users in case they are new and only exists in gateway
-                userRepository.saveAll(<%= instanceName %>.getUsers());
-            }
-    <%_ } else { _%>
-            if (<%= instanceName %>.getUser() != null) {
-                // Save user in case it's new and only exists in gateway
-                userRepository.save(<%= instanceName %>.getUser());
-            }
-    <%_ } _%>
+    <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
+      <%_ if (userRelationship.collection) { _%> 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>() != null) { 
+            // Save users in case they are new and only exist in gateway 
+            userRepository.saveAll(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalizedPlural %>()); 
+        } 
+      <%_ } else { _%> 
+        if (<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>() != null) { 
+            // Save user in case it's new and only exists in gateway 
+            userRepository.save(<%= instanceName %>.get<%= userRelationship.relationshipNameCapitalized %>()); 
+        } 
+      <%_ } _%>
+    <% } %>
   <%_ } _%>
 
             <%- include('../../common/patch_template', {asEntity, asDto, isService: false, viaService: viaService}); -%>

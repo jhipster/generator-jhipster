@@ -1,12 +1,12 @@
 const { default: PQueue } = require('p-queue');
-const OOOTransform = require('yeoman-environment/lib/util/out-of-order-transform');
+const { PTransform } = require('p-transform');
 const { isFilePending } = require('mem-fs-editor/lib/state');
 
 const { TemplateFileFs } = require('./template-file-fs');
 
-module.exports.MultiStepTransform = class MultiStepTransform extends OOOTransform {
+module.exports.MultiStepTransform = class MultiStepTransform extends PTransform {
   constructor(options = {}) {
-    super(options);
+    super({ logName: 'jhipster:multi-step-transform', ...options });
 
     this.twoStepTemplateQueue = new PQueue({ concurrency: 1, autoStart: false });
     this.templateFileFs = new TemplateFileFs(options);
@@ -15,7 +15,7 @@ module.exports.MultiStepTransform = class MultiStepTransform extends OOOTransfor
     this.pendingFiles = [];
   }
 
-  async _executeTransform(file, enc) {
+  async queuedTransform(file, enc) {
     try {
       if (file.contents && this.templateFileFs.isTemplate(file.path)) {
         const templateFile = this.templateFileFs.add(file.path, file.contents.toString());
@@ -43,10 +43,10 @@ module.exports.MultiStepTransform = class MultiStepTransform extends OOOTransfor
     }
   }
 
-  async _final(...args) {
+  _flush(callback) {
     // Clear normal queue before templates.
-    await this.queue.onIdle();
-    await this.twoStepTemplateQueue.start().onIdle();
-    super._final(...args);
+    this.flushQueue()
+      .then(() => this.twoStepTemplateQueue.start().onIdle())
+      .then(() => super._flush(callback));
   }
 };

@@ -27,7 +27,6 @@ const { GENERATOR_SPRING_SERVICE } = require('../generator-list');
 const { BASE_NAME, PACKAGE_NAME, PACKAGE_FOLDER, DATABASE_TYPE } = OptionNames;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
@@ -41,8 +40,12 @@ module.exports = class extends BaseBlueprintGenerator {
       description: 'default option',
     });
     this.defaultOption = this.options.default;
+  }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_SPRING_SERVICE, { arguments: [this.name] });
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -64,7 +67,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -94,7 +97,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -108,7 +111,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -122,7 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -151,7 +154,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 };
