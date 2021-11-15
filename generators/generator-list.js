@@ -25,6 +25,7 @@ const Generators = {
   GENERATOR_AZURE_SPRING_CLOUD: 'azure-spring-cloud',
   GENERATOR_BASE: 'base',
   GENERATOR_BOOTSTRAP: 'bootstrap',
+  GENERATOR_BOOTSTRAP_APPLICATION: 'bootstrap-application',
   GENERATOR_CI_CD: 'ci-cd',
   /* @deprecated */
   GENERATOR_CICD: 'ci-cd',

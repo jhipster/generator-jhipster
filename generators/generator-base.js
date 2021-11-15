@@ -29,6 +29,7 @@ const os = require('os');
 const normalize = require('normalize-path');
 const simpleGit = require('simple-git');
 
+const SharedData = require('../lib/support/shared-data.cjs');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -182,7 +183,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    */
   get sharedData() {
     if (!this._sharedData) {
-      throw new Error("Shared data doesn't exists it should be provided by the cli");
+      this._sharedData = new SharedData(this.configOptions);
     }
     return this._sharedData;
   }
@@ -1590,8 +1591,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @return {object} entity definition
    */
   readEntityJson(entityName) {
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
-    const file = this.destinationPath(configDir, `${entityName}.json`);
+    const file = path.join(path.dirname(this.config.path), JHIPSTER_CONFIG_DIR, `${entityName}.json`);
     try {
       return this.fs.readJSON(file);
     } catch (error) {
@@ -2549,7 +2549,27 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (this.configOptions.optionsParsed) return;
     this.configOptions.optionsParsed = true;
 
+    // Write new definitions to memfs
+    if (options.applicationWithEntities) {
+      this.config.set({
+        ...this.config.getAll(),
+        ...options.applicationWithEntities.config,
+      });
+      if (options.applicationWithEntities.entities) {
+        const entities = options.applicationWithEntities.entities.map(entity => {
+          const entityName = _.upperFirst(entity.name);
+          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+          this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
+          return entityName;
+        });
+        this.jhipsterConfig.entities = [...new Set((this.jhipsterConfig.entities || []).concat(entities))];
+      }
+    }
+
     // Load stored options
+    if (options.withGeneratedFlag !== undefined) {
+      this.jhipsterConfig.withGeneratedFlag = options.withGeneratedFlag;
+    }
     if (options.skipJhipsterDependencies !== undefined) {
       this.jhipsterConfig.skipJhipsterDependencies = options.skipJhipsterDependencies;
     }

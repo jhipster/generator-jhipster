@@ -113,6 +113,18 @@ Object {
   "generators/base/templates/template-file-base.ejs": Object {
     "stateCleared": "modified",
   },
+  "generators/bootstrap-application/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/templates/template-file-bootstrap-application.ejs": Object {
+    "stateCleared": "modified",
+  },
   "generators/bootstrap/generator.mjs": Object {
     "stateCleared": "modified",
   },

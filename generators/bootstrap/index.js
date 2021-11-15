@@ -30,7 +30,7 @@ const {
 const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
-const { LOADING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+const { LOADING_PRIORITY, PRE_CONFLICTS_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
 const { MultiStepTransform } = require('../../utils/multi-step-transform');
 const { defaultConfig } = require('../generator-defaults');
@@ -47,7 +47,9 @@ const { STRING: TYPE_STRING, LONG: TYPE_LONG } = CommonDBTypes;
 module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
+  }
 
+  _postConstruct() {
     /*
      * When testing a generator with yeoman-test using 'withLocalConfig(localConfig)', it instantiates the
      * generator and then executes generator.config.defaults(localConfig).
@@ -67,11 +69,9 @@ module.exports = class extends BaseGenerator {
       this.config.set(this.options.localConfig);
     }
 
-    if (this.options.withGeneratedFlag !== undefined) {
-      this.jhipsterConfig.withGeneratedFlag = this.options.withGeneratedFlag;
-    }
-
     if (this.options.help) return;
+
+    this.loadStoredAppOptions();
 
     // Load common runtime options.
     this.parseCommonRuntimeOptions();
@@ -82,7 +82,6 @@ module.exports = class extends BaseGenerator {
       createUserManagementEntities() {
         this._createUserManagementEntities();
       },
-
       loadClientPackageManager() {
         if (this.jhipsterConfig.clientPackageManager) {
           this.env.options.nodePackageManager = this.jhipsterConfig.clientPackageManager;
@@ -118,7 +117,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get preConflicts() {
+  get [PRE_CONFLICTS_PRIORITY]() {
     return this._preConflicts();
   }
 

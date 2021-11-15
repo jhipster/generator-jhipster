@@ -10,6 +10,7 @@ Object {
     "GENERATOR_AZURE_SPRING_CLOUD": "azure-spring-cloud",
     "GENERATOR_BASE": "base",
     "GENERATOR_BOOTSTRAP": "bootstrap",
+    "GENERATOR_BOOTSTRAP_APPLICATION": "bootstrap-application",
     "GENERATOR_CICD": "ci-cd",
     "GENERATOR_CI_CD": "ci-cd",
     "GENERATOR_CLIENT": "client",
@@ -57,6 +58,7 @@ Object {
 exports[`Public api generator-jhipster/priorities should match snapshot 1`] = `
 Object {
   "COMPOSING_PRIORITY": ">composing",
+  "CONFIGURING_EACH_ENTITY_PRIORITY": ">configuringEachEntity",
   "CONFIGURING_PRIORITY": ">configuring",
   "DEFAULT_PRIORITY": ">default",
   "END_PRIORITY": ">end",
@@ -79,6 +81,9 @@ Object {
   "INSTALL_PRIORITY": ">install",
   "LOADING_PRIORITY": ">loading",
   "POST_WRITING_PRIORITY": ">postWriting",
+  "PREPARING_EACH_ENTITY_FIELD_PRIORITY": ">preparingEachEntityField",
+  "PREPARING_EACH_ENTITY_PRIORITY": ">preparingEachEntity",
+  "PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY": ">preparingEachEntityRelationship",
   "PREPARING_FIELDS_PRIORITY": ">preparingFields",
   "PREPARING_PRIORITY": ">preparing",
   "PREPARING_RELATIONSHIPS_PRIORITY": ">preparingRelationships",
@@ -98,6 +103,7 @@ Object {
   ],
   "PRIORITY_PREFIX": ">",
   "PROMPTING_PRIORITY": ">prompting",
+  "WRITING_ENTITIES_PRIORITY": ">writingEntities",
   "WRITING_PRIORITY": ">writing",
 }
 `;

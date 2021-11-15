@@ -28,12 +28,13 @@ const SharedData = require('../lib/support/shared-data.cjs');
 
 const createEnvironment = (args, options = {}, adapter) => {
   // Remove after migration to environment 3.
+  const configOptions = { sharedEntities: {} };
   const sharedOptions = {
     fromCli: true,
     localConfigOnly: true,
     ...options.sharedOptions,
-    configOptions: { sharedEntities: {} },
-    jhipsterSharedData: new SharedData(),
+    configOptions,
+    jhipsterSharedData: new SharedData(configOptions),
   };
   return Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
 };
