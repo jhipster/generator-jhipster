@@ -42,13 +42,17 @@ module.exports = class extends BaseBlueprintGenerator {
 
     if (this.options.help) return;
 
-    this.useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('workspaces');
-
     // Generate workspaces file only when option passed or regenerating
     this.generateWorkspaces = this.options.workspaces !== false || !!this.packageJson.get('workspaces');
 
     // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
     this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
+  }
+
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints('workspaces');
+    }
 
     this.loadRuntimeOptions();
   }
@@ -106,7 +110,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    return this.useBlueprints ? undefined : this._configuring();
+    if (this.delegateToBlueprint) return {};
+    return this._configuring();
   }
 
   _loading() {
@@ -122,7 +127,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    return this.useBlueprints ? undefined : this._loading();
+    if (this.delegateToBlueprint) return {};
+    return this._loading();
   }
 
   _writing() {
@@ -146,7 +152,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    return this.useBlueprints ? undefined : this._writing();
+    if (this.delegateToBlueprint) return {};
+    return this._writing();
   }
 
   _postWriting() {
@@ -179,7 +186,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    return this.useBlueprints ? undefined : this._postWriting();
+    if (this.delegateToBlueprint) return {};
+    return this._postWriting();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -199,7 +207,8 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get install() {
-    return this.useBlueprints ? undefined : this._install();
+    if (this.delegateToBlueprint) return {};
+    return this._install();
   }
 
   _detectNodePackageManager() {

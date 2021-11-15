@@ -74,9 +74,9 @@ class JHipsterCommand extends Command {
    * @private
    * Override _parseCommand to execute a callback before parsing.
    */
-  _parseCommand(operands, unknown) {
+  async _parseCommand(operands, unknown) {
     if (this._lazyBuildCommandCallBack) {
-      this._lazyBuildCommandCallBack(operands, unknown);
+      await this._lazyBuildCommandCallBack(operands, unknown);
     }
     return super._parseCommand(operands, unknown);
   }
