@@ -406,7 +406,7 @@ spec:
             claimName: samplekafka-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -821,7 +821,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -1026,7 +1026,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -1605,7 +1605,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2160,7 +2160,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -2424,7 +2424,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3114,7 +3114,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -3756,7 +3756,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -4912,7 +4912,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -5117,7 +5117,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -5743,7 +5743,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -5817,7 +5817,7 @@ spec:
             claimName: samplemysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -8887,7 +8887,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9473,7 +9473,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -9951,7 +9951,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11107,7 +11107,7 @@ spec:
             claimName: msmysql-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
@@ -11312,7 +11312,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -11884,7 +11884,7 @@ spec:
             claimName: jhgate-mysql-pvc
       containers:
         - name: mysql
-          image: mysql:8.0.26
+          image: mysql:8.0.27
           env:
             - name: MYSQL_ALLOW_EMPTY_PASSWORD
               value: \\"yes\\"
