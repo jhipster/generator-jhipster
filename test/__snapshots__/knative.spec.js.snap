@@ -769,7 +769,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -4734,7 +4734,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -9791,7 +9791,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
@@ -13907,7 +13907,7 @@ spec:
             privileged: true
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           env:
             - name: discovery.type
               value: single-node
