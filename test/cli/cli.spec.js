@@ -93,7 +93,7 @@ describe('jhipster cli', () => {
     const commands = { mocked: {} };
     const generator = { mocked: {} };
     let oldArgv;
-    let callback;
+    let runArgs;
     before(() => {
       oldArgv = process.argv;
     });
@@ -113,7 +113,7 @@ describe('jhipster cli', () => {
         sourceRoot: () => '',
       };
       sandbox.stub(Environment.prototype, 'run').callsFake((...args) => {
-        callback(...args);
+        runArgs = args;
         return Promise.resolve();
       });
       sandbox.stub(Environment.prototype, 'composeWith');
@@ -121,12 +121,10 @@ describe('jhipster cli', () => {
     });
 
     const commonTests = () => {
-      it('should pass a defined command', done => {
-        callback = (command, _options) => {
-          expect(command).to.not.be.undefined;
-          done();
-        };
-        return mockCli({ commands });
+      it('should pass a defined command', async () => {
+        await mockCli({ commands });
+        const [command] = runArgs;
+        expect(command).to.not.be.undefined;
       });
     };
 
@@ -137,14 +135,12 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward options', done => {
-        callback = (command, options) => {
-          expect(command).to.be.equal('jhipster:mocked');
-          expect(options.foo).to.be.true;
-          expect(options.fooBar).to.be.true;
-          done();
-        };
-        return mockCli({ commands });
+      it('should forward options', async () => {
+        await mockCli({ commands });
+        const [command, options] = runArgs;
+        expect(command).to.be.equal('jhipster:mocked');
+        expect(options.foo).to.be.true;
+        expect(options.fooBar).to.be.true;
       });
     });
 
@@ -156,14 +152,12 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward argument and options', done => {
-        callback = (command, options) => {
-          expect(command).to.be.equal('jhipster:mocked Foo');
-          expect(options.foo).to.be.true;
-          expect(options.fooBar).to.be.true;
-          done();
-        };
-        return mockCli({ commands });
+      it('should forward argument and options', async () => {
+        await mockCli({ commands });
+        const [command, options] = runArgs;
+        expect(command).to.be.equal('jhipster:mocked Foo');
+        expect(options.foo).to.be.true;
+        expect(options.fooBar).to.be.true;
       });
     });
 
@@ -175,13 +169,12 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward argument and options', done => {
-        callback = (command, options) => {
-          expect(command).to.be.equal('jhipster:mocked Foo Bar');
-          expect(options.foo).to.be.true;
-          expect(options.fooBar).to.be.true;
-          done();
-        };
+      it('should forward argument and options', async () => {
+        await mockCli({ commands });
+        const [command, options] = runArgs;
+        expect(command).to.be.equal('jhipster:mocked Foo Bar');
+        expect(options.foo).to.be.true;
+        expect(options.fooBar).to.be.true;
         return mockCli({ commands });
       });
     });
@@ -223,10 +216,9 @@ describe('jhipster cli', () => {
     });
 
     const commonTests = () => {
-      it('should pass a defined environment', done => {
+      it('should pass a defined environment', async () => {
         const cb = (_args, _options, env) => {
           expect(env).to.not.be.undefined;
-          done();
         };
         return mockCli({ commands, './mocked': cb });
       });
@@ -242,14 +234,13 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward argument and options', done => {
+      it('should forward argument and options', async () => {
         const cb = (args, options) => {
           expect(args).to.eql(['Foo']);
           expect(options.foo).to.be.true;
           expect(options.fooBar).to.be.true;
-          done();
         };
-        return mockCli({ commands, './mocked': cb });
+        await mockCli({ commands, './mocked': cb });
       });
     });
 
@@ -263,14 +254,13 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward argument and options', done => {
+      it('should forward argument and options', async () => {
         const cb = (args, options) => {
           expect(args).to.eql(['Foo']);
           expect(options.foo).to.be.false;
           expect(options.fooBar).to.be.false;
-          done();
         };
-        return mockCli({ commands, './mocked': cb });
+        await mockCli({ commands, './mocked': cb });
       });
     });
 
@@ -284,14 +274,13 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward argument and options', done => {
+      it('should forward argument and options', async () => {
         const cb = (args, options, env) => {
           expect(args).to.eql([['Foo', 'Bar']]);
           expect(options.foo).to.be.true;
           expect(options.fooBar).to.be.true;
-          done();
         };
-        return mockCli({ commands, './mocked': cb });
+        await mockCli({ commands, './mocked': cb });
       });
     });
 
@@ -304,12 +293,11 @@ describe('jhipster cli', () => {
 
       commonTests();
 
-      it('should forward argument and options', done => {
+      it('should forward argument and options', async () => {
         const cb = (args, options, env) => {
           expect(args).to.eql([]);
           expect(options.foo).to.be.true;
           expect(options.fooBar).to.be.true;
-          done();
         };
         return mockCli({ commands, './mocked': cb });
       });

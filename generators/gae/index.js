@@ -35,11 +35,11 @@ const { MAVEN, GRADLE } = require('../../jdl/jhipster/build-tool-types');
 
 const NO_CACHE_PROVIDER = cacheProviders.NO;
 
-let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_GAE);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_GAE);
+    }
   }
 
   _initializing() {
@@ -121,7 +121,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -607,7 +607,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -748,7 +748,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
@@ -761,7 +761,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -831,7 +831,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -877,7 +877,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 
