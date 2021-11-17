@@ -126,13 +126,13 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <cassandra-driver.version>4.11.3</cassandra-driver.version>
 <%_ } _%>
-        <archunit-junit5.version>0.21.0</archunit-junit5.version>
+        <archunit-junit5.version>0.22.0</archunit-junit5.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-        <caffeine.version>3.0.3</caffeine.version>
+        <caffeine.version>3.0.4</caffeine.version>
         <typesafe.version>1.4.1</typesafe.version>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
@@ -151,10 +151,10 @@
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
+        <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <checkstyle.version>9.0</checkstyle.version>
-        <nohttp-checkstyle.version>0.0.9</nohttp-checkstyle.version>
+        <checkstyle.version>9.1</checkstyle.version>
+        <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
@@ -171,7 +171,7 @@
         <openapi-generator-maven-plugin.version>5.2.1</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-        <sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
