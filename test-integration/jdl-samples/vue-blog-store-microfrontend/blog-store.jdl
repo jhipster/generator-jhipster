@@ -9,6 +9,7 @@ application {
     baseName gateway
     packageName com.okta.developer.gateway
     applicationType gateway
+    clientFramework vue
     authenticationType oauth2
     prodDatabaseType postgresql
     testFrameworks [cypress]
@@ -23,6 +24,7 @@ application {
     baseName blog
     packageName com.okta.developer.blog
     applicationType microservice
+    clientFramework vue
     authenticationType oauth2
     prodDatabaseType postgresql
     searchEngine elasticsearch
@@ -38,6 +40,7 @@ application {
     baseName store,
     packageName com.okta.developer.store
     applicationType microservice
+    clientFramework vue
     authenticationType oauth2
     databaseType mongodb
     devDatabaseType mongodb

@@ -5,7 +5,18 @@ import AccountService from '@/account/account.service';
 import TranslationService from '@/locale/translation.service';
 <%_ } %>
 
-@Component
+import EntitiesMenu from '@/entities/entities-menu.vue';
+
+@Component({
+  components: {
+    'entities-menu': EntitiesMenu,
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of remotes) { _%>
+    '<%= remote.lowercaseBaseName %>-menu': () => import('@<%= remote.lowercaseBaseName %>/entities-menu'),
+  <%_ } _%>
+<%_ } _%>
+  },
+})
 export default class JhiNavbar extends Vue {
   @Inject('loginService')
   private loginService: () => LoginService;
