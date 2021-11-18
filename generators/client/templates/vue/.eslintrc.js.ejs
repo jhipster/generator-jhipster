@@ -30,7 +30,7 @@ module.exports = {
     ],
     parserOptions: {
       ecmaVersion: 2020,
-      project: ['./tsconfig.json'],
+      project: ['./tsconfig.spec.json'],
     },
     rules: {
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -40,7 +40,8 @@ module.exports = {
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/ban-ts-comment': 'off'
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
     },
     'ignorePatterns': ['<%= BUILD_DIR %>'],
   };

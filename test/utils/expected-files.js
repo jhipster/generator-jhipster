@@ -649,18 +649,24 @@ const expectedFiles = {
   ],
 
   jwtServer: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/management/SecurityMetersService.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTConfigurer.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/management/SecurityMetersServiceTests.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java`,
   ],
 
   jwtServerGateway: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/management/SecurityMetersService.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/management/SecurityMetersServiceTests.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java`,
   ],
 
   jwtClient: [

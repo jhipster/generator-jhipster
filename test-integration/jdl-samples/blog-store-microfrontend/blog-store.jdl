@@ -21,6 +21,7 @@ application {
 application {
   config {
     baseName blog
+    clientFramework angular
     packageName com.okta.developer.blog
     applicationType microservice
     authenticationType oauth2
@@ -36,6 +37,7 @@ application {
 application {
   config {
     baseName store,
+    clientFramework angular
     packageName com.okta.developer.store
     applicationType microservice
     authenticationType oauth2

@@ -1,0 +1,52 @@
+import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
+import EntitiesMenu from '@/entities/entities-menu.vue';
+import EntitiesMenuClass from '@/entities/entities-menu.component';
+import * as config from '@/shared/config/config';
+
+const localVue = createLocalVue();
+config.initVueApp(localVue);
+const i18n = config.initI18N(localVue);
+localVue.component('b-dropdown-item', {});
+localVue.component('font-awesome-icon', {});
+
+describe('EntitiesMenu', () => {
+  let translationService;
+
+  beforeEach(() => {
+    translationService = { loadTranslations: jest.fn() };
+  });
+
+  describe('using microfrontendI18n', () => {
+    beforeEach(() => {
+      shallowMount<EntitiesMenuClass>(EntitiesMenu, {
+        i18n,
+        localVue,
+        provide: {
+          translationService: () => translationService,
+          microfrontendI18n: true,
+        },
+      });
+    });
+
+    it('should load translations', () => {
+      expect(translationService.loadTranslations).toHaveBeenCalled();
+    });
+  });
+
+  describe('not using microfrontendI18n', () => {
+    beforeEach(() => {
+      shallowMount<EntitiesMenuClass>(EntitiesMenu, {
+        i18n,
+        localVue,
+        provide: {
+          translationService: () => translationService,
+          microfrontendI18n: false,
+        },
+      });
+    });
+
+    it('should not load translations', () => {
+      expect(translationService.loadTranslations).not.toHaveBeenCalled();
+    });
+  });
+});

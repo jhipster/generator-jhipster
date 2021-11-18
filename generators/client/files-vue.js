@@ -36,6 +36,7 @@ const vueFiles = {
       templates: [
         'package.json',
         'tsconfig.json',
+        'tsconfig.spec.json',
         '.postcssrc.js',
         '.eslintrc.js',
         'webpack/config.js',
@@ -48,6 +49,43 @@ const vueFiles = {
     {
       condition: generator => generator.protractorTests,
       templates: ['tsconfig.e2e.json'],
+    },
+  ],
+  entities: [
+    {
+      path: VUE_DIR,
+      templates: [
+        'entities/entities.component.ts',
+        'entities/entities.vue',
+        'entities/entities-menu.component.ts',
+        'entities/entities-menu.vue',
+        'router/entities.ts',
+      ],
+    },
+  ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js.jhi.vue'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      path: VUE_DIR,
+      templates: ['index.ts'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      path: CLIENT_TEST_SRC_DIR,
+      templates: [
+        'spec/app/microfrontends/entities-menu.component.ts',
+        'spec/app/microfrontends/entities-menu.vue',
+        'spec/app/microfrontends/entities-router.ts',
+      ],
+    },
+    {
+      condition: generator => generator.applicationTypeMicroservice,
+      path: CLIENT_TEST_SRC_DIR,
+      templates: ['spec/app/entities/entities-menu.spec.ts'],
     },
   ],
   sass: [
@@ -64,6 +102,7 @@ const vueFiles = {
         'app.component.ts',
         'shims-vue.d.ts',
         'constants.ts',
+        'declarations.d.ts',
         'main.ts',
         'shared/alert/alert.service.ts',
         'shared/config/axios-interceptor.ts',
@@ -74,7 +113,6 @@ const vueFiles = {
         'shared/security/authority.ts',
         'router/index.ts',
         'router/admin.ts',
-        'router/entities.ts',
         'router/pages.ts',
       ],
     },
@@ -347,6 +385,7 @@ function customizeFiles() {
       'app/core/jhi-navbar/jhi-navbar.vue',
       'app/core/ribbon/ribbon.vue',
       'app/shared/jhi-item-count.vue',
+      'app/entities/entities-menu.vue',
     ]);
     if (this.withAdminUi) {
       utils.vueReplaceTranslation(this, [

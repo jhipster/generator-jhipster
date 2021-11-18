@@ -2756,6 +2756,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.testFrameworks = config.testFrameworks || [];
     dest.cypressCoverage = config.cypressCoverage;
 
+    dest.remotes = Object.entries(config.applications || {}).map(([baseName, config]) => ({ baseName, ...config })) || [];
+
     dest.gatlingTests = dest.testFrameworks.includes(GATLING);
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
     dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
@@ -2783,6 +2785,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.humanizedBaseName =
         dest.humanizedBaseName || (dest.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(dest.baseName));
       dest.projectDescription = dest.projectDescription || `Description for ${this.baseName}`;
+      dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
+    }
+
+    if (dest.remotes) {
+      dest.remotes.forEach(app => this.loadDerivedAppConfig(app));
     }
   }
 
