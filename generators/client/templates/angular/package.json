@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "13.0.1",
+    "@angular/common": "13.0.2",
     "bootstrap": "4.6.1",
     "@fortawesome/angular-fontawesome": "0.10.1",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
@@ -17,7 +17,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular/cli": "13.0.2",
+    "@angular/cli": "13.0.3",
     "@angular-builders/custom-webpack": "13.0.0",
     "@angular-builders/jest": "13.0.0",
     "@angular-eslint/eslint-plugin": "13.0.0-alpha.0",
@@ -32,7 +32,7 @@
     "eslint-webpack-plugin": "3.1.1",
     "folder-hash": "4.0.1",
     "jest": "27.3.1",
-    "jest-preset-angular": "11.0.0-rc.4",
+    "jest-preset-angular": "11.0.0",
     "jest-date-mock": "1.0.8",
     "jest-junit": "13.0.0",
     "jest-sonar-reporter": "2.0.0",
