@@ -388,12 +388,6 @@ describe('DefaultApplicationOptions', () => {
       it('should set the search engine option to false', () => {
         expect(options.searchEngine).to.be.false;
       });
-      it('should set the client skipping option to false', () => {
-        expect(options.skipClient).to.be.false;
-      });
-      it('should set the server skipping option to false', () => {
-        expect(options.skipServer).to.be.false;
-      });
       it('should set the test frameworks option to nothing', () => {
         expect(options.testFrameworks).to.have.lengthOf(0);
       });
