@@ -75,7 +75,7 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,cjs,mjs,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,cjs,mjs,json,md,yml,java}\"",
     "pretest": "npm run lint",
-    "test": "mocha test generators --no-insight --forbid-only --parallel",
+    "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
     "update-snapshots": "npm run update-snapshot -- test generators"
   },
