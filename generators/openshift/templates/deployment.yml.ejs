@@ -190,7 +190,7 @@ objects:
 <%_ if (app.databaseTypeCouchbase) { _%>
             - name: SPRING_COUCHBASE_CONNECTION_STRING
               value: ${APPLICATION_NAME}-couchbase
-            - name: JHIPSTER_COUCHBASE_BUCKET_NAME
+            - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME
               value: ${APPLICATION_NAME}
 <%_ } _%>
 <%_ if (app.searchEngineElasticsearch) { _%>

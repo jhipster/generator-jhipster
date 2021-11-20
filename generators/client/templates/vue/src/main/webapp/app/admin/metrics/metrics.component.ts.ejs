@@ -107,7 +107,7 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
         } else {
           plural = '';
         }
-        time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
+        time_string += `${Math.floor(ms / times[key])} ${key}${plural} `;
         ms = ms - times[key] * Math.floor(ms / times[key]);
       }
     }

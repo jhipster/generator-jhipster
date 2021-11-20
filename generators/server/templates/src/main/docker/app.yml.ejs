@@ -52,7 +52,7 @@ _%>
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
       - SPRING_COUCHBASE_CONNECTION_STRING=<%= baseName.toLowerCase() %>-couchbase
-      - JHIPSTER_COUCHBASE_BUCKET_NAME=<%= baseName %>
+      - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=<%= baseName %>
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
       - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211

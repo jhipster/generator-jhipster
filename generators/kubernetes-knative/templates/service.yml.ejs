@@ -114,7 +114,7 @@ spec:
 <%_ if (app.prodDatabaseTypeCouchbase) { _%>
             - name: SPRING_COUCHBASE_CONNECTION_STRING
               value: "<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-couchbase-<%= i %>.<%= app.baseName.toLowerCase() %>-couchbase<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
-            - name: JHIPSTER_COUCHBASE_BUCKET_NAME
+            - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME
               value: <%= app.baseName.toLowerCase() %>
 <%_ } _%>
 <%_ if (app.searchEngineElasticsearch) { _%>

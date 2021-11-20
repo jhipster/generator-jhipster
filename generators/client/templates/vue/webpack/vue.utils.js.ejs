@@ -6,7 +6,7 @@ const sass = require('sass');
 const packageConfig = require('../package.json');
 const config = require('./config');
 
-const sourceMapEnabled = production => production ? config.build.productionSourceMap : config.dev.cssSourceMap;
+const sourceMapEnabled = production => (production ? config.build.productionSourceMap : config.dev.cssSourceMap);
 
 const cssLoaders = options => {
   options = options || {};
@@ -16,14 +16,14 @@ const cssLoaders = options => {
     options: {
       sourceMap: options.sourceMap,
       esModule: false,
-    }
+    },
   };
 
   const postcssLoader = {
     loader: 'postcss-loader',
     options: {
-      sourceMap: options.sourceMap
-    }
+      sourceMap: options.sourceMap,
+    },
   };
 
   // generate loader string to be used with extract text plugin
@@ -34,8 +34,8 @@ const cssLoaders = options => {
       loaders.push({
         loader: loader + '-loader',
         options: Object.assign({}, loaderOptions, {
-          sourceMap: options.sourceMap
-        })
+          sourceMap: options.sourceMap,
+        }),
       });
     }
 
@@ -52,7 +52,7 @@ const cssLoaders = options => {
     sass: generateLoaders('sass', { indentedSyntax: true, implementation: sass }),
     scss: generateLoaders('sass', { implementation: sass }),
     stylus: generateLoaders('stylus'),
-    styl: generateLoaders('stylus')
+    styl: generateLoaders('stylus'),
   };
 };
 
@@ -65,7 +65,7 @@ const styleLoaders = options => {
     const loader = loaders[extension];
     output.push({
       test: new RegExp('\\.' + extension + '$'),
-      use: loader
+      use: loader,
     });
   }
 
@@ -75,7 +75,7 @@ const styleLoaders = options => {
 const vueLoaderConfig = production => ({
   loaders: cssLoaders({
     sourceMap: sourceMapEnabled(production),
-    extract: production
+    extract: production,
   }),
   cssSourceMap: sourceMapEnabled(production),
   cacheBusting: config.dev.cacheBusting,
@@ -83,12 +83,13 @@ const vueLoaderConfig = production => ({
     video: ['src', 'poster'],
     source: 'src',
     img: 'src',
-    image: 'xlink:href'
-  }
+    image: 'xlink:href',
+  },
+  hotReload: config.dev.hotReload,
 });
 
 module.exports = {
   cssLoaders,
   styleLoaders,
   vueLoaderConfig,
-}
+};

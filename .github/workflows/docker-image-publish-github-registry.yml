@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
@@ -67,7 +67,7 @@ jobs:
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v3.5.0
+        uses: docker/metadata-action@v3.6.0
         with:
           images: ghcr.io/${{ github.repository }}${{ (steps.login-hub.outcome == 'success' && ',jhipster/jhipster') || ''}}
 

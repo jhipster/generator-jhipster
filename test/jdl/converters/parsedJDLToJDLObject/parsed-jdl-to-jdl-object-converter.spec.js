@@ -531,8 +531,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             searchEngine: false,
             serverPort: '8080',
             serviceDiscoveryType: false,
-            skipClient: false,
-            skipServer: false,
             skipUserManagement: false,
             websocket: false,
             withAdminUi: true,

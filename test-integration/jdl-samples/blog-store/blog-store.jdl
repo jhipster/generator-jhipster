@@ -59,8 +59,6 @@ entity Blog {
 @ChangelogDate(20210408164811)
 entity Post {
   title String required
-  content TextBlob required
-  date Instant required
 }
 
 @ChangelogDate(20210408164812)

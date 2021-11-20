@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
 apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
@@ -59,6 +62,8 @@ spec:
   - match:
     - uri:
         prefix: /services/<%= config.baseName.toLowerCase() %>/
+    rewrite:
+      uri: /
     route:
     - destination:
         host: <%= config.baseName.toLowerCase() %>-knative
@@ -69,10 +74,7 @@ spec:
             Knative-Serving-Revision: <%= config.baseName.toLowerCase() %>-knative
   <%_ }); _%>
 <%_ } _%>
-  - match:
-    - uri:
-        prefix: /
-    route:
+  - route:
     - destination:
         host: <%= app.baseName.toLowerCase() %>-knative
       headers:

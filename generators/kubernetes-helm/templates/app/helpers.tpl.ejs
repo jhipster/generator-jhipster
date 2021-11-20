@@ -43,15 +43,4 @@ mongodb customisation
 {{- define "mongodb-replicaset.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-mongodb" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseTypeCouchbase) { _%>
-{{/*
-couchdb customisation
-*/}}
-{{- define "couchdb.name" -}}
-{{- default "<%= app.baseName.toLowerCase() %>-couchbase" -}}
-{{- end -}}
-
-{{- define "couchdb.fullname" -}}
-{{- default "<%= app.baseName.toLowerCase() %>-couchbase" -}}
-{{- end -}}
 <%_ } _%>

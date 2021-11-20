@@ -62,14 +62,18 @@ const commonFiles = {
       ],
     },
     {
-      condition: generator => generator.enableI18nRTL,
+      condition: generator => generator.enableI18nRTL && !generator.clientFrameworkReact,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['content/scss/rtl.scss'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js.jhi'],
     },
   ],
   swagger: [
     {
-      condition: generator => !generator.applicationTypeMicroservice,
+      condition: generator => !generator.applicationTypeMicroservice || generator.microfrontend,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
     },

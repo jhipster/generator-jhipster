@@ -6,7 +6,7 @@ const { REACT } = require('../../jdl/jhipster/client-framework-types');
 
 const commonOptions = { clientFramework: REACT };
 
-describe('JHipster vue generator', () => {
+describe('JHipster react generator', () => {
   describe('microfrontend', () => {
     it('should not succeed', async () => {
       await expect(
@@ -22,7 +22,7 @@ describe('JHipster vue generator', () => {
             ...commonOptions,
           })
           .run()
-      ).rejects.toThrow('Microfrontend requires angularX client framework.');
+      ).rejects.toThrow("Client framework react doesn't support microfrontends");
     });
   });
 });

@@ -133,7 +133,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -155,7 +158,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -293,7 +296,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -315,7 +321,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -326,17 +332,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -358,7 +366,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -496,7 +504,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -606,7 +614,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -697,7 +705,7 @@ postgresql customisation
     "stateCleared": "modified",
   },
   "mspsql-knative/templates/mspsql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: mspsql-destinationrule
@@ -890,7 +898,7 @@ spec:
     "stateCleared": "modified",
   },
   "mspsql-knative/templates/mspsql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: mspsql-virtualservice
@@ -1065,7 +1073,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -1087,7 +1098,7 @@ spec:
       hosts:
         - grafana.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -1225,7 +1236,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -1247,7 +1261,7 @@ spec:
       hosts:
         - kiali.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -1258,17 +1272,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -1290,7 +1306,7 @@ spec:
       hosts:
         - zipkin.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -1415,7 +1431,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -1446,7 +1462,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -1471,7 +1490,7 @@ spec:
       hosts:
         - jhgate.default.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -1484,10 +1503,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -1578,7 +1594,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -1754,7 +1770,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -1776,7 +1795,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -1914,7 +1933,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -1936,7 +1958,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -1947,17 +1969,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -1979,7 +2003,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -2117,7 +2141,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -2148,7 +2172,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -2173,7 +2200,7 @@ spec:
       hosts:
         - jhgate.default.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -2186,10 +2213,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -2280,7 +2304,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -2371,7 +2395,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -2481,7 +2505,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -2655,7 +2679,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -2677,7 +2704,7 @@ spec:
       hosts:
         - grafana.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -2815,7 +2842,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -2837,7 +2867,7 @@ spec:
       hosts:
         - kiali.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -2848,17 +2878,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -2880,7 +2912,7 @@ spec:
       hosts:
         - zipkin.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -3005,7 +3037,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -3036,7 +3068,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -3061,7 +3096,7 @@ spec:
       hosts:
         - jhgate.default.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -3074,10 +3109,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -3168,7 +3200,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -3356,7 +3388,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -3378,7 +3413,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -3516,7 +3551,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -3538,7 +3576,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -3549,17 +3587,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -3581,7 +3621,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -3758,7 +3798,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -3789,7 +3829,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -3814,7 +3857,7 @@ spec:
       hosts:
         - jhgate.default.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -3827,10 +3870,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -3921,7 +3961,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -4024,7 +4064,7 @@ data:
     "stateCleared": "modified",
   },
   "msmariadb-knative/templates/msmariadb-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmariadb-destinationrule
@@ -4131,7 +4171,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmariadb-knative/templates/msmariadb-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmariadb-virtualservice
@@ -4237,7 +4277,7 @@ data:
     "stateCleared": "modified",
   },
   "msmongodb-knative/templates/msmongodb-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmongodb-destinationrule
@@ -4341,7 +4381,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmongodb-knative/templates/msmongodb-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmongodb-virtualservice
@@ -4429,7 +4469,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -4539,7 +4579,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -4630,7 +4670,7 @@ postgresql customisation
     "stateCleared": "modified",
   },
   "mspsql-knative/templates/mspsql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: mspsql-destinationrule
@@ -4823,7 +4863,7 @@ spec:
     "stateCleared": "modified",
   },
   "mspsql-knative/templates/mspsql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: mspsql-virtualservice
@@ -4946,7 +4986,7 @@ maintainers:
 - name: Team JHipster
   email:
 dependencies:
-- name: prometheus-community
+- name: prometheus
   version: ^9.2.0
   repository: https://prometheus-community.github.io/helm-charts
   condition: prometheus.enabled
@@ -4959,7 +4999,7 @@ dependencies:
   },
   "csvc-knative/requirements.yml": Object {
     "contents": "dependencies:
-  - name: prometheus-community
+  - name: prometheus
     version: ^9.2.0
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
@@ -5048,7 +5088,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -5070,7 +5113,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -5091,7 +5134,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/jhipster-grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhipster-grafana-gateway
@@ -5113,7 +5159,7 @@ spec:
       hosts:
         - jhipster-grafana.mynamespace.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhipster-grafana-gw-virtualservice
@@ -5251,7 +5297,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -5273,7 +5322,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -5284,17 +5333,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -5316,7 +5367,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -7741,7 +7792,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -7853,7 +7904,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -8035,7 +8086,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -8057,7 +8111,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -8195,7 +8249,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -8217,7 +8274,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -8228,17 +8285,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -8260,7 +8319,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -8386,7 +8445,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -8496,7 +8555,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/templates/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -8678,7 +8737,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -8700,7 +8762,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -8838,7 +8900,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-knative/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -8860,7 +8925,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -8871,17 +8936,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-knative/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -8903,7 +8970,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -9029,7 +9096,7 @@ mysql customisation
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -9060,7 +9127,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -9085,7 +9155,7 @@ spec:
       hosts:
         - jhgate.jhipsternamespace.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -9098,10 +9168,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -9192,7 +9259,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/templates/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -9298,7 +9365,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -9320,7 +9390,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -9341,7 +9411,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -9363,7 +9436,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -9374,17 +9447,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -9406,7 +9481,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -9454,7 +9529,7 @@ logSummary
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -9624,7 +9699,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -9652,7 +9727,7 @@ spec:
     "stateCleared": "modified",
   },
   "mspsql-knative/mspsql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: mspsql-destinationrule
@@ -9790,7 +9865,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:13.4
+          image: postgres:13.5
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -9915,7 +9990,7 @@ spec:
     "stateCleared": "modified",
   },
   "mspsql-knative/mspsql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: mspsql-virtualservice
@@ -10152,7 +10227,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -10174,7 +10252,7 @@ spec:
       hosts:
         - grafana.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -10195,7 +10273,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -10217,7 +10298,7 @@ spec:
       hosts:
         - kiali.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -10228,17 +10309,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -10260,7 +10343,7 @@ spec:
       hosts:
         - zipkin.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -10281,7 +10364,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -10312,7 +10395,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -10337,7 +10423,7 @@ spec:
       hosts:
         - jhgate.default.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -10350,10 +10436,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -10504,7 +10587,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -10770,7 +10853,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -10792,7 +10878,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -10813,7 +10899,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -10835,7 +10924,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -10846,17 +10935,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -10878,7 +10969,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -10899,7 +10990,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -10930,7 +11021,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -10955,7 +11049,7 @@ spec:
       hosts:
         - jhgate.default.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -10968,10 +11062,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -11122,7 +11213,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -11178,7 +11269,7 @@ logSummary
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -11348,7 +11439,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -11585,7 +11676,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -11607,7 +11701,7 @@ spec:
       hosts:
         - grafana.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -11628,7 +11722,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -11650,7 +11747,7 @@ spec:
       hosts:
         - kiali.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -11661,17 +11758,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -11693,7 +11792,7 @@ spec:
       hosts:
         - zipkin.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -11714,7 +11813,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -11745,7 +11844,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -11770,7 +11872,7 @@ spec:
       hosts:
         - jhgate.default.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -11783,10 +11885,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -11937,7 +12036,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -12218,7 +12317,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -12240,7 +12342,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -12261,7 +12363,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -12283,7 +12388,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -12294,17 +12399,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -12326,7 +12433,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -12347,7 +12454,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -12378,7 +12485,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -12403,7 +12513,7 @@ spec:
       hosts:
         - jhgate.default.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -12416,10 +12526,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -12570,7 +12677,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -12642,7 +12749,7 @@ data:
     "stateCleared": "modified",
   },
   "msmariadb-knative/msmariadb-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmariadb-destinationrule
@@ -12706,7 +12813,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mariadb
-          image: mariadb:10.6.4
+          image: mariadb:10.7.1
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -12824,7 +12931,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmariadb-knative/msmariadb-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmariadb-virtualservice
@@ -12864,7 +12971,7 @@ data:
     "stateCleared": "modified",
   },
   "msmongodb-knative/msmongodb-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmongodb-destinationrule
@@ -13092,7 +13199,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.8
+          image: mongo:4.4.10
           command:
             - /work-dir/peer-finder
           args:
@@ -13122,7 +13229,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.8
+          image: mongo:4.4.10
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -13291,7 +13398,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmongodb-knative/msmongodb-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmongodb-virtualservice
@@ -13331,7 +13438,7 @@ data:
     "stateCleared": "modified",
   },
   "msmssqldb-knative/msmssqldb-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmssqldb-destinationrule
@@ -13387,7 +13494,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU12-ubuntu-20.04
+          image: mcr.microsoft.com/mssql/server:2019-CU13-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
@@ -13510,7 +13617,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmssqldb-knative/msmssqldb-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmssqldb-virtualservice
@@ -13538,7 +13645,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -13708,7 +13815,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -13736,7 +13843,7 @@ spec:
     "stateCleared": "modified",
   },
   "mspsql-knative/mspsql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: mspsql-destinationrule
@@ -13874,7 +13981,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:13.4
+          image: postgres:13.5
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -13999,7 +14106,7 @@ spec:
     "stateCleared": "modified",
   },
   "mspsql-knative/mspsql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: mspsql-virtualservice
@@ -14236,7 +14343,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -14258,7 +14368,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -14279,7 +14389,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -14301,7 +14414,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -14312,17 +14425,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -14344,7 +14459,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -16752,7 +16867,10 @@ spec:
     "stateCleared": "modified",
   },
   "monitoring-knative/jhipster-grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhipster-grafana-gateway
@@ -16774,7 +16892,7 @@ spec:
       hosts:
         - jhipster-grafana.mynamespace.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhipster-grafana-gw-virtualservice
@@ -16823,7 +16941,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:8.1.3
+          image: grafana/grafana:8.2.4
           ports:
             - containerPort: 3000
               name: http
@@ -17061,7 +17179,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -17251,7 +17369,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -17496,7 +17614,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -17518,7 +17639,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -17539,7 +17660,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -17561,7 +17685,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -17572,17 +17696,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -17604,7 +17730,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -17652,7 +17778,7 @@ logSummary
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: msmysql-destinationrule
@@ -17822,7 +17948,7 @@ spec:
     "stateCleared": "modified",
   },
   "msmysql-knative/msmysql-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: msmysql-virtualservice
@@ -18067,7 +18193,10 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
     "stateCleared": "modified",
   },
   "istio-knative/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -18089,7 +18218,7 @@ spec:
       hosts:
         - grafana.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -18110,7 +18239,10 @@ spec:
     "stateCleared": "modified",
   },
   "istio-knative/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -18132,7 +18264,7 @@ spec:
       hosts:
         - kiali.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -18143,17 +18275,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "istio-knative/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -18175,7 +18309,7 @@ spec:
       hosts:
         - zipkin.istio-system.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -18196,7 +18330,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -18227,7 +18361,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -18252,7 +18389,7 @@ spec:
       hosts:
         - jhgate.jhipsternamespace.
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -18265,10 +18402,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate-knative
           headers:
@@ -18419,7 +18553,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-knative/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice

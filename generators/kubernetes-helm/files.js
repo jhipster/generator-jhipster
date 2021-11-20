@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { COUCHBASE } = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { JWT } = require('../../jdl/jhipster/authentication-types');
@@ -50,13 +49,6 @@ function writeFiles() {
         this.template('app/requirements.yml.ejs', `${appOut}/requirements.yaml`);
         this.template('app/helpers.tpl.ejs', `${appOut}/templates/_helpers.tpl`);
 
-        if (this.app.prodDatabaseType === COUCHBASE) {
-          this.template(
-            `${kubernetesSubgenPath}/db/${this.app.prodDatabaseType}.yml.ejs`,
-            `${appOut}/templates/${appName}-${this.app.prodDatabaseType}.yml`
-          );
-        }
-
         if (this.app.searchEngine === ELASTICSEARCH) {
           this.template(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appOut}/templates/${appName}-elasticsearch.yml`);
         }
@@ -69,6 +61,9 @@ function writeFiles() {
         }
         if (!this.app.serviceDiscoveryType && this.app.authenticationType === JWT) {
           this.template(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appOut}/templates/jwt-secret.yml`);
+        }
+        if (this.app.prodDatabaseTypeCouchbase) {
+          this.template(`${kubernetesSubgenPath}/secret/couchbase-secret.yml.ejs`, `${appOut}/templates/couchbase-secret.yml`);
         }
         if (this.istio) {
           this.template(`${kubernetesSubgenPath}/istio/destination-rule.yml.ejs`, `${appOut}/templates/${appName}-destination-rule.yml`);

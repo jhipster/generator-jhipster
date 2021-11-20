@@ -22,7 +22,7 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
-const writeReactFiles = require('./files-react').writeFiles;
+const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-react');
 const { cleanup: cleanupVue, writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
 const { clientI18nFiles } = require('../languages/files');
@@ -43,8 +43,6 @@ const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 
 const TYPE_STRING = CommonDBTypes.STRING;
 const TYPE_UUID = CommonDBTypes.UUID;
-
-let useBlueprints;
 
 module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -76,8 +74,12 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     this.loadRuntimeOptions();
 
     this.existingProject = !!this.jhipsterConfig.clientFramework;
+  }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_CLIENT);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_CLIENT);
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -108,7 +110,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -124,7 +126,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -160,32 +162,32 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      composeCommon() {
-        this.composeWithJHipster(GENERATOR_COMMON, true);
+      async composeCommon() {
+        await this.composeWithJHipster(GENERATOR_COMMON, true);
       },
-      composeCypress() {
+      async composeCypress() {
         const testFrameworks = this.jhipsterConfig.testFrameworks;
         if (!Array.isArray(testFrameworks) || !testFrameworks.includes(CYPRESS)) return;
-        this.composeWithJHipster(GENERATOR_CYPRESS, { existingProject: this.existingProject }, true);
+        await this.composeWithJHipster(GENERATOR_CYPRESS, { existingProject: this.existingProject }, true);
       },
-      composeLanguages() {
+      async composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
 
-        this.composeWithJHipster(GENERATOR_LANGUAGES, true);
+        await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
     };
   }
 
   get composing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._composing();
   }
 
@@ -200,12 +202,6 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.loadServerConfig();
         this.loadPlatformConfig();
         this.loadTranslationConfig();
-      },
-
-      checkMicrofrontend() {
-        if (this.microfrontend && !this.clientFrameworkAngular) {
-          throw new Error(`Microfrontend requires ${ANGULAR} client framework.`);
-        }
       },
 
       validateSkipServer() {
@@ -243,7 +239,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -283,7 +279,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
@@ -300,6 +296,14 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         this.userPrimaryKeyTypeUUID = this.user.primaryKey.type === TYPE_UUID;
       },
 
+      loadEntities() {
+        if (!this.configOptions.sharedEntities || (this.applicationTypeGateway && this.microfrontend)) {
+          this.localEntities = [];
+          return;
+        }
+        this.localEntities = Object.values(this.configOptions.sharedEntities).filter(entity => !entity.builtIn);
+      },
+
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
           app: {
@@ -314,31 +318,32 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanupReact,
       cleanupVue,
 
       write() {
         if (this.skipClient) return;
         switch (this.clientFramework) {
           case ANGULAR:
-            return writeAngularFiles.call(this, useBlueprints);
+            return writeAngularFiles.call(this);
           case REACT:
-            return writeReactFiles.call(this, useBlueprints);
+            return writeReactFiles.call(this);
           case VUE:
-            return writeVueFiles.call(this, useBlueprints);
+            return writeVueFiles.call(this);
           default:
           // do nothing by default
         }
       },
       writeCommonFiles() {
         if (this.skipClient) return;
-        return writeCommonFiles.call(this, useBlueprints);
+        return writeCommonFiles.call(this);
       },
 
       ...super._missingPostWriting(),
@@ -346,7 +351,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -385,13 +390,19 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
 
       microfrontend() {
         if (!this.microfrontend) return;
-        this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
+        if (this.clientFrameworkAngular) {
+          this.addWebpackConfig("require('./webpack.microfrontend')(config, options, targetOptions)");
+        } else if (this.clientFrameworkVue) {
+          this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })");
+        } else {
+          throw new Error(`Client framework ${this.clientFramework} doesn't support microfrontends`);
+        }
       },
     };
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 
@@ -413,7 +424,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 

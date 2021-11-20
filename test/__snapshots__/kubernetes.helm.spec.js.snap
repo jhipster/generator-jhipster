@@ -70,7 +70,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -459,7 +458,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -1220,7 +1218,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -1735,7 +1732,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -2418,7 +2414,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -2495,7 +2490,10 @@ data:
     "stateCleared": "modified",
   },
   "csvc-helm/templates/grafana-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -2517,7 +2515,7 @@ spec:
       hosts:
         - grafana.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
@@ -2655,7 +2653,10 @@ spec:
     "stateCleared": "modified",
   },
   "csvc-helm/templates/kiali-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: kiali-observability-gateway
@@ -2677,7 +2678,7 @@ spec:
       hosts:
         - kiali.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: kiali-gw-virtualservice
@@ -2688,17 +2689,19 @@ spec:
   gateways:
     - kiali-observability-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: kiali
+            port:
+              number: 20001
 ",
     "stateCleared": "modified",
   },
   "csvc-helm/templates/zipkin-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: zipkin-observability-gateway
@@ -2720,7 +2723,7 @@ spec:
       hosts:
         - zipkin.istio-system.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: zipkin-gw-virtualservice
@@ -2950,7 +2953,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-helm/templates/jhgate-destination-rule.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: jhgate-destinationrule
@@ -2970,7 +2973,7 @@ spec:
         maxRequestsPerConnection: 10
         maxRetries: 5
     outlierDetection:
-      consecutiveErrors: 5
+      consecutive5xxErrors: 5
       interval: 30s
       baseEjectionTime: 60s
   subsets:
@@ -2981,7 +2984,10 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-helm/templates/jhgate-gateway.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
+# using certificates and prefer that for production use
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: jhgate-gateway
@@ -3006,7 +3012,7 @@ spec:
       hosts:
         - jhgate.default.example.com
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-gw-virtualservice
@@ -3019,10 +3025,7 @@ spec:
   gateways:
     - jhgate-gateway
   http:
-    - match:
-        - uri:
-            prefix: /
-      route:
+    - route:
         - destination:
             host: jhgate
 ",
@@ -3047,7 +3050,7 @@ spec:
     "stateCleared": "modified",
   },
   "jhgate-helm/templates/jhgate-virtual-service.yml": Object {
-    "contents": "apiVersion: networking.istio.io/v1alpha3
+    "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: jhgate-virtualservice
@@ -3167,7 +3170,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -4511,7 +4513,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -4883,7 +4884,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -4908,7 +4908,7 @@ maintainers:
 - name: Team JHipster
   email:
 dependencies:
-- name: prometheus-community
+- name: prometheus
   version: ^9.2.0
   repository: https://prometheus-community.github.io/helm-charts
   condition: prometheus.enabled
@@ -4921,7 +4921,7 @@ dependencies:
   },
   "csvc-helm/requirements.yaml": Object {
     "contents": "dependencies:
-  - name: prometheus-community
+  - name: prometheus
     version: ^9.2.0
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
@@ -7733,7 +7733,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
@@ -8236,7 +8235,6 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 
 ### Backlogs to be covered
 
-- Couchbase is yet to be integrated with Helm repository, it is still referring the Kubernetes sub-generator manifest - to be tested
 - helm upgrade - to be tested
 - Istio - to be tested
 ",
