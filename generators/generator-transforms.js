@@ -37,7 +37,7 @@ const prettierTransform = function (options, generator, transformOptions = {}) {
         return file;
       }
       if (!file.contents) {
-        throw new Error(`File content doesn't exit for ${file.relative}`);
+        throw new Error(`File content doesn't exist for ${file.relative}`);
       }
       /* resolve from the projects config */
       let fileContent;
