@@ -450,8 +450,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     } else if (clientFramework === VUE) {
       this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
       this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
-      this.needleApi.clientVue.addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName);
-      this.needleApi.clientVue.addEntityServiceToMain(entityInstance, entityName);
+      this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
+      this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
     }
   }
 

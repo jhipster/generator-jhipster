@@ -478,7 +478,7 @@ function writeFiles() {
 }
 
 function addToMenu() {
-  if (this.skipClient || this.clientFrameworkVue) return;
+  if (this.skipClient) return;
 
   if (!this.embedded) {
     this.addEntityToModule();
