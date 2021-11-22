@@ -35,7 +35,7 @@ const {
 } = require('../../lib/constants/priorities.cjs').compat;
 
 const prompts = require('./prompts');
-const writeAngularFiles = require('./files-angular').writeFiles;
+const { cleanup: cleanupAngular, writeFiles: writeAngularFiles } = require('./files-angular');
 const { cleanup: cleanupReact, writeFiles: writeReactFiles } = require('./files-react');
 const { cleanup: cleanupVue, writeFiles: writeVueFiles, customizeFiles: customizeVueFiles } = require('./files-vue');
 const writeCommonFiles = require('./files-common').writeFiles;
@@ -341,6 +341,7 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
     return {
       cleanupReact,
       cleanupVue,
+      cleanupAngular,
 
       write() {
         if (this.skipClient) return;

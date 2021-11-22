@@ -58,7 +58,7 @@ const files = {
       ],
     },
     {
-      condition: generator => generator.enableI18nRTL && !generator.clientFrameworkReact,
+      condition: generator => generator.enableI18nRTL && !generator.clientFrameworkReact && !generator.clientFrameworkAngular,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['content/scss/rtl.scss'],
     },

@@ -516,7 +516,16 @@ const files = {
   ],
 };
 
+function cleanup() {
+  if (!this.clientFrameworkAngular) return;
+
+  if (this.isJhipsterVersionLessThan('7.4.1')) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
+  }
+}
+
 module.exports = {
+  cleanup,
   writeFiles,
   files,
 };
