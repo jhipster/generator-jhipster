@@ -265,6 +265,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
         }
       },
+      forceReactiveGateway() {
+        if (this.jhipsterConfig.applicationType === GATEWAY) {
+          if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
+            this.warning('Non reactive gateway is not supported. Switching to reactive.');
+          }
+          this.jhipsterConfig.reactive = true;
+        }
+      },
       configure() {
         this._configureServer();
       },
