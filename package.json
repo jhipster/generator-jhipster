@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "7.3.1",
+  "version": "7.4.0",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -75,17 +75,17 @@
     "prettier:check": "prettier --check \"{,**/}*.{js,cjs,mjs,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,cjs,mjs,json,md,yml,java}\"",
     "pretest": "npm run lint",
-    "test": "mocha test generators --no-insight --forbid-only --parallel",
+    "test": "mocha test generators --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "update-snapshot": "mocha --no-insight --no-parallel --updateSnapshot --",
     "update-snapshots": "npm run update-snapshot -- test generators"
   },
   "dependencies": {
-    "aws-sdk": "2.1028.0",
+    "aws-sdk": "2.1033.0",
     "axios": "0.24.0",
     "chalk": "4.1.2",
     "chevrotain": "9.1.0",
     "commander": "8.3.0",
-    "conf": "10.0.3",
+    "conf": "10.1.0",
     "debug": "4.3.2",
     "didyoumean": "1.2.2",
     "ejs": "3.1.6",
@@ -119,7 +119,7 @@
   "devDependencies": {
     "chai": "4.3.4",
     "ejs-lint": "1.2.1",
-    "eslint": "8.2.0",
+    "eslint": "8.3.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-chai-friendly": "^0.7.1",

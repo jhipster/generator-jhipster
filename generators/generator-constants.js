@@ -26,7 +26,7 @@ const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17'];
 
 // Version of Node, NPM
-const NODE_VERSION = '14.17.6';
+const NODE_VERSION = '14.18.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
@@ -34,9 +34,9 @@ const GRADLE_VERSION = '7.0.2';
 const JIB_VERSION = '3.1.4';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.3.2-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.4.1-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.5.6';
+const SPRING_BOOT_VERSION = '2.5.7';
 const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.32.Final';
