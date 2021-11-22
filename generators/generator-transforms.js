@@ -36,6 +36,9 @@ const prettierTransform = function (options, generator, transformOptions = {}) {
       if (isFileStateDeleted(file)) {
         return file;
       }
+      if (!file.contents) {
+        throw new Error(`File content doesn't exit for ${file.relative}`);
+      }
       /* resolve from the projects config */
       let fileContent;
       try {
@@ -58,12 +61,17 @@ const prettierTransform = function (options, generator, transformOptions = {}) {
         file.contents = Buffer.from(data);
         return file;
       } catch (error) {
-        const errorMessage = `Error parsing file ${file.relative}: ${error}
+        let errorMessage;
+        if (fileContent) {
+          errorMessage = `Error parsing file ${file.relative}: ${error}
 
 At: ${fileContent
-          .split('\n')
-          .map((value, idx) => `${idx + 1}: ${value}`)
-          .join('\n')}`;
+            .split('\n')
+            .map((value, idx) => `${idx + 1}: ${value}`)
+            .join('\n')}`;
+        } else {
+          errorMessage = `Unknown prettier error: ${error}`;
+        }
         if (ignoreErrors) {
           generator.warning(errorMessage);
           return file;
