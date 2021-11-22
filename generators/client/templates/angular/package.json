@@ -44,6 +44,7 @@
     "webpack": "5.68.0",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-merge": "5.8.0",
-    "webpack-notifier": "1.15.0"
+    "webpack-notifier": "1.15.0",
+    "postcss-rtlcss": "3.5.0"
   }
 }
