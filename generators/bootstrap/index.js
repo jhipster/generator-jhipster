@@ -188,7 +188,8 @@ module.exports = class extends BaseGenerator {
     if (!skipPrettier) {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      transformStreams.push(prettierTransform(prettierOptions, this, this.options.ignoreErrors));
+      const ignoreErrors = this.options.commandName === 'upgrade' || this.options.ignoreErrors;
+      transformStreams.push(prettierTransform(prettierOptions, this, ignoreErrors));
     }
 
     transformStreams.push(createConflicterCheckTransform(this.env.conflicter, conflicterStatus), createConflicterStatusTransform());

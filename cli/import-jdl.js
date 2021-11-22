@@ -158,6 +158,7 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     forceNoFiltering: undefined,
     unidirectionalRelationships: undefined,
     localConfigOnly: undefined,
+    commandName: undefined,
     fromJdl: true,
   };
 
