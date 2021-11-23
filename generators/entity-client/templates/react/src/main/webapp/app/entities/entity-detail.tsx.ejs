@@ -47,7 +47,7 @@ export const <%= entityReactName %>Detail = (props: RouteComponentProps<{id: str
     dispatch(getEntity(props.match.params.id));
   }, []);
 
-  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
   return (
     <Row>
       <Col md="8">
@@ -152,10 +152,10 @@ _%>
   <%_ } _%>
 <%_ } _%>
           </dl>
-        <Button tag={Link} to="/<%= entityFileName %>" replace color="info" data-cy="entityDetailsBackButton">
+        <Button tag={Link} to="/<%= entityPage %>" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>&nbsp;
-        <Button tag={Link} to={`/<%= entityFileName %>/${<%= entityInstance %>Entity.<%= primaryKey.name %>}/edit`} replace color="primary">
+        <Button tag={Link} to={`/<%= entityPage %>/${<%= entityInstance %>Entity.<%= primaryKey.name %>}/edit`} replace color="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
       </Col>

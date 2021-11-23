@@ -113,17 +113,6 @@ return merge(
   stats: {
     children: false
   },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
-  },
   plugins: [
     new webpack.EnvironmentPlugin({
       // react-jhipster requires LOG_LEVEL config.

@@ -77,6 +77,7 @@ jobs:
           - ms-react-consul-jwt-cassandra-redis
           - ms-vue-eureka-jwt-couchbase-hazelcast
           - mf-ngx-eureka-jwt-psql-ehcache
+          - mf-react-eureka-oauth2-mariadb-infinispan
           - mf-vue-consul-oauth2-mysql-memcached
         include:
           - suite: ms-ngx-eureka-oauth2-mongodb-caffeine
@@ -86,6 +87,8 @@ jobs:
           - suite: ms-vue-eureka-jwt-couchbase-hazelcast
             extra-args: --workspaces --monorepository
           - suite: mf-ngx-eureka-jwt-psql-ehcache
+            extra-args: --workspaces --monorepository
+          - suite: mf-react-eureka-oauth2-mariadb-infinispan
             extra-args: --workspaces --monorepository
           - suite: mf-vue-consul-oauth2-mysql-memcached
             extra-args: --workspaces --monorepository

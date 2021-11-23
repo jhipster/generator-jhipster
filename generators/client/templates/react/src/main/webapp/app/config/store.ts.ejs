@@ -16,23 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { AnyAction, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import { AnyAction, Action, Store, Reducer, ReducersMapObject, configureStore, ThunkAction, combineReducers } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
-import reducer from 'app/shared/reducers';
+import sharedReducers from 'app/shared/reducers';
 import errorMiddleware from './error-middleware';
 import notificationMiddleware from './notification-middleware';
 import loggerMiddleware from './logger-middleware';
 <%_ if (communicationSpringWebsocket) { _%>
 import websocketMiddleware from './websocket-middleware';
 <%_ } _%>
-import { loadingBarMiddleware } from 'react-redux-loading-bar';
+<%_ if (enableTranslation) { _%>
+import translationMiddleware from './translation-middleware';
+<%_ } _%>
 
-const store = configureStore({
-  reducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
+const store = configureInjectableStore(
+  configureStore({
+    reducer: sharedReducers,
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        serializableCheck: {
         // Ignore these field paths in all actions
         ignoredActionPaths: ['payload.config', 'payload.request', 'error', 'meta.arg'],
       },
@@ -40,12 +44,39 @@ const store = configureStore({
       errorMiddleware,
       notificationMiddleware,
       loadingBarMiddleware(),
-    <%_ if (communicationSpringWebsocket) { _%>
+<%_ if (communicationSpringWebsocket) { _%>
       websocketMiddleware,
-    <%_ } _%>
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      translationMiddleware,
+<%_ } _%>
       loggerMiddleware
     ),
-});
+  })
+);
+
+// Allow to lazy load reducers https://github.com/reduxjs/redux/blob/master/docs/usage/CodeSplitting.md
+interface InjectableStore<S = any, A extends Action = AnyAction> extends Store<S, A> {
+  asyncReducers: ReducersMapObject;
+  injectReducer(key: string, reducer: Reducer): void;
+}
+
+export function configureInjectableStore(storeToInject) {
+  const injectableStore = storeToInject as InjectableStore<any, any>;
+  injectableStore.asyncReducers = {};
+
+  injectableStore.injectReducer = (key, asyncReducer) => {
+    injectableStore.asyncReducers[key] = asyncReducer;
+    injectableStore.replaceReducer(
+      combineReducers({
+        ...sharedReducers,
+        ...injectableStore.asyncReducers,
+      })
+    );
+  };
+
+  return injectableStore;
+}
 
 const getStore = () => store;
 

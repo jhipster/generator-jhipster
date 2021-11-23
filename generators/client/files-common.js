@@ -63,13 +63,12 @@ const files = {
       templates: ['content/scss/rtl.scss'],
     },
     {
-      condition: generator => generator.microfrontend && generator.clientFrameworkVue,
+      condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
       templates: ['webpack/webpack.microfrontend.js.jhi'],
     },
   ],
   swagger: [
     {
-      condition: generator => !generator.applicationTypeMicroservice || generator.microfrontend,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
     },

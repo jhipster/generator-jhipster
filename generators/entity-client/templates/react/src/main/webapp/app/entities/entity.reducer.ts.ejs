@@ -45,9 +45,9 @@ const initialState: EntityState<I<%= entityReactName %>> = {
   updateSuccess: false
 };
 
-const apiUrl = '<% if (applicationTypeGateway && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+const apiUrl = '<% if (microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
 <%_ if (searchEngine) { _%>
-const apiSearchUrl = '<% if (applicationTypeGateway && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
+const apiSearchUrl = '<% if (microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions

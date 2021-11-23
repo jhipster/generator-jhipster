@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
+import React<% if (applicationTypeGateway && microfrontend) { %>, { Suspense }<% } %> from 'react';
 import { Switch <% if (communicationSpringWebsocket) { %>, useLocation <% } %>} from 'react-router-dom';
 import Loadable from 'react-loadable';
 
@@ -34,7 +34,7 @@ import PasswordResetFinish from 'app/modules/account/password-reset/finish/passw
 <%_ } _%>
 import Logout from 'app/modules/login/logout';
 import Home from 'app/modules/home/home';
-import Entities from 'app/entities';
+import EntitiesRoutes from 'app/entities/routes';
 import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
@@ -43,17 +43,25 @@ import { AUTHORITIES } from 'app/config/constants';
 import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
 
+const loading = <div>loading ...</div>;
 <%_ if (!skipUserManagement) { _%>
-const Account = Loadable({
+
+  const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
-  loading: () => <div>loading ...</div>
+  loading: () => loading,
 });
 <%_ } _%>
 
 const Admin = Loadable({
   loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
-  loading: () => <div>loading ...</div>
+  loading: () => loading,
 });
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+  <%_ for (const remote of microfrontends) { _%>
+const <%= remote.capitalizedBaseName %>Routes = React.lazy(() => import('@<%= remote.lowercaseBaseName %>/entities-routes'));
+  <%_ } _%>
+<%_ } _%>
 
 const Routes = () => {
 <%_ if (communicationSpringWebsocket) { _%>
@@ -83,7 +91,14 @@ const Routes = () => {
 <%_ if (authenticationTypeOauth2) { _%>
         <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
 <%_ } _%>
-        <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
+        <PrivateRoute path="/<%= microfrontend ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+        <Suspense fallback={loading}>
+          <PrivateRoute path="/<%= remote.lowercaseBaseName %>/" component={<%= remote.capitalizedBaseName %>Routes} hasAnyAuthorities={[AUTHORITIES.USER]} />
+        </Suspense>
+  <%_ } _%>
+<%_ } _%>
         <ErrorBoundaryRoute component={PageNotFound} />
       </Switch>
     </div>

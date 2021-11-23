@@ -53,6 +53,13 @@ module.exports = class extends BaseBlueprintGenerator {
       async loadNativeLanguage() {
         await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
       },
+      async prepareReact() {
+        const entity = this.entity;
+        if (!entity.clientFrameworkReact) return;
+        entity.entityReactState = entity.applicationTypeMonolith
+          ? entity.entityInstance
+          : `${entity.lowercaseBaseName}.${entity.entityInstance}`;
+      },
     };
   }
 
@@ -157,6 +164,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _postWriting() {
     return {
       addToMenu() {
+        if (this.skipClient || (this.microfrontend && this.applicationTypeGateway && this.microserviceName)) return undefined;
         return addToMenu.call(this);
       },
 

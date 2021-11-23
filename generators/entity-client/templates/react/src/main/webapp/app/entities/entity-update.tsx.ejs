@@ -72,7 +72,7 @@ Object.keys(differentRelationships).forEach(key => {
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
       entity: uniqueRel.otherEntityAngularName,
-      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+      reducer: uniqueRel.otherEntity.builtInUser ? `userManagement.${uniqueRel.otherEntityNamePlural}` : `${uniqueRel.otherEntity.entityReactState}.entities`,
     });
     if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
@@ -113,17 +113,17 @@ export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: str
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
   <%_ otherEntityActions.forEach(val => { _%>
-  const <%= val.instance %> = useAppSelector(state => state.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>);
+  const <%= val.instance %> = useAppSelector(state => state.<%= val.reducer %>);
   <%_ }) _%>
-  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
-  const loading = useAppSelector(state => state.<%= entityInstance %>.loading);
-  const updating = useAppSelector(state => state.<%= entityInstance %>.updating);
-  const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
+  const loading = useAppSelector(state => state.<%= entityReactState %>.loading);
+  const updating = useAppSelector(state => state.<%= entityReactState %>.updating);
+  const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
   const <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
   <%_ }); _%>
   const handleClose = () => {
-    props.history.push('/<%= entityFileName %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
+    props.history.push('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
   }
 
   useEffect(() => {
@@ -383,7 +383,7 @@ _%>
           </ValidatedField>
   <%_ } _%>
 <%_ }) _%>
-          <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityFileName %>" replace color="info">
+          <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityPage %>" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>

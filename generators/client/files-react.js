@@ -76,7 +76,7 @@ const files = {
     {
       condition: generator => generator.enableTranslation,
       path: REACT_DIR,
-      templates: ['config/translation.ts'],
+      templates: ['config/translation.ts', 'config/translation-middleware.ts'],
     },
     {
       condition: generator => generator.websocket === SPRING_WEBSOCKET,
@@ -91,7 +91,11 @@ const files = {
   reactEntities: [
     {
       path: REACT_DIR,
-      templates: [{ file: 'entities/index.tsx', method: 'processJsx' }],
+      templates: [
+        'entities/reducers.ts',
+        { file: 'entities/menu.tsx', method: 'processJsx' },
+        { file: 'entities/routes.tsx', method: 'processJsx' },
+      ],
     },
   ],
   reactMain: [
@@ -261,6 +265,22 @@ const files = {
         'shared/layout/footer/footer.scss',
         'shared/layout/password/password-strength-bar.scss',
       ],
+    },
+  ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js.jhi.react'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      path: REACT_DIR,
+      templates: ['main.tsx'],
+    },
+    {
+      condition: generator => generator.microfrontend && generator.applicationTypeGateway,
+      path: CLIENT_MAIN_SRC_DIR,
+      templates: ['microfrontends/entities-menu.tsx', 'microfrontends/entities-routes.tsx', 'app/shared/error/error-loading.tsx'],
     },
   ],
   clientTestFw: [
