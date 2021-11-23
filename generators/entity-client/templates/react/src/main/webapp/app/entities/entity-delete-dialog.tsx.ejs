@@ -34,8 +34,8 @@ export const <%= entityReactName %>DeleteDialog = (props: RouteComponentProps<{ 
     setLoadModal(true);
   }, []);
 
-  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityInstance %>.entity);
-  const updateSuccess = useAppSelector(state => state.<%= entityInstance %>.updateSuccess);
+  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
+  const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
 
   const handleClose = () => {
     props.history.push('/<%= entityFileName %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);

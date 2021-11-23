@@ -24,16 +24,22 @@ import { AppThunk } from 'app/config/store';
 import { TranslatorContext } from 'react-jhipster';
 
 const initialState = {
-  currentLocale: ''
+  currentLocale: '',
+  sourcePrefixes: [],
+  lastChange: TranslatorContext.context.lastChange.getTime(),
+  loadedKeys: [],
 };
 
 export type LocaleState =  Readonly<typeof initialState>;
 
-export const setLocale: (locale: string) => AppThunk = locale => async dispatch => {
-  if (!Object.keys(TranslatorContext.context.translations).includes(locale)) {
-    const response = await axios.get(`i18n/${locale}.json?_=${I18N_HASH}`, { baseURL: '' });
+export const loadLocale = async (locale: string, prefix: string) => {
+  if (prefix || !Object.keys(TranslatorContext.context.translations).includes(locale)) {
+    const response = await axios.get(`${prefix}i18n/${locale}.json?_=${I18N_HASH}`, { baseURL: '' });
     TranslatorContext.registerTranslations(locale, response.data);
   }
+};
+
+export const setLocale: (locale: string) => AppThunk = locale => dispatch => {
   dispatch(updateLocale(locale));
 };
 
@@ -49,10 +55,20 @@ export const LocaleSlice = createSlice({
       }
       state.currentLocale = currentLocale;
     },
+    loaded(state, action) {
+      state.lastChange = TranslatorContext.context.lastChange.getTime();
+      state.loadedKeys = state.loadedKeys.concat(action.payload);
+    },
+    addSourcePrefix(state, action) {
+      const sourcePrefix = action.payload;
+      if (!state.sourcePrefixes.includes(sourcePrefix)) {
+        state.sourcePrefixes = state.sourcePrefixes.concat(sourcePrefix);
+      }
+    },
   },
 });
 
-export const { updateLocale } = LocaleSlice.actions;
+export const { updateLocale, addSourcePrefix, loaded } = LocaleSlice.actions;
 
 // Reducer
 export default LocaleSlice.reducer;

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2022 the original author or authors from the JHipster project.
+ Copyright 2013-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,18 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "extends": "./tsconfig",
-  "include": ["<%= MAIN_SRC_DIR %>app", "<%= MAIN_SRC_DIR %>microfrontend"],
-  "compilerOptions": {
-    "paths": {
-<%_ if (microfrontend && applicationTypeGateway) { _%>
-  <%_ for (const remote of microfrontends) { _%>
-      "@<%= remote.lowercaseBaseName %>/*": ["<%= CLIENT_MAIN_SRC_DIR %>microfrontends/*"],
-  <%_ } _%>
-<%_ } _%>
-      "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
-   },
-    "types": ["jest", "webpack-env"]
-  }
-}
+import('./index');

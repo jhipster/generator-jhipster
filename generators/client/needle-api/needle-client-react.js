@@ -29,20 +29,20 @@ module.exports = class extends needleClientBase {
 
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-    const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`;
+    const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`;
     const entityEntry =
       // prettier-ignore
       this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/${routerName}">
-                        |      ${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityTranslationValue}`}
-                        |    </MenuItem>`);
+                        |        ${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityTranslationValue}`}
+                        |      </MenuItem>`);
     const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
 
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
   addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName) {
-    const indexModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
-    const indexReducerPath = `${this.CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
+    const indexModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/routes.tsx`;
+    const indexReducerPath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/reducers.ts`;
 
     const errorMessage = path =>
       `${chalk.yellow('Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(
@@ -59,15 +59,18 @@ module.exports = class extends needleClientBase {
     const indexAddRoutePathRewriteFileModel = this.generateFileModel(
       indexModulePath,
       'jhipster-needle-add-route-path',
-      this.generator.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}${entityFileName}\`} component={${entityName}} />`)
+      this.generator.stripMargin(
+        `|<ErrorBoundaryRoute path={\`\${match.url}${
+          this.generator.microfrontend ? '/' : ''
+        }${entityFileName}\`} component={${entityName}} />`
+      )
     );
     this.addBlockContentToFile(indexAddRoutePathRewriteFileModel, errorMessage(indexModulePath));
 
     const reducerAddImportRewriteFileModel = this.generateFileModel(
       indexReducerPath,
       'jhipster-needle-add-reducer-import', // prettier-ignore
-      this.generator.stripMargin(`|// prettier-ignore
-                    |import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
+      this.generator.stripMargin(`import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
     );
     this.addBlockContentToFile(reducerAddImportRewriteFileModel, errorMessage(indexReducerPath));
 

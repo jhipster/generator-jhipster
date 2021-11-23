@@ -36,12 +36,12 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    './<%= CLIENT_MAIN_SRC_DIR %>app/index'
+    './<%= CLIENT_MAIN_SRC_DIR %>app/<%= microfrontend ? 'main' : 'index' %>'
   ],
   output: {
     path: utils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].bundle.js',
-    chunkFilename: 'app/[id].chunk.js'
+    filename: '[name].[contenthash:8].js',
+    chunkFilename: '[name].[chunkhash:8].chunk.js'
   },
   optimization: {
     moduleIds: 'named',
@@ -72,7 +72,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
     ]
   },
   devServer: {
-    hot: true,
+    hot: <%= !microfrontend %>,
     static: {
       directory: './<%= DIST_DIR %>',
     },
@@ -114,7 +114,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: `http${options.tls ? 's' : ''}://localhost:<%= devServerPort %>`,
+          target: `http${options.tls ? 's' : ''}://localhost:${options.watch ? '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
           ws: true,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
@@ -135,7 +135,6 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
     }, {
       reload: false
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new WebpackNotifierPlugin({
       title: '<%= humanizedBaseName %>',
       contentImage: path.join(__dirname, 'logo-jhipster.png')

@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation) { _%>
@@ -40,9 +41,10 @@ import passwordReset from 'app/modules/account/password-reset/password-reset.red
 import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
 <%_ } _%>
+import entitiesReducers from 'app/entities/reducers';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
-const rootReducer = {
+const rootReducer: ReducersMapObject = {
   authentication,
 <%_ if (enableTranslation) { _%>
   locale,
@@ -62,8 +64,13 @@ const rootReducer = {
   sessions,
   <%_ } _%>
 <%_ } _%>
+  loadingBar,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
-  loadingBar
+<%_ if (applicationTypeMonolith) { _%>
+  ...entitiesReducers,
+<%_ } else { _%>
+  <%= lowercaseBaseName %>: Object.keys(entitiesReducers).length > 0 ? combineReducers(entitiesReducers as ReducersMapObject) : undefined,
+<%_ } _%>
 };
 
 export default rootReducer;

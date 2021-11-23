@@ -1,0 +1,167 @@
+/*
+ * Microservice stack sample to test compilation and base microfrontend functionality.
+ *
+ * Test focus:
+ * - clientFramework: react with microfrontend
+ * - serviceDiscovery: eureka
+ * - authenticationType: oauth2
+ * - prodDatabaseType: mariadb
+ * - testFrameworks: cypress
+ *
+ * Imperative focus:
+ * - cacheProvider: infinispan
+ *
+ * Matrix:
+ * - reactive: true, false
+ * - buildTool: maven, gradle
+ */
+
+/* reactive, maven */ 
+application {
+  config {
+    applicationType gateway
+    authenticationType oauth2
+    baseName gateway
+    buildTool maven
+    clientFramework react
+    creationTimestamp 1617901618886
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.gateway
+    // TODO switch to mariadb
+    prodDatabaseType postgresql
+    serviceDiscoveryType eureka
+    testFrameworks [cypress]
+  }
+  entities *
+}
+
+/* imperative, maven */
+application {
+  config {
+    applicationType microservice
+    authenticationType oauth2
+    baseName blog
+    buildTool maven
+    cacheProvider infinispan
+    clientFramework react
+    creationTimestamp 1617901618887
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.blog
+    prodDatabaseType mariadb
+    serverPort 8081
+    serviceDiscoveryType eureka
+    testFrameworks [cypress]
+  }
+  entities Blog, Post, Tag
+}
+
+/* imperative, gradle, entitySuffix/dtoSuffix */
+application {
+  config {
+    applicationType microservice
+    authenticationType oauth2
+    baseName store,
+    buildTool gradle
+    cacheProvider infinispan
+    clientFramework react
+    creationTimestamp 1617901618888
+    dtoSuffix Rest
+    entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.store
+    prodDatabaseType mariadb
+    serverPort 8082
+    serviceDiscoveryType eureka
+    testFrameworks [cypress]
+  }
+  entities Product
+}
+
+/* reactive, gradle, entitySuffix/dtoSuffix */
+application {
+  config {
+    applicationType microservice
+    authenticationType oauth2
+    baseName notification,
+    buildTool gradle
+    clientFramework react
+    creationTimestamp 1617901618889
+    dtoSuffix Rest
+    entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.notification
+    // TODO switch to mariadb
+    prodDatabaseType postgresql
+    reactive true
+    serverPort 8083
+    serviceDiscoveryType eureka
+    testFrameworks [cypress]
+  }
+  entities Notification
+}
+
+@ChangelogDate(20210408164809)
+entity UserData {
+  address String
+}
+
+@ChangelogDate(20210408164810)
+entity Blog {
+  name String required minlength(3)
+  handle String required minlength(2)
+}
+
+@ChangelogDate(20210408164811)
+entity Post {
+  title String required
+}
+
+@ChangelogDate(20210408164812)
+entity Tag {
+  name String required minlength(2)
+}
+
+@ChangelogDate(20210408164813)
+entity Product {
+  title String required
+  price BigDecimal required min(0)
+  image ImageBlob
+}
+
+/*
+relationship OneToOne {
+  @Id UserData{user(login)} to User
+}
+*/
+
+@ChangelogDate(20210408164814)
+entity Notification {
+  title String required
+}
+
+relationship ManyToOne {
+  Post{blog(name)} to Blog
+}
+
+relationship ManyToMany {
+  Post{tag(name)} to Tag{post}
+}
+
+paginate Post, Tag with infinite-scroll
+paginate Product with pagination
+
+service Product with serviceClass
+service Notification with serviceImpl
+dto Blog, Post, Tag, Notification with mapstruct
+
+microservice Product with store
+microservice Blog, Post, Tag with blog
+microservice Notification with notification
+
+deployment {
+  deploymentType docker-compose,
+  appsFolders [gateway, store, blog, notification]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType eureka
+}

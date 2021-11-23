@@ -9,21 +9,23 @@ const commonOptions = { clientFramework: REACT };
 
 describe('JHipster react generator', () => {
   describe('microfrontend', () => {
-    it('should not succeed', async () => {
-      await expect(
-        helpers
-          .create(path.join(__dirname, '../../generators/client'))
-          .withOptions({
-            skipInstall: true,
-            auth: OAUTH2,
-            enableTranslation: true,
-            applicationType: MICROSERVICE,
-            nativeLanguage: 'en',
-            languages: ['fr', 'en'],
-            ...commonOptions,
-          })
-          .run()
-      ).rejects.toThrow("Client framework react doesn't support microfrontends");
+    let runResult;
+    before(async () => {
+      runResult = await helpers
+        .create(path.join(__dirname, '../../generators/client'))
+        .withOptions({
+          applicationType: MICROSERVICE,
+          skipInstall: true,
+          auth: OAUTH2,
+          enableTranslation: true,
+          nativeLanguage: 'en',
+          languages: ['fr', 'en'],
+          ...commonOptions,
+        })
+        .run();
+    });
+    it('should match generated files snapshot', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
 });

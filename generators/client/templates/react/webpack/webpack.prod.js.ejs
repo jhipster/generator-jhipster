@@ -36,12 +36,12 @@ module.exports = async () => webpackMerge(await commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
   entry: {
-    main: './<%= MAIN_SRC_DIR %>app/index'
+    main: './<%= MAIN_SRC_DIR %>app/<%= microfrontend ? 'main' : 'index' %>'
   },
   output: {
     path: utils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].[contenthash].bundle.js',
-    chunkFilename: 'app/[name].[chunkhash].chunk.js'
+    filename: '[name].[contenthash:8].js',
+    chunkFilename: '[name].[chunkhash:8].chunk.js'
   },
   module: {
     rules: [
