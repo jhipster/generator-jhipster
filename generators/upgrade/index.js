@@ -164,7 +164,7 @@ module.exports = class extends BaseGenerator {
       generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
     }
     const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
-    const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight ${skipChecksOption}`;
+    const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
     this.info(regenerateCmd);
     try {
       childProcess.execSync(regenerateCmd, { stdio: 'inherit' });

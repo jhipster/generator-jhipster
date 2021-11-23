@@ -168,6 +168,7 @@ const buildCommands = ({ program, commands = {}, envBuilder, env, loadCommand })
         const options = {
           ...program.opts(),
           ...cmdOptions,
+          commandName: cmdName,
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console
