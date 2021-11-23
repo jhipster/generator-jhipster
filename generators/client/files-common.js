@@ -67,7 +67,7 @@ const commonFiles = {
       templates: ['content/scss/rtl.scss'],
     },
     {
-      condition: generator => generator.microfrontend,
+      condition: generator => generator.microfrontend && generator.clientFrameworkVue,
       templates: ['webpack/webpack.microfrontend.js.jhi'],
     },
   ],

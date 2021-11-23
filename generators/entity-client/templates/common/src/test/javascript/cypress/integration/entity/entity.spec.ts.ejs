@@ -32,9 +32,15 @@ const skipCreateTest =
 const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 
 if (workaroundRelationshipReactivePostgress && sampleFields.length === 0) {
-  sampleFields.push(fields.find(f => !f.autoGenerate));
+  const sample = fields.find(f => !f.autoGenerate);
+  if (sample) {
+    sampleFields.push(sample);
+  }
 } else if (workaroundInstantReactiveMariaDB) {
-  sampleFields.push(...fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant'));
+  const samples = fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant');
+  if (samples.length > 0) {
+    sampleFields.push(...samples);
+  }
 }
 _%>
 
