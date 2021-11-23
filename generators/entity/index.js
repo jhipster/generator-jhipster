@@ -204,7 +204,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         const context = this.context;
 
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          context.skipClient = context.skipClient || !this.jhipsterConfig.microfrontend;
           context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
           if (!this.entityConfig.clientRootFolder) {
             context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;

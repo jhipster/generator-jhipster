@@ -157,11 +157,7 @@ module.exports = class extends BaseBlueprintGenerator {
       },
 
       replaceTranslations() {
-        if (
-          this.skipClient ||
-          (this.jhipsterConfig.microfrontend && this.jhipsterConfig.applicationType === 'gateway' && this.microserviceName)
-        )
-          return undefined;
+        if (this.skipClient || (this.microfrontend && this.applicationTypeGateway && this.microserviceName)) return undefined;
         return replaceTranslations.call(this);
       },
     };
