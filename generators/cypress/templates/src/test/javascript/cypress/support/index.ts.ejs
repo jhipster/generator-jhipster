@@ -46,7 +46,7 @@ Cypress.Cookies.defaults({
   preserve: ['XSRF-TOKEN','SESSION', 'JSESSIONID']
 })
 <%_ } _%>
-<%_ if (clientFrameworkReact || clientFrameworkVue) { _%>
+<%_ if (clientFrameworkReact) { _%>
 
 // https://docs.cypress.io/api/events/catalog-of-events#Uncaught-Exceptions
 Cypress.on('uncaught:exception', (err, runnable) => {

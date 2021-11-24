@@ -21,6 +21,7 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 
 <%_ let dayJsIncluded = false;
   for (field of fields.filter(field => !field.id)) { _%>
@@ -66,6 +67,7 @@ const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
 localVue.use(Router);
+localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-input-group', {});
 localVue.component('b-input-group-prepend', {});
@@ -102,7 +104,10 @@ describe('Component Tests', () => {
       <%_ if (relationship.otherEntityUser && authenticationTypeOauth2) { _%>
           userOAuth2Service: () => new UserOAuth2Service(),
       <%_ } else { _%>
-          <%= otherEntityName %>Service: () => new <%= otherEntityAngularName %>Service(),
+          <%= otherEntityName %>Service: () =>
+            sinon.createStubInstance<<%= otherEntityAngularName %>Service>(<%= otherEntityAngularName %>Service, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
       <%_ } _%>
     <%_ } _%>
     <%_ entitiesSeen.push(otherEntityAngularName); _%>
