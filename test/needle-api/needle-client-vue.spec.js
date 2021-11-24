@@ -124,30 +124,30 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
       `
-      {
-        path: 'entityFileName',
-        name: 'entityName',
-        component: entityName,
-        meta: { authorities: [Authority.USER] },
-      },
-      {
-        path: 'entityFileName/new',
-        name: 'entityNameCreate',
-        component: entityNameUpdate,
-        meta: { authorities: [Authority.USER] },
-      },
-      {
-        path: 'entityFileName/:entityInstanceId/edit',
-        name: 'entityNameEdit',
-        component: entityNameUpdate,
-        meta: { authorities: [Authority.USER] },
-      },
-      {
-        path: 'entityFileName/:entityInstanceId/view',
-        name: 'entityNameView',
-        component: entityNameDetails,
-        meta: { authorities: [Authority.USER] },
-      },
+    {
+      path: 'entityFileName',
+      name: 'entityName',
+      component: entityName,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/new',
+      name: 'entityNameCreate',
+      component: entityNameUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/:entityInstanceId/edit',
+      name: 'entityNameEdit',
+      component: entityNameUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/:entityInstanceId/view',
+      name: 'entityNameView',
+      component: entityNameDetails,
+      meta: { authorities: [Authority.USER] },
+    },
 `
     );
   });

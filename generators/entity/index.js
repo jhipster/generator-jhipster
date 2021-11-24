@@ -231,6 +231,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
               ? ''
               : this.entityConfig.microserviceName;
           }
+
+          if (this.jhipsterConfig.applications && !this.entityConfig.skipClient) {
+            const remoteConfig = this.jhipsterConfig.applications[this.entityConfig.microserviceName];
+            if (remoteConfig.clientFramework === 'vue') {
+              this.entityConfig.skipClient = true;
+            }
+          }
         }
       },
 

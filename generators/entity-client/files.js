@@ -479,7 +479,7 @@ function addToMenu() {
   if (!this.embedded) {
     this.addEntityToModule();
     this.addEntityToMenu(
-      this.entityStateName,
+      this.entityPage,
       this.enableTranslation,
       this.clientFramework,
       this.entityTranslationKeyMenu,

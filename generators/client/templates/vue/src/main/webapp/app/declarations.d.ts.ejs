@@ -29,7 +29,7 @@ declare const I18N_HASH: string;
   <%_ for (const remote of microfrontends) { _%>
 
 declare module '@<%= remote.lowercaseBaseName %>/entities-router' {
-  const _default: [];
+  const _default: unknown;
   export default _default;
 }
 

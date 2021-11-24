@@ -446,7 +446,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     return {
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        packageJsonConfigStorage.backend_port = this.serverPort;
+        packageJsonConfigStorage.backend_port = this.gatewayServerPort || this.serverPort;
         packageJsonConfigStorage.packaging = this.defaultPackaging;
         packageJsonConfigStorage.default_environment = this.defaultEnvironment;
       },
