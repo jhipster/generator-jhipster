@@ -160,7 +160,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.packageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': this.dependabotPackageJson.devDependencies['eslint-plugin-cypress'],
-            '@cypress/request': '2.88.7',
           },
         });
       },
