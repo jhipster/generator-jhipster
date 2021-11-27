@@ -54,7 +54,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw -ntp -P-webapp,dev verify $JHI_MAVEN_ENABLE_TESTCONTAINERS --batch-mode \
+    ./mvnw -ntp -P-webapp verify $JHI_MAVEN_ENABLE_TESTCONTAINERS --batch-mode \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.testcontainers=INFO \
         -Dlogging.level.org.zalando=OFF \
