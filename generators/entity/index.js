@@ -204,7 +204,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         const context = this.context;
 
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          context.skipClient = context.skipClient || !this.jhipsterConfig.microfrontend;
           context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
           if (!this.entityConfig.clientRootFolder) {
             context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
@@ -231,6 +230,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
             context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
               ? ''
               : this.entityConfig.microserviceName;
+          }
+
+          if (this.jhipsterConfig.applications && !this.entityConfig.skipClient) {
+            const remoteConfig = this.jhipsterConfig.applications[this.entityConfig.microserviceName];
+            if (remoteConfig.clientFramework === 'vue') {
+              this.entityConfig.skipClient = true;
+            }
           }
         }
       },

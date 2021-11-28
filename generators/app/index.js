@@ -373,7 +373,7 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          this.jhipsterConfig.skipClient = !this.jhipsterConfig.microfrontend;
+          this.jhipsterConfig.skipClient = !this.jhipsterConfig.clientFramework;
           this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
         }

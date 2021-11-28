@@ -24,7 +24,7 @@ const { DefinePlugin } = require('webpack');
 <&_ if (fragment.moduleFederationSection) { -&>
 <%_ if (applicationTypeGateway) { _%>
         remotes: {
-  <%_ for (const remote of remotes) { _%>
+  <%_ for (const remote of microfrontends) { _%>
           '@<%= remote.lowercaseBaseName %>': `<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js`,
   <%_ } _%>
         },

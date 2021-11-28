@@ -17,8 +17,8 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1',
     ...pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
-<%_ if (applicationTypeGateway) { _%>
-    '^@(<%= remotes.map(remote => remote.lowercaseBaseName).join('|') %>)/(.*)$': '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/$2',
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    '^@(<%= microfrontends.map(remote => remote.lowercaseBaseName).join('|') %>)/(.*)$': '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/$2',
 <%_ } _%>
   },
   reporters: [

@@ -2666,7 +2666,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.microfrontend) {
-      this.jhipsterConfig.microfrontend = options.microfrontend;
+      this.warning('Microfrontend option is deprecated.');
     }
 
     if (options.reactive !== undefined) {
@@ -2747,7 +2747,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.pages = config.pages;
     dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
     dest.withAdminUi = config.withAdminUi;
-    dest.microfrontend = config.microfrontend;
     dest.gatewayServerPort = config.gatewayServerPort;
 
     dest.capitalizedBaseName = config.capitalizedBaseName;
@@ -2776,6 +2775,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.applicationTypeGateway = dest.applicationType === GATEWAY;
     dest.applicationTypeMonolith = dest.applicationType === MONOLITH;
     dest.applicationTypeMicroservice = dest.applicationType === MICROSERVICE;
+
+    if (dest.remotes) {
+      dest.microfrontends = dest.remotes.filter(r => !r.skipClient);
+      dest.microfrontend =
+        (dest.applicationTypeMicroservice && !dest.skipClient) || (dest.applicationTypeGateway && dest.microfrontends.length > 0);
+    }
 
     // Application name modified, using each technology's conventions
     if (dest.baseName) {
