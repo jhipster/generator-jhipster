@@ -59,7 +59,7 @@
     "jest-junit": "13.0.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
-    "merge-jsons-webpack-plugin": "1.0.21",
+    "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.4.5",
     "postcss-loader": "6.2.0",
     "postcss-rtlcss": "3.5.0",
