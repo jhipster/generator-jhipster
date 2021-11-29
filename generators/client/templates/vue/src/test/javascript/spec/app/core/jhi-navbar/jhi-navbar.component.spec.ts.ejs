@@ -96,15 +96,19 @@ let wrapper: Wrapper<JhiNavbarClass>;
 
   it('logout should clear credentials', async () => {
     store.commit('authenticated', { login: 'test' });
-<%_ if (!authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     const logoutUrl = '/to-match';
     loginService.logout.mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
+<%_ } else if (!authenticationTypeJwt) { _%>
+    loginService.logout.mockReturnValue(Promise.resolve({}));
 <%_ } _%>
     await jhiNavbar.logout();
 
 <%_ if (!authenticationTypeJwt) { _%>
     expect(loginService.logout).toHaveBeenCalled();
+  <%_ if (authenticationTypeOauth2) { _%>
     expect(router.currentRoute.path).toBe(logoutUrl);
+  <%_ } _%>
 <%_ } else { _%>
     expect(jhiNavbar.authenticated).toBeFalsy();
 <%_ } _%>
