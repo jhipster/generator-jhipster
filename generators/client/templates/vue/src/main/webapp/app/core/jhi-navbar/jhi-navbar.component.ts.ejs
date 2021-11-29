@@ -76,7 +76,7 @@ export default class JhiNavbar extends Vue {
       return this.$router.push('/');
     }
 <%_ } _%>
-    return this.$router.currentRoute;
+    return Promise.resolve(this.$router.currentRoute);
   }
 
   public openLogin() : void {
