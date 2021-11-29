@@ -53,7 +53,7 @@ export default class JhiNavbar extends Vue {
   }
 <%_ } _%>
 
-  public logout() : void {
+  public logout() : Promise<any> {
 <%_ if (!authenticationTypeJwt) { _%>
     return this.loginService().logout().then(response => {
       this.$store.commit('logout');
@@ -73,9 +73,10 @@ export default class JhiNavbar extends Vue {
     sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     this.$store.commit('logout');
     if (this.$route.path !== '/') {
-      this.$router.push('/');
+      return this.$router.push('/');
     }
 <%_ } _%>
+    return this.$router.currentRoute;
   }
 
   public openLogin() : void {
