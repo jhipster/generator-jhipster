@@ -21,16 +21,13 @@
 _%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import { <% if (enableTranslation) { %>HttpClient, <% } %>HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import locale from '@angular/common/locales/<%= localeId %>';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
 import { CookieService } from 'ngx-cookie-service';
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 <%_ } _%>
 import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageService<% } %> } from 'ngx-webstorage';
 import * as dayjs from 'dayjs';
@@ -39,18 +36,17 @@ import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap'
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import './config/dayjs';
 import { SharedModule } from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslationModule } from 'app/shared/language/translation.module';
+<%_ } _%>
 import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './home/home.module';
-import { EntityRoutingModule } from './entities/entity-routing.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { fontAwesomeIcons } from './config/font-awesome-icons';
 import { httpInterceptorProviders } from 'app/core/interceptor/index';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
-import { translatePartialLoader, missingTranslationHandler } from './config/translation.config';
 <%_ } _%>
 import { MainComponent } from './layouts/main/main.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
@@ -67,24 +63,13 @@ import { ErrorComponent } from './layouts/error/error.component';
     SharedModule,
     HomeModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
-    EntityRoutingModule,
     AppRoutingModule,
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
     NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-', caseSensitive: true }),
 <%_ if (enableTranslation) { _%>
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: translatePartialLoader,
-        deps: [HttpClient],
-      },
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useFactory: missingTranslationHandler,
-      },
-    }),
+    TranslationModule,
 <%_ } _%>
   ],
   providers: [
@@ -112,7 +97,7 @@ import { ErrorComponent } from './layouts/error/error.component';
   bootstrap: [MainComponent],
 })
 export class AppModule {
-  constructor(applicationConfigService: ApplicationConfigService, iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, translateService: TranslateService, sessionStorageService: SessionStorageService<% } %>) {
+  constructor(applicationConfigService: ApplicationConfigService, iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig) {
 <%_ if (applicationTypeMicroservice) { _%>
     applicationConfigService.setMicrofrontend();
 <%_ } _%>
@@ -120,11 +105,5 @@ export class AppModule {
     registerLocaleData(locale);
     iconLibrary.addIcons(...fontAwesomeIcons);
     dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
-<%_ if (enableTranslation) { _%>
-    translateService.setDefaultLang('<%= nativeLanguage %>');
-    // if user have changed language and navigates away from the application and back to the application then use previously choosed language
-    const langKey = sessionStorageService.retrieve('locale') ?? '<%= nativeLanguage %>';
-    translateService.use(langKey);
-<%_ } _%>
   }
 }

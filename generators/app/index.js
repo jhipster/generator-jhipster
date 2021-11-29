@@ -250,8 +250,13 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
     });
 
     this.option('microfrontend', {
-      desc: 'Use experimental microfrontend support',
+      desc: 'Force to generate experimental microfrontend support',
       type: Boolean,
+    });
+
+    this.option('test-frameworks', {
+      desc: 'Test frameworks to be generated',
+      type: Array,
     });
 
     this.option('reactive', {

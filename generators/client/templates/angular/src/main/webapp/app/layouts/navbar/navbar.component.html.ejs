@@ -60,6 +60,26 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+<%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+          <li *ngFor="let entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems">
+            <a
+              class="dropdown-item"
+              [routerLink]="entityNavbarItem.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span
+    <%_ if (enableTranslation) { _%>
+              [jhiTranslate]="entityNavbarItem.translationKey"
+    <%_ } _%>
+              >{{entityNavbarItem.name}}</span>
+            </a>
+          </li>
+  <%_ } _%>
+<%_ } _%>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>
