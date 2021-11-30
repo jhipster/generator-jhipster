@@ -29,6 +29,7 @@ const { GENERATOR_APP } = require('../generator-list');
 const { JHIPSTER_CONFIG_DIR, GENERATOR_JHIPSTER } = require('../generator-constants');
 const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
+const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = OptionNames;
 const {
@@ -373,7 +374,10 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
 
         this.configOptions.logo = false;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          this.jhipsterConfig.skipClient = !this.jhipsterConfig.clientFramework;
+          this.jhipsterConfig.skipClient =
+            this.jhipsterConfig.skipClient ||
+            !this.jhipsterConfig.clientFramework ||
+            this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
           this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
         }
