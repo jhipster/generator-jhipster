@@ -1316,20 +1316,22 @@ const baseServerFiles = {
         // Create Cucumber test files
         { file: 'package/cucumber/CucumberIT.java', renameTo: generator => `${generator.testDir}cucumber/CucumberIT.java` },
         {
-          file: 'package/cucumber/stepdefs/StepDefs.java',
+          file: 'package/cucumber/steps/StepDefs.java',
           renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java`,
         },
         {
           file: 'package/cucumber/CucumberTestContextConfiguration.java',
           renameTo: generator => `${generator.testDir}cucumber/CucumberTestContextConfiguration.java`,
         },
-        { file: '../features/gitkeep', noEjs: true },
       ],
     },
     {
       condition: generator => generator.cucumberTests,
       path: SERVER_TEST_RES_DIR,
-      templates: ['cucumber.properties'],
+      templates: [
+        'junit-platform.properties',
+        { file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true },
+      ],
     },
     {
       condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== OAUTH2,
@@ -1635,10 +1637,19 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/cucumber/stepdefs/UserStepDefs.java',
-          renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java`,
+          file: 'package/cucumber/steps/UserStepDefs.java',
+          renameTo: generator => `${generator.testDir}cucumber/steps/UserStepDefs.java`,
         },
-        '../features/user/user.feature',
+      ],
+    },
+    {
+      condition: generator => !generator.skipUserManagement && generator.cucumberTests,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'package/features/user/user.feature',
+          renameTo: generator => `${generator.testDir}cucumber/user.feature`,
+        },
       ],
     },
     {

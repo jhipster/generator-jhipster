@@ -182,16 +182,29 @@ task integrationTest(type: Test) {
 <%_ } _%>
 }
 <%_ if (cucumberTests) { _%>
+tasks {
 
-task cucumberTest(type: Test) {
-    description = "Execute cucumber BDD tests."
-    group = "verification"
-    include "**/*CucumberIT*"
+    val consoleLauncherTest by registering(JavaExec::class) {
+        dependsOn(testClasses)
+        val reportsDir = file("$buildDir/test-results")
+        outputs.dir(reportsDir)
+        classpath = sourceSets["test"].runtimeClasspath
+        main = "org.junit.platform.console.ConsoleLauncher"
+        args("--scan-classpath")
+        args("--include-engine", "cucumber")
+        args("--reports-dir", reportsDir)
+    }
+    cucumberTest(type: Test) {
+        dependsOn(consoleLauncherTest)
+        description = "Execute cucumber BDD tests."
+        group = "verification"
+        include "**/*CucumberIT*"
 
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.enabled = false
+        // uncomment if the tests reports are not generated
+        // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+        // ignoreFailures true
+        reports.html.enabled = false
+    }
 }
 
 check.dependsOn cucumberTest
@@ -592,9 +605,11 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:database-commons"
 <%_ } _%>
 <%_ if (cucumberTests) { _%>
-    testImplementation "io.cucumber:cucumber-junit"
+    testImplementation "org.junit.platform:junit-platform-console"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
+    testImplementation "org.testng:testng"
 <%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"

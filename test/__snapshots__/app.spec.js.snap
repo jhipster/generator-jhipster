@@ -13299,12 +13299,6 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/features/gitkeep": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/features/user/user.feature": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
     "stateCleared": "modified",
   },
@@ -13335,7 +13329,7 @@ Object {
   "src/test/java/com/mycompany/myapp/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java": Object {
+  "src/test/java/com/mycompany/myapp/cucumber/steps/UserStepDefs.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
@@ -13398,16 +13392,22 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/com/mycompany/myapp/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/mycompany/myapp/cucumber/user.feature": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testcontainers.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/cucumber.properties": Object {
+  "src/test/resources/i18n/messages_en.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
