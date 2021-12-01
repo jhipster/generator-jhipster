@@ -1010,6 +1010,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
     if (context.options.skipServer !== undefined) {
       this.entityConfig.skipServer = context.options.skipServer;
     }
+    // in case we are regenerating existing entities, and searchengine is not specified on
+    // entity file it shall be threated as if  search engine is set to false.
+    // also if search engine is set to false on the top level it shall not generate search artifacts for
+    // individual entities
+    if (this.context.entityExisted && (this.entityConfig.searchEngine === undefined || !this.jhipsterConfig.searchEngine)) {
+      this.entityConfig.searchEngine = false;
+    }
     dest.experimental = context.options.experimental;
 
     dest.entityTableName = generator.getTableName(context.options.tableName || dest.name);
