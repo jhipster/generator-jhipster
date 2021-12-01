@@ -61,79 +61,79 @@
           return '';
         }
 <%_ } _%>
-
+        const baseUrl = '/v3/api-docs';
         var urls = [];
-        axios.get('/swagger-resources').then(function (response) {
-          if (response.data && response.data.forEach) {
-            response.data.forEach(function (resource) {
-              urls.push({ name: resource.name, url: resource.location });
-            });
-          }
-        }, () => {}).then(() => {
-          if (urls.length === 0) {
-        	urls.push({ name: '<%= baseName %>', url: '/v3/api-docs' });
-          }
-
-          urls.sort(function (a, b) {
-            var x = a.name.toLowerCase(),
-              y = b.name.toLowerCase();
-            if (x.includes('(default)')) return -1;
-            if (y.includes('(default)')) return 1;
-            if (x.includes('(management)')) return -1;
-            if (y.includes('(management)')) return 1;
-            return x < y ? -1 : x > y ? 1 : 0;
-          });
-
-          // Build a system
-          var ui = SwaggerUIBundle({
-            urls: urls,
-            dom_id: '#swagger-ui',
-            deepLinking: true,
-            filter: true,
-            layout: 'StandaloneLayout',
-            withCredentials: true,
-            presets: [
-              SwaggerUIBundle.presets.apis,
-              SwaggerUIStandalonePreset
-            ],
-            plugins: [
-              SwaggerUIBundle.plugins.DownloadUrl,
-              AlwaysEnableTryItOutPlugin
-            ],
-<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
-            requestInterceptor: function(req) {
-              req.headers['X-XSRF-TOKEN'] = getCSRF();
-              // Remove the sample Swagger UI request body if present
-              if (
-                req.method === 'GET' &&
-                req.body === '{"additionalProp1":"string","additionalProp2":"string","additionalProp3":"string"}'
-              ) {
-                req.body = undefined;
+        axios
+          .get('/management/jhiopenapigroups')
+          .then(
+            function (response) {
+              if (response.data) {
+                for ({ group, description } of response.data) {
+                  urls.push({ name: description, url: `${baseUrl}/${group}` });
+                }
               }
-              return req;
             },
+            () => {}
+          )
+          .then(() => {
+            if (urls.length === 0) {
+              urls.push({ name: 'openapi', url: baseUrl });
+            }
+
+            urls.sort(function (a, b) {
+              var x = a.name.toLowerCase(),
+                y = b.name.toLowerCase();
+              if (x.includes('(default)')) return -1;
+              if (y.includes('(default)')) return 1;
+              if (x.includes('(management)')) return -1;
+              if (y.includes('(management)')) return 1;
+              return x < y ? -1 : x > y ? 1 : 0;
+            });
+
+            // Build a system
+            var ui = SwaggerUIBundle({
+              urls: urls,
+              dom_id: '#swagger-ui',
+              deepLinking: true,
+              filter: true,
+              layout: 'StandaloneLayout',
+              withCredentials: true,
+              presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+              plugins: [SwaggerUIBundle.plugins.DownloadUrl, AlwaysEnableTryItOutPlugin],
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+              requestInterceptor: function(req) {
+                req.headers['X-XSRF-TOKEN'] = getCSRF();
+                // Remove the sample Swagger UI request body if present
+                if (
+                  req.method === 'GET' &&
+                  req.body === '{"additionalProp1":"string","additionalProp2":"string","additionalProp3":"string"}'
+                ) {
+                  req.body = undefined;
+                }
+                return req;
+              },
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-            requestInterceptor: function (req) {
-              var authToken =
-                localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
-              if (authToken) {
+              requestInterceptor: function (req) {
+                var authToken =
+                  localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
+                if (authToken) {
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-                authToken = JSON.parse(authToken);
+                  authToken = JSON.parse(authToken);
 <%_ } _%>
-                req.headers['Authorization'] = 'Bearer ' + authToken;
-              }
-              // Remove the sample Swagger UI request body if present
-              if (
-                req.method === 'GET' &&
-                req.body === '{"additionalProp1":"string","additionalProp2":"string","additionalProp3":"string"}'
-              ) {
-                req.body = undefined;
-              }
-              return req;
-            },
+                  req.headers['Authorization'] = 'Bearer ' + authToken;
+                }
+                // Remove the sample Swagger UI request body if present
+                if (
+                  req.method === 'GET' &&
+                  req.body === '{"additionalProp1":"string","additionalProp2":"string","additionalProp3":"string"}'
+                ) {
+                  req.body = undefined;
+                }
+                return req;
+              },
 <%_ } _%>
-          });
+            });
 
           window.ui = ui;
         });

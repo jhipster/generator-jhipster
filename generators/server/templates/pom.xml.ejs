@@ -329,7 +329,11 @@
 <%_ } _%>
         <dependency>
             <groupId>org.springdoc</groupId>
+<%_ if (reactive) { _%>
+            <artifactId>springdoc-openapi-webflux-core</artifactId>
+<%_ } else { _%>
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
+<%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
