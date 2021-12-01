@@ -20,9 +20,9 @@ package <%= entityAbsolutePackage %>.service.dto;
 
 import java.util.Objects;
 <%_ if (typeof javadoc !== 'undefined') { _%>
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.ApiModel;
 <%_ } if (importApiModelProperty) { _%>
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.ApiModelProperty;
 <%_ } _%>
 <%_ if (fieldsContainInstant) { _%>
 import java.time.Instant;
@@ -68,7 +68,7 @@ import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
  * A DTO for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity.
  */
 <%_ if (typeof javadoc !== 'undefined') { _%>
-@ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
+@Schema(description = "<%- formatAsApiDescription(javadoc) %>")
 <%_ } _%>
 public class <%= dtoClass %> implements Serializable {
 
@@ -85,7 +85,7 @@ _%>
     <%_ }
   } _%>
   <%_ if (reference.doc) { _%>
-    @ApiModelProperty(value = "<%- formatAsApiDescription(reference.doc) %>"<% if (required) { %>, required = true<% } %>)
+    @Schema(value = "<%- formatAsApiDescription(reference.doc) %>"<% if (required) { %>, required = true<% } %>)
   <%_ } _%>
   <%_ if (field && field.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob

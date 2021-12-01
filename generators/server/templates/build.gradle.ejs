@@ -539,9 +539,8 @@ dependencies {
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
     <%_ } _%>
-    implementation ("io.springfox:springfox-oas")
-    implementation ("io.springfox:springfox-swagger2")
-    implementation "io.springfox:springfox-bean-validators"
+    implementation ("org.springdoc:springdoc-openapi-webmvc-core")
+    implementation ("org.springdoc:springdoc-openapi-data-rest")
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
         <%_ if (!reactive) { _%>

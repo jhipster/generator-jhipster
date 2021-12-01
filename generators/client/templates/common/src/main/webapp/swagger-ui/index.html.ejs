@@ -64,9 +64,15 @@
 
         var urls = [];
         axios.get('/swagger-resources').then(function (response) {
-          response.data.forEach(function (resource) {
-            urls.push({ name: resource.name, url: resource.location });
-          });
+          if (response.data && response.data.forEach) {
+            response.data.forEach(function (resource) {
+              urls.push({ name: resource.name, url: resource.location });
+            });
+          }
+        }, () => {}).then(() => {
+          if (urls.length === 0) {
+        	urls.push({ name: '<%= baseName %>', url: '/v3/api-docs' });
+          }
 
           urls.sort(function (a, b) {
             var x = a.name.toLowerCase(),
