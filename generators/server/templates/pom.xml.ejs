@@ -948,16 +948,6 @@
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
-<%_ if (cucumberTests) { _%>
-        <testResources>
-            <testResource>
-                <directory><%= SERVER_TEST_RES_DIR %></directory>
-            </testResource>
-            <testResource>
-                <directory><%= TEST_DIR %>features</directory>
-            </testResource>
-        </testResources>
-<%_ } _%>
         <plugins>
 <%_ if (cucumberTests) { _%>
             <plugin>
@@ -1046,7 +1036,7 @@
                     <executions>
                         <execution>
                             <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
-                            <id>CLI-test</id>
+                            <id>prepare cucumber feature files</id>
                             <phase>integration-test</phase>
                             <goals>
                                 <goal>run</goal>
