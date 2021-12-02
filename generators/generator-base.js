@@ -2673,6 +2673,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.reactive = options.reactive;
     }
 
+    if (options.enableSwaggerCodegen !== undefined) {
+      this.jhipsterConfig.enableSwaggerCodegen = options.enableSwaggerCodegen;
+    }
+
     if (options.clientPackageManager) {
       this.jhipsterConfig.clientPackageManager = options.clientPackageManager;
     }

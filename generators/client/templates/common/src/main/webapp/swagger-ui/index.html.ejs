@@ -48,6 +48,7 @@
           },
         };
       };
+
       window.onload = function () {
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
         function getCSRF() {
@@ -60,11 +61,26 @@
           }
           return '';
         }
+<%_ } else { _%>
+        const getBearerToken = () => {
+          var authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+          if (authToken) {
+<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
+            authToken = JSON.parse(authToken);
 <%_ } _%>
+            return `Bearer ${authToken}`;
+          }
+          return null;
+        };
+        const config = {
+          headers: { Authorization: getBearerToken() },
+        };
+<%_ } _%>
+
         const baseUrl = '/v3/api-docs';
         var urls = [];
         axios
-          .get('/management/jhiopenapigroups')
+          .get('/management/jhiopenapigroups'<% if (authenticationTypeJwt) { %>, config<% } %>)
           .then(
             function (response) {
               if (response.data) {
@@ -115,14 +131,7 @@
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
               requestInterceptor: function (req) {
-                var authToken =
-                  localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
-                if (authToken) {
-<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-                  authToken = JSON.parse(authToken);
-<%_ } _%>
-                  req.headers['Authorization'] = 'Bearer ' + authToken;
-                }
+                req.headers['Authorization'] = getBearerToken();
                 // Remove the sample Swagger UI request body if present
                 if (
                   req.method === 'GET' &&
