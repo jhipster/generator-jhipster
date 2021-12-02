@@ -182,29 +182,28 @@ task integrationTest(type: Test) {
 <%_ } _%>
 }
 <%_ if (cucumberTests) { _%>
-tasks {
 
-    val consoleLauncherTest by registering(JavaExec::class) {
-        dependsOn(testClasses)
-        val reportsDir = file("$buildDir/test-results")
-        outputs.dir(reportsDir)
-        classpath = sourceSets["test"].runtimeClasspath
-        main = "org.junit.platform.console.ConsoleLauncher"
-        args("--scan-classpath")
-        args("--include-engine", "cucumber")
-        args("--reports-dir", reportsDir)
-    }
-    cucumberTest(type: Test) {
-        dependsOn(consoleLauncherTest)
-        description = "Execute cucumber BDD tests."
-        group = "verification"
-        include "**/*CucumberIT*"
+task consoleLauncherTest(type: JavaExec) {
+    dependsOn(testClasses)
+    String cucumberReportsDir = file("$buildDir/reports/tests")
+    outputs.dir(reportsDir)
+    classpath = sourceSets["test"].runtimeClasspath
+    main = "org.junit.platform.console.ConsoleLauncher"
+    args("--scan-classpath")
+    args("--include-engine", "cucumber")
+    args("--reports-dir", cucumberReportsDir)
+}
 
-        // uncomment if the tests reports are not generated
-        // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-        // ignoreFailures true
-        reports.html.enabled = false
-    }
+task cucumberTest(type: Test) {
+    dependsOn(consoleLauncherTest)
+    description = "Execute cucumber BDD tests."
+    group = "verification"
+    include "**/*CucumberIT*"
+
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.enabled = false
 }
 
 check.dependsOn cucumberTest
