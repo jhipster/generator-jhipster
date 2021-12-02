@@ -126,7 +126,7 @@ public class PublicUserResource {
     @GetMapping("/users")
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
-    public ResponseEntity<List<<%= asDto('User') %>>> getAllPublicUsers(Pageable pageable) {
+    public ResponseEntity<List<<%= asDto('User') %>>> getAllPublicUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all public User names");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -139,7 +139,7 @@ public class PublicUserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
   <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllPublicUsers(ServerHttpRequest request, Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllPublicUsers(ServerHttpRequest request, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all public User names");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
