@@ -88,7 +88,7 @@ if (project.hasProperty("gae")) {
     appengineStage.dependsOn thinResolve
 }
 
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice') { _%>
+<%_ if (serviceDiscoveryType || applicationTypeGateway || applicationTypeMicroservice) { _%>
 if (project.hasProperty("zipkin")) {
     apply from: "gradle/zipkin.gradle"
 }
@@ -158,13 +158,13 @@ task integrationTest(type: Test) {
         events 'FAILED', 'SKIPPED'
     }
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     if (project.hasProperty('testcontainers')) {
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
         environment 'spring.profiles.active', 'testcontainers'
-        <%_ } else { _%>
+  <%_ } else { _%>
         environment 'SPRING_PROFILES_ACTIVE', 'testcontainers'
-        <%_ } _%>
+  <%_ } _%>
     }
 <%_ } _%>
 
@@ -215,7 +215,7 @@ task cucumberTestReport(type: TestReport) {
 }
 
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 if (!project.hasProperty("runList")) {
     project.ext.runList = "main"
 }
@@ -225,28 +225,28 @@ project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/chan
 liquibase {
     activities {
         main {
-            driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'h2Disk') { %><%- getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'oracle') { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
-            username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
-            password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
+            driver "<% if (devDatabaseTypeMysql) { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseTypeMariadb) { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseTypePostgres) { %>org.postgresql.Driver<% } else if (devDatabaseTypeH2Disk) { %>org.h2.Driver<% } else if (devDatabaseTypeOracle) { %>oracle.jdbc.OracleDriver<% } %>"
+            url "<% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
+            username "<% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %>"
+            password "<% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %>"
             changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
-            defaultSchemaName "<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>"
+            defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
             logLevel "debug"
             classpath "<%= SERVER_MAIN_RES_DIR %>"
         }
         diffLog {
-            driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'h2Disk') { %><%- getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'oracle') { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
-            username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
-            password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
+            driver "<% if (devDatabaseTypeMysql) { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseTypeMariadb) { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseTypePostgres) { %>org.postgresql.Driver<% } else if (devDatabaseTypeH2Disk) { %>org.h2.Driver<% } else if (devDatabaseTypeOracle) { %>oracle.jdbc.OracleDriver<% } %>"
+            url "<% if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypePostgres || devDatabaseTypeMssql) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeH2Disk) { %><%- getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseTypeOracle) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
+            username "<% if (devDatabaseTypeMysql) { %>root<% } else if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { %><%= baseName %><% } else if (devDatabaseTypeMssql) { %>SA<% } %>"
+            password "<% if (devDatabaseTypeMssql) { %>yourStrong(!)Password<% } %>"
             changeLogFile project.ext.diffChangelogFile
-            referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseType === 'postgresql') { %>tech.jhipster.domain.util.FixedPostgreSQL10Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
-            defaultSchemaName "<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>"
+            referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<% if (devDatabaseTypeMysql) { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseTypeMariadb) { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseTypePostgres) { %>tech.jhipster.domain.util.FixedPostgreSQL10Dialect<% } else if (devDatabaseTypeH2Disk) { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseTypeOracle) { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseTypeMssql) { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+            defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
             logLevel "debug"
             classpath "$buildDir/classes/java/main"
-            <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
             excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
-            <%_ } _%>
+<%_ } _%>
         }
     }
 
@@ -308,122 +308,122 @@ dependencies {
     implementation group: "tech.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
-    <%_ // This is useful for major Spring Boot migration
-    if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
+<%_ // This is useful for major Spring Boot migration
+if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     runtime "org.springframework.boot:spring-boot-properties-migrator"
-    <%_ } _%>
+<%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
-    <%_ if (cacheProvider !== 'no') { _%>
+<%_ if (!cacheProviderNo) { _%>
     implementation "org.springframework.boot:spring-boot-starter-cache"
-    <%_ } _%>
+<%_ } _%>
     implementation "io.dropwizard.metrics:metrics-core"
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
-        <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-    <%_ if (cacheProvider === 'hazelcast') { _%>
+<%_ if (cacheProviderHazelcast) { _%>
     implementation "com.hazelcast:hazelcast"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast && enableHibernateCache) { _%>
     implementation "com.hazelcast:hazelcast-hibernate53"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'hazelcast') { _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
     implementation "com.hazelcast:hazelcast-spring"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') { _%>
+<%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
     implementation "org.infinispan:infinispan-hibernate-cache-v53"
     implementation "org.infinispan:infinispan-spring-boot-starter-embedded"
     implementation "org.infinispan:infinispan-core"
     implementation "org.infinispan:infinispan-jcache"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'memcached') { _%>
+<%_ } _%>
+<%_ if (cacheProviderMemcached) { _%>
     implementation "com.google.code.simple-spring-memcached:spring-cache"
     implementation "com.google.code.simple-spring-memcached:xmemcached-provider"
     implementation "com.googlecode.xmemcached:xmemcached"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'redis') { _%>
+<%_ } _%>
+<%_ if (cacheProviderRedis) { _%>
     implementation "org.redisson:redisson"
-        <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'redis'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
     implementation "javax.cache:cache-api"
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
-        <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
-        <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
     implementation "org.apache.commons:commons-lang3"
-    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase' || applicationType === 'gateway') { _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
     implementation "commons-codec:commons-codec"
-    <%_ } _%>
-    <%_ if (enableSwaggerCodegen) { _%>
+<%_ } _%>
+<%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
-    <%_ } _%>
+<%_ } _%>
     implementation "javax.transaction:javax.transaction-api"
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
     implementation "org.lz4:lz4-java"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache') { _%>
+<%_ } _%>
+<%_ if (cacheProviderEhCache) { _%>
     implementation "org.ehcache:ehcache"
-        <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (cacheProvider === 'caffeine') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (cacheProviderCaffeine) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
     implementation "com.github.ben-manes.caffeine:jcache:${caffeineVersion}"
     implementation "com.typesafe:config:${typesafeConfigVersion}"
-        <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
-        <%_ if (!reactive) { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (!reactive) { _%>
     implementation "org.hibernate:hibernate-entitymanager"
-        <%_ } _%>
+  <%_ } _%>
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
     liquibaseRuntime sourceSets.main.compileClasspath
-        <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-mail"
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-    <%_ if (databaseType === 'sql') { _%>
-        <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-        <%_ } else { _%>
+  <%_ } else { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-    <%_ } _%>
-    <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb' && reactive) { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb && reactive) { _%>
     // Mongock doesn't support reactive yet, so this dependency is necessary.
     // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     // This is done here explicitly as dependency resolution seems to have changed recently such that the validation starter
@@ -431,97 +431,97 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation"
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mysql') { _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeMysql) { _%>
     testImplementation "org.testcontainers:mysql"
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mariadb') { _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeMariadb) { _%>
     testImplementation "org.testcontainers:mariadb"
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypePostgres) { _%>
     testImplementation "org.testcontainers:postgresql"
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeMssql) { _%>
     testImplementation "org.testcontainers:mssqlserver"
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'oracle' && !reactive) { _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeOracle && !reactive) { _%>
     testImplementation "org.testcontainers:oracle-xe"
-    <%_ } _%>
-    <%_ if (messageBroker === 'kafka') { _%>
-        <%_ if (!reactive) { _%>
+<%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+  <%_ if (!reactive) { _%>
     implementation "org.apache.kafka:kafka-clients"
-        <%_ } else { _%>
+  <%_ } else { _%>
     implementation "io.projectreactor.kafka:reactor-kafka"
-        <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: "spring-boot-starter-tomcat"
     }
-    <%_ if (!reactive) { _%>
+<%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-undertow"
-    <%_ } _%>
-    <%_ if (reactive) { _%>
+<%_ } _%>
+<%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "io.netty:netty-tcnative-boringssl-static"
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.boot:spring-boot-starter-websocket"
-    <%_ } _%>
+<%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
     implementation "com.datastax.oss:java-driver-mapper-runtime"
-    <%_ } _%>
-    <%_ if (applicationType === 'gateway') { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
-    <%_ } _%>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
+<%_ } _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
-    <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
-    <%_ } else { _%>
+  <%_ } else { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
-    <%_ } _%>
+  <%_ } _%>
     implementation "org.springframework.retry:spring-retry"
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (serviceDiscoveryType) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+  <%_ if (serviceDiscoveryEureka) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
     implementation "org.springframework.cloud:spring-cloud-starter-config"
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
+  <%_ } _%>
+  <%_ if (serviceDiscoveryConsul) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
-    <%_ } _%>
-    <%_ if (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive) { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway && authenticationTypeOauth2 && reactive) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-security"
-    <%_ } _%>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
+<%_ } _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
-    <%_ } _%>
-    <%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
     implementation "com.playtika.reactivefeign:feign-reactor-webclient"
     implementation "com.playtika.reactivefeign:feign-reactor-cloud"
     implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
-    <%_ } _%>
+<%_ } _%>
     implementation "org.springframework.security:spring-security-config"
-    <%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
+<%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
     implementation "org.springframework.security:spring-security-data"
-    <%_ } _%>
+<%_ } _%>
     implementation "org.springframework.security:spring-security-web"
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
-    <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
-    <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
     implementation "io.jsonwebtoken:jjwt-api"
     if (!project.hasProperty("gae")) {
         runtimeOnly "io.jsonwebtoken:jjwt-impl"
@@ -530,108 +530,108 @@ dependencies {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
     }
-    <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
     implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
     implementation "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver"
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
-    <%_ } _%>
+<%_ } _%>
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
-    <%_ if (prodDatabaseType === 'mysql') { _%>
+<%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
-        <%_ } else { _%>
+  <%_ } else { _%>
     implementation "dev.miku:r2dbc-mysql"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypePostgres) { _%>
     implementation "org.postgresql:postgresql"
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     liquibaseRuntime "org.postgresql:postgresql"
-        <%_ } else { _%>
+  <%_ } else { _%>
     implementation "io.r2dbc:r2dbc-postgresql"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mariadb') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeMariadb) { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
-        <%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
-        <%_ } else { _%>
+  <%_ } else { _%>
         implementation "org.mariadb:r2dbc-mariadb"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeMssql) { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
-        <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
-        <%_ } _%>
+  <%_ } _%>
     liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
-    <%_ } _%>
+<%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxbRuntimeVersion}"
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
     annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"
-    <%_ } _%>
+<%_ } _%>
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
-    <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
     testImplementation ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: "org.slf4j")
     }
     testImplementation "org.testcontainers:database-commons"
-    <%_ } _%>
-    <%_ if (cucumberTests) { _%>
+<%_ } _%>
+<%_ if (cucumberTests) { _%>
     testImplementation "io.cucumber:cucumber-junit"
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
-    <%_ } _%>
+<%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
     testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
-    <%_ } _%>
+<%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
-    <%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseTypeMongodb) { _%>
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
-    <%_ } _%>
-    <%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
-    <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
     testImplementation "com.h2database:h2"
-        <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     testImplementation "io.r2dbc:r2dbc-h2"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-        <%_ if (!reactive) { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+  <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
-        <%_ } else { _%>
+  <%_ } else { _%>
     implementation "io.r2dbc:r2dbc-h2"
-        <%_ } _%>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'oracle') { _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypeOracle) { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"
     liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
-    <%_ } _%>
-    <%_ if (messageBroker === 'kafka') { _%>
+<%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
     testImplementation "org.testcontainers:kafka"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'redis') { %>
+<%_ } _%>
+<%_ if (cacheProviderRedis) { %>
     testImplementation "org.testcontainers:testcontainers"
-    <%_ } _%>
+<%_ } _%>
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
