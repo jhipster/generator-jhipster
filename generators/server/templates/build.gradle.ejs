@@ -540,7 +540,6 @@ dependencies {
     implementation "com.couchbase.client:java-client"
     <%_ } _%>
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
-    implementation ("org.springdoc:springdoc-openapi-data-rest")
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
         <%_ if (!reactive) { _%>
