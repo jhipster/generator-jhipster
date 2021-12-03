@@ -1637,8 +1637,8 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/cucumber/steps/UserStepDefs.java',
-          renameTo: generator => `${generator.testDir}cucumber/steps/UserStepDefs.java`,
+          file: 'package/cucumber/stepdefs/UserStepDefs.java',
+          renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java`,
         },
       ],
     },
