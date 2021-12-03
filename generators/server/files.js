@@ -1316,7 +1316,7 @@ const baseServerFiles = {
         // Create Cucumber test files
         { file: 'package/cucumber/CucumberIT.java', renameTo: generator => `${generator.testDir}cucumber/CucumberIT.java` },
         {
-          file: 'package/cucumber/steps/StepDefs.java',
+          file: 'package/cucumber/stepdefs/StepDefs.java',
           renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java`,
         },
         {

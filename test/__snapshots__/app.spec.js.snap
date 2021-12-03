@@ -13329,7 +13329,7 @@ Object {
   "src/test/java/com/mycompany/myapp/cucumber/stepdefs/StepDefs.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/cucumber/steps/UserStepDefs.java": Object {
+  "src/test/java/com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": Object {
