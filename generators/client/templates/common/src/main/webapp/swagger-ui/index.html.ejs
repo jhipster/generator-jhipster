@@ -61,7 +61,7 @@
           }
           return '';
         }
-        const config = {};
+        const axiosConfig = { timeout: 5000 };
 <%_ } else { _%>
         const getBearerToken = () => {
           var authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
@@ -73,15 +73,15 @@
           }
           return null;
         };
-        const config = {
-          headers: { Authorization: getBearerToken() },
+        const axiosConfig = {
+          headers: { timeout: 5000, Authorization: getBearerToken() },
         };
 <%_ } _%>
 
         const baseUrl = '/v3/api-docs';
         let services;
         try {
-          const response = await axios.get('/management/health/discoveryComposite');
+          const response = await axios.get('/management/health/discoveryComposite', axiosConfig);
           services = response.data?.components?.discoveryClient?.details?.services;
           console.log(`Services`, services);
         } catch (error) {
@@ -94,7 +94,7 @@
             urls = (
               await Promise.allSettled(
                 services.map(async service => {
-                  const response = await axios.get(`/services/${service}/management/jhiopenapigroups`, { timeout: 5000, ...config });
+                  const response = await axios.get(`/services/${service}/management/jhiopenapigroups`, axiosConfig);
                   if (Array.isArray(response.data)) {
                     return response.data.map(({ group, description }) => ({
                       name: description,
@@ -110,7 +110,7 @@
               .filter(Array.isArray)
               .flat();
           } else {
-            const response = await axios.get('/management/jhiopenapigroups');
+            const response = await axios.get('/management/jhiopenapigroups', axiosConfig);
             if (Array.isArray(response.data)) {
               urls = response.data.map(({ group, description }) => ({ name: description, url: `${baseUrl}/${group}` }));
             }
