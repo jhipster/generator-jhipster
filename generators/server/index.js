@@ -432,6 +432,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanupServer() {
+        if (this.isJhipsterVersionLessThan('7.4.2')) {
+          this.removeFile(`${this.javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
+          this.removeFile(`${this.testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+        }
+      },
       ...writeFiles(),
       ...super._missingPostWriting(),
     };
