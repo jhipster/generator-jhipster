@@ -50,11 +50,8 @@ package <%= entityAbsolutePackage %>.domain;
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
-<%_ if (!dtoMapstruct && typeof javadoc !== 'undefined') { _%>
-import io.swagger.v3.oas.annotations.Schema;
-<%_ } _%>
-<%_ if (!dtoMapstruct && importApiModelProperty) { _%>
-import io.swagger.v3.oas.annotations.Schema;
+<%_ if (!dtoMapstruct && (typeof javadoc !== 'undefined' || importApiModelProperty)) { _%>
+import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
 
 import java.io.Serializable;
@@ -111,7 +108,7 @@ public class <%= persistClass %> implements Serializable {
 <%- formatAsFieldJavadoc(field.javadoc) %>
   <%_ } _%>
   <%_ if (!dtoMapstruct && typeof field.javadoc !== 'undefined') { _%>
-    @Schema(value = "<%- formatAsApiDescription(field.javadoc) %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
+    @Schema(description = "<%- formatAsApiDescription(field.javadoc) %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>AnnotationSection() -&>
     private <%= field.javaFieldType %> <%= field.fieldName %>;
@@ -130,7 +127,7 @@ for (relationship of relationships.filter(relationship => !relationship.embedded
   if (typeof relationship.javadoc !== 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationship.javadoc) %>
     <%_ if (!dtoMapstruct) { _%>
-    @Schema(value = "<%- formatAsApiDescription(relationship.javadoc) %>")
+    @Schema(description = "<%- formatAsApiDescription(relationship.javadoc) %>")
     <%_ } _%>
   <%_ } _%>
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>
