@@ -34,10 +34,10 @@ const GRADLE_VERSION = '7.0.2';
 const JIB_VERSION = '3.1.4';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.3.2-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.4.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.5.6';
-const LIQUIBASE_VERSION = '4.5.0';
+const SPRING_BOOT_VERSION = '2.5.7';
+const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.4.32.Final';
 
@@ -51,27 +51,27 @@ const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v7.1.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.5.0';
 const DOCKER_JAVA_JRE = 'eclipse-temurin:11-jre-focal';
-const DOCKER_MYSQL = 'mysql:8.0.26';
-const DOCKER_MARIADB = 'mariadb:10.6.4';
-const DOCKER_POSTGRESQL = 'postgres:13.4';
-const DOCKER_MONGODB = 'mongo:4.4.8';
+const DOCKER_MYSQL = 'mysql:8.0.27';
+const DOCKER_MARIADB = 'mariadb:10.7.1';
+const DOCKER_POSTGRESQL = 'postgres:13.5';
+const DOCKER_MONGODB = 'mongo:4.4.10';
 const DOCKER_COUCHBASE = 'couchbase/server:7.0.0';
 const DOCKER_CASSANDRA = 'cassandra:3.11.11';
-const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU12-ubuntu-20.04';
-const DOCKER_NEO4J = 'neo4j:4.2.11';
+const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2019-CU13-ubuntu-20.04';
+const DOCKER_NEO4J = 'neo4j:4.3.7';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.2021.06';
-const DOCKER_MEMCACHED = 'memcached:1.6.10-alpine';
-const DOCKER_REDIS = 'redis:6.2.5';
+const DOCKER_MEMCACHED = 'memcached:1.6.12-alpine';
+const DOCKER_REDIS = 'redis:6.2.6';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:15.0.2'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
-const DOCKER_SONAR = 'sonarqube:8.9.2-community';
-const DOCKER_CONSUL = 'consul:1.9.9';
+const DOCKER_SONAR = 'sonarqube:9.1.0-community';
+const DOCKER_CONSUL = 'consul:1.10.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.4.1';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.29.2';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.31.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.23.0';
-const DOCKER_GRAFANA = 'grafana/grafana:8.1.3';
+const DOCKER_GRAFANA = 'grafana/grafana:8.2.4';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.42.1';
@@ -83,7 +83,7 @@ const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
 const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
 const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
 const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1beta1';
-const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1alpha3';
+const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1beta1';
 const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
 // Helm versions

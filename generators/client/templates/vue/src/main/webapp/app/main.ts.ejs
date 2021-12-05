@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
 import Vue2Filters from 'vue2-filters';
 import { ToastPlugin } from 'bootstrap-vue';
-import router from './router';
+import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
@@ -26,6 +26,7 @@ import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 import AlertService from './shared/alert/alert.service';
 
+import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
@@ -68,13 +69,18 @@ const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
 const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>(<any>Vue).cookie, <%_ } _%><%_ if (communicationSpringWebsocket) { _%>trackerService, <%_ } _%>router);
 
-router.beforeEach((to, from, next) => {
-
+router.beforeEach(async (to, from, next) => {
   if (!to.matched.length) {
-    next('/not-found');
-  }
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    await lazyRoutes;
+    if (router.match(to.fullPath).matched.length > 0) {
+      next(to.fullPath);
+      return;
+    }
 
-  if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
+<%_ } _%>
+    next('/not-found');
+  } else if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
     accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
       if (!value) {
         sessionStorage.setItem('requested-url', to.fullPath);
@@ -122,9 +128,13 @@ new Vue({
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
-    alertService: () => new AlertService()
-
+    alertService: () => new AlertService(),
+<%_ if (applicationTypeMicroservice && microfrontend) { _%>
+    microfrontendI18n: false,
+<%_ } _%>
   },
-<%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
-  store
+<%_ if (enableTranslation) { _%>
+  i18n,
+<%_ } _%>
+  store,
 });

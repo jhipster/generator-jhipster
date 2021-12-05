@@ -66,10 +66,14 @@ const commonFiles = {
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['content/scss/rtl.scss'],
     },
+    {
+      condition: generator => generator.microfrontend && generator.clientFrameworkVue,
+      templates: ['webpack/webpack.microfrontend.js.jhi'],
+    },
   ],
   swagger: [
     {
-      condition: generator => !generator.applicationTypeMicroservice,
+      condition: generator => !generator.applicationTypeMicroservice || generator.microfrontend,
       path: CLIENT_MAIN_SRC_DIR,
       templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
     },

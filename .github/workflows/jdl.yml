@@ -52,7 +52,7 @@ jobs:
         id: build
         uses: ./.github/actions/build-matrix
   applications:
-    name: ${{ matrix.app-sample }}
+    name: ${{ matrix.suite }}
     runs-on: ${{ matrix.os }}
     needs: build-matrix
     defaults:
@@ -72,21 +72,20 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         cache: [angular]
-        app-sample:
+        suite:
           - blog-store
           - blog-store-microfrontend
+          - vue-blog-store-microfrontend
         include:
-          - app-sample: blog-store
-            environment: prod
+          - suite: blog-store
             extra-args: --workspaces --monorepository
             skip-backend-tests: 1
-            sonar-analyse: 0
-          - app-sample: blog-store-microfrontend
-            environment: prod
-            extra-args: --workspaces --monorepository --microfrontend
+          - suite: blog-store-microfrontend
+            extra-args: --workspaces --monorepository
             skip-backend-tests: 1
-            skip-frontend-tests: 0
-            sonar-analyse: 0
+          - suite: vue-blog-store-microfrontend
+            extra-args: --workspaces --monorepository
+            skip-backend-tests: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -100,8 +99,8 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          jdl-sample: ${{ matrix.app-sample }}
-          application-environment: ${{ matrix.environment }}
+          jdl-sample: ${{ matrix.jdl-files || matrix.suite }}
+          application-environment: ${{ matrix.environment || 'prod' }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
       - uses: actions/setup-node@v2.4.1
@@ -112,7 +111,7 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: |
             ~/.npm
@@ -123,7 +122,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
@@ -131,8 +130,8 @@ jobs:
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load gradle cache'
-        if: contains(matrix.app-sample, 'gradle')
-        uses: actions/cache@v2.1.6
+        if: contains(matrix.suite, 'gradle')
+        uses: actions/cache@v2.1.7
         with:
           path: |
             ~/.gradle/caches
@@ -188,7 +187,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend'
-        if: steps.compare.outputs.equals != 'true' && needs.build-matrix.outputs.client != 'false'
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-frontend-tests != 1 && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
       - name: 'TESTS: packaging'
         if: steps.compare.outputs.equals != 'true'
@@ -207,19 +206,19 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always() && steps.backend.outcome == 'failure'
         with:
-          name: log-${{ matrix.app-sample }}
-          path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
+          name: log-${{ matrix.suite }}
+          path: ${{ steps.setup.outputs.application-path }}/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v2
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.app-sample }}
-          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
+          name: screenshots-${{ matrix.suite }}
+          path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v2
       - name: 'ANALYSIS: Sonar analysis'
-        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 0
+        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse == 'true'
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

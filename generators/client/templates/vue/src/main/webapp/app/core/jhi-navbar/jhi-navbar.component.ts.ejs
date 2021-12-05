@@ -5,7 +5,18 @@ import AccountService from '@/account/account.service';
 import TranslationService from '@/locale/translation.service';
 <%_ } %>
 
-@Component
+import EntitiesMenu from '@/entities/entities-menu.vue';
+
+@Component({
+  components: {
+    'entities-menu': EntitiesMenu,
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of remotes) { _%>
+    '<%= remote.lowercaseBaseName %>-menu': () => import('@<%= remote.lowercaseBaseName %>/entities-menu'),
+  <%_ } _%>
+<%_ } _%>
+  },
+})
 export default class JhiNavbar extends Vue {
   @Inject('loginService')
   private loginService: () => LoginService;
@@ -42,21 +53,30 @@ export default class JhiNavbar extends Vue {
   }
 <%_ } _%>
 
-  public logout() : void {
+  public logout() : Promise<any> {
 <%_ if (!authenticationTypeJwt) { _%>
-    this.loginService().logout().then(response => {
+    return this.loginService().logout().then(response => {
       this.$store.commit('logout');
-      this.$router.push('/');
   <%_ if (authenticationTypeOauth2) { _%>
-      window.location.href = response.data.logoutUrl;
+      const next = response.data?.logoutUrl ?? '/';
+      if (this.$route.path !== next) {
+        return this.$router.push(next);
+      }
+  <%_ } else { _%>
+      if (this.$route.path !== '/') {
+        return this.$router.push('/');
+      }
   <%_ } _%>
     });
 <%_ } else { _%>
     localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     this.$store.commit('logout');
-    this.$router.push('/');
+    if (this.$route.path !== '/') {
+      return this.$router.push('/');
+    }
 <%_ } _%>
+    return Promise.resolve(this.$router.currentRoute);
   }
 
   public openLogin() : void {

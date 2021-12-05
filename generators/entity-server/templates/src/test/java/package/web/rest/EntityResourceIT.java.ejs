@@ -48,7 +48,7 @@ if (databaseTypeSql && reactive) {
 let idValue = `${persistInstance}.get${primaryKey.nameCapitalized}()`;
 if (primaryKey.typeLong) {
   idValue = idValue + '.intValue()';
-} else if (primaryKey.type === 'UUID') {
+} else if (primaryKey.typeUUID) {
   idValue = idValue + '.toString()';
 }
 let transactionalAnnotation = '';

@@ -14,7 +14,7 @@ import {
 } from '../../support/entity';
 <%_
 
-const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = entityApi + 'api/';
 
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
@@ -32,16 +32,22 @@ const skipCreateTest =
 const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 
 if (workaroundRelationshipReactivePostgress && sampleFields.length === 0) {
-  sampleFields.push(fields.find(f => !f.autoGenerate));
+  const sample = fields.find(f => !f.autoGenerate);
+  if (sample) {
+    sampleFields.push(sample);
+  }
 } else if (workaroundInstantReactiveMariaDB) {
-  sampleFields.push(...fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant'));
+  const samples = fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant');
+  if (samples.length > 0) {
+    sampleFields.push(...samples);
+  }
 }
 _%>
 
 describe('<%= entityClass %> e2e test', () => {
 
-  const <%= entityInstance %>PageUrl = '/<%= entityUrl %>';
-  const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityUrl %>(\\?.*)?$');
+  const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
+  const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(sampleFields.map(field => field.reference))) %>;
@@ -164,7 +170,7 @@ describe('<%= entityClass %> e2e test', () => {
 
   it('<%= entityClassPlural %> menu should load <%= entityClassPlural %> page', () => {
     cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityStateName %>');
+    cy.clickOnEntityMenuItem('<%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -186,7 +192,7 @@ describe('<%= entityClass %> e2e test', () => {
 
       it('should load create <%= entityClass %> page', () => {
         cy.get(entityCreateButtonSelector).click({force: true});
-        cy.url().should('match', new RegExp('/<%= entityUrl %>/new$'));
+        cy.url().should('match', new RegExp('/<%= entityPage %>/new$'));
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click({force: true});

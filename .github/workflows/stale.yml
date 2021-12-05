@@ -37,3 +37,5 @@ jobs:
             Comment or this will be closed in 7 days
           days-before-stale: 30
           days-before-close: 7
+          exempt-issue-labels: 'area: bug :bug:,status: work in progress,v8'
+          exempt-pr-labels: 'pr: bug-fix,status: work in progress'

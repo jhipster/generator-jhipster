@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const NODE_VERSION = '14.17.1';
+const NODE_VERSION = '14.18.1';
 
 const PRETTIER_DEFAULT_INDENT = 'prettierDefaultIndent';
 const PRETTIER_DEFAULT_INDENT_DEFAULT_VALUE = 2;

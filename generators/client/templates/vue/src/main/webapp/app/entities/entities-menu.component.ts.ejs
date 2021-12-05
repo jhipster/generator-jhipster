@@ -1,0 +1,34 @@
+import {
+  Component,
+  Inject,
+  Vue,
+<%_ if (enableTranslation && applicationTypeMicroservice) { _%>
+  Watch,
+<%_ } _%>
+} from 'vue-property-decorator';
+<%_ if (enableTranslation && applicationTypeMicroservice) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
+
+@Component
+export default class EntitiesMenu extends Vue {
+<%_ if (enableTranslation && applicationTypeMicroservice) { _%>
+  @Inject({ default: true }) private readonly microfrontendI18n!: boolean;
+  @Inject('translationService') private translationService: () => TranslationService;
+
+  @Watch('$i18n.locale')
+  onLocaleChanged() {
+    this.loadLanguage();
+  }
+
+  created(): void {
+    this.loadLanguage();
+  }
+
+  private loadLanguage() {
+    if (this.microfrontendI18n) {
+      this.translationService().loadTranslations('<%= frontendAppName %>', '<%= endpointPrefix %>/', I18N_HASH);
+    }
+  }
+<%_ } _%>
+}

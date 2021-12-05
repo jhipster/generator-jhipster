@@ -7,6 +7,7 @@ const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const angularfiles = require('../generators/client/files-angular').files;
 const { JWT, OAUTH2 } = require('../jdl/jhipster/authentication-types');
+const { GATEWAY } = require('../jdl/jhipster/application-types');
 const { CAFFEINE, EHCACHE } = require('../jdl/jhipster/cache-types');
 const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -130,6 +131,27 @@ describe('JHipster server generator', () => {
     });
     it('should match generated files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('gateway application type', () => {
+    describe('with non reactive option', () => {
+      let runResult;
+      before(async () => {
+        runResult = await helpers
+          .create(path.join(__dirname, '../generators/server'))
+          .withOptions({
+            defaults: true,
+            reactive: false,
+            applicationType: GATEWAY,
+          })
+          .run();
+      });
+      it('should convert to reactive', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': { reactive: true, applicationType: GATEWAY },
+        });
+      });
     });
   });
 });

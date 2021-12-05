@@ -34,8 +34,15 @@ const mockBlueprintSubGen = class extends ClientGenerator {
   }
 
   get writing() {
-    const phaseFromJHipster = super._writing();
+    return super._writing();
+  }
+
+  get postWriting() {
+    const phaseFromJHipster = super._postWriting();
     const customPhaseSteps = {
+      async composeEntitiesClient() {
+        await this.composeWithJHipster('entities-client');
+      },
       addCustomMethods() {
         this.addEntityToMenu('routerName', false, VUE);
       },
@@ -65,7 +72,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 };
 
 describe('needle API Vue: JHipster client generator with blueprint', () => {
-  before(done => {
+  before(() =>
     helpers
       .run(path.join(__dirname, '../../generators/client'))
       .withOptions({
@@ -85,17 +92,16 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['fr'],
       })
-      .on('end', done);
-  });
+  );
 
   it('menu contains the item and the root', () => {
     assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/core/jhi-navbar/jhi-navbar.vue`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities-menu.vue`,
       `
-          <b-dropdown-item to="/routerName">
-            <font-awesome-icon icon="asterisk" />
-            <span>Router Name</span>
-          </b-dropdown-item>
+    <b-dropdown-item to="/routerName">
+      <font-awesome-icon icon="asterisk" />
+      <span>Router Name</span>
+    </b-dropdown-item>
 `
     );
   });
@@ -103,53 +109,60 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
   it('menu contains the item in router import', () => {
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
-      '// prettier-ignore\n' +
-        "const entityName = () => import('@/entities/entityFolderName/entityFileName.vue');\n" +
-        '// prettier-ignore\n' +
-        "const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileName-update.vue');\n" +
-        '// prettier-ignore\n' +
-        "const entityNameDetails = () => import('@/entities/entityFolderName/entityFileName-details.vue');"
+      `
+// prettier-ignore
+const entityName = () => import('@/entities/entityFolderName/entityFileName.vue');
+// prettier-ignore
+const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileName-update.vue');
+// prettier-ignore
+const entityNameDetails = () => import('@/entities/entityFolderName/entityFileName-details.vue');
+`
     );
   });
 
   it('menu contains the item in router', () => {
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
-      '  {\n' +
-        "    path: '/entityFileName',\n" +
-        "    name: 'entityName',\n" +
-        '    component: entityName,\n' +
-        '    meta: { authorities: [Authority.USER] },\n' +
-        '  },\n' +
-        '  {\n' +
-        "    path: '/entityFileName/new',\n" +
-        "    name: 'entityNameCreate',\n" +
-        '    component: entityNameUpdate,\n' +
-        '    meta: { authorities: [Authority.USER] },\n' +
-        '  },\n' +
-        '  {\n' +
-        "    path: '/entityFileName/:entityInstanceId/edit',\n" +
-        "    name: 'entityNameEdit',\n" +
-        '    component: entityNameUpdate,\n' +
-        '    meta: { authorities: [Authority.USER] },\n' +
-        '  },\n' +
-        '  {\n' +
-        "    path: '/entityFileName/:entityInstanceId/view',\n" +
-        "    name: 'entityNameView',\n" +
-        '    component: entityNameDetails,\n' +
-        '    meta: { authorities: [Authority.USER] },\n' +
-        '  },\n'
+      `
+    {
+      path: 'entityFileName',
+      name: 'entityName',
+      component: entityName,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/new',
+      name: 'entityNameCreate',
+      component: entityNameUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/:entityInstanceId/edit',
+      name: 'entityNameEdit',
+      component: entityNameUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/:entityInstanceId/view',
+      name: 'entityNameView',
+      component: entityNameDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+`
     );
   });
 
   it('menu contains the item in service import', () => {
     assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
-      "import entityNameService from '@/entities/entityFolderName/entityFileName.service';"
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
+      "import entityNameService from './entityFolderName/entityFileName.service';"
     );
   });
 
   it('menu contains the item in service', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/main.ts`, 'entityInstanceService: () => new entityNameService(),');
+    assert.fileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
+      "@Provide('entityInstanceService') private entityInstanceService = () => new entityNameService();"
+    );
   });
 });

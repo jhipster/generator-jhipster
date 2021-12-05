@@ -31,7 +31,6 @@ const files = {
   common: [
     {
       templates: [
-        '.npmrc',
         'package.json',
         '.eslintrc.json',
         'tsconfig.json',
@@ -346,6 +345,9 @@ function cleanup() {
 
   if (this.isJhipsterVersionLessThan('7.4.0') && this.enableI18nRTL) {
     this.removeFile(`${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`);
+  }
+  if (this.isJhipsterVersionLessThan('7.4.1')) {
+    this.removeFile('.npmrc');
   }
 }
 

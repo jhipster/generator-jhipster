@@ -522,7 +522,7 @@ function getEnumInfo(field, clientRootFolder) {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: fieldType,
-    javadoc: field.fieldTypeJavadoc && this.getJavadoc(field.fieldTypeJavadoc),
+    javadoc: field.fieldTypeJavadoc && getJavadoc(field.fieldTypeJavadoc),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,
@@ -794,7 +794,7 @@ function vueReplaceTranslation(generator, files) {
     const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
       .map(s => `${s}="\\$t\\(.*?\\)"`)
       .join(')|(');
-    this.replaceContent(
+    replaceContent(
       {
         file: filePath,
         pattern: new RegExp(` ?(${regexp})`, 'g'),

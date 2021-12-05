@@ -19,14 +19,17 @@
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const { GENERATOR_ENTITIES_CLIENT } = require('../generator-list');
 
-let useBlueprints;
-
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
     if (this.options.help) return;
     this.clientEntities = this.options.clientEntities;
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_ENTITIES_CLIENT);
+  }
+
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_ENTITIES_CLIENT);
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -39,7 +42,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    return useBlueprints ? undefined : this._initializing();
+    return this.delegateToBlueprint ? undefined : this._initializing();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -52,7 +55,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    return useBlueprints ? undefined : this._loading();
+    return this.delegateToBlueprint ? undefined : this._loading();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -67,7 +70,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    return useBlueprints ? undefined : this._default();
+    return this.delegateToBlueprint ? undefined : this._default();
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -82,6 +85,6 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get end() {
-    return useBlueprints ? undefined : this._end();
+    return this.delegateToBlueprint ? undefined : this._end();
   }
 };

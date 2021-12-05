@@ -54,8 +54,6 @@ const NO_CACHE = cacheTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_WEBSOCKET = websocketTypes.FALSE;
 
-let useBlueprints;
-
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
@@ -75,11 +73,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
     // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
     this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
+  }
 
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_SERVER);
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_SERVER);
+    }
 
     // Not using normal blueprints or this is a normal blueprint.
-    if (!useBlueprints || (this.fromBlueprint && this.sbsBlueprint)) {
+    if ((!this.fromBlueprint && !this.delegateToBlueprint) || (this.fromBlueprint && this.sbsBlueprint)) {
       this.setFeatures({
         customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
           const buildTool = this.jhipsterConfig.buildTool;
@@ -231,7 +233,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -251,7 +253,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -263,6 +265,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
         }
       },
+      forceReactiveGateway() {
+        if (this.jhipsterConfig.applicationType === GATEWAY) {
+          if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
+            this.warning('Non reactive gateway is not supported. Switching to reactive.');
+          }
+          this.jhipsterConfig.reactive = true;
+        }
+      },
       configure() {
         this._configureServer();
       },
@@ -270,27 +280,27 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      composeCommon() {
-        this.composeWithJHipster(GENERATOR_COMMON, true);
+      async composeCommon() {
+        await this.composeWithJHipster(GENERATOR_COMMON, true);
       },
 
-      composeLanguages() {
+      async composeLanguages() {
         // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (this.jhipsterConfig.enableTranslation === false) return;
-        this.composeWithJHipster(GENERATOR_LANGUAGES, true);
+        await this.composeWithJHipster(GENERATOR_LANGUAGES, true);
       },
     };
   }
 
   get composing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._composing();
   }
 
@@ -310,7 +320,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -357,7 +367,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
@@ -415,7 +425,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -428,7 +438,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -436,7 +446,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     return {
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        packageJsonConfigStorage.backend_port = this.serverPort;
+        packageJsonConfigStorage.backend_port = this.gatewayServerPort || this.serverPort;
         packageJsonConfigStorage.packaging = this.defaultPackaging;
         packageJsonConfigStorage.default_environment = this.defaultEnvironment;
       },
@@ -542,7 +552,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:start': './mvnw -P-webapp',
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
-            'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
+            'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
@@ -559,7 +569,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:start': `./gradlew ${excludeWebapp}`,
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
-            'java:docker': './gradlew bootJar jibDockerBuild',
+            'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
             'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
@@ -573,8 +583,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
-          'ci:backend:test': 'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
-          'ci:server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
+          'ci:backend:test':
+            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
@@ -595,12 +605,24 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               'concurrently -k -s first "npm run backend:start" "npm start" "wait-on http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"',
           });
         }
+        // Vue eagerly loads remotes, wait for it.
+        if (this.microfrontend && this.applicationTypeGateway && this.clientFrameworkVue) {
+          const remotesScript = this.remotes
+            .map(
+              app =>
+                `echo "Waiting for microfrontend ${app.baseName} to start" && wait-on http-get://localhost:$npm_package_config_backend_port/${app.endpointPrefix}/remoteEntry.js && echo "Microfrontend ${app.baseName} started"`
+            )
+            .join(' && ');
+          scriptsStorage.set({
+            'ci:server:await': `${scriptsStorage.get('ci:server:await')} && ${remotesScript}`,
+          });
+        }
       },
     };
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 
@@ -632,7 +654,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 

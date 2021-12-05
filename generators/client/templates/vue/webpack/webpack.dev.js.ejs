@@ -18,83 +18,31 @@
 -%>
 'use strict';
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const { styleLoaders } = require('./vue.utils');
 const config = require('./config');
 
-module.exports = (env, options) => ({
-  module: {
-    rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
-  },
-  // cheap-module-eval-source-map is faster for development
-  devtool: config.dev.devtool,
-  entry: {
-    global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
-    main: './<%= MAIN_SRC_DIR %>app/main'
-  },
-  output: {
-    filename: 'app/[contenthash].bundle.js',
-    chunkFilename: 'app/[id].chunk.js'
-  },
-  optimization: {
-    moduleIds: 'named',
-  },
-  devServer: {
-    static: {
-      directory: './<%= DIST_DIR %>',
+module.exports = (env, options) => {
+  const devConfig = {
+    module: {
+      rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
     },
-    port: <%= devServerPort %>,
-    proxy: [
-      {
-        context: [
-          '/api',
-          '/services',
-          '/management',
-          '/swagger-resources',
-          '/v2/api-docs',
-          '/v3/api-docs',
-          '/h2-console',
-<%_ if (authenticationTypeOauth2) { _%>
-          '/oauth2',
-          '/login',
-<%_ } _%>
-          '/auth'
-        ],
-        target: 'http://127.0.0.1:<%= serverPort %>',
-        secure: false,
-        headers: { host: 'localhost:9000' }
-      },
-<%_ if (communicationSpringWebsocket) { _%>
-      {
-        context: [
-          '/websocket'
-        ],
-        target: 'ws://127.0.0.1:<%= serverPort %>',
-        ws: true
-      }
-<%_ } _%>
-    ],
-    historyApiFallback: true
-  },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new HtmlWebpackPlugin({
-      base: '/',
-      template: './<%= MAIN_SRC_DIR %>index.html',
-      chunks: ['vendors', 'main', 'global'],
-      chunksSortMode: 'manual',
-      inject: true
-    }),
+    // cheap-module-eval-source-map is faster for development
+    devtool: config.dev.devtool,
+    optimization: {
+      moduleIds: 'named',
+    },
+    plugins: [],
+  };
+  if (!options.env.WEBPACK_SERVE) return devConfig;
+  devConfig.plugins.push(
     new BrowserSyncPlugin(
       {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: 'http://localhost:<%= devServerPort %>',
+          target: `http://localhost:${options.watch ? '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
 <%_ if (communicationSpringWebsocket) { _%>
           ws: true,
 <%_ } _%>
@@ -116,5 +64,6 @@ module.exports = (env, options) => ({
         reload: true
       }
     )
-  ]
-});
+  );
+  return devConfig;
+};

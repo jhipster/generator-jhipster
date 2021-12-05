@@ -41,7 +41,7 @@ module.exports = (on<%_ if (cypressCoverage) { _%>, config<%_ } _%>) => {
     prepareAudit(launchOptions);
     if (browser.name === 'chrome' && browser.isHeadless) {
       launchOptions.args.push('--disable-gpu');
-      return launchOptions
+      return launchOptions;
     }
   });
 
