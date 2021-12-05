@@ -49,7 +49,7 @@ export class ParseLinks {
       const queryString: { [key: string]: string | undefined } = {};
 
       url.replace(
-        new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
+        /([^?=&]+)(=([^&]*))?/g,
         ($0: string, $1: string | undefined, $2: string | undefined, $3: string | undefined) => {
           if ($1 !== undefined) {
             queryString[$1] = $3;
