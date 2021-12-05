@@ -167,8 +167,9 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         searchEntities,
         <%_ } _%>
         ), (state, action) => {
+          const { data<% if (!paginationNo) { %>, headers<% } %> } = action.payload
         <%_ if (paginationInfiniteScroll) { _%>
-          const links = parseHeaderForLinks(action.payload.headers.link);
+          const links = parseHeaderForLinks(headers.link);
         <%_ } _%>
 
           return {
@@ -177,14 +178,14 @@ export const <%= entityReactName %>Slice = createEntitySlice({
         <%_ if (paginationInfiniteScroll) { _%>
           <%_ if (!databaseTypeCassandra) { _%>
             links,
-            entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
+            entities: loadMoreDataWhenScrolled(state.entities, data, links),
           <%_ } _%>
         <%_ } else { _%>
-            entities: action.payload.data,
+            entities: data,
         <%_ } _%>
         <%_ if (!paginationNo) { _%>
           <%_ if (!databaseTypeCassandra) { _%>
-            totalItems: parseInt(action.payload.headers['x-total-count'], 10)
+            totalItems: parseInt(headers['x-total-count'], 10)
           <%_ } _%>
         <%_ } _%>
           };
