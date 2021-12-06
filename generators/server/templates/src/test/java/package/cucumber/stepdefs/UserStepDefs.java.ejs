@@ -27,22 +27,32 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.web.rest.UserResource;
+import <%= packageName %>.security.AuthoritiesConstants;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ if (!reactive) { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } _%>
+import org.springframework.security.test.context.support.WithMockUser;
 
+<%_ if (!reactive) { _%>
+@AutoConfigureMockMvc
+<%_ } else { _%>
+@AutoConfigureWebTestClient
+<%_ } _%>
+@IntegrationTest
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class UserStepDefs extends StepDefs {
 
     @Autowired
     private UserResource userResource;
 
     private MockMvc restUserMockMvc;
-
-    @Before
-    public void setup() {
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
-    }
 
     @When("I search user {string}")
     public void i_search_user(String userId) throws Throwable {
