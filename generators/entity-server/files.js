@@ -173,6 +173,16 @@ const serverFiles = {
       ],
     },
     {
+      condition: generator => generator.searchEngine === ELASTICSEARCH && !generator.embedded && !generator.paginationNo,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/search/SortToFieldSortBuilderConverter.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/search/SortToFieldSortBuilderConverter.java`,
+        },
+      ],
+    },
+    {
       condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       path: SERVER_MAIN_SRC_DIR,
       templates: [

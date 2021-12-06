@@ -43,6 +43,56 @@ describe('JHipster generator for entity', () => {
           assert.file(expectedFiles.gatling);
         });
       });
+
+      describe('search, no dto, no service, pagination', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
+            })
+            .withArguments(['foo'])
+            .withPrompts({
+              fieldAdd: false,
+              relationshipAdd: false,
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: PAGINATION,
+            });
+        });
+
+        it('does creates search files', () => {
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToFieldSortBuilderConverter.java`);
+          assert.file(expectedFiles.server);
+          assert.file(expectedFiles.gatling);
+        });
+      });
+
+      describe('search, no dto, no service, infinite-scroll', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
+            })
+            .withArguments(['foo'])
+            .withPrompts({
+              fieldAdd: false,
+              relationshipAdd: false,
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: INFINITE_SCROLL,
+            });
+        });
+
+        it('does creates search files', () => {
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToFieldSortBuilderConverter.java`);
+          assert.file(expectedFiles.server);
+          assert.file(expectedFiles.gatling);
+        });
+      });
     });
 
     context('monolith with couchbase FTS', () => {
