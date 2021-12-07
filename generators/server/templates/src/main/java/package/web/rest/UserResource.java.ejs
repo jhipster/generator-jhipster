@@ -284,7 +284,7 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
-    public ResponseEntity<List<<%= asDto('AdminUser') %>>> getAllUsers(Pageable pageable) {
+    public ResponseEntity<List<<%= asDto('AdminUser') %>>> getAllUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -296,7 +296,7 @@ public class UserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('AdminUser') %>>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= asDto('AdminUser') %>>>> getAllUsers(@org.springdoc.api.annotations.ParameterObject ServerHttpRequest request, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {

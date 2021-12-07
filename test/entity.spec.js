@@ -772,7 +772,7 @@ describe('JHipster generator for entity', () => {
           assert.file(expectedFiles.gatling);
         });
         it('generates OpenAPI annotations on domain model', () => {
-          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
+          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@Schema/);
         });
       });
     });
@@ -848,8 +848,8 @@ describe('JHipster generator for entity', () => {
           ]);
         });
         it('generates OpenAPI annotations on DTO', () => {
-          assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
-          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@ApiModelProperty/);
+          assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@Schema/);
+          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@Schema/);
         });
       });
     });

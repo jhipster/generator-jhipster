@@ -314,16 +314,12 @@
         </dependency>
 <%_ } _%>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-oas</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-bean-validators</artifactId>
+            <groupId>org.springdoc</groupId>
+<%_ if (reactive) { _%>
+            <artifactId>springdoc-openapi-webflux-core</artifactId>
+<%_ } else { _%>
+            <artifactId>springdoc-openapi-webmvc-core</artifactId>
+<%_ } _%>
         </dependency>
 <%_ if (databaseTypeSql) { _%>
         <dependency>

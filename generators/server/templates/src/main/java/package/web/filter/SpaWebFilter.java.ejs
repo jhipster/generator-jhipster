@@ -35,7 +35,7 @@ public class SpaWebFilter implements WebFilter {
         String path = exchange.getRequest().getURI().getPath();
         if (!path.startsWith("/api") && !path.startsWith("/management")<% if (authenticationTypeOauth2) { %> && !path.startsWith("/login")<% } %>
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
-            && !path.startsWith("/services") && !path.startsWith("/swagger") && !path.startsWith("/v2/api-docs") && !path.startsWith("/v3/api-docs")
+            && !path.startsWith("/services") && !path.startsWith("/v3/api-docs")
 <%_ } _%>
             && path.matches("[^\\\\.]*")) {
             return chain.filter(

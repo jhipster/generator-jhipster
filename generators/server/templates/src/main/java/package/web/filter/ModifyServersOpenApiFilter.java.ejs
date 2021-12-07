@@ -34,12 +34,13 @@ import reactor.core.publisher.Mono;
 @Component
 public class ModifyServersOpenApiFilter implements GlobalFilter, Ordered {
 
+    private static final String OPEN_API_PATH = "/v3/api-docs";
     private static final Logger log = LoggerFactory.getLogger(ModifyServersOpenApiFilter.class);
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        if (path.startsWith("/services") && path.contains("/v3/api-docs")) {
+        if (path.startsWith("/services") && path.contains(OPEN_API_PATH)) {
             ServerHttpResponse originalResponse = exchange.getResponse();
             DataBufferFactory bufferFactory = originalResponse.bufferFactory();
             ServerHttpResponseDecorator decoratedResponse = createModifyServersOpenApiInterceptor(path, originalResponse, bufferFactory);
@@ -109,7 +110,7 @@ public class ModifyServersOpenApiFilter implements GlobalFilter, Ordered {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonBody = mapper.readTree(strBody);
                 ObjectNode serversToJson = mapper.createObjectNode();
-                serversToJson.set("url", mapper.valueToTree(path.replace("/v3/api-docs", "")));
+                serversToJson.set("url", mapper.valueToTree(path.replaceFirst(OPEN_API_PATH + "(/.*)?$", "")));
                 serversToJson.set("description", mapper.valueToTree("added by global filter"));
 
                 // add custom server
