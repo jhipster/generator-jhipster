@@ -2,6 +2,10 @@ const expect = require('expect');
 const path = require('path');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
+const { MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { ANGULARX } = require('../../jdl/jhipster/client-framework-types');
+
+const commonOptions = { clientFramework: ANGULARX };
 
 describe('JHipster angular generator', () => {
   describe('microfrontend', () => {
@@ -12,10 +16,11 @@ describe('JHipster angular generator', () => {
         .withOptions({
           skipInstall: true,
           auth: OAUTH2,
-          microfrontend: true,
+          applicationType: MICROSERVICE,
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
+          ...commonOptions,
         })
         .run();
     });

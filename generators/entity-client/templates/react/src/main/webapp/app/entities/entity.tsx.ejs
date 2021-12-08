@@ -18,7 +18,7 @@
 -%>
 import React, { useState, useEffect } from 'react';
 <%_ if (paginationInfiniteScroll) { _%>
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
@@ -324,12 +324,10 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
 <%_ } _%>
       <div className="table-responsive">
 <%_ if (paginationInfiniteScroll) { _%>
-        <InfiniteScroll pageStart={paginationState.activePage}
-                        loadMore={handleLoadMore}
+        <InfiniteScroll dataLength={<%= entityInstance %>List ? <%= entityInstance %>List.length : 0} 
+                        next={handleLoadMore}
                         hasMore={paginationState.activePage - 1 < links.next}
-                        loader={<div className="loader">Loading ...</div>}
-                        threshold={0}
-                        initialLoad={false}>
+                        loader={<div className="loader">Loading ...</div>}>
 <%_ } _%>
         {
           <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(

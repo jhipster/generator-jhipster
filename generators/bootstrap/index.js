@@ -21,8 +21,8 @@ const _ = require('lodash');
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
-  createYoRcTransform,
-  createYoResolveTransform,
+  createYoRcTransform: createForceYoRcTransform,
+  createYoResolveTransform: createApplyYoResolveTransform,
   patternFilter,
   patternSpy,
 } = require('yeoman-environment/transform');
@@ -148,6 +148,9 @@ module.exports = class extends BaseGenerator {
    * @return {Promise}
    */
   async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
+    const { skipYoResolve } = this.options;
+    const { withGeneratedFlag } = this.jhipsterConfig;
+
     // JDL writes directly to disk, set the file as modified so prettier will be applied
     stream = stream.pipe(
       patternSpy(file => {
@@ -170,28 +173,29 @@ module.exports = class extends BaseGenerator {
       ],
     };
 
-    const yoResolveTranform = this.options.skipYoResolve ? [] : [createYoResolveTransform(this.env.conflicter)];
+    const createApplyPrettierTransform = () => {
+      const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
+      // Prettier is clever, it uses correct rules and correct parser according to file extension.
+      const ignoreErrors = this.options.commandName === 'upgrade' || this.options.ignoreErrors;
+      return prettierTransform(prettierOptions, this, ignoreErrors);
+    };
+
+    const createForceWriteConfigFiles = () =>
+      patternSpy(file => {
+        file.conflicter = 'force';
+      }, '**/.jhipster/*.json').name('jhipster:config-files:force');
+
     const transformStreams = [
       // multi-step changes the file path, should be executed earlier in the pipeline
       new MultiStepTransform(),
-      ...yoResolveTranform,
-      createYoRcTransform(),
-      patternSpy(file => {
-        file.conflicter = 'force';
-      }, '**/.jhipster/*.json').name('jhipster:config-files:force'),
+      ...(skipYoResolve ? [] : [createApplyYoResolveTransform(this.env.conflicter)]),
+      createForceYoRcTransform(),
+      createForceWriteConfigFiles(),
+      ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
+      ...(skipPrettier ? [] : [createApplyPrettierTransform()]),
+      createConflicterCheckTransform(this.env.conflicter, conflicterStatus),
+      createConflicterStatusTransform(),
     ];
-
-    if (this.jhipsterConfig.withGeneratedFlag) {
-      transformStreams.push(generatedAnnotationTransform(this));
-    }
-
-    if (!skipPrettier) {
-      const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
-      // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      transformStreams.push(prettierTransform(prettierOptions, this, this.options.ignoreErrors));
-    }
-
-    transformStreams.push(createConflicterCheckTransform(this.env.conflicter, conflicterStatus), createConflicterStatusTransform());
 
     await this.env.fs.commit(transformStreams, stream);
   }

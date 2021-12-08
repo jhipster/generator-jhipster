@@ -473,6 +473,9 @@ Object {
   "src/test/javascript/spec/app/core/ribbon/ribbon.component.spec.ts": Object {
     "stateCleared": "modified",
   },
+  "src/test/javascript/spec/app/entities/entities-menu.spec.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/test/javascript/spec/app/microfrontends/entities-menu.component.ts": Object {
     "stateCleared": "modified",
   },

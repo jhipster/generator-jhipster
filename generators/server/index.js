@@ -265,6 +265,14 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
         }
       },
+      forceReactiveGateway() {
+        if (this.jhipsterConfig.applicationType === GATEWAY) {
+          if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
+            this.warning('Non reactive gateway is not supported. Switching to reactive.');
+          }
+          this.jhipsterConfig.reactive = true;
+        }
+      },
       configure() {
         this._configureServer();
       },
@@ -424,6 +432,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanupServer() {
+        if (this.isJhipsterVersionLessThan('7.4.2')) {
+          this.removeFile(`${this.javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
+          this.removeFile(`${this.testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+        }
+      },
       ...writeFiles(),
       ...super._missingPostWriting(),
     };
@@ -438,7 +452,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     return {
       packageJsonScripts() {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        packageJsonConfigStorage.backend_port = this.serverPort;
+        packageJsonConfigStorage.backend_port = this.gatewayServerPort || this.serverPort;
         packageJsonConfigStorage.packaging = this.defaultPackaging;
         packageJsonConfigStorage.default_environment = this.defaultEnvironment;
       },
@@ -544,7 +558,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:start': './mvnw -P-webapp',
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
-            'java:docker': './mvnw -ntp verify -DskipTests jib:dockerBuild',
+            'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
@@ -561,7 +575,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:start': `./gradlew ${excludeWebapp}`,
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
-            'java:docker': './gradlew bootJar jibDockerBuild',
+            'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
             'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
@@ -575,8 +589,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
-          'ci:backend:test': 'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test',
-          'ci:server:package': 'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment',
+          'ci:backend:test':
+            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
