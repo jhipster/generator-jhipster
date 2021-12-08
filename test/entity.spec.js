@@ -851,6 +851,59 @@ describe('JHipster generator for entity', () => {
           assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
           assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@ApiModelProperty/);
         });
+        it('shall not generate search specific artifacts because elastic search is false on top level', () => {
+          assert.noFile(expectedFiles.entitySearchSpecific);
+          // and no annotation in the domain class
+          assert.noFileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
+            /@org.springframework.data.elasticsearch.annotations.Document/
+          );
+          assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`, /FooSearchRepository/);
+        });
+      });
+    });
+    context('microservice with elasticsearch', () => {
+      describe('entity not enabled for search', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/elasticsearch-microservice'), dir);
+              fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
+            })
+            .withArguments(['Foo'])
+            .withOptions({ regenerate: true, force: true });
+        });
+        it('shall not generate search specific artifacts because entity has no search enabled', () => {
+          assert.noFile(expectedFiles.entitySearchSpecific);
+          // and no annotation in the domain class
+          assert.noFileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
+            /@org.springframework.data.elasticsearch.annotations.Document/
+          );
+        });
+      });
+      describe('entity enabled for search', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/elasticsearch-microservice'), dir);
+              fse.copySync(path.join(__dirname, 'templates/.jhipster/DtoServicePagination.json'), path.join(dir, '.jhipster/Foo.json'));
+            })
+            .withArguments(['Foo'])
+            .withOptions({ regenerate: true, force: true });
+        });
+        it('shall generate search specific artifacts because entity has search enabled', () => {
+          assert.file(expectedFiles.entitySearchSpecific);
+          // and no annotation in the domain class
+          assert.fileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
+            /@org.springframework.data.elasticsearch.annotations.Document/
+          );
+          // and repository shall be also used in service
+          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`, /FooSearchRepository/);
+        });
       });
     });
 
