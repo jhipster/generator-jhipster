@@ -22,6 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
@@ -30,6 +31,7 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -185,12 +187,14 @@ describe('Component Tests', () => {
 
       // WHEN
       comp.prepareRemove({id: <%- tsKeyId %>});
+      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
+
       comp.remove<%= entityAngularName %>();
       await comp.$nextTick();
 
       // THEN
       expect(<%= entityInstance %>ServiceStub.delete.called).toBeTruthy();
-      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
+      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(2);
     });
 <%_ } _%>
   });

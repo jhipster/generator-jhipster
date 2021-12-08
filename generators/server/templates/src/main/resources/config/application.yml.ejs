@@ -32,6 +32,17 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+---
+# Conditionally disable springdoc on missing api-docs profile
+spring:
+  config:
+    activate:
+      on-profile: '!api-docs'
+springdoc:
+  api-docs:
+    enabled: false
+---
+
 <%_ if (serviceDiscoveryEureka) { _%>
 eureka:
   client:
@@ -85,24 +96,24 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["configprops", "env", <% if (applicationTypeGateway && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable) { %>, "caches"<% } %><% if (databaseTypeSql) { %>, "liquibase"<% } %>]
+        include: ["configprops", "env", <% if (applicationTypeGateway && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", 'jhiopenapigroups', "logfile", "loggers", "prometheus", "threaddump"<% if (cacheManagerIsAvailable) { %>, "caches"<% } %><% if (databaseTypeSql) { %>, "liquibase"<% } %>]
   endpoint:
     health:
       show-details: when_authorized
       roles: "ROLE_ADMIN"
       probes:
         enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState<% if (databaseTypeSql) { %>,db<% } %>
     jhimetrics:
       enabled: true
   info:
     git:
       mode: full
   health:
-    group:
-      liveness:
-        include: livenessState
-      readiness:
-        include: readinessState<% if (databaseTypeSql) { %>,db<% } %>
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
@@ -295,6 +306,9 @@ server:
       cookie:
         http-only: true
 
+springdoc:
+  show-actuator: true
+
 # Properties to be exposed on the /info management endpoint
 info:
   # Comma separated list of profiles that will trigger the ribbon to show
@@ -324,8 +338,8 @@ jhipster:
   mail:
     from: <%= baseName %>@localhost
   api-docs:
-    default-include-pattern: ${server.servlet.context-path:}/api/.*
-    management-include-pattern: ${server.servlet.context-path:}/management/.*
+    default-include-pattern: ${server.servlet.context-path:}/api/**
+    management-include-pattern: ${server.servlet.context-path:}/management/**
     title: <%= humanizedBaseName %> API
     description: <%= humanizedBaseName %> API documentation
     version: 0.0.1

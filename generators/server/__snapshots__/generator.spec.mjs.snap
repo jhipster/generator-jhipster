@@ -779,10 +779,6 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/config/apidocs/GatewaySwaggerResourcesProvider.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/web/filter/ModifyServersOpenApiFilter.java",
           "renameTo": [Function],
         },
@@ -794,10 +790,6 @@ Object {
       "templates": Array [
         Object {
           "file": "package/web/filter/ModifyServersOpenApiFilterTest.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/apidocs/GatewaySwaggerResourcesProviderTest.java",
           "renameTo": [Function],
         },
       ],

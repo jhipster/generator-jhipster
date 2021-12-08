@@ -41,15 +41,13 @@ const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
+const { ANGULAR_X: ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA, H2_MEMORY, H2_DISK } = databaseTypes;
 const NO_DATABASE = databaseTypes.NO;
@@ -159,7 +157,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
   jhipsterTemplatePath(...args) {
-    this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+    try {
+      this._jhipsterGenerator = this._jhipsterGenerator || this.env.requireNamespace(this.options.namespace).generator;
+    } catch (error) {
+      throw new Error(
+        `The Namespace ${this.options.namespace} may not be correct. Please check your configuration and ensure your blueprint folder start with "generator-". Detail: ${error}`
+      );
+    }
     return this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...args);
   }
 
@@ -450,8 +454,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     } else if (clientFramework === VUE) {
       this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
       this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
-      this.needleApi.clientVue.addEntityServiceToMainImport(entityName, entityClass, entityFileName, entityFolderName);
-      this.needleApi.clientVue.addEntityServiceToMain(entityInstance, entityName);
+      this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);
+      this.needleApi.clientVue.addEntityServiceToEntitiesComponent(entityInstance, entityName);
     }
   }
 
@@ -2660,11 +2664,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.microfrontend) {
-      this.jhipsterConfig.microfrontend = options.microfrontend;
+      this.warning('Microfrontend option is deprecated.');
     }
 
     if (options.reactive !== undefined) {
       this.jhipsterConfig.reactive = options.reactive;
+    }
+
+    if (options.enableSwaggerCodegen !== undefined) {
+      this.jhipsterConfig.enableSwaggerCodegen = options.enableSwaggerCodegen;
     }
 
     if (options.clientPackageManager) {
@@ -2721,7 +2729,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadAppConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.jhipsterVersion = config.jhipsterVersion;
     dest.baseName = config.baseName;
     dest.applicationType = config.applicationType;
@@ -2741,7 +2749,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.pages = config.pages;
     dest.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
     dest.withAdminUi = config.withAdminUi;
-    dest.microfrontend = config.microfrontend;
     dest.gatewayServerPort = config.gatewayServerPort;
 
     dest.capitalizedBaseName = config.capitalizedBaseName;
@@ -2786,7 +2793,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     if (dest.remotes) {
       dest.remotes.forEach(app => this.loadDerivedAppConfig(app));
+      dest.microfrontends = dest.remotes.filter(r => r.clientFramework && r.clientFramework !== CLIENT_FRAMEWORK_NO);
     }
+    dest.microfrontend =
+      (dest.applicationTypeMicroservice && !dest.skipClient) ||
+      (dest.applicationTypeGateway && dest.microfrontends && dest.microfrontends.length > 0);
   }
 
   /**
@@ -2796,7 +2807,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadClientConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.clientPackageManager = config.clientPackageManager;
     dest.clientFramework = config.clientFramework;
     dest.clientTheme = config.clientTheme;
@@ -2827,7 +2838,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.enableTranslation = config.enableTranslation;
     dest.nativeLanguage = config.nativeLanguage;
     dest.languages = config.languages;
@@ -2840,7 +2851,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param {any} config - config to load config from
    * @param {any} dest - destination context to use default is context
    */
-  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadServerConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.packageName = config.packageName;
     dest.packageFolder = config.packageFolder;
     dest.serverPort = config.serverPort;
@@ -2954,7 +2965,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.devDatabaseType));
   }
 
-  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+  loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
     dest.serviceDiscoveryType = config.serviceDiscoveryType;
     dest.monitoring = config.monitoring;
     this.loadDerivedPlatformConfig(dest);
@@ -3025,10 +3036,20 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * Default config based on current applicationType
+   */
+  get jhipsterDefaults() {
+    return this.getDefaultConfigForApplicationType();
+  }
+
+  /**
    * Get default config based on applicationType
    */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
-    return { ...defaultApplicationOptions.getConfigForApplicationType(applicationType), ...defaultConfig };
+    return {
+      ...defaultApplicationOptions.getConfigForApplicationType(applicationType),
+      ...(applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig),
+    };
   }
 
   setConfigDefaults(defaults = this.jhipsterConfig.applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig) {

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 {
-  "baseUrl": "http://localhost:<%= serverPort %>/",
+  "baseUrl": "http://localhost:<%= gatewayServerPort || serverPort %>/",
   "testFiles": "**/*.spec.ts",
   "supportFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/support/index.ts",
   "video": false,

@@ -297,11 +297,11 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
       },
 
       loadEntities() {
-        if (!this.configOptions.sharedEntities || (this.applicationTypeGateway && this.microfrontend)) {
+        if (!this.configOptions.sharedEntities) {
           this.localEntities = [];
           return;
         }
-        this.localEntities = Object.values(this.configOptions.sharedEntities).filter(entity => !entity.builtIn);
+        this.localEntities = Object.values(this.configOptions.sharedEntities).filter(entity => !entity.builtIn && !entity.skipClient);
       },
 
       insight() {

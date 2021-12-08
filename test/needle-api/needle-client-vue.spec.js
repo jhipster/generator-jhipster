@@ -124,42 +124,45 @@ const entityNameDetails = () => import('@/entities/entityFolderName/entityFileNa
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
       `
-      {
-        path: '/entityFileName',
-        name: 'entityName',
-        component: entityName,
-        meta: { authorities: [Authority.USER] },
-      },
-      {
-        path: '/entityFileName/new',
-        name: 'entityNameCreate',
-        component: entityNameUpdate,
-        meta: { authorities: [Authority.USER] },
-      },
-      {
-        path: '/entityFileName/:entityInstanceId/edit',
-        name: 'entityNameEdit',
-        component: entityNameUpdate,
-        meta: { authorities: [Authority.USER] },
-      },
-      {
-        path: '/entityFileName/:entityInstanceId/view',
-        name: 'entityNameView',
-        component: entityNameDetails,
-        meta: { authorities: [Authority.USER] },
-      },
+    {
+      path: 'entityFileName',
+      name: 'entityName',
+      component: entityName,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/new',
+      name: 'entityNameCreate',
+      component: entityNameUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/:entityInstanceId/edit',
+      name: 'entityNameEdit',
+      component: entityNameUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'entityFileName/:entityInstanceId/view',
+      name: 'entityNameView',
+      component: entityNameDetails,
+      meta: { authorities: [Authority.USER] },
+    },
 `
     );
   });
 
   it('menu contains the item in service import', () => {
     assert.fileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
-      "import entityNameService from '@/entities/entityFolderName/entityFileName.service';"
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
+      "import entityNameService from './entityFolderName/entityFileName.service';"
     );
   });
 
   it('menu contains the item in service', () => {
-    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/main.ts`, 'entityInstanceService: () => new entityNameService(),');
+    assert.fileContent(
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
+      "@Provide('entityInstanceService') private entityInstanceService = () => new entityNameService();"
+    );
   });
 });

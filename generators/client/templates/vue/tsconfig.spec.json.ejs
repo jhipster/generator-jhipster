@@ -22,7 +22,7 @@
     "outDir": "<%= BUILD_DIR %>out-tsc/spec",
 <%_ if (microfrontend && applicationTypeGateway) { _%>
     "paths": {
-  <%_ for (const remote of remotes) { _%>
+  <%_ for (const remote of microfrontends) { _%>
       "@<%= remote.lowercaseBaseName %>/*": ["<%= CLIENT_TEST_SRC_DIR %>spec/app/microfrontends/*"],
   <%_ } _%>
       "@/*": ["*"]

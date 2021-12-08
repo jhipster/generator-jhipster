@@ -71,7 +71,7 @@ class SecurityMetersServiceTests {
     public void testCountMethodsShouldBeBoundToCorrectCounters() {
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "expired")
-            .counter().count()).isEqualTo(0);
+            .counter().count()).isZero();
 
         securityMetersService.trackTokenExpired();
 
@@ -81,7 +81,7 @@ class SecurityMetersServiceTests {
 
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "unsupported")
-            .counter().count()).isEqualTo(0);
+            .counter().count()).isZero();
 
         securityMetersService.trackTokenUnsupported();
 
@@ -91,7 +91,7 @@ class SecurityMetersServiceTests {
 
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "invalid-signature")
-            .counter().count()).isEqualTo(0);
+            .counter().count()).isZero();
 
         securityMetersService.trackTokenInvalidSignature();
 
@@ -101,7 +101,7 @@ class SecurityMetersServiceTests {
 
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "malformed")
-            .counter().count()).isEqualTo(0);
+            .counter().count()).isZero();
 
         securityMetersService.trackTokenMalformed();
 

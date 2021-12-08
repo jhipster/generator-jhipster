@@ -14,7 +14,7 @@ import {
 } from '../../support/entity';
 <%_
 
-const baseApi = (applicationTypeGateway && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = entityApi + 'api/';
 
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
@@ -32,9 +32,15 @@ const skipCreateTest =
 const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 
 if (workaroundRelationshipReactivePostgress && sampleFields.length === 0) {
-  sampleFields.push(fields.find(f => !f.autoGenerate));
+  const sample = fields.find(f => !f.autoGenerate);
+  if (sample) {
+    sampleFields.push(sample);
+  }
 } else if (workaroundInstantReactiveMariaDB) {
-  sampleFields.push(...fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant'));
+  const samples = fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant');
+  if (samples.length > 0) {
+    sampleFields.push(...samples);
+  }
 }
 _%>
 
@@ -207,7 +213,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/<%= baseApi + entityApiUrl %>',
-  <% if (requiredRelationships.length > 0) { %>
+  <%_ if (requiredRelationships.length > 0) { _%>
           body: {
             ...<%= entityInstance %>Sample,
     <%_ for (relationship of requiredRelationships) { _%>
@@ -228,6 +234,11 @@ describe('<%= entityClass %> e2e test', () => {
             },
             {
               statusCode: 200,
+  <%_ if (!paginationNo) { _%>
+              headers: {
+                link: '<http://localhost/<%= baseApi + entityApiUrl %>?page=0&size=20>; rel="last",<http://localhost/<%= baseApi + entityApiUrl %>?page=0&size=20>; rel="first"',
+              },
+  <%_ } _%>
               body: [<%= entityInstance %>],
             }
           ).as('entitiesRequestInternal');

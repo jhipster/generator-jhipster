@@ -109,7 +109,7 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-            sonar-analyse: 0
+            sonar-analyse: 'false'
           - app-sample: ngx-mysql-es-noi18n-mapsid
             entity: sql
             environment: prod
@@ -195,7 +195,7 @@ jobs:
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
-      - uses: actions/setup-node@v2.4.1
+      - uses: actions/setup-node@v2.5.0
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
@@ -203,7 +203,7 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: |
             ~/.npm
@@ -214,7 +214,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
@@ -223,7 +223,7 @@ jobs:
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load gradle cache'
         if: contains(matrix.app-sample, 'gradle')
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: |
             ~/.gradle/caches
@@ -303,7 +303,7 @@ jobs:
           name: screenshots-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
       - name: 'ANALYSIS: Sonar analysis'
-        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 0
+        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 'false'
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
