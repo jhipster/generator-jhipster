@@ -41,7 +41,7 @@ class <%= controllerClass %>IT {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         <%= controllerClass %> <%= controllerInstance %> = new <%= controllerClass %>();
         restMockMvc = MockMvcBuilders
