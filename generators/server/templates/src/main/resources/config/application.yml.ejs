@@ -254,7 +254,7 @@ spring:
 <%_ if (!reactive) { _%>
   mvc:
     pathmatch:
-      matching-strategy: ant-path-matcher
+      matching-strategy: ant_path_matcher
 <%_ } _%>
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
   security:
