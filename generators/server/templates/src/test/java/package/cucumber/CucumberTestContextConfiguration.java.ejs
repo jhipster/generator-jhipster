@@ -19,11 +19,12 @@
 package <%= packageName %>.cucumber;
 
 import <%= packageName %>.IntegrationTest;
-// import io.cucumber.spring.CucumberContextConfiguration;
-// import org.springframework.test.context.web.WebAppConfiguration;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-// @CucumberContextConfiguration
-// @WebAppConfiguration
+@CucumberContextConfiguration
+@IntegrationTest
+@WebAppConfiguration
 public class CucumberTestContextConfiguration {
 
 }
