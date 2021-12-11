@@ -659,7 +659,7 @@ public class UserService {
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeSql && authenticationTypeOauth2) { _%>
     @Transactional
-    public Mono<User> saveUser(User user) {
+    public Mono<<%= asEntity('User') %>> saveUser(<%= asEntity('User') %> user) {
         return saveUser(user, false);
     }
 
@@ -682,7 +682,7 @@ public class UserService {
                 // Saving the relationship can be done in an entity callback
                 // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
         <%_ if (authenticationTypeOauth2) { _%>
-                Mono<User> persistedUser;
+                Mono<<%= asEntity('User') %>> persistedUser;
                 if (forceCreate) {
                     persistedUser = userRepository.create(user);
                 } else {
