@@ -259,6 +259,11 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('enable-swagger-codegen', {
+      desc: 'API first development using OpenAPI-generator',
+      type: Boolean,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;

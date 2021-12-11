@@ -82,8 +82,6 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         '/api',
         '/services',
         '/management',
-        '/swagger-resources',
-        '/v2/api-docs',
         '/v3/api-docs',
         '/h2-console',<% if (authenticationTypeOauth2) { %>
         '/oauth2',

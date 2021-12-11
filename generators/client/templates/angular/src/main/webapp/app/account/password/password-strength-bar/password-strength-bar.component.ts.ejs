@@ -33,7 +33,7 @@ export class PasswordStrengthBarComponent {
     const regex = /[$-/:-?{-~!"^_`[\]]/g; // "
     const lowerLetters = /[a-z]+/.test(p);
     const upperLetters = /[A-Z]+/.test(p);
-    const numbers = /[0-9]+/.test(p);
+    const numbers = /\d+/.test(p);
     const symbols = regex.test(p);
 
     const flags = [lowerLetters, upperLetters, numbers, symbols];

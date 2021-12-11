@@ -551,9 +551,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
 <%_ } _%>
-    implementation ("io.springfox:springfox-oas")
-    implementation ("io.springfox:springfox-swagger2")
-    implementation "io.springfox:springfox-bean-validators"
+    implementation ("org.springdoc:springdoc-openapi-webmvc-core")
 <%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
   <%_ if (!reactive) { _%>
