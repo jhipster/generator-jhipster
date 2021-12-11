@@ -494,7 +494,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
     return {
       loadEntity() {
         // Update current context with config from file.
+        // copying everything will also overwrite search setting from the service itself
+        // which is wrong  for the microservice context.
+        this.context.disableElasticSearch =
+          !this.context.searchEngine && this.jhipsterConfig.applicationType === MICROSERVICE && this.context.entityExisted;
         Object.assign(this.context, this.entityStorage.getAll());
+        // in case search was deactiated on entity level (through  JSON file),   also disable  it in context
+        if (!this.entityConfig.searchEngine && this.context.entityExisted) {
+          this.context.searchEngine = false;
+        }
         this.loadDerivedAppConfig(this.context);
         this.loadDerivedClientConfig(this.context);
         this.loadDerivedServerConfig(this.context);
@@ -1009,13 +1017,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
     if (context.options.skipServer !== undefined) {
       this.entityConfig.skipServer = context.options.skipServer;
-    }
-    // in case we are regenerating existing entities, and searchengine is not specified on
-    // entity file it shall be threated as if  search engine is set to false.
-    // also if search engine is set to false on the top level it shall not generate search artifacts for
-    // individual entities
-    if (this.context.entityExisted && (this.entityConfig.searchEngine === undefined || !this.jhipsterConfig.searchEngine)) {
-      this.entityConfig.searchEngine = false;
     }
     dest.experimental = context.options.experimental;
 

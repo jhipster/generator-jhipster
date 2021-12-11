@@ -620,6 +620,9 @@ describe('JHipster generator for entity', () => {
           assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.module.ts`, 'SampleMicroserviceBarModule');
           assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/BarResource.java`);
         });
+        it('generates search specific content for template', () => {
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.html`, 'form name="searchForm"');
+        });
       });
 
       describe('with entity from microservice and custom client-root-folder', () => {

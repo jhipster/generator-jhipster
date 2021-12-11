@@ -2953,8 +2953,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.messageBrokerKafka = dest.messageBroker === KAFKA;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
-    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-
+    // disable elastic search if it was deactivated on top level
+    dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH && !dest.disableElasticSearch;
+    if (dest.searchEngine === ELASTICSEARCH && dest.disableElasticSearch) {
+      dest.searchEngine = false;
+    }
     dest.reactiveSqlTestContainers =
       dest.reactive &&
       ([MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.prodDatabaseType) ||
