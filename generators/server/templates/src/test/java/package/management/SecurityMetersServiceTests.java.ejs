@@ -43,7 +43,7 @@ class SecurityMetersServiceTests {
     }
 
     @Test
-    public void testInvalidTokensCountersByCauseAreCreated() {
+    void testInvalidTokensCountersByCauseAreCreated() {
         meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).counter();
 
         meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
@@ -68,7 +68,7 @@ class SecurityMetersServiceTests {
     }
 
     @Test
-    public void testCountMethodsShouldBeBoundToCorrectCounters() {
+    void testCountMethodsShouldBeBoundToCorrectCounters() {
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "expired")
             .counter().count()).isZero();

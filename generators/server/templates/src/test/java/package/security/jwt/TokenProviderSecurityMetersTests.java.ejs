@@ -74,7 +74,7 @@ class TokenProviderSecurityMetersTests {
     }
 
     @Test
-    public void testValidTokenShouldNotCountAnything() {
+    void testValidTokenShouldNotCountAnything() {
         Collection<Counter> counters = meterRegistry.find(INVALID_TOKENS_METER_EXPECTED_NAME).counters();
 
         assertThat(aggregate(counters)).isZero();
@@ -87,7 +87,7 @@ class TokenProviderSecurityMetersTests {
     }
 
     @Test
-    public void testTokenExpiredCount() {
+    void testTokenExpiredCount() {
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "expired")
             .counter().count()).isZero();
@@ -117,7 +117,7 @@ class TokenProviderSecurityMetersTests {
     }
 
     @Test
-    public void testTokenSignatureInvalidCount() {
+    void testTokenSignatureInvalidCount() {
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "invalid-signature")
             .counter().count()).isZero();
@@ -132,7 +132,7 @@ class TokenProviderSecurityMetersTests {
     }
 
     @Test
-    public void testTokenMalformedCount() {
+    void testTokenMalformedCount() {
         assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME)
             .tag("cause", "malformed")
             .counter().count()).isZero();
