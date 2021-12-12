@@ -35,7 +35,7 @@ import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 import org.springframework.data.r2dbc.repository.Query;
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.data.relational.core.query.Criteria;
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
@@ -61,7 +61,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>R2dbc<% } if (databaseTypeMongodb) { %>ReactiveMongo<% } if (databaseTypeCouchbase) { %>ReactiveN1qlCouchbase<% } if (databaseTypeNeo4j) { %>ReactiveNeo4j<% } if (databaseTypeCassandra) { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>><% if (databaseTypeSql) { %>, <%= entityClass %>RepositoryInternal<% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>ReactiveCrud<% } if (databaseTypeMongodb) { %>ReactiveMongo<% } if (databaseTypeCouchbase) { %>ReactiveN1qlCouchbase<% } if (databaseTypeNeo4j) { %>ReactiveNeo4j<% } if (databaseTypeCassandra) { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>><% if (databaseTypeSql) { %>, <%= entityClass %>RepositoryInternal<% } %> {
 
 <%_ if (!paginationNo) { _%>
 
@@ -148,12 +148,7 @@ if (databaseTypeSql) {
 }
 <%_ if (databaseTypeSql) { _%>
 interface <%= entityClass %>RepositoryInternal {
-    <S extends <%= persistClass %>> Mono<S> insert(S entity);
     <S extends <%= persistClass %>> Mono<S> save(S entity);
-    Mono<Integer> update(<%= persistClass %> entity);
-
-    Flux<<%= persistClass %>> findAll();
-    Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
     Flux<<%= persistClass %>> findAllBy(Pageable pageable);
     Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
 
@@ -164,8 +159,6 @@ interface <%= entityClass %>RepositoryInternal {
     Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
-
-    Mono<Void> deleteById(<%= primaryKey.type %> id);
   <%_ } _%>
 
 }
