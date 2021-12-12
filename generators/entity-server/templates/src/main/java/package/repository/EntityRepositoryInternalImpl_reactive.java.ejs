@@ -145,6 +145,7 @@ _%>
 
         String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
         return db.sql(select).map(this::process);
+<<<<<<< HEAD
     }
 
     @Override
@@ -155,6 +156,8 @@ _%>
     @Override
     public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
         return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.name %>").is(id)).one();
+=======
+>>>>>>> fdc69ef9ae (use spring reactive repository implementation as implementation parent)
     }
 
 <%_ if (fieldsContainOwnerManyToMany) { _%>
@@ -183,6 +186,7 @@ _%>
         return entity;
     }
 
+<<<<<<< HEAD
     @Override
     public <S extends <%= persistClass %>> Mono<S> save(S entity) {
 <%_ if (isUsingMapsId) { _%>
@@ -194,6 +198,8 @@ _%>
         return super.save(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap((S e) -> updateRelations(e))<% } %>;
     }
 
+=======
+>>>>>>> fdc69ef9ae (use spring reactive repository implementation as implementation parent)
 <%_ if (fieldsContainOwnerManyToMany) { _%>
     protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
   <%_ relationships.filter(function(rel) {
@@ -208,10 +214,25 @@ _%>
         return result.thenReturn(entity);
     }
 
+<<<<<<< HEAD
     @Override
     public Mono<Void> deleteById(Long entityId) {
         return deleteRelations(entityId)
             .then(super.deleteById(entityId));
+=======
+    protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
+  <%_ relationships.filter(function(rel) {
+          return (rel.relationshipManyToMany && rel.ownerSide);
+  }).forEach(function(rel, idx) {
+    if (idx === 0) { _%>
+        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
+   <%_ } else { _%>
+        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
+   <%_
+       }
+  }); _%>
+        return result.thenReturn(entity);
+>>>>>>> fdc69ef9ae (use spring reactive repository implementation as implementation parent)
     }
 
     protected Mono<Void> deleteRelations(Long entityId) {
