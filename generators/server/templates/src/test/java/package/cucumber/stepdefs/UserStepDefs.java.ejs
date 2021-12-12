@@ -31,18 +31,35 @@ import <%= packageName %>.security.AuthoritiesConstants;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
+import org.springframework.test.web.servlet.MockMvc;
+<%_ } _%>
 
 public class UserStepDefs extends StepDefs {
 
     @Autowired
-    private UserResource userResource;
+<%_ if (!reactive) { _%>
+    private MockMvc userResource;
+<%_ } else { _%>
+    private WebTestClient userResource;
+<%_ } _%>
 
     @When("I search user {string}")
     public void i_search_user(String userId) throws Throwable {
+<%_ if (!reactive) { _%>
         actions = userResource.perform(get("/api/admin/users/" + userId)
+<%_ } else { _%>
+        actions = accountWebTestClient.get().uri("/api/admin/users/" + userId)
+<%_ } _%>
                     .with(user("admin").password("admin")
-                        .roles(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN))
+                        .roles(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+<%_ if (!reactive) { _%>
+)
+<%_ } _%>
                     .accept(MediaType.APPLICATION_JSON));
+
     }
 
     @Then("the user is found")
