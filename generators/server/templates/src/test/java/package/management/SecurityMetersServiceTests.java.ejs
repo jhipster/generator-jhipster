@@ -64,7 +64,7 @@ class SecurityMetersServiceTests {
 
         Collection<Counter> counters = meterRegistry.find(INVALID_TOKENS_METER_EXPECTED_NAME).counters();
 
-        assertThat(counters.size()).isEqualTo(4);
+        assertThat(counters).hasSize(4);
     }
 
     @Test
