@@ -29,6 +29,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import <%= packageName %>.web.rest.UserResource;
 import <%= packageName %>.security.AuthoritiesConstants;
 
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ if (reactive) { _%>
@@ -40,18 +41,25 @@ import org.springframework.test.web.servlet.MockMvc;
 public class UserStepDefs extends StepDefs {
 
     @Autowired
+    private UserResource userResource;
+
 <%_ if (!reactive) { _%>
-    private MockMvc userResource;
+    private MockMvc userResourceMock;
 <%_ } else { _%>
-    private WebTestClient userResource;
+    private WebTestClient userResourceMock;
 <%_ } _%>
+
+    @Before
+    public void setup() {
+        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
+    }
 
     @When("I search user {string}")
     public void i_search_user(String userId) throws Throwable {
 <%_ if (!reactive) { _%>
-        actions = userResource.perform(get("/api/admin/users/" + userId)
+        actions = userResourceMock.perform(get("/api/admin/users/" + userId)
 <%_ } else { _%>
-        actions = accountWebTestClient.get().uri("/api/admin/users/" + userId)
+        actions = userResourceMock.get().uri("/api/admin/users/" + userId)
 <%_ } _%>
                     .with(user("admin").password("admin")
                         .roles(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
