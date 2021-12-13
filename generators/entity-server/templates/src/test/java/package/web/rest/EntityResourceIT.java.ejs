@@ -1393,7 +1393,7 @@ _%>
     <%_ } else if (field.fieldTypeBigDecimal) { _%>
         assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
     <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %><%_ if (field.fieldTypeBigDecimal) { _%>.setScale(2)<%_ } _%>);
+        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
     <%_ }
   } _%>
   <%_ if (searchEngineElasticsearch) { _%>
