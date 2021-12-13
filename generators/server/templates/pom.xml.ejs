@@ -321,6 +321,12 @@
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
 <%_ } _%>
         </dependency>
+<%_ if (!reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
         <dependency>
             <groupId>com.zaxxer</groupId>
