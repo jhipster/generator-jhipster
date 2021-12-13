@@ -167,32 +167,14 @@ _%>
         return entity;
     }
 
-<%_ if (fieldsContainOwnerManyToMany) { _%>
-
-    protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
-  <%_ relationships.filter(function(rel) {
-          return (rel.relationshipManyToMany && rel.ownerSide);
-  }).forEach(function(rel, idx) {
-    if (idx === 0) { _%>
-        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
-   <%_ } else { _%>
-        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
-   <%_
-       }
-  }); _%>
-        return result.thenReturn(entity);
+<%_ if (isUsingMapsId) { _%>
+    @Override
+    public <S extends <%= persistClass %>> Mono<S> save(S entity) {
+        if (entity.get<%= primaryKey.nameCapitalized %>() == null && entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>() != null) {
+            entity.set<%= primaryKey.nameCapitalized %>(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>());
+            return entityManager.insert(entity);
+        }
+        return super.save(entity);
     }
-
-    protected Mono<Void> deleteRelations(Long entityId) {
-  <%_ relationships.filter(function(rel) {
-          return (rel.relationshipManyToMany && rel.ownerSide);
-  }).forEach(function(rel, idx) {
-    if (idx === 0) { _%>
-        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<%
-    } else { %>
-                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% }
-  }); %>;
-    }
-
 <%_ } _%>
 }
