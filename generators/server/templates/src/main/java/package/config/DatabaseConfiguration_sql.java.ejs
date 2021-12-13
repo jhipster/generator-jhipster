@@ -179,11 +179,7 @@ public class DatabaseConfiguration {
         converters.add(StringToUUIDConverter.INSTANCE);
         converters.add(UUIDToStringConverter.INSTANCE);
   <%_ } _%>
-        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
-        return new R2dbcCustomConversions(
-            CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
-            Collections.emptyList()
-        );
+        return R2dbcCustomConversions.of(dialect, converters);
     }
 
     @Bean
