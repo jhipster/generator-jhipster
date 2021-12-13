@@ -160,10 +160,10 @@ task integrationTest(type: Test) {
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
 <%_ if (databaseTypeSql) { _%>
     if (project.hasProperty('testcontainers')) {
-  <%_ if (!reactive) { _%>
-        environment 'spring.profiles.active', 'testcontainers'
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         environment 'SPRING_PROFILES_ACTIVE', 'testcontainers'
+  <%_ } else { _%>
+        environment 'spring.profiles.active', 'testcontainers'
   <%_ } _%>
     }
 <%_ } _%>
