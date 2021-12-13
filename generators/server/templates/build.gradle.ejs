@@ -160,10 +160,10 @@ task integrationTest(type: Test) {
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
 <%_ if (databaseTypeSql) { _%>
     if (project.hasProperty('testcontainers')) {
-  <%_ if (!reactive) { _%>
-        environment 'spring.profiles.active', 'testcontainers'
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         environment 'SPRING_PROFILES_ACTIVE', 'testcontainers'
+  <%_ } else { _%>
+        environment 'spring.profiles.active', 'testcontainers'
   <%_ } _%>
     }
 <%_ } _%>
@@ -406,10 +406,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+  <%_ } else { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -448,10 +448,10 @@ dependencies {
     testImplementation "org.testcontainers:oracle-xe"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.apache.kafka:kafka-clients"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.projectreactor.kafka:reactor-kafka"
+  <%_ } else { _%>
+    implementation "org.apache.kafka:kafka-clients"
   <%_ } _%>
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
@@ -539,26 +539,26 @@ dependencies {
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
 <%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "mysql:mysql-connector-java"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "dev.miku:r2dbc-mysql"
+  <%_ } else { _%>
+    liquibaseRuntime "mysql:mysql-connector-java"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypePostgres) { _%>
     implementation "org.postgresql:postgresql"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.postgresql:postgresql"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-postgresql"
+  <%_ } else { _%>
+    liquibaseRuntime "org.postgresql:postgresql"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMariadb) { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+  <%_ if (reactive) { _%>
+    implementation "org.mariadb:r2dbc-mariadb"
   <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb"
+    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMssql) { _%>
@@ -613,10 +613,10 @@ dependencies {
   <%_ } _%>
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "com.h2database:h2"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-h2"
+  <%_ } else { _%>
+    liquibaseRuntime "com.h2database:h2"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeOracle) { _%>
