@@ -706,8 +706,6 @@ const expectedFiles = {
     `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`,
     `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
     `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProvider.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilter.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilterTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,

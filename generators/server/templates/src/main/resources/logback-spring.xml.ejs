@@ -138,13 +138,12 @@
 <%_ if (reactive) { _%>
     <logger name="reactor" level="WARN"/>
 <%_ } _%>
-    <logger name="springfox" level="WARN"/>
+    <logger name="io.swagger.v3" level="INFO"/>
     <logger name="sun.rmi" level="WARN"/>
 <%_ if (databaseTypeSql) { _%>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/>
 <%_ } _%>
-    <logger name="springfox.documentation.schema.property" level="ERROR"/>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway || cacheProviderHazelcast) { _%>
     <logger name="sun.net.www" level="INFO"/>
 <%_ } _%>
