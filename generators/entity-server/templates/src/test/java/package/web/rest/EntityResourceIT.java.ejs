@@ -639,7 +639,7 @@ _%>
   <%_ if (isUsingMapsId) { _%>
 
         // Validate the id for MapsId, the ids must be same
-        assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+        assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(<%_ if (dtoMapstruct) { _%><%= dtoInstance %><%_ } else { _%>test<%= entityClass %><%_ } _%>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
 

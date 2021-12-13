@@ -167,7 +167,7 @@ public class DatabaseConfiguration {
     // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions(R2dbcDialect dialect) {
-        List<Object> converters = new ArrayList<>(dialect.getConverters());
+        List<Object> converters = new ArrayList<>();
         converters.add(InstantWriteConverter.INSTANCE);
         converters.add(InstantReadConverter.INSTANCE);
         converters.add(BitSetReadConverter.INSTANCE);
