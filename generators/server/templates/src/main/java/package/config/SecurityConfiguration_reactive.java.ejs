@@ -308,7 +308,7 @@ public class SecurityConfiguration {
     }
 <%_ if (authenticationTypeOauth2) { _%>
 
-    <%_ if (applicationType === 'gateway') { _%>
+  <%_ if (applicationTypeGateway) { _%>
     private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
         ReactiveClientRegistrationRepository clientRegistrationRepository) {
         DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
@@ -325,7 +325,7 @@ public class SecurityConfiguration {
                 uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience())
                     .build());
     }
-    <%_ } _%>
+  <%_ } _%>
 
     Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
