@@ -196,7 +196,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testgetCurrentUserLogin() {
         String login = SecurityUtils.getCurrentUserLogin()
-            .subscriberContext(
+            .contextWrite(
                 ReactiveSecurityContextHolder.withAuthentication(
                     new UsernamePasswordAuthenticationToken("admin", "admin")
                 )
@@ -209,7 +209,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testgetCurrentUserJWT() {
         String jwt = SecurityUtils.getCurrentUserJWT()
-            .subscriberContext(
+            .contextWrite(
                 ReactiveSecurityContextHolder.withAuthentication(
                     new UsernamePasswordAuthenticationToken("admin", "token")
                 )
@@ -222,7 +222,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testIsAuthenticated() {
         Boolean isAuthenticated = SecurityUtils.isAuthenticated()
-            .subscriberContext(
+            .contextWrite(
                 ReactiveSecurityContextHolder.withAuthentication(
                     new UsernamePasswordAuthenticationToken("admin", "admin")
                 )
@@ -236,7 +236,7 @@ class SecurityUtilsUnitTest {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         Boolean isAuthenticated = SecurityUtils.isAuthenticated()
-            .subscriberContext(
+            .contextWrite(
                 ReactiveSecurityContextHolder.withAuthentication(
                     new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
                 )
@@ -253,12 +253,12 @@ class SecurityUtilsUnitTest {
             new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
         );
         Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .subscriberContext(context)
+            .contextWrite(context)
             .block();
         assertThat(hasCurrentUserThisAuthority).isTrue();
 
         hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)
-            .subscriberContext(context)
+            .contextWrite(context)
             .block();
         assertThat(hasCurrentUserThisAuthority).isFalse();
     }
@@ -271,12 +271,12 @@ class SecurityUtilsUnitTest {
             new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
         );
         Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .subscriberContext(context)
+            .contextWrite(context)
             .block();
         assertThat(hasCurrentUserThisAuthority).isFalse();
 
         hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)
-            .subscriberContext(context)
+            .contextWrite(context)
             .block();
         assertThat(hasCurrentUserThisAuthority).isTrue();
     }
@@ -289,12 +289,12 @@ class SecurityUtilsUnitTest {
             new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
         );
         Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)
-            .subscriberContext(context)
+            .contextWrite(context)
             .block();
         assertThat(hasCurrentUserThisAuthority).isTrue();
 
         hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)
-            .subscriberContext(context)
+            .contextWrite(context)
             .block();
         assertThat(hasCurrentUserThisAuthority).isFalse();
     }
