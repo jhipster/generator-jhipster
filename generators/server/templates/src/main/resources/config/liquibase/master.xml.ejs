@@ -21,6 +21,8 @@
     <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
 <%_ if (prodDatabaseTypePostgres) { _%>
     <property name="clobType" value="longvarchar" dbms="h2"/>
+<%_ } else if (reactive) { _%>
+    <property name="clobType" value="varchar(1000000)" dbms="h2"/>
 <%_ } else { _%>
     <property name="clobType" value="clob" dbms="h2"/>
 <%_ } _%>
