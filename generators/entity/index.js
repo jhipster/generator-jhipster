@@ -38,6 +38,8 @@ const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
+const { NO: SEARCH_ENGINE_NO } = require('../../jdl/jhipster/search-engine-types');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
 const {
   GENERATOR_ENTITIES,
@@ -359,6 +361,28 @@ class EntityGenerator extends BaseBlueprintGenerator {
           throw new Error(validation);
         }
 
+        if (this.entityConfig.searchEngine === undefined) {
+          const backendOnlyMicroservice =
+            context.applicationType === MICROSERVICE && (!context.clientFramework || context.clientFramework === CLIENT_FRAMEWORK_NO);
+          if (backendOnlyMicroservice && context.searchEngine && context.searchEngine !== SEARCH_ENGINE_NO && !context.entityExisted) {
+            // Propagate searchEngine to the entity, it's opt-in and should be propagated to gateway
+            this.entityConfig.searchEngine = true;
+          }
+        } else if (
+          (!context.searchEngine || context.searchEngine === SEARCH_ENGINE_NO) &&
+          (context.applicationType !== GATEWAY || !this.entityConfig.microserviceName)
+        ) {
+          if (this.entityConfig.searchEngine === SEARCH_ENGINE_NO) {
+            // Convert to boolean.
+            this.entityConfig.searchEngine = false;
+          }
+          // If search engine is disabled at application, and unless it's a gateway publishing a microservice entity.
+          if (this.entityConfig.searchEngine) {
+            this.warning('Search engine disabled at application, cannot be enabled at entity, disabling');
+            this.entityConfig.searchEngine = false;
+          }
+        }
+
         this.entityConfig.name = this.entityConfig.name || context.name;
         if (![SQL, MONGODB, COUCHBASE, NEO4J].includes(context.databaseType)) {
           this.entityConfig.pagination = NO_PAGINATION;
@@ -494,8 +518,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     return {
       loadEntity() {
         loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
-        this.context.disableSearch =
-          !this.context.searchEngine && this.jhipsterConfig.applicationType === MICROSERVICE && this.context.entityExisted;
         // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
         this.loadDerivedAppConfig(this.context);
@@ -504,7 +526,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         // The entity definition should take precedence so frontend and backend are in sync.
         // Doesn't apply to microfrontends.
         if (
-          (this.entityConfig.searchEngine === undefined || this.context.disableSearch) &&
+          this.entityConfig.searchEngine === undefined &&
           !this.context.microfrontend &&
           (this.context.applicationTypeMicroservice || (this.entityConfig.microserviceName && this.context.applicationTypeGateway))
         ) {
