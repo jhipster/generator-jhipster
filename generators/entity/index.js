@@ -53,6 +53,7 @@ const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
 const { PaginationTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
+const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 
 const { PAGINATION } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
@@ -234,7 +235,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
           if (this.jhipsterConfig.applications && !this.entityConfig.skipClient) {
             const remoteConfig = this.jhipsterConfig.applications[this.entityConfig.microserviceName];
-            if (remoteConfig.clientFramework === 'vue') {
+            if (remoteConfig && remoteConfig.clientFramework && remoteConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
+              // Gateway requires entities to discover a microfrontend.
+              // Microfrontends is generated at the microservice side, so skip it at gateway side.
               this.entityConfig.skipClient = true;
             }
           }
