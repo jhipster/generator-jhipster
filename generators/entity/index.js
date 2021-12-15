@@ -493,21 +493,27 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadEntity() {
-        // Update current context with config from file.
-        // copying everything will also overwrite search setting from the service itself
-        // which is wrong  for the microservice context.
-        this.context.disableElasticSearch =
+        loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+        this.context.disableSearch =
           !this.context.searchEngine && this.jhipsterConfig.applicationType === MICROSERVICE && this.context.entityExisted;
+        // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
-        // in case search was deactiated on entity level (through  JSON file),   also disable  it in context
-        if (!this.entityConfig.searchEngine && this.context.entityExisted) {
+        this.loadDerivedAppConfig(this.context);
+
+        // Entity searchEngine support should opt-in instead of opt-out for gateway/microservice.
+        // The entity definition should take precedence so frontend and backend are in sync.
+        // Doesn't apply to microfrontends.
+        if (
+          (this.entityConfig.searchEngine === undefined || this.context.disableSearch) &&
+          !this.context.microfrontend &&
+          (this.context.applicationTypeMicroservice || (this.entityConfig.microserviceName && this.context.applicationTypeGateway))
+        ) {
+          this.info(`searchEngine is missing in .jhipster/${this.entityConfig.name}.json, should opt-in for gateway/microservice entities`);
           this.context.searchEngine = false;
         }
-        this.loadDerivedAppConfig(this.context);
         this.loadDerivedClientConfig(this.context);
         this.loadDerivedServerConfig(this.context);
         this.loadDerivedPlatformConfig(this.context);
-        loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
         if (this.context.fields) {
           this.context.fields
             .filter(field => field.options)
