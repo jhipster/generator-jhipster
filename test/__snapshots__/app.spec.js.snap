@@ -68,6 +68,12 @@ Object {
   "gradlew.bat": Object {
     "stateCleared": "modified",
   },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
+    "stateCleared": "modified",
+  },
   "package.json": Object {
     "stateCleared": "modified",
   },
@@ -8572,6 +8578,12 @@ Object {
     "stateCleared": "modified",
   },
   "ngsw-config.json": Object {
+    "stateCleared": "modified",
+  },
+  "npmw": Object {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": Object {
     "stateCleared": "modified",
   },
   "package.json": Object {

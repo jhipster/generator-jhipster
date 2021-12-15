@@ -668,6 +668,19 @@ if (project.hasProperty("nodeInstall")) {
         npmVersion = "<%= NPM_VERSION %>"
         download = downloadNode
     }
+
+    // Copy local node and npm to a fixed location for npmw
+    def fixedNode = tasks.register("fixedNode", Copy) {
+        from nodeSetup
+        into '<%= BUILD_DIR %>node'
+    }
+    tasks.named("nodeSetup").configure { finalizedBy fixedNode }
+
+    def fixedNpm = tasks.register("fixedNpm", Copy) {
+        from npmSetup
+        into '<%= BUILD_DIR %>node'
+    }
+    tasks.named("npmSetup").configure { finalizedBy fixedNpm }
 }
 <%_ } _%>
 <%_ if (embeddableLaunchScript) { _%>

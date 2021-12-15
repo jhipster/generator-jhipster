@@ -93,14 +93,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           ) {
             return defaultInstallTask();
           }
-          const gradle = buildTool === GRADLE;
-          const command = gradle ? './gradlew' : './npmw';
-          const args = gradle ? ['npmInstall'] : ['install'];
 
           try {
-            await this.spawnCommand(command, args, { preferLocal: true });
+            await this.spawnCommand('./npmw', ['install'], { preferLocal: true });
           } catch (error) {
-            this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
+            this.log(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
           }
           return true;
         }.bind(this),
