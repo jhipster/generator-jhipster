@@ -44,7 +44,7 @@ describe('<%= entityAngularName %> Management Component', () => {
         TestBed.configureTestingModule({
             imports: [
 <%_ if (paginationPagination || searchEngine) { _%>
-              RouterTestingModule.withRoutes([{ path: '<%= entityUrl %>', component: <%= entityAngularName %>Component }]),
+              RouterTestingModule.withRoutes([{ path: '<%= entityPage %>', component: <%= entityAngularName %>Component }]),
 <%_ } _%>
               HttpClientTestingModule
             ],
