@@ -3,7 +3,7 @@
     "clientPackageManager": "npm",
     "applicationType": "monolith",
     "reactive": false,
-    "baseName": "jhipster",
+    "baseName": "jhipsterApp",
     "jhiPrefix": "",
     "otherModules": [],
     "skipClient": false,
