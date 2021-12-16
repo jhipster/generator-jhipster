@@ -96,11 +96,6 @@
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version><%= HIBERNATE_VERSION %></hibernate.version>
-  <%_ if (!reactive) { _%>
-        <!-- The javassist version should match the one managed by
-        https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
-        <javassist.version>3.27.0-GA</javassist.version>
-  <%_ } _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
@@ -1853,11 +1848,6 @@
                                     <groupId>javax.validation</groupId>
                                     <artifactId>validation-api</artifactId>
                                     <version>${validation-api.version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.javassist</groupId>
-                                    <artifactId>javassist</artifactId>
-                                    <version>${javassist.version}</version>
                                 </dependency>
   <%_ if (devDatabaseTypePostgres) { _%>
                                 <dependency>
