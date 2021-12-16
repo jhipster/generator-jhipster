@@ -2625,7 +2625,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.clientFramework = options.clientFramework;
     }
     if (options.testFrameworks) {
-      this.jhipsterConfig.testFrameworks = options.testFrameworks;
+      this.jhipsterConfig.testFrameworks = [...new Set([...(this.jhipsterConfig.testFrameworks || []), ...options.testFrameworks])];
     }
     if (options.cypressCoverage !== undefined) {
       this.jhipsterConfig.cypressCoverage = options.cypressCoverage;
@@ -2668,7 +2668,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     if (options.microfrontend) {
-      this.warning('Microfrontend option is deprecated.');
+      this.jhipsterConfig.microfrontend = options.microfrontend;
     }
 
     if (options.reactive !== undefined) {
@@ -2744,6 +2744,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.dtoSuffix = config.dtoSuffix;
     dest.skipUserManagement = config.skipUserManagement;
     dest.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
+    dest.microfrontend = config.microfrontend;
 
     dest.skipServer = config.skipServer;
     dest.skipCommitHook = config.skipCommitHook;
@@ -2800,6 +2801,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.microfrontends = dest.remotes.filter(r => r.clientFramework && r.clientFramework !== CLIENT_FRAMEWORK_NO);
     }
     dest.microfrontend =
+      dest.microfrontend ||
       (dest.applicationTypeMicroservice && !dest.skipClient) ||
       (dest.applicationTypeGateway && dest.microfrontends && dest.microfrontends.length > 0);
   }
