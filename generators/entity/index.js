@@ -55,7 +55,6 @@ const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { IMAGE, TEXT } = BlobTypes;
 
 const { PaginationTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
-const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 
 const { PAGINATION } = PaginationTypes;
 const NO_PAGINATION = PaginationTypes.NO;
