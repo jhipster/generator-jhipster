@@ -16,9 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (enableTranslation) { _%>
-jest.mock('@ngx-translate/core');
-<%_ } _%>
 jest.mock('app/core/auth/account.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
@@ -26,7 +23,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { throwError, of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -52,9 +49,14 @@ describe('SettingsComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [
+<%_ if (enableTranslation) { _%>
+          TranslateModule.forRoot(),
+<%_ } _%>
+          HttpClientTestingModule
+        ],
         declarations: [SettingsComponent],
-        providers: [FormBuilder<% if (enableTranslation) { %>, TranslateService<% } %>, AccountService],
+        providers: [FormBuilder, AccountService],
       })
         .overrideTemplate(SettingsComponent, '')
         .compileComponents();

@@ -22,6 +22,7 @@ const { compilerOptions: { paths = {}, baseUrl = './' } } = require('./tsconfig.
 const environment = require('./webpack/environment');
 
 module.exports = {
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|dayjs/esm)'],
   globals: {
     ...environment,
   },
