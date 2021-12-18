@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const validationOptions = require('../jdl/jhipster/validations');
+const gradleOptions = require('./gradle/constants.cjs');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR_X, REACT, VUE } = require('../jdl/jhipster/client-framework-types');
 const commonPackageJson = require('./common/templates/package.json');
@@ -30,7 +31,7 @@ const NODE_VERSION = '14.18.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
-const GRADLE_VERSION = '7.3.1';
+const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 const JIB_VERSION = '3.1.4';
 
 // Libraries version

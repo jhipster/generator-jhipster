@@ -513,15 +513,15 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
+  <%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
   <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -627,15 +627,15 @@
             <scope>test</scope>
         </dependency>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-        </dependency>
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         <dependency>
             <groupId>io.projectreactor.kafka</groupId>
             <artifactId>reactor-kafka</artifactId>
+        </dependency>
+  <%_ } else { _%>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
         </dependency>
   <%_ } _%>
         <dependency>
@@ -847,17 +847,16 @@
             <scope>provided</scope>
         </dependency>
 <%_ } _%>
-<%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (reactive) { _%>
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } else { _%>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>

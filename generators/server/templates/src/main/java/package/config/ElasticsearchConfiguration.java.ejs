@@ -154,7 +154,7 @@ class CustomElasticsearchPersistentProperty extends SimpleElasticsearchPersisten
 
     @SuppressWarnings({"unchecked"})
     public CustomElasticsearchPersistentProperty(Property property, PersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
-        super(property, owner, simpleTypeHolder, PropertyNameFieldNamingStrategy.INSTANCE);
+        super(property, owner, simpleTypeHolder);
     }
 
     @Override
