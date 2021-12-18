@@ -127,12 +127,16 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     <%_ } _%>
   <%_ } _%>
 
+    @Override
     <S extends <%= persistClass %>> Mono<S> save(S entity);
 
+    @Override
     Flux<<%= persistClass %>> findAll();
 
+    @Override
     Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
 
+    @Override
     Mono<Void> deleteById(<%= primaryKey.type %> id);
 <%_ } _%>
 
