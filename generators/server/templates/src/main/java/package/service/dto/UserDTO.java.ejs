@@ -71,12 +71,12 @@ public class <%= asDto('User') %> {
     }
 
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        public String get<%= javaBeanCase(field.fieldName) %>() {
-            return <%= field.fieldName %>;
-        }
-        public void set<%= javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
-            this.<%= field.fieldName %> = <%= field.fieldName %>;
-        }
+    public String get<%= javaBeanCase(field.fieldName) %>() {
+        return <%= field.fieldName %>;
+    }
+    public void set<%= javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
+        this.<%= field.fieldName %> = <%= field.fieldName %>;
+    }
 <%_ } _%>
 
     // prettier-ignore
