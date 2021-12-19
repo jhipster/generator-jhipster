@@ -44,9 +44,9 @@ import java.util.*;
 <%_ } else { _%>
 import java.util.ArrayList;
 import java.util.Collection;
-<%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
 import java.util.Optional;
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,7 +59,113 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
  */
 class SecurityUtilsUnitTest {
 
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+    @Test
+    void testgetCurrentUserLogin() {
+        String login = SecurityUtils.getCurrentUserLogin()
+            .contextWrite(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "admin")
+                )
+            )
+            .block();
+        assertThat(login).isEqualTo("admin");
+    }
+  <%_ if (authenticationTypeJwt) { _%>
+
+    @Test
+    void testgetCurrentUserJWT() {
+        String jwt = SecurityUtils.getCurrentUserJWT()
+            .contextWrite(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "token")
+                )
+            )
+            .block();
+        assertThat(jwt).isEqualTo("token");
+    }
+  <%_ } _%>
+
+    @Test
+    void testIsAuthenticated() {
+        Boolean isAuthenticated = SecurityUtils.isAuthenticated()
+            .contextWrite(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "admin")
+                )
+            )
+            .block();
+        assertThat(isAuthenticated).isTrue();
+    }
+
+    @Test
+    void testAnonymousIsNotAuthenticated() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        Boolean isAuthenticated = SecurityUtils.isAuthenticated()
+            .contextWrite(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
+                )
+            )
+            .block();
+        assertThat(isAuthenticated).isFalse();
+    }
+
+    @Test
+    void testHasCurrentUserAnyOfAuthorities() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        Context context = ReactiveSecurityContextHolder.withAuthentication(
+            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
+        );
+        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            .contextWrite(context)
+            .block();
+        assertThat(hasCurrentUserThisAuthority).isTrue();
+
+        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)
+            .contextWrite(context)
+            .block();
+        assertThat(hasCurrentUserThisAuthority).isFalse();
+    }
+
+    @Test
+    void testHasCurrentUserNoneOfAuthorities() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        Context context = ReactiveSecurityContextHolder.withAuthentication(
+            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
+        );
+        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            .contextWrite(context)
+            .block();
+        assertThat(hasCurrentUserThisAuthority).isFalse();
+
+        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)
+            .contextWrite(context)
+            .block();
+        assertThat(hasCurrentUserThisAuthority).isTrue();
+    }
+
+    @Test
+    void testHasCurrentUserThisAuthority() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        Context context = ReactiveSecurityContextHolder.withAuthentication(
+            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
+        );
+        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)
+            .contextWrite(context)
+            .block();
+        assertThat(hasCurrentUserThisAuthority).isTrue();
+
+        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)
+            .contextWrite(context)
+            .block();
+        assertThat(hasCurrentUserThisAuthority).isFalse();
+    }
+<%_ } else { /% Not reactive %/_%>
     @BeforeEach
     @AfterEach
     void cleanup() {
@@ -190,113 +296,6 @@ class SecurityUtilsUnitTest {
 
         assertThat(SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)).isFalse();
         assertThat(SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)).isTrue();
-    }
-<%_ } _%>
-<%_ if (reactive) { _%>
-    @Test
-    void testgetCurrentUserLogin() {
-        String login = SecurityUtils.getCurrentUserLogin()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "admin")
-                )
-            )
-            .block();
-        assertThat(login).isEqualTo("admin");
-    }
-  <%_ if (authenticationTypeJwt) { _%>
-
-    @Test
-    void testgetCurrentUserJWT() {
-        String jwt = SecurityUtils.getCurrentUserJWT()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "token")
-                )
-            )
-            .block();
-        assertThat(jwt).isEqualTo("token");
-    }
-  <%_ } _%>
-
-    @Test
-    void testIsAuthenticated() {
-        Boolean isAuthenticated = SecurityUtils.isAuthenticated()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "admin")
-                )
-            )
-            .block();
-        assertThat(isAuthenticated).isTrue();
-    }
-
-    @Test
-    void testAnonymousIsNotAuthenticated() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-        Boolean isAuthenticated = SecurityUtils.isAuthenticated()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
-                )
-            )
-            .block();
-        assertThat(isAuthenticated).isFalse();
-    }
-
-    @Test
-    void testHasCurrentUserAnyOfAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        Context context = ReactiveSecurityContextHolder.withAuthentication(
-            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
-        );
-        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .contextWrite(context)
-            .block();
-        assertThat(hasCurrentUserThisAuthority).isTrue();
-
-        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)
-            .contextWrite(context)
-            .block();
-        assertThat(hasCurrentUserThisAuthority).isFalse();
-    }
-
-    @Test
-    void testHasCurrentUserNoneOfAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        Context context = ReactiveSecurityContextHolder.withAuthentication(
-            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
-        );
-        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .contextWrite(context)
-            .block();
-        assertThat(hasCurrentUserThisAuthority).isFalse();
-
-        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.ANONYMOUS, AuthoritiesConstants.ADMIN)
-            .contextWrite(context)
-            .block();
-        assertThat(hasCurrentUserThisAuthority).isTrue();
-    }
-
-    @Test
-    void testHasCurrentUserThisAuthority() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        Context context = ReactiveSecurityContextHolder.withAuthentication(
-            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
-        );
-        Boolean hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)
-            .contextWrite(context)
-            .block();
-        assertThat(hasCurrentUserThisAuthority).isTrue();
-
-        hasCurrentUserThisAuthority = SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)
-            .contextWrite(context)
-            .block();
-        assertThat(hasCurrentUserThisAuthority).isFalse();
     }
 <%_ } _%>
 

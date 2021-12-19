@@ -51,30 +51,7 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class UserJWTController {
 
-<%_ if (!reactive) { _%>
-    private final TokenProvider tokenProvider;
-
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
-
-    @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication, loginVM.isRememberMe());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
-    }
-<%_ } else { _%>
+<%_ if (reactive) { _%>
     private final TokenProvider tokenProvider;
 
     private final ReactiveAuthenticationManager authenticationManager;
@@ -97,8 +74,31 @@ public class UserJWTController {
                 return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
             });
     }
+<%_ } else { _%>
+    private final TokenProvider tokenProvider;
 
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+        this.tokenProvider = tokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.createToken(authentication, loginVM.isRememberMe());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
 <%_ } _%>
+
     /**
      * Object to return as body in JWT Authentication.
      */

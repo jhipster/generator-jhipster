@@ -24,10 +24,10 @@ import org.springframework.stereotype.Repository;
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-import org.springframework.data.jpa.repository.JpaRepository;
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
+  <%_ } else { _%>
+import org.springframework.data.jpa.repository.JpaRepository;
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
