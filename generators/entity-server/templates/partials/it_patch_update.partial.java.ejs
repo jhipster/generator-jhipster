@@ -37,12 +37,7 @@ partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persi
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (!reactive) { _%>
-rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-.contentType("application/merge-patch+json")
-.content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
-.andExpect(status().isOk());
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 webTestClient
 .patch()
 .uri(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())
@@ -51,6 +46,11 @@ webTestClient
 .exchange()
 .expectStatus()
 .isOk();
+<%_ } else { _%>
+rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= asEntity(entityClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+.contentType("application/merge-patch+json")
+.content(TestUtil.convertObjectToJsonBytes(<%= 'partialUpdated' + persistClass %>)))
+.andExpect(status().isOk());
 <%_ } _%>
 
 // Validate the <%= entityClass %> in the database

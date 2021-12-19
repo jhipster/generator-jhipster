@@ -31,15 +31,15 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
+  <%_ if (reactive) { _%>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Table;
+  <%_ } else { _%>
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
-  <%_ } else { _%>
-import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Persistable;
-import org.springframework.data.relational.core.mapping.Table;
 
   <%_ } _%>
 <%_ } _%>

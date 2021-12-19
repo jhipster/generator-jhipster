@@ -113,18 +113,18 @@ _%>
     @Override
     public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
         if (entity == null) {
-<%_ if (!reactive) { _%>
-            return null;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
             return Mono.empty();
+<%_ } else { _%>
+            return null;
 <%_ } _%>
         }
         Problem problem = entity.getBody();
         if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
-<%_ if (!reactive) { _%>
-            return entity;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
             return Mono.just(entity);
+<%_ } else { _%>
+            return entity;
 <%_ } _%>
         }
 
@@ -136,10 +136,10 @@ _%>
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
             .withTitle(problem.getTitle())
-<%_ if (!reactive) { _%>
-            .with(PATH_KEY, requestUri);
-<%_ } else { _%>
+<%_ if (reactive) { _%>
             .with(PATH_KEY, request.getRequest().getPath().value());
+<%_ } else { _%>
+            .with(PATH_KEY, requestUri);
 <%_ } _%>
 
         if (problem instanceof ConstraintViolationProblem) {
@@ -160,7 +160,7 @@ _%>
     }
 
     @Override
-    public <%- returnType %> handle<%_ if (!reactive) { _%>MethodArgumentNotValid(MethodArgumentNotValidException<% } else { %>BindingResult(WebExchangeBindException<% } %> ex, @Nonnull <%= requestClass %> request) {
+    public <%- returnType %> handle<%_ if (reactive) { _%>BindingResult(WebExchangeBindException<% } else { %>MethodArgumentNotValid(MethodArgumentNotValidException<% } %> ex, @Nonnull <%= requestClass %> request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()))
@@ -168,8 +168,8 @@ _%>
 
         Problem problem = Problem.builder()
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
-            .withTitle("<%_ if (!reactive) { _%>Method argument not valid<% } else { %>Data binding and validation failure<% } %>")
-            .withStatus(<% if (!reactive) { %>defaultConstraintViolationStatus()<% } else { %>Status.BAD_REQUEST<% } %>)
+            .withTitle("<%_ if (reactive) { _%>Data binding and validation failure<% } else { %>Method argument not valid<% } %>")
+            .withStatus(<% if (reactive) { %>Status.BAD_REQUEST<% } else { %>defaultConstraintViolationStatus()<% } %>)
             .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
             .with(FIELD_ERRORS_KEY, fieldErrors)
             .build();

@@ -114,10 +114,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
-<%_ if (!reactive) { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !paginationNo || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
@@ -229,10 +229,10 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ if (cacheProviderRedis || searchEngineElasticsearch || fieldsContainOwnerManyToMany) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
-<%_ if (!reactive) { _%>
-@AutoConfigureMockMvc
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
+<%_ } else { _%>
+@AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser
 class <%= entityClass %>ResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
@@ -462,14 +462,13 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     @Autowired
     private EntityManager em;
 <%_ } _%>
-<%_ if (!reactive) { _%>
 
-    @Autowired
-    private MockMvc rest<%= entityClass %>MockMvc;
-<%_ } else { _%>
-
+<%_ if (reactive) { _%>
     @Autowired
     private WebTestClient webTestClient;
+<%_ } else { _%>
+    @Autowired
+    private MockMvc rest<%= entityClass %>MockMvc;
 <%_ } _%>
 
     private <%= persistClass %> <%= persistInstance %>;
@@ -604,17 +603,17 @@ _%>
   <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
   <%_ } _%>
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
-            .andExpect(status().isCreated());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isCreated();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .andExpect(status().isCreated());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -663,17 +662,17 @@ _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
-            .andExpect(status().isBadRequest());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .andExpect(status().isBadRequest());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -767,8 +766,8 @@ _%>
       let required = false;
       if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
         required = true;
-      }
-      if (required) { _%>
+      } _%>
+      <%_ if (required) { _%>
 
     @Test<%= transactionalAnnotation %>
     void check<%= field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
@@ -780,17 +779,17 @@ _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);<% } %>
 
 
-        <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
-            .andExpect(status().isBadRequest());
-        <%_ } else { _%>
+        <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
+        <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .andExpect(status().isBadRequest());
         <%_ } _%>
 
         <%_ if (databaseTypeCouchbase) { _%>
@@ -858,17 +857,17 @@ _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List
-<%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (!databaseTypeCassandra) { %> + "?sort=<%= primaryKey.name %>,desc"<% } %>))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-<%_ } else { _%>
+<%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?sort=<%= primaryKey.name %>,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
+<%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (!databaseTypeCassandra) { %> + "?sort=<%= primaryKey.name %>,desc"<% } %>))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= idValue %>))<%= !reactive ? ')' : '' %><%_ } _%><% for (field of fields.filter(field => !field.id && !field.transient)) { %>
@@ -893,18 +892,18 @@ _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
-        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
+        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } else { _%>
-        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
+        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } _%>
 
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
-            .andExpect(status().isOk());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true")
             .exchange()
             .expectStatus().isOk();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
+            .andExpect(status().isOk());
   <%_ } _%>
 
   <%_ if (!serviceNo) { _%>
@@ -917,18 +916,18 @@ _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
-        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
+        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } else { _%>
-        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
+        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } _%>
 
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
-            .andExpect(status().isOk());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true")
             .exchange()
             .expectStatus().isOk();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
+            .andExpect(status().isOk());
   <%_ } _%>
 
   <%_ if (!serviceNo) { _%>
@@ -950,17 +949,17 @@ _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get the <%= entityInstance %>
-<%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-<%_ } else { _%>
+<%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
+<%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= primaryKey.name %>").value(<%= reactive ? 'is(' : '' %><%= idValue %>))<%_ } _%><% for (field of fields.filter(field => !field.id && !field.transient)) { %>
@@ -1313,14 +1312,14 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>
-<%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <% if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>))
-            .andExpect(status().isNotFound());
-<%_ } else { _%>
+<%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL_ID, <% if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNotFound();
+<%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <% if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>))
+            .andExpect(status().isNotFound());
 <%_ } _%>
     }
 <%_ if (!readOnly) { _%>
@@ -1364,17 +1363,17 @@ _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
   <%_ } _%>
 
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>)))
-            .andExpect(status().isOk());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>))
             .exchange()
             .expectStatus().isOk();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>)))
+            .andExpect(status().isOk());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1414,17 +1413,17 @@ _%>
 
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
-            .andExpect(status().isBadRequest());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .andExpect(status().isBadRequest());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1451,17 +1450,17 @@ _%>
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
-            .andExpect(status().isBadRequest());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .andExpect(status().isBadRequest());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1488,17 +1487,17 @@ _%>
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
-            .andExpect(status().isMethodNotAllowed());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isEqualTo(405);
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1562,17 +1561,17 @@ _%>
 
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-  <%_ if (!reactive) { _%>
-            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
-            .andExpect(status().isBadRequest());
-  <%_ } else { _%>
-            webTestClient.patch().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())
+  <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
             .exchange()
             .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .contentType("application/merge-patch+json")
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isBadRequest());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1599,17 +1598,17 @@ _%>
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-  <%_ if (!reactive) { _%>
-            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
-            .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
-            .andExpect(status().isBadRequest());
-  <%_ } else { _%>
-            webTestClient.patch().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
+  <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
             .exchange()
             .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- getJavaValueGeneratorForType(primaryKey.type) %>)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType("application/merge-patch+json")
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isBadRequest());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1636,17 +1635,17 @@ _%>
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-  <%_ if (!reactive) { _%>
-            rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
-            .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
-            .andExpect(status().isMethodNotAllowed());
-  <%_ } else { _%>
-            webTestClient.patch().uri(ENTITY_API_URL)
+  <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>))
             .exchange()
             .expectStatus().isEqualTo(405);
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
+            .contentType("application/merge-patch+json")
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
@@ -1683,15 +1682,15 @@ _%>
         int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Delete the <%= entityInstance %>
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.delete().uri(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNoContent();
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
   <%_ } _%>
 
         // Validate the database contains one less item
@@ -1748,16 +1747,16 @@ _%>
   <%_ } _%>
 
         // Search the <%= entityInstance %>
-  <%_ if (!reactive) { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
+  <%_ } else { _%>
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= idValue %>))<%= !reactive ? ')' : '' %><%_ } _%><% for (field of fields.filter(field => !field.id && !field.transient)) { %>
