@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JHipster generator Default configuration with AngularX creates expected default files for angularX 1`] = `
+exports[`JHipster generator custom path Default configuration with AngularX creates expected default files for angularX 1`] = `
 Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
@@ -839,6 +839,9 @@ Object {
   "src/main/webapp2/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -996,6 +999,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp2/app/shared/pagination/item-count.component.spec.ts": Object {

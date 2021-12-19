@@ -550,17 +550,18 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         const buildTool = this.jhipsterConfig.buildTool;
         let e2ePackage = 'target/e2e';
         if (buildTool === MAVEN) {
+          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
             'app:start': './mvnw',
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
-            'backend:start': './mvnw -P-webapp',
+            'backend:start': `./mvnw${excludeWebapp}`,
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
-            'backend:unit:test': `./mvnw -ntp -P-webapp verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
@@ -609,18 +610,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
             'e2e:devserver':
               'concurrently -k -s first "npm run backend:start" "npm start" "wait-on http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"',
-          });
-        }
-        // Vue eagerly loads remotes, wait for it.
-        if (this.microfrontend && this.applicationTypeGateway && this.clientFrameworkVue) {
-          const remotesScript = this.remotes
-            .map(
-              app =>
-                `echo "Waiting for microfrontend ${app.baseName} to start" && wait-on http-get://localhost:$npm_package_config_backend_port/${app.endpointPrefix}/remoteEntry.js && echo "Microfrontend ${app.baseName} started"`
-            )
-            .join(' && ');
-          scriptsStorage.set({
-            'ci:server:await': `${scriptsStorage.get('ci:server:await')} && ${remotesScript}`,
           });
         }
       },
