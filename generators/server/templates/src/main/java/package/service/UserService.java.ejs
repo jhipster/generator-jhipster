@@ -136,7 +136,7 @@ public class UserService {
     private final CacheManager cacheManager;
   <%_ } _%>
 
-    public UserService(UserRepository userRepository<% if (!authenticationTypeOauth2) { %>, PasswordEncoder passwordEncoder<% } %><% if (searchEngineElasticsearch) { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %><% if (authenticationTypeSession  && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable) { %>, CacheManager cacheManager<% } %>) {
+    public UserService(UserRepository userRepository<% if (!authenticationTypeOauth2) { %>, PasswordEncoder passwordEncoder<% } %><% if (searchEngineElasticsearch) { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %><% if (authenticationTypeSession && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -145,7 +145,7 @@ public class UserService {
         this.userSearchRepository = userSearchRepository;
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    <%_ if (authenticationTypeSession  && !reactive) { _%>
+    <%_ if (authenticationTypeSession && !reactive) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
     <%_ } _%>
         this.authorityRepository = authorityRepository;
@@ -402,8 +402,10 @@ public class UserService {
     @Transactional
     <%_ } _%>
     public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> createUser(<%= asDto('AdminUser') %> userDTO) {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();<% if (databaseTypeCassandra) { %>
-        user.setId(UUID.randomUUID().toString());<% } %>
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+    <%_ if (databaseTypeCassandra) { _%>
+        user.setId(UUID.randomUUID().toString());
+    <%_ } _%>
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
