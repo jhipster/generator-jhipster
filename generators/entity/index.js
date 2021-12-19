@@ -387,7 +387,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         this.entityConfig.name = this.entityConfig.name || context.name;
         // disable pagination if there is not database, unless it is gateway project
-        if (![SQL, MONGODB, COUCHBASE, NEO4J].includes(context.databaseType) && context.applicationType !== GATEWAY) {
+        if (
+          ![SQL, MONGODB, COUCHBASE, NEO4J].includes(context.databaseType) &&
+          (context.applicationType !== GATEWAY || !this.entityConfig.microserviceName)
+        ) {
           this.entityConfig.pagination = NO_PAGINATION;
         }
 
