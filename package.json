@@ -124,7 +124,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-chai-friendly": "^0.7.1",
     "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-mocha": "10.0.1",
+    "eslint-plugin-mocha": "10.0.3",
     "eslint-plugin-prettier": "4.0.0",
     "expect": "27.4.2",
     "fs-extra": "10.0.0",
