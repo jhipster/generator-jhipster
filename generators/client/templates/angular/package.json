@@ -21,7 +21,7 @@
     "@angular-builders/custom-webpack": "13.0.0",
     "@angular-builders/jest": "13.0.2",
     "@angular-eslint/eslint-plugin": "13.0.1",
-    "@types/node": "17.0.0",
+    "@types/node": "17.0.1",
     "@types/jest": "27.0.3",
     "@typescript-eslint/eslint-plugin": "5.7.0",
     "browser-sync": "2.27.7",
@@ -43,6 +43,6 @@
     "webpack": "5.65.0",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-merge": "5.8.0",
-    "webpack-notifier": "1.14.1"
+    "webpack-notifier": "1.15.0"
   }
 }
