@@ -1162,7 +1162,16 @@ Object {
           "file": "package/cucumber/stepdefs/UserStepDefs.java",
           "renameTo": [Function],
         },
-        "../features/user/user.feature",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "package/features/user/user.feature",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1727,17 +1736,18 @@ Object {
           "file": "package/cucumber/CucumberTestContextConfiguration.java",
           "renameTo": [Function],
         },
-        Object {
-          "file": "../features/gitkeep",
-          "noEjs": true,
-        },
       ],
     },
     Object {
       "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
-        "cucumber.properties",
+        "junit-platform.properties",
+        Object {
+          "file": "package/features/gitkeep",
+          "noEjs": true,
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
