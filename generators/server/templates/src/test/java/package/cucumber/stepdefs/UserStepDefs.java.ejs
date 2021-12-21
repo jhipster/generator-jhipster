@@ -52,10 +52,10 @@ public class UserStepDefs extends StepDefs {
     @Autowired
     private UserResource userResource;
 
-<%_ if (!reactive) { _%>
-    private MockMvc userResourceMock;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
     private WebTestClient userResourceMock;
+<%_ } else { _%>
+    private MockMvc userResourceMock;
 <%_ } _%>
 
     @Before
