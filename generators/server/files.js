@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const cleanup = require('../cleanup');
 const serverCleanup = require('./cleanup');
 const constants = require('../generator-constants');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
@@ -1739,13 +1738,6 @@ function writeFiles() {
     },
 
     cleanupOldServerFiles() {
-      cleanup.cleanupOldServerFiles(
-        this,
-        `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}/${this.testDir}`,
-        SERVER_MAIN_RES_DIR,
-        SERVER_TEST_RES_DIR
-      );
       serverCleanup.cleanupOldServerFiles(
         this,
         `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
