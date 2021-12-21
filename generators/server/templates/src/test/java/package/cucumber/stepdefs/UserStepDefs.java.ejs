@@ -42,9 +42,10 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
 
 public class UserStepDefs extends StepDefs {
