@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const cleanup = require('../cleanup');
+const serverCleanup = require('./cleanup');
 const constants = require('../generator-constants');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
@@ -1739,6 +1740,13 @@ function writeFiles() {
 
     cleanupOldServerFiles() {
       cleanup.cleanupOldServerFiles(
+        this,
+        `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
+        `${SERVER_TEST_SRC_DIR}/${this.testDir}`,
+        SERVER_MAIN_RES_DIR,
+        SERVER_TEST_RES_DIR
+      );
+      serverCleanup.cleanupOldServerFiles(
         this,
         `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
         `${SERVER_TEST_SRC_DIR}/${this.testDir}`,

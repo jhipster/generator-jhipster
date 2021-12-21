@@ -487,14 +487,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.isJhipsterVersionLessThan('7.0.0-beta.1')) {
     generator.removeFile(`${javaDir}config/CloudDatabaseConfiguration.java`);
   }
-
-  if (generator.isJhipsterVersionLessThan('7.4.1')) {
-    generator.removeFile(`${testResourceDir}cucumber.properties`);
-    generator.removeFile(`${testDir}../features/gitkeep`);
-    generator.removeFile(`${testDir}../features/user/user.feature`);
-  }
 }
-
 /**
  * Upgrade files.
  *
