@@ -81,7 +81,7 @@ public class UserStepDefs extends StepDefs {
 <%_ } else { _%>
         actions = userResourceMock.perform(get("/api/admin/users/" + userId)
 <%_ } _%>
-                    .accept(MediaType.APPLICATION_JSON)<% if (!reactive) { %>)<%_ } _%> ;
+                    .accept(MediaType.APPLICATION_JSON)<% if (!reactive) { %>)<%_ } _%>;
     }
 
     @Then("the user is found")
