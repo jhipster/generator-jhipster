@@ -43,7 +43,7 @@ const HIBERNATE_VERSION = '5.4.33.Final';
 
 const JACOCO_VERSION = '0.8.7';
 const KAFKA_VERSION = '5.5.5';
-const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
+const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
