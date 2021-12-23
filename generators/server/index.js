@@ -54,6 +54,8 @@ const NO_CACHE = cacheTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_WEBSOCKET = websocketTypes.FALSE;
 
+const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
+
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
@@ -336,6 +338,15 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
+        this.mainJavaDir = SERVER_MAIN_SRC_DIR;
+        this.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
+        this.mainJavaPackageDir = `${SERVER_MAIN_RES_DIR}${this.packageFolder}/`;
+        this.testJavaDir = SERVER_TEST_SRC_DIR;
+        this.testJavaPackageDir = `${SERVER_MAIN_RES_DIR}${this.packageFolder}/`;
+        this.testResourceDir = SERVER_TEST_RES_DIR;
+        this.srcMainDir = MAIN_DIR;
+        this.srcTestDir = TEST_DIR;
+
         if (this.jhipsterConfig.databaseType === SQL) {
           // sql
           let dbContainer;
@@ -434,16 +445,16 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     return {
       cleanupCucumberTests() {
         if (!this.cucumberTests) return undefined;
-        if (this.isJhipsterVersionLessThan('7.4.1')) {
+        if (this.isJhipsterVersionLessThan('7.4.2')) {
           this.removeFile(`${this.testResourceDir}cucumber.properties`);
-          this.removeFile(`${this.testDir}../features/gitkeep`);
-          this.removeFile(`${this.testDir}../features/user/user.feature`);
+          this.removeFile(`${this.srcTestDir}features/gitkeep`);
+          this.removeFile(`${this.srcTestDir}features/user/user.feature`);
         }
       },
       cleanupServer() {
         if (this.isJhipsterVersionLessThan('7.4.2')) {
-          this.removeFile(`${this.javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
-          this.removeFile(`${this.testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+          this.removeFile(`${this.mainJavaPackageDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
+          this.removeFile(`${this.testJavaDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
         }
       },
       ...writeFiles(),
