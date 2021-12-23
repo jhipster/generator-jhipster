@@ -443,7 +443,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     // and therefore hibernate validators is not included anymore
     implementation "org.springframework.boot:spring-boot-starter-validation"
     testImplementation "org.testcontainers:neo4j"
-    testImplementation 'org.testcontainers:junit-jupiter'
+<%_ } _%>
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka) { _%>
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (prodDatabaseTypeMysql) { _%>
     testImplementation "org.testcontainers:mysql"
@@ -544,6 +547,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (databaseTypeMongodb) { _%>
     implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
     implementation "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver"
+    testImplementation "org.testcontainers:mongodb"
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.github.differentway:couchmove"
@@ -615,9 +619,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
-<%_ if (databaseTypeMongodb) { _%>
-    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
 <%_ } _%>
@@ -640,9 +641,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     testImplementation "org.testcontainers:kafka"
-<%_ } _%>
-<%_ if (cacheProviderRedis) { %>
-    testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here

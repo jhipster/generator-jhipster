@@ -302,6 +302,13 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
         </dependency>
+<%_ } _%>
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
@@ -345,13 +352,6 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -381,16 +381,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>neo4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>
@@ -480,6 +470,11 @@
         <dependency>
             <groupId>com.github.cloudyrock.mongock</groupId>
             <artifactId>mongodb-springdata-v3-driver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <scope>test</scope>
         </dependency>
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
@@ -1709,23 +1704,6 @@
                     <artifactId>spring-boot-devtools</artifactId>
                     <optional>true</optional>
                 </dependency>
-<%_ if (databaseTypeSql && !devDatabaseTypeH2Any) { _%>
-                <dependency>
-                    <groupId>org.testcontainers</groupId>
-  <%_ if (devDatabaseTypeMysql) { _%>
-                    <artifactId>mysql</artifactId>
-  <%_ } else if (devDatabaseTypeMariadb) { _%>
-                    <artifactId>mariadb</artifactId>
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-                    <artifactId>postgresql</artifactId>
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-                    <artifactId>mssqlserver</artifactId>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-                    <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-                    <scope>test</scope>
-                </dependency>
-<%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
                 <dependency>
                     <groupId>com.h2database</groupId>

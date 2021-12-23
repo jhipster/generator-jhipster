@@ -1,0 +1,43 @@
+package <%= packageName %>;
+
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.test.context.ContextConfigurationAttributes;
+import org.springframework.test.context.ContextCustomizer;
+import org.springframework.test.context.ContextCustomizerFactory;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.utility.DockerImageName;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+
+public class MongoDbTestContainerExtension implements BeforeAllCallback {
+
+    private static AtomicBoolean started = new AtomicBoolean(false);
+    private static final ThreadLocal<MongoDBContainer> THREAD_CONTAINER = new ThreadLocal<>();
+
+    @Override
+    public void beforeAll(ExtensionContext context) {
+        if (!started.get()) {
+            MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("<%= DOCKER_MONGODB %>"));
+            THREAD_CONTAINER.set(mongoDBContainer);
+            mongoDBContainer.start();
+        }
+        started.set(true);
+    }
+
+    public static class MongoSpringContextCustomizerFactory implements ContextCustomizerFactory {
+        @Override
+        public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
+            return (context, mergedConfig) -> {
+                MongoDBContainer container = THREAD_CONTAINER.get();
+                if (container != null) {
+                    TestPropertyValues.of("spring.data.mongodb.uri=" + container.getReplicaSetUrl())
+                            .applyTo(context.getEnvironment());
+                }
+            };
+        }
+    }
+}
