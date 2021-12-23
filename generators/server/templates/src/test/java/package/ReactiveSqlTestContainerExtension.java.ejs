@@ -21,6 +21,7 @@ package <%= packageName %>;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.testcontainers.utility.DockerImageName;
 <%_ if (prodDatabaseTypeMysql) { _%>
 import org.testcontainers.containers.MySQLContainer;
 <%_ } else if (prodDatabaseTypeMariadb) { _%>
@@ -38,19 +39,19 @@ public class ReactiveSqlTestContainerExtension implements BeforeAllCallback {
     private static AtomicBoolean started = new AtomicBoolean(false);
 
 <%_ if (prodDatabaseTypeMysql) { _%>
-    private static MySQLContainer<?> container = new MySQLContainer<>("<%= DOCKER_MYSQL %>")
+    private static MySQLContainer<?> container = new MySQLContainer<>(DockerImageName.parse("<%= DOCKER_MYSQL %>"))
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
 <%_ } else if (prodDatabaseTypeMariadb) { _%>
-    private static MariaDBContainer<?> container = new MariaDBContainer<>("<%= DOCKER_MARIADB %>")
+    private static MariaDBContainer<?> container = new MariaDBContainer<>(DockerImageName.parse("<%= DOCKER_MARIADB %>"))
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
 <%_ } else if (prodDatabaseTypePostgres) { _%>
-    private static PostgreSQLContainer<?> container = new PostgreSQLContainer<>("<%= DOCKER_POSTGRESQL %>")
+    private static PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("<%= DOCKER_POSTGRESQL %>"))
             .withDatabaseName("<%= baseName %>")
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
 <%_ } else if (prodDatabaseTypeMssql) { _%>
-    private static MSSQLServerContainer<?> container =  new MSSQLServerContainer<>("<%= DOCKER_MSSQL %>")
+    private static MSSQLServerContainer<?> container =  new MSSQLServerContainer<>(DockerImageName.parse("<%= DOCKER_MSSQL %>"))
             .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
 <%_ } _%>
 
