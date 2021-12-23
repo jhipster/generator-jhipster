@@ -321,7 +321,7 @@
       "security-admin-console": [],
       "web_app": [],
       "admin-cli": [],
-      "account-console": [],<% if (serviceDiscoveryType === 'eureka') { %>
+      "account-console": [],<% if (serviceDiscoveryEureka) { %>
       "jhipster-registry": [],<% } %>
       "broker": [
         {
@@ -2491,7 +2491,7 @@
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5"
   },
-  "keycloakVersion": "15.0.2",
+  "keycloakVersion": "16.1.0",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []
