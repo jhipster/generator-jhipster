@@ -4378,6 +4378,9 @@ Object {
   "src/test/java/com/mycompany/myapp/MongoDbTestContainerExtension.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/TestContainersSpringContextCustomizerFactory.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
     "stateCleared": "modified",
   },
