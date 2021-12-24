@@ -1252,7 +1252,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/MongoDbTestContainerExtension.java",
+          "file": "package/TestContainersSpringContextCustomizerFactory.java",
           "renameTo": [Function],
         },
       ],
@@ -1555,6 +1555,16 @@ Object {
       "templates": Array [
         Object {
           "file": "package/config/dbmigrations/InitialSetupMigration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/MongoDbTestContainerExtension.java",
           "renameTo": [Function],
         },
       ],

@@ -104,6 +104,15 @@ const mongoDbFiles = {
         },
       ],
     },
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/MongoDbTestContainerExtension.java',
+          renameTo: generator => `${generator.testDir}MongoDbTestContainerExtension.java`,
+        },
+      ],
+    },
   ],
 };
 
@@ -1721,11 +1730,12 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/MongoDbTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}MongoDbTestContainerExtension.java`,
+          file: 'package/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}TestContainersSpringContextCustomizerFactory.java`,
         },
       ],
     },
+
     {
       path: SERVER_TEST_SRC_DIR,
       templates: [
