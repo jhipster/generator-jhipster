@@ -18,19 +18,15 @@
 -%>
 package <%= packageName %>.cucumber;
 
-import org.junit.runner.RunWith;
-
 <%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
-import io.cucumber.junit.CucumberOptions;
-import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.platform.engine.Cucumber;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(plugin = "pretty", features = "<%= TEST_DIR %>features")
+@Cucumber
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT)
 <%_ } _%>
