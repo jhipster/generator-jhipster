@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const cleanup = require('../cleanup');
+const serverCleanup = require('./cleanup');
 const constants = require('../generator-constants');
 const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
@@ -1315,13 +1315,15 @@ const baseServerFiles = {
           file: 'package/cucumber/CucumberTestContextConfiguration.java',
           renameTo: generator => `${generator.testDir}cucumber/CucumberTestContextConfiguration.java`,
         },
-        { file: '../features/gitkeep', noEjs: true },
       ],
     },
     {
       condition: generator => generator.cucumberTests,
       path: SERVER_TEST_RES_DIR,
-      templates: ['cucumber.properties'],
+      templates: [
+        'junit-platform.properties',
+        { file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true },
+      ],
     },
     {
       condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== OAUTH2,
@@ -1630,7 +1632,16 @@ const baseServerFiles = {
           file: 'package/cucumber/stepdefs/UserStepDefs.java',
           renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java`,
         },
-        '../features/user/user.feature',
+      ],
+    },
+    {
+      condition: generator => !generator.skipUserManagement && generator.cucumberTests,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'package/features/user/user.feature',
+          renameTo: generator => `${generator.testDir}cucumber/user.feature`,
+        },
       ],
     },
     {
@@ -1727,7 +1738,7 @@ function writeFiles() {
     },
 
     cleanupOldServerFiles() {
-      cleanup.cleanupOldServerFiles(
+      serverCleanup.cleanupOldServerFiles(
         this,
         `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
         `${SERVER_TEST_SRC_DIR}/${this.testDir}`,
