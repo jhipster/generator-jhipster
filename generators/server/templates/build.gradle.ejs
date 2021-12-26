@@ -183,7 +183,19 @@ task integrationTest(type: Test) {
 }
 <%_ if (cucumberTests) { _%>
 
+task consoleLauncherTest(type: JavaExec) {
+    dependsOn(testClasses)
+    String cucumberReportsDir = file("$buildDir/reports/tests")
+    outputs.dir(reportsDir)
+    classpath = sourceSets["test"].runtimeClasspath
+    main = "org.junit.platform.console.ConsoleLauncher"
+    args("--scan-classpath")
+    args("--include-engine", "cucumber")
+    args("--reports-dir", cucumberReportsDir)
+}
+
 task cucumberTest(type: Test) {
+    dependsOn(consoleLauncherTest)
     description = "Execute cucumber BDD tests."
     group = "verification"
     include "**/*CucumberIT*"
@@ -281,7 +293,8 @@ configurations {
 }
 
 repositories {
-    mavenLocal()
+    // Local maven repository is required for libraries built locally with maven like development jhipster-bom.
+    <%= !JHIPSTER_DEPENDENCIES_VERSION.includes('-SNAPSHOT') && !JHIPSTER_DEPENDENCIES_VERSION.includes('-CICD') ? '// ' : '' %>mavenLocal()
     mavenCentral()
     <%_ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     maven { url 'https://repo.spring.io/milestone' }
@@ -591,9 +604,11 @@ dependencies {
     testImplementation "org.testcontainers:database-commons"
 <%_ } _%>
 <%_ if (cucumberTests) { _%>
-    testImplementation "io.cucumber:cucumber-junit"
+    testImplementation "org.junit.platform:junit-platform-console"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
+    testImplementation "org.testng:testng"
 <%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"

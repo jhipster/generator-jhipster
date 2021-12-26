@@ -16,20 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.cucumber;
-
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
+export const EntityNavbarItems = [
+<%_ for (const entity of localEntities) { _%>
+  {
+    name: '<%= entity.entityAngularName %>',
+    route: '<%= entity.entityPage %>',
+  <%_ if (enableTranslation) { _%>
+    translationKey: 'global.menu.entities.<%= entity.entityTranslationKey %>',
+  <%_ } _%>
+  },
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-import io.cucumber.junit.platform.engine.Cucumber;
-
-@Cucumber
-<%_ if (databaseTypeNeo4j) { _%>
-@ExtendWith(AbstractNeo4jIT)
-<%_ } _%>
-class CucumberIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest<% } %> {
-
-}
+];

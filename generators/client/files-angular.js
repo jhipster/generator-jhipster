@@ -74,6 +74,7 @@ const files = {
       path: ANGULAR_DIR,
       templates: [
         // entities
+        'entities/entity-navbar-items.ts',
         'entities/entity-routing.module.ts',
         // home module
         'home/home.module.ts',
@@ -382,7 +383,11 @@ const files = {
     {
       condition: generator => generator.enableTranslation,
       path: ANGULAR_DIR,
-      templates: ['shared/language/find-language-from-key.pipe.ts', 'shared/language/translate.directive.ts'],
+      templates: [
+        'shared/language/translation.module.ts',
+        'shared/language/find-language-from-key.pipe.ts',
+        'shared/language/translate.directive.ts',
+      ],
     },
   ],
   angularAuthService: [

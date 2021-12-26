@@ -1,5 +1,5 @@
 {
-    "name": "Bar",
+    "name": "Foo",
     "fields": [
         {
             "fieldName": "name",
@@ -8,7 +8,7 @@
     ],
     "relationships": [],
     "changelogDate": "20180905045309",
-    "entityTableName": "bar",
+    "entityTableName": "foo",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",
@@ -16,6 +16,5 @@
     "fluentMethods": true,
     "clientRootFolder": "sampleMicroservice",
     "applications": "*",
-    "microserviceName": "sampleMicroservice",
-    "searchEngine": "elasticsearch"
+    "microserviceName": "sampleMicroservice"
 }

@@ -1416,6 +1416,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -1573,6 +1576,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -2657,6 +2663,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -2814,6 +2823,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -3991,6 +4003,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -4148,6 +4163,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -5331,6 +5349,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -5488,6 +5509,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -6656,6 +6680,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -6813,6 +6840,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -7996,6 +8026,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -8153,6 +8186,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -9351,6 +9387,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -9508,6 +9547,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -11638,6 +11680,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -11795,6 +11840,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -12975,6 +13023,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -13132,6 +13183,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -13308,12 +13362,6 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/features/gitkeep": Object {
-    "stateCleared": "modified",
-  },
-  "src/test/features/user/user.feature": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
     "stateCleared": "modified",
   },
@@ -13407,16 +13455,22 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/com/mycompany/myapp/cucumber/gitkeep": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/com/mycompany/myapp/cucumber/user.feature": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testcontainers.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/cucumber.properties": Object {
+  "src/test/resources/i18n/messages_en.properties": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
@@ -14285,6 +14339,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -14442,6 +14499,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {
@@ -15592,6 +15652,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -15749,6 +15812,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {

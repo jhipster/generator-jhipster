@@ -218,7 +218,7 @@ describe('Authentication reducer tests', () => {
           type: getAccount.fulfilled.type,
           payload: resolvedObject
         },
-        updateLocale('en'),
+        updateLocale('<%= nativeLanguage %>'),
         <%_ } _%>
       ];
       await store.dispatch(getSession());

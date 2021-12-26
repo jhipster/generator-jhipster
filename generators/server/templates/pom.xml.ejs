@@ -580,14 +580,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-<%_ if (!cucumberTests) { _%>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-<%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -794,7 +786,7 @@
         <!-- Cucumber -->
         <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -805,6 +797,16 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-console</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>
@@ -923,17 +925,13 @@
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
-<%_ if (cucumberTests) { _%>
-        <testResources>
-            <testResource>
-                <directory><%= SERVER_TEST_RES_DIR %></directory>
-            </testResource>
-            <testResource>
-                <directory><%= TEST_DIR %>features</directory>
-            </testResource>
-        </testResources>
-<%_ } _%>
         <plugins>
+<%_ if (cucumberTests) { _%>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+<%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -1008,6 +1006,38 @@
         </plugins>
         <pluginManagement>
             <plugins>
+<%_ if (cucumberTests) { _%>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
+                            <id>prepare cucumber feature files</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <echo message="Running JUnit Platform CLI"/>
+                                    <java classname="org.junit.platform.console.ConsoleLauncher"
+                                          fork="true"
+                                          failonerror="true"
+                                          newenvironment="true"
+                                          maxmemory="512m"
+                                          classpathref="maven.test.classpath">
+                                        <arg value="--include-engine"/>
+                                        <arg value="cucumber"/>
+                                        <arg value="--scan-classpath"/>
+                                        <arg value="${project.build.testOutputDirectory}"/>
+                                    </java>
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+<%_ } _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
@@ -1369,7 +1399,6 @@
                         </execution>
                     </executions>
                 </plugin>
-<%_ if (!reactive) { _%>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -1381,6 +1410,10 @@
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
                         </excludes>
+<%_ if (reactive) { _%>
+                        <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                        <argLine>-XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+<%_ } _%>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -1397,6 +1430,10 @@
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
                         </includes>
+<%_ if (reactive) { _%>
+                        <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                        <argLine>-XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+<%_ } _%>
                     </configuration>
                     <executions>
                         <execution>
@@ -1413,7 +1450,6 @@
                         </execution>
                     </executions>
                 </plugin>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
                 <plugin>
                     <!--
@@ -2130,122 +2166,6 @@
                                     <id>repackage</id>
                                     <goals>
                                         <goal>repackage</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-<%_ } _%>
-<%_ if (reactive) { _%>
-        <profile>
-            <id>surefire-java13-</id>
-            <activation>
-                <jdk>(,13]</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${maven-surefire-plugin.version}</version>
-                            <configuration>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <excludes>
-                                    <exclude>**/*IT*</exclude>
-                                    <exclude>**/*IntTest*</exclude>
-                                </excludes>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-failsafe-plugin</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
-                            <configuration>
-                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <includes>
-                                    <include>**/*IT*</include>
-                                    <include>**/*IntTest*</include>
-                                </includes>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>integration-test</id>
-                                    <goals>
-                                        <goal>integration-test</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>verify</id>
-                                    <goals>
-                                        <goal>verify</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>surefire-java13+</id>
-            <activation>
-                <jdk>(13,]</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${maven-surefire-plugin.version}</version>
-                            <configuration>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <excludes>
-                                    <exclude>**/*IT*</exclude>
-                                    <exclude>**/*IntTest*</exclude>
-                                </excludes>
-                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>-XX:+AllowRedefinitionToAddDeleteMethods</argLine>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-failsafe-plugin</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
-                            <configuration>
-                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <includes>
-                                    <include>**/*IT*</include>
-                                    <include>**/*IntTest*</include>
-                                </includes>
-                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>-XX:+AllowRedefinitionToAddDeleteMethods</argLine>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>integration-test</id>
-                                    <goals>
-                                        <goal>integration-test</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>verify</id>
-                                    <goals>
-                                        <goal>verify</goal>
                                     </goals>
                                 </execution>
                             </executions>

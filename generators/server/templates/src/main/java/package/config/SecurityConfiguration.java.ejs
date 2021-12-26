@@ -268,14 +268,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   <%_ if (applicationTypeMonolith) { _%>
         .and()
             .httpBasic()
-        <%_ } _%>
+  <%_ } _%>
         .and()
             .apply(securityConfigurerAdapter());
-  <%_ } else if (authenticationTypeOauth2) { _%>
-    <%_ if (applicationTypeMonolith) { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
+  <%_ if (applicationTypeMonolith) { _%>
         .and()
             .oauth2Login()
-    <%_ } _%>
+  <%_ } _%>
         .and()
             .oauth2ResourceServer()
                 .jwt()
@@ -283,7 +283,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
             .and()
                 .oauth2Client();
-  <%_ } _%>
+<%_ } _%>
         // @formatter:on
     }
 <%_ if (authenticationTypeJwt) { _%>

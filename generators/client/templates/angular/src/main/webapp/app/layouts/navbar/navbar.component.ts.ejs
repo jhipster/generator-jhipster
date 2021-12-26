@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit<% if (enableTranslation && applicationTypeGateway) { %>, Compiler, Injector, NgModuleFactory, Type<% } %> } from '@angular/core';
 import { Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -31,6 +31,7 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-navbar',
@@ -46,12 +47,22 @@ export class NavbarComponent implements OnInit {
   openAPIEnabled?: boolean;
   version = '';
   account: Account | null = null;
+  entitiesNavbarItems: any[] = [];
+<%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+  <%= remote.lowercaseBaseName %>EntityNavbarItems: any[] = [];
+  <%_ } _%>
+<%_ } _%>
 
   constructor(
     private loginService: LoginService,
 <%_ if (enableTranslation) { _%>
     private translateService: TranslateService,
     private sessionStorageService: SessionStorageService,
+  <%_ if (applicationTypeGateway) { _%>
+    private compiler: Compiler,
+    private injector: Injector,
+  <%_ } _%>
 <%_ } _%>
     private accountService: AccountService,
     private profileService: ProfileService,
@@ -63,11 +74,32 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.entitiesNavbarItems = EntityNavbarItems;
     this.profileService.getProfileInfo().subscribe(profileInfo => {
       this.inProduction = profileInfo.inProduction;
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
-    this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    <%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+      import('<%= remote.lowercaseBaseName %>/entity-navbar-items').then(
+        <%= enableTranslation ? 'async ' : '' %>({ EntityNavbarItems: <%= remote.capitalizedBaseName %>EntityNavbarItems }) => {
+          this.<%= remote.lowercaseBaseName %>EntityNavbarItems = <%= remote.capitalizedBaseName %>EntityNavbarItems;
+    <%_ if (enableTranslation) { _%>
+          const { LazyTranslationModule } = await import('<%= remote.lowercaseBaseName %>/translation-module');
+          this.loadModule(LazyTranslationModule as Type<any>);
+    <%_ } _%>
+        },
+        () => {
+          // eslint-disable-next-line no-console
+          console.log('Error loading <%= remote.lowercaseBaseName %> entities');
+        }
+      );
+  <%_ } _%>
+<%_ } _%>
+    });
   }
 
 <%_ if (enableTranslation) { _%>
@@ -98,4 +130,11 @@ export class NavbarComponent implements OnInit {
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
+<%_ if (enableTranslation && applicationTypeGateway) { _%>
+
+  private loadModule(moduleType: Type<any>): void {
+    const moduleFactory = this.compiler.compileModuleAndAllComponentsSync(moduleType);
+    moduleFactory.ngModuleFactory.create(this.injector);
+  }
+<%_ } _%>
 }

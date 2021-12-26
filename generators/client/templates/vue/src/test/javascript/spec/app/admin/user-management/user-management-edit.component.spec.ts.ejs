@@ -87,8 +87,8 @@ describe('UserManagementEdit Component', () => {
       // GIVEN
       axiosStub.put.resolves({
         headers: {
-          'x-jhipsterapp-alert': '',
-          'x-jhipsterapp-params': '',
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
         },
       });
       userManagementEdit.userAccount = { id: <%- tsKeyId %>, authorities: [] };
@@ -106,8 +106,8 @@ describe('UserManagementEdit Component', () => {
       // GIVEN
       axiosStub.post.resolves({
         headers: {
-          'x-jhipsterapp-alert': '',
-          'x-jhipsterapp-params': '',
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
         },
       });
       userManagementEdit.userAccount = { authorities: [] };
