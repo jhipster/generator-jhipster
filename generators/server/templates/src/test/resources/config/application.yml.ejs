@@ -60,7 +60,7 @@ mongock:
 
 <%_ } _%>
 spring:
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
@@ -121,12 +121,6 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
   data:
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    mongodb:
-      host: localhost
-      port: 0
-      database: <%= baseName %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     cassandra:
