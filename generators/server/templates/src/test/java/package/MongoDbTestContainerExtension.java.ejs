@@ -1,0 +1,33 @@
+package <%= packageName %>;
+
+import java.util.Collections;
+
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.utility.DockerImageName;
+
+public class MongoDbTestContainerExtension implements BeforeAllCallback {
+
+    private static final ThreadLocal<MongoDBContainer> THREAD_CONTAINER = new ThreadLocal<>();
+    private long memoryInBytes = 512 * 1024 * 1024;
+    private long memorySwapInBytes = 512 * 1024 * 1024;
+
+    @Override
+    public void beforeAll(ExtensionContext context) {
+        if (null == THREAD_CONTAINER.get()) {
+            MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("<%= DOCKER_MONGODB %>"))
+                .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
+                .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig()
+                    .withMemory(memoryInBytes)
+                    .withMemorySwap(memorySwapInBytes)
+                );
+            mongoDBContainer.start();
+            THREAD_CONTAINER.set(mongoDBContainer);
+        }
+    }
+
+    public static ThreadLocal<?> getThreadContainer() {
+        return THREAD_CONTAINER;
+    }
+}

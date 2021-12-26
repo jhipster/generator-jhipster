@@ -60,7 +60,7 @@ mongock:
 
 <%_ } _%>
 spring:
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
@@ -122,12 +122,6 @@ spring:
 <%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
   data:
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    mongodb:
-      host: localhost
-      port: 0
-      database: <%= baseName %>
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     cassandra:
       contact-points: localhost
@@ -160,11 +154,6 @@ spring:
 <%_ } _%>
   messages:
     basename: i18n/messages
-<%_ if (databaseTypeMongodb) { _%>
-  mongodb:
-    embedded:
-      version: 4.4.10
-<%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
     url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>

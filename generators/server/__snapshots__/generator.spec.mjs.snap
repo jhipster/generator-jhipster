@@ -1230,6 +1230,25 @@ Object {
       ],
     },
     Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
@@ -1527,6 +1546,16 @@ Object {
       "templates": Array [
         Object {
           "file": "package/config/dbmigrations/InitialSetupMigration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/MongoDbTestContainerExtension.java",
           "renameTo": [Function],
         },
       ],
