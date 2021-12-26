@@ -160,11 +160,6 @@ spring:
 <%_ } _%>
   messages:
     basename: i18n/messages
-<%_ if (databaseTypeMongodb) { _%>
-  mongodb:
-    embedded:
-      version: 4.4.10
-<%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
     url: <%- getR2DBCUrl('h2Memory', { databaseName: lowercaseBaseName }) %>
