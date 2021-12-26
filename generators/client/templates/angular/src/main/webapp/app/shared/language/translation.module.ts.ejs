@@ -19,7 +19,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+<%_ if (applicationTypeMicroservice) { _%>import { TranslateHttpLoader } from '@ngx-translate/http-loader';<%_ } _%>
 import { translatePartialLoader, missingTranslationHandler } from 'app/config/translation.config';
 import { SessionStorageService } from 'ngx-webstorage';
 
