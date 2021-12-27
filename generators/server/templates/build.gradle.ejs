@@ -256,9 +256,9 @@ liquibase {
             defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
             logLevel "debug"
             classpath "$buildDir/classes/java/main"
-<%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
             excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
-<%_ } _%>
+  <%_ } _%>
         }
     }
 
@@ -323,7 +323,7 @@ dependencies {
     }<% } %>
 <%_ // This is useful for major Spring Boot migration
 if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
-    runtime "org.springframework.boot:spring-boot-properties-migrator"
+    runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
 <%_ if (!cacheProviderNo) { _%>
