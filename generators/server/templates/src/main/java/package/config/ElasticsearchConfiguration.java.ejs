@@ -35,6 +35,7 @@ import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.mapping.model.PropertyNameFieldNamingStrategy;
 import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentEntity;
 <%_ } _%>
+import org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -154,7 +155,7 @@ class CustomElasticsearchPersistentProperty extends SimpleElasticsearchPersisten
 
     @SuppressWarnings({"unchecked"})
     public CustomElasticsearchPersistentProperty(Property property, PersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
-        super(property, owner, simpleTypeHolder);
+        super(property, owner, simpleTypeHolder, new SnakeCaseFieldNamingStrategy());
     }
 
     @Override
