@@ -25,7 +25,7 @@
     "@types/sinon": "10.0.6",
     "@types/vuelidate": "0.7.15",
     "@typescript-eslint/eslint-plugin": "5.8.0",
-    "@typescript-eslint/parser": "5.8.0",
+    "@typescript-eslint/parser": "5.8.1",
     "@vue/eslint-config-prettier": "6.0.0",
     "@vue/eslint-config-typescript": "9.1.0",
     "@vue/vue2-jest": "27.0.0-alpha.3",
