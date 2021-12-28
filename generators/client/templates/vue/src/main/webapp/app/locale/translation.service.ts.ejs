@@ -11,6 +11,19 @@ export default class TranslationService {
     this.store = store;
     this.i18n = i18n;
   }
+<%_ if (microfrontend) { _%>
+
+  public loadTranslations(appKey: string, urlPrefix: string, hash: string) {
+    const currentLanguage = this.store.getters.currentLanguage;
+    if (!this.i18n) return;
+
+    axios.get(`${urlPrefix}i18n/${currentLanguage}.json?_=${hash}`).then((res: any) => {
+      if (res.data) {
+        this.i18n.mergeLocaleMessage(currentLanguage, res.data);
+      }
+    });
+  }
+<%_ } _%>
 
   public refreshTranslation(newLanguage: string) {
     let currentLanguage = this.store.getters.currentLanguage;
@@ -19,23 +32,27 @@ export default class TranslationService {
       this.i18n.setLocaleMessage(currentLanguage, {});
       axios.get(`i18n/${currentLanguage}.json?_=${I18N_HASH}`).then((res: any) => {
         if (res.data) {
-          dayjs.locale(currentLanguage);
           this.i18n.setLocaleMessage(currentLanguage, res.data);
-          this.i18n.locale = currentLanguage;
-          this.store.commit('currentLanguage', currentLanguage);
+          this.setLocale(currentLanguage);
         }
       });
     } else if (this.i18n) {
-      dayjs.locale(currentLanguage);
-      this.i18n.locale = currentLanguage;
-      this.store.commit('currentLanguage', currentLanguage);
+      this.setLocale(currentLanguage);
     }
-<%_ if (enableI18nRTL) { _%>
-      this.updatePageDirection(currentLanguage);
-<%_ } _%>
   }
 
+  private setLocale(lang: string) {
+    dayjs.locale(lang);
+    this.i18n.locale = lang;
+    this.store.commit('currentLanguage', lang);
+    axios.defaults.headers.common['Accept-Language'] = lang;
+    document.querySelector('html').setAttribute('lang', lang);
 <%_ if (enableI18nRTL) { _%>
+    this.updatePageDirection(lang);
+<%_ } _%>
+  }
+<%_ if (enableI18nRTL) { _%>
+
     private isRTL(lang: string): boolean {
       const languages = this.store.getters.languages;
       return languages[lang] && languages[lang].rtl;

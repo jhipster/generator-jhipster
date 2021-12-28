@@ -378,6 +378,10 @@ Object {
           "file": "package/security/jwt/JWTFilter.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/management/SecurityMetersService.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -775,10 +779,6 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/config/apidocs/GatewaySwaggerResourcesProvider.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/web/filter/ModifyServersOpenApiFilter.java",
           "renameTo": [Function],
         },
@@ -790,10 +790,6 @@ Object {
       "templates": Array [
         Object {
           "file": "package/web/filter/ModifyServersOpenApiFilterTest.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/apidocs/GatewaySwaggerResourcesProviderTest.java",
           "renameTo": [Function],
         },
       ],
@@ -1131,7 +1127,15 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
+          "file": "package/management/SecurityMetersServiceTests.java",
+          "renameTo": [Function],
+        },
+        Object {
           "file": "package/security/jwt/TokenProviderTest.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/security/jwt/TokenProviderSecurityMetersTests.java",
           "renameTo": [Function],
         },
         Object {
@@ -1158,7 +1162,16 @@ Object {
           "file": "package/cucumber/stepdefs/UserStepDefs.java",
           "renameTo": [Function],
         },
-        "../features/user/user.feature",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "package/features/user/user.feature",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1723,17 +1736,18 @@ Object {
           "file": "package/cucumber/CucumberTestContextConfiguration.java",
           "renameTo": [Function],
         },
-        Object {
-          "file": "../features/gitkeep",
-          "noEjs": true,
-        },
       ],
     },
     Object {
       "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
-        "cucumber.properties",
+        "junit-platform.properties",
+        Object {
+          "file": "package/features/gitkeep",
+          "noEjs": true,
+          "renameTo": [Function],
+        },
       ],
     },
     Object {

@@ -46,6 +46,27 @@ This is a "<%= applicationType %>" application intended to be part of a microser
 This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
 <%_ } _%>
 
+## Project Structure
+
+Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+
+In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husk, and others that are well known and you can find references in the web.
+
+<%_ if (configOptions.backendName === 'Java') { %>
+`/src/*` structure follows default <%= configOptions.backendName %> structure.
+
+<%_ } _%>
+- `.yo-rc.json` - Yeoman configuration file
+JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
+- `.yo-resolve` (optional) - Yeoman conflict resolver
+Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if ommited) or force. Lines starting with `#` are considered comments and are ignored.
+- `.jhipster/*.json` - JHipster entity configuration files
+<%_ if (buildToolMaven) { _%>
+- `npmw` - wrapper to use locally installed npm.
+JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop your application.
+<%_ } _%>
+- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+
 ## Development
 
 <%_ if (skipClient) { _%>

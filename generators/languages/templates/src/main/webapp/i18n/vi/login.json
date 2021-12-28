@@ -3,7 +3,7 @@
         "title": "Đăng nhập",
         "form": {
             "password": "Mật khẩu",
-            "password.placeholder": "Nhập mật khầu của bạn",
+            "password.placeholder": "Nhập mật khẩu của bạn",
             "rememberme": "Nhớ tài khoản",
             "button": "Đăng nhập"
         },

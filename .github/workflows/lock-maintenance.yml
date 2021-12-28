@@ -7,14 +7,15 @@ on:
 jobs:
   build:
     name: Bump transitional dependencies
+    if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v2.4.1
+      - uses: actions/setup-node@v2.5.0
         with:
           node-version: '14'
       - run: npm install -g npm@latest
-      - uses: actions/checkout@v2.3.5
-      - uses: actions/cache@v2.1.6
+      - uses: actions/checkout@v2.4.0
+      - uses: actions/cache@v2.1.7
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-
@@ -23,12 +24,12 @@ jobs:
       - name: Create commit
         run: |
           rm package-lock.json
-          npm install
+          npm install || npm install --force
           git add .
           ./test-integration/scripts/04-git-config.sh
           git commit -a -m "Bump transitional dependencies" || true
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3.10.1
+        uses: peter-evans/create-pull-request@v3.12.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'Bump transitional dependencies'

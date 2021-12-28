@@ -26,8 +26,6 @@ import { Authority } from 'app/config/authority.constants';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
-const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(
@@ -54,7 +52,20 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
           loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         },
 <%_ } _%>
-        ...LAYOUT_ROUTES,
+        {
+          path: '<%= applicationTypeMicroservice ? lowercaseBaseName : '' %>',
+          loadChildren: () => import(`./entities/entity-routing.module`).then(m => m.EntityRoutingModule),
+        },
+<%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+        {
+          path: '<%= remote.lowercaseBaseName %>',
+          loadChildren: () => import(`<%= remote.lowercaseBaseName %>/entity-routing`).then(m => m.EntityRoutingModule),
+        },
+  <%_ } _%>
+<%_ } _%>
+        navbarRoute,
+        ...errorRoute,
       ],
       { enableTracing: DEBUG_INFO_ENABLED }
     ),

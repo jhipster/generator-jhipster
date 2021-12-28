@@ -51,8 +51,13 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       // jhipsterContext is the original generator
       this.jhipsterContext = this.options.jhipsterContext;
 
-      // Fallback to the original generator if the file does not exists in the blueprint.
-      this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
+      try {
+        // Fallback to the original generator if the file does not exists in the blueprint.
+        this.jhipsterTemplatesFolders.push(this.jhipsterTemplatePath());
+      } catch (error) {
+        this.warning('Error adding current blueprint templates as alternative for JHipster templates.');
+        this.log(error);
+      }
     }
   }
 
@@ -226,44 +231,6 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
 
   /**
    * @private
-   * @deprecated
-   * Instantiates the blueprint generators, if any.
-   * @param {string} subGen - sub generator
-   * @param {any} extraOptions - extra options to pass to blueprint generator
-   * @return {true} useBlueprints - true if one or more blueprints generators have been constructed; false otherwise
-   */
-  instantiateBlueprints(subGen, extraOptions) {
-    if (this.options.help) {
-      // Ignore blueprint registered options.
-      return false;
-    }
-    let useBlueprints = false;
-
-    if (!this.configOptions.blueprintConfigured) {
-      this.configOptions.blueprintConfigured = true;
-      this._configureBlueprints();
-    }
-
-    const blueprints = this.jhipsterConfig.blueprints;
-    if (blueprints && blueprints.length > 0) {
-      blueprints.forEach(blueprint => {
-        const blueprintGenerator = this._composeBlueprint(blueprint.name, subGen, extraOptions);
-        if (blueprintGenerator) {
-          if (blueprintGenerator.sbsBlueprint) {
-            // If sbsBlueprint, add templatePath to the original generator templatesFolder.
-            this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
-          } else {
-            // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
-            useBlueprints = true;
-          }
-        }
-      });
-    }
-    return useBlueprints;
-  }
-
-  /**
-   * @private
    * Composes with blueprint generators, if any.
    * @param {String} subGen - sub generator
    * @param {Object} extraOptions - extra options to pass to blueprint generator
@@ -353,7 +320,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    * @param {any} options - options to pass to blueprint generator
    * @return {Generator|undefined}
    */
-  _composeBlueprint(blueprint, subGen, extraOptions = {}) {
+  async _composeBlueprint(blueprint, subGen, extraOptions = {}) {
     blueprint = normalizeBlueprintName(blueprint);
     if (!this.configOptions.skipChecks && !this.options.skipChecks) {
       this._checkBlueprint(blueprint);
@@ -362,16 +329,17 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     const generatorName = packageNameToNamespace(blueprint);
     const generatorNamespace = `${generatorName}:${subGen}`;
     if (!this.env.isPackageRegistered(generatorName)) {
-      this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
+      await this.env.lookup({ filterPaths: true, packagePatterns: blueprint });
     }
-    if (!this.env.get(generatorNamespace)) {
+    if (!(await this.env.get(generatorNamespace))) {
       this.debug(
-        `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
-          subGen
+        `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(
+          generatorNamespace
         )} subgenerator: falling back to default generator`
       );
       return undefined;
     }
+    this.debug(`Found blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(generatorNamespace)}`);
 
     const finalOptions = {
       ...this.options,
@@ -380,7 +348,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
       jhipsterContext: this,
     };
 
-    const blueprintGenerator = this.composeWith(generatorNamespace, finalOptions, true);
+    const blueprintGenerator = await this.composeWith(generatorNamespace, finalOptions, true);
     if (blueprintGenerator instanceof Error) {
       throw blueprintGenerator;
     }

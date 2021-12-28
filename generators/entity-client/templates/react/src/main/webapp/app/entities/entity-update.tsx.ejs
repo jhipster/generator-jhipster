@@ -278,7 +278,7 @@ _%>
           {<%= _.lowerFirst(fieldType) %>Values.map(<%= _.lowerFirst(fieldType) %> => (
               <option value={<%= _.lowerFirst(fieldType) %>} key={<%= _.lowerFirst(fieldType) %>}>
       <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>"+<%= _.lowerFirst(fieldType) %>)}
+                {translate("<%= enumPrefix %>."+<%= _.lowerFirst(fieldType) %>)}
       <%_ } else { _%>
                 {<%= _.lowerFirst(fieldType) %>}
       <%_ } _%>

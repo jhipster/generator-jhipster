@@ -211,7 +211,7 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/test/**"),
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
                 pathMatchers(HttpMethod.OPTIONS, "/**")
             )))
             .csrf()
@@ -278,11 +278,9 @@ public class SecurityConfiguration {
             .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
-  <%_ if (microfrontend && authenticationTypeJwt) { _%>
-            // microfrontend resources are loaded by webpack without a bearer-token, they need to be public
+            // microfrontend resources are loaded by webpack without authentication, they need to be public
             .pathMatchers("/services/*/*.js").permitAll()
             .pathMatchers("/services/*/*.js.map").permitAll()
-  <%_ } _%>
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
 <%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
@@ -308,7 +306,7 @@ public class SecurityConfiguration {
     }
 <%_ if (authenticationTypeOauth2) { _%>
 
-    <%_ if (applicationType === 'gateway') { _%>
+  <%_ if (applicationTypeGateway) { _%>
     private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
         ReactiveClientRegistrationRepository clientRegistrationRepository) {
         DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
@@ -325,7 +323,7 @@ public class SecurityConfiguration {
                 uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience())
                     .build());
     }
-    <%_ } _%>
+  <%_ } _%>
 
     Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();

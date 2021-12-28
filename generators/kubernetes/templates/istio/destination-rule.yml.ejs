@@ -18,7 +18,7 @@ spec:
         maxRequestsPerConnection: 10
         maxRetries: 5
     outlierDetection:
-      consecutiveErrors: 5
+      consecutive5xxErrors: 5
       interval: 30s
       baseEjectionTime: 60s
   subsets:

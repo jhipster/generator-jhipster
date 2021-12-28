@@ -16,7 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: networking.istio.io/v1alpha3
+# This configuration uses 'http' and is not recommended for production use.
+# Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
+# using a self signed certificate and prefer that for production use
+apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
   name: jhipster-grafana-gateway
@@ -38,7 +41,7 @@ spec:
     hosts:
     - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
   name: jhipster-grafana-gw-virtualservice

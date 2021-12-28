@@ -169,10 +169,16 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
     [SKIP_USER_MANAGEMENT]: true,
     ...customOptions,
   };
-  delete options[CLIENT_FRAMEWORK];
+  let skipClient = options[SKIP_CLIENT];
+  if (skipClient === undefined) {
+    skipClient = options[CLIENT_FRAMEWORK] === undefined;
+  }
+  if (skipClient) {
+    delete options[CLIENT_FRAMEWORK];
+    delete options[SKIP_SERVER];
+  }
   delete options[CLIENT_THEME];
   delete options[CLIENT_THEME_VARIANT];
-  delete options[SKIP_SERVER];
   delete options[WITH_ADMIN_UI];
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     options[SKIP_USER_MANAGEMENT] = true;
@@ -186,7 +192,7 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
   return {
     ...options,
     [APPLICATION_TYPE]: MICROSERVICE,
-    [SKIP_CLIENT]: true,
+    [SKIP_CLIENT]: skipClient,
   };
 }
 
@@ -205,16 +211,12 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
     [MESSAGE_BROKER]: OptionValues[MESSAGE_BROKER].false,
     [PROD_DATABASE_TYPE]: POSTGRESQL,
     [SEARCH_ENGINE]: OptionValues[SEARCH_ENGINE].false,
-    [SKIP_CLIENT]: OptionValues[SKIP_CLIENT],
     [TEST_FRAMEWORKS]: [],
     [WEBSOCKET]: OptionValues[WEBSOCKET].false,
     [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
     [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
     ...customOptions,
   };
-  if (typeof options[SKIP_SERVER] !== 'boolean') {
-    options[SKIP_SERVER] = OptionValues[SKIP_SERVER];
-  }
   if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
     options[PACKAGE_FOLDER] = OptionValues[PACKAGE_FOLDER];
     options[PACKAGE_NAME] = OptionValues[PACKAGE_NAME];

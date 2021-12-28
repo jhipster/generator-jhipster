@@ -28,16 +28,21 @@ module.exports = (config, options, targetOptions) => {
         name: '<%= lowercaseBaseName %>',
         filename: 'remoteEntry.js',
         exposes: {
-    <%_ for (entity of Object.values(this.configOptions.sharedEntities || {}).filter(e => e.microserviceName)) { _%>
+  <%_ if (enableTranslation) { _%>
+          './translation-module': 'app/shared/language/translation.module.ts',
+  <%_ } _%>
+          './entity-navbar-items': 'app/entities/entity-navbar-items.ts',
+          './entity-routing': 'app/entities/entity-routing.module.ts',
+  <%_ for (entity of Object.values(this.configOptions.sharedEntities || {}).filter(e => e.microserviceName)) { _%>
           './<%= entity.entityFileName %>': 'app/entities/<%= entity.entityFolderName %>/<%= entity.entityFileName %>.module.ts',
-    <%_ } _%>
+  <%_ } _%>
         },
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
         remotes: {
-          <%_ for ([microserviceName, microserviceConfig] of Object.entries(jhipsterConfig.applications || {})) { _%>
-          '<%= microserviceName %>': `<%= microserviceName %>@${targetOptions.target !== 'serve' ? '/services/<%= microserviceName %>' : 'http://localhost:<%= microserviceConfig.applicationIndex + devServerBasePort %>'}/remoteEntry.js`,
-          <%_ } _%>
+  <%_ for (const remote of microfrontends) { _%>
+          '<%= remote.lowercaseBaseName %>': `<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js`,
+  <%_ } _%>
         },
 <%_ } _%>
         shared: {
@@ -141,6 +146,8 @@ module.exports = (config, options, targetOptions) => {
     ],
     output: {
       publicPath: 'auto',
+      uniqueName: '<%= lowercaseBaseName %>',
+      scriptType: 'text/javascript',
     },
     optimization: {
       runtimeChunk: false,

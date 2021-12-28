@@ -28,12 +28,12 @@ springBootVersion=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%= SPRING_BOOT_VERSION %> -->
 hibernateVersion=<%= HIBERNATE_VERSION %>
 mapstructVersion=1.4.2.Final
-archunitJunit5Version=0.21.0
+archunitJunit5Version=0.22.0
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-caffeineVersion=3.0.3
+caffeineVersion=3.0.4
 typesafeConfigVersion=1.4.1
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -47,7 +47,7 @@ commonsBeanutilsVersion=1.9.4
 
 <%_ if (reactive) { _%>
 blockhoundJunitPlatformVersion=1.0.6.RELEASE
-junitPlatformLauncherVersion=1.7.2
+junitPlatformLauncherVersion=1.8.1
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
@@ -63,21 +63,21 @@ cassandraDriverVersion=4.11.3
 jibPluginVersion=<%= JIB_VERSION %>
 gitPropertiesPluginVersion=2.3.1
 <%_ if (!skipClient) { _%>
-gradleNodePluginVersion=3.1.0
+gradleNodePluginVersion=3.1.1
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-liquibasePluginVersion=2.0.4
+liquibasePluginVersion=2.1.0
 <%_ } _%>
 sonarqubePluginVersion=3.3
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=5.2.1
 <%_ } _%>
-noHttpCheckstyleVersion=0.0.9
-checkstyleVersion=9.0
-modernizerPluginVersion=1.6.0
+noHttpCheckstyleVersion=0.0.10
+checkstyleVersion=9.1
+modernizerPluginVersion=1.6.1
 <%_ if (enableGradleEnterprise) { _%>
-gradleEnterprisePluginVersion=3.6.4
-gradleCommonCustomUserDataPluginVersion=1.4.2
+gradleEnterprisePluginVersion=3.7.1
+gradleCommonCustomUserDataPluginVersion=1.5
 <%_ } _%>
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

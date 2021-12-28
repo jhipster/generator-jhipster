@@ -84,7 +84,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 <%_ } _%>
 
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession  && !reactive) { _%>
+<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
@@ -659,7 +659,7 @@ public class UserService {
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeSql && authenticationTypeOauth2) { _%>
     @Transactional
-    public Mono<User> saveUser(User user) {
+    public Mono<<%= asEntity('User') %>> saveUser(<%= asEntity('User') %> user) {
         return saveUser(user, false);
     }
 
@@ -682,7 +682,7 @@ public class UserService {
                 // Saving the relationship can be done in an entity callback
                 // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
         <%_ if (authenticationTypeOauth2) { _%>
-                Mono<User> persistedUser;
+                Mono<<%= asEntity('User') %>> persistedUser;
                 if (forceCreate) {
                     persistedUser = userRepository.create(user);
                 } else {
@@ -1017,15 +1017,20 @@ public class UserService {
     private static <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %> getUser(Map<String, Object> details) {
         <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %> user = new <%= databaseTypeNo ? asDto('AdminUser') : asEntity('User') %>();
         Boolean activated = Boolean.TRUE;
+        String sub = String.valueOf(details.get("sub"));
+        String username = null;
+        if (details.get("preferred_username") != null) {
+            username = ((String) details.get("preferred_username")).toLowerCase();
+        }
         // handle resource server JWT, where sub claim is email and uid is ID
         if (details.get("uid") != null) {
             user.setId((String) details.get("uid"));
-            user.setLogin((String) details.get("sub"));
+            user.setLogin(sub);
         } else {
-            user.setId((String) details.get("sub"));
+            user.setId(sub);
         }
-        if (details.get("preferred_username") != null) {
-            user.setLogin(((String) details.get("preferred_username")).toLowerCase());
+        if (username != null) {
+            user.setLogin(username);
         } else if (user.getLogin() == null) {
             user.setLogin(user.getId());
         }
@@ -1042,8 +1047,11 @@ public class UserService {
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
+        } else if (sub.contains("|") && (username != null && username.contains("@"))) {
+            // special handling for Auth0
+            user.setEmail(username);
         } else {
-            user.setEmail((String) details.get("sub"));
+            user.setEmail(sub);
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));

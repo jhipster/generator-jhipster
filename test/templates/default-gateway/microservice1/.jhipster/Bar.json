@@ -16,5 +16,6 @@
     "fluentMethods": true,
     "clientRootFolder": "sampleMicroservice",
     "applications": "*",
-    "microserviceName": "sampleMicroservice"
+    "microserviceName": "sampleMicroservice",
+    "searchEngine": "elasticsearch"
 }

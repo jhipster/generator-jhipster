@@ -204,6 +204,13 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
     entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
   }
 
+  const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
+  entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
+  entityWithConfig.entityPage =
+    microfrontend && microserviceName && (entityWithConfig.applicationType === MICROSERVICE || entityWithConfig.applicationType === GATEWAY)
+      ? `${microserviceName.toLowerCase()}/${entityFileName}`
+      : `${entityFileName}`;
+
   const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => generator.isBuiltInUser(relationship.otherEntityName));
   entityWithConfig.saveUserSnapshot =
     entityWithConfig.applicationType === MICROSERVICE &&
@@ -449,6 +456,9 @@ function loadRequiredConfigIntoEntity(entity, config) {
     jhiPrefix: config.jhiPrefix,
     authenticationType: config.authenticationType,
     reactive: config.reactive,
+    microfrontend: config.microfrontend,
+    // Workaround different paths
+    clientFramework: config.clientFramework,
   });
   return entity;
 }

@@ -141,6 +141,10 @@ const expectedFiles = {
       // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
       `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
     ],
+    entitySearchSpecific: [
+      `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`,
+      `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepositoryMockConfiguration.java`,
+    ],
     fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
     serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
     gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`],
@@ -649,18 +653,24 @@ const expectedFiles = {
   ],
 
   jwtServer: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/management/SecurityMetersService.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTConfigurer.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/management/SecurityMetersServiceTests.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java`,
   ],
 
   jwtServerGateway: [
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/management/SecurityMetersService.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/management/SecurityMetersServiceTests.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderSecurityMetersTests.java`,
   ],
 
   jwtClient: [
@@ -696,8 +706,6 @@ const expectedFiles = {
     `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`,
     `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
     `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProvider.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/apidocs/GatewaySwaggerResourcesProviderTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilter.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/filter/ModifyServersOpenApiFilterTest.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,

@@ -11,10 +11,12 @@ import UserManagementEdit from '@/admin/user-management/user-management-edit.vue
 import UserManagementEditClass from '@/admin/user-management/user-management-edit.component';
 import UserManagementService from '@/admin/user-management/user-management.service';
 import VueRouter from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
+localVue.use(ToastPlugin);
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -85,8 +87,8 @@ describe('UserManagementEdit Component', () => {
       // GIVEN
       axiosStub.put.resolves({
         headers: {
-          'x-jhipsterapp-alert': '',
-          'x-jhipsterapp-params': '',
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
         },
       });
       userManagementEdit.userAccount = { id: <%- tsKeyId %>, authorities: [] };
@@ -104,8 +106,8 @@ describe('UserManagementEdit Component', () => {
       // GIVEN
       axiosStub.post.resolves({
         headers: {
-          'x-jhipsterapp-alert': '',
-          'x-jhipsterapp-params': '',
+          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
+          'x-<%= frontendAppName.toLowerCase() %>-params': '',
         },
       });
       userManagementEdit.userAccount = { authorities: [] };

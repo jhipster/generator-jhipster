@@ -81,7 +81,6 @@
     "copy-webpack-plugin": "<%= dependabotPackageJson.devDependencies['copy-webpack-plugin'] %>",
     "css-loader": "<%= dependabotPackageJson.devDependencies['css-loader'] %>",
     "css-minimizer-webpack-plugin": "<%= dependabotPackageJson.devDependencies['css-minimizer-webpack-plugin'] %>",
-    "file-loader": "<%= dependabotPackageJson.devDependencies['file-loader'] %>",
     "fork-ts-checker-webpack-plugin": "<%= dependabotPackageJson.devDependencies['fork-ts-checker-webpack-plugin'] %>",
 <%_ if (!skipJhipsterDependencies) { _%>
     "generator-jhipster": "<%= packagejs.version %>",
@@ -123,8 +122,11 @@
     "eslint-plugin-prettier": "<%= dependabotPackageJson.devDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= dependabotPackageJson.devDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",
-    "url-loader": "<%= dependabotPackageJson.devDependencies['url-loader'] %>",
+<%_ if (microfrontend) { _%>
+    "@vue/vue2-jest": "<%= dependabotPackageJson.devDependencies['@vue/vue2-jest'] %>",
+<%_ } else { _%>
     "vue-jest": "<%= dependabotPackageJson.devDependencies['vue-jest'] %>",
+<%_ } _%>
     "vue-loader": "<%= dependabotPackageJson.devDependencies['vue-loader'] %>",
     "vue-template-compiler": "<%= dependabotPackageJson.dependencies['vue'] %>",
     "webpack": "<%= dependabotPackageJson.devDependencies['webpack'] %>",
@@ -152,6 +154,7 @@
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start --",
     "build": "<%= clientPackageManager %> run webapp:prod --",
+    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
 <%_ if (protractorTests && !cypressTests) { _%>
     "e2e": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
@@ -178,10 +181,11 @@
     "test": "<%= clientPackageManager %> run jest --",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
-    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --progress=profile --env stats=minimal",
-    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --mode production --progress=profile --env stats=minimal",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --mode development --progress=profile --env stats=normal",
+    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",
+    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --mode production --env stats=minimal",
+    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --mode development --env stats=normal",
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
     "webapp:test": "<%= clientPackageManager %> run test --",
     "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",

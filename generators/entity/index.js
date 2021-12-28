@@ -38,6 +38,8 @@ const { prepareFieldForTemplates, fieldIsEnum } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { stringify } = require('../../utils');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
+const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
+const { NO: SEARCH_ENGINE_NO } = require('../../jdl/jhipster/search-engine-types');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
 const {
   GENERATOR_ENTITIES,
@@ -64,8 +66,6 @@ const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = require(
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
-
-let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -148,11 +148,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
       desc: 'Regenerate only a single entity, relationships can be not correctly generated',
       type: Boolean,
     });
+  }
 
-    if (this.options.help) {
-      return;
-    }
-
+  async _postConstruct() {
     const name = _.upperFirst(this.options.name).replace('.json', '');
     this.entityStorage = this.getEntityConfig(name, true);
     this.entityConfig = this.entityStorage.createProxy();
@@ -169,14 +167,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
       configurationFileExists: this.fs.exists(this.destinationPath(filename)),
     };
 
-    this._setupEntityOptions(this, this, this.context);
-    useBlueprints =
-      !this.fromBlueprint &&
-      this.instantiateBlueprints(GENERATOR_ENTITY, {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_ENTITY, {
         entityExisted,
         configExisted,
         arguments: [name],
       });
+    }
+
+    this._setupEntityOptions(this, this, this.context);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -207,7 +206,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         const context = this.context;
 
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          context.skipClient = context.skipClient || !this.jhipsterConfig.microfrontend;
           context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
           if (!this.entityConfig.clientRootFolder) {
             context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
@@ -234,6 +232,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
             context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
               ? ''
               : this.entityConfig.microserviceName;
+          }
+
+          if (this.jhipsterConfig.applications && !this.entityConfig.skipClient) {
+            const remoteConfig = this.jhipsterConfig.applications[this.entityConfig.microserviceName];
+            if (remoteConfig && remoteConfig.clientFramework && remoteConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
+              // Gateway requires entities to discover a microfrontend.
+              // Microfrontends is generated at the microservice side, so skip it at gateway side.
+              this.entityConfig.skipClient = true;
+            }
           }
         }
       },
@@ -304,7 +311,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get initializing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
@@ -326,7 +333,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get prompting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
@@ -356,8 +363,34 @@ class EntityGenerator extends BaseBlueprintGenerator {
           throw new Error(validation);
         }
 
+        if (this.entityConfig.searchEngine === undefined) {
+          const backendOnlyMicroservice =
+            context.applicationType === MICROSERVICE && (!context.clientFramework || context.clientFramework === CLIENT_FRAMEWORK_NO);
+          if (backendOnlyMicroservice && context.searchEngine && context.searchEngine !== SEARCH_ENGINE_NO && !context.entityExisted) {
+            // Propagate searchEngine to the entity, it's opt-in and should be propagated to gateway
+            this.entityConfig.searchEngine = true;
+          }
+        } else if (
+          (!context.searchEngine || context.searchEngine === SEARCH_ENGINE_NO) &&
+          (context.applicationType !== GATEWAY || !this.entityConfig.microserviceName)
+        ) {
+          if (this.entityConfig.searchEngine === SEARCH_ENGINE_NO) {
+            // Convert to boolean.
+            this.entityConfig.searchEngine = false;
+          }
+          // If search engine is disabled at application, and unless it's a gateway publishing a microservice entity.
+          if (this.entityConfig.searchEngine) {
+            this.warning('Search engine disabled at application, cannot be enabled at entity, disabling');
+            this.entityConfig.searchEngine = false;
+          }
+        }
+
         this.entityConfig.name = this.entityConfig.name || context.name;
-        if (![SQL, MONGODB, COUCHBASE, NEO4J].includes(context.databaseType)) {
+        // disable pagination if there is no database, unless it’s a microservice entity published by a gateway
+        if (
+          ![SQL, MONGODB, COUCHBASE, NEO4J].includes(context.databaseType) &&
+          (context.applicationType !== GATEWAY || !this.entityConfig.microserviceName)
+        ) {
           this.entityConfig.pagination = NO_PAGINATION;
         }
 
@@ -456,16 +489,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get configuring() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
   // Public API method used by the getter and also by Blueprints
   _composing() {
     return {
-      composeEntities() {
+      async composeEntities() {
         // We need to compose with others entities to update relationships.
-        this.composeWithJHipster(
+        await this.composeWithJHipster(
           GENERATOR_ENTITIES,
           {
             entities: this.options.singleEntity ? [this.context.name] : undefined,
@@ -482,7 +515,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get composing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._composing();
   }
 
@@ -490,13 +523,25 @@ class EntityGenerator extends BaseBlueprintGenerator {
   _loading() {
     return {
       loadEntity() {
+        loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
         // Update current context with config from file.
         Object.assign(this.context, this.entityStorage.getAll());
         this.loadDerivedAppConfig(this.context);
+
+        // Entity searchEngine support should opt-in instead of opt-out for gateway/microservice.
+        // The entity definition should take precedence so frontend and backend are in sync.
+        // Doesn't apply to microfrontends.
+        if (
+          this.entityConfig.searchEngine === undefined &&
+          !this.context.microfrontend &&
+          (this.context.applicationTypeMicroservice || (this.entityConfig.microserviceName && this.context.applicationTypeGateway))
+        ) {
+          this.info(`searchEngine is missing in .jhipster/${this.entityConfig.name}.json, should opt-in for gateway/microservice entities`);
+          this.context.searchEngine = false;
+        }
         this.loadDerivedClientConfig(this.context);
         this.loadDerivedServerConfig(this.context);
         this.loadDerivedPlatformConfig(this.context);
-        loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
         if (this.context.fields) {
           this.context.fields
             .filter(field => field.options)
@@ -520,22 +565,22 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.configOptions.sharedEntities[this.context.name] = this.context;
       },
 
-      composing() {
+      async composing() {
         if (this.options.skipWriting) return;
         const context = this.context;
         if (!context.skipServer) {
-          this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
+          await this.composeWithJHipster(GENERATOR_ENTITY_SERVER, this.arguments, {
             context,
           });
         }
 
         if (!context.skipClient || this.jhipsterConfig.applicationType === GATEWAY) {
-          this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
+          await this.composeWithJHipster(GENERATOR_ENTITY_CLIENT, this.arguments, {
             context,
             skipInstall: this.options.skipInstall,
           });
           if (this.jhipsterConfig.enableTranslation) {
-            this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
+            await this.composeWithJHipster(GENERATOR_ENTITY_I_18_N, this.arguments, {
               context,
               skipInstall: this.options.skipInstall,
             });
@@ -546,7 +591,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -604,7 +649,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get preparingFields() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparingFields();
   }
 
@@ -630,7 +675,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
@@ -737,7 +782,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get preparingRelationships() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparingRelationships();
   }
 
@@ -838,7 +883,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -864,7 +909,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
@@ -894,7 +939,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get install() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._install();
   }
 
@@ -908,7 +953,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
   }
 
   get end() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._end();
   }
 

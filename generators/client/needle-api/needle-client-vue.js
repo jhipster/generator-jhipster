@@ -24,7 +24,17 @@ const needleClientBase = require('./needle-client');
 module.exports = class extends needleClientBase {
   addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue = _.startCase(routerName)) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/core/jhi-navbar/jhi-navbar.vue`;
+    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/entities/entities-menu.vue`;
+
+    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
+      filePath,
+      `<b-dropdown-item to="/${routerName}">`,
+      this.generator
+    );
+    if (isSpecificEntityAlreadyGenerated) {
+      return;
+    }
+
     const menuI18nTitle = enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : '';
     const entityEntry =
       // prettier-ignore
@@ -41,6 +51,16 @@ module.exports = class extends needleClientBase {
   addEntityToRouterImport(entityName, fileName, folderName, readOnly) {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
     const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
+
+    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
+      filePath,
+      `import('@/entities/${folderName}/${fileName}.vue');`,
+      this.generator
+    );
+    if (isSpecificEntityAlreadyGenerated) {
+      return;
+    }
+
     let entityEntry;
     if (!readOnly) {
       // prettier-ignore
@@ -70,8 +90,7 @@ module.exports = class extends needleClientBase {
     const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;
     const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/router/entities.ts`;
 
-    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(filePath, `path: '/${entityFileName}'`, this.generator);
-
+    const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(filePath, `path: '${entityFileName}'`, this.generator);
     if (isSpecificEntityAlreadyGenerated) {
       return;
     }
@@ -81,25 +100,25 @@ module.exports = class extends needleClientBase {
       // prettier-ignore
       entityEntry = this.generator.stripMargin(
                 `|{
-                |    path: '/${entityFileName}',
+                |    path: '${entityFileName}',
                 |    name: '${entityName}',
                 |    component: ${entityName},
                 |    meta: { authorities: [Authority.USER] }
                 |  },
                 |  {
-                |    path: '/${entityFileName}/new',
+                |    path: '${entityFileName}/new',
                 |    name: '${entityName}Create',
                 |    component: ${entityName}Update,
                 |    meta: { authorities: [Authority.USER] }
                 |  },
                 |  {
-                |    path: '/${entityFileName}/:${entityInstance}Id/edit',
+                |    path: '${entityFileName}/:${entityInstance}Id/edit',
                 |    name: '${entityName}Edit',
                 |    component: ${entityName}Update,
                 |    meta: { authorities: [Authority.USER] }
                 |  },
                 |  {
-                |    path: '/${entityFileName}/:${entityInstance}Id/view',
+                |    path: '${entityFileName}/:${entityInstance}Id/view',
                 |    name: '${entityName}View',
                 |    component: ${entityName}Details,
                 |    meta: { authorities: [Authority.USER] }
@@ -124,6 +143,7 @@ module.exports = class extends needleClientBase {
     }
 
     const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-to-router', entityEntry);
+    rewriteFileModel.prettierAware = true;
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 
@@ -150,6 +170,36 @@ module.exports = class extends needleClientBase {
         );
 
     const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-main', entityEntry);
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
+
+  addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName) {
+    const errorMessage = `${chalk.yellow('Reference to entity ') + entityClass} ${chalk.yellow(
+      'not added to import in entities component.\n'
+    )}`;
+    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/entities/entities.component.ts`;
+
+    // prettier-ignore
+    const entityEntry = `import ${entityName}Service from './${entityFolderName}/${entityFileName}.service';`;
+
+    const rewriteFileModel = this.generateFileModel(
+      filePath,
+      'jhipster-needle-add-entity-service-to-entities-component-import',
+      entityEntry
+    );
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
+
+  addEntityServiceToEntitiesComponent(entityInstance, entityName) {
+    const errorMessage = `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow(
+      'not added to service in entities component.\n'
+    )}`;
+    const filePath = `${this.CLIENT_MAIN_SRC_DIR}/app/entities/entities.component.ts`;
+
+    // prettier-ignore
+    const entityEntry = `@Provide('${entityInstance}Service') private ${entityInstance}Service = () => new ${entityName}Service();`;
+
+    const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-add-entity-service-to-entities-component', entityEntry);
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 };

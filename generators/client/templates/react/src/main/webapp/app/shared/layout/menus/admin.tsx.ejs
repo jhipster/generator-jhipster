@@ -25,7 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavDropdown } from './menu-components';
 import { Translate, translate } from 'react-jhipster';
 
-const adminMenuItems = (
+const adminMenuItems = () => (
   <>
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
@@ -44,14 +44,14 @@ const adminMenuItems = (
 <%_ } _%>
     {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
   </>
-  );
+);
 
-const openAPIItem = (
+const openAPIItem = () => (
   <MenuItem icon="book" to="/admin/docs"><Translate contentKey="global.menu.admin.apidocs">API</Translate></MenuItem>
 );
 
 <% if (devDatabaseTypeH2Any) { %>
-const databaseItem = (
+const databaseItem = () => (
   <DropdownItem tag="a" href="<% if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>" target="_tab">
     <FontAwesomeIcon icon="database" fixedWidth /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
@@ -60,10 +60,10 @@ const databaseItem = (
 
 export const AdminMenu = ({ showOpenAPI <% if (devDatabaseTypeH2Any) { %>, showDatabase <%_ } _%>}) => (
   <NavDropdown icon="users-cog" name={translate('global.menu.admin.main')} id="admin-menu" data-cy="adminMenu">
-      {adminMenuItems}
-      {showOpenAPI && openAPIItem}
+      {adminMenuItems()}
+      {showOpenAPI && openAPIItem()}
 <% if (devDatabaseTypeH2Any) { %>
-      {showDatabase && databaseItem}
+      {showDatabase && databaseItem()}
 <%_ } _%>
   </NavDropdown>
 );

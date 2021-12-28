@@ -16,6 +16,8 @@ module.exports = {
 <%_ } _%>
 
   dev: {
+    hotReload: <%= !microfrontend %>,
+
     // https://webpack.js.org/configuration/devtool/#development
     devtool: 'cheap-module-source-map',
 

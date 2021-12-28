@@ -65,9 +65,6 @@ Object {
   "src/main/webapp/WEB-INF/web.xml": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/admin-routing.module.ts": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/configuration/configuration.component.html": Object {
     "stateCleared": "modified",
   },
@@ -90,21 +87,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.service.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.component.html": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.component.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.component.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.module.ts": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.route.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.component.html": Object {
@@ -353,6 +335,9 @@ Object {
   "src/main/webapp/app/core/util/parse-links.service.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-navbar-items.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-routing.module.ts": Object {
     "stateCleared": "modified",
   },
@@ -495,6 +480,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/translation.module.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": Object {

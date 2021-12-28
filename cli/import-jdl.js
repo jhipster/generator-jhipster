@@ -158,6 +158,7 @@ function runGenerator(command, { cwd, fork, env }, generatorOptions = {}) {
     forceNoFiltering: undefined,
     unidirectionalRelationships: undefined,
     localConfigOnly: undefined,
+    commandName: undefined,
     fromJdl: true,
   };
 
@@ -432,8 +433,8 @@ class JDLProcessor {
         applicationWithEntities.config.applications = Object.fromEntries(
           relatedApplications.map(([baseName, config]) => {
             config.gatewayServerPort = gatewayServerPort;
-            const { serverPort, applicationIndex, devServerPort } = config;
-            return [baseName, { serverPort, applicationIndex, devServerPort }];
+            const { clientFramework, serverPort, applicationIndex, devServerPort } = config;
+            return [baseName, { clientFramework, serverPort, applicationIndex, devServerPort }];
           })
         );
       }

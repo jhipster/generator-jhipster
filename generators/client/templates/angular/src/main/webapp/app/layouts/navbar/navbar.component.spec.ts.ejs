@@ -16,12 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('@angular/router');
 jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 <%_ if (enableTranslation) { _%>
@@ -55,9 +54,16 @@ describe('Navbar Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()<% if (enableTranslation) { %>, TranslateModule.forRoot()<% } %>],
+        imports: [
+          HttpClientTestingModule,
+          RouterTestingModule.withRoutes([]),
+<%_ if (enableTranslation) { _%>
+          TranslateModule.forRoot(),
+<%_ } _%>
+          NgxWebstorageModule.forRoot()
+        ],
         declarations: [NavbarComponent],
-        providers: [Router, LoginService],
+        providers: [LoginService],
       })
         .overrideTemplate(NavbarComponent, '')
         .compileComponents();

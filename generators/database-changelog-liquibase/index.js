@@ -35,7 +35,6 @@ const { prepareFieldForTemplates } = require('../../utils/field');
 const { prepareRelationshipForTemplates } = require('../../utils/relationship');
 const { prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 
-let useBlueprints;
 /* eslint-disable consistent-return */
 module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -51,7 +50,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Set number of rows to be generated
     this.numberOfRows = 10;
-    useBlueprints = !this.fromBlueprint && this.instantiateBlueprints(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE);
+  }
+
+  async _postConstruct() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE);
+    }
   }
 
   _loading() {
@@ -69,7 +73,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get loading() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
@@ -149,7 +153,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get preparing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
@@ -194,7 +198,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get preparingRelationships() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._preparingRelationships();
   }
 
@@ -209,7 +213,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get default() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
@@ -253,7 +257,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get writing() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     if (this.options.skipWriting) {
       return {};
     }
@@ -286,7 +290,7 @@ module.exports = class extends BaseBlueprintGenerator {
   }
 
   get postWriting() {
-    if (useBlueprints) return;
+    if (this.delegateToBlueprint) return {};
     if (this.options.skipWriting) {
       return {};
     }

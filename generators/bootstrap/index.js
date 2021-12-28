@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 const { State } = require('mem-fs-editor');
-const filter = require('gulp-filter');
 const _ = require('lodash');
-const path = require('path');
 const {
-  createEachFileTransform,
+  createConflicterCheckTransform,
   createConflicterStatusTransform,
-  createYoRcTransform,
-  createYoResolveTransform,
-} = require('yeoman-environment/lib/util/transform');
+  createYoRcTransform: createForceYoRcTransform,
+  createYoResolveTransform: createApplyYoResolveTransform,
+  patternFilter,
+  patternSpy,
+} = require('yeoman-environment/transform');
 
 const { hasState, setModifiedFileState } = State;
 
@@ -101,17 +101,17 @@ module.exports = class extends BaseGenerator {
           this.debug('Skipping commit prettier');
           return;
         }
-        await this._commitSharedFs(this.env.sharedFs.stream().pipe(filter(['.prettierrc**', '.prettierignore'])), true);
+        await this._commitSharedFs(this.env.sharedFs.stream().pipe(patternFilter('**/{.prettierrc**,.prettierignore}')), true);
       },
       async commitFiles() {
         if (this.options.skipCommit) {
           this.debug('Skipping commit files');
           return;
         }
-        await this._commitSharedFs();
         this.env.sharedFs.once('change', () => {
           this._queueCommit();
         });
+        await this._commitSharedFs();
       },
     };
   }
@@ -128,11 +128,11 @@ module.exports = class extends BaseGenerator {
     this.queueTask(
       {
         method: async () => {
-          await this._commitSharedFs();
           this.debug('Adding queueCommit event listener');
           this.env.sharedFs.once('change', () => {
             this._queueCommit();
           });
+          await this._commitSharedFs();
         },
       },
       {
@@ -147,63 +147,57 @@ module.exports = class extends BaseGenerator {
    * @param {Stream} [stream] - files stream, defaults to this.sharedFs.stream().
    * @return {Promise}
    */
-  _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
-    return new Promise((resolve, reject) => {
-      this.env.sharedFs.each(file => {
-        if (
-          file.contents &&
-          (path.basename(file.path) === '.yo-rc.json' ||
-            (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster'))
-        ) {
-          if (!hasState(file) && !this.options.reproducibleTests) {
-            setModifiedFileState(file);
-          }
+  async _commitSharedFs(stream = this.env.sharedFs.stream(), skipPrettier = this.options.skipPrettier) {
+    const { skipYoResolve } = this.options;
+    const { withGeneratedFlag } = this.jhipsterConfig;
+
+    // JDL writes directly to disk, set the file as modified so prettier will be applied
+    stream = stream.pipe(
+      patternSpy(file => {
+        if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
+          setModifiedFileState(file);
         }
-      });
-      const yoResolveTranform = this.options.skipYoResolve ? [] : [createYoResolveTransform(this.env.conflicter)];
-      const transformStreams = [
-        // multi-step changes the file path, should be executed earlier in the pipeline
-        new MultiStepTransform(),
-        ...yoResolveTranform,
-        createYoRcTransform(),
-        createEachFileTransform(file => {
-          if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
-            file.conflicter = 'force';
-          }
-          return file;
-        }),
-      ];
+      }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
+    );
 
-      if (this.jhipsterConfig.withGeneratedFlag) {
-        transformStreams.push(generatedAnnotationTransform(this));
-      }
+    const conflicterStatus = {
+      fileActions: [
+        {
+          key: 'i',
+          name: 'ignore, do not overwrite and remember (experimental)',
+          value: ({ relativeFilePath }) => {
+            this.env.fs.append(`${this.env.cwd}/.yo-resolve`, `${relativeFilePath} skip`, { create: true });
+            return 'skip';
+          },
+        },
+      ],
+    };
 
-      if (!skipPrettier) {
-        const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
-        // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const filterPatternForPrettier = `{,.,**/,**/.,.jhipster/**/}*.{${this.getPrettierExtensions()}}`;
-        // docker-compose modifies .yo-rc.json from others folder, match them all.
-        const prettierFilter = filter(['**/.yo-rc.json', filterPatternForPrettier], { restore: true });
-        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-        transformStreams.push(prettierFilter, prettierTransform(prettierOptions, this, this.options.ignoreErrors), prettierFilter.restore);
-      }
+    const createApplyPrettierTransform = () => {
+      const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
+      // Prettier is clever, it uses correct rules and correct parser according to file extension.
+      const ignoreErrors = this.options.commandName === 'upgrade' || this.options.ignoreErrors;
+      return prettierTransform(prettierOptions, this, ignoreErrors);
+    };
 
-      transformStreams.push(
-        createEachFileTransform(file => this.env.conflicter.checkForCollision(file), { ordered: false, maxParallel: 10 }),
-        createConflicterStatusTransform()
-      );
+    const createForceWriteConfigFiles = () =>
+      patternSpy(file => {
+        file.conflicter = 'force';
+      }, '**/.jhipster/*.json').name('jhipster:config-files:force');
 
-      this.env.fs.commit(transformStreams, stream, (error, value) => {
-        if (error) {
-          reject(error);
-          return;
-        }
+    const transformStreams = [
+      // multi-step changes the file path, should be executed earlier in the pipeline
+      new MultiStepTransform(),
+      ...(skipYoResolve ? [] : [createApplyYoResolveTransform(this.env.conflicter)]),
+      createForceYoRcTransform(),
+      createForceWriteConfigFiles(),
+      ...(withGeneratedFlag ? [generatedAnnotationTransform(this)] : []),
+      ...(skipPrettier ? [] : [createApplyPrettierTransform()]),
+      createConflicterCheckTransform(this.env.conflicter, conflicterStatus),
+      createConflicterStatusTransform(),
+    ];
 
-        // Force to empty Conflicter queue.
-        this.env.conflicter.queue.once('end', () => resolve(value));
-        this.env.conflicter.queue.run();
-      });
-    });
+    await this.env.fs.commit(transformStreams, stream);
   }
 
   _createUserManagementEntities() {

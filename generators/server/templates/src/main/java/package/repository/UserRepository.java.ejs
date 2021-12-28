@@ -224,9 +224,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%_ if (cacheManagerIsAvailable) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%_ } _%>
     default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
         return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
     }

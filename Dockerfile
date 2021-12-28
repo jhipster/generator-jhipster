@@ -1,5 +1,9 @@
 # syntax=docker/dockerfile:1
 FROM eclipse-temurin:11-focal
+
+# copy sources
+COPY . /home/jhipster/generator-jhipster
+
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
@@ -34,7 +38,8 @@ RUN \
        exit 1; \
        ;; \
   esac; \
-  wget https://nodejs.org/dist/v14.17.6/node-v14.17.6-linux-$ARCH.tar.gz -O /tmp/node.tar.gz && \
+  JHI_NODE_VERSION="$(/home/jhipster/generator-jhipster/test-integration/scripts/99-print-node-version.sh)"; \
+  wget https://nodejs.org/dist/v$JHI_NODE_VERSION/node-v$JHI_NODE_VERSION-linux-$ARCH.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm@7 && \
@@ -47,9 +52,6 @@ RUN \
     /var/lib/apt/lists/* \
     /tmp/* \
     /var/tmp/*
-
-# copy sources
-COPY . /home/jhipster/generator-jhipster
 
 RUN \
   # install jhipster

@@ -17,7 +17,7 @@ const clientTestPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/ja
 
 const applyCustomizers = paths => clientTestPathCustomizer(outputPathCustomizer(paths));
 
-describe('JHipster generator', () => {
+describe('JHipster generator custom path', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
       let runResult;

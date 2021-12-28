@@ -43,6 +43,56 @@ describe('JHipster generator for entity', () => {
           assert.file(expectedFiles.gatling);
         });
       });
+
+      describe('search, no dto, no service, pagination', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
+            })
+            .withArguments(['foo'])
+            .withPrompts({
+              fieldAdd: false,
+              relationshipAdd: false,
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: PAGINATION,
+            });
+        });
+
+        it('does creates search files', () => {
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToFieldSortBuilderConverter.java`);
+          assert.file(expectedFiles.server);
+          assert.file(expectedFiles.gatling);
+        });
+      });
+
+      describe('search, no dto, no service, infinite-scroll', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
+            })
+            .withArguments(['foo'])
+            .withPrompts({
+              fieldAdd: false,
+              relationshipAdd: false,
+              dto: NO_DTO,
+              service: NO_SERVICE,
+              pagination: INFINITE_SCROLL,
+            });
+        });
+
+        it('does creates search files', () => {
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToFieldSortBuilderConverter.java`);
+          assert.file(expectedFiles.server);
+          assert.file(expectedFiles.gatling);
+        });
+      });
     });
 
     context('monolith with couchbase FTS', () => {
@@ -570,6 +620,12 @@ describe('JHipster generator for entity', () => {
           assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.module.ts`, 'SampleMicroserviceBarModule');
           assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/BarResource.java`);
         });
+        it('generates search specific content for template', () => {
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.html`, 'form name="searchForm"');
+        });
+        it('generates pagination specific content for template', () => {
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.html`, 'ngb-pagination');
+        });
       });
 
       describe('with entity from microservice and custom client-root-folder', () => {
@@ -619,6 +675,24 @@ describe('JHipster generator for entity', () => {
         });
         it('generates a string id for the mongodb entity', () => {
           assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.model.ts`, 'id?: string');
+        });
+      });
+
+      describe('without database and paginated entity', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/gateway-nodb'), dir);
+            })
+            .withPrompts({
+              useMicroserviceJson: true,
+              microservicePath: 'microservice1',
+            })
+            .withArguments(['foo']);
+        });
+        it('generates pagination specific content for the template', () => {
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/foo/list/foo.component.html`, 'ngb-pagination');
         });
       });
     });
@@ -722,7 +796,7 @@ describe('JHipster generator for entity', () => {
           assert.file(expectedFiles.gatling);
         });
         it('generates OpenAPI annotations on domain model', () => {
-          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
+          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@Schema/);
         });
       });
     });
@@ -798,8 +872,61 @@ describe('JHipster generator for entity', () => {
           ]);
         });
         it('generates OpenAPI annotations on DTO', () => {
-          assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
-          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@ApiModelProperty/);
+          assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@Schema/);
+          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@Schema/);
+        });
+        it('shall not generate search specific artifacts because elastic search is false on top level', () => {
+          assert.noFile(expectedFiles.entitySearchSpecific);
+          // and no annotation in the domain class
+          assert.noFileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
+            /@org.springframework.data.elasticsearch.annotations.Document/
+          );
+          assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`, /FooSearchRepository/);
+        });
+      });
+    });
+    context('microservice with elasticsearch', () => {
+      describe('entity not enabled for search', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/elasticsearch-microservice'), dir);
+              fse.copySync(path.join(__dirname, 'templates/.jhipster/Simple.json'), path.join(dir, '.jhipster/Foo.json'));
+            })
+            .withArguments(['Foo'])
+            .withOptions({ regenerate: true, force: true });
+        });
+        it('shall not generate search specific artifacts because entity has no search enabled', () => {
+          assert.noFile(expectedFiles.entitySearchSpecific);
+          // and no annotation in the domain class
+          assert.noFileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
+            /@org.springframework.data.elasticsearch.annotations.Document/
+          );
+        });
+      });
+      describe('entity enabled for search', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/elasticsearch-microservice'), dir);
+              fse.copySync(path.join(__dirname, 'templates/.jhipster/DtoServicePagination.json'), path.join(dir, '.jhipster/Foo.json'));
+            })
+            .withArguments(['Foo'])
+            .withOptions({ regenerate: true, force: true });
+        });
+        it('shall generate search specific artifacts because entity has search enabled', () => {
+          assert.file(expectedFiles.entitySearchSpecific);
+          // and no annotation in the domain class
+          assert.fileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
+            /@org.springframework.data.elasticsearch.annotations.Document/
+          );
+          // and repository shall be also used in service
+          assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`, /FooSearchRepository/);
         });
       });
     });
