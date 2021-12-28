@@ -53,7 +53,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
       ],
     });
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => of(true).toPromise());
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(<%= entityAngularName %>RoutingResolveService);
     service = TestBed.inject(<%= entityAngularName %>Service);
