@@ -10,18 +10,20 @@ import org.testcontainers.utility.DockerImageName;
 public class MongoDbTestContainerExtension implements BeforeAllCallback {
 
     private static final ThreadLocal<MongoDBContainer> THREAD_CONTAINER = new ThreadLocal<>();
-    private long memoryInBytes = 1024 * 1024 * 1024;
-    private long memorySwapInBytes = 1576 * 1024 * 1024;
+    private final long memoryInBytes = Math.round(1024 * 1024 * 1024 * 0.7);
+    private final long memorySwapInBytes = Math.round(1024 * 1024 * 1024);
+    private final long nanoCpu = Math.round(1_000_000_000L * 0.5);
 
     @Override
     public void beforeAll(ExtensionContext context) {
         if (null == THREAD_CONTAINER.get()) {
             MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("<%= DOCKER_MONGODB %>"))
+                .withReuse(true)
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig()
                     .withMemory(memoryInBytes)
                     .withMemorySwap(memorySwapInBytes)
-                    .withNanoCPUs(1500000000L)
+                    .withNanoCPUs(nanoCpu)
                 );
             mongoDBContainer.start();
             THREAD_CONTAINER.set(mongoDBContainer);
