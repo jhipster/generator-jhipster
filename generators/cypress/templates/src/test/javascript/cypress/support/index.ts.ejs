@@ -46,12 +46,3 @@ Cypress.Cookies.defaults({
   preserve: ['XSRF-TOKEN','SESSION', 'JSESSIONID']
 })
 <%_ } _%>
-<%_ if (clientFrameworkVue && communicationSpringWebsocket) { _%>
-
-// https://docs.cypress.io/api/events/catalog-of-events#Uncaught-Exceptions
-Cypress.on('uncaught:exception', (err, runnable) => {
-  // returning false here prevents Cypress from
-  // failing the test
-  return false
-});
-<%_ } _%>

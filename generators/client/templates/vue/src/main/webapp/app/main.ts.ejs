@@ -61,13 +61,13 @@ const i18n = config.initI18N(Vue);
 const store = config.initVueXStore(Vue);
 
 <%_ if (communicationSpringWebsocket) { _%>
-const trackerService = new TrackerService(router<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
+const trackerService = new TrackerService(router, store<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
 const loginService = new LoginService();
-const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>(<any>Vue).cookie, <%_ } _%><%_ if (communicationSpringWebsocket) { _%>trackerService, <%_ } _%>router);
+const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>(<any>Vue).cookie, <%_ } _%>router);
 
 router.beforeEach(async (to, from, next) => {
   if (!to.matched.length) {
