@@ -1571,6 +1571,31 @@ Object {
     },
     Object {
       "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "templates": Array [
+        "gradle/profile_dbmigrate.gradle",
+      ],
+    },
+    Object {
+      "condition": [Function],
       "path": "src/main/java/",
       "templates": Array [
         Object {

@@ -71,6 +71,12 @@ if (project.hasProperty("prod") || project.hasProperty("gae")) {
     apply from: "gradle/profile_dev.gradle"
 }
 
+<%_ if (databaseTypeMongodb && reactive) { _%>
+if (!project.hasProperty("db-migrate") || project.getProperty("db-migrate") != false) {
+    apply from: "gradle/profile_dbmigrate.gradle"
+}
+<%_ } _%>
+
 if (project.hasProperty("war")) {
     apply from: "gradle/war.gradle"
 }
@@ -430,11 +436,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
-<%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) { _%>
-    // Mongock doesn't support reactive yet, so this dependency is necessary.
-    // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"

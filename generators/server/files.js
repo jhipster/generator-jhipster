@@ -113,6 +113,27 @@ const mongoDbFiles = {
         },
       ],
     },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.buildTool === GRADLE && generator.reactive,
+      templates: ['gradle/profile_dbmigrate.gradle'],
+    },
   ],
 };
 
@@ -1735,7 +1756,6 @@ const baseServerFiles = {
         },
       ],
     },
-
     {
       path: SERVER_TEST_SRC_DIR,
       templates: [

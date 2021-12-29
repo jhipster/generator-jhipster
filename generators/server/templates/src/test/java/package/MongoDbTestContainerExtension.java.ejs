@@ -20,6 +20,7 @@ public class MongoDbTestContainerExtension implements BeforeAllCallback {
             MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("<%= DOCKER_MONGODB %>"))
                 .withReuse(true)
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
+                .withCommand("--wiredTigerCacheSizeGB 0.25 --wiredTigerCollectionBlockCompressor none --slowOpSampleRate 0")
                 .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig()
                     .withMemory(memoryInBytes)
                     .withMemorySwap(memorySwapInBytes)

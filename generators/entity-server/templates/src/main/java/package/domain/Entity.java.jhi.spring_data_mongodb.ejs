@@ -56,22 +56,28 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
+    <%_ if (!relationship.otherEntity.embedded && !reactive) { _%>
     @DBRef
     <%_ } _%>
     @Field("<%= relationship.relationshipFieldName %>")
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
+      <%_ if (!reactive) { _%>
     @DBRef
+      <%_ } _%>
     @Field("<%= relationship.relationshipFieldName %>")
     <%_ } _%>
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
+    <%_ if (!reactive) { _%>
     @DBRef
+    <%_ } _%>
     @Field("<%= relationship.relationshipFieldNamePlural %>")
   <%_ } else { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
+      <%_ if (!reactive) { _%>
     @DBRef
+      <%_ } _%>
         <%_ if (relationship.ownerSide) { _%>
     @Field("<%= relationship.relationshipFieldName %>")
         <%_ } _%>
