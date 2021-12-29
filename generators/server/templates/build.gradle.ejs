@@ -545,8 +545,8 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     }
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-    implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
-    implementation "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver"
+    implementation "io.mongock:mongock-springboot"
+    implementation "io.mongock:mongodb-springdata-v3-driver"
     testImplementation "org.testcontainers:mongodb"
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
