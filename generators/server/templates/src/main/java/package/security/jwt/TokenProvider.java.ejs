@@ -52,6 +52,8 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
 
+    private static final String INVALID_JWT_TOKEN = "Invalid JWT token.";
+
     private final Key key;
 
     private final JwtParser jwtParser;
@@ -131,19 +133,19 @@ public class TokenProvider {
         } catch (ExpiredJwtException e) {
             this.securityMetersService.trackTokenExpired();
 
-            log.trace("Invalid JWT token.", e);
+            log.trace(INVALID_JWT_TOKEN, e);
         } catch (UnsupportedJwtException e) {
             this.securityMetersService.trackTokenUnsupported();
 
-            log.trace("Invalid JWT token.", e);
+            log.trace(INVALID_JWT_TOKEN, e);
         } catch (MalformedJwtException e) {
             this.securityMetersService.trackTokenMalformed();
 
-            log.trace("Invalid JWT token.", e);
+            log.trace(INVALID_JWT_TOKEN, e);
         } catch (SignatureException e) {
             this.securityMetersService.trackTokenInvalidSignature();
 
-            log.trace("Invalid JWT token.", e);
+            log.trace(INVALID_JWT_TOKEN, e);
         } catch (IllegalArgumentException e) { // TODO: should we let it bubble (no catch), to avoid defensive programming and follow the fail-fast principle?
             log.error("Token validation error {}", e.getMessage());
         }
