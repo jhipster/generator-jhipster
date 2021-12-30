@@ -92,9 +92,9 @@ export class NavbarComponent implements OnInit {
           this.loadModule(LazyTranslationModule as Type<any>);
     <%_ } _%>
         },
-        () => {
+        error => {
           // eslint-disable-next-line no-console
-          console.log('Error loading <%= remote.lowercaseBaseName %> entities');
+          console.log('Error loading <%= remote.lowercaseBaseName %> entities', error);
         }
       );
   <%_ } _%>

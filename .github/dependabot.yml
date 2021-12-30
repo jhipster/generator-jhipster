@@ -25,11 +25,12 @@ updates:
       - 'theme: angular'
       - 'theme: dependencies'
     ignore:
-      # Must match @angular-devkit/build-webpack dependency https://github.com/angular/angular-cli/blob/master/packages/angular_devkit/build_webpack/package.json#L16
-      - dependency-name: 'webpack'
       # https://github.com/ng-bootstrap/ng-bootstrap/issues/3899
       - dependency-name: 'bootstrap'
         versions: ['>=5']
+      # Should match generated project node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/templates/'
@@ -59,6 +60,10 @@ updates:
     labels:
       - 'theme: react'
       - 'theme: dependencies'
+    ignore:
+      # Should match generated project node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/vue/'
@@ -76,6 +81,9 @@ updates:
       # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
       - dependency-name: 'bootstrap'
         versions: ['>=5']
+      # Should match generated project node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
 
   - package-ecosystem: 'github-actions'
     directory: '/'

@@ -126,6 +126,11 @@
   },
   "defaultProject": "<%= dasherizedBaseName %>",
   "cli": {
+    "cache": {
+      "enabled": true,
+      "path": "./<%= BUILD_DIR %>",
+      "environment": "all"
+    },
     "packageManager": "<%= clientPackageManager %>"
   }
 }

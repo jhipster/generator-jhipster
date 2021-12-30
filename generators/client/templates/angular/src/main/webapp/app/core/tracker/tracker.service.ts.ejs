@@ -21,8 +21,8 @@ import { Location } from '@angular/common';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { Subscription, ReplaySubject, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import * as SockJS from 'sockjs-client';
-import * as Stomp from 'webstomp-client';
+import SockJS from 'sockjs-client';
+import Stomp, { Client, Subscription as StompSubscription, ConnectionHeaders, Message } from 'webstomp-client';
 
 <%_ if (authenticationTypeSession) { _%>
 import { CSRFService } from 'app/core/auth/csrf.service';
@@ -34,11 +34,11 @@ import { TrackerActivity } from './tracker-activity.model';
 
 @Injectable({ providedIn: 'root' })
 export class TrackerService {
-  private stompClient: Stomp.Client | null = null;
+  private stompClient: Client | null = null;
   private routerSubscription: Subscription | null = null;
   private connectionSubject: ReplaySubject<void> = new ReplaySubject(1);
   private connectionSubscription: Subscription | null = null;
-  private stompSubscription: Stomp.Subscription | null = null;
+  private stompSubscription: StompSubscription | null = null;
   private listenerSubject: Subject<TrackerActivity> = new Subject();
 
   constructor(
@@ -67,7 +67,7 @@ export class TrackerService {
 <%_ } _%>
     const socket: WebSocket = new SockJS(url);
     this.stompClient = Stomp.over(socket, { protocols: ['v12.stomp'] });
-    const headers: Stomp.ConnectionHeaders = {};
+    const headers: ConnectionHeaders = {};
 <%_ if (authenticationTypeSession) { _%>
     headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
 <%_ } _%>
@@ -111,7 +111,7 @@ export class TrackerService {
 
     this.connectionSubscription = this.connectionSubject.subscribe(() => {
       if (this.stompClient) {
-        this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Stomp.Message) => {
+        this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Message) => {
           this.listenerSubject.next(JSON.parse(data.body));
         });
       }

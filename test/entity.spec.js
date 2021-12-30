@@ -623,6 +623,9 @@ describe('JHipster generator for entity', () => {
         it('generates search specific content for template', () => {
           assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.html`, 'form name="searchForm"');
         });
+        it('generates pagination specific content for template', () => {
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/list/bar.component.html`, 'ngb-pagination');
+        });
       });
 
       describe('with entity from microservice and custom client-root-folder', () => {
@@ -672,6 +675,24 @@ describe('JHipster generator for entity', () => {
         });
         it('generates a string id for the mongodb entity', () => {
           assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.model.ts`, 'id?: string');
+        });
+      });
+
+      describe('without database and paginated entity', () => {
+        before(async () => {
+          await helpers
+            .run(require.resolve('../generators/entity'))
+            .doInDir(dir => {
+              fse.copySync(path.join(__dirname, '../test/templates/gateway-nodb'), dir);
+            })
+            .withPrompts({
+              useMicroserviceJson: true,
+              microservicePath: 'microservice1',
+            })
+            .withArguments(['foo']);
+        });
+        it('generates pagination specific content for the template', () => {
+          assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/foo/list/foo.component.html`, 'ngb-pagination');
         });
       });
     });

@@ -183,7 +183,19 @@ task integrationTest(type: Test) {
 }
 <%_ if (cucumberTests) { _%>
 
+task consoleLauncherTest(type: JavaExec) {
+    dependsOn(testClasses)
+    String cucumberReportsDir = file("$buildDir/reports/tests")
+    outputs.dir(reportsDir)
+    classpath = sourceSets["test"].runtimeClasspath
+    main = "org.junit.platform.console.ConsoleLauncher"
+    args("--scan-classpath")
+    args("--include-engine", "cucumber")
+    args("--reports-dir", cucumberReportsDir)
+}
+
 task cucumberTest(type: Test) {
+    dependsOn(consoleLauncherTest)
     description = "Execute cucumber BDD tests."
     group = "verification"
     include "**/*CucumberIT*"
@@ -591,9 +603,11 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:database-commons"
 <%_ } _%>
 <%_ if (cucumberTests) { _%>
-    testImplementation "io.cucumber:cucumber-junit"
+    testImplementation "org.junit.platform:junit-platform-console"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
     testImplementation "io.cucumber:cucumber-java"
     testImplementation "io.cucumber:cucumber-spring"
+    testImplementation "org.testng:testng"
 <%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"
@@ -669,6 +683,19 @@ if (project.hasProperty("nodeInstall")) {
         npmVersion = "<%= NPM_VERSION %>"
         download = downloadNode
     }
+
+    // Copy local node and npm to a fixed location for npmw
+    def fixedNode = tasks.register("fixedNode", Copy) {
+        from nodeSetup
+        into '<%= BUILD_DIR %>node'
+    }
+    tasks.named("nodeSetup").configure { finalizedBy fixedNode }
+
+    def fixedNpm = tasks.register("fixedNpm", Copy) {
+        from npmSetup
+        into '<%= BUILD_DIR %>node'
+    }
+    tasks.named("npmSetup").configure { finalizedBy fixedNpm }
 }
 <%_ } _%>
 <%_ if (embeddableLaunchScript) { _%>
