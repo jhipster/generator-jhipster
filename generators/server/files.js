@@ -1738,25 +1738,6 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseType === MONGODB,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseType === MONGODB,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
