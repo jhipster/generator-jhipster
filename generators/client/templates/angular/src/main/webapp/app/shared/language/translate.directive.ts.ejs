@@ -59,11 +59,11 @@ export class TranslateDirective implements OnChanges, OnInit, OnDestroy {
     this.translateService
       .get(this.<%= jhiPrefix %>Translate, this.translateValues)
       .pipe(takeUntil(this.directiveDestroyed))
-      .subscribe(
-        value => {
+      .subscribe({
+        next: value => {
           this.el.nativeElement.innerHTML = value;
         },
-        () => `${translationNotFoundMessage}[${this.<%= jhiPrefix %>Translate}]`
-      );
+        error: () => `${translationNotFoundMessage}[${this.<%= jhiPrefix %>Translate}]`
+      });
   }
 }

@@ -72,18 +72,18 @@ export class UserManagementUpdateComponent implements OnInit {
     this.isSaving = true;
     this.updateUser(this.user);
     if (this.user.id !== undefined) {
-      this.userService.update(this.user).subscribe(
-        () => this.onSaveSuccess(),
-        () => this.onSaveError()
-      );
+      this.userService.update(this.user).subscribe({
+        next: () => this.onSaveSuccess(),
+        error: () => this.onSaveError()
+      });
     } else {
 <%_ if (!enableTranslation) { _%>
       this.user.langKey = 'en';
 <%_ } _%>
-      this.userService.create(this.user).subscribe(
-        () => this.onSaveSuccess(),
-        () => this.onSaveError()
-      );
+      this.userService.create(this.user).subscribe({
+        next: () => this.onSaveSuccess(),
+        error: () => this.onSaveError()
+      });
     }
   }
 
