@@ -18,8 +18,12 @@ if not exist %NPM_EXE% (
   call %INSTALL_NPM_COMMAND%
 )
 
-if exist %NPM_EXE% (
+if exist %NODE_EXE% (
+  Rem Executing local npm with local node
   call %NODE_EXE% %NPM_EXE% %*
+) else if exist %NPM_EXE% (
+  Rem Executing local npm
+  call %NPM_EXE% %*
 ) else (
   call npm %*
 )
