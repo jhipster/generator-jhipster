@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "12.1.2",
-    "@types/jest": "27.0.3",
+    "@types/jest": "27.4.0",
     "@types/lodash": "4.14.178",
     "@types/node": "16.11.17",
     "@types/react": "17.0.38",
