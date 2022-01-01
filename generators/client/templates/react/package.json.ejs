@@ -179,6 +179,8 @@
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+    "build": "<%= clientPackageManager %> run webapp:prod --",
+    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
 <%_ if (protractorTests && !cypressTests) { _%>
     "e2e": "<%= clientPackageManager %> run e2e:protractor --",
     "e2e:headless": "<%= clientPackageManager %> run e2e:protractor:headless --",
