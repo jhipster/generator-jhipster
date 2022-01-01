@@ -45,28 +45,28 @@
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
-                }).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                }).subscribe({
+                    next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                         this.isLoading = false;
                         this.<%= entityInstancePlural %> = res.body ?? [];
                     },
-                    () => {
+                    error: () => {
                         this.isLoading = false;
                     }
-                );
+                });
             return;
         }
 <%_ } _%>
 
-        this.<%= entityInstance %>Service.query().subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+        this.<%= entityInstance %>Service.query().subscribe({
+            next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
                 this.<%= entityInstancePlural %> = res.body ?? [];
             },
-            () => {
+            error: () => {
                 this.isLoading = false;
             }
-        );
+        });
     }
 
 <%_ if (searchEngine) { _%>

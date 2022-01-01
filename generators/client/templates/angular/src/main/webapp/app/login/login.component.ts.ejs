@@ -66,15 +66,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
         password: this.loginForm.get('password')!.value,
         rememberMe: this.loginForm.get('rememberMe')!.value,
       })
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.authenticationError = false;
           if (!this.router.getCurrentNavigation()) {
             // There were no routing during login (eg from navigationToStoredUrl)
             this.router.navigate(['']);
           }
         },
-        () => this.authenticationError = true
-      );
+        error: () => this.authenticationError = true
+      });
   }
 }
