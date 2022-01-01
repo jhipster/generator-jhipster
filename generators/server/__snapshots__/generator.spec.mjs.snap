@@ -357,10 +357,21 @@ Object {
       ],
     },
     Object {
+      "condition": [Function],
       "path": "src/test/java/",
       "templates": Array [
         Object {
           "file": "package/security/SecurityUtilsUnitTest.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/security/SecurityUtilsUnitTest_reactive.java",
           "renameTo": [Function],
         },
       ],
@@ -581,10 +592,6 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/config/LocaleConfiguration.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/config/LoggingAspectConfiguration.java",
           "renameTo": [Function],
         },
@@ -619,7 +626,21 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
+          "file": "package/config/LocaleConfiguration.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
           "file": "package/config/ReactorConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/LocaleConfiguration_reactive.java",
           "renameTo": [Function],
         },
       ],
@@ -767,8 +788,24 @@ Object {
           "file": "package/web/rest/AuthInfoResource.java",
           "renameTo": [Function],
         },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
         Object {
           "file": "package/web/rest/LogoutResource.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/LogoutResource_reactive.java",
           "renameTo": [Function],
         },
       ],
@@ -1627,11 +1664,27 @@ Object {
           "renameTo": [Function],
         },
         Object {
+          "file": "package/web/rest/errors/ExceptionTranslatorTestController.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
           "file": "package/web/rest/errors/ExceptionTranslatorIT.java",
           "renameTo": [Function],
         },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
         Object {
-          "file": "package/web/rest/errors/ExceptionTranslatorTestController.java",
+          "file": "package/web/rest/errors/ExceptionTranslatorIT_reactive.java",
           "renameTo": [Function],
         },
       ],

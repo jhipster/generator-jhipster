@@ -51,8 +51,8 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class UserJWTController {
 
-<%_ if (reactive) { _%>
     private final TokenProvider tokenProvider;
+<%_ if (reactive) { _%>
 
     private final ReactiveAuthenticationManager authenticationManager;
 
@@ -75,7 +75,6 @@ public class UserJWTController {
             });
     }
 <%_ } else { _%>
-    private final TokenProvider tokenProvider;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 

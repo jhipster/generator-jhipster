@@ -457,10 +457,21 @@ const baseServerFiles = {
       ],
     },
     {
+      condition: generator => !generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
           file: 'package/security/SecurityUtilsUnitTest.java',
+          renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/security/SecurityUtilsUnitTest_reactive.java',
           renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`,
         },
       ],
@@ -676,8 +687,30 @@ const baseServerFiles = {
           file: 'package/web/rest/AuthInfoResource.java',
           renameTo: generator => `${generator.javaDir}web/rest/AuthInfoResource.java`,
         },
+      ],
+    },
+    {
+      condition: generator =>
+        generator.authenticationType === OAUTH2 &&
+        !generator.reactive &&
+        (generator.applicationType === MONOLITH || generator.applicationType === GATEWAY),
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
         {
           file: 'package/web/rest/LogoutResource.java',
+          renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`,
+        },
+      ],
+    },
+    {
+      condition: generator =>
+        generator.authenticationType === OAUTH2 &&
+        generator.reactive &&
+        (generator.applicationType === MONOLITH || generator.applicationType === GATEWAY),
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/LogoutResource_reactive.java',
           renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`,
         },
       ],
@@ -841,10 +874,6 @@ const baseServerFiles = {
           renameTo: generator => `${generator.javaDir}config/JacksonConfiguration.java`,
         },
         {
-          file: 'package/config/LocaleConfiguration.java',
-          renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java`,
-        },
-        {
           file: 'package/config/LoggingAspectConfiguration.java',
           renameTo: generator => `${generator.javaDir}config/LoggingAspectConfiguration.java`,
         },
@@ -867,12 +896,26 @@ const baseServerFiles = {
       templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }],
     },
     {
+      condition: generator => !generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/LocaleConfiguration.java',
+          renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java`,
+        },
+      ],
+    },
+    {
       condition: generator => generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/config/ReactorConfiguration.java',
           renameTo: generator => `${generator.javaDir}config/ReactorConfiguration.java`,
+        },
+        {
+          file: 'package/config/LocaleConfiguration_reactive.java',
+          renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java`,
         },
       ],
     },
@@ -1214,12 +1257,28 @@ const baseServerFiles = {
       templates: [
         { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
         {
+          file: 'package/web/rest/errors/ExceptionTranslatorTestController.java',
+          renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => !generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
           file: 'package/web/rest/errors/ExceptionTranslatorIT.java',
           renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIT.java`,
         },
+      ],
+    },
+    {
+      condition: generator => generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
         {
-          file: 'package/web/rest/errors/ExceptionTranslatorTestController.java',
-          renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java`,
+          file: 'package/web/rest/errors/ExceptionTranslatorIT_reactive.java',
+          renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIT.java`,
         },
       ],
     },

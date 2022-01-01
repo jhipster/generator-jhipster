@@ -71,7 +71,7 @@ public interface <%= entityClass %>Service {
      * @param <%= instanceName %> the entity to update partially.
      * @return the persisted entity.
      */
-    <% if (reactive) { %>Mono<<% } else { %>Optional<<% } %><%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>);
+    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>);
 
     /**
      * Get all the <%= entityInstancePlural %>.

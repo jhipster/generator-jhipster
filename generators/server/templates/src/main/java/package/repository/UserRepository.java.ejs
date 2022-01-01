@@ -472,7 +472,7 @@ public class UserRepository {
     public static final String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
 
-  <%_ if (!reactive) { _%>
+  <%_ if (reactive) { _%>
     private final ReactiveSession session;
   <%_ } else { _%>
     private final CqlSession session;
@@ -480,7 +480,7 @@ public class UserRepository {
 
     private final Validator validator;
 
-  <%_ if (!reactive) { _%>
+  <%_ if (reactive) { _%>
     private final ReactiveCassandraTemplate cqlTemplate;
   <%_ } else { _%>
     private UserDao userDao;

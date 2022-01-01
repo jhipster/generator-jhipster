@@ -62,7 +62,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 <%_ if (databaseTypeSql) { _%>
     @Transactional
 <%_ } _%>
-    public <% if (!reactive) { %>Mono<UserDetails> findByUsername<% } else { %>UserDetails loadUserByUsername<% } %>(final String login) {
+    public <% if (reactive) { %>Mono<UserDetails> findByUsername<% } else { %>UserDetails loadUserByUsername<% } %>(final String login) {
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
