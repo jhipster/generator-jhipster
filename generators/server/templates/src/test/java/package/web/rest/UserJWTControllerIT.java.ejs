@@ -72,7 +72,7 @@ import static org.hamcrest.Matchers.not;
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
-@AutoConfigureWebTestClient(timeout = "PT60S")
+@AutoConfigureWebTestClient(timeout = "PT180S")
 <%_ } _%>
 @IntegrationTest
 class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{

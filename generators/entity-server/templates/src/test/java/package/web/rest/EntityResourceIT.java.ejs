@@ -232,7 +232,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
-@AutoConfigureWebTestClient(timeout = "PT60S")
+@AutoConfigureWebTestClient(timeout = "PT180S")
 <%_ } _%>
 @WithMockUser
 class <%= entityClass %>ResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
