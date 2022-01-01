@@ -66,16 +66,16 @@ import AlertService from '@/shared/alert/alert.service';
       hasManyToMany = true;
     } _%>
     <%_ if (!importEntitiesSeen.includes(otherEntityAngularName)) { _%>
-      <% if (relationship.otherEntityUser && !authenticationTypeOauth2) { %>
-import UserService from '@/admin/user-management/user-management.service';
-  <% } else if (relationship.otherEntityUser && authenticationTypeOauth2) { %>
-import UserOAuth2Service from '@/entities/user/user.oauth2.service';
-  <% } else if (!relationship.otherEntityUser) { %>
+      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+import UserService from '@/entities/user/user.service';
+      <% } else { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
-  <% } %>
+      <% } %>
+    <%_ } _%>
+    <%_ importEntitiesSeen.push(otherEntityAngularName); _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ importEntitiesSeen.push(otherEntityAngularName); } } _%>
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 <%_ const enumImports = generateEntityClientEnumImports(fields); _%>
@@ -142,16 +142,18 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         const otherEntityAngularName = relationship.otherEntityAngularName;
   _%>
   <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
-  <%_ if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { _%>
-  @Inject('userOAuth2Service') private userOAuth2Service: () => UserOAuth2Service;
-  <%_ } else {_%>
+      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+  @Inject('userService') private userService: () => UserService;
+      <% } else { %>
   @Inject('<%= otherEntityName %>Service') private <%= otherEntityName %>Service: () => <%= otherEntityAngularName %>Service;
-  <%_ } _%>
-  <%_ } _%>
-  <%_ if (!entitiesSeen.includes(otherEntityNamePlural)) { %>
+      <%_ } _%>
+    <%_ } _%>
+    <%_ if (!entitiesSeen.includes(otherEntityNamePlural)) { %>
   public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%> = [];
+    <%_ } _%>
+    <%_ entitiesSeen.push(otherEntityAngularName);entitiesSeen.push(otherEntityNamePlural); _%>
   <%_ } _%>
-  <%_ entitiesSeen.push(otherEntityAngularName);entitiesSeen.push(otherEntityNamePlural); } } _%>
+<%_ } _%>
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
   public <%- _.lowerFirst(importedType) %>Values : string[] = Object.keys(<%- importedType %>);
   <%_ }); _%>
@@ -317,14 +319,16 @@ _%>
           if (!entitiesSet.has(otherEntityName)) {
             entitiesSet.add(otherEntityName);
     _%>
-    <%_ if (otherEntityAngularName === 'User' && authenticationType === 'oauth2') { _%>
-    this.userOAuth2Service().retrieve().then((res) => {
-    <%_ } else {_%>
+      <% if (relationship.otherEntityUser && (!skipUserManagement || authenticationTypeOauth2)) { %>
+    this.userService().retrieve().then((res) => {
+      <%_ } else { _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {
-    <%_ } _%>
+      <%_ } _%>
       this.<%= otherEntityNamePlural %> = res.data;
     });
-    <%_ } } } _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
   }
 
   <%_ if (hasManyToMany) { _%>
