@@ -582,7 +582,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === GRADLE) {
-          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
+          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp -x webapp_test';
           e2ePackage = 'e2e';
           scriptsStorage.set({
             'app:start': './gradlew',
