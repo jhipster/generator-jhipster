@@ -31,12 +31,17 @@ describe('/account/settings', () => {
 
   beforeEach(() => {
     cy.login(username, password);
-    cy.visit('');
-    cy.clickOnSettingsItem();
+    cy.visit('/account/settings');
   });
 
   beforeEach(() => {
     cy.intercept('POST', '/api/account').as('settingsSave');
+  });
+
+  it('should be accessible through menu', () => {
+    cy.visit('');
+    cy.clickOnSettingsItem();
+    cy.url().should('match', /\/account\/settings$/);
   });
 
   it("should be able to change 'user' firstname settings", () => {

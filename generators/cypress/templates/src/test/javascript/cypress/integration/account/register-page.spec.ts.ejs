@@ -28,12 +28,17 @@ import {
 
 describe('/account/register', () => {
   beforeEach(() => {
-    cy.visit('');
-    cy.clickOnRegisterItem();
+    cy.visit('/account/register');
   });
 
   beforeEach(() => {
     cy.intercept('POST', '/api/register').as('registerSave');
+  });
+
+  it('should be accessible through menu', () => {
+    cy.visit('');
+    cy.clickOnRegisterItem();
+    cy.url().should('match', /\/account\/register$/);
   });
 
   it('should load the register page', () => {
