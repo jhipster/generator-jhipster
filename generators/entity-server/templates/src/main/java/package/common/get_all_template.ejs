@@ -69,15 +69,15 @@ _%>
         log.debug("REST request to get a page of <%= entityClassPlural %>");
     <%_ if (reactive) { _%>
         return <%= entityInstance %><%= viaService ? 'Service.countAll' : 'Repository.count' %>().zipWith(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<%= reactiveEntityToDto %>.collectList())
-                .map(countWithEntities -> {
-                    return ResponseEntity.ok()
+                .map(countWithEntities ->
+                    ResponseEntity.ok()
                         .headers(
                             PaginationUtil.generatePaginationHttpHeaders(
                                 UriComponentsBuilder.fromHttpRequest(request),
                                 new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
                             )
-                        ).body(countWithEntities.getT2());
-                });
+                        ).body(countWithEntities.getT2())
+                );
     <%_ } else { _%>
       <%_ if (relationshipsContainEagerLoad) { _%>
         Page<<%= instanceType %>> page;

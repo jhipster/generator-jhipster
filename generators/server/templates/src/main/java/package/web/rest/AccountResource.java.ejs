@@ -523,16 +523,16 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
   <%_ if (reactive) { _%>
+        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
+            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
+            .then();
+  <%_ } else { _%>
         Optional<<%= asEntity('User') %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");
         }
-  <%_ } else { _%>
-        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
-            .then();
   <%_ } _%>
     }
 

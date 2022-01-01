@@ -126,7 +126,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
 <%_ if (serviceImpl) { _%>
     @Override
 <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } else { %>Optional<<% } %><%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to partially update <%= entityClass %> : {}", <%= instanceName %>);
 <%- include('../../common/patch_template', {asEntity, asDto, isService: true, viaService: false}); -%>
     }

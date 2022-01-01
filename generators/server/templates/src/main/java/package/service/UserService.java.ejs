@@ -847,8 +847,10 @@ public class UserService {
                 this.clearUserCaches(user);
       <%_ } _%>
             });
+    <%_ } _%>
     }
 
+    <%_ if (reactive) { _%>
       <%_ if (databaseTypeSql) { _%>
     @Transactional
       <%_ } _%>
@@ -863,8 +865,8 @@ public class UserService {
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
             .doOnNext(user -> log.debug("Deleted User: {}", user));
-    <%_ } _%>
     }
+    <%_ } _%>
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 
