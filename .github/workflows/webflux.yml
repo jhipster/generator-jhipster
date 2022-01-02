@@ -98,6 +98,7 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
+            skip-backend-tests: 1
           - suite: webflux-mongodb-es-session
             app-sample: webflux-mongodb-es-session
             entity: mongodb
