@@ -25,7 +25,6 @@ export default class TrackerService {
     this.store.watch(
       (_state, getters) => getters.authenticated,
       (value, oldValue) => {
-        console.log('TrackerService state change', value, oldValue);
         if (value === oldValue) return;
         if (value) {
           return this.connect();
