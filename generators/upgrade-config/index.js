@@ -18,6 +18,8 @@
  */
 
 const BaseGenerator = require('../generator-base');
+const { INITIALIZING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+
 const { parseBluePrints } = require('../../utils/blueprint');
 
 module.exports = class extends BaseGenerator {
@@ -45,7 +47,7 @@ module.exports = class extends BaseGenerator {
     this.jhipsterOldVersion = this.config.get('jhipsterVersion');
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     return {
       validateFromCli: this.checkInvocationFromCLI,
 

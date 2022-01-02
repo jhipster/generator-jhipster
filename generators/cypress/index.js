@@ -17,7 +17,18 @@
  * limitations under the License.
  */
 const _ = require('lodash');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  DEFAULT_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
+
 const writeFiles = require('./files').writeFiles;
 const constants = require('../generator-constants');
 const { GENERATOR_CYPRESS } = require('../generator-list');
@@ -50,7 +61,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -77,7 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -97,7 +108,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -112,7 +123,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
@@ -122,7 +133,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return super._missingPreDefault();
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -141,7 +152,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -229,7 +240,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }

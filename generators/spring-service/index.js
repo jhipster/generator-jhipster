@@ -18,7 +18,11 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, LOADING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
@@ -66,7 +70,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -96,7 +100,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -110,7 +114,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -124,7 +128,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -153,7 +157,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }

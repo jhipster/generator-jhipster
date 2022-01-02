@@ -27,9 +27,21 @@ const BaseGenerator = require('./generator-base');
 const { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } = require('../utils/blueprint');
 
 /**
- * This is the base class for a generator that can be extended through a blueprint.
+ * Basic task definition
  *
- * The method signatures in public API should not be changed without a major version change
+ * @async
+ * @function YeomanTask
+ * @param {...string} cliArgs - Arguments passed to cli.
+ * @return {Promise<any>}.
+ */
+
+/**
+ * Base class for a generator that can be extended through a blueprint.
+ *
+ * @class
+ * @property {import('yeoman-generator/lib/util/storage')} blueprintStorage - Storage for blueprint config (Blueprints only).
+ * @property {object} blueprintConfig - Proxy object for blueprintStorage (Blueprints only).
+ * @property {import('yeoman-generator')} jhipsterContext - JHipster parent generator (Blueprints only).
  */
 module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   constructor(args, options, features) {
@@ -62,11 +74,33 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get initializing() {
+    return this._initializing();
+  }
+
+  /**
    * Public API method used by the getter and also by Blueprints
    * @returns {Object} tasks
    */
   _initializing() {
     return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Prompting priority is used to prompt users for configuration values.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get prompting() {
+    return this._prompting();
   }
 
   /**
@@ -78,11 +112,33 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Configuring priority is used to customize and validate the configuration.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get configuring() {
+    return this._configuring();
+  }
+
+  /**
    * Public API method used by the getter and also by Blueprints
    * @returns {Object} tasks
    */
   _configuring() {
     return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Composing should be used to compose with others generators.
+   *
+   * @returns {Object.<string, requestCallback>} taskGroup
+   */
+  get composing() {
+    return this._composing();
   }
 
   /**
@@ -94,11 +150,34 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Loading should be used to load application configuration from jhipster configuration.
+   * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
+   *
+   * @returns {Object.<string, YeomanTask>} taskGroup
+   */
+  get loading() {
+    return this._loading();
+  }
+
+  /**
    * Public API method used by the getter and also by Blueprints
    * @returns {Object} tasks
    */
   _loading() {
     return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Preparing should be used to generate derived properties.
+   *
+   * @returns {Object.<string, YeomanTask>} taskGroup
+   */
+  get preparing() {
+    return this._preparing();
   }
 
   /**
@@ -154,11 +233,33 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * Default priority should used as misc customizations.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get default() {
+    return this._default();
+  }
+
+  /**
    * Public API method used by the getter and also by Blueprints
    * @returns {Object} tasks
    */
   _default() {
     return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Writing priority should used to write files.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get writing() {
+    return this._writing();
   }
 
   /**
@@ -186,10 +287,32 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Priority API stub for blueprints.
+   *
+   * PostWriting priority should used to customize files.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get postWriting() {
+    return this._postWriting();
+  }
+
+  /**
    * Public API method used by the getter and also by Blueprints
    */
   _postWriting() {
     return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Install priority should used to prepare the project.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get install() {
+    return this._install();
   }
 
   /**
@@ -198,6 +321,17 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    */
   _install() {
     return {};
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * End priority should used to say good bye and print instructions.
+   *
+   * @returns {Object.<string, YeomanTask>} generator tasks
+   */
+  get end() {
+    return this._end();
   }
 
   /**
@@ -219,9 +353,11 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
    */
   _isPriorityMissing(priorityName, destPriority = 'related') {
     const ownPrototype = Object.getPrototypeOf(this);
+    const parentPrototype = Object.getPrototypeOf(ownPrototype);
     if (
+      parentPrototype !== JHipsterBaseBlueprintGenerator.prototype &&
       !Object.getOwnPropertyDescriptor(ownPrototype, priorityName) &&
-      Object.getOwnPropertyDescriptor(Object.getPrototypeOf(ownPrototype), priorityName)
+      Object.getOwnPropertyDescriptor(parentPrototype, priorityName)
     ) {
       this.warning(`Priority ${priorityName} is missing for generator ${this.options.namespace}. Merging into ${destPriority} priority.`);
       return true;

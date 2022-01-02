@@ -18,6 +18,9 @@
  */
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, DEFAULT_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const prompts = require('./prompts');
 const AwsFactory = require('./lib/aws');
 const statistics = require('../statistics');
@@ -89,7 +92,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -98,7 +101,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return prompts.prompting;
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -127,7 +130,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -285,7 +288,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }

@@ -22,9 +22,24 @@ const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  COMPOSING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  PREPARING_FIELDS_PRIORITY,
+  PREPARING_RELATIONSHIPS_PRIORITY,
+  DEFAULT_PRIORITY,
+  WRITING_PRIORITY,
+  INSTALL_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
+
 const prompts = require('./prompts');
 const { defaultConfig } = require('../generator-defaults');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
@@ -310,7 +325,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -332,7 +347,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -488,7 +503,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -514,7 +529,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get composing() {
+  get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
   }
@@ -590,7 +605,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -648,7 +663,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get preparingFields() {
+  get [PREPARING_FIELDS_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparingFields();
   }
@@ -674,7 +689,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
@@ -781,7 +796,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get preparingRelationships() {
+  get [PREPARING_RELATIONSHIPS_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparingRelationships();
   }
@@ -882,7 +897,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -908,7 +923,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -938,7 +953,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get install() {
+  get [INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._install();
   }
@@ -952,7 +967,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }
