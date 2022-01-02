@@ -248,7 +248,7 @@ const vueFiles = {
     {
       condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
       path: VUE_DIR,
-      templates: ['entities/user/user.oauth2.service.ts'],
+      templates: ['entities/user/user.service.ts'],
     },
   ],
   clientTestConfig: [
@@ -367,6 +367,10 @@ function cleanup() {
     this.removeFile('webpack/prod.env.js');
     this.removeFile('webpack/utils.js');
     this.removeFile('webpack/loader.conf.js');
+  }
+
+  if (this.isJhipsterVersionLessThan('7.4.2')) {
+    this.removeFile(`${VUE_DIR}entities/user/user.oauth2.service.ts`);
   }
 }
 

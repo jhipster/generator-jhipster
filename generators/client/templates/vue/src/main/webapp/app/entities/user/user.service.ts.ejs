@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseApiUrl = 'api/users';
 
-export default class UserOAuth2Service {
+export default class UserService {
   public retrieve(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios

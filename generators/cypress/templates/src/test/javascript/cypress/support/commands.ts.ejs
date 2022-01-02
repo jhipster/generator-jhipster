@@ -122,6 +122,7 @@ Cypress.Commands.add('authenticatedRequest', (data: any) => {
     return cy.request({
         ...data,
         headers: {
+          ...data.headers,
           'X-XSRF-TOKEN': csrfCookie?.value,
         },
     });
@@ -129,15 +130,46 @@ Cypress.Commands.add('authenticatedRequest', (data: any) => {
 <%_ } _%>
 });
 
-<%_ if (!authenticationTypeOauth2) { _%>
 Cypress.Commands.add('login', (username: string, password: string) => {
-  cy.clickOnLoginItem();
-  cy.get(usernameLoginSelector).type(username);
-  cy.get(passwordLoginSelector).type(password);
-  cy.get(submitLoginSelector).click();
+  cy.session(
+    [username, password],
+    () => {
+<%_ if (authenticationTypeOauth2) { _%>
+      cy.getOauth2Data();
+      cy.get('@oauth2Data').then(oauth2Data => {
+        cy.oauthLogin(oauth2Data, username, password);
+      });
+<%_ } else { _%>
+      cy.request({
+        method: 'GET',
+        url: '/api/account',
+        failOnStatusCode: false,
+      });
+      cy.authenticatedRequest({
+        method: 'POST',
+        body: { username, password },
+        url: Cypress.env('authenticationUrl'),
+  <%_ if (authenticationTypeSession) { _%>
+        form: true,
+  <%_ } else { _%>
+      }).then(({ body: { id_token } }) => {
+    <%_ if (clientFrameworkVue) { _%>
+        sessionStorage.setItem(Cypress.env('jwtStorageName'), id_token);
+    <%_ } else { _%>
+        sessionStorage.setItem(Cypress.env('jwtStorageName'), JSON.stringify(id_token));
+    <%_ } _%>
+  <%_ } _%>
+      });
+<%_ } _%>
+    },
+    {
+      validate() {
+        cy.authenticatedRequest({ url: '/api/account' }).its('status').should('eq', 200);
+      },
+    }
+  );
 });
 
-<%_ } _%>
 declare global {
   namespace Cypress {
     interface Chainable {
