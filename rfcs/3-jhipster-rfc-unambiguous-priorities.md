@@ -24,7 +24,7 @@ JHipter workflow is clear and each priorities has it's purpose. This makes tasks
 
 [guide-level-explanation]: #guide-level-explanation
 
-Priorities will be implemented using constants as name, declaring it like `get [INITIALIZING_PRIORITY]() {}`. The constant `INITIALIZING_PRIORITY` will have a `#` prefixed value like `#initializing`. `initilizing` will be free to be an ordinary class member.
+Priorities will be implemented using constants as name, declaring it like `get [INITIALIZING_PRIORITY]() {}`. The constant `INITIALIZING_PRIORITY` will have a `#` prefixed value like `#initializing`. `initializing` will be available to be an ordinary class member.
 
 ## Reference-level explanation
 
