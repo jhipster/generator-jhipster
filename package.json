@@ -114,7 +114,7 @@
     "uuid": "8.3.2",
     "winston": "3.3.3",
     "yeoman-environment": "3.8.1",
-    "yeoman-generator": "5.4.2"
+    "yeoman-generator": "5.5.2"
   },
   "devDependencies": {
     "chai": "4.3.4",

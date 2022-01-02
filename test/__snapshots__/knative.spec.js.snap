@@ -6,18 +6,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\", \\"03-psql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -948,18 +948,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"example.com\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1643,18 +1643,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -2554,18 +2554,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"example.com\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -3255,18 +3255,18 @@ Object {
       \\"04-mongo\\",
       \\"07-mariadb\\"
     ],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": [],
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -4913,18 +4913,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"mynamespace\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"prometheus\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -7961,18 +7961,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"mynamespace\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -8612,18 +8612,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
     \\"generatorType\\": \\"helm\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -9316,18 +9316,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\", \\"03-psql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -10180,18 +10180,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"example.com\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -10804,18 +10804,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -11629,18 +11629,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"example.com\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -12260,18 +12260,18 @@ Object {
       \\"07-mariadb\\",
       \\"11-mssql\\"
     ],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": [],
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"default\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"default\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -14296,18 +14296,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"mynamespace\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"prometheus\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -17567,18 +17567,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"mynamespace\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"mynamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -18146,18 +18146,18 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
-    \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
-    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
+    \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
     \\"generatorType\\": \\"k8s\\",
     \\"ingressDomain\\": \\"\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
+    \\"kubernetesServiceType\\": \\"LoadBalancer\\",
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",

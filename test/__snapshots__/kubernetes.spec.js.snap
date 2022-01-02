@@ -6,19 +6,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"09-kafka\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": false,
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": false
   }
 }
 ",
@@ -487,19 +487,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\", \\"03-psql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1342,20 +1342,20 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"example.com\\",
+    \\"ingressType\\": \\"nginx\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"Ingress\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressType\\": \\"nginx\\",
-    \\"ingressDomain\\": \\"example.com\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1914,19 +1914,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -2656,19 +2656,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"example.com\\",
+    \\"istio\\": true,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"example.com\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": true
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -3530,19 +3530,19 @@ Object {
       \\"07-mariadb\\",
       \\"11-mssql\\"
     ],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": [],
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -5453,19 +5453,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"08-monolith\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": false,
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": false
   }
 }
 ",
@@ -5906,19 +5906,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"mynamespace\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"prometheus\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -9150,19 +9150,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"mynamespace\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -9725,19 +9725,19 @@ Object {
       \\"07-mariadb\\",
       \\"11-mssql\\"
     ],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": [],
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipster\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"default\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -11648,19 +11648,19 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"jhipsterrepository\\",
+    \\"ingressDomain\\": \\"\\",
+    \\"istio\\": false,
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"kubernetesNamespace\\": \\"jhipsternamespace\\",
     \\"kubernetesServiceType\\": \\"LoadBalancer\\",
-    \\"kubernetesUseDynamicStorage\\": true,
     \\"kubernetesStorageClassName\\": \\"\\",
-    \\"ingressDomain\\": \\"\\",
+    \\"kubernetesUseDynamicStorage\\": true,
     \\"monitoring\\": \\"no\\",
-    \\"istio\\": false
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
