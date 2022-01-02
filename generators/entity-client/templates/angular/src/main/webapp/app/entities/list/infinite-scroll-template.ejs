@@ -62,15 +62,15 @@
                 page: this.page,
                 size: this.itemsPerPage,
                 sort: this.sort()
-            }).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+            }).subscribe({
+                next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                     this.isLoading = false;
                     this.paginate<%= entityClassPlural %>(res.body, res.headers);
                 },
-                () => {
+                error: () => {
                     this.isLoading = false;
                 }
-            );
+            });
             return;
         }
 <%_ } _%>
@@ -79,15 +79,15 @@
             page: this.page,
             size: this.itemsPerPage,
             sort: this.sort()
-        }).subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+        }).subscribe({
+            next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
                 this.paginate<%= entityClassPlural %>(res.body, res.headers);
             },
-            () => {
+            error: () => {
                 this.isLoading = false;
             }
-        );
+        });
     }
 
     reset(): void {

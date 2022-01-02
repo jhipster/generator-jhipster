@@ -33,7 +33,7 @@ archunitJunit5Version=0.22.0
 jacksonDatabindNullableVersion=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-caffeineVersion=3.0.4
+caffeineVersion=3.0.5
 typesafeConfigVersion=1.4.1
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -47,7 +47,7 @@ commonsBeanutilsVersion=1.9.4
 
 <%_ if (reactive) { _%>
 blockhoundJunitPlatformVersion=1.0.6.RELEASE
-junitPlatformLauncherVersion=1.8.1
+junitPlatformLauncherVersion=1.8.2
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
@@ -61,23 +61,23 @@ cassandraDriverVersion=4.11.3
 
 # gradle plugin version
 jibPluginVersion=<%= JIB_VERSION %>
-gitPropertiesPluginVersion=2.3.1
+gitPropertiesPluginVersion=2.3.2
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=3.1.1
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-liquibasePluginVersion=2.1.0
+liquibasePluginVersion=2.1.1
 <%_ } _%>
 sonarqubePluginVersion=3.3
 <%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=5.2.1
+openapiPluginVersion=5.3.1
 <%_ } _%>
 noHttpCheckstyleVersion=0.0.10
-checkstyleVersion=9.1
+checkstyleVersion=9.2
 modernizerPluginVersion=1.6.1
 <%_ if (enableGradleEnterprise) { _%>
-gradleEnterprisePluginVersion=3.7.1
-gradleCommonCustomUserDataPluginVersion=1.5
+gradleEnterprisePluginVersion=3.8
+gradleCommonCustomUserDataPluginVersion=1.6.2
 <%_ } _%>
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 

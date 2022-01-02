@@ -31,9 +31,16 @@
 <%_ } _%>
   "viewportWidth": 1200,
   "viewportHeight": 720,
-  "retries": 2<%_ if (authenticationTypeJwt) { _%>,
+  "retries": 2,
+<%_ if (authenticationTypeJwt) { _%>
   "env": {
+    "authenticationUrl": "/api/authenticate",
     "jwtStorageName": "<%= jhiPrefixDashed %>-authenticationToken"
-  }
+  },
+<%_ } else if (authenticationTypeSession) { _%>
+  "env": {
+    "authenticationUrl": "/api/authentication"
+  },
 <%_ } _%>
+  "experimentalSessionSupport": true,
 }

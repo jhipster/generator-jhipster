@@ -345,7 +345,6 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.buildTool === MAVEN,
       templates: [
         { file: 'npmw', method: 'copy', noEjs: true },
         { file: 'npmw.cmd', method: 'copy', noEjs: true },
