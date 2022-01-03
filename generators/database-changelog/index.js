@@ -17,8 +17,11 @@
  * limitations under the License.
  */
 const fs = require('fs');
-const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { DEFAULT_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+
+const { JHIPSTER_CONFIG_DIR } = require('../generator-constants');
 const { GENERATOR_DATABASE_CHANGELOG, GENERATOR_DATABASE_CHANGELOG_LIQUIBASE } = require('../generator-list');
 
 const BASE_CHANGELOG = {
@@ -85,7 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }

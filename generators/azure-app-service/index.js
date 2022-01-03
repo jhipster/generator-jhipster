@@ -22,6 +22,16 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  LOADING_PRIORITY,
+  DEFAULT_PRIORITY,
+  WRITING_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
+
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 
@@ -102,7 +112,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -249,7 +259,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -268,7 +278,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -488,7 +498,7 @@ which is free for the first 30 days`);
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -509,7 +519,7 @@ which is free for the first 30 days`);
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -527,7 +537,7 @@ which is free for the first 30 days`);
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -651,7 +661,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

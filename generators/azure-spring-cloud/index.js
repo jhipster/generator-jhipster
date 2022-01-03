@@ -20,6 +20,16 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  LOADING_PRIORITY,
+  DEFAULT_PRIORITY,
+  WRITING_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
+
 const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
@@ -92,7 +102,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
@@ -258,7 +268,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
@@ -275,7 +285,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
@@ -318,7 +328,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -334,7 +344,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
@@ -362,7 +372,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -488,7 +498,7 @@ for more detailed information.`
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

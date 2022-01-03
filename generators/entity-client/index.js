@@ -18,11 +18,15 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
+
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
+  require('../../lib/constants/priorities.cjs').compat;
+
 const { writeFiles, addToMenu, replaceTranslations } = require('./files');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
 
 const utils = require('../utils');
-const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
   SUPPORTED_CLIENT_FRAMEWORKS: { ANGULAR, REACT },
 } = require('../generator-constants');
@@ -52,7 +56,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
@@ -85,7 +89,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
@@ -144,7 +148,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
@@ -163,7 +167,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
