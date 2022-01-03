@@ -216,7 +216,7 @@ public class AccountResource {
         }
     }
 }
-<%_ } else {  /* not oauth, not skipUserManagement */ _%>
+<%_ } else { /* not oauth, not skipUserManagement */ _%>
   <%_ if (authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.repository.PersistentTokenRepository;
