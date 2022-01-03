@@ -449,6 +449,9 @@ Object {
   "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
@@ -884,6 +887,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
@@ -3146,6 +3152,9 @@ Object {
   "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
@@ -4483,6 +4492,9 @@ Object {
   "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
@@ -5815,6 +5827,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
@@ -7163,6 +7178,9 @@ Object {
   "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
@@ -8507,6 +8525,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
@@ -9876,6 +9897,9 @@ Object {
   "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
@@ -10818,6 +10842,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
@@ -12167,6 +12194,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_fr.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {
@@ -14792,6 +14822,9 @@ Object {
   "src/test/resources/i18n/messages_en.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },
@@ -16142,6 +16175,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/junit-platform.properties": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": Object {

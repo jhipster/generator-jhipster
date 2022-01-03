@@ -1669,6 +1669,7 @@ Object {
       "templates": Array [
         "config/application.yml",
         "logback.xml",
+        "junit-platform.properties",
       ],
     },
     Object {
@@ -1770,7 +1771,6 @@ Object {
       "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
-        "junit-platform.properties",
         Object {
           "file": "package/features/gitkeep",
           "noEjs": true,

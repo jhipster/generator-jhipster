@@ -1253,7 +1253,7 @@ const baseServerFiles = {
     },
     {
       path: SERVER_TEST_RES_DIR,
-      templates: ['config/application.yml', 'logback.xml'],
+      templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
     {
       condition: generator => generator.databaseType === SQL && !generator.reactive,
@@ -1345,10 +1345,7 @@ const baseServerFiles = {
     {
       condition: generator => generator.cucumberTests,
       path: SERVER_TEST_RES_DIR,
-      templates: [
-        'junit-platform.properties',
-        { file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true },
-      ],
+      templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true }],
     },
     {
       condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== OAUTH2,
