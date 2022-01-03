@@ -26,6 +26,10 @@
 
     <logger name="tech.jhipster" level="WARN"/>
 
+    <!-- https://www.testcontainers.org/supported_docker_environment/logging_config/ -->
+    <logger name="org.testcontainers" level="INFO"/>
+    <logger name="com.github.dockerjava" level="WARN"/>
+
 <%_ if (databaseTypeCassandra) { _%>
     <logger name="io.netty" level="WARN"/>
 <%_ } _%>
@@ -58,10 +62,6 @@
 <%_ if (databaseTypeSql && reactive) { _%>
     <logger name="io.r2dbc" level="WARN"/>
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-    <logger name="com.github.dockerjava" level="WARN"/>
-    <logger name="org.testcontainers" level="WARN"/>
-<%_ } _%>
 <%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
@@ -89,7 +89,6 @@
     <logger name="org.mongodb.driver" level="WARN"/>
 <%_ } else if (databaseTypeCouchbase) { _%>
     <logger name="com.couchbase.client" level="WARN"/>
-    <logger name="org.testcontainers" level="INFO"/>
     <logger name="org.github.couchmove" level="INFO"/>
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
