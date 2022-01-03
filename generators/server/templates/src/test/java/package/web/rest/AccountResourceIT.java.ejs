@@ -109,7 +109,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
-@AutoConfigureWebTestClient(timeout = "PT180S")
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
