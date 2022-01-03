@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+
 const BaseGenerator = require('../generator-base');
+const { DEFAULT_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+
 const statistics = require('../statistics');
 const { GENERATOR_EXPORT_JDL } = require('../generator-list');
 const { OptionNames } = require('../../jdl/jhipster/application-options');
@@ -38,7 +41,7 @@ module.exports = class extends BaseGenerator {
     this.jdlFile = this.options.jdlFile || `${this.baseName}.jdl`;
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     return {
       validateFromCli() {
         this.checkInvocationFromCLI();

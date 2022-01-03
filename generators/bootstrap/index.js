@@ -30,6 +30,8 @@ const {
 const { hasState, setModifiedFileState } = State;
 
 const BaseGenerator = require('../generator-base');
+const { LOADING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+
 const { MultiStepTransform } = require('../../utils/multi-step-transform');
 const { defaultConfig } = require('../generator-defaults');
 const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
@@ -89,7 +91,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     return this._loading();
   }
 

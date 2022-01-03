@@ -49,6 +49,18 @@ const { MICROSERVICE, GATEWAY } = require('../../jdl/jhipster/application-types'
 const { getBase64Secret, getRandomHex } = require('../utils');
 const cacheTypes = require('../../jdl/jhipster/cache-types');
 const websocketTypes = require('../../jdl/jhipster/websocket-types');
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  COMPOSING_PRIORITY,
+  LOADING_PRIORITY,
+  PREPARING_PRIORITY,
+  DEFAULT_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
 
 const NO_CACHE = cacheTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
@@ -95,14 +107,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           ) {
             return defaultInstallTask();
           }
-          const gradle = buildTool === GRADLE;
-          const command = gradle ? './gradlew' : './npmw';
-          const args = gradle ? ['npmInstall'] : ['install'];
 
           try {
-            await this.spawnCommand(command, args, { preferLocal: true });
+            await this.spawnCommand('./npmw', ['install'], { preferLocal: true });
           } catch (error) {
-            this.log(chalk.red(`Error executing '${command} ${args.join(' ')}', execute it yourself. (${error.shortMessage})`));
+            this.log(chalk.red(`Error executing './npmw install', execute it yourself. (${error.shortMessage})`));
           }
           return true;
         }.bind(this),
@@ -234,12 +243,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get initializing() {
+  get [INITIALIZING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._initializing();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _prompting() {
     return {
       askForModuleName: prompts.askForModuleName,
@@ -254,12 +263,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get prompting() {
+  get [PROMPTING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._prompting();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _configuring() {
     return {
       configServerPort() {
@@ -281,12 +290,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get configuring() {
+  get [CONFIGURING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._configuring();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _composing() {
     return {
       async composeCommon() {
@@ -301,12 +310,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get composing() {
+  get [COMPOSING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._composing();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _loading() {
     return {
       loadSharedConfig() {
@@ -321,12 +330,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get loading() {
+  get [LOADING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._loading();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _preparing() {
     return {
       prepareForTemplates() {
@@ -377,12 +386,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get preparing() {
+  get [PREPARING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._preparing();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _default() {
     return {
       ...super._missingPreDefault(),
@@ -435,12 +444,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get default() {
+  get [DEFAULT_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._default();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _writing() {
     return {
       cleanupCucumberTests() {
@@ -462,11 +471,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get writing() {
+  get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._writing();
   }
 
+  /** @inheritdoc */
   _postWriting() {
     return {
       packageJsonScripts() {
@@ -585,7 +595,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === GRADLE) {
-          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp';
+          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp -x webapp_test';
           e2ePackage = 'e2e';
           scriptsStorage.set({
             'app:start': './gradlew',
@@ -635,12 +645,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get postWriting() {
+  get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
   }
 
-  // Public API method used by the getter and also by Blueprints
+  /** @inheritdoc */
   _end() {
     return {
       checkLocaleValue() {
@@ -667,7 +677,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
     };
   }
 
-  get end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

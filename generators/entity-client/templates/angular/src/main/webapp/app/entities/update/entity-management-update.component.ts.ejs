@@ -43,7 +43,7 @@ import { Observable } from 'rxjs';
 import { finalize<% if (relationships.some(rel => rel.ownerSide === true)) { %>, map<% } %> } from 'rxjs/operators';
 
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
 
@@ -239,10 +239,10 @@ _%>
     <%_ } _%>
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
-        result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-            () => this.onSaveSuccess(),
-            () => this.onSaveError()
-        );
+        result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+            next: () => this.onSaveSuccess(),
+            error: () => this.onSaveError()
+        });
     }
 
     protected onSaveSuccess(): void {

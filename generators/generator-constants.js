@@ -26,7 +26,7 @@ const JAVA_VERSION = '11';
 const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17'];
 
 // Version of Node, NPM
-const NODE_VERSION = '16.13.0';
+const NODE_VERSION = '16.13.1';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
@@ -34,16 +34,16 @@ const GRADLE_VERSION = '7.3.1';
 const JIB_VERSION = '3.1.4';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.4.2-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.5.1-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.5.7';
+const SPRING_BOOT_VERSION = '2.5.8';
 const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
-const HIBERNATE_VERSION = '5.4.32.Final';
+const HIBERNATE_VERSION = '5.4.33';
 
 const JACOCO_VERSION = '0.8.7';
 const KAFKA_VERSION = '5.5.5';
-const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
+const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
@@ -62,7 +62,7 @@ const DOCKER_NEO4J = 'neo4j:4.3.7';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:4.2021.06';
 const DOCKER_MEMCACHED = 'memcached:1.6.12-alpine';
 const DOCKER_REDIS = 'redis:6.2.6';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:15.0.2'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
+const DOCKER_KEYCLOAK = 'jboss/keycloak:16.1.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;

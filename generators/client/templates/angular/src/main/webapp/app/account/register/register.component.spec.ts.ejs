@@ -16,16 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (enableTranslation) { _%>
-jest.mock('@ngx-translate/core');
-<%_ } _%>
-
 import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
@@ -40,9 +36,14 @@ describe('RegisterComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [
+<%_ if (enableTranslation) { _%>
+          TranslateModule.forRoot(),
+<%_ } _%>
+          HttpClientTestingModule
+        ],
         declarations: [RegisterComponent],
-        providers: [FormBuilder<% if (enableTranslation) { %>, TranslateService<% } %>],
+        providers: [FormBuilder],
       })
         .overrideTemplate(RegisterComponent, '')
         .compileComponents();
@@ -67,10 +68,10 @@ describe('RegisterComponent', () => {
 
   it('should update success to true after creating an account', inject(
     [RegisterService<% if (enableTranslation) { %>, TranslateService<% } %>],
-    fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockLanguageService: TranslateService<% } %>) => {
+    fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
       jest.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
-      mockLanguageService.currentLang = '<%= nativeLanguage %>';
+      mockTranslateService.currentLang = '<%= nativeLanguage %>';
 <%_ } _%>
       comp.registerForm.patchValue({
         password: 'password',

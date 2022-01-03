@@ -27,8 +27,8 @@ export default class <%=jhiPrefixCapitalized%>Formatter {
 
   constructor() {
       this.caches = Object.create(null);
-      this.leftBraces = new RegExp("{{ |{{", "g");
-      this.rightBraces = new RegExp(" }}|}}", "g");
+      this.leftBraces = /{{ |{{/g;
+      this.rightBraces = / }}|}}/g;
   }
 
   interpolate(message: string, values: any): Array<any> {

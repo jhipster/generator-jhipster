@@ -25,7 +25,7 @@ _%>
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 <%_ if (fieldsContainDate) { _%>
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 <%_ } _%>
 
 <%_ if (fieldsContainDate) { _%>

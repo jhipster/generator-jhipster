@@ -48,8 +48,8 @@ describe('<%= entityClass %> e2e test', () => {
 
   const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
+  const username = Cypress.env('E2E_USERNAME') ?? 'user';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
   const <%= entityInstance %>Sample = <%- JSON.stringify(generateTestEntity(sampleFields.map(field => field.reference))) %>;
 
   let <%= entityInstance %>: any;
@@ -57,30 +57,9 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ if (skipCreateTest) { _%>// <%_ } _%>let <%= otherEntity.entityInstance %>: any;
 <%_ } _%>
 
-<%_ if (authenticationTypeOauth2) { _%>
   beforeEach(() => {
-    cy.getOauth2Data();
-    cy.get('@oauth2Data').then(oauth2Data => {
-      cy.oauthLogin(oauth2Data, username, password);
-    });
-    cy.intercept('GET', '/<%= baseApi + entityApiUrl %>').as('entitiesRequest');
-    cy.visit('');
-    cy.get(entityItemSelector).should('exist');
-  });
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('XSRF-TOKEN', 'JSESSIONID');
-  })
-<%_ } else { _%>
-  before(() => {
-    cy.window().then((win) => {
-      win.sessionStorage.clear()
-    });
-    cy.visit('');
     cy.login(username, password);
-    cy.get(entityItemSelector).should('exist');
   });
-<%_ } _%>
 
 <%_ if (requiredOtherEntities.length > 0) { _%>
   <%_ if (skipCreateTest) { _%>
@@ -160,13 +139,6 @@ describe('<%= entityClass %> e2e test', () => {
   <%_ } _%>
 
 <%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
-
-  afterEach(() => {
-    cy.oauthLogout();
-    cy.clearCache();
-  });
-<%_ } _%>
 
   it('<%= entityClassPlural %> menu should load <%= entityClassPlural %> page', () => {
     cy.visit('/');
@@ -191,11 +163,11 @@ describe('<%= entityClass %> e2e test', () => {
       });
 
       it('should load create <%= entityClass %> page', () => {
-        cy.get(entityCreateButtonSelector).click({force: true});
+        cy.get(entityCreateButtonSelector).click();
         cy.url().should('match', new RegExp('/<%= entityPage %>/new$'));
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
-        cy.get(entityCreateCancelButtonSelector).click({force: true});
+        cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
@@ -268,7 +240,7 @@ describe('<%= entityClass %> e2e test', () => {
       it('detail button click should load details <%= entityClass %> page', () => {
         cy.get(entityDetailsButtonSelector).first().click();
         cy.getEntityDetailsHeading('<%= entityInstance %>');
-        cy.get(entityDetailsBackButtonSelector).click({force: true});
+        cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
@@ -280,7 +252,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
-        cy.get(entityCreateCancelButtonSelector).click({force: true});
+        cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
@@ -296,7 +268,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.wait('@dialogDeleteRequest');
   <%_ } _%>
         cy.getEntityDeleteDialogHeading('<%= entityInstance %>').should('exist');
-        cy.get(entityConfirmDeleteButtonSelector).click({force: true});
+        cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(204);
         });
@@ -316,7 +288,7 @@ describe('<%= entityClass %> e2e test', () => {
   describe('new <%= entityClass %> page', () => {
     beforeEach(() => {
       cy.visit(`${<%= entityInstance %>PageUrl}`);
-      cy.get(entityCreateButtonSelector).click({force: true});
+      cy.get(entityCreateButtonSelector).click();
       cy.getEntityCreateUpdateHeading('<%= entityClass %>');
     });
 

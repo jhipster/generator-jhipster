@@ -29,8 +29,8 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
 import { CookieService } from 'ngx-cookie-service';
 <%_ } _%>
-import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageService<% } %> } from 'ngx-webstorage';
-import * as dayjs from 'dayjs';
+import { NgxWebstorageModule } from 'ngx-webstorage';
+import dayjs from 'dayjs/esm';
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';

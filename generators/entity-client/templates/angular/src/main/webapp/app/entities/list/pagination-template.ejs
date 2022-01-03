@@ -54,16 +54,16 @@
                 page: pageToLoad - 1,
                 query: this.currentSearch,
                 size: this.itemsPerPage,
-                sort: this.sort()}).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                sort: this.sort()}).subscribe({
+                    next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                         this.isLoading = false;
                         this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
                     },
-                    () => {
+                    error: () => {
                         this.isLoading = false;
                         this.onError();
                     }
-                );
+                });
             return;
         }
 <%_ } _%>
@@ -71,16 +71,16 @@
         this.<%= entityInstance %>Service.query({
             page: pageToLoad - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+            sort: this.sort()}).subscribe({
+                next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                     this.isLoading = false;
                     this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
                 },
-                () => {
+                error: () => {
                     this.isLoading = false;
                     this.onError();
                 }
-            );
+            });
     }
 
 <%_ if (searchEngine) { _%>

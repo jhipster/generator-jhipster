@@ -170,7 +170,7 @@ Object {
   "src/main/webapp/app/entities/entities.vue": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/user/user.oauth2.service.ts": Object {
+  "src/main/webapp/app/entities/user/user.service.ts": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/index.ts": Object {

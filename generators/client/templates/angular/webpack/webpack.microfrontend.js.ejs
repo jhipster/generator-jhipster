@@ -146,6 +146,8 @@ module.exports = (config, options, targetOptions) => {
     ],
     output: {
       publicPath: 'auto',
+      uniqueName: '<%= lowercaseBaseName %>',
+      scriptType: 'text/javascript',
     },
     optimization: {
       runtimeChunk: false,
