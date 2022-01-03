@@ -1570,12 +1570,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "templates": Array [
-        "gradle/profile_dbmigrate.gradle",
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/main/java/",
       "templates": Array [
         Object {

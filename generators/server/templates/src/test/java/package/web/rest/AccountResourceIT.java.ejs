@@ -201,9 +201,7 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
 <%_ } _%>
     }
 
-<%_ if (databaseTypeMongodb && !reactive) { _%>
-    @Test /* TODO reactivate once mongock will be reactive friendly */
-<%_ } _%>
+    @Test
     void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {
   <%_ if (searchEngineElasticsearch && reactive) { _%>
         // Configure the mock search repository
@@ -274,9 +272,7 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
 <%_ } _%>
     }
 
-<%_ if (databaseTypeMongodb && !reactive) { _%>
-    @Test /* TODO reactivate once mongock will be reactive friendly */
-<%_ } _%>
+    @Test
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
@@ -695,9 +691,7 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
 <%_ } _%>
     }
 
-<%_ if (databaseTypeMongodb && !reactive) { _%>
-    @Test  /* TODO reactivate once mongock will be reactive friendly */
-<%_ } _%>
+    @Test
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>

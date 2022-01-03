@@ -611,14 +611,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
           });
         }
-        // TODO reenable when mongock will be reactive friendly
-        const disableDBMigrateProfile =
-          // eslint-disable-next-line no-nested-ternary
-          this.jhipsterConfig.databaseType === MONGODB && this.jhipsterConfig.reactive
-            ? this.jhipsterConfig.buildTool === MAVEN
-              ? ',-db-migrate'
-              : ',db-migrate=false'
-            : '';
+
         scriptsStorage.set({
           'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
           'java:jar:prod': 'npm run java:jar -- -Pprod',
@@ -626,7 +619,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
-          'ci:backend:test': `npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment${disableDBMigrateProfile}`,
+          'ci:backend:test':
+            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',

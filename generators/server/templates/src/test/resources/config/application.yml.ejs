@@ -50,10 +50,6 @@ eureka:
 <%_ } _%>
 
 <%_ if (databaseTypeMongodb) { _%>
-  <%_ if (reactive) { _%>
-mongock: # TODO reactivate when mongock will be reactive friendly
-  enabled: false
-  <%_ } else { _%>
 mongock:
   migration-scan-package:
     - <%= packageName %>.config.dbmigrations
@@ -61,7 +57,7 @@ mongock:
     read-concern: local
     write-concern:
       journal: false
-  <%_ } _%>
+
 <%_ } _%>
 spring:
 <%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>

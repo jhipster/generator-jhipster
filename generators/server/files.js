@@ -130,10 +130,6 @@ const mongoDbFiles = {
         },
       ],
     },
-    {
-      condition: generator => generator.buildTool === GRADLE && generator.reactive,
-      templates: ['gradle/profile_dbmigrate.gradle'],
-    },
   ],
 };
 

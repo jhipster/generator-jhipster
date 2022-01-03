@@ -476,6 +476,14 @@
             <artifactId>mongodb</artifactId>
             <scope>test</scope>
         </dependency>
+  <%_ if (reactive) { _%>
+        <!-- Mongock doesn't support reactive yet, so this dependency is necessary. -->
+        <!-- See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
         <dependency>
@@ -2165,22 +2173,6 @@
                     </plugins>
                 </pluginManagement>
             </build>
-        </profile>
-<%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) {_%>
-        <profile>
-            <id>db-migrate</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <!-- Mongock doesn't support reactive yet, so this dependency is necessary. -->
-                <!-- See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information. -->
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-data-mongodb</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
 <%_ } _%>
         <!-- jhipster-needle-maven-add-profile -->
