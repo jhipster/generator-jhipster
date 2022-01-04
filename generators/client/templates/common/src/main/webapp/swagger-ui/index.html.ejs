@@ -64,7 +64,7 @@
         const axiosConfig = { timeout: 5000 };
 <%_ } else { _%>
         const getBearerToken = () => {
-          var authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+          var authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
           if (authToken) {
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
             authToken = JSON.parse(authToken);
