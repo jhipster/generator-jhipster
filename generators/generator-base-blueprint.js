@@ -57,7 +57,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
     if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage();
+      this.blueprintStorage = this._getStorage({ sorted: true });
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator
