@@ -1,4 +1,5 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
+import { Subscription } from 'rxjs';
 
 import TrackerService from './tracker.service';
 
@@ -6,6 +7,7 @@ import TrackerService from './tracker.service';
 export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
 
   public activities: any[] = [];
+  private subscription?: Subscription;
 
   @Inject('trackerService') private trackerService: () => TrackerService;
 
@@ -14,16 +16,16 @@ export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
   }
 
   public destroyed(): void {
-    this.trackerService().unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = undefined;
+    }
   }
 
   public init(): void {
-    this.trackerService().subscribe();
-    this.trackerService()
-      .receive()
-      .subscribe(activity => {
-        this.showActivity(activity);
-      });
+    this.subscription = this.trackerService().subscribe(activity => {
+      this.showActivity(activity);
+    });
   }
 
   public showActivity(activity: any): void {

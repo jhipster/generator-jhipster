@@ -6,9 +6,6 @@ import VueRouter from 'vue-router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-import TrackerService from '@/admin/tracker/tracker.service';
-<%_ } _%>
 
 import * as config from '@/shared/config/config';
 import LoginForm from '@/account/login-form/login-form.vue';
@@ -50,7 +47,7 @@ describe('LoginForm Component', () => {
         <%_ } _%>
         localVue,
         provide: {
-          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationTypeSession) { %> { get: () => {} }, <% } %><% if (communicationSpringWebsocket) { %>new TrackerService(new VueRouter()<%_ if (authenticationTypeSession) { _%>,{ get: jest.fn()}<%_ } %>), <% } %>new VueRouter())
+          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationTypeSession) { %> { get: () => {} }, <% } %>new VueRouter())
         }
       });
     loginForm = wrapper.vm;
