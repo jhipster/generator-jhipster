@@ -1389,7 +1389,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: cassandra:3.11.11
+              image: cassandra:4.0.1
               env:
                 - name: DATA_FILE_DIRECTORIES
                   value: /data/db
@@ -2161,7 +2161,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.10
+              image: mongo:4.4.11
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}
@@ -2897,7 +2897,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.5
+              image: postgres:14.1
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -5089,7 +5089,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.5
+              image: postgres:14.1
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
