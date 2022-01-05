@@ -39,7 +39,7 @@ describe('<%= registerPage %>', () => {
   it('should be accessible through menu', () => {
     cy.visit('');
     cy.clickOnRegisterItem();
-    cy.url().should('match', /<%= registerPage.replaceAll('/', '\\/') %>$/);
+    cy.url().should('match', /<%= registerPage.replace(/\//g, '\\/') %>$/);
   });
 
   it('should load the register page', () => {
