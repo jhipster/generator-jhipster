@@ -1389,7 +1389,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: cassandra:4.0.1
+              image: cassandra:3.11.11
               env:
                 - name: DATA_FILE_DIRECTORIES
                   value: /data/db
