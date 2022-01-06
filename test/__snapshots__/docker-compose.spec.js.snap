@@ -6,12 +6,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"10-couchbase\\"],
+    \\"clusteredDbApps\\": [\\"10-couchbase\\"],
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": [\\"10-couchbase\\"],
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -135,12 +135,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"05-cassandra\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -271,12 +271,12 @@ Object {
       \\"04-mongo\\",
       \\"07-mariadb\\"
     ],
+    \\"clusteredDbApps\\": [],
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": [],
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -375,7 +375,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:13.5
+    image: postgres:14.1
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -391,7 +391,7 @@ eureka:
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmongodb-mongodb:
-    image: mongo:4.4.10
+    image: mongo:4.4.11
 
   msmariadb:
     image: msmariadb
@@ -441,12 +441,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\", \\"03-psql\\", \\"04-mongo\\"],
+    \\"clusteredDbApps\\": [\\"04-mongo\\"],
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": [\\"04-mongo\\"],
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -542,7 +542,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:13.5
+    image: postgres:14.1
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -563,10 +563,10 @@ eureka:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
-    image: mongo:4.4.10
+    image: mongo:4.4.11
     command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
-    image: mongo:4.4.10
+    image: mongo:4.4.11
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
@@ -607,12 +607,12 @@ Object {
       \\"10-couchbase\\",
       \\"07-mariadb\\"
     ],
+    \\"clusteredDbApps\\": [],
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": [],
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -711,7 +711,7 @@ eureka:
       - SPRING_ELASTICSEARCH_REST_URIS=http://mspsql-elasticsearch:9200
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mspsql-postgresql:
-    image: postgres:13.5
+    image: postgres:14.1
     environment:
       - POSTGRES_USER=mspsql
       - POSTGRES_PASSWORD=
@@ -781,12 +781,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -900,12 +900,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1019,12 +1019,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"prometheus\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1155,7 +1155,7 @@ eureka:
       - 8761:8761
 
   prometheus:
-    image: prom/prometheus:v2.31.1
+    image: prom/prometheus:v2.32.1
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -1174,7 +1174,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:8.2.4
+    image: grafana/grafana:8.3.3
     ports:
       - 3000:3000
     volumes:
@@ -1254,12 +1254,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"08-monolith\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": false,
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": false
   }
 }
 ",
@@ -1314,12 +1314,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1414,12 +1414,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1516,12 +1516,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": \\"eureka\\"
   }
 }
 ",
@@ -1616,12 +1616,12 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"12-oracle\\"],
+    \\"clusteredDbApps\\": {},
     \\"directoryPath\\": \\"./\\",
     \\"gatewayType\\": \\"SpringCloudGateway\\",
-    \\"clusteredDbApps\\": {},
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
     \\"monitoring\\": \\"no\\",
-    \\"serviceDiscoveryType\\": false,
-    \\"jwtSecretKey\\": \\"SECRET--50\\"
+    \\"serviceDiscoveryType\\": false
   }
 }
 ",

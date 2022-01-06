@@ -667,6 +667,9 @@ wrapper {
 }
 
 <%_ if (!skipClient) { _%>
+task webapp_test(type: NpmTask, dependsOn: "npm_install") {
+    args = ["run", "webapp:test"]
+}
 
 if (project.hasProperty("nodeInstall")) {
     // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154
@@ -698,6 +701,10 @@ if (project.hasProperty("nodeInstall")) {
 bootJar {
     launchScript()
 }
+<%_ } _%>
+
+<%_ if (!skipClient) { _%>
+test.dependsOn webapp_test
 <%_ } _%>
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
