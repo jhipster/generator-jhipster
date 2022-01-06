@@ -34,7 +34,7 @@ import ReportGenerator = require('lighthouse/report/generator/report-generator')
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on<% if (cypressCoverage) { %>, config<% } %>) => {
+module.exports = async (on<% if (cypressCoverage) { %>, config<% } %>) => {
   // `on` is used to hook into various events Cypress emits
 <%_ if (cypressCoverage) { _%>
   // `config` is the resolved Cypress config
@@ -55,7 +55,8 @@ module.exports = (on<% if (cypressCoverage) { %>, config<% } %>) => {
     pa11y: pa11y(),
   });
 <%_ if (cypressCoverage) { _%>
-    require('@cypress/code-coverage/task')(on, config);
-    return config;
+  const coverageTask = await import('@cypress/code-coverage/task.js');
+  coverageTask(on, config);
+  return config;
 <%_ } _%>
 }
