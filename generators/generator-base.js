@@ -1871,7 +1871,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     if (this.destinationPath) {
       keystoreFolder = this.destinationPath(keystoreFolder);
     }
-    const keyStoreFile = `${keystoreFolder}/keystore.p12`;
+    const keyStoreFile = `"${keystoreFolder}/keystore.p12"`;
 
     if (this.fs.exists(keyStoreFile)) {
       this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
