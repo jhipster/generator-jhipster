@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2021 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,9 +34,11 @@ import ReportGenerator = require('lighthouse/report/generator/report-generator')
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on<%_ if (cypressCoverage) { _%>, config<%_ } _%>) => {
+module.exports = async (on<% if (cypressCoverage) { %>, config<% } %>) => {
   // `on` is used to hook into various events Cypress emits
-  <%_ if (cypressCoverage) { _%>// `config` is the resolved Cypress config<%_ } _%>
+<%_ if (cypressCoverage) { _%>
+  // `config` is the resolved Cypress config
+<%_ } _%>
   on('before:browser:launch', (browser, launchOptions) => {
     prepareAudit(launchOptions);
     if (browser.name === 'chrome' && browser.isHeadless) {
@@ -53,7 +55,8 @@ module.exports = (on<%_ if (cypressCoverage) { _%>, config<%_ } _%>) => {
     pa11y: pa11y(),
   });
 <%_ if (cypressCoverage) { _%>
-    require('@cypress/code-coverage/task')(on, config);
-    return config;
+  const coverageTask = await import('@cypress/code-coverage/task.js');
+  coverageTask(on, config);
+  return config;
 <%_ } _%>
 }
