@@ -304,7 +304,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/ArchTest.java",
+          "file": "package/TechnicalStructureTest.java",
           "renameTo": [Function],
         },
       ],
