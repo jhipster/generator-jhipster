@@ -761,8 +761,8 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/ArchTest.java',
-          renameTo: generator => `${generator.testDir}ArchTest.java`,
+          file: 'package/TechnicalStructureTest.java',
+          renameTo: generator => `${generator.testDir}TechnicalStructureTest.java`,
         },
       ],
     },

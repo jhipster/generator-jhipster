@@ -437,10 +437,10 @@ Object {
   "src/main/webapp/i18n/fr/user-management.json": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {

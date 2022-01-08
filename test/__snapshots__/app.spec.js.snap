@@ -362,10 +362,10 @@ Object {
   "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -799,10 +799,10 @@ Object {
   "src/main/resources/templates/mail/passwordResetEmail.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -3053,10 +3053,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -4393,10 +4393,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -5730,10 +5730,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -7061,10 +7061,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -8407,10 +8407,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -9774,10 +9774,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -10718,10 +10718,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -12067,10 +12067,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -13365,10 +13365,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -14681,10 +14681,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
@@ -16042,10 +16042,10 @@ Object {
   "src/main/webapp/swagger-ui/index.html": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/ArchTest.java": Object {
+  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
