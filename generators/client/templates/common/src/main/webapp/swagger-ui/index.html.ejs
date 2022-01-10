@@ -80,17 +80,14 @@
 <%_ } _%>
 
         const baseUrl = '/v3/api-docs';
-        let services;
+        let urls;
+<%_ if (!applicationTypeMonolith && serviceDiscoveryType) { _%>
+
         try {
           const response = await axios.get('/management/health/discoveryComposite', axiosConfig);
-          services = response.data?.components?.discoveryClient?.details?.services;
+          const services = response.data?.components?.discoveryClient?.details?.services;
           console.log(`Services`, services);
-        } catch (error) {
-          console.log(error);
-        }
 
-        let urls;
-        try {
           if (services && services.length > 0) {
             urls = (
               await Promise.allSettled(
@@ -116,16 +113,19 @@
               .filter(Array.isArray)
               .flat();
           }
-          if (urls.length === 0) {
-            const response = await axios.get('/management/jhiopenapigroups', axiosConfig);
-            if (Array.isArray(response.data)) {
-              urls = response.data.map(({ group, description }) => ({ name: description, url: `${baseUrl}/${group}` }));
-            }
-          }
-          console.log(`Swagger urls`, urls);
+
         } catch (error) {
           console.log(error);
         }
+<%_ } _%>
+
+        if (!urls || urls.length === 0) {
+          const response = await axios.get('/management/jhiopenapigroups', axiosConfig);
+          if (Array.isArray(response.data)) {
+            urls = response.data.map(({ group, description }) => ({ name: description, url: `${baseUrl}/${group}` }));
+          }
+        }
+        console.log(`Swagger urls`, urls);
 
         if (urls) {
           urls.sort(function (a, b) {
