@@ -25,7 +25,7 @@ import {
 } from '../../support/commands';
 
 describe('login modal', () => {
-   const username = Cypress.env('E2E_USERNAME') ?? '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
+  const username = Cypress.env('E2E_USERNAME') ?? '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
   const password = Cypress.env('E2E_PASSWORD') ?? '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
 
   beforeEach(() => {
