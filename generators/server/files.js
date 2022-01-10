@@ -933,8 +933,8 @@ const baseServerFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/service/ColumnConverter.java',
-          renameTo: generator => `${generator.javaDir}service/ColumnConverter.java`,
+          file: 'package/repository/ColumnConverter.java',
+          renameTo: generator => `${generator.javaDir}repository/ColumnConverter.java`,
         },
         {
           file: 'package/service/EntityManager.java',

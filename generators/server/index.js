@@ -460,6 +460,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.removeFile(`${this.srcTestDir}features/user/user.feature`);
         }
       },
+      cleanupSql() {
+        if (!this.databaseTypeSql) return undefined;
+        if (this.reactive && this.isJhipsterVersionLessThan('7.5.1')) {
+          this.removeFile(`${this.mainJavaPackageDir}repository/ColumnConverter.java`);
+        }
+      },
       cleanupServer() {
         if (this.isJhipsterVersionLessThan('7.4.2')) {
           this.removeFile(`${this.mainJavaPackageDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
