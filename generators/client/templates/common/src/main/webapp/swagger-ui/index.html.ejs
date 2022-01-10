@@ -94,14 +94,18 @@
             urls = (
               await Promise.allSettled(
                 services.map(async service => {
-                  const response = await axios.get(`/services/${service}/management/jhiopenapigroups`, axiosConfig);
-                  if (Array.isArray(response.data)) {
-                    return response.data.map(({ group, description }) => ({
-                      name: description,
-                      url: `/services/${service}${baseUrl}/${group}`,
-                    }));
+                  try {
+                    const response = await axios.get(`/services/${service}/management/jhiopenapigroups`, axiosConfig);
+                    if (Array.isArray(response.data)) {
+                      return response.data.map(({ group, description }) => ({
+                        name: description,
+                        url: `/services/${service}${baseUrl}/${group}`,
+                      }));
+                    }
+                    return undefined;
+                  } catch(_error) {
+                    // microservice doesn't provide compatible endpoints.
                   }
-                  return undefined;
                 })
               )
             )
