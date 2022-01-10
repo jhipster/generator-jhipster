@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2021 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,8 +38,9 @@
     "dayjs": "<%= dependabotPackageJson.dependencies['dayjs'] %>",
     "swagger-ui-dist": "<%= dependabotPackageJson.dependencies['swagger-ui-dist'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
-    "sockjs-client": "1.1.4",
-    "webstomp-client": "1.2.0",
+    "sockjs-client": "1.5.2",
+    "@stomp/rx-stomp": "1.1.4",
+    "rxjs": "7.4.0",
 <%_ } _%>
     "vue": "<%= dependabotPackageJson.dependencies['vue'] %>",
     "vue-class-component": "<%= dependabotPackageJson.dependencies['vue-class-component'] %>",

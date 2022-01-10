@@ -2,6 +2,7 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "baseName": "jhipsterSampleApplication",
+    "cypressCoverage": true,
     "packageName": "tech.jhipster.sample",
     "packageFolder": "tech/jhipster/sample",
     "authenticationType": "jwt",

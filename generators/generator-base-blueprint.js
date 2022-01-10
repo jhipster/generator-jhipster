@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2021 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -57,7 +57,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
     if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage();
+      this.blueprintStorage = this._getStorage({ sorted: true });
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator

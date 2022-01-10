@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2021 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -124,7 +124,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     this._sharedData = this.options.jhipsterSharedData;
 
     /* Force config to use 'generator-jhipster' namespace. */
-    this._config = this._getStorage('generator-jhipster');
+    this._config = this._getStorage('generator-jhipster', { sorted: true });
     /* JHipster config using proxy mode used as a plain object instead of using get/set. */
     this.jhipsterConfig = this.config.createProxy();
 
@@ -3007,7 +3007,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   getEntityConfig(entityName, create = false) {
     const entityPath = this.destinationPath(JHIPSTER_CONFIG_DIR, `${_.upperFirst(entityName)}.json`);
     if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath);
+    return this.createStorage(entityPath, { sorted: true });
   }
 
   /**

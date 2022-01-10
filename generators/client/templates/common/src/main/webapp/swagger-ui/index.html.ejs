@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2021 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -64,7 +64,7 @@
         const axiosConfig = { timeout: 5000 };
 <%_ } else { _%>
         const getBearerToken = () => {
-          var authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+          var authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
           if (authToken) {
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
             authToken = JSON.parse(authToken);

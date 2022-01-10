@@ -6,16 +6,16 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"monitoring\\": \\"no\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"monitoring\\": \\"no\\",
     \\"openshiftNamespace\\": \\"default\\",
-    \\"storageType\\": \\"ephemeral\\",
-    \\"registryReplicas\\": 2
+    \\"registryReplicas\\": 2,
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"storageType\\": \\"ephemeral\\"
   }
 }
 ",
@@ -963,16 +963,16 @@ Object {
       \\"05-cassandra\\",
       \\"07-mariadb\\"
     ],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"monitoring\\": \\"no\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"monitoring\\": \\"no\\",
     \\"openshiftNamespace\\": \\"default\\",
-    \\"storageType\\": \\"ephemeral\\",
-    \\"registryReplicas\\": 2
+    \\"registryReplicas\\": 2,
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"storageType\\": \\"ephemeral\\"
   }
 }
 ",
@@ -2161,7 +2161,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.10
+              image: mongo:4.4.11
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}
@@ -2897,7 +2897,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.5
+              image: postgres:14.1
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}
@@ -3258,16 +3258,16 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"08-monolith\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": false,
-    \\"monitoring\\": \\"no\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"monitoring\\": \\"no\\",
     \\"openshiftNamespace\\": \\"default\\",
-    \\"storageType\\": \\"ephemeral\\",
-    \\"registryReplicas\\": 2
+    \\"registryReplicas\\": 2,
+    \\"serviceDiscoveryType\\": false,
+    \\"storageType\\": \\"ephemeral\\"
   }
 }
 ",
@@ -3777,16 +3777,16 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"01-gateway\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"monitoring\\": \\"no\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"monitoring\\": \\"no\\",
     \\"openshiftNamespace\\": \\"default\\",
-    \\"storageType\\": \\"ephemeral\\",
-    \\"registryReplicas\\": 2
+    \\"registryReplicas\\": 2,
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"storageType\\": \\"ephemeral\\"
   }
 }
 ",
@@ -4402,16 +4402,16 @@ Object {
     "contents": "{
   \\"generator-jhipster\\": {
     \\"appsFolders\\": [\\"02-mysql\\", \\"03-psql\\"],
-    \\"directoryPath\\": \\"./\\",
     \\"clusteredDbApps\\": {},
-    \\"serviceDiscoveryType\\": \\"eureka\\",
-    \\"monitoring\\": \\"no\\",
-    \\"jwtSecretKey\\": \\"SECRET--50\\",
-    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"directoryPath\\": \\"./\\",
     \\"dockerPushCommand\\": \\"docker push\\",
+    \\"dockerRepositoryName\\": \\"ocrepo\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"monitoring\\": \\"no\\",
     \\"openshiftNamespace\\": \\"default\\",
-    \\"storageType\\": \\"ephemeral\\",
-    \\"registryReplicas\\": 2
+    \\"registryReplicas\\": 2,
+    \\"serviceDiscoveryType\\": \\"eureka\\",
+    \\"storageType\\": \\"ephemeral\\"
   }
 }
 ",
@@ -5089,7 +5089,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: postgres:13.5
+              image: postgres:14.1
               env:
                 - name: POSTGRES_DATABASE
                   value: \${DATABASE_NAME}

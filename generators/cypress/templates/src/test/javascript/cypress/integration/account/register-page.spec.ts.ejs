@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2021 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -39,7 +39,7 @@ describe('<%= registerPage %>', () => {
   it('should be accessible through menu', () => {
     cy.visit('');
     cy.clickOnRegisterItem();
-    cy.url().should('match', /<%= registerPage.replaceAll('/', '\\/') %>$/);
+    cy.url().should('match', /<%= registerPage.replace(/\//g, '\\/') %>$/);
   });
 
   it('should load the register page', () => {

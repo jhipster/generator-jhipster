@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2021 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -40,13 +40,4 @@ import './entity';
 import './management';
 <%_ if (authenticationTypeOauth2) { _%>
 import './oauth2';
-<%_ } _%>
-<%_ if (clientFrameworkVue && communicationSpringWebsocket) { _%>
-
-// https://docs.cypress.io/api/events/catalog-of-events#Uncaught-Exceptions
-Cypress.on('uncaught:exception', (err, runnable) => {
-  // returning false here prevents Cypress from
-  // failing the test
-  return false
-});
 <%_ } _%>
