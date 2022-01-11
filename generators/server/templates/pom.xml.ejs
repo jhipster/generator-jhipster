@@ -483,7 +483,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+
+        <!-- Mongo db driver was excluded from starter, adding manually. -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-reactivestreams</artifactId>
+        </dependency>
   <%_ } _%>
+        <!-- Mongo db driver was excluded from starter, adding manually. -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+        </dependency>
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
         <dependency>
