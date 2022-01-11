@@ -39,9 +39,7 @@ application {
     packageName com.okta.developer.store
     applicationType microservice
     authenticationType oauth2
-    databaseType mongodb
-    devDatabaseType mongodb
-    prodDatabaseType mongodb
+    prodDatabaseType postgresql
     enableHibernateCache false
     serverPort 8082
     creationTimestamp 1617901618888
