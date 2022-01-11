@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%= packageName %>.repository;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 import io.r2dbc.spi.Row;
@@ -30,7 +30,7 @@ import io.r2dbc.spi.Row;
 /**
  * This service provides helper function dealing with the low level {@link Row} and Spring's {@link R2dbcCustomConversions}, so type conversions can be applied.
  */
-@Service
+@Component
 public class ColumnConverter {
 
     private final ConversionService conversionService;
