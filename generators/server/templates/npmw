@@ -3,16 +3,22 @@
 basedir=`dirname "$0"`
 
 if [ -f "$basedir/mvnw" ]; then
-  builddir="target/node"
+  bindir="$basedir/target/node"
+  repodir="$basedir/target/node/node_modules"
   installCommand="$basedir/mvnw -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
-  NPM_EXE="$basedir/$builddir/npm"
-  NODE_EXE=""
+
+  PATH="$basedir/$builddir/:$PATH"
+  NPM_EXE="$basedir/$builddir/node_modules/npm/bin/npm-cli.js"
+  NODE_EXE="$basedir/$builddir/node"
 else
-  builddir="build/node"
+  bindir="$basedir/build/node/bin"
+  repodir="$basedir/build/node/lib/node_modules"
   installCommand="$basedir/gradlew npmSetup"
-  NPM_EXE="$basedir/$builddir/lib/node_modules/npm/bin/npm-cli.js"
-  NODE_EXE="$basedir/$builddir/bin/node"
 fi
+
+PATH="$bindir:$PATH"
+NPM_EXE="$repodir/npm/bin/npm-cli.js"
+NODE_EXE="$bindir/node"
 
 if ! [ -x "$NPM_EXE" ]; then
   $installCommand || true
