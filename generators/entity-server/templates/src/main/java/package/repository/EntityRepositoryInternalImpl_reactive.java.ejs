@@ -41,17 +41,21 @@ import org.springframework.data.domain.Pageable;
 <%_ if (databaseTypeSql) { _%>
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
-
 import static org.springframework.data.relational.core.query.Criteria.where;
+  <%_ if (fieldsContainOwnerManyToMany) { _%>
 import static org.springframework.data.relational.core.query.Query.query;
-
+  <%_ } _%>
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.r2dbc.repository.support.SimpleR2dbcRepository;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.sql.Column;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %>;
 import org.springframework.data.relational.core.sql.Table;
+import org.springframework.data.relational.repository.support.MappingRelationalEntityInformation;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.r2dbc.core.RowsFetchSpec;
 <%_ } _%>
@@ -85,7 +89,7 @@ import reactor.core.publisher.Mono;
  * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= persistClass %> entity.
  */
 @SuppressWarnings("unused")
-class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
+class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%= persistClass %>, <%= primaryKey.type %>> implements <%= entityClass %>RepositoryInternal {
     private final DatabaseClient db;
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
@@ -107,7 +111,9 @@ _%>
 }); _%>
 
     public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
-            reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
+            reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
+        R2dbcConverter converter) {
+        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= entityClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
@@ -131,18 +137,14 @@ _%>
 <%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
 <%_ }); _%>
-        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ reactiveEagerRelations.forEach(function(rel) {
-            const colName = _getJoinColumnName(rel); %>
-            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
+        SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)
+<%_ reactiveEagerRelations.forEach(function(rel) {
+            const colName = _getJoinColumnName(rel); _%>
+            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))
+<%_ }); _%>;
 
         String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
-<%_ if (databaseTypeSql) { _%>
-        String alias = entityTable.getReferenceName().getReference();
-        String selectWhere =
-            Optional.ofNullable(criteria).map(crit ->
-                new StringBuilder(select).append(" ").append("WHERE").append(" ").append(alias).append(".").append(crit.toString()).toString()).orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
-<%_ } _%>
-        return db.sql(select<% if (databaseTypeSql) { %>Where<% } %>).map(this::process);
+        return db.sql(select).map(this::process);
     }
 
     @Override
@@ -152,7 +154,7 @@ _%>
 
     @Override
     public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
-        return createQuery(null, where("<%= primaryKey.name %>").is(id)).one();
+        return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.name %>").is(id)).one();
     }
 
 <%_ if (fieldsContainOwnerManyToMany) { _%>
@@ -182,75 +184,46 @@ _%>
     }
 
     @Override
-    public <S extends <%= persistClass %>> Mono<S> insert(S entity) {
-        return entityManager.insert(entity);
-    }
-
-    @Override
     public <S extends <%= persistClass %>> Mono<S> save(S entity) {
-        if (entity.get<%= primaryKey.nameCapitalized %>() == null) {
 <%_ if (isUsingMapsId) { _%>
-            entity.set<%= primaryKey.nameCapitalized %>(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>());
-<%_ } _%>
-            return insert(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap(savedEntity -> updateRelations(savedEntity))<% } %>;
-        } else {
-            return update(entity).map(numberOfUpdates -> {
-                if (numberOfUpdates.intValue() <= 0) {
-                    throw new IllegalStateException("Unable to update <%= entityClass %> with id = " + entity.get<%= primaryKey.nameCapitalized %>());
-                }
-                return entity;
-            })<% if (fieldsContainOwnerManyToMany) { %>.then(updateRelations(entity))<% } %>;
+        if (entity.get<%= primaryKey.nameCapitalized %>() == null && entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>() != null) {
+            entity.set<%= primaryKey.nameCapitalized %>(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>());
+            return entityManager.insert(entity);
         }
-    }
-
-    @Override
-    public Mono<Integer> update(<%= persistClass %> entity) {
-<%_ if (fields.some(field => !field.id) || relationships.some(relationship => !relationship.id && relationship.ownerSide)) { _%>
-        //fixme is this the proper way?
-        return r2dbcEntityTemplate.update(entity).thenReturn(1);
-<%_ } else { _%>
-        /*
-         * Entity doesn't contain any updatable data, ignore update for compatibility.
-         * Otherwise it fails with `IllegalArgumentException: UPDATE contains no assignments`
-         * https://github.com/spring-projects/spring-data-r2dbc/issues/250#issuecomment-563122844
-         */
-        return Mono.just(1);
 <%_ } _%>
+        return super.save(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap((S e) -> updateRelations(e))<% } %>;
     }
 
 <%_ if (fieldsContainOwnerManyToMany) { _%>
+    protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
+  <%_ relationships.filter(function(rel) {
+    return (rel.relationshipManyToMany && rel.ownerSide);
+   }).forEach(function(rel, idx) { _%>
+    <%_ if (idx === 0) { _%>
+        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
+    <%_ } else { _%>
+        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
+    <%_ } _%>
+  <%_ }); _%>
+        return result.thenReturn(entity);
+    }
 
     @Override
     public Mono<Void> deleteById(Long entityId) {
-        return deleteRelations(entityId).then(
-             r2dbcEntityTemplate.delete(<%= persistClass %>.class).matching(query(where("id").is(entityId))).all().then()
-        );
-    }
-
-    protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
-  <%_ relationships.filter(function(rel) {
-          return (rel.relationshipManyToMany && rel.ownerSide);
-  }).forEach(function(rel, idx) {
-    if (idx === 0) { _%>
-        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
-   <%_ } else { _%>
-        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
-   <%_
-       }
-  }); _%>
-        return result.thenReturn(entity);
+        return deleteRelations(entityId)
+            .then(super.deleteById(entityId));
     }
 
     protected Mono<Void> deleteRelations(Long entityId) {
   <%_ relationships.filter(function(rel) {
-          return (rel.relationshipManyToMany && rel.ownerSide);
-  }).forEach(function(rel, idx) {
-    if (idx === 0) { _%>
-        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)<%
-    } else { %>
-                .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))<% }
-  }); %>;
-    }
-
+      return (rel.relationshipManyToMany && rel.ownerSide);
+    }).forEach(function(rel, idx) { _%>
+    <%_ if (idx === 0) { _%>
+        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)
+    <%_} else { _%>
+            .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))
+    <%_ } _%>
+  <%_ }); %>;
+        }
 <%_ } _%>
 }

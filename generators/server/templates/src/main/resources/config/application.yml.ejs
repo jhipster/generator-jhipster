@@ -143,7 +143,7 @@ management:
 
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
-  change-logs-scan-package:
+  migration-scan-package:
     - <%= packageName %>.config.dbmigrations
 
 <%_ } _%>
@@ -250,6 +250,12 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
+<%_ if (!reactive) { _%>
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+<%_ } _%>
 <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) && !authenticationTypeOauth2) { _%>
   security:
     user:

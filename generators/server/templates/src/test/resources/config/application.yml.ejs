@@ -51,7 +51,7 @@ eureka:
 
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
-  change-logs-scan-package:
+  migration-scan-package:
     - <%= packageName %>.config.dbmigrations
   mongo-db:
     read-concern: local
@@ -60,7 +60,7 @@ mongock:
 
 <%_ } _%>
 spring:
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
@@ -122,12 +122,6 @@ spring:
 <%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
   data:
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    mongodb:
-      host: localhost
-      port: 0
-      database: <%= baseName %>
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     cassandra:
       contact-points: localhost
@@ -152,6 +146,12 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
+<%_ if (!reactive) { _%>
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+<%_ } _%>
   messages:
     basename: i18n/messages
 <%_ if (databaseTypeSql && reactive) { _%>

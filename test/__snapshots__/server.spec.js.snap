@@ -530,6 +530,9 @@ Object {
   "src/test/resources/i18n/messages_fr.properties": Object {
     "stateCleared": "modified",
   },
+  "src/test/resources/junit-platform.properties": Object {
+    "stateCleared": "modified",
+  },
   "src/test/resources/logback.xml": Object {
     "stateCleared": "modified",
   },

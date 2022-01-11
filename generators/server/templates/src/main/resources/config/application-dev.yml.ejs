@@ -187,16 +187,8 @@ spring:
       local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-  <%_ if (reactive) { _%>
-    elasticsearch:
-      client:
-        reactive:
-          endpoints: localhost:9200
-  <%_ } else { _%>
   elasticsearch:
-    rest:
-      uris: http://localhost:9200
-  <%_ } _%>
+    uris: http://localhost:9200
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
   couchbase:
