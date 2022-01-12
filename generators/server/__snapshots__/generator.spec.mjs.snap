@@ -679,7 +679,7 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/ColumnConverter.java",
+          "file": "package/repository/rowmapper/ColumnConverter.java",
           "renameTo": [Function],
         },
         Object {
