@@ -33,6 +33,9 @@ class TechnicalStructureTest {
     @ArchTest
     static final ArchRule respectsTechnicalArchitectureLayers = layeredArchitecture()
         .layer("Config").definedBy("..config..")
+<%_ if (applicationTypeMicroservice) { _%>
+        .layer("Client").definedBy("..client..")
+<%_ } _%>
         .layer("Web").definedBy("..web..")
         .layer("Service").definedBy("..service..")
         .layer("Security").definedBy("..security..")
@@ -40,9 +43,12 @@ class TechnicalStructureTest {
         .layer("Domain").definedBy("..domain..")
 
         .whereLayer("Config").mayNotBeAccessedByAnyLayer()
+<%_ if (applicationTypeMicroservice) { _%>
+        .whereLayer("Client").mayNotBeAccessedByAnyLayer()
+<%_ } _%>
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
         .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
-        .whereLayer("Security").mayOnlyBeAccessedByLayers("Web", "Service", "Config")
+        .whereLayer("Security").mayOnlyBeAccessedByLayers(<% if (applicationTypeMicroservice) { %>"Client", <% } %>"Web", "Service", "Config")
         .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
 
