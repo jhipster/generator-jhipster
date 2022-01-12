@@ -22,7 +22,7 @@ Object {
   ".husky/pre-commit": Object {
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": Object {
+  ".lintstagedrc.cjs": Object {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/MavenWrapperDownloader.java": Object {
@@ -75,7 +75,7 @@ Object {
   ".husky/pre-commit": Object {
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": Object {
+  ".lintstagedrc.cjs": Object {
     "stateCleared": "modified",
   },
   ".prettierignore": Object {

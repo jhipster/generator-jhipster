@@ -35,7 +35,7 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
-    this.entity = this.options.context;
+    this.entity = this.options.context || {};
 
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
   }

@@ -17,4 +17,3 @@
  * limitations under the License.
  */
 export { default } from './index.js';
-export { files } from './files.js';
