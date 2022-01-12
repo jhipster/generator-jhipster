@@ -42,7 +42,11 @@ class TechnicalStructureTest {
         .layer("Persistence").definedBy("..repository..")
         .layer("Domain").definedBy("..domain..")
 
+<%_ if (messageBrokerKafka) { _%>
+        .whereLayer("Config").mayOnlyBeAccessedByLayers("Web")
+<%_ } else { _%>
         .whereLayer("Config").mayNotBeAccessedByAnyLayer()
+<%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
         .whereLayer("Client").mayNotBeAccessedByAnyLayer()
 <%_ } _%>
