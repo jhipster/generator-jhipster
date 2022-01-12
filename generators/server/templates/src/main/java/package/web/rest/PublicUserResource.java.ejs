@@ -194,12 +194,12 @@ public class PublicUserResource {
     <%_ } _%>
   <%_ } else { _%>
      <%_ if (reactive) { _%>
+        return userRepository.search(User.PREFIX, query).map(<%= asDto('User') %>::new).collectList();
+     <%_ } else { _%>
         return StreamSupport
             .stream(userRepository.search(User.PREFIX, query).spliterator(), false)
             .map(<%= asDto('User') %>::new)
             .collect(Collectors.toList());
-     <%_ } else { _%>
-        return userRepository.search(User.PREFIX, query).map(<%= asDto('User') %>::new).collectList();
      <%_ } _%>
   <%_ } _%>
     }
