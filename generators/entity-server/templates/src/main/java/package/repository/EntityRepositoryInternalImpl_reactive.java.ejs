@@ -77,6 +77,9 @@ import <%= otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%= otherEn
 import <%= otherEntity.entityAbsolutePackage %>.repository.<%= otherEntity.entityClass %>SqlHelper;
   <%_ } _%>
 <%_ }); _%>
+<%_ if (packageName !== entityAbsolutePackage) { _%>
+import <%= packageName %>.repository.EntityManager;
+<%_ } _%>
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
