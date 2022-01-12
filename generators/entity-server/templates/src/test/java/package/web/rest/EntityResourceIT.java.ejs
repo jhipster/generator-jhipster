@@ -84,7 +84,7 @@ import <%= entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.service.EntityManager;
+import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
 import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;

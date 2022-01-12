@@ -683,7 +683,7 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/service/EntityManager.java",
+          "file": "package/repository/EntityManager.java",
           "renameTo": [Function],
         },
       ],

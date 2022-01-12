@@ -937,8 +937,8 @@ const baseServerFiles = {
           renameTo: generator => `${generator.javaDir}repository/ColumnConverter.java`,
         },
         {
-          file: 'package/service/EntityManager.java',
-          renameTo: generator => `${generator.javaDir}service/EntityManager.java`,
+          file: 'package/repository/EntityManager.java',
+          renameTo: generator => `${generator.javaDir}repository/EntityManager.java`,
         },
       ],
     },
