@@ -46,10 +46,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 <%_ } else { _%>
@@ -117,15 +114,15 @@ interface <%= entityClass %>SearchRepositoryInternal {
 
   <%_ } _%>
 
-  void index(<%= entityClass %> entity);
+  void index(<%= persistClass %> entity);
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
 
     private final ElasticsearchRestTemplate elasticsearchTemplate;
-    private final <%= entityClass %>Repository repository;
+    private final <%= persistClass %>Repository repository;
 
-    <%= entityClass %>SearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate, <%= entityClass %>Repository repository) {
+    <%= persistClass %>SearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate, <%= entityClass %>Repository repository) {
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.repository = repository;
     }
@@ -164,7 +161,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
       @Override
       @Async
       @Transactional(propagation =  Propagation.REQUIRES_NEW, readOnly = true, isolation = Isolation.READ_COMMITTED)
-      public void index(<%= entityClass %> entity) {
+      public void index(<%= persistClass %> entity) {
          repository.findOneWithEagerRelationships(entity.getId()).ifPresent(elasticsearchTemplate::save);
       }
 
