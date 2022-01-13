@@ -46,7 +46,7 @@ if (isUsingMapsId) {
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
     <%_ } _%>
-        <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
+        <%= persistInstance %> = <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= persistInstance %>);
   <%_ } else {
       resultEntity = 'result'; _%>
@@ -54,10 +54,10 @@ if (isUsingMapsId) {
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
     <%_ } _%>
-        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
+        <%= returnPrefix %> <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
+        <%= entityInstance %>SearchRepository.index(<%= resultEntity %>);
     <%_ if (returnDirectly) { _%>
         return result;
     <%_ } _%>
