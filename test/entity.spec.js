@@ -42,6 +42,21 @@ describe('JHipster generator for entity', () => {
           assert.file(expectedFiles.server);
           assert.file(expectedFiles.gatling);
         });
+
+        it('search shall provide methods for query and for string and asychronous indexing', () => {
+          assert.fileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`,
+            'Stream<Foo> search(String query);'
+          );
+          assert.fileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`,
+            'Stream<Foo> search(Query query);'
+          );
+          assert.fileContent(
+            `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`,
+            'void index(Foo entity);'
+          );
+        });
       });
 
       describe('search, no dto, no service, pagination', () => {
