@@ -1530,6 +1530,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       args,
       {
         ...this.options,
+        destinationRoot: this._destinationRoot,
         configOptions: this.configOptions,
         ...options,
       },
@@ -2771,6 +2772,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.cucumberTests = dest.testFrameworks.includes(CUCUMBER);
     dest.protractorTests = dest.testFrameworks.includes(PROTRACTOR);
     dest.cypressTests = dest.testFrameworks.includes(CYPRESS);
+
+    dest.authenticationType = config.authenticationType;
+    dest.rememberMeKey = config.rememberMeKey;
+    dest.jwtSecretKey = config.jwtSecretKey;
   }
 
   loadDerivedMicroserviceAppConfig(dest = this) {
@@ -2805,6 +2810,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.microfrontend ||
       (dest.applicationTypeMicroservice && !dest.skipClient) ||
       (dest.applicationTypeGateway && dest.microfrontends && dest.microfrontends.length > 0);
+
+    dest.authenticationTypeSession = dest.authenticationType === SESSION;
+    dest.authenticationTypeJwt = dest.authenticationType === JWT;
+    dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
   }
 
   /**
@@ -2865,10 +2874,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.buildTool = config.buildTool;
 
-    dest.authenticationType = config.authenticationType;
-    dest.rememberMeKey = config.rememberMeKey;
-    dest.jwtSecretKey = config.jwtSecretKey;
-
     dest.databaseType = config.databaseType;
     dest.devDatabaseType = config.devDatabaseType;
     dest.prodDatabaseType = config.prodDatabaseType;
@@ -2911,10 +2916,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (dest.messageBroker === NO_MESSAGE_BROKER || !dest.messageBroker) {
       dest.messageBroker = false;
     }
-
-    dest.authenticationTypeSession = dest.authenticationType === SESSION;
-    dest.authenticationTypeJwt = dest.authenticationType === JWT;
-    dest.authenticationTypeOauth2 = dest.authenticationType === OAUTH2;
 
     dest.buildToolGradle = dest.buildTool === GRADLE;
     dest.buildToolMaven = dest.buildTool === MAVEN;
