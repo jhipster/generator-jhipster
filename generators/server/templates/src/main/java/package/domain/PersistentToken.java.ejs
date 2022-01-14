@@ -31,8 +31,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+<%_ if (!reactive) { _%>
+import org.springframework.data.mongodb.core.mapping.DBRef;
+<%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -174,7 +176,7 @@ public class PersistentToken implements Serializable {
   <%_ if (databaseTypeSql) { _%>
     @ManyToOne
   <%_ } _%>
-  <%_ if (databaseTypeMongodb) { _%>
+  <%_ if (databaseTypeMongodb && !reactive) { _%>
     @DBRef
   <%_ } _%>
   <%_ if (databaseTypeNeo4j) { _%>

@@ -113,7 +113,7 @@ eclipse {
 defaultTasks "bootRun"
 
 springBoot {
-    mainClassName = "<%= packageName %>.<%= mainClass %>"
+    mainClass = "<%= packageName %>.<%= mainClass %>"
 }
 
 test {
@@ -160,10 +160,10 @@ task integrationTest(type: Test) {
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
 <%_ if (databaseTypeSql) { _%>
     if (project.hasProperty('testcontainers')) {
-  <%_ if (!reactive) { _%>
-        environment 'spring.profiles.active', 'testcontainers'
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         environment 'SPRING_PROFILES_ACTIVE', 'testcontainers'
+  <%_ } else { _%>
+        environment 'spring.profiles.active', 'testcontainers'
   <%_ } _%>
     }
 <%_ } _%>
@@ -256,9 +256,9 @@ liquibase {
             defaultSchemaName "<% if (devDatabaseTypeMysql) { %><%= baseName %><% } else if (devDatabaseTypePostgres) { %><% } %>"
             logLevel "debug"
             classpath "$buildDir/classes/java/main"
-<%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
             excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
-<%_ } _%>
+  <%_ } _%>
         }
     }
 
@@ -323,7 +323,7 @@ dependencies {
     }<% } %>
 <%_ // This is useful for major Spring Boot migration
 if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
-    runtime "org.springframework.boot:spring-boot-properties-migrator"
+    runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
 <%_ if (!cacheProviderNo) { _%>
@@ -419,10 +419,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+  <%_ } else { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -431,11 +431,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
 <%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) { _%>
-    // Mongock doesn't support reactive yet, so this dependency is necessary.
-    // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
@@ -443,7 +438,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     // and therefore hibernate validators is not included anymore
     implementation "org.springframework.boot:spring-boot-starter-validation"
     testImplementation "org.testcontainers:neo4j"
-    testImplementation 'org.testcontainers:junit-jupiter'
+<%_ } _%>
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka) { _%>
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (prodDatabaseTypeMysql) { _%>
     testImplementation "org.testcontainers:mysql"
@@ -461,10 +459,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:oracle-xe"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.apache.kafka:kafka-clients"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.projectreactor.kafka:reactor-kafka"
+  <%_ } else { _%>
+    implementation "org.apache.kafka:kafka-clients"
   <%_ } _%>
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
@@ -523,9 +521,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
 <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
-<%_ if (!reactive) { _%><%# Can remove when Spring Security 5.5 is released https://github.com/spring-projects/spring-security/issues/8958 -%>
-    implementation "org.springframework.security:spring-security-data"
-<%_ } _%>
     implementation "org.springframework.security:spring-security-web"
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
@@ -545,8 +540,19 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     }
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-    implementation "com.github.cloudyrock.mongock:mongock-spring-v5"
-    implementation "com.github.cloudyrock.mongock:mongodb-springdata-v3-driver"
+    implementation "io.mongock:mongock-springboot"
+    implementation "io.mongock:mongodb-springdata-v3-driver"
+    testImplementation "org.testcontainers:mongodb"
+  <%_ if (reactive) { _%>
+    // Mongock doesn't support reactive yet, so this dependency is necessary.
+    // See https://github.com/jhipster/generator-jhipster/pull/12536#issuecomment-696683592 for more information.
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
+
+    // Mongo db driver was excluded from starter, adding manually
+    implementation "org.mongodb:mongodb-driver-reactivestreams"
+  <%_ } _%>
+    // Mongo db driver was excluded from starter, adding manually
+    implementation "org.mongodb:mongodb-driver-sync"
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.github.differentway:couchmove"
@@ -555,26 +561,26 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
 <%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "mysql:mysql-connector-java"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "dev.miku:r2dbc-mysql"
+  <%_ } else { _%>
+    liquibaseRuntime "mysql:mysql-connector-java"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypePostgres) { _%>
     implementation "org.postgresql:postgresql"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.postgresql:postgresql"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-postgresql"
+  <%_ } else { _%>
+    liquibaseRuntime "org.postgresql:postgresql"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMariadb) { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+  <%_ if (reactive) { _%>
+    implementation "org.mariadb:r2dbc-mariadb"
   <%_ } else { _%>
-        implementation "org.mariadb:r2dbc-mariadb"
+    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeMssql) { _%>
@@ -618,9 +624,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
-<%_ if (databaseTypeMongodb) { _%>
-    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
 <%_ } _%>
@@ -631,10 +634,10 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
   <%_ } _%>
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
-  <%_ if (!reactive) { _%>
-    liquibaseRuntime "com.h2database:h2"
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-h2"
+  <%_ } else { _%>
+    liquibaseRuntime "com.h2database:h2"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeOracle) { _%>
@@ -643,9 +646,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     testImplementation "org.testcontainers:kafka"
-<%_ } _%>
-<%_ if (cacheProviderRedis) { %>
-    testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here

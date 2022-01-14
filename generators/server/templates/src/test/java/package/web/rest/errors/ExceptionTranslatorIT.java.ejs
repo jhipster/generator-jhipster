@@ -154,7 +154,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
 @WithMockUser
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @IntegrationTest
 class ExceptionTranslatorIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 

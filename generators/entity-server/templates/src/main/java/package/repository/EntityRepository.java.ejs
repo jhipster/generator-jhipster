@@ -70,17 +70,15 @@ import java.util.UUID;
 <%_ } _%>
 @Repository
 public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
-  <%_
-  for (const relationship of relationships) {
-    if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
 
     @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationTypeOauth2) { %>preferredUsername<% } else { %>username<% } %>}")
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
-    <%_ } _%>
   <%_ } _%>
-  <%_
-  if (relationshipsContainEagerLoad) {
-    if (databaseTypeSql) { _%>
+<%_ } _%>
+<%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (databaseTypeSql) { _%>
 
     @Query(value = "select distinct <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
       for (const relationship of relationships) {
@@ -100,8 +98,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
         if (relationship.relationshipEagerLoad) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
       } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(@Param("id") <%= primaryKey.type %> id);
-    <%_
-    } else if (databaseTypeMongodb)  { _%>
+    <%_ } else if (databaseTypeMongodb)  { _%>
 
     @Query("{}")
     Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
@@ -111,8 +108,6 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
 
     @Query("{'id': ?0}")
     Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
-    <%_
-    }
-  }
-  _%>
+  <%_ } _%>
+<%_ } _%>
 }

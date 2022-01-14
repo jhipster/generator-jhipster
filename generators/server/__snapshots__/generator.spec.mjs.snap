@@ -679,7 +679,7 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/service/ColumnConverter.java",
+          "file": "package/repository/ColumnConverter.java",
           "renameTo": [Function],
         },
         Object {
@@ -1541,6 +1541,35 @@ Object {
     },
     Object {
       "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/MongoDbTestContainerExtension.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
       "path": "src/main/java/",
       "templates": Array [
         Object {
@@ -1640,6 +1669,7 @@ Object {
       "templates": Array [
         "config/application.yml",
         "logback.xml",
+        "junit-platform.properties",
       ],
     },
     Object {
@@ -1741,7 +1771,6 @@ Object {
       "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
-        "junit-platform.properties",
         Object {
           "file": "package/features/gitkeep",
           "noEjs": true,

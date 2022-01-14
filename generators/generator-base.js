@@ -1897,7 +1897,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
                 + '-storetype PKCS12 '
                 + '-keyalg RSA '
                 + '-alias selfsigned '
-                + `-keystore ${keyStoreFile} `
+                + `-keystore "${keyStoreFile}" `
                 + '-storepass password '
                 + '-keypass password '
                 + '-keysize 2048 '

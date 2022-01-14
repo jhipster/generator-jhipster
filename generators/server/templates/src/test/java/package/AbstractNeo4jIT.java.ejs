@@ -20,6 +20,7 @@ package <%= packageName %>;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.containers.Neo4jContainer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,7 +29,7 @@ public class AbstractNeo4jIT implements BeforeAllCallback {
 
     private static AtomicBoolean started = new AtomicBoolean(false);
 
-    private static Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
+    private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("<%= DOCKER_NEO4J %>")).withoutAuthentication();
 
     public void beforeAll(ExtensionContext extensionContext) {
         if (!started.get()) {

@@ -26,7 +26,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
   <%_ } _%>
 import org.springframework.data.mongodb.core.mapping.Field;
-  <%_ if (relationships.length > 0) { _%>
+  <%_ if (!reactive && relationships.length > 0) { _%>
 import org.springframework.data.mongodb.core.mapping.DBRef;
   <%_ } _%>
 <&_ } -&>
@@ -55,26 +55,23 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (relationship.relationshipOneToMany) { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
+  <%_ if (!reactive && (relationship.relationshipManyToMany || !relationship.otherEntity.embedded)) { _%>
     @DBRef
-    <%_ } _%>
+  <%_ } _%>
+  <%_ if (relationship.relationshipOneToMany) { _%>
     @Field("<%= relationship.relationshipFieldName %>")
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
-    @DBRef
     @Field("<%= relationship.relationshipFieldName %>")
     <%_ } _%>
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
-    @DBRef
     @Field("<%= relationship.relationshipFieldNamePlural %>")
   <%_ } else { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
-    @DBRef
-        <%_ if (relationship.ownerSide) { _%>
+      <%_ if (relationship.ownerSide) { _%>
     @Field("<%= relationship.relationshipFieldName %>")
-        <%_ } _%>
+      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
 

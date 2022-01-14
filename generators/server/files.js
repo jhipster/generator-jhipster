@@ -104,6 +104,32 @@ const mongoDbFiles = {
         },
       ],
     },
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/MongoDbTestContainerExtension.java',
+          renameTo: generator => `${generator.testDir}MongoDbTestContainerExtension.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
   ],
 };
 
@@ -907,8 +933,8 @@ const baseServerFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/service/ColumnConverter.java',
-          renameTo: generator => `${generator.javaDir}service/ColumnConverter.java`,
+          file: 'package/repository/ColumnConverter.java',
+          renameTo: generator => `${generator.javaDir}repository/ColumnConverter.java`,
         },
         {
           file: 'package/service/EntityManager.java',
@@ -1227,7 +1253,7 @@ const baseServerFiles = {
     },
     {
       path: SERVER_TEST_RES_DIR,
-      templates: ['config/application.yml', 'logback.xml'],
+      templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
     {
       condition: generator => generator.databaseType === SQL && !generator.reactive,
@@ -1319,10 +1345,7 @@ const baseServerFiles = {
     {
       condition: generator => generator.cucumberTests,
       path: SERVER_TEST_RES_DIR,
-      templates: [
-        'junit-platform.properties',
-        { file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true },
-      ],
+      templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true }],
     },
     {
       condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== OAUTH2,

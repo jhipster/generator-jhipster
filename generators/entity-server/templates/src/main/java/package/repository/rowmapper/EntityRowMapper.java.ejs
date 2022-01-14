@@ -39,7 +39,7 @@ import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
-import <%= packageName %>.service.ColumnConverter;
+import <%= packageName %>.repository.ColumnConverter;
 
 import io.r2dbc.spi.Row;
 

@@ -25,6 +25,9 @@ import <%= packageName %>.CouchbaseTestContainerExtension;
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+    import <%= packageName %>.MongoDbTestContainerExtension;
+<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
@@ -34,7 +37,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers) { _%>
+<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers || databaseTypeMongodb) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -61,10 +64,24 @@ import java.lang.annotation.Target;
 <%_ if (databaseTypeCouchbase) { _%>
 @ExtendWith(CouchbaseTestContainerExtension.class)
 <%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+@ExtendWith(MongoDbTestContainerExtension.class)
+<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)
 <%_ } _%>
-public @interface IntegrationTest {}
+public @interface IntegrationTest {
+<%_ if (reactive) { _%>
+    // 5s is the spring default https://github.com/spring-projects/spring-framework/blob/29185a3d28fa5e9c1b4821ffe519ef6f56b51962/spring-test/src/main/java/org/springframework/test/web/reactive/server/DefaultWebTestClient.java#L106
+  <%_ if (databaseTypeMongodb && reactive) { _%>
+    public static final String DEFAULT_TIMEOUT = "PT10S";
+    public static final String DEFAULT_ENTITY_TIMEOUT = "PT10S";
+  <%_ } else { _%>
+    public static final String DEFAULT_TIMEOUT = "PT5S";
+    public static final String DEFAULT_ENTITY_TIMEOUT = "PT5S";
+  <%_ } _%>
+<%_ } _%>
+}

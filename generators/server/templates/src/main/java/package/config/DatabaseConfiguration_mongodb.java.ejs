@@ -19,12 +19,10 @@
 
 package <%= packageName %>.config;
 
+import io.mongock.runner.springboot.EnableMongock;
 import tech.jhipster.config.JHipsterConstants;
-import com.github.cloudyrock.spring.v5.EnableMongock;
 import tech.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import tech.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 <%_ if (reactive) { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;

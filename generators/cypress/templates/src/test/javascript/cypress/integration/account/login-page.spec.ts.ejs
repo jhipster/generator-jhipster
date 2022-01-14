@@ -25,8 +25,8 @@ import {
 } from '../../support/commands';
 
 describe('login modal', () => {
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
+  const password = Cypress.env('E2E_PASSWORD') ?? '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
 
   beforeEach(() => {
     cy.visit('');
@@ -44,9 +44,9 @@ describe('login modal', () => {
   it('requires username', () => {
     cy.get(passwordLoginSelector).type('a-password');
     cy.get(submitLoginSelector).click();
-    <%_ if (!clientFrameworkReact) { _%>
+<%_ if (!clientFrameworkReact) { _%>
     cy.wait('@authenticate').then(({ response }) => expect(response.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
-    <%_ } _%>
+<%_ } _%>
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
   });
@@ -54,13 +54,13 @@ describe('login modal', () => {
   it('requires password', () => {
     cy.get(usernameLoginSelector).type('a-login');
     cy.get(submitLoginSelector).click();
-    <%_ if (!clientFrameworkReact) { _%>
+<%_ if (!clientFrameworkReact) { _%>
     cy.wait('@authenticate').then(({ response }) => expect(response.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
     cy.get(errorLoginSelector).should('be.visible');
-    <%_ } else { _%>
+<%_ } else { _%>
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('errors when password is incorrect', () => {
