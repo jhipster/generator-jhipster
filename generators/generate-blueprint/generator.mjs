@@ -306,7 +306,11 @@ export default class extends BaseBlueprintGenerator {
         // Generate snapshots to add to git.
         this.log(`
 This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
-        await this.spawnCommand('npm', ['run', 'update-snapshot']);
+        try {
+          await this.spawnCommand('npm', ['run', 'update-snapshot']);
+        } catch (error) {
+          this.log('Fail to generate snapshots');
+        }
       },
     };
   }
