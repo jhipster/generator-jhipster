@@ -267,7 +267,7 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
     /**
      * Setups the database with one user.
      */
-    public static <%= asEntity('User') %> initTestUser(UserRepository userRepository<% if (databaseTypeSql ) { %>, EntityManager em<% } _%>) {
+    public static <%= asEntity('User') %> initTestUser(UserRepository userRepository<% if (databaseTypeSql) { %>, EntityManager em<% } _%>) {
 <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
 <%_ } _%>
@@ -337,9 +337,9 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
             assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-<%_ if (!databaseTypeCassandra) { _%>
+  <%_ if (!databaseTypeCassandra) { _%>
             assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-<%_ } _%>
+  <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         });
     }

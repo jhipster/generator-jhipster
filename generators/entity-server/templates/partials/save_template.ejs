@@ -38,7 +38,7 @@ if (isUsingMapsId) {
         }
   <%_ } _%>
 <%_ } _%>
-<%_  if (!viaService) { _%>
+<%_ if (!viaService) { _%>
   <%_ if (dtoMapstruct) { _%>
     <%_ resultEntity = persistInstance; _%>
         <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
