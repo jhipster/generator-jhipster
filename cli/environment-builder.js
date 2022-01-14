@@ -311,7 +311,13 @@ module.exports = class EnvironmentBuilder {
       /* eslint-disable import/no-dynamic-require */
       /* eslint-disable global-require */
       try {
-        const blueprintCommands = _.cloneDeep(require(`${packagePath}/cli/commands`));
+        let blueprintCommand;
+        try {
+          blueprintCommand = require(`${packagePath}/cli/commands`);
+        } catch (e) {
+          blueprintCommand = require(`${packagePath}/cli/commands.cjs`);
+        }
+        const blueprintCommands = _.cloneDeep(blueprintCommand);
         Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
           commandSpec.blueprint = commandSpec.blueprint || blueprint;
         });
