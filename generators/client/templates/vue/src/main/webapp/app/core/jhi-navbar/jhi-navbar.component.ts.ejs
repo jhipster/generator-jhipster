@@ -31,9 +31,8 @@ export default class JhiNavbar extends Vue {
 
   created() {
 <%_ if (enableTranslation) { _%>
-    const lang = this.findLanguage();
-    this.currentLanguage = this.currentLanguage === lang ? this.currentLanguage : lang;
-    this.translationService().refreshTranslation(this.currentLanguage);
+    const currentLanguage = Object.keys(this.languages).includes(navigator.language) ? navigator.language : this.currentLanguage;
+    this.translationService().refreshTranslation(currentLanguage);
 <%_ } _%>
   }
 
@@ -107,18 +106,4 @@ export default class JhiNavbar extends Vue {
   public get inProduction() : boolean {
     return (this.$store.getters.activeProfiles.indexOf('prod') > -1);
   }
-
-<%_ if (enableTranslation) { _%>
-  findLanguage(): string {
-    const languageKeys = Object.keys(JSON.parse(JSON.stringify(this.languages)));
-    for (const lang of navigator.languages) {
-      for (const l of languageKeys) {
-        if (lang.startsWith(l)) {
-          return l;
-        }
-      }
-    }
-    return languageKeys[0];
-  }
-<%_ } %>
 }
