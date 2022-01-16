@@ -147,7 +147,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
 <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
-    public <% if (paginationNo) { %><%= listOrFlux %><<%= instanceType %><% } else { %><%= pageOrFlux %><<%= instanceType %><% } %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>) {
+    public <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
 <%_ if (paginationNo) { _%>
         return <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dtoMapstruct) { %><% if (!reactive) { %>.stream()<% } %>

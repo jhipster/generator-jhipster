@@ -463,11 +463,10 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private EntityManager em;
 <%_ } _%>
 
-<%_ if (reactive) { _%>
     @Autowired
+<%_ if (reactive) { _%>
     private WebTestClient webTestClient;
 <%_ } else { _%>
-    @Autowired
     private MockMvc rest<%= entityClass %>MockMvc;
 <%_ } _%>
 
@@ -1370,7 +1369,7 @@ _%>
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (testsNeedCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? asDto(entityInstance) : 'updated' + persistClass) %>)))
             .andExpect(status().isOk());

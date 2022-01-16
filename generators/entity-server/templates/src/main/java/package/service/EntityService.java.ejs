@@ -79,7 +79,7 @@ public interface <%= entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (paginationNo) { %><%= listOrFlux %><<%= instanceType %><% } else { %><%= pageOrFlux %><<%= instanceType %><% } %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
+    <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
     /**
