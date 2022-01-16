@@ -187,6 +187,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
+        this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
         this.JAVA_VERSION = constants.JAVA_VERSION;
         this.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;

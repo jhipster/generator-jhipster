@@ -57,4 +57,7 @@ fi
 if [ "$JHI_SONAR" = 1 ]; then
     docker-compose -f src/main/docker/sonar.yml up -d
 fi
+if [ -a src/main/docker/zipkin.yml ]; then
+    docker-compose -f src/main/docker/zipkin.yml up -d
+fi
 docker ps -a
