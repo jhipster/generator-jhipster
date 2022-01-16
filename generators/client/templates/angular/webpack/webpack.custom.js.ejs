@@ -70,9 +70,7 @@ module.exports = async (config, options, targetOptions) => {
           https: tls,
           proxy: {
             target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
-            <%_ if (websocket === 'spring-websocket') { _%>
             ws: true,
-            <%_ } _%>
             proxyOptions: {
               changeOrigin: false, //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
             },
