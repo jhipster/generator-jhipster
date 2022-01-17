@@ -100,7 +100,7 @@ new Vue({
   router,
   provide: {
     loginService: () => loginService,
-    <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userManagementService: () => new UserManagementService(),
