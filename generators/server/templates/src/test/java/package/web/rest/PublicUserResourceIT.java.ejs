@@ -35,7 +35,7 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.service.EntityManager;
+import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

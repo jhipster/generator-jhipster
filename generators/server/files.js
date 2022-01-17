@@ -787,8 +787,8 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/ArchTest.java',
-          renameTo: generator => `${generator.testDir}ArchTest.java`,
+          file: 'package/TechnicalStructureTest.java',
+          renameTo: generator => `${generator.testDir}TechnicalStructureTest.java`,
         },
       ],
     },
@@ -933,12 +933,12 @@ const baseServerFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/ColumnConverter.java',
-          renameTo: generator => `${generator.javaDir}repository/ColumnConverter.java`,
+          file: 'package/repository/rowmapper/ColumnConverter.java',
+          renameTo: generator => `${generator.javaDir}repository/rowmapper/ColumnConverter.java`,
         },
         {
-          file: 'package/service/EntityManager.java',
-          renameTo: generator => `${generator.javaDir}service/EntityManager.java`,
+          file: 'package/repository/EntityManager.java',
+          renameTo: generator => `${generator.javaDir}repository/EntityManager.java`,
         },
       ],
     },

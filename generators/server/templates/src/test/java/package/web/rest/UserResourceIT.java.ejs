@@ -40,7 +40,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.service.EntityManager;
+import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 import <%= packageName %>.service.mapper.UserMapper;
 <%_ if (!authenticationTypeOauth2) { _%>

@@ -304,7 +304,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/ArchTest.java",
+          "file": "package/TechnicalStructureTest.java",
           "renameTo": [Function],
         },
       ],
@@ -679,11 +679,11 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/ColumnConverter.java",
+          "file": "package/repository/rowmapper/ColumnConverter.java",
           "renameTo": [Function],
         },
         Object {
-          "file": "package/service/EntityManager.java",
+          "file": "package/repository/EntityManager.java",
           "renameTo": [Function],
         },
       ],
