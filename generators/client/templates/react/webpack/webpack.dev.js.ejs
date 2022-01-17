@@ -114,8 +114,8 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: `http${options.tls ? 's' : ''}://localhost:<%= devServerPort %>`<% if (communicationSpringWebsocket) { %>,
-          ws: true<% } %>,
+          target: `http${options.tls ? 's' : ''}://localhost:<%= devServerPort %>`,
+          ws: true,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
           }
