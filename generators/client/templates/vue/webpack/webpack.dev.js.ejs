@@ -43,9 +43,7 @@ module.exports = (env, options) => {
         port: 9000,
         proxy: {
           target: `http://localhost:${options.watch ? '<%= this.applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
-<%_ if (communicationSpringWebsocket) { _%>
           ws: true,
-<%_ } _%>
         },
         socket: {
           clients: {
