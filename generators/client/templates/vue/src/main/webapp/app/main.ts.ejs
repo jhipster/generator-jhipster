@@ -20,6 +20,7 @@ import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ if (!skipUserManagement) { _%>
 import ActivateService from './account/activate/activate.service';
 import RegisterService from './account/register/register.service';
+import UserManagementService from './admin/user-management/user-management.service';
 <%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
@@ -102,6 +103,7 @@ new Vue({
 <%_ if (!skipUserManagement) { _%>
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
+    userManagementService: () => new UserManagementService(),
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
     gatewayService: () => new GatewayService(),
