@@ -70,14 +70,14 @@ public final class SecurityUtils {
      *
      * @return the login of the current user.
      */
-    public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserLogin() {
-<%_ if (!reactive) { _%>
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
-<%_ } else { _%>
+    public static <% if (reactive) { %>Mono<% } else { %>Optional<% } %><String> getCurrentUserLogin() {
+<%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
+<%_ } else { _%>
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
 <%_ } _%>
     }
 
@@ -109,13 +109,13 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserJWT() {
-  <%_ if (!reactive) { _%>
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-  <%_ } else { _%>
+    public static <% if (reactive) { %>Mono<% } else { %>Optional<% } %><String> getCurrentUserJWT() {
+  <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
+  <%_ } else { _%>
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
   <%_ } _%>
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
@@ -127,12 +127,8 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isAuthenticated() {
-<%_ if (!reactive) { _%>
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
-<%_ } else { _%>
+    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> isAuthenticated() {
+<%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .map(Authentication::getAuthorities)
@@ -140,6 +136,10 @@ public final class SecurityUtils {
                 .map(GrantedAuthority::getAuthority)
                 .noneMatch(AuthoritiesConstants.ANONYMOUS::equals)
             );
+<%_ } else { _%>
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null &&
+            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
 <%_ } _%>
     }
 
@@ -149,13 +149,8 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has any of the authorities, false otherwise.
      */
-    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserAnyOfAuthorities(String... authorities) {
-<%_ if (!reactive) { _%>
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (
-            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
-        );
-<%_ } else { _%>
+    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserAnyOfAuthorities(String... authorities) {
+<%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .map(Authentication::getAuthorities)
@@ -163,6 +158,11 @@ public final class SecurityUtils {
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
             );
+<%_ } else { _%>
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (
+            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+        );
 <%_ } _%>
     }
 
@@ -172,11 +172,11 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has none of the authorities, false otherwise.
      */
-    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserNoneOfAuthorities(String... authorities) {
-<%_ if (!reactive) { _%>
-        return !hasCurrentUserAnyOfAuthorities(authorities);
-<%_ } else { _%>
+    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserNoneOfAuthorities(String... authorities) {
+<%_ if (reactive) { _%>
         return hasCurrentUserAnyOfAuthorities(authorities).map(result -> !result);
+<%_ } else { _%>
+        return !hasCurrentUserAnyOfAuthorities(authorities);
 <%_ } _%>
     }
 
@@ -186,7 +186,7 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> hasCurrentUserThisAuthority(String authority) {
+    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserThisAuthority(String authority) {
         return hasCurrentUserAnyOfAuthorities(authority);
     }
 

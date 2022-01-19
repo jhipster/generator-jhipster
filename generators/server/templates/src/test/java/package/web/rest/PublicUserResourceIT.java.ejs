@@ -40,10 +40,10 @@ import <%= packageName %>.repository.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-<%_ if (!reactive) { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
 <%_ if (cacheManagerIsAvailable) { _%>
 import org.springframework.cache.CacheManager;
@@ -60,8 +60,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -88,24 +87,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ if (reactive && testsNeedCsrf) { _%>
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+<%_ } else if (!reactive) { _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import static org.hamcrest.Matchers.hasItems;
   <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-<%_ } else if (testsNeedCsrf) { _%>
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-<%_ if (!reactive) { _%>
-@AutoConfigureMockMvc
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+@AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
@@ -179,7 +178,19 @@ class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCas
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         // Get all the users
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
+
+        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+  <%_ } _%>
+<%_ } else { _%>
         restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -193,18 +204,6 @@ class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCas
             .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
   <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").doesNotExist());
-<%_ } else { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
-
-        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-  <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        assertThat(foundUser.get<%= javaBeanCase(field.fieldName) %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
-  <%_ } _%>
 <% } _%>
     }
 
@@ -215,15 +214,7 @@ class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCas
     @Transactional
   <%_ } _%>
     void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
-  <%_ if (!reactive) { _%>
-        restUserMockMvc.perform(get("/api/authorities")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/authorities")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -233,6 +224,14 @@ class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCas
             .jsonPath("$").isArray()
             .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]").hasJsonPath()
             .jsonPath("$[?(@=='" + AuthoritiesConstants.USER + "')]").hasJsonPath();
+  <%_ } else { _%>
+        restUserMockMvc.perform(get("/api/authorities")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
   <%_ } _%>
     }
 <%_ } _%>
@@ -246,16 +245,16 @@ class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCas
         // Initialize the database
         userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-  <%_ if (!reactive) { _%>
-            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
             webTestClient.get().uri("/api/users?sort=resetKey,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
             webTestClient.get().uri("/api/users?sort=password,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
             webTestClient.get().uri("/api/users?sort=resetKey,id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();
             webTestClient.get().uri("/api/users?sort=id,DESC").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk();
+  <%_ } else { _%>
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
   <%_ } _%>
     }
 <%_ } _%>

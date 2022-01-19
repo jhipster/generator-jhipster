@@ -166,10 +166,10 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
   <%_ } _%>
   <%_ if (databaseTypeCassandra) { _%>
-    <%_ if (!reactive) { _%>
-    @PartitionKey
-    <%_ } else { _%>
+    <%_ if (reactive) { _%>
     @PrimaryKey
+    <%_ } else { _%>
+    @PartitionKey
     <%_ } _%>
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>

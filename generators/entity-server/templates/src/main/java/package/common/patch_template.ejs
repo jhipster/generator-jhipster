@@ -25,10 +25,10 @@ const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + 
 const mapper = entityInstance  + 'Mapper';
 _%>
 <%_ if(viaService) { _%>
-  <%_ if(!reactive) { _%>
-    Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
-  <%_ } else { _%>
+  <%_ if(reactive) { _%>
     Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+  <%_ } else { _%>
+    Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
   <%_ } _%>
 <%_ } else { %>
 <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
@@ -53,10 +53,10 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
-    <%_ if(!reactive) { %>
-        return saved<%= entityClass %>;
-    <%_ } else { %>
+    <%_ if(reactive) { %>
         return Mono.just(saved<%= entityClass %>);
+    <%_ } else { %>
+        return saved<%= entityClass %>;
     <%_ } %>
       })
   <%_ } _%>
