@@ -230,7 +230,7 @@ export default class extends BaseBlueprintGenerator {
           type: 'module',
           files: ['generators'],
           scripts: {
-            ejslint: "ejslint generators && ejslint generators -d '&'",
+            ejslint: "ejslint generators/**/*.ejs && ejslint generators/**/*.ejs -d '&'",
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
             mocha: 'mocha generators --no-insight --forbid-only',

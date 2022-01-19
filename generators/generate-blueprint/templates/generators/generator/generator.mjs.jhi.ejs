@@ -54,7 +54,7 @@ export async function createGenerator(env) {
 export default class extends <%= generatorClass %>Generator {
 <%_ } _%>
   constructor(args, opts, features) {
-    super(args, opts, { unique: 'namespace', taskPrefix: PRIORITY_PREFIX, ...features });
+    super(args, opts, { taskPrefix: PRIORITY_PREFIX, ...features });
 
     if (this.options.help) return;
 
