@@ -5,7 +5,8 @@
   },
   "extends": ["airbnb-base", "plugin:mocha/recommended", "plugin:prettier/recommended"],
   "parserOptions": {
-    "ecmaVersion": 11
+    "ecmaVersion": 11,
+    "sourceType": "module"
   },
   "overrides": [
     {
@@ -19,6 +20,7 @@
     "mocha/no-mocha-arrows": "off",
     "func-names": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-unresolved": [2, { "ignore": ["^#[\\w\\d/\\-]+$"] }],
     "no-restricted-syntax": [
       "error",
       {
