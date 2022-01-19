@@ -93,8 +93,10 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
-<%_ if (reactive && testsNeedCsrf) { _%>
+<%_ if (reactive) { _%>
+  <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+  <%_ } _%>
 <%_ } else { _%>
   <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;

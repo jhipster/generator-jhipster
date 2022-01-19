@@ -67,7 +67,7 @@ import reactor.core.publisher.Mono;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 <%_ } _%>
 
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
