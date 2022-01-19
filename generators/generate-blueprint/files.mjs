@@ -28,7 +28,7 @@ export const files = {
     },
     {
       condition: ctx => ctx.commands.length > 0,
-      templates: ['cli/commands.js'],
+      templates: ['cli/commands.cjs'],
     },
   ],
 };
