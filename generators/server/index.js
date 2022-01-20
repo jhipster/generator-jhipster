@@ -464,6 +464,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (!this.databaseTypeSql) return undefined;
         if (this.reactive && this.isJhipsterVersionLessThan('7.5.1')) {
           this.removeFile(`${this.mainJavaPackageDir}service/ColumnConverter.java`);
+          this.removeFile(`${this.mainJavaPackageDir}service/EntityManager.java`);
+          this.removeFile(`${this.testJavaPackageDir}ArchTest.java`);
         }
       },
       cleanupServer() {

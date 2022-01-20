@@ -77,9 +77,8 @@ import <%= otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%= otherEn
 import <%= otherEntity.entityAbsolutePackage %>.repository.<%= otherEntity.entityClass %>SqlHelper;
   <%_ } _%>
 <%_ }); _%>
-import <%= packageName %>.service.EntityManager;
-<%_ if (fieldsContainOwnerManyToMany) { _%>
-import <%= packageName %>.service.EntityManager.LinkTable;
+<%_ if (packageName !== entityAbsolutePackage) { _%>
+import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 
 import reactor.core.publisher.Flux;
@@ -106,7 +105,7 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 <%_ relationships.forEach(function(rel) {
   if (rel.shouldWriteJoinTable) {
 _%>
-    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
+    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
 <%_ }
 }); _%>
 
