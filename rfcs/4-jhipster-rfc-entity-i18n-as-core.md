@@ -1,8 +1,8 @@
-# JHipster-RFC-4: Entities and I18n as a core features.
+# JHipster-RFC-4: Entities as a core feature.
 
 <!-- This is a RFC template based on the Rust RFC process but simplified: https://github.com/rust-lang/rfcs/ -->
 
-- Feature Name: Entities and I18n as a core features.
+- Feature Name: Entities as a core feature.
 - Start Date: 2021-11-20
 - Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/0000)
 
@@ -10,13 +10,13 @@
 
 [summary]: #summary
 
-This RFC proposes to implement entities and i18n as JHipster core features instead of generators.
+This RFC proposes to implement entities as JHipster core feature instead of generators.
 
 ## Motivation
 
 [motivation]: #motivation
 
-With JHipster 8 modular proposal, entity and i18n related generators would multiply and become a development problem due to generator dependencies order. Probably inviable. A solution for this issue must be implemented.
+With JHipster 8 modular proposal, entity related generators would multiply and become a development problem due to generator dependencies order. Probably inviable. A solution for this issue must be implemented.
 
 Another reason is that JHipster has too many generators, this will allow a more concise workflow.
 
@@ -30,7 +30,6 @@ JHipster have a few generators related to entities.
 - `entities-client` generator is used to rebuild webpack when some entity changes.
 - `entity` generator is used for prompting, configuring, preparing.
 - `entity-client` generator is used for entity customizations and writing files related to client.
-- `entity-i18n` generator is used for entity customizations and writing files related to i18n.
 - `entity-server` generator is used for entity customizations and writing files related to server.
 
 We have priorities to be used on entity generators.
@@ -38,7 +37,7 @@ We have priorities to be used on entity generators.
 - `preparingFields`
 - `preparingRelationships`
 
-Those generators and priorities will be replaced by entity/i18n focused priorities and internal methods to support the workflow. Some entity related generators may be kept for more specific purpose like prompts.
+Those generators and priorities will be replaced by entity focused priorities and internal methods to support the workflow. Some entity related generators may be kept for more specific purpose like prompts.
 
 Planed priorities includes.
 
@@ -46,9 +45,7 @@ Planed priorities includes.
 - `preparingEachEntity`: priority to create derived properties for entities to be used by the templates.
 - `preparingEachEntityField`: priority to create derived properties for fields to be used by the templates.
 - `preparingEachEntityRelationship`: priority to create derived properties for relationships to be used by the templates.
-- `writingEachEntity`: priority to write entity related files.
-- `writingEachEntityLanguage`: priority to write entity related i18n files.
-- `writingEachLanguage`: priority to write language related files.
+- `writingEntities`: priority to write entity related files.
 
 ## Reference-level explanation
 
@@ -91,26 +88,21 @@ New priorities will have as first argument relevant resources to the priority/ta
     }
   }
 
-  get writingEachLanguage () {
+  get writingEntities () {
     return {
-      async writeLanguageTask({ lang }) {
-        await this.writeFileToDisk(translationFiles);
-      }
-    }
-  }
-
-  get writingEachEntity () {
-    return {
-      async writeEntityTask({ entityName, entity }) {
-        await this.writeFileToDisk(entityFiles);
-      }
-    }
-  }
-
-  get writingEachEntityLanguage () {
-    return {
-      async writeLanguageTask({ entityName, entity, lang }) {
-        await this.writeFileToDisk(entityTranslationFiles);
+      async writeEntityTask({ entities }) {
+        await this.writeFileToDisk({
+          sections: entitiesFiles,
+          context: { entities },
+        );
+        await Promise.all(
+          entities.map(async entity => {
+            await this.writeFiles({
+              sections: entityFiles,
+              context: { entity },
+            });
+          })
+        );
       }
     }
   }
@@ -141,4 +133,4 @@ As advantages we can list:
 
 ## Implementation
 
-New priorities will be implemented at v7 as a incremental feature. Entity/i18n breaking change implementation will only be migrated to the new priorities at v8 pre-release cycle.
+New priorities will be implemented at v7 as a incremental feature. Entity breaking change implementation will only be migrated to the new priorities at v8 pre-release cycle.
