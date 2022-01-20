@@ -67,11 +67,11 @@ inputs:
   jhipster-bom-repository:
     description: 'JHipster BOM repository'
     required: false
-    default: https://github.com/jhipster/jhipster-bom.git
+    default: https://github.com/DanielFran/jhipster-bom.git
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: DanielFran:skip_ci-spring-boot_2.6.3
+    default: skip_ci-spring-boot_2.6.3
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
