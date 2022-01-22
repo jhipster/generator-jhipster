@@ -19,9 +19,9 @@
 import chalk from 'chalk';
 
 import GENERATOR_LIST from '../generator-list.js';
-import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES } from '../../lib/constants/priorities.mjs';
+import { BASE_PRIORITY_NAMES, ENTITY_PRIORITY_NAMES } from '../../lib/constants/priorities.mjs';
 
-const prioritiesForSub = subGenerator => (subGenerator.startsWith('entit') ? ENTITY_PRIORITY_NAMES : PRIORITY_NAMES);
+const prioritiesForSub = subGenerator => (subGenerator.startsWith('entit') ? ENTITY_PRIORITY_NAMES : BASE_PRIORITY_NAMES);
 
 export const GENERATORS = 'generators';
 export const SUB_GENERATORS = 'subGenerators';
