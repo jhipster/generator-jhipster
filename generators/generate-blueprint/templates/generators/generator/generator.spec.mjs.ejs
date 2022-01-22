@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import helpers from 'yeoman-test';
 import expect from 'expect';
+
+import { helpers, lookups } from '#test-utils';
 
 describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
@@ -27,11 +28,10 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
         .create('jhipster:<%= subGenerator %>')
         .withOptions({
           reproducible: true,
+          defaults: true,
           blueprint: '<%= application.baseName %>',
         })
-        .withEnvironment(env => {
-          env.lookup();
-        })
+        .withLookups(lookups)
         .run();
     });
 
