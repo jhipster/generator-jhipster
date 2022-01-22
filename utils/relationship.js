@@ -184,9 +184,11 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     }
   }
 
-  if (isReservedTableName(relationship.otherEntityTableName, entityWithConfig.prodDatabaseType) && jhiTablePrefix) {
-    const otherEntityTableName = relationship.otherEntityTableName;
-    relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
+  if (entityWithConfig.prodDatabaseType) {
+    if (isReservedTableName(relationship.otherEntityTableName, entityWithConfig.prodDatabaseType) && jhiTablePrefix) {
+      const otherEntityTableName = relationship.otherEntityTableName;
+      relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
+    }
   }
 
   if (relationship.otherEntityAngularName === undefined) {

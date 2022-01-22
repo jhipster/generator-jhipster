@@ -84,7 +84,7 @@ const BASE_TEMPLATE_DATA = {
     return [];
   },
   get differentRelationships() {
-    return [];
+    return {};
   },
   get i18nToLoad() {
     return [];
@@ -109,7 +109,9 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   const entityName = _.upperFirst(entityWithConfig.name);
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
-  entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
+  if (entityWithConfig.changelogDate) {
+    entityWithConfig.changelogDateForRecent = parseLiquibaseChangelogDate(entityWithConfig.changelogDate);
+  }
   entityWithConfig.faker = entityWithConfig.faker || createFaker(generator.jhipsterConfig.nativeLanguage);
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));

@@ -6,7 +6,7 @@ const { existsSync } = require('fs');
 const { GENERATOR_JHIPSTER } = require('../../generators/generator-constants');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
 const {
-  PRIORITY_NAMES,
+  BASE_PRIORITY_NAMES,
   BASE_ENTITY_PRIORITY_NAMES,
   compat: {
     CONFIGURING_EACH_ENTITY_PRIORITY,
@@ -180,7 +180,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
     const prioritiesSpy = sinon.spy();
     const prioritiesTasks = [];
     let prioritiesCount = 0;
-    [...PRIORITY_NAMES, ...(entity ? BASE_ENTITY_PRIORITY_NAMES : [])].forEach(priority => {
+    [...BASE_PRIORITY_NAMES, ...(entity ? BASE_ENTITY_PRIORITY_NAMES : [])].forEach(priority => {
       let callback;
       if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${taskPrefix}${priority}`)) {
         prioritiesCount++;
@@ -244,6 +244,9 @@ const testBlueprintSupport = (generatorName, options = {}) => {
         options = {
           ...options,
           applicationWithEntities: {
+            config: {
+              skipUserManagement: true,
+            },
             entities: [
               {
                 name: 'One',
@@ -290,7 +293,7 @@ const testBlueprintSupport = (generatorName, options = {}) => {
     it('should call every priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
     });
-    PRIORITY_NAMES.forEach(priority => {
+    BASE_PRIORITY_NAMES.forEach(priority => {
       it(`should call ${priority} tasks if implemented`, function () {
         if (!spy.prioritiesTasks[priority]) {
           this.skip();
