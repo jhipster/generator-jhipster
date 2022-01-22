@@ -30,6 +30,7 @@ import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 @AnalyzeClasses(packagesOf = <%= mainClass %>.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {
 
+    // prettier-ignore
     @ArchTest
     static final ArchRule respectsTechnicalArchitectureLayers = layeredArchitecture()
         .layer("Config").definedBy("..config..")
@@ -37,10 +38,14 @@ class TechnicalStructureTest {
         .layer("Client").definedBy("..client..")
 <%_ } _%>
         .layer("Web").definedBy("..web..")
+<%_ if (!databaseTypeNo || authenticationTypeOauth2) { _%>
         .layer("Service").definedBy("..service..")
+<%_ } _%>
         .layer("Security").definedBy("..security..")
+<%_ if (!databaseTypeNo) { _%>
         .layer("Persistence").definedBy("..repository..")
         .layer("Domain").definedBy("..domain..")
+<%_ } _%>
 
 <%_ if (messageBrokerKafka) { _%>
         .whereLayer("Config").mayOnlyBeAccessedByLayers("Web")
@@ -51,10 +56,14 @@ class TechnicalStructureTest {
         .whereLayer("Client").mayNotBeAccessedByAnyLayer()
 <%_ } _%>
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
+<%_ if (!databaseTypeNo || authenticationTypeOauth2) { _%>
         .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
-        .whereLayer("Security").mayOnlyBeAccessedByLayers(<% if (applicationTypeMicroservice) { %>"Client", <% } %>"Web", "Service", "Config")
+<%_ } _%>
+        .whereLayer("Security").mayOnlyBeAccessedByLayers(<% if (applicationTypeMicroservice) { %>"Client", <% } %>"Web"<% if (!databaseTypeNo || authenticationTypeOauth2) { %>, "Service"<% } %>, "Config")
+<%_ if (!databaseTypeNo) { _%>
         .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
+<%_ } _%>
 
         .ignoreDependency(belongToAnyOf(<%= mainClass %>.class), alwaysTrue());
 }
