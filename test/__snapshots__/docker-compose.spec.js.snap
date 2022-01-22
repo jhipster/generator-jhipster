@@ -1248,6 +1248,125 @@ scrape_configs:
 }
 `;
 
+exports[`JHipster Docker Compose Sub Generator gateway and one microservice, without monitoring should match files snapshot 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "contents": "{
+  \\"generator-jhipster\\": {
+    \\"appsFolders\\": [\\"01-gateway\\", \\"02-mysql\\"],
+    \\"clusteredDbApps\\": {},
+    \\"directoryPath\\": \\"./\\",
+    \\"gatewayType\\": \\"SpringCloudGateway\\",
+    \\"jwtSecretKey\\": \\"SECRET--50\\",
+    \\"monitoring\\": \\"no\\",
+    \\"serviceDiscoveryType\\": \\"eureka\\"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "README-DOCKER-COMPOSE.md": Object {
+    "contents": "# JHipster generated Docker-Compose configuration
+
+## Usage
+
+Launch all your infrastructure by running: \`docker-compose up -d\`.
+
+## Configured Docker services
+
+### Service registry and configuration server:
+
+- [JHipster Registry](http://localhost:8761)
+
+### Applications and dependencies:
+
+- jhgate (gateway application)
+- jhgate's mysql database
+- jhgate's no search engine
+- msmysql (microservice application)
+- msmysql's mysql database
+- msmysql's no search engine
+
+### Additional Services:
+",
+    "stateCleared": "modified",
+  },
+  "central-server-config/application.yml": Object {
+    "contents": "#common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: SECRET--50
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:\${jhipster.registry.password}@jhipster-registry:8761/eureka/
+",
+    "stateCleared": "modified",
+  },
+  "docker-compose.yml": Object {
+    "contents": "services:
+  jhgate:
+    image: jhgate
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+    ports:
+      - \\"8080:8080\\"
+  jhgate-mysql:
+    image: mysql:8.0.27
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=jhgate
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  msmysql:
+    image: msmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+  msmysql-mysql:
+    image: mysql:8.0.27
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=msmysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  jhipster-registry:
+    image: jhipster/jhipster-registry:v7.1.0
+    volumes:
+      - ./central-server-config:/central-config
+    # By default the JHipster Registry runs with the \\"dev\\" and \\"native\\"
+    # Spring profiles.
+    # \\"native\\" profile means the filesystem is used to store data, see
+    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_SECURITY_USER_PASSWORD=admin
+      - JHIPSTER_REGISTRY_PASSWORD=admin
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+      - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
+      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
+    ports:
+      - 8761:8761
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`JHipster Docker Compose Sub Generator monolith should match files snapshot 1`] = `
 Object {
   ".yo-rc.json": Object {
