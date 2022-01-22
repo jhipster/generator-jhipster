@@ -40,6 +40,7 @@ module.exports = {
   copyWebResource,
   renderContent,
   deepFind,
+  escapeRegExp,
   getJavadoc,
   buildEnumInfo,
   getEnumInfo,
