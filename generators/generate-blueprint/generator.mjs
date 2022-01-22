@@ -257,7 +257,10 @@ export default class extends BaseBlueprintGenerator {
             'yeoman-test': `${packagejs.devDependencies['yeoman-test']}`,
           },
           engines: {
-            node: '^14.17.1 || >=16.0.0',
+            node: '>=16.13.0',
+          },
+          imports: {
+            '#test-utils': './test/utils.mjs',
           },
         });
       },

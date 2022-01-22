@@ -20,7 +20,14 @@
 export const files = {
   baseFiles: [
     {
-      templates: ['.github/workflows/generator.yml', '.eslintrc.json', '.mocharc.cjs', 'README.md', '.prettierignore.jhi.blueprint'],
+      templates: [
+        '.github/workflows/generator.yml',
+        '.eslintrc.json',
+        '.mocharc.cjs',
+        'README.md',
+        'test/utils.mjs',
+        '.prettierignore.jhi.blueprint',
+      ],
     },
     {
       condition: ctx => ctx.cli,
