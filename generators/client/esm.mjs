@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import generator from './index.js';
-
-export default generator;
+export { default } from './index.js';
+export { files as angularFiles } from './files-angular.js';
+export { files as commonFiles } from './files-common.js';
+export { files as reactFiles } from './files-react.js';
+export { files as vueFiles } from './files-vue.js';

@@ -139,7 +139,7 @@ module.exports = class extends BaseBlueprintGenerator {
             const selectedEntity = this.options.entities.includes(entityName);
             const { regenerate = !selectedEntity } = this.options;
             await this.composeWithJHipster(GENERATOR_ENTITY, [entityName], {
-              skipWriting: !this.options.writeEveryEntity && !selectedEntity,
+              skipWriting: this.options.skipWriting || (!this.options.writeEveryEntity && !selectedEntity),
               regenerate,
               skipDbChangelog: this.jhipsterConfig.databaseType === SQL || this.options.skipDbChangelog,
               skipInstall: true,
@@ -175,7 +175,7 @@ module.exports = class extends BaseBlueprintGenerator {
   _default() {
     return {
       async composeEntitiesClient() {
-        if (this.options.entities.length !== this.jhipsterConfig.entities.length) return;
+        if (this.options.skipWriting || this.options.entities.length !== this.jhipsterConfig.entities.length) return;
         const clientEntities = this.getExistingEntityNames()
           .map(entityName => {
             const entity = this.configOptions.sharedEntities[entityName];

@@ -16,21 +16,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const expect = require('expect');
-const path = require('path');
+import expect from 'expect';
+import lodash from 'lodash';
+import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-const { skipPrettierHelpers: helpers } = require('../../test/utils/utils');
+import testSupport from '../../test/support/index.cjs';
+import testUtils from '../../test/utils/utils.js';
+import Generator from './index.cjs';
+import generatorConfig from './config.cjs';
 
-const { basicTests, testBlueprintSupport } = require('../../test/support/index.cjs');
-const { defaultConfig, requiredConfig } = require('./config.cjs');
-const { GENERATOR_JAVA } = require('../generator-list');
+const { skipPrettierHelpers: helpers } = testUtils;
 
-const generatorPath = path.join(__dirname, 'index.cjs');
-const generator = path.basename(__dirname);
+const { defaultConfig, requiredConfig } = generatorConfig;
+
+const { snakeCase } = lodash;
+const { basicTests, testBlueprintSupport } = testSupport;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const generator = basename(__dirname);
+const generatorPath = join(__dirname, 'index.cjs');
 
 describe(`JHipster ${generator} generator`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_JAVA).toBe(generator);
+  it('generator-list constant matches folder name', async () => {
+    await expect((await import('../generator-list.js')).default[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+  });
+  it('should be exported at package.json', async () => {
+    await expect((await import(`generator-jhipster/esm/generators/${generator}`)).default).toBe(Generator);
+  });
+  it('should support features parameter', () => {
+    const instance = new Generator([], { help: true }, { bar: true });
+    expect(instance.features.bar).toBe(true);
   });
   basicTests({
     requiredConfig,
@@ -42,7 +60,7 @@ describe(`JHipster ${generator} generator`, () => {
     },
     generatorPath,
   });
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(generator, { entity: true }));
   describe('with', () => {
     describe('default config', () => {
       let runResult;

@@ -22,6 +22,7 @@ const { INITIALIZING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRI
   require('../../lib/constants/priorities.cjs').compat;
 
 const constants = require('../generator-constants');
+const { entityDefaultConfig } = require('../generator-defaults');
 const { writeFiles, customizeFiles } = require('./files');
 const utils = require('../utils');
 const { GENERATOR_ENTITY_SERVER } = require('../generator-list');
@@ -35,7 +36,7 @@ module.exports = class extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, features);
 
-    this.entity = this.options.context;
+    this.entity = this.options.context || { ...entityDefaultConfig };
 
     this.jhipsterContext = this.options.jhipsterContext || this.options.context;
   }

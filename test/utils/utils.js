@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const fs = require('fs');
 const { createHelpers } = require('yeoman-test');
 
-const SharedData = require('../../lib/support/shared-data.cjs');
+const EnvironmentBuilder = require('../../cli/environment-builder');
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
 
@@ -42,14 +42,13 @@ function createTestHelpers(options = {}) {
   const { environmentOptions = {} } = options;
   const sharedOptions = {
     ...DEFAULT_TEST_OPTIONS,
-    configOptions: {},
-    jhipsterSharedData: new SharedData(),
     ...environmentOptions.sharedOptions,
   };
   const newOptions = {
     settings: { ...DEFAULT_TEST_SETTINGS, ...options.settings },
     environmentOptions: { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions },
     generatorOptions: { ...DEFAULT_TEST_OPTIONS, ...options.generatorOptions },
+    createEnv: (...args) => EnvironmentBuilder.createEnv(...args),
   };
   return createHelpers(newOptions);
 }

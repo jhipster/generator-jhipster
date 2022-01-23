@@ -1,0 +1,163 @@
+#
+# Copyright 2013-2021 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Blueprint Generator
+concurrency:
+  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+      - 'skip_ci*'
+    paths:
+      - 'package*.json'
+      - 'generators/*'
+      - 'cli/**'
+      - 'lib/**'
+      - 'utils/**'
+      - 'generators/generate-blueprint/**'
+      - 'generators/*/*.m?c?js'
+  pull_request:
+    types: [closed, opened, synchronize, reopened]
+    branches:
+      - '*'
+    paths:
+      - 'package*.json'
+      - 'cli/**'
+      - 'lib/**'
+      - 'utils/**'
+      - 'generators/*'
+      - 'generators/generate-blueprint/**'
+      - 'generators/*/*.m?c?js'
+jobs:
+  applications:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    if: >-
+      !contains(github.event.head_commit.message, '[ci skip]') &&
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[skip ci]') &&
+      !contains(github.event.pull_request.title, '[ci skip]') &&
+      github.event.action != 'closed' &&
+      !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')
+    timeout-minutes: 40
+    steps:
+      #----------------------------------------------------------------------
+      # Install all tools and check configuration
+      #----------------------------------------------------------------------
+      - name: 'SETUP: Checkout generator-jhipster'
+        uses: actions/checkout@v2.4.0
+        with:
+          path: generator-jhipster
+          fetch-depth: 2
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./generator-jhipster/.github/actions/setup
+        with:
+          application-sample: ngx-default
+          executable: jhipster-foo
+      - uses: actions/setup-node@v2.5.1
+        with:
+          node-version: ${{ steps.setup.outputs.node-version }}
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: ${{ steps.setup.outputs.java-version }}
+      - name: 'SETUP: load npm cache'
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/Cypress/
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-generate-blueprint
+          restore-keys: |
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-generate-blueprint
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
+      - name: 'SETUP: load maven cache'
+        uses: actions/cache@v2.1.7
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
+            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
+      - name: 'TOOLS: configure tools installed by the system'
+        run: $JHI_SCRIPTS/03-system.sh
+      - name: 'TOOLS: configure git'
+        run: $JHI_SCRIPTS/04-git-config.sh
+      #----------------------------------------------------------------------
+      # Install JHipster and generate project+entities
+      #----------------------------------------------------------------------
+      - name: 'GENERATION: install JHipster'
+        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - name: 'GENERATION: generate blueprint'
+        run: |
+          cd ..
+          mkdir generator-jhipster-foo
+          cd generator-jhipster-foo
+          cp $JHI_INTEG/generate-blueprint-samples/default/.yo-rc.json .
+          jhipster generate-blueprint --force --skip-jhipster-dependencies
+          npm link generator-jhipster
+          npm link
+      - name: 'GENERATION: config'
+        run: $JHI_SCRIPTS/11-generate-config.sh
+      - name: 'GENERATION: project'
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }} --blueprints foo
+      - name: 'GENERATION: jhipster info'
+        run: $JHI_SCRIPTS/14-jhipster-info.sh
+      #----------------------------------------------------------------------
+      # Launch tests
+      #----------------------------------------------------------------------
+      - name: 'TESTS: blueprint files should be written'
+        run: |
+          ls template-file-app
+          ls template-file-client
+          ls template-file-common
+          ls template-file-cypress
+          ls template-file-server
+      - name: 'TESTS: backend'
+        id: backend
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1
+        run: npm run ci:backend:test
+      - name: 'E2E: Teardown'
+        if: always() && matrix.e2e == 1 && steps.compare.outputs.equals != 'true'
+        run: npm run ci:e2e:teardown
+      - name: 'BACKEND: Store failure logs'
+        uses: actions/upload-artifact@v2
+        if: always() && steps.backend.outcome == 'failure'
+        with:
+          name: log-${{ matrix.app-sample }}
+          path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
+      - name: 'E2E: Store failure screenshots'
+        uses: actions/upload-artifact@v2
+        if: always() && steps.e2e.outcome == 'failure'
+        with:
+          name: screenshots-${{ matrix.app-sample }}
+          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
+      - name: 'ANALYSIS: Sonar analysis'
+        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 'false'
+        run: $JHI_SCRIPTS/25-sonar-analyze.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

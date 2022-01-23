@@ -98,7 +98,7 @@ module.exports = class extends BaseBlueprintGenerator {
   /* ======================================================================== */
 
   _composeWithIncrementalChangelogProvider(databaseChangelog) {
-    const skipWriting = !this.options.entities.includes(databaseChangelog.entityName);
+    const skipWriting = this.options.skipWriting || !this.options.entities.includes(databaseChangelog.entityName);
     return this.composeWithJHipster(GENERATOR_DATABASE_CHANGELOG_LIQUIBASE, {
       databaseChangelog,
       skipWriting,

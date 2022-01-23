@@ -59,6 +59,9 @@ const defaultCommands = {
   gae: {
     desc: 'Deploy the current application to Google App Engine',
   },
+  'generate-blueprint': {
+    desc: 'Generate a blueprint',
+  },
   gradle: {
     desc: 'Create Gradle project (alpha)',
   },

@@ -111,6 +111,7 @@ runs:
         JHI_CLI_PACKAGE="${{inputs.package-with-executable}}"
         source "$JHI_HOME/test-integration/scripts/00-init-env.sh"
 
+        echo "JHI_INTEG=$JHI_INTEG" >> $GITHUB_ENV
         echo "JHI_HOME=$JHI_HOME" >> $GITHUB_ENV
         echo "JHI_SCRIPTS=$JHI_SCRIPTS" >> $GITHUB_ENV
         echo "JHI_CLI_PACKAGE_PATH=$JHI_CLI_PACKAGE_PATH" >> $GITHUB_ENV
