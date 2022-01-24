@@ -77,15 +77,15 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, 
 <%_ /***** Id mapping *****/
 const otherIdReferences = otherDtoReferences.filter(r => !r.relatedReference || r.relatedReference.id);
 if (!embedded && otherIdReferences.length > 0) {
-    if (otherIdReferences.some(r => !r.collection)) { _%>
+  if (otherIdReferences.some(r => !r.collection)) { _%>
 
     @Named("<%= primaryKey.name %>")
     @BeanMapping(ignoreByDefault = true)
-      <%_ let renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
-       for (reference of dtoReferences.filter(reference => reference.id)) {
-          renMapAnotEnt = true; _%>
+    <%_ let renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
+    for (reference of dtoReferences.filter(reference => reference.id)) {
+      renMapAnotEnt = true; _%>
     @Mapping(target = "<%= reference.name %>", source = "<%= reference.name %>")
-      <%_ } _%>
+    <%_ } _%>
     <%_ if (renMapAnotEnt) { _%>
     <%= dtoClass %> toDtoId(<%= persistClass %> <%= persistInstance %>);
     <%_ } _%>
@@ -140,7 +140,7 @@ if (!embedded && otherIdReferences.length > 0) {
 
     @Named("<%= mapperName %>")
     @BeanMapping(ignoreByDefault = true)
-    <%_ dtoReferences.filter(r => r.id && r != reference).forEach(r => { _%>
+    <%_ dtoReferences.filter(r => r.id && r !== reference).forEach(r => { _%>
     @Mapping(target = "<%= r.name %>", source = "<%= r.name %>")
     <%_ }); _%>
     <%_ if (otherReference.relationship.relatedField && !otherReference.relationship.relatedField.id) { _%>

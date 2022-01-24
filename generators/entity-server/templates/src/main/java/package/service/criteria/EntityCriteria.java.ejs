@@ -13,22 +13,22 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
-<%_ if (fieldsContainBigDecimal === true) { _%>
+<%_ if (fieldsContainBigDecimal) { _%>
 import tech.jhipster.service.filter.BigDecimalFilter;
 <%_ } _%>
-<%_ if (fieldsContainDuration === true) { _%>
+<%_ if (fieldsContainDuration) { _%>
 import tech.jhipster.service.filter.DurationFilter;
 <%_ } _%>
-<%_ if (fieldsContainInstant === true) { _%>
+<%_ if (fieldsContainInstant) { _%>
 import tech.jhipster.service.filter.InstantFilter;
 <%_ } _%>
-<%_ if (fieldsContainLocalDate === true) { _%>
+<%_ if (fieldsContainLocalDate) { _%>
 import tech.jhipster.service.filter.LocalDateFilter;
 <%_ } _%>
-<%_ if (fieldsContainUUID === true || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
+<%_ if (fieldsContainUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import tech.jhipster.service.filter.UUIDFilter;
 <%_ } _%>
-<%_ if (fieldsContainZonedDateTime === true) { _%>
+<%_ if (fieldsContainZonedDateTime) { _%>
 import tech.jhipster.service.filter.ZonedDateTimeFilter;
 <%_ } _%>
 

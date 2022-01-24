@@ -24,7 +24,7 @@ const mapOrFlatMap = reactive ? 'flatMap' : 'map'
 const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + '> result =';
 const mapper = entityInstance  + 'Mapper';
 _%>
-<%_ if(viaService) { _%>
+<%_ if (viaService) { _%>
   <%_ if(reactive) { _%>
     Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
   <%_ } else { _%>
@@ -32,8 +32,8 @@ _%>
   <%_ } _%>
 <%_ } else { %>
 <%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
-   .map(existing<%= entityClass %> -> {
-  <%_ if(dtoMapstruct) { _%>
+    .map(existing<%= entityClass %> -> {
+  <%_ if (dtoMapstruct) { _%>
        <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
   <%_ } else { _%>
     <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
