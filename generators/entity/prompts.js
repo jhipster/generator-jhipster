@@ -156,7 +156,7 @@ function askForUpdate() {
 function askForFields() {
   const context = this.context;
   // don't prompt if data is imported from a file
-  if (context.useConfigurationFile && context.updateEntity !== 'add') {
+  if (this.options.defaults || (context.useConfigurationFile && context.updateEntity !== 'add')) {
     return undefined;
   }
 
@@ -209,6 +209,9 @@ function askForFieldsToRemove() {
 
 function askForRelationships() {
   const context = this.context;
+  if (this.options.defaults) {
+    return undefined;
+  }
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
     return undefined;

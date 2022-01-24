@@ -1,12 +1,12 @@
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
 const { requiredDefaultConfig, defaultConfig } = require('../generators/generator-defaults');
-const EnvironmentBuilder = require('../cli/environment-builder');
+
+const { skipPrettierHelpers } = require('./utils/utils');
 
 describe('JHipster generator with required configuration', () => {
   before(() => {
-    return helpers
-      .create('jhipster:app', {}, { createEnv: EnvironmentBuilder.createEnv })
+    return skipPrettierHelpers
+      .create('jhipster:app')
       .withOptions({
         defaultLocalConfig: requiredDefaultConfig,
         baseName: 'jhipster',

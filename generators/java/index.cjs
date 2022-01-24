@@ -19,6 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
+const GeneratorBaseEntity = require('../generator-base-entity.cjs');
 const {
   INITIALIZING_PRIORITY,
   PROMPTING_PRIORITY,
@@ -26,10 +27,15 @@ const {
   COMPOSING_PRIORITY,
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
+  CONFIGURING_EACH_ENTITY_PRIORITY,
+  PREPARING_EACH_ENTITY_PRIORITY,
+  PREPARING_EACH_ENTITY_FIELD_PRIORITY,
+  PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY,
   WRITING_PRIORITY,
+  WRITING_ENTITIES_PRIORITY,
 } = require('../../lib/constants/priorities.cjs');
 
-const { GENERATOR_JAVA } = require('../generator-list');
+const { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } = require('../generator-list');
 const {
   PACKAGE_NAME,
   PACKAGE_NAME_DEFAULT_VALUE,
@@ -42,7 +48,7 @@ const {
 const { files } = require('./files.cjs');
 const { dependencyChain } = require('./mixin.cjs');
 
-const MixedChain = generateMixedChain(GENERATOR_JAVA);
+const MixedChain = generateMixedChain(GeneratorBaseEntity, GENERATOR_JAVA);
 
 module.exports = class extends MixedChain {
   constructor(args, options, features) {
@@ -62,6 +68,11 @@ module.exports = class extends MixedChain {
     if (this.options.defaults) {
       this.configureChain();
     }
+  }
+
+  async _postConstruct() {
+    this.loadStoredAppOptions();
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
   }
 
   async _beforeQueue() {
@@ -194,6 +205,42 @@ module.exports = class extends MixedChain {
     return this.preparing;
   }
 
+  get configuringEachEntity() {
+    return {};
+  }
+
+  get [CONFIGURING_EACH_ENTITY_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this.configuringEachEntity;
+  }
+
+  get preparingEachEntity() {
+    return {};
+  }
+
+  get [PREPARING_EACH_ENTITY_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this.preparingEachEntity;
+  }
+
+  get preparingEachEntityField() {
+    return {};
+  }
+
+  get [PREPARING_EACH_ENTITY_FIELD_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this.preparingEachEntityField;
+  }
+
+  get preparingEachEntityRelationship() {
+    return {};
+  }
+
+  get [PREPARING_EACH_ENTITY_RELATIONSHIP_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this.preparingEachEntityRelationship;
+  }
+
   get writing() {
     return {
       async writeFiles() {
@@ -206,6 +253,15 @@ module.exports = class extends MixedChain {
   get [WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return;
     return this.writing;
+  }
+
+  get writingEntities() {
+    return {};
+  }
+
+  get [WRITING_ENTITIES_PRIORITY]() {
+    if (this.delegateToBlueprint) return {};
+    return this.writingEntities;
   }
 
   /*

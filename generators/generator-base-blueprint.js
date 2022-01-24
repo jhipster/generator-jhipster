@@ -131,6 +131,35 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   }
 
   /**
+   * Configuring entities task argument
+   *
+   * @typedef {object} ConfiguringEntityArgument
+   * @property {string} entityName - Entity name.
+   * @property {import('yeoman-generator/lib/util/storage')} entityStorage - Storage for entity.
+   * @property {object} entityConfig - Proxy object for entityStorage.
+   */
+
+  /**
+   * Configuring entities task definition
+   *
+   * @async
+   * @function ConfiguringEntityTask
+   * @param {ConfiguringEntityArgument} taskData
+   * @return {Promise<any>}.
+   */
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Configuring each entity priority is used to customize and validate the entity configuration.
+   *
+   * @returns {Object.<string, ConfiguringEntityTask>} taskGroup
+   */
+  get configuringEachEntity() {
+    return {};
+  }
+
+  /**
    * Priority API stub for blueprints.
    *
    * Composing should be used to compose with others generators.

@@ -21,8 +21,15 @@ const shelljs = require('shelljs');
 const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } =
-  require('../../lib/constants/priorities.cjs').compat;
+const {
+  INITIALIZING_PRIORITY,
+  PROMPTING_PRIORITY,
+  CONFIGURING_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+  INSTALL_PRIORITY,
+  END_PRIORITY,
+} = require('../../lib/constants/priorities.cjs').compat;
 
 const { GENERATOR_OPENAPI_CLIENT } = require('../generator-list');
 const { OpenAPIOptionsNames, OpenAPIDefaultValues } = require('../../jdl/jhipster/openapi-options');
@@ -152,7 +159,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  install() {
+  get [INSTALL_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._install();
   }
@@ -165,7 +172,7 @@ module.exports = class extends BaseBlueprintGenerator {
     };
   }
 
-  end() {
+  get [END_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._end();
   }

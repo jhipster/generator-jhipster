@@ -19,10 +19,10 @@
 package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-<%_ if (!reactive) { _%>
-import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 import tech.jhipster.config.liquibase.AsyncSpringLiquibase;
+<%_ } else { _%>
+import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
 <%_ } _%>
 import liquibase.integration.spring.SpringLiquibase;
 import org.slf4j.Logger;
@@ -63,14 +63,14 @@ public class LiquibaseConfiguration {
     @Bean
     public SpringLiquibase liquibase(@Qualifier("taskExecutor") Executor executor,<% if (!reactive) { %>
             @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,<% } %> LiquibaseProperties liquibaseProperties,
-            <% if (!reactive) { %>ObjectProvider<DataSource> dataSource, DataSource<% } else { %>R2dbc<% } %>Properties dataSourceProperties) {
+            <% if (reactive) { %>R2dbc<% } else { %>ObjectProvider<DataSource> dataSource, DataSource<% } %>Properties dataSourceProperties) {
 
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+        SpringLiquibase liquibase = createAsyncSpringLiquibase(this.env, executor, liquibaseProperties, dataSourceProperties);
+<%_ } else { _%>
         // If you don't want Liquibase to start asynchronously, substitute by this:
         // SpringLiquibase liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(this.env, executor, liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
-<%_ } else { _%>
-        SpringLiquibase liquibase = createAsyncSpringLiquibase(this.env, executor, liquibaseProperties, dataSourceProperties);
 <%_ } _%>
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());

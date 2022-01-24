@@ -6,15 +6,17 @@ const { exec, fork } = require('child_process');
 const path = require('path');
 const sinon = require('sinon');
 const Environment = require('yeoman-environment');
+const helpers = require('yeoman-test');
 
 const { createProgram, buildJHipster } = require('../../cli/program');
 const { getJHipsterCli, prepareTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 const { logger } = require('../../cli/utils');
+const BaseGenerator = require('../../generators/generator-base');
 
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
 
 const mockCli = (opts = {}) => {
-  opts = { ...opts, program: createProgram() };
+  opts = { printLogo: () => {}, ...opts, program: createProgram() };
   opts.loadCommand = key => opts[`./${key}`];
   const program = buildJHipster(opts);
   const { argv } = opts;
@@ -91,7 +93,7 @@ describe('jhipster cli', () => {
 
   describe('with mocked generator command', () => {
     const commands = { mocked: {} };
-    const generator = { mocked: {} };
+    let generator;
     let oldArgv;
     let runArgs;
     before(() => {
@@ -101,23 +103,21 @@ describe('jhipster cli', () => {
       process.argv = oldArgv;
     });
     beforeEach(() => {
-      generator.mocked = {
-        _options: {
-          foo: {
-            description: 'Foo',
-          },
-          'foo-bar': {
-            description: 'Foo bar',
-          },
+      generator = new (helpers.createDummyGenerator(BaseGenerator))({ env: Environment.createEnv() });
+      generator._options = {
+        foo: {
+          description: 'Foo',
         },
-        sourceRoot: () => '',
+        'foo-bar': {
+          description: 'Foo bar',
+        },
       };
       sandbox.stub(Environment.prototype, 'run').callsFake((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
       sandbox.stub(Environment.prototype, 'composeWith');
-      sandbox.stub(Environment.prototype, 'create').returns(generator.mocked);
+      sandbox.stub(Environment.prototype, 'create').returns(generator);
     });
 
     const commonTests = () => {
@@ -146,7 +146,7 @@ describe('jhipster cli', () => {
 
     describe('with argument', () => {
       beforeEach(() => {
-        generator.mocked._arguments = [{ name: 'name' }];
+        generator._arguments = [{ name: 'name' }];
         process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
       });
 
@@ -163,7 +163,7 @@ describe('jhipster cli', () => {
 
     describe('with variable arguments', () => {
       beforeEach(() => {
-        generator.mocked._arguments = [{ name: 'name', type: Array }];
+        generator._arguments = [{ name: 'name', type: Array }];
         process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
       });
 
@@ -477,7 +477,7 @@ describe('jhipster cli', () => {
         });
 
         it('should print usage', () => {
-          expect(stdout.includes('Usage: cli run jhipster:app [options]')).to.be.true;
+          expect(stdout.includes('Usage: jhipster run jhipster:app [options]')).to.be.true;
         });
         it('should print options', () => {
           expect(stdout.includes('--application-type <value>')).to.be.true;
@@ -504,7 +504,7 @@ describe('jhipster cli', () => {
         });
 
         it('should print usage', () => {
-          expect(stdout.includes('Usage: cli run cli:foo [options]')).to.be.true;
+          expect(stdout.includes('Usage: jhipster run cli:foo [options]')).to.be.true;
         });
         it('should print options', () => {
           expect(stdout.includes('--foo-bar')).to.be.true;

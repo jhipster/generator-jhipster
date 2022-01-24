@@ -32,15 +32,15 @@ const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
-const JIB_VERSION = '3.1.4';
+const JIB_VERSION = '3.2.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.5.2-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.6.0';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.6.2';
+const SPRING_BOOT_VERSION = '2.6.3';
 const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
-const HIBERNATE_VERSION = '5.6.3.Final';
+const HIBERNATE_VERSION = '5.6.4.Final';
 
 const JACOCO_VERSION = '0.8.7';
 const KAFKA_VERSION = '5.5.7';
@@ -49,7 +49,7 @@ const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 // const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v7.1.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v7.2.0';
 const DOCKER_JHIPSTER_CONTROL_CENTER = 'jhipster/jhipster-control-center:v0.5.0';
 const DOCKER_JAVA_JRE = 'eclipse-temurin:11-jre-focal';
 const DOCKER_MYSQL = 'mysql:8.0.27';

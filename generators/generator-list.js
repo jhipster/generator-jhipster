@@ -25,6 +25,7 @@ const Generators = {
   GENERATOR_AZURE_SPRING_CLOUD: 'azure-spring-cloud',
   GENERATOR_BASE: 'base',
   GENERATOR_BOOTSTRAP: 'bootstrap',
+  GENERATOR_BOOTSTRAP_APPLICATION: 'bootstrap-application',
   GENERATOR_CI_CD: 'ci-cd',
   /* @deprecated */
   GENERATOR_CICD: 'ci-cd',
@@ -45,6 +46,7 @@ const Generators = {
   GENERATOR_ENTITY_SERVER: 'entity-server',
   GENERATOR_EXPORT_JDL: 'export-jdl',
   GENERATOR_GAE: 'gae',
+  GENERATOR_GENERATE_BLUEPRINT: 'generate-blueprint',
   GENERATOR_GRADLE: 'gradle',
   GENERATOR_HEROKU: 'heroku',
   GENERATOR_INFO: 'info',

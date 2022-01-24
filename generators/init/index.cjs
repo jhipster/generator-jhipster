@@ -165,6 +165,11 @@ module.exports = class extends MixedChain {
 
   get writing() {
     return {
+      cleanup() {
+        if (this.isJhipsterVersionLessThan('7.5.1')) {
+          this.removeFile('.lintstagedrc.js');
+        }
+      },
       async writeFiles() {
         if (this.shouldSkipFiles()) return;
         await this.writeFiles({ sections: files, context: this.application });

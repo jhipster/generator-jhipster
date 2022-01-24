@@ -16,6 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import generator from './index.js';
-
-export default generator;
+export { default } from './index.js';

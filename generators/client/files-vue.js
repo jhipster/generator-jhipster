@@ -24,12 +24,6 @@ const { GATEWAY } = require('../../jdl/jhipster/application-types');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, VUE_DIR } = constants;
 
-module.exports = {
-  cleanup,
-  writeFiles,
-  customizeFiles,
-};
-
 const vueFiles = {
   common: [
     {
@@ -428,3 +422,10 @@ function customizeFiles() {
     }
   }
 }
+
+module.exports = {
+  files: vueFiles,
+  cleanup,
+  writeFiles,
+  customizeFiles,
+};

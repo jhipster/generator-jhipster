@@ -1,0 +1,635 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JHipster generate-blueprint generator with all option should write java files with gradle build tool and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".github/workflows/generator.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.cjs": Object {
+    "stateCleared": "modified",
+  },
+  ".mocharc.cjs": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "cli/cli.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/add/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/add/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/add/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/add/templates/template-file-add.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/app/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/app/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/app/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/app/templates/template-file-app.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/aws/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/aws/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/aws/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/aws/templates/template-file-aws.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-app-service/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-app-service/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-app-service/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-app-service/templates/template-file-azure-app-service.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-spring-cloud/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-spring-cloud/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-spring-cloud/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/azure-spring-cloud/templates/template-file-azure-spring-cloud.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/base/templates/template-file-base.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap-application/templates/template-file-bootstrap-application.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/bootstrap/templates/template-file-bootstrap.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/templates/template-file-ci-cd.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/client/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/client/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/client/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/client/templates/template-file-client.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cloudfoundry/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cloudfoundry/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cloudfoundry/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cloudfoundry/templates/template-file-cloudfoundry.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/common/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/common/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/common/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/common/templates/template-file-common.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cypress/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cypress/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cypress/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/cypress/templates/template-file-cypress.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog-liquibase/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog-liquibase/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog-liquibase/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog-liquibase/templates/template-file-database-changelog-liquibase.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/database-changelog/templates/template-file-database-changelog.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker-compose/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker-compose/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker-compose/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/docker-compose/templates/template-file-docker-compose.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities-client/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities-client/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities-client/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities-client/templates/template-file-entities-client.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entities/templates/template-file-entities.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-client/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-client/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-client/templates/template-file-entity-client.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-i18n/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-i18n/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-i18n/templates/template-file-entity-i18n.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-server/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-server/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity-server/templates/template-file-entity-server.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/entity/templates/template-file-entity.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/export-jdl/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/export-jdl/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/export-jdl/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/export-jdl/templates/template-file-export-jdl.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gae/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gae/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gae/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gae/templates/template-file-gae.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/templates/template-file-generate-blueprint.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/gradle/templates/template-file-gradle.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/heroku/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/heroku/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/heroku/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/heroku/templates/template-file-heroku.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/info/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/info/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/info/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/info/templates/template-file-info.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/init/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/init/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/init/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/init/templates/template-file-init.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/java/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/java/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/java/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/java/templates/template-file-java.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-helm/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-helm/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-helm/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-helm/templates/template-file-kubernetes-helm.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-knative/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-knative/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-knative/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes-knative/templates/template-file-kubernetes-knative.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/templates/template-file-kubernetes.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/languages/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/languages/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/languages/templates/template-file-languages.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/maven/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/maven/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/maven/templates/template-file-maven.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openapi-client/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openapi-client/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openapi-client/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openapi-client/templates/template-file-openapi-client.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openshift/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openshift/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openshift/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/openshift/templates/template-file-openshift.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/page/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/page/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/page/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/page/templates/template-file-page.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/project-name/templates/template-file-project-name.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/server/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/server/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/server/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/server/templates/template-file-server.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/templates/template-file-spring-boot.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-controller/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-controller/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-controller/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-controller/templates/template-file-spring-controller.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-service/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-service/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-service/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/spring-service/templates/template-file-spring-service.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade-config/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade-config/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade-config/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade-config/templates/template-file-upgrade-config.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/upgrade/templates/template-file-upgrade.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/workspaces/generator.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/workspaces/generator.spec.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/workspaces/index.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "generators/workspaces/templates/template-file-workspaces.ejs": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`JHipster generate-blueprint generator with default config should write files and match snapshot 1`] = `
+Object {
+  ".editorconfig": Object {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": Object {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": Object {
+    "stateCleared": "modified",
+  },
+  ".github/workflows/generator.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".gitignore": Object {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": Object {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.cjs": Object {
+    "stateCleared": "modified",
+  },
+  ".mocharc.cjs": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": Object {
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": Object {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "README.md": Object {
+    "stateCleared": "modified",
+  },
+  "cli/cli.mjs": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

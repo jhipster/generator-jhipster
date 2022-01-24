@@ -79,6 +79,7 @@ const cypressFiles = {
 };
 module.exports = {
   writeFiles,
+  files: cypressFiles,
 };
 
 function writeFiles() {

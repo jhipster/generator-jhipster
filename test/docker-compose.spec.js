@@ -113,7 +113,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
   });
 
-  describe('gateway and one microservice', () => {
+  describe('gateway and one microservice, without monitoring', () => {
     let runResult;
     before(async () => {
       runResult = await helpers
@@ -186,43 +186,6 @@ describe('JHipster Docker Compose Sub Generator', () => {
   });
 
   describe('gateway and one microservice, with curator', () => {
-    let runResult;
-    before(async () => {
-      runResult = await helpers
-        .create(require.resolve('../generators/docker-compose'))
-        .doInDir(dir => {
-          fse.copySync(path.join(__dirname, './templates/compose/01-gateway'), path.join(dir, './01-gateway'));
-          fse.copySync(path.join(__dirname, './templates/compose/02-mysql'), path.join(dir, './02-mysql'));
-        })
-        .withOptions({ skipChecks: true, reproducibleTests: true })
-        .withPrompts({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          chosenApps: ['01-gateway', '02-mysql'],
-          clusteredDbApps: [],
-        })
-        .run();
-    });
-    it('should match files snapshot', function () {
-      expect(runResult.getSnapshot()).toMatchSnapshot();
-    });
-    it('creates expected default files', () => {
-      assert.file(expectedFiles.dockercompose);
-    });
-    it('creates jhipster-registry content', () => {
-      assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
-    });
-    it('no prometheus files', () => {
-      assert.noFile(expectedFiles.prometheus);
-    });
-    it('creates compose file without container_name, external_links, links', () => {
-      assert.noFileContent('docker-compose.yml', /container_name:/);
-      assert.noFileContent('docker-compose.yml', /external_links:/);
-      assert.noFileContent('docker-compose.yml', /links:/);
-    });
-  });
-
-  describe('gateway and one microservice', () => {
     let runResult;
     before(async () => {
       runResult = await helpers

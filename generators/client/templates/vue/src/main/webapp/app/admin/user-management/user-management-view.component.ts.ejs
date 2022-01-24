@@ -5,7 +5,7 @@ import AlertService from '@/shared/alert/alert.service';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>UserManagementView extends Vue {
-  @Inject('userService') private userManagementService: () => UserManagementService;
+  @Inject('userManagementService') private userManagementService: () => UserManagementService;
   @Inject('alertService') private alertService: () => AlertService;
 
   public user: any = null;

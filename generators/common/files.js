@@ -82,4 +82,5 @@ module.exports = {
   writeFiles,
   prettierConfigFiles,
   commonFiles,
+  files: commonFiles,
 };

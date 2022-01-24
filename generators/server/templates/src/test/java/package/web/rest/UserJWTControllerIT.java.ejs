@@ -32,10 +32,10 @@ import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-<%_ if (!reactive) { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
 import org.springframework.http.MediaType;
 <%_ if (!skipUserManagement) { _%>
@@ -43,8 +43,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
   <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
@@ -69,10 +68,10 @@ import static org.hamcrest.Matchers.not;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
-<%_ if (!reactive) { _%>
-@AutoConfigureMockMvc
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
+<%_ } else { _%>
+@AutoConfigureMockMvc
 <%_ } _%>
 @IntegrationTest
 class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
@@ -120,16 +119,7 @@ class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCass
         login.setUsername("test");
 <%_ } _%>
         login.setPassword("test");
-<%_ if (!reactive) { _%>
-        mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(login)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id_token").isString())
-            .andExpect(jsonPath("$.id_token").isNotEmpty())
-            .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(is(emptyString()))));
-<%_ } else { _%>
+<%_ if (reactive) { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(login))
@@ -138,6 +128,15 @@ class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCass
             .expectHeader().valueMatches("Authorization", "Bearer .+")
             .expectBody()
             .jsonPath("$.id_token").isNotEmpty();
+<%_ } else { _%>
+        mockMvc.perform(post("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id_token").isString())
+            .andExpect(jsonPath("$.id_token").isNotEmpty())
+            .andExpect(header().string("Authorization", not(nullValue())))
+            .andExpect(header().string("Authorization", not(is(emptyString()))));
 <%_ } _%>
     }
 
@@ -170,16 +169,7 @@ class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCass
 <%_ } _%>
         login.setPassword("test");
         login.setRememberMe(true);
-<%_ if (!reactive) { _%>
-        mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(login)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id_token").isString())
-            .andExpect(jsonPath("$.id_token").isNotEmpty())
-            .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(is(emptyString()))));
-<%_ } else { _%>
+<%_ if (reactive) { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(login))
@@ -188,6 +178,15 @@ class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCass
             .expectHeader().valueMatches("Authorization", "Bearer .+")
             .expectBody()
             .jsonPath("$.id_token").isNotEmpty();
+<%_ } else { _%>
+        mockMvc.perform(post("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id_token").isString())
+            .andExpect(jsonPath("$.id_token").isNotEmpty())
+            .andExpect(header().string("Authorization", not(nullValue())))
+            .andExpect(header().string("Authorization", not(is(emptyString()))));
 <%_ } _%>
     }
 
@@ -196,14 +195,7 @@ class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCass
         LoginVM login = new LoginVM();
         login.setUsername("wrong-user");
         login.setPassword("wrong password");
-<%_ if (!reactive) { _%>
-        mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(login)))
-            .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.id_token").doesNotExist())
-            .andExpect(header().doesNotExist("Authorization"));
-<%_ } else { _%>
+<%_ if (reactive) { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(login))
@@ -212,6 +204,13 @@ class UserJWTControllerIT <% if (databaseTypeCassandra) { %>extends AbstractCass
             .expectHeader().doesNotExist("Authorization")
             .expectBody()
             .jsonPath("$.id_token").doesNotExist();
+<%_ } else { _%>
+        mockMvc.perform(post("/api/authenticate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.id_token").doesNotExist())
+            .andExpect(header().doesNotExist("Authorization"));
 <%_ } _%>
     }
 }

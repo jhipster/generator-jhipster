@@ -33,7 +33,7 @@ describe('UserManagementView Component', () => {
   let userManagementView: UserManagementViewClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userService: () => new UserManagementService(), alertService: () => new AlertService(), } });
+    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userManagementService: () => new UserManagementService(), alertService: () => new AlertService(), } });
     userManagementView = wrapper.vm;
   });
 
