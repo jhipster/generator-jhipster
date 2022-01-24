@@ -131,7 +131,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "expect": "27.4.6",
     "fs-extra": "10.0.0",
-    "jsdoc": "3.6.7",
+    "jsdoc": "3.6.9",
     "mocha": "9.1.4",
     "mocha-expect-snapshot": "2.1.0",
     "proxyquire": "2.1.3",
