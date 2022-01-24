@@ -42,11 +42,11 @@
       const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
       const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
       beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
-      }
     }
-    if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
-      beans.push({class: 'UserRepository', instance: 'userRepository'});
-    }
+  }
+  if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
+    beans.push({class: 'UserRepository', instance: 'userRepository'});
+  }
 _%>
 
     <%= beans.map(bean => `private final ${bean.class} ${bean.instance};`).join('\n\n    ') %>
