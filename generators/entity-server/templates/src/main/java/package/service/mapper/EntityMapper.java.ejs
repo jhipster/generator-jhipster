@@ -140,7 +140,7 @@ if (!embedded && otherIdReferences.length > 0) {
 
     @Named("<%= mapperName %>")
     @BeanMapping(ignoreByDefault = true)
-    <%_ dtoReferences.filter(r => r.id && r != reference).forEach(r => { _%>
+    <%_ dtoReferences.filter(r => r.id && r !== reference).forEach(r => { _%>
     @Mapping(target = "<%= r.name %>", source = "<%= r.name %>")
     <%_ }); _%>
     <%_ if (otherReference.relationship.relatedField && !otherReference.relationship.relatedField.id) { _%>
