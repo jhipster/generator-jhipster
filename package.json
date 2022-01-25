@@ -83,6 +83,7 @@
     "update-snapshots": "npm run update-snapshot -- test generators"
   },
   "dependencies": {
+    "@faker-js/faker": "5.5.3",
     "aws-sdk": "2.1062.0",
     "axios": "0.25.0",
     "chalk": "4.1.2",
@@ -92,7 +93,6 @@
     "debug": "4.3.3",
     "didyoumean": "1.2.2",
     "ejs": "3.1.6",
-    "faker": "5.5.3",
     "glob": "7.2.0",
     "insight": "0.11.1",
     "js-yaml": "4.1.0",
