@@ -22,7 +22,7 @@
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 
-const faker = require('faker');
+const faker = require('@faker-js/faker');
 
 const constants = require('../generator-constants');
 
