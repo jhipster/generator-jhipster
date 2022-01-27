@@ -66,20 +66,18 @@ describe('/account/settings', () => {
     cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(200));
   });
 
-  it("should not be able to change 'user' settings if email already exists", () => {
-    cy.login(adminUsername, adminPassword);
-    cy.visit('');
-    cy.clickOnSettingsItem();
-    cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-    cy.get(submitSettingsSelector).click();
+  describe('if there is another user with an email', () => {
+    before(() => {
+      cy.login(adminUsername, adminPassword);
+      cy.visit('/account/settings');
+      cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
+      cy.get(submitSettingsSelector).click();
+    });
 
-    cy.login(username, password);
-    cy.visit('');
-    cy.clickOnSettingsItem();
-
-    cy.intercept('POST', '/api/account').as('settingsNotSave');
-    cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
-    cy.get(submitSettingsSelector).click();
-    cy.wait('@settingsNotSave').then(({ response }) => expect(response.statusCode).to.equal(400));
+    it("should not be able to change 'user' email to same value", () => {
+      cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
+      cy.get(submitSettingsSelector).click();
+      cy.wait('@settingsSave').then(({ response }) => expect(response.statusCode).to.equal(400));
+  });
   });
 });
