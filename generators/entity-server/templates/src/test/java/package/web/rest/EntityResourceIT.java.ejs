@@ -60,9 +60,6 @@ _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%= packageName %>.web.rest.TestUtil;
 <% } %>
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_
@@ -235,7 +232,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser
-class <%= entityClass %>ResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
+class <%= entityClass %>ResourceIT {
 <%_
 for (field of fields.filter(field => !field.id && !field.transient)) {
 const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();

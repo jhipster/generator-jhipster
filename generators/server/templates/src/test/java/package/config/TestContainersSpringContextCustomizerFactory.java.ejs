@@ -1,0 +1,60 @@
+package <%= packageName %>.config;
+
+import java.util.List;
+
+<%_ if (databaseTypeMongodb) { _%>
+import <%= packageName %>.config.MongoDbTestContainerExtension;
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+    import <%= packageName %>.config.CassandraTestContainerExtension;
+    import org.cassandraunit.CQLDataLoader;
+<%_ } _%>
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfigurationAttributes;
+import org.springframework.test.context.ContextCustomizer;
+import org.springframework.test.context.ContextCustomizerFactory;
+import org.springframework.boot.test.util.TestPropertyValues;
+
+<%_ if (databaseTypeMongodb) { _%>
+import org.testcontainers.containers.MongoDBContainer;
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+import org.testcontainers.containers.CassandraContainer;
+<%_ } _%>
+
+
+public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
+
+    private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
+
+    @Override
+    public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
+        return (context, mergedConfig) -> {
+<%_ if (databaseTypeMongodb) { _%>
+            MongoDBContainer databaseContainer = (MongoDBContainer) MongoDbTestContainerExtension.getThreadContainer().get();
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+            CassandraContainer databaseContainer = (CassandraContainer) CassandraTestContainerExtension.getThreadContainer().get();
+<%_ } _%>
+            if (databaseContainer != null) {
+            TestPropertyValues
+<%_ if (databaseTypeMongodb) { _%>
+                .of("spring.data.mongodb.uri=" + databaseContainer.getReplicaSetUrl())
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+                .of("spring.data.cassandra.port=" +  databaseContainer.getMappedPort(CassandraContainer.CQL_PORT))
+                .and("spring.data.cassandra.contact-points=" +  databaseContainer.getHost())
+                .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
+                .and("spring.data.cassandra.local-datacenter=" + databaseContainer.getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
+                .and("spring.data.cassandra.cluster-name=" + databaseContainer.getCluster().getMetadata().getClusterName())
+<%_ } _%>
+                .applyTo(context);
+
+            } else {
+                log.error("test container configuration has not been set because container has not started");
+            }
+        };
+    }
+}

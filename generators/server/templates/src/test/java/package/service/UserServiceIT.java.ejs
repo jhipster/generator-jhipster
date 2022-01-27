@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.service;
 
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
@@ -135,7 +132,7 @@ import static org.mockito.Mockito.when;
 <%_ if (databaseTypeSql && !reactive) { _%>
 @Transactional
 <%_ } _%>
-class UserServiceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
+class UserServiceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 

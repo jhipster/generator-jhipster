@@ -124,10 +124,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     cassandra:
-      contact-points: localhost
       compression: NONE
-      keyspace-name: cassandra_unit_keyspace
-      local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
   couchbase:
