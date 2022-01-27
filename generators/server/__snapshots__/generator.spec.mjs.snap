@@ -1588,7 +1588,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/MongoDbTestContainerExtension.java",
+          "file": "package/config/MongoDbTestContainerExtension.java",
           "renameTo": [Function],
         },
       ],
@@ -1607,7 +1607,7 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/TestContainersSpringContextCustomizerFactory.java",
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
           "renameTo": [Function],
         },
       ],
@@ -1877,7 +1877,26 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/AbstractCassandraTest.java",
+          "file": "package/config/CassandraTestContainerExtension.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
           "renameTo": [Function],
         },
       ],

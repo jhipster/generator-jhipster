@@ -108,8 +108,8 @@ const mongoDbFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/MongoDbTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}MongoDbTestContainerExtension.java`,
+          file: 'package/config/MongoDbTestContainerExtension.java',
+          renameTo: generator => `${generator.testDir}config/MongoDbTestContainerExtension.java`,
         },
       ],
     },
@@ -125,8 +125,8 @@ const mongoDbFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}TestContainersSpringContextCustomizerFactory.java`,
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
         },
       ],
     },
@@ -222,7 +222,27 @@ const cassandraFiles = {
           file: 'package/CassandraKeyspaceIT.java',
           renameTo: generator => `${generator.testDir}CassandraKeyspaceIT.java`,
         },
-        { file: 'package/AbstractCassandraTest.java', renameTo: generator => `${generator.testDir}AbstractCassandraTest.java` },
+        {
+          file: 'package/config/CassandraTestContainerExtension.java',
+          renameTo: generator => `${generator.testDir}config/CassandraTestContainerExtension.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
       ],
     },
   ],

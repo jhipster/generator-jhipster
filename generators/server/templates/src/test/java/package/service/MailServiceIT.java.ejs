@@ -19,8 +19,6 @@
 package <%= packageName %>.service;
 
 import <%= packageName %>.config.Constants;
-<% if (databaseTypeCassandra) { %>
-import <%= packageName %>.AbstractCassandraTest;<% } %>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import tech.jhipster.config.JHipsterProperties;
@@ -59,7 +57,7 @@ import static org.mockito.Mockito.*;
  * Integration tests for {@link MailService}.
  */
 @IntegrationTest
-class MailServiceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
+class MailServiceIT {
 
     private static final String[] languages = {
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array

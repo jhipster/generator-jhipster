@@ -4408,19 +4408,19 @@ Object {
   "src/test/java/com/mycompany/myapp/IntegrationTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/MongoDbTestContainerExtension.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/TestContainersSpringContextCustomizerFactory.java": Object {
+  "src/test/java/com/mycompany/myapp/config/MongoDbTestContainerExtension.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": Object {

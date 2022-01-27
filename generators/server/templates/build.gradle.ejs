@@ -386,6 +386,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
     implementation "javax.transaction:javax.transaction-api"
 <%_ if (databaseTypeCassandra) { _%>
+    testImplementation "org.testcontainers:cassandra"
     implementation "org.lz4:lz4-java"
 <%_ } _%>
 <%_ if (cacheProviderEhCache) { _%>

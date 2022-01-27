@@ -144,6 +144,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
     generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
   }
+  if (generator.isJhipsterVersionLessThan('7.6.1')) {
+    generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
+    generator.removeFile(`${testDir}TestContainersSpringContextCustomizerFactory.java`);
+    generator.removeFile(`${testDir}AbstractCassandraTest.java`);
+  }
 }
 
 module.exports = {
