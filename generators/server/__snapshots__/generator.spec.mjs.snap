@@ -1591,6 +1591,14 @@ Object {
           "file": "package/config/MongoDbTestContainerExtension.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/config/JhipsterIntegrationTestProperties.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1600,15 +1608,8 @@ Object {
         Object {
           "file": "META-INF/spring.factories",
         },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
         Object {
-          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
-          "renameTo": [Function],
+          "file": "testcontainers.properties",
         },
       ],
     },
@@ -1880,6 +1881,14 @@ Object {
           "file": "package/config/CassandraTestContainerExtension.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/config/JhipsterIntegrationTestProperties.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1889,15 +1898,8 @@ Object {
         Object {
           "file": "META-INF/spring.factories",
         },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
         Object {
-          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
-          "renameTo": [Function],
+          "file": "testcontainers.properties",
         },
       ],
     },
