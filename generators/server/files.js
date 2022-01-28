@@ -119,6 +119,9 @@ const mongoDbFiles = {
         {
           file: 'META-INF/spring.factories',
         },
+        {
+          file: 'testcontainers.properties',
+        },
       ],
     },
     {
@@ -233,6 +236,9 @@ const cassandraFiles = {
       templates: [
         {
           file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
         },
       ],
     },
