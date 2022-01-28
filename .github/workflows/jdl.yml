@@ -80,6 +80,8 @@ jobs:
           - suite: blog-store
             extra-args: --workspaces --monorepository
             skip-backend-tests: 1
+            # Scripts wait for gateway to start, delay for microservices to start.
+            e2e-delay: 120
           - suite: blog-store-microfrontend
             extra-args: --workspaces --monorepository
             skip-backend-tests: 1
@@ -195,6 +197,9 @@ jobs:
       - name: 'TESTS: Start docker-compose containers for e2e tests'
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare
+      - name: 'E2E: Delay'
+        if: matrix.e2e-delay && steps.compare.outputs.equals != 'true'
+        run: sleep ${{matrix.e2e-delay}}
       - name: 'E2E: Run'
         id: e2e
         if: steps.compare.outputs.equals != 'true'
