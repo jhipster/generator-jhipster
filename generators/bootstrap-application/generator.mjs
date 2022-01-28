@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const BaseGenerator = require('../generator-base');
-const { LOADING_PRIORITY, PREPARING_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
+import BaseGenerator from '../generator-base.js';
+import { PRIORITY_PREFIX, LOADING_PRIORITY, PREPARING_PRIORITY } from '../../lib/constants/priorities.mjs';
 
-module.exports = class extends BaseGenerator {
+export default class extends BaseGenerator {
   constructor(args, options, features) {
-    super(args, options, { unique: 'namespace', ...features });
+    super(args, options, { unique: 'namespace', taskPrefix: PRIORITY_PREFIX, ...features });
 
     if (this.options.help) return;
 
@@ -29,7 +29,7 @@ module.exports = class extends BaseGenerator {
     this.loadRuntimeOptions();
   }
 
-  _loading() {
+  get loading() {
     return {
       loadApplication({ application }) {
         this.loadAppConfig(undefined, application);
@@ -42,10 +42,10 @@ module.exports = class extends BaseGenerator {
   }
 
   get [LOADING_PRIORITY]() {
-    return this._loading();
+    return this.loading;
   }
 
-  _preparingPriority() {
+  get preparing() {
     return {
       prepareApplication({ application }) {
         this.loadDerivedAppConfig(application);
@@ -53,16 +53,10 @@ module.exports = class extends BaseGenerator {
         this.loadDerivedServerConfig(application);
         this.loadDerivedPlatformConfig(application);
       },
-      async loadEntities() {
-        await this.composeWithJHipster('entities', { skipWriting: true });
-      },
-      checkEntities() {
-        this.getExistingEntityNames().forEach(entityName => this.sharedData.getEntity(entityName));
-      },
     };
   }
 
   get [PREPARING_PRIORITY]() {
-    return this._preparingPriority();
+    return this.preparing;
   }
-};
+}
