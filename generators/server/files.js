@@ -111,6 +111,14 @@ const mongoDbFiles = {
           file: 'package/config/MongoDbTestContainerExtension.java',
           renameTo: generator => `${generator.testDir}config/MongoDbTestContainerExtension.java`,
         },
+        {
+          file: 'package/config/JhipsterIntegrationTestProperties.java',
+          renameTo: generator => `${generator.testDir}config/JhipsterIntegrationTestProperties.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
       ],
     },
     {
@@ -121,15 +129,6 @@ const mongoDbFiles = {
         },
         {
           file: 'testcontainers.properties',
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
         },
       ],
     },
@@ -229,6 +228,14 @@ const cassandraFiles = {
           file: 'package/config/CassandraTestContainerExtension.java',
           renameTo: generator => `${generator.testDir}config/CassandraTestContainerExtension.java`,
         },
+        {
+          file: 'package/config/JhipsterIntegrationTestProperties.java',
+          renameTo: generator => `${generator.testDir}config/JhipsterIntegrationTestProperties.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
       ],
     },
     {
@@ -239,15 +246,6 @@ const cassandraFiles = {
         },
         {
           file: 'testcontainers.properties',
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
         },
       ],
     },

@@ -194,7 +194,10 @@ server:
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
+<%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
+jhipster-tests:
+  keep-containers-running: true
+<%_ } _%>
 jhipster:
   clientApp:
     name: "<%= frontendAppName %>"
