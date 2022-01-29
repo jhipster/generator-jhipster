@@ -32,6 +32,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.CassandraContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+
 /**
  * Base class for starting/stopping Cassandra during tests.
  */
@@ -48,6 +50,7 @@ public class CassandraTestContainerExtension implements BeforeAllCallback, After
         if (null == THREAD_CONTAINER.get()) {
             CassandraContainer container = (CassandraContainer) new CassandraContainer("<%= DOCKER_CASSANDRA %>")
                 .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
+                .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);
 
             container.start();

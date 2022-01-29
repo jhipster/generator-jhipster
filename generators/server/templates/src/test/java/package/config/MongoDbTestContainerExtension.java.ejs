@@ -23,7 +23,10 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 public class MongoDbTestContainerExtension implements BeforeAllCallback, AfterAllCallback {
     <%_ /* TODO, the smallest configuration that lead to only one error for webflux-gw-jwt was 0.6 RAM /0.8 SWAP/0.1 nanocore */
@@ -32,12 +35,16 @@ public class MongoDbTestContainerExtension implements BeforeAllCallback, AfterAl
     private final long nanoCpu = Math.round(1_000_000_000L * 0.1); */
     _%>
     private static final ThreadLocal<MongoDBContainer> THREAD_CONTAINER = new ThreadLocal<>();
+    private static final Logger log = LoggerFactory.getLogger(MongoDbTestContainerExtension.class);
 
 
     @Override
     public void beforeAll(ExtensionContext context) {
         if (null == THREAD_CONTAINER.get()) {
-            MongoDBContainer mongoDBContainer = new MongoDBContainer("<%= DOCKER_MONGODB %>").withReuse(true);
+            MongoDBContainer mongoDBContainer = new MongoDBContainer("<%= DOCKER_MONGODB %>")
+                .withCommand("--nojournal --wiredTigerCacheSizeGB 0.25 --wiredTigerCollectionBlockCompressor none --slowOpSampleRate 0 --setParameter ttlMonitorEnabled=false --setParameter diagnosticDataCollectionEnabled=false --setParameter logicalSessionRefreshMillis=6000000 --setParameter enableFlowControl=false --setParameter oplogFetcherUsesExhaust=false --setParameter disableResumableRangeDeleter=true --setParameter enableShardedIndexConsistencyCheck=false --setParameter enableFinerGrainedCatalogCacheRefresh=false --setParameter readHedgingMode=off --setParameter loadRoutingTableOnStartup=false --setParameter rangeDeleterBatchDelayMS=2000000 --setParameter skipShardingConfigurationChecks=true --setParameter syncdelay=3600")
+                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withReuse(true);
 <%_ /* TODO tried to pimp the configuration
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
                 /* .withCommand("--nojournal --wiredTigerCacheSizeGB 0.25 --wiredTigerCollectionBlockCompressor none --slowOpSampleRate 0 --setParameter ttlMonitorEnabled=false --setParameter diagnosticDataCollectionEnabled=false --setParameter logicalSessionRefreshMillis=6000000 --setParameter enableFlowControl=false --setParameter oplogFetcherUsesExhaust=false --setParameter disableResumableRangeDeleter=true --setParameter enableShardedIndexConsistencyCheck=false --setParameter enableFinerGrainedCatalogCacheRefresh=false --setParameter readHedgingMode=off --setParameter loadRoutingTableOnStartup=false --setParameter rangeDeleterBatchDelayMS=2000000 --setParameter skipShardingConfigurationChecks=true --setParameter syncdelay=3600")
