@@ -54,7 +54,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 <%_ } _%>
             TestPropertyValues testValues = TestPropertyValues.empty();
             if (databaseContainer != null) {
-                testValues
+                testValues = testValues
 <%_ if (databaseTypeMongodb) { _%>
                     .and("spring.data.mongodb.uri=" + databaseContainer.getReplicaSetUrl());
 <%_ } _%>
@@ -65,7 +65,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                     .and("spring.data.cassandra.local-datacenter=" + databaseContainer.getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
                     .and("spring.data.cassandra.cluster-name=" + databaseContainer.getCluster().getMetadata().getClusterName());
 <%_ } _%>
-
             } else {
                 log.error("test container database configuration has not been set because container has not started");
             }
