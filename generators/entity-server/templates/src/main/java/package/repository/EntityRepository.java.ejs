@@ -41,7 +41,6 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-import org.springframework.context.annotation.Primary;
 <%_
 if (databaseTypeSql || databaseTypeMongodb) {
   let importList = fieldsContainOwnerManyToMany;
@@ -70,7 +69,6 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-@Primary
 public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
