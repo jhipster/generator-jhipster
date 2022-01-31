@@ -32,6 +32,7 @@ const BaseGenerator = require('../generator-base');
 const { LOADING_PRIORITY, PRE_CONFLICTS_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
 const { MultiStepTransform } = require('../../utils/multi-step-transform');
+const { GENERATOR_UPGRADE } = require('../generator-list');
 const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
 const { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates } = require('../../utils/entity');
@@ -45,6 +46,13 @@ const { LONG: TYPE_LONG } = CommonDBTypes;
 module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
+
+    if (this.options.help) return;
+
+    if (!this.options.upgradeCommand) {
+      const { commandName } = this.options;
+      this.options.upgradeCommand = commandName === GENERATOR_UPGRADE;
+    }
   }
 
   _postConstruct() {
@@ -151,13 +159,16 @@ module.exports = class extends BaseGenerator {
     const { withGeneratedFlag } = this.jhipsterConfig;
 
     // JDL writes directly to disk, set the file as modified so prettier will be applied
-    stream = stream.pipe(
-      patternSpy(file => {
-        if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
-          setModifiedFileState(file);
-        }
-      }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
-    );
+    const { upgradeCommand, ignoreErrors } = this.options;
+    if (!upgradeCommand) {
+      stream = stream.pipe(
+        patternSpy(file => {
+          if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
+            setModifiedFileState(file);
+          }
+        }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
+      );
+    }
 
     const conflicterStatus = {
       fileActions: [
@@ -175,8 +186,7 @@ module.exports = class extends BaseGenerator {
     const createApplyPrettierTransform = () => {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      const ignoreErrors = this.options.commandName === 'upgrade' || this.options.ignoreErrors;
-      return prettierTransform(prettierOptions, this, ignoreErrors);
+      return prettierTransform(prettierOptions, this, upgradeCommand || ignoreErrors);
     };
 
     const createForceWriteConfigFiles = () =>
