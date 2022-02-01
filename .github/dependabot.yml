@@ -5,6 +5,7 @@ updates:
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
     labels:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
@@ -19,7 +20,8 @@ updates:
     directory: '/generators/client/templates/angular/'
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: angular'
@@ -36,7 +38,8 @@ updates:
     directory: '/generators/common/templates/'
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: dependencies'
@@ -45,7 +48,8 @@ updates:
     directory: '/generators/client/templates/common/'
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: front'
@@ -55,7 +59,8 @@ updates:
     directory: '/generators/client/templates/react/'
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: react'
@@ -69,7 +74,8 @@ updates:
     directory: '/generators/client/templates/vue/'
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: vue'
