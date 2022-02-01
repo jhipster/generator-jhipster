@@ -101,7 +101,7 @@ module.exports = class EnvironmentBuilder {
    */
   getBlueprintsOption() {
     return Object.entries(this._blueprintsWithVersion)
-      .map(([packageName, packageVersion]) => (packageVersion ? `${packageName}@packageVersion` : packageName))
+      .map(([packageName, packageVersion]) => (packageVersion ? `${packageName}@${packageVersion}` : packageName))
       .join(',');
   }
 
