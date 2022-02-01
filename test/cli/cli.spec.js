@@ -16,11 +16,8 @@ const BaseGenerator = require('../../generators/generator-base');
 const jhipsterCli = require.resolve(path.join(__dirname, '..', '..', 'cli', 'cli.js'));
 
 const mockCli = (opts = {}) => {
-  opts = { printLogo: () => {}, ...opts, program: createProgram() };
-  opts.loadCommand = key => opts[`./${key}`];
-  const program = buildJHipster(opts);
-  const { argv } = opts;
-  return program.parseAsync(argv);
+  const program = buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
+  return program.parseAsync(opts.argv);
 };
 
 describe('jhipster cli', () => {
@@ -300,6 +297,25 @@ describe('jhipster cli', () => {
           expect(options.fooBar).to.be.true;
         };
         return mockCli({ commands, './mocked': cb });
+      });
+    });
+
+    describe('with useOptions', () => {
+      beforeEach(() => {
+        commands.mocked.desc = 'Mocked command';
+        commands.mocked.cliOnly = true;
+        commands.mocked.useOptions = { useFoo: true, useBar: 'foo' };
+        process.argv = ['jhipster', 'jhipster', 'mocked'];
+      });
+
+      commonTests();
+
+      it('should forward argument and options', async () => {
+        const cb = (args, options) => {
+          expect(options.useFoo).to.be.true;
+          expect(options.useBar).to.equal('foo');
+        };
+        await mockCli({ commands, './mocked': cb });
       });
     });
   });
