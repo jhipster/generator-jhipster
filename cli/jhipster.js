@@ -25,44 +25,52 @@ const { logger } = require('./utils');
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
 
+const BUNDLED_VERSION_MESSAGE = 'Using bundled JHipster';
+const LOCAL_VERSION_MESSAGE = "Switching to JHipster installed locally in current project's node repository (node_modules)";
+
 if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
   logger.fatal(
     `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`
   );
 }
 
-let preferLocal = true;
+const preferLocalArg = process.argv.includes('--prefer-local');
+const preferGlobalArg = process.argv.includes('--prefer-global') || process.argv.includes('--bundled');
+
+if (preferLocalArg && preferGlobalArg) {
+  throw new Error('--prefer-local and --prefer-bundled cannot be used together');
+}
 
 // Don't use commander for parsing command line to avoid polluting it in cli.js
 // --prefer-local: Always resolve node modules locally (useful when using linked module)
-if ((process.argv.includes('upgrade') && !process.argv.includes('--prefer-local')) || process.argv.includes('--prefer-global')) {
-  // Prefer global version for `jhipster upgrade` to get most recent code
-  preferLocal = false;
-}
+const preferLocal = preferLocalArg || (!preferGlobalArg && !process.argv.includes('upgrade'));
 
 requireCLI(preferLocal);
 
 /*
- * Require cli.js giving priority to local version over global one if it exists.
+ * Require cli.js giving priority to local version over bundled one if it exists.
  */
 function requireCLI(preferLocal) {
+  let message = BUNDLED_VERSION_MESSAGE;
   /* eslint-disable global-require */
   if (preferLocal) {
     try {
       const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.js'));
-      if (__dirname !== path.dirname(localCLI)) {
+      if (__dirname === path.dirname(localCLI)) {
+        message = LOCAL_VERSION_MESSAGE;
+      } else {
         // load local version
         /* eslint-disable import/no-dynamic-require */
-        logger.info("Using JHipster version installed locally in current project's node_modules");
+        logger.info(LOCAL_VERSION_MESSAGE);
         require(localCLI);
         return;
       }
     } catch (e) {
-      // Unable to find local version, so global one will be loaded anyway
+      // Unable to find local version, so bundled one will be loaded anyway
     }
   }
-  // load global version
-  logger.info('Using JHipster version installed globally');
+  // load current jhipster
+  logger.info(message);
   require('./cli');
   /* eslint-enable  */
 }
