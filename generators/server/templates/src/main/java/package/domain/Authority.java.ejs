@@ -26,6 +26,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.<%= databaseType %>.core.mapping.Document;
 <%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+import org.springframework.data.couchbase.repository.Collection;
+import org.springframework.data.couchbase.repository.Scope;
+import static <%= packageName %>.config.Constants.SCOPE_NAME;
+import static <%= packageName %>.domain.Authority.COLLECTION_NAME;
+<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -73,10 +79,16 @@ import java.util.Objects;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
+@Scope(SCOPE_NAME)
+@Collection(COLLECTION_NAME)
 <%_ } _%>
 public class Authority implements Serializable<% if (databaseTypeSql && reactive) { %>, Persistable<String><% } %> {
 
     private static final long serialVersionUID = 1L;
+
+<%_ if (databaseTypeCouchbase) { _%>
+    public static final String COLLECTION_NAME = "authority";
+<%_ } _%>
 
     @NotNull
     @Size(max = 50)

@@ -226,7 +226,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%_ } _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
-        return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
+        return findById(login);
     }
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
     <%_ if (cacheManagerIsAvailable) { _%>

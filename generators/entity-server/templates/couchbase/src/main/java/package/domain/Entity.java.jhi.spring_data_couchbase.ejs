@@ -23,6 +23,8 @@
 <&_ if (fragment.staticImportSection) { -&>
 <%_ if (!embedded) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
+import static <%= packageName %>.config.Constants.SCOPE_NAME;
+import static <%= packageName %>.domain.<%= entityClass %>.COLLECTION_NAME;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
 <&_ } -&>
@@ -31,9 +33,10 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
   <%_ if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
-import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
-  <%_ } _%>
 import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.repository.Collection;
+import org.springframework.data.couchbase.repository.Scope;
+  <%_ } _%>
 import org.springframework.data.couchbase.core.mapping.Field;
   <%_ if (relationships.length > 0) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,21 +45,15 @@ import java.util.stream.Collectors;
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
+    <%_ if (!embedded) { _%>
 @Document
+@Scope(SCOPE_NAME)
+@Collection(COLLECTION_NAME)
+    <%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.classStaticFieldsSection) { -&>
-<%_ if (!embedded) { _%>
-    public static final String PREFIX = "<%= entityInstance.toLowerCase() %>";
-<%_ } _%>
-<&_ } -&>
-
-<&_ if (fragment.classFieldsSection) { -&>
-<%_ if (!embedded) { _%>
-    @SuppressWarnings("unused")
-    @IdPrefix
-    private String prefix = PREFIX;
-<%_ } _%>
+    public static final String COLLECTION_NAME = "<%= entityInstance %>";
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>

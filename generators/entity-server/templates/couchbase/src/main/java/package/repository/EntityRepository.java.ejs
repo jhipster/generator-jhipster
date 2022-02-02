@@ -60,10 +60,10 @@ _%>
 @Repository
 public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
   <%_
-  if (relationships.length !== 0) { %>
-
+  var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntityIsEmbedded)
+  if (notEmbeddedRelationships.length !== 0) { %>
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
-      for (const relationship of relationships) {
+      for (const relationship of notEmbeddedRelationships) {
           if (relationship.collection) {
             %> ", (SELECT `<%= relationship.relationshipFieldName %>`.*, meta(`<%= relationship.relationshipFieldName %>`).id FROM `<%= relationship.relationshipFieldNamePlural %>` `<%= relationship.relationshipFieldName %>`) as `<%= relationship.relationshipFieldNamePlural %>`"  + <%
           } else {
@@ -73,13 +73,13 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
         " FROM #{#n1ql.bucket} b";
 
     String JOIN = <%
-        relationships.forEach(function (relationship, index) {
+        notEmbeddedRelationships.forEach(function (relationship, index) {
           if (!relationship.collection) { %>
-            " LEFT JOIN #{#n1ql.bucket} `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
+            " LEFT JOIN `<%= relationship.otherEntityInstance %>` `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
           } else { %>
-            " LEFT NEST #{#n1ql.bucket} `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
+            " LEFT NEST `<%= relationship.otherEntityInstance %>` `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
           }
-          if (index < relationships.length - 1) { %>
+          if (index < notEmbeddedRelationships.length - 1) { %>
             + <%
           }
         }); %>;
@@ -94,11 +94,11 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
         )<% } %>;
     }
 
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} #{[0]}")
+    @Query(SELECT + JOIN + " #{[0]}")
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><<%= persistClass %>> findAllBy(String pageableStatement);
 
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter}")
+    @Query(SELECT + JOIN)
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><<%= persistClass %>> findAll();
 
@@ -108,10 +108,10 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     } _%>
 
 <%_ if (searchEngineCouchbase) { _%>
-  <%_ if (relationships.length === 0) { _%>
+  <%_ if (notEmbeddedRelationships.length === 0) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
   <%_ } else { _%>
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} AND SEARCH(b, #{[0]}) #{[1]}")
+    @Query(SELECT + JOIN + " WHERE SEARCH(b, #{[0]}) #{[1]}")
   <%_ } _%>
     <%= listOrFlux %><<%= persistClass %>> search(String queryString, String pageableStatement);
 

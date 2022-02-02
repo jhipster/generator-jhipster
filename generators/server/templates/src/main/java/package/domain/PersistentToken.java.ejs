@@ -48,7 +48,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
-import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
+import org.springframework.data.couchbase.repository.Collection;
+import org.springframework.data.couchbase.repository.Scope;
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
@@ -88,6 +89,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
+@Scope("<%= camelCase(baseName) %>")
+@Collection("persistentToken")
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   <%_ if (reactive) { _%>
@@ -104,12 +107,6 @@ public class PersistentToken implements Serializable {
     private static final int MAX_USER_AGENT_LEN = 255;
 
 <%_ if (databaseTypeCouchbase) { _%>
-    public static final String PREFIX = "token";
-
-    @SuppressWarnings("unused")
-    @IdPrefix
-    private String prefix = PREFIX;
-
     @Id
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
     private String id;

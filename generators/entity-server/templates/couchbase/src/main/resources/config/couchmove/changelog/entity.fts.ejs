@@ -4,7 +4,7 @@
         "doc_config": {
             "docid_prefix_delim": "",
             "docid_regexp": "",
-            "mode": "type_field",
+            "mode": "scope.collection.type_field",
             "type_field": "_class"
         },
         "mapping": {
@@ -17,12 +17,11 @@
                 "enabled": false
             },
             "default_type": "_default",
-            "docvalues_dynamic": true,
+            "docvalues_dynamic": false,
             "index_dynamic": true,
             "store_dynamic": false,
-            "type_field": "_type",
             "types": {
-                "<%= entityAbsolutePackage %>.domain.<%= entityClass %>": {
+                "<%= camelCase(baseName) %>.<%= entityInstance %>": {
                     "dynamic": true,
                     "enabled": true
                 }
@@ -36,5 +35,5 @@
     "sourceType": "couchbase",
     "sourceName": "${bucket}",
     "uuid": "",
-    "name": "<%= entityClass.toLowerCase() %>"
+    "name": "<%= entityInstance %>"
 }
