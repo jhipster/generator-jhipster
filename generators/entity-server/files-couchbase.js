@@ -21,12 +21,22 @@ const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = require('../generator-const
 const entityCouchbaseFiles = {
   dbChangelog: [
     {
-      condition: generator => generator.searchEngineCouchbase && !generator.skipDbChangelog,
+      condition: generator => !generator.skipDbChangelog && !generator.embedded,
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        {
+          file: 'config/couchmove/changelog/entity.n1ql',
+          renameTo: generator => `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.n1ql`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngineCouchbase && !generator.skipDbChangelog && !generator.embedded,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
           file: 'config/couchmove/changelog/entity.fts',
-          renameTo: generator => `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.fts`,
+          renameTo: generator => `config/couchmove/changelog/V${parseInt(generator.changelogDate) + 10}__${generator.entityInstance.toLowerCase()}.fts`,
         },
       ],
     },

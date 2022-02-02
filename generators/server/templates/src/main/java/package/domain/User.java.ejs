@@ -66,7 +66,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
-import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
+import org.springframework.data.couchbase.repository.Collection;
+import org.springframework.data.couchbase.repository.Scope;
+import static <%= packageName %>.config.Constants.SCOPE_NAME;
+import static <%= packageName %>.domain.User.COLLECTION_NAME;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -115,6 +118,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
+@Scope(SCOPE_NAME)
+@Collection(COLLECTION_NAME)
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   <%_ if (reactive) { _%>
@@ -130,6 +135,10 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+<%_ if (databaseTypeCouchbase) { _%>
+    public static final String COLLECTION_NAME = "user";
+<%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
     @Id
@@ -153,12 +162,6 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
   <%_ } _%>
     @Property("user_id")
 <%_ } else { _%>
-  <%_ if (databaseTypeCouchbase) { _%>
-    public static final String PREFIX = "user";
-
-    @IdPrefix
-    private String prefix = PREFIX;
-  <%_ } _%>
   <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     @Id
   <%_ } _%>

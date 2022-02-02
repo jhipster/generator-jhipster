@@ -1,0 +1,12 @@
+CREATE SCOPE `${bucket}`.`<%= camelCase(baseName) %>`;
+
+<%_ if (!skipUserManagement) { _%>
+CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`user`;
+
+    <%_ if (isUsingBuiltInAuthority()) { _%>
+CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`authority`;
+    <%_ } _%>
+    <%_ if (authenticationTypeSession) { _%>
+CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`persistentToken`;
+    <%_ } _%>
+<%_ } _%>

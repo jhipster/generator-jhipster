@@ -35,6 +35,7 @@ public final class Constants {
     public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
+    public static final String SCOPE_NAME = "<%= camelCase(baseName) %>";
     public static final String ID_DELIMITER = "__";
 <%_ } _%>
 

@@ -44,7 +44,7 @@ class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 <%_ if (databaseTypeCouchbase) { _%>
-    private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
+    private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
     private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- getPrimaryKeyValue(user.primaryKey.type) %>;
 <%_ } _%>

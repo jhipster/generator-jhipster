@@ -1,0 +1,4 @@
+CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`<%= entityInstance %>`;
+
+CREATE PRIMARY INDEX ON `${bucket}`.`<%= camelCase(baseName) %>`.`<%= entityInstance %>`
+    WITH { "defer_build" : true };

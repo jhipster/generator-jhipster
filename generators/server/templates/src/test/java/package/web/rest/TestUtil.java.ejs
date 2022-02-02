@@ -51,7 +51,6 @@ import javax.persistence.criteria.Root;
 <%_ if (searchEngineCouchbase) { _%>
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.time.Duration;
 import reactor.core.publisher.Mono;
@@ -65,10 +64,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class TestUtil {
 
     private static final ObjectMapper mapper = createObjectMapper();
-<%_ if (searchEngineCouchbase) { _%>
-    private static final int MAX_ATTEMPTS = 3;
-    // private static final Delay DEFAULT_DELAY = Delay.exponential(TimeUnit.SECONDS);
-<%_ } _%>
 
     private static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
@@ -267,7 +262,7 @@ public final class TestUtil {
                     .switchIfEmpty(Mono.error(new NoSuchElementException()))
             )
             .retry()
-            .timeout(Duration.ofSeconds(5))
+            .timeout(Duration.ofSeconds(60))
             .block();
     }
 

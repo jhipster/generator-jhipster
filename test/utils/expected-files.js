@@ -783,11 +783,12 @@ const expectedFiles = {
   ],
 
   couchbase: [
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__user.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_scope_and_collections.n1ql`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.2__create_indexes.n1ql`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/scope/authority/ROLE_ADMIN.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/scope/authority/ROLE_USER.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/scope/user/admin.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/scope/user/user.json`,
     `${DOCKER_DIR}couchbase.yml`,
     `${DOCKER_DIR}couchbase-cluster.yml`,
     `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,

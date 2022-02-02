@@ -95,16 +95,31 @@ const couchbaseFiles = {
   serverResource: [
     {
       path: SERVER_MAIN_RES_DIR,
-      templates: ['config/couchmove/changelog/V0__create_indexes.n1ql'],
+      templates: [
+        'config/couchmove/changelog/V0__create_scope_and_collections.n1ql',
+        'config/couchmove/changelog/V0.2__create_indexes.n1ql',
+      ],
     },
     {
       condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
       path: SERVER_MAIN_RES_DIR,
       templates: [
-        'config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json',
-        'config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json',
-        'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
-        'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
+        {
+          file: 'config/couchmove/changelog/V0.1__initial_setup/scope/authority/ROLE_ADMIN.json',
+          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/authority/ROLE_ADMIN.json`,
+        },
+        {
+          file: 'config/couchmove/changelog/V0.1__initial_setup/scope/authority/ROLE_USER.json',
+          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/authority/ROLE_USER.json`,
+        },
+        {
+          file: 'config/couchmove/changelog/V0.1__initial_setup/scope/user/admin.json',
+          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/user/admin.json`,
+        },
+        {
+          file: 'config/couchmove/changelog/V0.1__initial_setup/scope/user/user.json',
+          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/user/user.json`,
+        },
       ],
     },
   ],
@@ -115,6 +130,10 @@ const couchbaseFiles = {
         {
           file: 'package/CouchbaseTestContainerExtension.java',
           renameTo: generator => `${generator.testDir}CouchbaseTestContainerExtension.java`,
+        },
+        {
+          file: 'package/config/DatabaseConfigurationIT.java',
+          renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`,
         },
       ],
     },

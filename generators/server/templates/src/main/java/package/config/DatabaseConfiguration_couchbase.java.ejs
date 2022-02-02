@@ -68,6 +68,8 @@ import org.springframework.data.repository.util.QueryExecutionConverters;
 import reactor.core.publisher.Flux;
 <%_ } _%>
 
+import static <%= packageName %>.config.Constants.SCOPE_NAME;
+
 @Configuration
 @EnableConfigurationProperties(CouchbaseProperties.class)
 <%_ if (searchEngineElasticsearch) { _%>
@@ -179,7 +181,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         Bucket bucket = cluster.bucket(getBucketName());
         Couchmove couchmove = new Couchmove(bucket, cluster, "config/couchmove/changelog");
         couchmove.migrate();
-        couchmove.buildN1qlDeferredIndexes();
+        couchmove.buildN1qlDeferredIndexes(SCOPE_NAME);
         return couchmove;
     }
 

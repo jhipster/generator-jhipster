@@ -20,8 +20,7 @@ package <%= packageName %>;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.testcontainers.couchbase.BucketDefinition;
-import org.testcontainers.couchbase.CouchbaseContainer;
+import org.testcontainers.couchbase.*;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -43,6 +42,7 @@ public class CouchbaseTestContainerExtension implements BeforeAllCallback {
                 .asCompatibleSubstituteFor("couchbase/server");
             couchbase = new CouchbaseContainer(dockerImage)
                 .withBucket(new BucketDefinition(getBucketName()).withQuota(100))
+                .withServiceQuota(CouchbaseService.SEARCH, 1024)
                 .withCredentials("user", "secret");
             couchbase.start();
             System.setProperty("spring.couchbase.connection-string", couchbase.getConnectionString());
