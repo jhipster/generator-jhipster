@@ -22,7 +22,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "1.1.0",
     "@types/jest": "27.4.0",
-    "@types/node": "16.11.21",
+    "@types/node": "16.11.22",
     "@types/sinon": "10.0.9",
     "@types/vuelidate": "0.7.15",
     "@vue/eslint-config-prettier": "7.0.0",
