@@ -60,41 +60,50 @@ function createUserEntity(customUserData = {}) {
   const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : this.getPkType(user.databaseType);
   const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
 
-  let idField = user.fields.find(field => field.fieldName === 'id');
-  if (!idField) {
-    idField = {};
-    user.fields.unshift(idField);
-  }
-  _.defaults(idField, {
-    fieldName: 'id',
-    fieldType: userIdType,
-    fieldValidateRulesMaxlength,
-    fieldTranslationKey: 'global.field.id',
-    fieldNameHumanized: 'ID',
-    id: true,
-    builtIn: true,
-  });
-
-  if (!user.fields.some(field => field.fieldName === 'login')) {
-    user.fields.push({
+  addOrExtendFields(user.fields, [
+    {
+      fieldName: 'id',
+      fieldType: userIdType,
+      fieldValidateRulesMaxlength,
+      fieldTranslationKey: 'global.field.id',
+      fieldNameHumanized: 'ID',
+      id: true,
+      builtIn: true,
+    },
+    {
       fieldName: 'login',
       fieldType: TYPE_STRING,
       builtIn: true,
-    });
-  }
-
-  if (!user.fields.some(field => field.fieldName === 'firstName')) {
-    user.fields.push({
+    },
+    {
       fieldName: 'firstName',
       fieldType: TYPE_STRING,
-    });
-  }
-
-  if (!user.fields.some(field => field.fieldName === 'lastName')) {
-    user.fields.push({
+      builtIn: true,
+    },
+    {
       fieldName: 'lastName',
       fieldType: TYPE_STRING,
-    });
-  }
+      builtIn: true,
+    },
+  ]);
+
   return user;
+}
+
+function addOrExtendFields(fields, fieldsToAdd) {
+  fieldsToAdd = [].concat(fieldsToAdd);
+  for (const fieldToAdd of fieldsToAdd) {
+    const { fieldName: newFieldName, id } = fieldToAdd;
+    let field = fields.find(field => field.fieldName === newFieldName);
+    if (!field) {
+      field = { ...fieldToAdd };
+      if (id) {
+        fields.unshift(field);
+      } else {
+        fields.push(field);
+      }
+    } else {
+      _.defaults(field, fieldToAdd);
+    }
+  }
 }
