@@ -635,7 +635,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
           'ci:backend:test':
-            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
+            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -Djhipster-tests.keep-containers-running=false -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
