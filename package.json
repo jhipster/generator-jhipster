@@ -138,7 +138,7 @@
     "sinon": "13.0.0",
     "sinon-chai": "3.7.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "6.2.0"
+    "yeoman-test": "6.3.0"
   },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0",
