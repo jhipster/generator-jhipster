@@ -42,7 +42,7 @@ const {
 /**
  * This is the base class for a generator that generates entities.
  */
-class JHipsterBaseEntityGenerator extends BaseBlueprintGenerator {
+class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, { priorityArgs: true, ...features });
 
@@ -341,4 +341,4 @@ class JHipsterBaseEntityGenerator extends BaseBlueprintGenerator {
   }
 }
 
-module.exports = JHipsterBaseEntityGenerator;
+module.exports = JHipsterBaseEntitiesGenerator;
