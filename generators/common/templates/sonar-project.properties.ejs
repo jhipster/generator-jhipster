@@ -45,7 +45,7 @@ sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey=squid:UndocumentedApi
 <%_ if (authenticationTypeJwt) { _%>
 # Rule https://rules.sonarsource.com/java/RSPEC-4502 is ignored, as for JWT tokens we are not subject to CSRF attack
 sonar.issue.ignore.multicriteria.S4502.resourceKey=<%= MAIN_DIR %>java/**/*
-sonar.issue.ignore.multicriteria.S4502.ruleKey=squid:S4502
+sonar.issue.ignore.multicriteria.S4502.ruleKey=java:S4502
 <%_ } _%>
 # Rule https://rules.sonarsource.com/java/RSPEC-4684
 sonar.issue.ignore.multicriteria.S4684.resourceKey=<%= MAIN_DIR %>java/**/*
