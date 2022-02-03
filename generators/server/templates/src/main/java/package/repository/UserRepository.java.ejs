@@ -157,13 +157,6 @@ import java.util.UUID;
 <%_ if (!databaseTypeCassandra && !(databaseTypeSql && reactive) && !authenticationTypeOauth2) { _%>
 import java.time.Instant;
 <%_ } _%>
-<% if (databaseTypeCouchbase) { %>
-import static <%= packageName %>.config.Constants.ID_DELIMITER;
-<% } %>
-<%_ if (searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
-<%_ } _%>
 /**
  * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= asEntity('User') %>} entity.
  */
@@ -260,13 +253,13 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <% if (reactive) { %>
-    <%_ if (databaseTypeCouchbase) { _%>
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%_ } _%>
+    <%_ if (!databaseTypeCouchbase) { _%>
     Flux<<%= asEntity('User') %>>findAllByIdNotNull(Pageable pageable);
+    <%_ } _%>
 
     <%_ if (databaseTypeCouchbase) { _%>
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE activated = true")
     <%_ } _%>
     Flux<<%= asEntity('User') %>>findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(Pageable pageable);
 
@@ -276,38 +269,20 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     Mono<Long> count();
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
-    default Page<<%= asEntity('User') %>> findAllByActivatedIsTrue(Pageable pageable) {
-        return new PageImpl<>(findAllByActivatedIsTrue(JHipsterCouchbaseRepository.pageableStatement(pageable)), pageable, countAllByActivatedIsTrue());
-    }
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query("#{#n1ql.selectEntity} WHERE activated = true")
+    Page<<%= asEntity('User') %>> findAllByActivatedIsTrue(Pageable pageable);
     <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>
   <% } %>
 
-  <%_ if (databaseTypeCouchbase && !reactive) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND activated = true #{[0]}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    List<<%= asEntity('User') %>> findAllByActivatedIsTrue(String pageableStatement);
-
-    @Query("SELECT COUNT(*) as count FROM #{#n1ql.bucket} WHERE #{#n1ql.filter} AND activated = true")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    Long countAllByActivatedIsTrue();
-  <%_ } _%>
-
   <%_ if (searchEngineCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{n1ql.bucket}, #{[0]) #{[1]}")
-    <%= listOrFlux %><User> search(String queryString, String pageableStatement);
+    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
+    <%= listOrFlux %><User> search(String queryString);
 
-    default <%= listOrFlux %><User> search(String queryString) {
-        return search(searchQuery(queryString).toString(), "");
-    }
-
-    default <%= pageOrFlux %><User> search(String queryString, Pageable pageable) {
-        return
-            <% if (!reactive) { %>new PageImpl<>(<% } %>
-                search(searchQuery(queryString).toString(), pageableStatement(pageable))
-            <% if (!reactive) { %>)<% } %>;
-    }
+    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
+    <%= pageOrFlux %><User> search(String queryString, Pageable pageable);
   <%_ } _%>
 }
 <%_ } else if (databaseTypeSql && reactive) { _%>

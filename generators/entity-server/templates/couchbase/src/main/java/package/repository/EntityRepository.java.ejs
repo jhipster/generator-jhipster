@@ -25,21 +25,16 @@ import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Pageable;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.ScanConsistency;
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
   <%_ } else { _%>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import java.util.List;
   <%_ } _%>
 <%_ } _%>
 <%_ if (relationships.length !== 0 && !reactive) { _%>
 import java.util.Optional;
-<%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_ if (primaryKey.typeUUID) { _%>
@@ -84,19 +79,9 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
           }
         }); %>;
 
-    default <%= pageOrFlux %><<%= persistClass %>> findAll<% if (reactive) {%>By<% } %>(Pageable pageable) {
-        return
-        <% if (!reactive) { %>new PageImpl<>(<% } %>
-            findAllBy(pageableStatement(pageable, "b"))
-        <% if (!reactive) { %>,
-            pageable,
-            count()
-        )<% } %>;
-    }
-
-    @Query(SELECT + JOIN + " #{[0]}")
+    @Query(SELECT + JOIN)
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= persistClass %>> findAllBy(String pageableStatement);
+    <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable);
 
     @Query(SELECT + JOIN)
     @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
@@ -109,22 +94,18 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
 
 <%_ if (searchEngineCouchbase) { _%>
   <%_ if (notEmbeddedRelationships.length === 0) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
+    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
   <%_ } else { _%>
-    @Query(SELECT + JOIN + " WHERE SEARCH(b, #{[0]}) #{[1]}")
+    @Query(SELECT + JOIN + " WHERE " + SEARCH_CONDITION)
   <%_ } _%>
-    <%= listOrFlux %><<%= persistClass %>> search(String queryString, String pageableStatement);
+    <%= listOrFlux %><<%= persistClass %>> search(String queryString);
 
-    default <%= listOrFlux %><<%= persistClass %>> search(String queryString) {
-        return search(searchQuery(queryString).toString(), "");
-    }
-
-    default <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable) {
-        return
-            <% if (!reactive) { %>new PageImpl<>(<% } %>
-                search(searchQuery(queryString).toString(), pageableStatement(pageable<% if (relationships.length !== 0) { %>, "b"<% } %>))
-            <% if (!reactive) { %>)<% } %>;
-    }
+  <%_ if (notEmbeddedRelationships.length === 0) { _%>
+    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
+  <%_ } else { _%>
+    @Query(SELECT + JOIN + " WHERE " + SEARCH_CONDITION)
+  <%_ } _%>
+    <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable);
 <%_ } _%>
 
 }
