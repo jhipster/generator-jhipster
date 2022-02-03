@@ -31,7 +31,7 @@ import org.springframework.data.domain.PageImpl;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
@@ -85,14 +85,12 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     @Override
     public Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
   <%_ if (!paginationNo) { _%>
-        List<FieldSortBuilder> builders = new SortToFieldSortBuilderConverter().convert(pageable.getSort());
+        List<SortBuilder<?>> builders = new SortToSortBuilderListConverter().convert(pageable.getSort());
 
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder().withQuery(queryStringQuery(query))
             .withPageable(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
-        builders.stream().forEach(builder -> {
-            queryBuilder.withSort(builder);
-        });
+        queryBuilder.withSorts(builders);            
 
         NativeSearchQuery nativeSearchQuery = queryBuilder.build();
   <%_ } else { _%>

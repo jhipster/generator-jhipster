@@ -78,7 +78,7 @@ describe('JHipster generator for entity', () => {
 
         it('does creates search files', () => {
           assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
-          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToFieldSortBuilderConverter.java`);
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToSortBuilderListConverter.java`);
           assert.file(expectedFiles.server);
           assert.file(expectedFiles.gatling);
         });
@@ -103,7 +103,7 @@ describe('JHipster generator for entity', () => {
 
         it('does creates search files', () => {
           assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
-          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToFieldSortBuilderConverter.java`);
+          assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SortToSortBuilderListConverter.java`);
           assert.file(expectedFiles.server);
           assert.file(expectedFiles.gatling);
         });
