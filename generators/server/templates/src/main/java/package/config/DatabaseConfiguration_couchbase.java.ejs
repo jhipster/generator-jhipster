@@ -24,10 +24,7 @@ import tech.jhipster.config.JHipsterProperties;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.couchmove.Couchmove;
-
-import <%= packageName %>.config.couchbase.CustomCouchbaseRepositoryFactoryBean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +50,6 @@ import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbase
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 <%_ } _%>
 import org.springframework.data.couchbase.repository.config.Enable<%_ if (reactive) { _%>Reactive<% } %>CouchbaseRepositories;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -76,7 +72,7 @@ import static <%= packageName %>.config.Constants.SCOPE_NAME;
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(basePackages = "<%= packageName %>.repository", repositoryFactoryBeanClass = CustomCouchbaseRepositoryFactoryBean.class<%_ if (searchEngineElasticsearch) { %>,
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(basePackages = "<%= packageName %>.repository"<%_ if (searchEngineElasticsearch) { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
 <%_ if (!reactive) { _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
@@ -164,15 +160,6 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         MappingCouchbaseConverter mappingCouchbaseConverter = super.mappingCouchbaseConverter(couchbaseMappingContext, couchbaseCustomConversions);
         ((GenericConversionService) mappingCouchbaseConverter.getConversionService()).addConverter(StringToObjectConverter.INSTANCE);
         return mappingCouchbaseConverter;
-    }
-
-    /**
-     * Workaround for Couchbase overriding SB default jackson mapper: https://github.com/spring-projects/spring-data-couchbase/issues/1209
-     */
-    @Bean
-    @Primary
-    ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        return builder.createXmlMapper(false).build();
     }
 
     @Bean

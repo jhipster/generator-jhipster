@@ -54,32 +54,9 @@ _%>
 @NoRepositoryBean
 public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
 
-    static String pageableStatement(Pageable pageable) {
-        return pageableStatement(pageable, "");
-    }
-
-    static String pageableStatement(Pageable pageable, String prefix) {
-        Sort sort = Sort.by(
-            pageable.getSort().stream()
-                .map(order -> {
-                    String property = order.getProperty();
-                    if ("id".equals(property)) {
-                        return order.withProperty(format("meta(%s).id", prefix));
-                    }
-                    if (prefix.isEmpty()) {
-                        return order;
-                    }
-                    return order.withProperty(format("%s.%s", prefix, property));
-                })
-                .collect(Collectors.toList()));
-        return new Query()
-            .limit(pageable.getPageSize())
-            .skip(pageable.getOffset())
-            .with(sort)
-            .export();
-    }
-
 <%_ if (searchEngineCouchbase) { _%>
+    String SEARCH_CONDITION = "SEARCH(b, #{T(tech.jhipster.sample.repository.JHipsterCouchbaseRepository).searchQuery([0]).toString()})";
+
     static SearchQuery searchQuery(String queryString) {
         List<String> ids = new LinkedList<>();
         for (String r : queryString.split(" ")) {

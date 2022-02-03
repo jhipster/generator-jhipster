@@ -42,30 +42,6 @@ const couchbaseFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/couchbase/CustomCouchbaseRepositoryFactory.java',
-          renameTo: generator => `${generator.javaDir}config/couchbase/CustomCouchbaseRepositoryFactory.java`,
-        },
-        {
-          file: 'package/config/couchbase/CustomCouchbaseRepositoryFactoryBean.java',
-          renameTo: generator => `${generator.javaDir}config/couchbase/CustomCouchbaseRepositoryFactoryBean.java`,
-        },
-        {
-          file: 'package/config/couchbase/CustomCouchbaseRepositoryQuery.java',
-          renameTo: generator => `${generator.javaDir}config/couchbase/CustomCouchbaseRepositoryQuery.java`,
-        },
-        {
-          file: 'package/config/couchbase/CustomN1qlQueryCreator.java',
-          renameTo: generator => `${generator.javaDir}config/couchbase/CustomN1qlQueryCreator.java`,
-        },
-        {
-          file: 'package/config/couchbase/CustomN1qlRepositoryQueryExecutor.java',
-          renameTo: generator => `${generator.javaDir}config/couchbase/CustomN1qlRepositoryQueryExecutor.java`,
-        },
-        {
-          file: 'package/config/couchbase/package-info.java',
-          renameTo: generator => `${generator.javaDir}config/couchbase/package-info.java`,
-        },
-        {
           file: 'package/repository/JHipsterCouchbaseRepository.java',
           renameTo: generator => `${generator.javaDir}repository/JHipsterCouchbaseRepository.java`,
         },
