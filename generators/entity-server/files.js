@@ -177,8 +177,8 @@ const serverFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/search/SortToFieldSortBuilderConverter.java',
-          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/search/SortToFieldSortBuilderConverter.java`,
+          file: 'package/repository/search/SortToSortBuilderListConverter.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/repository/search/SortToSortBuilderListConverter.java`,
         },
       ],
     },
