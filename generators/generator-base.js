@@ -43,6 +43,29 @@ const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
 const { ANGULAR_X: ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
+const {
+  PRIORITY_NAMES: {
+    LOADING,
+    PREPARING,
+
+    CONFIGURING_EACH_ENTITY,
+    LOADING_EACH_ENTITY,
+    PREPARING_EACH_ENTITY,
+    PREPARING_FIELDS,
+    PREPARING_EACH_ENTITY_FIELD,
+    PREPARING_RELATIONSHIPS,
+    PREPARING_EACH_ENTITY_RELATIONSHIP,
+    POST_PREPARING_EACH_ENTITY,
+
+    DEFAULT,
+    WRITING,
+    WRITING_ENTITIES,
+    POST_WRITING,
+    PRE_CONFLICTS,
+    INSTALL,
+    END,
+  },
+} = require('../lib/constants/priorities.cjs');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -122,7 +145,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     // JHipster runtime config that should not be stored to .yo-rc.json.
     this.configOptions = this.options.configOptions || { sharedEntities: {} };
     this.configOptions.sharedEntities = this.configOptions.sharedEntities || {};
-    this._sharedData = this.options.jhipsterSharedData;
 
     /* Force config to use 'generator-jhipster' namespace. */
     this._config = this._getStorage('generator-jhipster', { sorted: true });
@@ -183,7 +205,14 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    */
   get sharedData() {
     if (!this._sharedData) {
-      this._sharedData = new SharedData(this.configOptions);
+      const { baseName } = this.jhipsterConfig;
+      if (!baseName) {
+        throw new Error('baseName is required');
+      }
+      if (!this.options.sharedData[baseName]) {
+        this.options.sharedData[baseName] = {};
+      }
+      this._sharedData = new SharedData(this.options.sharedData[baseName]);
     }
     return this._sharedData;
   }
@@ -3071,6 +3100,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * JHipster config with default values fallback
+   */
+  get jhipsterConfigWithDefaults() {
+    return _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults);
+  }
+
+  /**
    * Get default config based on applicationType
    */
   getDefaultConfigForApplicationType(applicationType = this.jhipsterConfig.applicationType) {
@@ -3216,6 +3252,47 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         delete this.options[optionName];
       }
     });
+  }
+
+  getArgsForPriority(priorityName) {
+    if (this.features.priorityArgs) {
+      return [this.getDataArgForPriority(priorityName)];
+    }
+    return this.args;
+  }
+
+  /**
+   */
+  getDataArgForPriority(priorityName) {
+    if (
+      ![
+        LOADING,
+        PREPARING,
+
+        CONFIGURING_EACH_ENTITY,
+        LOADING_EACH_ENTITY,
+        PREPARING_EACH_ENTITY,
+        PREPARING_FIELDS,
+        PREPARING_EACH_ENTITY_FIELD,
+        PREPARING_RELATIONSHIPS,
+        PREPARING_EACH_ENTITY_RELATIONSHIP,
+        POST_PREPARING_EACH_ENTITY,
+
+        DEFAULT,
+        WRITING,
+        WRITING_ENTITIES,
+        POST_WRITING,
+        PRE_CONFLICTS,
+        INSTALL,
+        END,
+      ].includes(priorityName)
+    ) {
+      throw new Error(`${priorityName} data not available`);
+    }
+    if (!this.jhipsterConfig.baseName) {
+      return {};
+    }
+    return { application: this.sharedData.getApplication() };
   }
 
   /**

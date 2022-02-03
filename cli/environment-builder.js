@@ -24,7 +24,6 @@ const Environment = require('yeoman-environment');
 const { CLI_NAME, logger } = require('./utils');
 const { loadYoRc, packageNameToNamespace } = require('../generators/utils');
 const { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } = require('../utils/blueprint');
-const SharedData = require('../lib/support/shared-data.cjs');
 
 const createEnvironment = (args, options = {}, adapter) => {
   // Remove after migration to environment 3.
@@ -34,7 +33,6 @@ const createEnvironment = (args, options = {}, adapter) => {
     localConfigOnly: true,
     ...options.sharedOptions,
     configOptions,
-    jhipsterSharedData: new SharedData(configOptions),
   };
   return Environment.createEnv(args, { newErrorHandler: true, ...options, sharedOptions }, adapter);
 };
