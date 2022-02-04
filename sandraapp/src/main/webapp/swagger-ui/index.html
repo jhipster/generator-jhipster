@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sandraapp - Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16"/>
+</head>
+
+<body>
+<div id="swagger-ui"></div>
+
+<script src="./swagger-ui-bundle.js"></script>
+<script src="./swagger-ui-standalone-preset.js"></script>
+<script src="./axios.min.js"></script>
+
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        // Automatically click all 'Try it out' buttons
+        var mutationObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                document.querySelectorAll(".btn.try-out__btn:not(.cancel)").forEach(div => { div.click(); });
+            });
+        });
+
+        mutationObserver.observe(document.documentElement, {
+            attributes: true,
+            childList: true,
+            subtree: true
+        });
+
+
+        var urls = [];
+        axios.get("/swagger-resources").then(function (response) {
+            response.data.forEach(function (resource) {
+                urls.push({"name": resource.name, "url": resource.location});
+            });
+
+            urls.sort(function (a, b) {
+                var x = a.name.toLowerCase(), y = b.name.toLowerCase();
+                return x < y ? -1 : x > y ? 1 : 0;
+            });
+
+            // Build a system
+            var ui = SwaggerUIBundle({
+                urls: urls,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                filter: true,
+                layout: "StandaloneLayout",
+                withCredentials: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                requestInterceptor: function (req) {
+                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken")
+                        || sessionStorage.getItem("jhi-authenticationtoken"));
+                    if (authToken) {
+                        req.headers['Authorization'] = "Bearer " + authToken;
+                    }
+                    return req;
+                }
+            });
+
+            window.ui = ui
+        });
+
+    };
+</script>
+</body>
+</html>
