@@ -1,9 +1,0 @@
-Description:
-    Creates a .devcontainer folder and generates a Dockerfile and devcontainer.json.
-
-Example:
-    jhipster devcontainer
-
-    This will create:
-        .devcontainer/Dockerfile
-        .devcontainer/devcontainer.json
