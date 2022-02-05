@@ -97,7 +97,7 @@ module.exports = class extends needleServer {
   addProperty(name, value) {
     const errorMessage = `${chalk.yellow('Reference to maven property name ')}
             (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`;
-    const property = `<${name}>${value}</${name}>`;
+    const property = value ? `<${name}>${value}</${name}>` : `<${name}/>`;
     const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-property -->', property);
 
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
