@@ -2,6 +2,7 @@ package <%= entityAbsolutePackage %>.service.criteria;
 
 import java.io.Serializable;
 import java.util.Objects;
+import org.springdoc.api.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 <%_ for (const field of fields) { if (field.fieldIsEnum === true) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
@@ -76,6 +77,7 @@ _%>
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
+@ParameterObject
 public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ Object.keys(extraFilters).forEach((key) => {
   extraFilter = extraFilters[key]; _%>
