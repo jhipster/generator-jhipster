@@ -397,6 +397,7 @@ const baseServerFiles = {
       templates: [
         { file: 'mvnw', method: 'copy', noEjs: true },
         { file: 'mvnw.cmd', method: 'copy', noEjs: true },
+        { file: '.mvn/jvm.config', method: 'copy', noEjs: true },
         { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
         { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
         { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },

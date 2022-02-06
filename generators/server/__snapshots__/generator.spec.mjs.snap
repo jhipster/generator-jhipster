@@ -258,6 +258,11 @@ Object {
           "noEjs": true,
         },
         Object {
+          "file": ".mvn/jvm.config",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
           "file": ".mvn/wrapper/maven-wrapper.jar",
           "method": "copy",
           "noEjs": true,
