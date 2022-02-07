@@ -62,8 +62,6 @@ const commonFiles = {
         '.lintstagedrc.js',
         {
           file: '.husky/pre-commit',
-          method: 'copy',
-          noEjs: true,
         },
       ],
     },

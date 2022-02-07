@@ -174,6 +174,12 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
             this.removeFile('.huskyrc');
           }
         }
+        if (this.isJhipsterVersionLessThan('7.6.1')) {
+          if (this.skipClient) {
+            this.removeFile('npmw');
+            this.removeFile('npmw.cmd');
+          }
+        }
       },
       writePrettierConfig() {
         // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work

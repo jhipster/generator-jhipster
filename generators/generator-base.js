@@ -3116,7 +3116,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     };
   }
 
-  setConfigDefaults(defaults = this.jhipsterConfig.applicationType === MICROSERVICE ? defaultConfigMicroservice : defaultConfig) {
+  setConfigDefaults(defaults = this.jhipsterDefaults) {
     const jhipsterVersion = packagejs.version;
     const baseName = this.getDefaultAppName();
     const creationTimestamp = new Date().getTime();
