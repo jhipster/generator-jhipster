@@ -24,6 +24,7 @@ import tech.jhipster.config.JHipsterProperties;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
 import com.github.couchmove.Couchmove;
 
 import org.slf4j.Logger;
@@ -78,6 +79,9 @@ import static <%= packageName %>.config.Constants.SCOPE_NAME;
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
 <%_ } _%>
 public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
+
+    private static final String CHANGELOG_COLLECTION = "changelog";
+    private static final String TYPE_KEY = "type";
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
@@ -166,10 +170,16 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public Couchmove couchmove(Cluster cluster) {
         log.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
-        Couchmove couchmove = new Couchmove(bucket, cluster, "config/couchmove/changelog");
+        Collection collection = bucket.scope(SCOPE_NAME).collection(CHANGELOG_COLLECTION);
+        Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
         couchmove.migrate();
         couchmove.buildN1qlDeferredIndexes(SCOPE_NAME);
         return couchmove;
+    }
+
+    @Override
+    public String typeKey() {
+        return TYPE_KEY;
     }
 
     /**

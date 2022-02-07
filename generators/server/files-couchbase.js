@@ -72,7 +72,7 @@ const couchbaseFiles = {
     {
       path: SERVER_MAIN_RES_DIR,
       templates: [
-        'config/couchmove/changelog/V0__create_scope_and_collections.n1ql',
+        'config/couchmove/changelog/V0__create_collections.n1ql',
         'config/couchmove/changelog/V0.2__create_indexes.n1ql',
       ],
     },
@@ -82,15 +82,18 @@ const couchbaseFiles = {
       templates: [
         {
           file: 'config/couchmove/changelog/V0.1__initial_setup/scope/authority/ROLE_ADMIN.json',
-          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/authority/ROLE_ADMIN.json`,
+          renameTo: generator =>
+            `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/authority/ROLE_ADMIN.json`,
         },
         {
           file: 'config/couchmove/changelog/V0.1__initial_setup/scope/authority/ROLE_USER.json',
-          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/authority/ROLE_USER.json`,
+          renameTo: generator =>
+            `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/authority/ROLE_USER.json`,
         },
         {
           file: 'config/couchmove/changelog/V0.1__initial_setup/scope/user/admin.json',
-          renameTo: generator => `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/user/admin.json`,
+          renameTo: generator =>
+            `config/couchmove/changelog/V0.1__initial_setup/${generator.camelCase(generator.baseName)}/user/admin.json`,
         },
         {
           file: 'config/couchmove/changelog/V0.1__initial_setup/scope/user/user.json',

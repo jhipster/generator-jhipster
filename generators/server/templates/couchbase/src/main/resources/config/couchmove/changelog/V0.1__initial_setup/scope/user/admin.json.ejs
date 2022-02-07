@@ -2,7 +2,7 @@
   "login": "admin",
 <%_ if (!authenticationTypeOauth2) { _%>
   "password": "$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC",
-<% } %>
+<%_ } _%>
   "firstName": "Administrator",
   "lastName": "Administrator",
   "email": "admin@localhost",
@@ -14,5 +14,5 @@
     "ROLE_USER",
     "ROLE_ADMIN"
   ],
-  "_class": "<%= packageName %>.domain.<%= asEntity('User') %>"
+  "type": "user"
 }

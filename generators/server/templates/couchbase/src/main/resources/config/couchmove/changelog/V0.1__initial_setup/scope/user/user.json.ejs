@@ -2,7 +2,7 @@
   "login": "user",
 <%_ if (!authenticationTypeOauth2) { _%>
   "password": "$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K",
-<% } %>
+<%_ } _%>
   "firstName": "User",
   "lastName": "User",
   "email": "user@localhost",
@@ -13,5 +13,5 @@
   "authorities": [
     "ROLE_USER"
   ],
-  "_class": "<%= packageName %>.domain.<%= asEntity('User') %>"
+  "type": "user"
 }

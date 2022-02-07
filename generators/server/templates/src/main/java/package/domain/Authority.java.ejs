@@ -27,10 +27,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.<%= databaseType %>.core.mapping.Document;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.couchbase.repository.Collection;
 import org.springframework.data.couchbase.repository.Scope;
 import static <%= packageName %>.config.Constants.SCOPE_NAME;
-import static <%= packageName %>.domain.Authority.COLLECTION_NAME;
+import static <%= packageName %>.domain.Authority.TYPE_NAME;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.core.schema.Id;
@@ -80,14 +81,15 @@ import java.util.Objects;
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
 @Scope(SCOPE_NAME)
-@Collection(COLLECTION_NAME)
+@TypeAlias(TYPE_NAME)
+@Collection(TYPE_NAME)
 <%_ } _%>
 public class Authority implements Serializable<% if (databaseTypeSql && reactive) { %>, Persistable<String><% } %> {
 
     private static final long serialVersionUID = 1L;
 
 <%_ if (databaseTypeCouchbase) { _%>
-    public static final String COLLECTION_NAME = "authority";
+    public static final String TYPE_NAME = "authority";
 <%_ } _%>
 
     @NotNull

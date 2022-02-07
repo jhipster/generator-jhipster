@@ -36,7 +36,8 @@ const entityCouchbaseFiles = {
       templates: [
         {
           file: 'config/couchmove/changelog/entity.fts',
-          renameTo: generator => `config/couchmove/changelog/V${parseInt(generator.changelogDate) + 10}__${generator.entityInstance.toLowerCase()}.fts`,
+          renameTo: generator =>
+            `config/couchmove/changelog/V${parseInt(generator.changelogDate, 10) + 10}__${generator.entityInstance.toLowerCase()}.fts`,
         },
       ],
     },
