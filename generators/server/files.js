@@ -257,6 +257,7 @@ const baseServerFiles = {
         'grafana/provisioning/dashboards/dashboard.yml',
         'grafana/provisioning/dashboards/JVM.json',
         'grafana/provisioning/datasources/datasource.yml',
+        'zipkin.yml',
       ],
     },
     {
