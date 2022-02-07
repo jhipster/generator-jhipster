@@ -85,6 +85,7 @@ module.exports = class extends BlueprintBaseGenerator {
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
         this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
+        this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
         this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
