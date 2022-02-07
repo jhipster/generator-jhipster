@@ -2,4 +2,8 @@
 . "$(dirname "$0")/_/husky.sh"
 
 
+<%_ if (skipClient) { _%>
+npx --no-install lint-staged
+<%_ } else { _%>
 "$(dirname "$0")/../npmw" exec --no-install lint-staged
+<%_ } _%>
