@@ -80,6 +80,7 @@ const couchbaseFiles = {
   ],
   serverResource: [
     {
+      condition: generator => !generator.skipUserManagement,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/couchmove/changelog/V0__create_collections.n1ql', 'config/couchmove/changelog/V0.2__create_indexes.n1ql'],
     },

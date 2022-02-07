@@ -30,7 +30,7 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
     <%_ if (databaseTypeCouchbase) { _%>
         builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
-        builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$0");
+        builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
     <%_} _%>
     }

@@ -21,7 +21,7 @@ package <%= packageName %>.repository;
 import org.springframework.data.couchbase.repository.Query;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.ScanConsistency;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.NoRepositoryBean;
 import com.couchbase.client.java.search.SearchQuery;
 import com.couchbase.client.java.search.queries.DocIdQuery;
@@ -31,8 +31,6 @@ import java.util.LinkedList;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-<%_ } else { _%>
-import org.springframework.data.domain.Page;
 <%_ } _%>
 
 import java.util.List;
@@ -45,7 +43,7 @@ import java.util.List;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @NoRepositoryBean
-public interface CouchbaseSearchRepository<T, ID> {
+public interface CouchbaseSearchRepository<T, ID> extends JHipsterCouchbaseRepository<T, ID> {
 
     String SEARCH_CONDITION = "SEARCH(b, #{T(<%= packageName %>.repository.CouchbaseSearchRepository).searchQuery([0]).toString()})";
 
@@ -69,10 +67,25 @@ public interface CouchbaseSearchRepository<T, ID> {
     }
 
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
-    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
-    <%= listOrFlux %><T> search(String queryString);
+    default <%= listOrFlux %><T> search(String queryString) {
+        return findAllById(toIds(searchIds(queryString)));
+    }
 
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
-    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
-    <%= pageOrFlux %><T> search(String queryString, Pageable pageable);
+    default <%= pageOrFlux %><T> search(String queryString, Pageable pageable) {
+    <%_ if (reactive) { _%>
+        return findAllById(toIds(searchIds(queryString, pageable)));
+    <%_ } else { _%>
+        Page<T> page = searchIds(queryString, pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+    <%_ } _%>
+    }
+
+    @Query(FIND_IDS_QUERY + " AND " + SEARCH_CONDITION)
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    <%= listOrFlux %><T> searchIds(String queryString);
+
+    @Query(FIND_IDS_QUERY + " AND " + SEARCH_CONDITION)
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    <%= pageOrFlux %><T> searchIds(String queryString, Pageable pageable);
 }

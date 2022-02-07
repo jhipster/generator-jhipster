@@ -1,10 +1,8 @@
-<%_ if (!skipUserManagement) { _%>
 CREATE COLLECTION `${bucket}`.`${scope}`.`user`;
 
-    <%_ if (isUsingBuiltInAuthority()) { _%>
+<%_ if (isUsingBuiltInAuthority()) { _%>
 CREATE COLLECTION `${bucket}`.`${scope}`.`authority`;
-    <%_ } _%>
-    <%_ if (authenticationTypeSession) { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
 CREATE COLLECTION `${bucket}`.`${scope}`.`persistentToken`;
-    <%_ } _%>
 <%_ } _%>
