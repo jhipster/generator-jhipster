@@ -35,16 +35,9 @@
 
     <script type="text/javascript">
       const AlwaysEnableTryItOutPlugin = function (system) {
-        const OperationContainer = system.getComponents('OperationContainer');
         return {
           components: {
             TryItOutButton: () => null,
-            OperationContainer: class CustomOperationContainer extends OperationContainer {
-              constructor(...args) {
-                super(...args);
-                this.state.tryItOutEnabled = true;
-              }
-            },
           },
         };
       };
@@ -150,6 +143,7 @@
           withCredentials: true,
           presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
           plugins: [SwaggerUIBundle.plugins.DownloadUrl, AlwaysEnableTryItOutPlugin],
+          tryItOutEnabled: true,
           requestInterceptor: function (req) {
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
             req.headers['X-XSRF-TOKEN'] = getCSRF();
