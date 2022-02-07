@@ -49,6 +49,7 @@ public class CouchbaseTestContainerExtension implements BeforeAllCallback {
             System.setProperty("spring.couchbase.username", couchbase.getUsername());
             System.setProperty("spring.couchbase.password", couchbase.getPassword());
             System.setProperty("jhipster.database.couchbase.bucket-name", getBucketName());
+            System.setProperty("jhipster.database.couchbase.scope-name", "testScope");
             started.set(true);
         }
     }

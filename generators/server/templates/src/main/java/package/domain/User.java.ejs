@@ -68,8 +68,6 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.couchbase.repository.Collection;
-import org.springframework.data.couchbase.repository.Scope;
-import static <%= packageName %>.config.Constants.SCOPE_NAME;
 import static <%= packageName %>.domain.User.TYPE_NAME;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -119,7 +117,6 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
-@Scope(SCOPE_NAME)
 @TypeAlias(TYPE_NAME)
 @Collection(TYPE_NAME)
 <%_ } _%>

@@ -23,7 +23,6 @@
 <&_ if (fragment.staticImportSection) { -&>
 <%_ if (!embedded) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
-import static <%= packageName %>.config.Constants.SCOPE_NAME;
 import static <%= packageName %>.domain.<%= entityClass %>.TYPE_NAME;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
@@ -35,7 +34,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.repository.Collection;
-import org.springframework.data.couchbase.repository.Scope;
 import org.springframework.data.annotation.TypeAlias;
   <%_ } _%>
 import org.springframework.data.couchbase.core.mapping.Field;
@@ -48,7 +46,6 @@ import java.util.stream.Collectors;
 <&_ if (fragment.annotationSection) { -&>
     <%_ if (!embedded) { _%>
 @Document
-@Scope(SCOPE_NAME)
 @TypeAlias(TYPE_NAME)
 @Collection(TYPE_NAME)
     <%_ } _%>

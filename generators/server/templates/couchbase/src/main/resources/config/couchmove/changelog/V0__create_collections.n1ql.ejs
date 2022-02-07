@@ -1,10 +1,10 @@
 <%_ if (!skipUserManagement) { _%>
-CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`user`;
+CREATE COLLECTION `${bucket}`.`${scope}`.`user`;
 
     <%_ if (isUsingBuiltInAuthority()) { _%>
-CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`authority`;
+CREATE COLLECTION `${bucket}`.`${scope}`.`authority`;
     <%_ } _%>
     <%_ if (authenticationTypeSession) { _%>
-CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`persistentToken`;
+CREATE COLLECTION `${bucket}`.`${scope}`.`persistentToken`;
     <%_ } _%>
 <%_ } _%>

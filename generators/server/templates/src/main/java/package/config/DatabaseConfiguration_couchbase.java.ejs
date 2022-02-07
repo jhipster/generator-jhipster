@@ -65,7 +65,6 @@ import org.springframework.data.repository.util.QueryExecutionConverters;
 import reactor.core.publisher.Flux;
 <%_ } _%>
 
-import static <%= packageName %>.config.Constants.SCOPE_NAME;
 
 @Configuration
 @EnableConfigurationProperties(CouchbaseProperties.class)
@@ -170,16 +169,21 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public Couchmove couchmove(Cluster cluster) {
         log.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
-        Collection collection = bucket.scope(SCOPE_NAME).collection(CHANGELOG_COLLECTION);
+        Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
         Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
         couchmove.migrate();
-        couchmove.buildN1qlDeferredIndexes(SCOPE_NAME);
+        couchmove.buildN1qlDeferredIndexes(getScopeName());
         return couchmove;
     }
 
     @Override
     public String typeKey() {
         return TYPE_KEY;
+    }
+
+    @Override
+    protected String getScopeName() {
+        return jHipsterProperties.getDatabase().getCouchbase().getScopeName();
     }
 
     /**
