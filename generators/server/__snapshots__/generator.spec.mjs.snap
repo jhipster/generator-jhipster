@@ -267,6 +267,7 @@ Object {
       ],
     },
     Object {
+      "condition": [Function],
       "templates": Array [
         Object {
           "file": "npmw",
