@@ -39,6 +39,8 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 <%_ } _%>
 
+import static <%= packageName %>.domain.<%= entityClass %>.TYPE_NAME;
+
 /**
  * Spring Data Couchbase repository for the <%= persistClass %> entity.
  */
@@ -77,10 +79,12 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
           }
         }); %>;
 
-    @Query(SELECT + JOIN)
+    String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
+
+    @Query(SELECT + JOIN + WHERE)
     <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable);
 
-    @Query(SELECT + JOIN)
+    @Query(SELECT + JOIN + WHERE)
     <%= listOrFlux %><<%= persistClass %>> findAll();
 
     @Query(SELECT + " USE KEYS $1" + JOIN)
@@ -88,10 +92,10 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     } _%>
 
 <%_ if (searchEngine && notEmbeddedRelationships.length !== 0) { _%>
-    @Query(SELECT + JOIN + " WHERE " + SEARCH_CONDITION)
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
     <%= listOrFlux %><<%= persistClass %>> search(String queryString);
 
-    @Query(SELECT + JOIN + " WHERE " + SEARCH_CONDITION)
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
     <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable);
 <%_ } _%>
 

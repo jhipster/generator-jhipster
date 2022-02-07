@@ -62,10 +62,7 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-  <%_ if (!reactive) { _%>
-import org.springframework.data.domain.Page;
-  <%_ } _%>
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
   <%_ if (reactive) { _%>
@@ -169,27 +166,38 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
-  <%_ if (databaseTypeCouchbase) { _%>
-    // @ScanConsistency is to fix index issues with Spring Data Couchbase
-    // https://github.com/spring-projects/spring-data-couchbase/issues/897
+  <%_ if (!authenticationTypeOauth2) { _%>
+      <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+        return findIdByActivationKey(activationKey)
+            .map(User::getId)
+            .flatMap(this::findById);
+    }
+
+    @Query(FIND_IDS_QUERY + " AND activationKey = $1")
+    <%= optionalOrMono %><User> findIdByActivationKey(String activationKey);
+    <%_ } _%>
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
 
-    <%_ if (databaseTypeCouchbase) { _%>
-    <%_ } _%>
-    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
-  <%_ } _%>
-  <%_ if (!authenticationTypeOauth2) { _%>
+    <% if (databaseTypeCouchbase) { %>default <% } %><%= listOrFlux %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+        return findAllById(toIds(findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime)));
+    }
 
-    <%_ if (databaseTypeCouchbase) { _%>
+    @Query(FIND_IDS_QUERY + " AND activated = false AND activationKey IS NOT NULL AND createdDate < $1")
+    <%= listOrFlux %><User> findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
     <%_ } _%>
-    <%= listOrFlux %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
   <%_ } _%>
 
   <%_ if (!authenticationTypeOauth2) { _%>
-    <%_ if (databaseTypeCouchbase) { _%>
+    <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+        return findIdByResetKey(resetKey)
+            .map(User::getId)
+            .flatMap(this::findById);
+    }
+
+    @Query(FIND_IDS_QUERY + " AND resetKey = $1")
+    <%= optionalOrMono %><User> findIdByResetKey(String resetKey);
     <%_ } _%>
-    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
   <%_ } _%>
 
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -198,10 +206,15 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
       <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseTypeCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE LOWER(email) = LOWER($1) AND #{#n1ql.filter}")
+    <% if (databaseTypeCouchbase) { %>default <% } %><%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+        return findIdByEmailIgnoreCase(email)
+            .map(User::getId)
+            .flatMap(this::findById);
+    }
+
+    @Query(FIND_IDS_QUERY + " AND LOWER(email) = LOWER($1)")
+    <%= optionalOrMono %><User> findIdByEmailIgnoreCase(String email);
     <%_ } _%>
-    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
   <%_ } _%>
   <%_ if (databaseTypeCouchbase) { _%>
@@ -248,17 +261,26 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%_ } _%>
 
     <%_ if (databaseTypeCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE activated = true")
-    <%_ } _%>
-    Flux<<%= asEntity('User') %>>findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(Pageable pageable);
+    default Flux<User> findAllByActivatedIsTrue(Pageable pageable) {
+        return findAllById(toIds(findAllIdsByActivatedIsTrue(pageable)));
+    }
 
-    <%_ if (databaseTypeCouchbase) { _%>
+    @Query(FIND_IDS_QUERY + " AND activated = true")
+    Flux<User> findAllIdsByActivatedIsTrue(Pageable pageable);
+    <%_ } else { _%>
+    Flux<<%= asEntity('User') %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>
+
     Mono<Long> count();
   <% } else { %>
     <%_ if (databaseTypeCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE activated = true")
-    Page<<%= asEntity('User') %>> findAllByActivatedIsTrue(Pageable pageable);
+    default Page<User> findAllByActivatedIsTrue(Pageable pageable) {
+        Page<User> page = findAllIdsByActivatedIsTrue(pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+    }
+
+    @Query(FIND_IDS_QUERY + " AND activated = true")
+    Page<User> findAllIdsByActivatedIsTrue(Pageable pageable);
     <%_ } else { _%>
     Page<<%= asEntity('User') %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
     <%_ } _%>

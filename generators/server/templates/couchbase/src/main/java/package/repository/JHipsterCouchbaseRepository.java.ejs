@@ -19,23 +19,20 @@
 package <%= packageName %>.repository;
 
 import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
-import org.springframework.data.couchbase.repository.ScanConsistency;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.couchbase.repository.*;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.NoRepositoryBean;
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
-import org.springframework.data.domain.Page;
+import java.util.List;
+import java.util.stream.Collectors;
 <%_ } _%>
 
-import java.util.List;
-
 /**
- * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
+ * Couchbase specific {@link org.springframework.data.repository.Repository} interface that use KV first approach to optimize requests.
  */
 <%_
     let listOrFlux = reactive ? 'Flux' : 'List';
@@ -45,11 +42,52 @@ _%>
 @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
 public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
 
-    <%= listOrFlux %><T> findAll();
+    String FIND_IDS_QUERY = "SELECT meta().id as __id, 0 as __cas FROM #{#n1ql.bucket} WHERE #{#n1ql.filter}";
 
-    <%= listOrFlux %><T> findAll(Sort sort);
+    default <%= listOrFlux %><T> findAll() {
+        return findAllById(toIds(findAllIds()));
+    }
 
-    <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable);
+    default <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable) {
+    <%_ if (reactive) { _%>
+        return findAllById(toIds(findAllIds(pageable)));
+    <%_ } else { _%>
+        Page<T> page = findAllIds(pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+    <%_ } _%>
+    }
 
-    <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll();
+    default <%= listOrFlux %><T> findAll(Sort sort) {
+        return findAllById(toIds(findAllIds(sort)));
+    }
+
+    default <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll() {
+    <%_ if (reactive) { _%>
+        return toIds(findAllIds())
+            .collectList()
+            .flatMap(this::deleteAllById);
+    <%_ } else { _%>
+        deleteAllById(toIds(findAllIds()));
+    <%_ } _%>
+    }
+
+    @Query(FIND_IDS_QUERY)
+    <%= listOrFlux %><T> findAllIds();
+
+    @Query(FIND_IDS_QUERY)
+    <%= pageOrFlux %><T> findAllIds(Pageable pageable);
+
+    @Query(FIND_IDS_QUERY)
+    <%= listOrFlux %><T> findAllIds(Sort sort);
+
+    @SuppressWarnings("unchecked")
+    default <%= listOrFlux %><ID> toIds(<%= listOrFlux %><T> entities) {
+    <%_ if (reactive) { _%>
+        return entities.mapNotNull(entity -> (ID) getEntityInformation().getId(entity));
+    <%_ } else { _%>
+        return entities.stream()
+            .map(entity -> (ID) getEntityInformation().getId(entity))
+            .collect(Collectors.toList());
+    <%_ } _%>
+    }
 }

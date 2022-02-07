@@ -33,13 +33,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.couchbase.repository.Query;
-<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeNeo4j) { _%>
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
   <%_ } else { _%>
@@ -76,10 +73,6 @@ public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (
 <%_ if (databaseTypeNeo4j) { _%>
     <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<%_ } _%>
     <% if (reactive) { %>Flux<% } else { %>List<% } %><Authority> findAll();
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
-    <%= listOrFlux %><Authority> findAll();
 <%_ } _%>
 
 }
