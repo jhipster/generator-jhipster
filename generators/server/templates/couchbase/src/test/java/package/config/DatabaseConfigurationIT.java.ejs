@@ -21,6 +21,7 @@ package <%=packageName%>.config;
 import com.github.couchmove.Couchmove;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tech.jhipster.config.JHipsterProperties;
 
 import java.time.Duration;
 
@@ -28,8 +29,8 @@ import java.time.Duration;
 public class DatabaseConfigurationIT {
 
     @Bean
-    public Couchmove waitForIndexes(Couchmove couchmove) {
-        couchmove.waitForN1qlIndexes(Constants.SCOPE_NAME, Duration.ofSeconds(60));
+    public Couchmove waitForIndexes(Couchmove couchmove, JHipsterProperties properties) {
+        couchmove.waitForN1qlIndexes(properties.getDatabase().getCouchbase().getScopeName(), Duration.ofSeconds(60));
         return couchmove;
     }
 }

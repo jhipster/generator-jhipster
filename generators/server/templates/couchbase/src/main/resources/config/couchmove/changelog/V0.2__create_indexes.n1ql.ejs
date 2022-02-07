@@ -1,17 +1,17 @@
 <%_ if (!skipUserManagement) { _%>
-CREATE PRIMARY INDEX ON `${bucket}`.`<%= camelCase(baseName) %>`.`user`
+CREATE PRIMARY INDEX ON `${bucket}`.`${scope}`.`user`
     WITH { "defer_build" : true };
 
-CREATE INDEX user_mail ON `${bucket}`.`<%= camelCase(baseName) %>`.`user`(email)
+CREATE INDEX user_mail ON `${bucket}`.`${scope}`.`user`(email)
     WITH { "defer_build" : true };
 
 <%_ if (isUsingBuiltInAuthority()) { _%>
-CREATE PRIMARY INDEX ON `${bucket}`.`<%= camelCase(baseName) %>`.`authority`
+CREATE PRIMARY INDEX ON `${bucket}`.`${scope}`.`authority`
     WITH { "defer_build" : true };
 <%_ } _%>
 
   <%_ if (authenticationTypeSession) { _%>
-CREATE INDEX token_date ON `${bucket}`.`<%= camelCase(baseName) %>`.`persistentToken` %>(tokenDate)
+CREATE INDEX token_date ON `${bucket}`.`${scope}`.`persistentToken` %>(tokenDate)
     WITH { "defer_build" : true };
   <%_ } _%>
 <%_ } _%>
