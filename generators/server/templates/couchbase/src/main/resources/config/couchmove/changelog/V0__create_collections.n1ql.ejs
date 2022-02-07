@@ -1,5 +1,3 @@
-CREATE SCOPE `${bucket}`.`<%= camelCase(baseName) %>`;
-
 <%_ if (!skipUserManagement) { _%>
 CREATE COLLECTION `${bucket}`.`<%= camelCase(baseName) %>`.`user`;
 

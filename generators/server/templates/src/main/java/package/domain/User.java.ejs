@@ -66,10 +66,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.couchbase.repository.Collection;
 import org.springframework.data.couchbase.repository.Scope;
 import static <%= packageName %>.config.Constants.SCOPE_NAME;
-import static <%= packageName %>.domain.User.COLLECTION_NAME;
+import static <%= packageName %>.domain.User.TYPE_NAME;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -119,7 +120,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
 @Scope(SCOPE_NAME)
-@Collection(COLLECTION_NAME)
+@TypeAlias(TYPE_NAME)
+@Collection(TYPE_NAME)
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   <%_ if (reactive) { _%>
@@ -137,7 +139,7 @@ public class <%= asEntity('User') %><% if (databaseTypeSql || databaseTypeMongod
     private static final long serialVersionUID = 1L;
 
 <%_ if (databaseTypeCouchbase) { _%>
-    public static final String COLLECTION_NAME = "user";
+    public static final String TYPE_NAME = "user";
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>

@@ -24,7 +24,7 @@
 <%_ if (!embedded) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static <%= packageName %>.config.Constants.SCOPE_NAME;
-import static <%= packageName %>.domain.<%= entityClass %>.COLLECTION_NAME;
+import static <%= packageName %>.domain.<%= entityClass %>.TYPE_NAME;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
 <&_ } -&>
@@ -36,6 +36,7 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.repository.Collection;
 import org.springframework.data.couchbase.repository.Scope;
+import org.springframework.data.annotation.TypeAlias;
   <%_ } _%>
 import org.springframework.data.couchbase.core.mapping.Field;
   <%_ if (relationships.length > 0) { _%>
@@ -48,12 +49,13 @@ import java.util.stream.Collectors;
     <%_ if (!embedded) { _%>
 @Document
 @Scope(SCOPE_NAME)
-@Collection(COLLECTION_NAME)
+@TypeAlias(TYPE_NAME)
+@Collection(TYPE_NAME)
     <%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.classStaticFieldsSection) { -&>
-    public static final String COLLECTION_NAME = "<%= entityInstance %>";
+    public static final String TYPE_NAME = "<%= entityInstance %>";
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
