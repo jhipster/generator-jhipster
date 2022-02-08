@@ -32,6 +32,9 @@ import <%= packageName %>.config.MongoDbTestContainerExtension;
 <%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.config.CassandraTestContainerExtension;
 <%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+import <%= packageName %>.config.KafkaTestContainerExtension;
+<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
@@ -84,6 +87,9 @@ import java.lang.annotation.Target;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+@ExtendWith(KafkaTestContainerExtension.class)
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)

@@ -1862,6 +1862,10 @@ Object {
           "file": "package/web/rest/KafkaResourceIT.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/config/KafkaTestContainerExtension.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {

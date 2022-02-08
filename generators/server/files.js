@@ -1459,6 +1459,10 @@ const baseServerFiles = {
           file: 'package/web/rest/KafkaResourceIT.java',
           renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
         },
+        {
+          file: 'package/config/KafkaTestContainerExtension.java',
+          renameTo: generator => `${generator.testDir}config/KafkaTestContainerExtension.java`,
+        },
       ],
     },
   ],
