@@ -361,7 +361,7 @@ _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.otherEntity.embedded) {
     if (relationship.relationshipManyToOne) { _%>
-            ", <%= relationship.relationshipFieldNamePlural %>='" + get<%= relationship.relationshipNameCapitalizedPlural %>() + "'" +
+            ", <%= relationship.relationshipFieldName %>='" + get<%= relationship.relationshipNameCapitalized %>() + "'" +
     <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>
             ", <%= relationship.relationshipFieldName %>='" + get<%= relationship.relationshipNameCapitalized %>() + "'" +
     <%_ } _%>
