@@ -118,7 +118,7 @@ jobs:
             environment: dev
             war: 0
             e2e: 1
-            testcontainers: 0
+            testcontainers: 1
           - app-sample: ngx-h2mem-ws-nol2
             entity: sql
             environment: dev
@@ -146,6 +146,12 @@ jobs:
           - app-sample: ngx-gradle-mariadb-oauth2-infinispan
             entity: sql
             environment: dev
+            war: 0
+            e2e: 1
+            testcontainers: 1
+          - app-sample: ngx-gradle-mongodb-kafka-cucumber
+            entity: mongodb
+            environment: prod
             war: 0
             e2e: 1
             testcontainers: 1

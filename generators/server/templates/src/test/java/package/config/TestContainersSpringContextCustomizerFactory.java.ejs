@@ -30,6 +30,10 @@ import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
+<%_ if (messageBrokerKafka) { _%>
+import org.testcontainers.containers.KafkaContainer;
+<%_ } _%>
+
 
 <%_ if (databaseTypeMongodb) { _%>
 import org.testcontainers.containers.MongoDBContainer;
@@ -68,6 +72,14 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             } else {
                 log.error("test container database configuration has not been set because container has not started");
             }
+<%_ if (messageBrokerKafka) { _%>
+            KafkaContainer brokerContainer = (KafkaContainer) KafkaTestContainerExtension.getThreadContainer().get();
+            if (brokerContainer != null) {
+                testValues = testValues.and("kafka.bootstrap-servers=" + brokerContainer.getBootstrapServers());
+            } else {
+                log.error("test container database configuration has not been set because container has not started");
+            }
+<%_ } _%>
             testValues.applyTo(context);
         };
     }
