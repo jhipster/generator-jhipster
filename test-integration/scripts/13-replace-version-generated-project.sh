@@ -10,6 +10,9 @@ if [[ "$JHI_LIB_BRANCH" == "release" ]]; then
 fi
 
 if [[ $JHI_VERSION == '' ]]; then
+    JHI_VERSION=$JHI_BOM_VERSION
+fi
+if [[ $JHI_VERSION == '' ]]; then
     JHI_VERSION=0.0.0-CICD
 fi
 
