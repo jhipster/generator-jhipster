@@ -27,12 +27,12 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JHipsterCouchbaseRepositoryTest {
+class CouchbaseSearchRepositoryTest {
 
     @MethodSource
     @ParameterizedTest
     void queryString(String query, SearchQuery ftsQuery) {
-        assertThat(JHipsterCouchbaseRepository.searchQuery(query).toString()).isEqualTo(ftsQuery.toString());
+        assertThat(CouchbaseSearchRepository.searchQuery(query).toString()).isEqualTo(ftsQuery.toString());
     }
 
     @SuppressWarnings("unused")

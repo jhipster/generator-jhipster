@@ -35,8 +35,6 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.couchbase.repository.Query;
-import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.ScanConsistency;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
@@ -81,7 +79,6 @@ public interface AuthorityRepository extends <% if (databaseTypeSql) { %><% if (
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><Authority> findAll();
 <%_ } _%>
 

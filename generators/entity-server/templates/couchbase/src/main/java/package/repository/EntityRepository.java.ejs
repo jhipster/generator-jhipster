@@ -20,11 +20,9 @@ package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 
-<%_ if (relationships.length !== 0 || searchEngineCouchbase) { _%>
+<%_ if (relationships.length !== 0) { _%>
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Pageable;
-import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.ScanConsistency;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -53,7 +51,7 @@ import java.util.UUID;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @Repository
-public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngine) { %>, CouchbaseSearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
   <%_
   var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntityIsEmbedded)
   if (notEmbeddedRelationships.length !== 0) { %>
@@ -80,31 +78,20 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
         }); %>;
 
     @Query(SELECT + JOIN)
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable);
 
     @Query(SELECT + JOIN)
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><<%= persistClass %>> findAll();
 
     @Query(SELECT + " USE KEYS $1" + JOIN)
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= optionalOrMono %><<%= persistClass %>> findById(String id);<%
     } _%>
 
-<%_ if (searchEngineCouchbase) { _%>
-  <%_ if (notEmbeddedRelationships.length === 0) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
-  <%_ } else { _%>
+<%_ if (searchEngine && notEmbeddedRelationships.length !== 0) { _%>
     @Query(SELECT + JOIN + " WHERE " + SEARCH_CONDITION)
-  <%_ } _%>
     <%= listOrFlux %><<%= persistClass %>> search(String queryString);
 
-  <%_ if (notEmbeddedRelationships.length === 0) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE " + SEARCH_CONDITION)
-  <%_ } else { _%>
     @Query(SELECT + JOIN + " WHERE " + SEARCH_CONDITION)
-  <%_ } _%>
     <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable);
 <%_ } _%>
 

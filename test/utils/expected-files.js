@@ -802,7 +802,7 @@ const expectedFiles = {
     `${DOCKER_DIR}neo4j.yml`,
   ],
 
-  couchbaseSearch: [`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/JHipsterCouchbaseRepositoryTest.java`],
+  couchbaseSearch: [`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CouchbaseSearchRepositoryTest.java`],
 
   cassandra: [
     `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,
