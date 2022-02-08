@@ -211,7 +211,7 @@ _%>
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
   if (rel.relationshipManyToOne || (rel.relationshipOneToOne && rel.ownerSide)) { _%>
-          <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.id,
+          <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.<%= otherEntityPkName %>,
   <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
           <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
   <%_ } _%>
