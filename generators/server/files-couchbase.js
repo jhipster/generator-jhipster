@@ -59,11 +59,21 @@ const couchbaseFiles = {
     },
     {
       condition: generator => generator.searchEngine === COUCHBASE,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/CouchbaseSearchRepository.java',
+          renameTo: generator => `${generator.javaDir}repository/CouchbaseSearchRepository.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngine === COUCHBASE,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/JHipsterCouchbaseRepositoryTest.java',
-          renameTo: generator => `${generator.testDir}repository/JHipsterCouchbaseRepositoryTest.java`,
+          file: 'package/repository/CouchbaseSearchRepositoryTest.java',
+          renameTo: generator => `${generator.testDir}repository/CouchbaseSearchRepositoryTest.java`,
         },
       ],
     },
@@ -118,6 +128,7 @@ function writeCouchbaseFiles() {
       }
 
       if (this.isJhipsterVersionLessThan('7.6.1')) {
+        this.removeFile(`${constants.SERVER_TEST_SRC_DIR}${this.testDir}repository/JHipsterCouchbaseRepositoryTest.java`);
         this.removeFolder(`${constants.SERVER_MAIN_SRC_DIR}${this.javaDir}config/couchbase`);
         this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`);
         this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`);

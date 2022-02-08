@@ -24,12 +24,6 @@ import org.springframework.data.couchbase.repository.ScanConsistency;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
-<%_ if (searchEngineCouchbase) { _%>
-import com.couchbase.client.java.search.SearchQuery;
-import com.couchbase.client.java.search.queries.DocIdQuery;
-import com.couchbase.client.java.search.queries.QueryStringQuery;
-import java.util.LinkedList;
-<%_ } _%>
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -39,10 +33,6 @@ import org.springframework.data.domain.Page;
 <%_ } _%>
 
 import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.data.couchbase.core.query.Query;
-
-import static java.lang.String.format;
 
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
@@ -52,40 +42,14 @@ import static java.lang.String.format;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @NoRepositoryBean
+@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
 public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
 
-<%_ if (searchEngineCouchbase) { _%>
-    String SEARCH_CONDITION = "SEARCH(b, #{T(tech.jhipster.sample.repository.JHipsterCouchbaseRepository).searchQuery([0]).toString()})";
-
-    static SearchQuery searchQuery(String queryString) {
-        List<String> ids = new LinkedList<>();
-        for (String r : queryString.split(" ")) {
-            if (r.indexOf("id:") == 0) {
-                ids.add(r.substring(3));
-                queryString = queryString.replace(r, "").replaceAll("[ ]+", " ").trim();
-            }
-        }
-        QueryStringQuery query = SearchQuery.queryString(queryString);
-        if (ids.size() != 0) {
-            DocIdQuery docIdQuery = SearchQuery.docId(ids.toArray(new String[0]));
-            if (!queryString.isEmpty()) {
-                return SearchQuery.conjuncts(query, docIdQuery);
-            }
-            return docIdQuery;
-        }
-        return query;
-    }
-<%_ } _%>
-
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><T> findAll();
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= listOrFlux %><T> findAll(Sort sort);
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable);
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll();
 }
