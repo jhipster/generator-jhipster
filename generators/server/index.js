@@ -605,7 +605,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
-            'backend:unit:test': `./mvnw -T 1C -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:unit:test': `./mvnw -T 1C -ntp${excludeWebapp} verify --batch-mode -Djhipster-tests.keep-containers-running=false ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
@@ -621,7 +621,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
-            'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
+            'backend:unit:test': `./gradlew test integrationTest -Djhipster-tests.keep-containers-running=false ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
             'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
           });
@@ -635,7 +635,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
           'ci:backend:test':
-            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -Djhipster-tests.keep-containers-running=false -P$npm_package_config_default_environment',
+            'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',

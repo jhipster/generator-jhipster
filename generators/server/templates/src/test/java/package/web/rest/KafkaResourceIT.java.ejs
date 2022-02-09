@@ -96,7 +96,6 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
 
         producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
-
 <%_ if (reactive) { _%>
         String value = client.get().uri("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume")
             .accept(MediaType.TEXT_EVENT_STREAM)
@@ -105,23 +104,20 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
             .returnResult(String.class)
             .getResponseBody().blockFirst(Duration.ofSeconds(10));
-
         assertThat(value).isEqualTo("value-consume");
 <%_ } else { _%>
         MvcResult mvcResult = restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume"))
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
             .andReturn();
-
         for (int i = 0; i < 100; i++) {
+            Thread.sleep(200);
             String content = mvcResult.getResponse().getContentAsString();
             if (content.contains("data:value-consume")) {
                 return;
             }
-            Thread.sleep(500);
         }
         fail("Expected content data:value-consume not received");
 <%_ } _%>
     }
-
 }

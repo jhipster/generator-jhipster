@@ -18,7 +18,16 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import <%= packageName %>.config.KafkaProperties;
+<%_ if (!reactive) { _%>
+import java.time.Duration;
+<%_ }  _%>
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+<%_ if (!reactive) { _%>
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+<%_ }  _%>
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 <%_ if (!reactive) { _%>
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -29,6 +38,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 <%_ }  _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -44,17 +54,7 @@ import reactor.kafka.sender.SenderResult;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 <%_ }  _%>
 
-<%_ if (!reactive) { _%>
-import java.time.Duration;
-<%_ }  _%>
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-<%_ if (!reactive) { _%>
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-<%_ }  _%>
+import <%= packageName %>.config.KafkaProperties;
 
 @RestController
 @RequestMapping("/api/<%= dasherizedBaseName %>-kafka")
@@ -67,16 +67,17 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
     private KafkaSender<String, String> sender;
 <%_ } else { _%>
     private KafkaProducer<String, String> producer;
-    private ExecutorService sseExecutorService = Executors.newCachedThreadPool();
+    private Executor sseExecutor;
 <%_ }  _%>
 
-    public <%= upperFirstCamelCase(baseName) %>KafkaResource(KafkaProperties kafkaProperties) {
+    public <%= upperFirstCamelCase(baseName) %>KafkaResource(KafkaProperties kafkaProperties<% if (!reactive) { %>, @Qualifier("taskExecutor") Executor executor<%_ } _%>) {
         this.kafkaProperties = kafkaProperties;
 <%_ if (reactive) { _%>
         this.sender = KafkaSender.create(SenderOptions.create(kafkaProperties.getProducerProps()));
 <%_ } else { _%>
         this.producer = new KafkaProducer<>(kafkaProperties.getProducerProps());
-<%_ }  _%>
+        this.sseExecutor = executor;
+<%_ } _%>
     }
 
     @PostMapping("/publish/{topic}")
@@ -108,16 +109,17 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
             .receive()
             .map(ConsumerRecord::value);
 <%_ } else { _%>
-        SseEmitter emitter = new SseEmitter(0L);
-        sseExecutorService.execute(() -> {
-            KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
-            emitter.onCompletion(consumer::close);
-            consumer.subscribe(topics);
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
+        consumer.subscribe(topics);
+        SseEmitter emitter = new SseEmitter();
+        emitter.onCompletion(consumer::close);
+        sseExecutor.execute(() -> {
             boolean exitLoop = false;
-            while(!exitLoop) {
+            while (!exitLoop) {
                 try {
-                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
+                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));
                     for (ConsumerRecord<String, String> record : records) {
+                        log.info("kafka message received and resent through Sse: {}" , record.value());
                         emitter.send(record.value());
                     }
                     emitter.send(SseEmitter.event().comment(""));
@@ -127,7 +129,6 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
                     exitLoop = true;
                 }
             }
-            consumer.close();
             emitter.complete();
         });
         return emitter;
@@ -135,6 +136,7 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
     }
 
     private static class PublishResult {
+
         public final String topic;
         public final int partition;
         public final long offset;
