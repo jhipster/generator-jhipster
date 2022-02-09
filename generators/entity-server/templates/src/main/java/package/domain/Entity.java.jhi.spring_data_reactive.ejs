@@ -92,7 +92,7 @@ import org.springframework.data.relational.core.mapping.Table;
 <&_ if (fragment.classAdditionalRelationshipsSection) { -&>
     <%_ for (const relationship of relationships) { _%>
       <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
-    @Column("<%= relationship.columnName %>_id")
+    @Column("<%= relationship.joinColumnNames[0] %>")
     private <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id;
       <%_ } _%>
     <%_ } _%>

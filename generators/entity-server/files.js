@@ -79,6 +79,36 @@ const serverFiles = {
       ],
     },
     {
+      condition: generator => generator.databaseTypeSql && generator.requiresPersistableImplementation,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.spring_data_persistable',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.spring_data_persistable`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && generator.reactive && generator.requiresPersistableImplementation,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/EntityCallback.java',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}Callback.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive && generator.requiresPersistableImplementation,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/domain/Entity.java.jhi.javax_lifecycle_events',
+          renameTo: generator => `${generator.entityAbsoluteFolder}/domain/${generator.persistClass}.java.jhi.javax_lifecycle_events`,
+        },
+      ],
+    },
+    {
       condition: generator => generator.databaseTypeCassandra,
       path: SERVER_MAIN_SRC_DIR,
       templates: [

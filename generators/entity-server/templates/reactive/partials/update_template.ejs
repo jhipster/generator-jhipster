@@ -21,11 +21,18 @@ const instanceName = restInstance;
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDtoReference = mapper + '::' + 'toDto';
+// if the entity has no fields except the id a call to save will produce an exception
+const needsSaveCall = fields.filter(field => !field.id && !field.transient).length > 0;
 _%>
 <%_ if (viaService) { _%>
-        return <%= entityInstance %>Service.save(<%= instanceName %>)
+        return <%= entityInstance %>Service.update(<%= instanceName %>)
 <%_ } else { _%>
-        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %><%if (dtoMapstruct) { %>)<% } -%>)
+    <%_ if (needsSaveCall) { _%>
+        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %><%if (dtoMapstruct) { %>)<% } -%><% if (isPersisted) { %>.setIsPersisted()<% } %>)
+    <%_ } else { _%>
+        // no save call needed as we have no fields that can be updated
+        return <%= entityInstance %>Repository.findById(<%= instanceName %>.get<%= primaryKey.nameCapitalized %>())
+    <%_ } _%>
     <%_ if (searchEngineElasticsearch) { %>
             .flatMap(<%= entityInstance %>SearchRepository::save)
     <%_ } -%>

@@ -22,6 +22,7 @@
     importSection: 0,
     staticImportSection: 0,
     annotationSection: 0,
+    additionalInterfacesSection: 0,
     classStaticFieldsSection: 0,
     classFieldsSection: 0,
     classAdditionalFieldsSection: 0,
@@ -92,7 +93,7 @@ import <%= otherEntity.entityAbsoluteClass %>;
   <%_ } _%>
 <%_ } _%>
 <&- fragments.annotationSection() -&>
-public class <%= persistClass %> implements Serializable {
+public class <%= persistClass %> implements Serializable<&- fragments.additionalInterfacesSection() -&> {
 
     private static final long serialVersionUID = 1L;
 
