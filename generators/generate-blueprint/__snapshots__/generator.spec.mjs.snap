@@ -584,6 +584,9 @@ Object {
   "package.json": Object {
     "stateCleared": "modified",
   },
+  "test/utils.mjs": Object {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -629,6 +632,9 @@ Object {
     "stateCleared": "modified",
   },
   "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "test/utils.mjs": Object {
     "stateCleared": "modified",
   },
 }

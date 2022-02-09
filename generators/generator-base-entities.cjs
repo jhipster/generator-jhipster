@@ -27,6 +27,7 @@ const {
   PREPARING_EACH_ENTITY_RELATIONSHIP,
   POST_PREPARING_EACH_ENTITY,
   WRITING_ENTITIES,
+  POST_WRITING_ENTITIES,
 } = PRIORITY_NAMES;
 
 const {
@@ -37,6 +38,7 @@ const {
   PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
   POST_PREPARING_EACH_ENTITY_QUEUE,
   WRITING_ENTITIES_QUEUE,
+  POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
 /**
@@ -97,6 +99,17 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
 
   _writingEachEntity() {
     return {};
+  }
+
+  getDataArgForPriority(priorityName) {
+    const dataArg = super.getDataArgForPriority(priorityName);
+    if (priorityName === WRITING_ENTITIES || priorityName === POST_WRITING_ENTITIES) {
+      return {
+        ...dataArg,
+        ...this.getEntitiesDataToWrite(),
+      };
+    }
+    return dataArg;
   }
 
   /**
@@ -328,12 +341,23 @@ class JHipsterBaseEntitiesGenerator extends BaseBlueprintGenerator {
         tasks.forEach(task => {
           this.queueTask({
             ...task,
-            args: [
-              {
-                ...this.getDataArgForPriority(WRITING_ENTITIES),
-                ...this.getEntitiesDataToWrite(),
-              },
-            ],
+            args: this.getArgsForPriority(WRITING_ENTITIES),
+          });
+        });
+      },
+    });
+
+    this.queueTask({
+      queueName: POST_WRITING_ENTITIES_QUEUE,
+      taskName: 'queuePostWritingEachEntity',
+      cancellable: true,
+      method: () => {
+        if (this.options.skipWriting) return;
+        const tasks = this.extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
+        tasks.forEach(task => {
+          this.queueTask({
+            ...task,
+            args: this.getArgsForPriority(POST_WRITING_ENTITIES),
           });
         });
       },
