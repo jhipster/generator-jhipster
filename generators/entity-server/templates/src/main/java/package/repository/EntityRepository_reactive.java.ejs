@@ -104,21 +104,21 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
     let ownerSide = relationship.ownerSide; _%>
     <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id = :id")
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= relationship.joinColumnNames[0] %> = :id")
     Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= relationship.joinColumnNames[0] %> IS NULL")
     Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
     <%_ } else if (relationship.shouldWriteJoinTable) { _%>
 
-    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
+    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.<%= primaryKey.fields[0].columnName %> = joinTable.<%= relationship.joinColumnNames[0] %> WHERE joinTable.<%= relationship.joinColumnNames[0] %> = :id")
     Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
     <%_ } else if (relationship.relationshipOneToOne && !ownerSide) {
         let otherEntityRelationshipName = relationship.otherEntityRelationshipName;
         let otherEntityTableName = relationship.otherEntityTableName;
       _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= primaryKey.fields[0].columnName  %> not in (select <%= relationship.joinColumnNames[0]%> from <%= otherEntityTableName %>)")
     Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
     <%_ } _%>
   <%_ } _%>

@@ -29,7 +29,7 @@ public class <%= entityClass %>SqlHelper {
 
     public static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
-<%_ fields.forEach(function(field) {
+<%_ fields.filter(field => !field.transient).forEach(function(field) {
     let col = field.fieldNameAsDatabaseColumn;
     _%>
         columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
@@ -39,7 +39,7 @@ public class <%= entityClass %>SqlHelper {
 <%_ }); _%>
 
 <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
-        columns.add(Column.aliased("<%= getColumnName(rel.relationshipName) %>_id", table, columnPrefix + "_<%= getColumnName(rel.relationshipName) %>_id"));
+        columns.add(Column.aliased("<%= rel.joinColumnNames[0] %>", table, columnPrefix + "_<%= rel.joinColumnNames[0] %>"));
 <%_ }); _%>
         return columns;
     }

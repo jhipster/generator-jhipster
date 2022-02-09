@@ -835,6 +835,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       processEntityPrimaryKeysDerivedProperties() {
         if (!this.context.primaryKey) return;
         derivedPrimaryKeyProperties(this.context.primaryKey);
+        this._checkPersistableInterfaceRequirement();
       },
 
       processPrimaryKeyTypesForRelations() {
@@ -1145,6 +1146,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
   _derivedCompositePrimaryKeyProperties(types) {
     this.context.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
+  }
+
+  _checkPersistableInterfaceRequirement() {
+    this.context.requiresPersistableImplementation = this.context.fields.some(field => field.requiresPersistableImplementation);
   }
 }
 

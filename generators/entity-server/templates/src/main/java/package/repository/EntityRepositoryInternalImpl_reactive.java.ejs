@@ -103,7 +103,7 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 <%_ relationships.forEach(function(rel) {
   if (rel.shouldWriteJoinTable) {
 _%>
-    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= getColumnName(name) %>_id", "<%= getColumnName(rel.relationshipName) %>_id");
+    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= entity.entityTableName %>_<%= getColumnName(entity.primaryKey.name) %>", "<%= rel.joinColumnNames[0] %>");
 <%_ }
 }); _%>
 
@@ -136,7 +136,7 @@ _%>
 <%_ }); _%>
         SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)
 <%_ reactiveEagerRelations.forEach(function(rel) { _%>
-            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))
+            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("<%= rel.otherEntity.primaryKey.fields[0].columnName %>", <%= rel.relationshipName %>Table ))
 <%_ }); _%>;
 
         String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
@@ -150,7 +150,7 @@ _%>
 
     @Override
     public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
-        return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.name %>").is(id)).one();
+        return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.fields[0].columnName %>").is(id)).one();
     }
 
 <%_ if (implementsEagerLoadApis) { _%>
@@ -196,21 +196,21 @@ _%>
     return (rel.relationshipManyToMany && rel.ownerSide);
    }).forEach(function(rel, idx) { _%>
     <%_ if (idx === 0) { _%>
-        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)).then();
+        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)).then();
     <%_ } else { _%>
-        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::getId)));
+        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.get<%= rel.relationshipNameCapitalizedPlural %>().stream().map(<%= asEntity(rel.otherEntityNameCapitalized) %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)));
     <%_ } _%>
   <%_ }); _%>
         return result.thenReturn(entity);
     }
 
     @Override
-    public Mono<Void> deleteById(Long entityId) {
+    public Mono<Void> deleteById(<%= primaryKey.type %> entityId) {
         return deleteRelations(entityId)
             .then(super.deleteById(entityId));
     }
 
-    protected Mono<Void> deleteRelations(Long entityId) {
+    protected Mono<Void> deleteRelations(<%= primaryKey.type %> entityId) {
   <%_ relationships.filter(function(rel) {
       return (rel.relationshipManyToMany && rel.ownerSide);
     }).forEach(function(rel, idx) { _%>

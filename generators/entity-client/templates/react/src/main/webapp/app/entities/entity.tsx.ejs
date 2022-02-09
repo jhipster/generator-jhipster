@@ -430,7 +430,7 @@ _%>
                         {
                           (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
                               (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                                  <span key={j}><Link to={`<%= otherEntityStateName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                                  <span key={j}><Link to={`<%= otherEntityStateName %>/${val.<%= otherEntity.primaryKey.name %>}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
                               )
                           ) : null
                         }

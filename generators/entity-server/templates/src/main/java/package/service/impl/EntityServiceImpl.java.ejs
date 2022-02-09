@@ -112,7 +112,23 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('/partials/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
+<%- include('/partials/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, isPersisted: false}); -%>
+    }
+
+<%_ if (!serviceImpl) { _%>
+    /**
+     * Update a <%= entityInstance %>.
+     *
+     * @param <%= instanceName %> the entity to save.
+     * @return the persisted entity.
+    */
+<%_ } _%>
+<%_ if (serviceImpl) { _%>
+    @Override
+<%_ } _%>
+    public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> update(<%= instanceType %> <%= instanceName %>) {
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
+<%- include('/partials/update_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, isPersisted: requiresPersistableImplementation}); -%>
     }
 
 <%_ if (!serviceImpl) { _%>

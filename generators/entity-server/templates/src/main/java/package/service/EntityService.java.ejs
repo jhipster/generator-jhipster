@@ -66,6 +66,14 @@ public interface <%= entityClass %>Service {
     <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> save(<%= instanceType %> <%= instanceName %>);
 
     /**
+     * Updates a <%= entityInstance %>.
+     *
+     * @param <%= instanceName %> the entity to update.
+     * @return the persisted entity.
+     */
+     <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> update(<%= instanceType %> <%= instanceName %>);
+
+    /**
      * Partially updates a <%= entityInstance %>.
      *
      * @param <%= instanceName %> the entity to update partially.

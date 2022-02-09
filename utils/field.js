@@ -271,23 +271,27 @@ function prepareFieldForTemplates(entityWithConfig, field, generator) {
       field.jpaGeneratedValue = false;
       field.autoGenerateByService = false;
       field.autoGenerateByRepository = false;
+      field.requiresPersistableImplementation = true;
     } else if (entityWithConfig.databaseType !== SQL) {
       field.liquibaseAutoIncrement = false;
       field.jpaGeneratedValue = false;
       field.autoGenerateByService = field.fieldType === UUID;
       field.autoGenerateByRepository = !field.autoGenerateByService;
+      field.requiresPersistableImplementation = false;
       field.readonly = true;
     } else if (entityWithConfig.reactive) {
-      field.liquibaseAutoIncrement = true;
+      field.liquibaseAutoIncrement = field.fieldType === LONG;
       field.jpaGeneratedValue = false;
-      field.autoGenerateByService = false;
-      field.autoGenerateByRepository = true;
+      field.autoGenerateByService = !field.liquibaseAutoIncrement;
+      field.autoGenerateByRepository = !field.autoGenerateByService;
+      field.requiresPersistableImplementation = !field.liquibaseAutoIncrement;
       field.readonly = true;
     } else {
       const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
       field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
       field.autoGenerateByService = false;
       field.autoGenerateByRepository = true;
+      field.requiresPersistableImplementation = false;
       field.readonly = true;
       if (field.jpaGeneratedValue === 'identity') {
         field.liquibaseAutoIncrement = true;
