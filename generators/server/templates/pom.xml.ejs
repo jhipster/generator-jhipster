@@ -77,7 +77,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <start-class><%= packageName %>.<%= mainClass %></start-class>
-        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx512m</argLine>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx1G</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
@@ -1029,7 +1029,7 @@
                                           fork="true"
                                           failonerror="true"
                                           newenvironment="true"
-                                          maxmemory="512m"
+                                          maxmemory="1G"
                                           classpathref="maven.test.classpath">
                                         <arg value="--include-engine"/>
                                         <arg value="cucumber"/>

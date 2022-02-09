@@ -1743,7 +1743,8 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.cucumberTests,
+      condition: generator =>
+        !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1753,7 +1754,8 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.cucumberTests,
+      condition: generator =>
+        !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_RES_DIR,
       templates: [
         {

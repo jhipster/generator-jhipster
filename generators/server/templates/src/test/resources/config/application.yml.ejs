@@ -172,7 +172,7 @@ spring:
     scheduling:
       thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
       pool:
-        size: 1
+        size: 20
   thymeleaf:
     mode: HTML
 <%_ if (authenticationTypeOauth2) { _%>
