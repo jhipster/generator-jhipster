@@ -60,7 +60,7 @@ _%>
                 </dd>
 <%_ } _%>
 <%_
-for (const relationship of relationships) {
+for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
     const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
     const relationshipFieldName = relationship.relationshipFieldName;

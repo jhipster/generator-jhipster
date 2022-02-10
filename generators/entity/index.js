@@ -719,7 +719,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
           if (!this.context.differentRelationships[entityType]) {
             this.context.differentRelationships[entityType] = [];
           }
-          this.context.differentRelationships[entityType].push(relationship);
+          if (!relationship.otherEntityIsEmbedded) {
+            this.context.differentRelationships[entityType].push(relationship);
+          }
         });
       },
 
