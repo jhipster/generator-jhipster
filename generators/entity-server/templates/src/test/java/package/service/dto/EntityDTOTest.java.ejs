@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,35 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.dto;
+package <%= entityAbsolutePackage %>.service.dto;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
 <%_
-let id1 = getPrimaryKeyValue(primaryKeyType, databaseType, '1');
-let id2 = getPrimaryKeyValue(primaryKeyType, databaseType, '2');
-_%>
-<%_ if (id1.includes('UUID')) { _%>
+let id1;
+let id2;
+if (!embedded) {
+    id1 = getPrimaryKeyValue(primaryKey.type, databaseType, '1');
+    id2 = getPrimaryKeyValue(primaryKey.type, databaseType, '2');
+} %>
+<%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
-public class <%= asDto(entityClass) %>Test {
+class <%= dtoClass %>Test {
 
     @Test
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
-        <%_if (!embedded) { _%>
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %>1 = new <%= asDto(entityClass) %>();
-        <%= asDto(entityInstance) %>1.setId(<%- id1 %>);
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %>2 = new <%= asDto(entityClass) %>();
-        assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.setId(<%= asDto(entityInstance) %>1.getId());
-        assertThat(<%= asDto(entityInstance) %>1).isEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>2.setId(<%- id2 %>);
-        assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%= asDto(entityInstance) %>1.setId(null);
-        assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
-        <%_} _%>
+    void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(<%= dtoClass %>.class);
+<%_if (!embedded) { _%>
+        <%= dtoClass %> <%= dtoInstance %>1 = new <%= dtoClass %>();
+        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
+        <%= dtoClass %> <%= dtoInstance %>2 = new <%= dtoClass %>();
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
+        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= dtoInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        assertThat(<%= dtoInstance %>1).isEqualTo(<%= dtoInstance %>2);
+        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
+        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
+        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
+<%_ } _%>
     }
 }

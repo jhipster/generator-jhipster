@@ -1,0 +1,171 @@
+/*
+ * UUID custom id
+ */
+@ChangelogDate(20200804035300)
+entity EntityUuidId {
+  id UUID
+}
+
+@ChangelogDate(20200804035301)
+entity EntityUuidIdMapsId {
+}
+
+@ChangelogDate(20200804035302)
+entity EntityUuidIdRelationship {
+  id UUID
+}
+
+relationship OneToOne {
+  EntityUuidIdMapsId to @Id EntityUuidId
+  EntityUuidIdRelationship{oneToOne} to EntityUuidId{oneToOneBack}
+  EntityUuidIdRelationship{oneToOneMapsId} to EntityUuidIdMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  EntityUuidIdRelationship{manyToOne} to EntityUuidId{manyToOneBack}
+  EntityUuidIdRelationship{manyToOneMapsId} to EntityUuidIdMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  EntityUuidIdRelationship{manyToMany} to EntityUuidId{manyToManyBack}
+  EntityUuidIdRelationship{manyToManyMapsId} to EntityUuidIdMapsId{manyToManyMapsIdBack}
+}
+
+/*
+ * UUID custom id with DTO
+ */
+@ChangelogDate(20200804035400)
+entity EntityUuidIdDTO {
+  id UUID
+}
+
+@ChangelogDate(20200804035401)
+entity EntityUuidIdDTOMapsId {
+}
+
+@ChangelogDate(20200804035402)
+entity EntityUuidIdDTORel {
+  id UUID
+}
+
+relationship OneToOne {
+  EntityUuidIdDTOMapsId to @Id EntityUuidIdDTO
+  EntityUuidIdDTORel{oneToOne} to EntityUuidIdDTO{oneToOneBack}
+  EntityUuidIdDTORel{oneToOneMapsId} to EntityUuidIdDTOMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  EntityUuidIdDTORel{manyToOne} to EntityUuidIdDTO{manyToOneBack}
+  EntityUuidIdDTORel{manyToOneMapsId} to EntityUuidIdDTOMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  EntityUuidIdDTORel{manyToMany} to EntityUuidIdDTO{manyToManyBack}
+  EntityUuidIdDTORel{manyToManyMapsId} to EntityUuidIdDTOMapsId{manyToManyMapsIdBack}
+}
+
+dto EntityUuidIdDTO, EntityUuidIdDTOMapsId, EntityUuidIdDTORel with mapstruct
+
+/*
+ * Custom named id
+ */
+@ChangelogDate(20200804035500)
+entity EntityCustomId {
+  @Id customId Long
+}
+
+@ChangelogDate(20200804035501)
+entity EntityCustomIdMapsId {
+}
+
+@ChangelogDate(20200804035502)
+entity EntityCustomIdRelationship {
+  @Id relatedId Long
+}
+
+relationship OneToOne {
+  EntityCustomIdMapsId to @Id EntityCustomId
+  EntityCustomIdRelationship{oneToOne} to EntityCustomId{oneToOneBack}
+  EntityCustomIdRelationship{oneToOneMapsId} to EntityCustomIdMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  EntityCustomIdRelationship{manyToOne} to EntityCustomId{manyToOneBack}
+  EntityCustomIdRelationship{manyToOneMapsId} to EntityCustomIdMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  EntityCustomIdRelationship{manyToMany} to EntityCustomId{manyToManyBack}
+  EntityCustomIdRelationship{manyToManyMapsId} to EntityCustomIdMapsId{manyToManyMapsIdBack}
+}
+
+/*
+ * Custom named id with dto
+ */
+@ChangelogDate(20200804035600)
+entity EntityCustomIdDTO {
+  @Id customId Long
+}
+
+@ChangelogDate(20200804035601)
+entity EntityCustomIdDTOMapsId {
+}
+
+@ChangelogDate(20200804035502)
+entity EntityCustomIdDTORel {
+  @Id relatedId Long
+}
+
+relationship OneToOne {
+  EntityCustomIdDTOMapsId to @Id EntityCustomIdDTO
+  EntityCustomIdDTORel{oneToOne} to EntityCustomIdDTO{oneToOneBack}
+  EntityCustomIdDTORel{oneToOneMapsId} to EntityCustomIdDTOMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  EntityCustomIdDTORel{manyToOne} to EntityCustomIdDTO{manyToOneBack}
+  EntityCustomIdDTORel{manyToOneMapsId} to EntityCustomIdDTOMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  EntityCustomIdDTORel{manyToMany} to EntityCustomIdDTO{manyToManyBack}
+  EntityCustomIdDTORel{manyToManyMapsId} to EntityCustomIdDTOMapsId{manyToManyMapsIdBack}
+}
+
+dto EntityCustomIdDTO, EntityCustomIdDTOMapsId, EntityCustomIdDTORel with mapstruct
+
+/*
+ * UUID Custom named id with filtering
+ */
+@ChangelogDate(20200804035500)
+entity UuidIdFiltering {
+  @Id customId UUID
+}
+
+@ChangelogDate(20200804035501)
+entity UuidIdFilteringMapsId {
+}
+
+@ChangelogDate(20200804035502)
+entity UuidIdFilteringRelationship {
+  @Id relatedId UUID
+}
+
+relationship OneToOne {
+  UuidIdFilteringMapsId to @Id UuidIdFiltering
+  UuidIdFilteringRelationship{oneToOne} to UuidIdFiltering{oneToOneBack}
+  UuidIdFilteringRelationship{oneToOneMapsId} to UuidIdFilteringMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  UuidIdFilteringRelationship{manyToOne} to UuidIdFiltering{manyToOneBack}
+  UuidIdFilteringRelationship{manyToOneMapsId} to UuidIdFilteringMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  UuidIdFilteringRelationship{manyToMany} to UuidIdFiltering{manyToManyBack}
+  UuidIdFilteringRelationship{manyToManyMapsId} to UuidIdFilteringMapsId{manyToManyMapsIdBack}
+}
+
+filter UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship
+service UuidIdFiltering, UuidIdFilteringMapsId, UuidIdFilteringRelationship with serviceClass

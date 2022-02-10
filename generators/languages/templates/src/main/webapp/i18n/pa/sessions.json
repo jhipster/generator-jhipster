@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<strong>{{username}}</strong>] ਲਈ ਕਿਰਿਆਸ਼ੀਲ ਸੈਸ਼ਨ ",
+        "table": {
+            "ipaddress": "ਆਈ ਪੀ ਪਤਾ",
+            "userAgent": "ਉਪਭੋਗਤਾ ਏਜੰਟ",
+            "date": "ਮਿਤੀ",
+            "button": "ਅਯੋਗ"
+        },
+        "messages": {
+            "success": "<strong>ਸੈਸ਼ਨ ਅਵੈਧ ਕਰ ਦਿੱਤਾ ਗਯਾ ਹੈ!</strong>",
+            "error": "<strong>ਇੱਕ ਅਸ਼ੁੱਧੀ ਹੋਈ ਹੈ!</strong> ਸ਼ੈਸ਼ਨ ਅਵੈਧ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ ।"
+        }
+    }
+}

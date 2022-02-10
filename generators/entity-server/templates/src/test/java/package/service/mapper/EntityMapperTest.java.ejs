@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,19 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.mapper;
+package <%= entityAbsolutePackage %>.service.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-<%_
-let id = getPrimaryKeyValue(primaryKeyType, databaseType, '1');
-_%>
-<%_ if (id.includes('UUID')) { _%>
+<%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
-public class <%= entityClass %>MapperTest {
+class <%= entityClass %>MapperTest {
 
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
 
@@ -36,13 +33,4 @@ public class <%= entityClass %>MapperTest {
     public void setUp() {
         <%= entityInstance %>Mapper = new <%= entityClass %>MapperImpl();
     }
-
-    <%_if (!embedded) { _%>
-    @Test
-    public void testEntityFromId() {
-        <%= primaryKeyType %> id = <%- id %>;
-        assertThat(<%= entityInstance %>Mapper.fromId(id).getId()).isEqualTo(id);
-        assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
-    }
-    <%_} _%>
 }

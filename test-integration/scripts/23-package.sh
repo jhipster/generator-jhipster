@@ -1,16 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 source $(dirname $0)/00-init-env.sh
-
-#-------------------------------------------------------------------------------
-# Package UAA
-#-------------------------------------------------------------------------------
-if [[ "$JHI_APP" == *"uaa"* ]]; then
-    cd "$JHI_FOLDER_UAA"
-    ./mvnw -ntp verify -DskipTests -Pdev --batch-mode
-    mv target/*.jar app.jar
-fi
 
 cd "$JHI_FOLDER_APP"
 

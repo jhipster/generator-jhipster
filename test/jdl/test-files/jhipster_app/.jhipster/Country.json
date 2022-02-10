@@ -5,7 +5,6 @@
       "relationshipType": "one-to-one",
       "relationshipName": "region",
       "otherEntityName": "region",
-      "otherEntityField": "id",
       "ownerSide": true,
       "useJPADerivedIdentifier": true,
       "otherEntityRelationshipName": "country"
@@ -14,7 +13,6 @@
       "relationshipType": "one-to-one",
       "relationshipName": "user",
       "otherEntityName": "user",
-      "otherEntityField": "id",
       "ownerSide": true,
       "otherEntityRelationshipName": "country"
     }

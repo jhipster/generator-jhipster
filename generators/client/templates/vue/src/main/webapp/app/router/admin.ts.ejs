@@ -4,21 +4,23 @@ import {Authority} from "@/shared/security/authority";
   const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('@/admin/user-management/user-management.vue');
   const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('@/admin/user-management/user-management-view.vue');
   const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('@/admin/user-management/user-management-edit.vue');
-  <%_ } _%>
-  const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('@/admin/configuration/configuration.vue');
+<%_ } _%>
   const <%= jhiPrefixCapitalized %>DocsComponent = () => import('@/admin/docs/docs.vue');
+<%_ if (withAdminUi) { _%>
+  const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('@/admin/configuration/configuration.vue');
   const <%= jhiPrefixCapitalized %>HealthComponent = () => import('@/admin/health/health.vue');
   const <%= jhiPrefixCapitalized %>LogsComponent = () => import('@/admin/logs/logs.vue');
   const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('@/admin/metrics/metrics.vue');
-  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
   const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('@/admin/gateway/gateway.vue');
-  <%_ } _%>
-  <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
   const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('@/admin/tracker/tracker.vue');
-  <%_ } _%>
+<%_ } _%>
 
 export default [
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
     {
       path: '/admin/user-management',
       name: '<%= jhiPrefixCapitalized %>User',
@@ -43,13 +45,14 @@ export default [
       component: <%= jhiPrefixCapitalized %>UserManagementViewComponent,
       meta: { authorities: [Authority.ADMIN] }
     },
-  <% } %>
+<%_ } _%>
     {
       path: '/admin/docs',
       name: '<%= jhiPrefixCapitalized %>DocsComponent',
       component: <%= jhiPrefixCapitalized %>DocsComponent,
       meta: { authorities: [Authority.ADMIN] }
     },
+<%_ if (withAdminUi) { _%>
     {
       path: '/admin/health',
       name: '<%= jhiPrefixCapitalized %>HealthComponent',
@@ -73,21 +76,22 @@ export default [
       name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
       component: <%= jhiPrefixCapitalized %>ConfigurationComponent,
       meta: { authorities: [Authority.ADMIN] }
-    }
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>,
+    },
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
     {
       path: '/admin/gateway',
       name: '<%= jhiPrefixCapitalized %>GatewayComponent',
       component: <%= jhiPrefixCapitalized %>GatewayComponent,
       meta: { authorities: [Authority.ADMIN] }
-    }
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>,
+    },
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     {
       path: '/admin/tracker',
       name: '<%= jhiPrefixCapitalized %>TrackerComponent',
       component: <%= jhiPrefixCapitalized %>TrackerComponent,
       meta: { authorities: [Authority.ADMIN] }
     }
-    <%_ } _%>
+<%_ } _%>
 ]

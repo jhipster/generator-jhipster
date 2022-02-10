@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# generator-jhipster-<%= baseName %>
+
+> JHipster blueprint, <%= baseName %> blueprint for JHipster
+
+[![NPM version][npm-image]][npm-url]
+[![Generator][github-generator-image]][github-generator-url]
+[![Integration Test][github-integration-image]][github-integration-url]
+
+# Introduction
+
+This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
+
+# Prerequisites
+
+As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
+
+- [Installing JHipster](https://www.jhipster.tech/installation/)
+
+# Installation
+
+To install or update this blueprint:
+
+```bash
+npm install -g generator-jhipster-<%= baseName %>
+```
+
+# Usage
+
+To use this blueprint, run the below command
+
+```bash
+jhipster --blueprints <%= baseName %>
+```
+
+You can look for updated <%= baseName %> blueprint specific options by running
+
+```bash
+jhipster app --blueprints <%= baseName %> --help
+```
+
+And looking for `(blueprint option: <%= baseName %>)` like
+
+## Pre-release
+
+To use an unreleased version, install it using git.
+
+```bash
+npm install -g jhipster/generator-jhipster-<%= baseName %>#main
+jhipster --blueprints <%= baseName %> --skip-jhipster-dependencies
+```
+
+[npm-image]: https://img.shields.io/npm/v/generator-jhipster-<%= baseName %>.svg
+[npm-url]: https://npmjs.org/package/generator-jhipster-<%= baseName %>
+[github-generator-image]: https://github.com/jhipster/generator-jhipster-<%= baseName %>/actions/workflows/generator.yml/badge.svg
+[github-generator-url]: https://github.com/jhipster/generator-jhipster-<%= baseName %>/actions/workflows/generator.yml
+[github-integration-image]: https://github.com/jhipster/generator-jhipster-<%= baseName %>/actions/workflows/integration.yml/badge.svg
+[github-integration-url]: https://github.com/jhipster/generator-jhipster-<%= baseName %>/actions/workflows/integration.yml

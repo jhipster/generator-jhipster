@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "[<b>{{username}} 使用中的工作階段</b>]",
+        "title": "[<strong>{{username}} 使用中的工作階段</strong>]",
         "table": {
             "ipaddress": "IP 位址",
             "useragent": "使用者代理",

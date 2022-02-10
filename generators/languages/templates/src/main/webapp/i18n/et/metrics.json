@@ -46,7 +46,8 @@
                     "code": "Kood",
                     "count": "Arv",
                     "mean": "Keskväärtus",
-                    "average": "Keskmine"
+                    "average": "Keskmine",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

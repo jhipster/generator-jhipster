@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "ਸਾਈਨ ਇਨ",
+        "form": {
+            "password": "ਪਾਸਵਰਡ",
+            "password.placeholder": "ਤੁਹਾਡਾ ਪਾਸਵਰਡ",
+            "rememberme": "ਮੈਨੂੰ ਯਾਦ ਰੱਖੋ",
+            "button": "ਸਾਈਨ ਇਨ ਕਰੋ"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>ਸਾਈਨ ਇਨ ਅਸਫਲ!</strong> ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਪ੍ਰਮਾਣ ਪੱਤਰਾਂ ਦੀ ਜਾਂਚ ਕਰੋ ਅਤੇ ਮੁੜ ਕੋਸ਼ਿਸ ਕਰੋ ।"
+            }
+        },
+        "password": {
+            "forgot": "ਕੀ ਤੁਸੀਂ ਆਪਣਾ ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ ਹੋ?"
+        }
+    }
+}

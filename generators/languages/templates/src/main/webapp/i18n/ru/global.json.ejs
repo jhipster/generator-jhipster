@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Администрирование",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Шлюз",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "Управление пользователями",
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
@@ -62,8 +62,8 @@
             "newpassword.placeholder": "Новый пароль",
             "confirmpassword.label": "Подтверждение нового пароля",
             "confirmpassword.placeholder": "Подтвердите новый пароль",
-            "email.label": "Email",
-            "email.placeholder": "Ваш email"
+            "email.label": "Эл. почта",
+            "email.placeholder": "Ваша эл. почта"
         },
         "messages": {
             "info": {
@@ -106,7 +106,7 @@
         "ribbon": {
             "dev": "Разработка"
         },
-        "item-count": "{{first}} - {{second}} из {{total}}"
+        "item-count": "Показываем {{first}} - {{second}} из {{total}}."
     },
     "entity": {
         "action": {
@@ -150,6 +150,8 @@
         "emailexists": "Эл. почта уже используется!!",
         "idexists": "Новый {{entityName}} не может иметь данный ID",
         "idnull": "Неверный ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Не удалось извлечь файл",
             "not.image": "Файл должен был быть изображением, но было установлено, что \"{{ fileType }}\""

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 source $(dirname $0)/00-init-env.sh
@@ -11,14 +11,6 @@ fi
 
 if [[ $JHI_VERSION == '' ]]; then
     JHI_VERSION=0.0.0-CICD
-fi
-
-# replace version in uaa
-if [[ "$JHI_APP" == *"uaa"* ]]; then
-    cd "$JHI_FOLDER_UAA"
-    sed -e 's/<jhipster-dependencies.version>.*<\/jhipster-dependencies.version>/<jhipster-dependencies.version>'$JHI_VERSION'<\/jhipster-dependencies.version>/1;' pom.xml > pom.xml.sed
-    mv -f pom.xml.sed pom.xml
-    cat pom.xml | grep \<jhipster-dependencies.version\>
 fi
 
 # jhipster-dependencies.version in generated pom.xml or gradle.properties

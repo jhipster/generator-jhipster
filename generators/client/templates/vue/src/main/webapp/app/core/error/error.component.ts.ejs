@@ -38,11 +38,11 @@ export default class Error extends Vue {
     this.error404 = error404;
 
     if (!this.$store.getters.authenticated && this.error403) {
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       this.loginService().openLogin((<any>this).$root);
-      <%_ } else { %>
+<%_ } else { %>
       this.loginService().login();
-      <%_ } %>
+<%_ } %>
     }
   }
 }

@@ -3,17 +3,17 @@
         "title": "साइन इन",
         "form": {
             "password": "पासवर्ड",
-            "password.placeholder": "अपना पासवर्ड",
+            "password.placeholder": "अपना पासवर्ड टाइप करें",
             "rememberme": "मुझे याद रखें",
-            "button": "साइन इन"
+            "button": "साइन इन करें"
         },
         "messages": {
             "error": {
-                "authentication": "<strong>साइन इन करने में विफल रहा!</strong> कृपया आपके क्रेडेंशियल्स की जाँच करें और पुन: प्रयास करें."
+                "authentication": "<strong>साइन इन करने में विफल रहा!</strong> कृपया आपके क्रेडेंशियल्स की जाँच करें और पुन: प्रयास करें।"
             }
         },
         "password": {
-            "forgot": "आप अपना पासवर्ड भूल गए?"
+            "forgot": "आप अपना पासवर्ड भूल गए हैं?"
         }
     }
 }

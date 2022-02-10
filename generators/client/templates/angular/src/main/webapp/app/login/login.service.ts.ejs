@@ -1,0 +1,89 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Injectable } from '@angular/core';
+<%_ if (authenticationTypeOauth2) { _%>
+import { Location } from '@angular/common';
+
+<%_ } else { _%>
+import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+<%_ } else if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import { Logout } from './logout.model';
+<%_ } else { _%>
+import { Login } from './login.model';
+<%_ } _%>
+
+@Injectable({ providedIn: 'root' })
+export class LoginService {
+  constructor(
+<%_ if (authenticationTypeSession) { _%>
+    private applicationConfigService: ApplicationConfigService,
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+    private location: Location,
+<%_ } else { _%>
+    private accountService: AccountService,
+<%_ } _%>
+    private authServerProvider: AuthServerProvider
+  ) {}
+
+<%_ if (authenticationTypeOauth2) { _%>
+  login(): void {
+    // If you have configured multiple OIDC providers, then, you can update this URL to /login.
+    // It will show a Spring Security generated login page with links to configured OIDC providers.
+    location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
+  }
+<%_ } else { _%>
+  login(credentials: Login): Observable<Account | null> {
+    return this.authServerProvider.login(credentials).pipe(mergeMap(() => this.accountService.identity(true)));
+  }
+<%_ } _%>
+
+<%_ if (authenticationTypeSession) { _%>
+  logoutUrl(): string {
+    return this.applicationConfigService.getEndpointFor('api/logout');
+  }
+
+  logoutInClient(): void {
+    this.accountService.authenticate(null);
+  }
+<%_ } _%>
+
+  logout(): void {
+<%_ if (authenticationTypeOauth2) { _%>
+    this.authServerProvider.logout().subscribe((logout: Logout) => {
+      window.location.href = logout.logoutUrl;
+    });
+<%_ } else { _%>
+    this.authServerProvider.logout().subscribe({ complete: () => this.accountService.authenticate(null) });
+<%_ } _%>
+  }
+}

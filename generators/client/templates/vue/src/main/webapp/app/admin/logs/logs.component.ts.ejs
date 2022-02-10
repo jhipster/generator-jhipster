@@ -24,7 +24,7 @@ export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
       });
   }
 
-  public updateLevel(name, level): void {
+  public updateLevel(name: string, level: string): void {
     this.logsService()
       .changeLevel(name, level)
       .then(() => {
@@ -32,7 +32,7 @@ export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
       });
   }
 
-  public changeOrder(orderProp): void {
+  public changeOrder(orderProp: string): void {
     this.orderProp = orderProp;
     this.reverse = !this.reverse;
   }

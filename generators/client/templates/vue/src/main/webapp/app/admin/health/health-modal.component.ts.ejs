@@ -21,15 +21,13 @@ export default class <%=jhiPrefixCapitalized%>HealthModal extends Vue {
       if (val > 1) {
         // Value
         return val.toFixed(2) + ' GB';
-      } else {
-        return (value / 1048576).toFixed(2) + ' MB';
       }
+      return (value / 1048576).toFixed(2) + ' MB';
     }
 
     if (typeof value === 'object') {
       return JSON.stringify(value);
-    } else {
-      return value.toString();
     }
+    return value.toString();
   }
 }

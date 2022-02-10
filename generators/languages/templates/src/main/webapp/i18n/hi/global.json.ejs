@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,7 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "आप एक <strong>पुराने</strong> ब्राउज़र का उपयोग कर रहे हैं। कृपया अपने अनुभव में सुधार करने के लिए अपने <a href=\"http://browsehappy.com/?locale=en\">ब्राउज़र को अपग्रेड करें</a>",
+        "browsehappy": "आप एक <strong>पुराने</strong> ब्राउज़र का उपयोग कर रहें हैं। कृपया अपने अनुभव में सुधार करने के लिए अपने <a href=\"http://browsehappy.com/?locale=en\">ब्राउज़र को अपग्रेड करें</a>",
         "menu": {
             "home": "होम",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "प्रशासन",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "गेटवे",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "उपयोगकर्ता प्रबंधन",
                 "tracker": "उपयोगकर्ता ट्रैकर",
                 "metrics": "मेट्रिक्स",
@@ -56,14 +56,14 @@
         "form": {
             "username.label": "उपयोगकर्ता नाम",
             "username.placeholder": "अपना उपयोगकर्ता नाम",
-            "currentpassword.label": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword.label": "वर्तमान पासवर्ड",
+            "currentpassword.placeholder": "वर्तमान पासवर्ड",
             "newpassword.label": "नया पासवर्ड",
             "newpassword.placeholder": "नया पासवर्ड",
             "confirmpassword.label": "नए पासवर्ड की पुष्टि",
             "confirmpassword.placeholder": "नए पासवर्ड की पुष्टि करें",
-            "email.label": "ई मेल",
-            "email.placeholder": "ई मेल"
+            "email.label": "ई-मेल",
+            "email.placeholder": "ई-मेल"
         },
         "messages": {
             "info": {
@@ -82,21 +82,21 @@
             },
             "validate": {
                 "newpassword": {
-                    "required": "अपना पासवर्ड की आवश्यकता है.",
-                    "minlength": "आपका पासवर्ड कम से कम 5 वर्ण होने के लिए आवश्यक है.",
-                    "maxlength": "अपना पासवर्ड 50 वर्णों से अधिक नहीं हो सकता.",
-                    "strength": "पासवर्ड ताकत:"
+                    "required": "आपके नये पासवर्ड की आवश्यकता है।",
+                    "minlength": "आपका नया पासवर्ड कम से कम १ अक्षर का होना आवश्यक हैं।",
+                    "maxlength": "आपका नया पासवर्ड ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकता।",
+                    "strength": "पासवर्ड की ताकत:"
                 },
                 "confirmpassword": {
-                    "required": "आपके पुष्टिकरण पासवर्ड की आवश्यकता है.",
-                    "minlength": "आपके पुष्टिकरण पासवर्ड कम से कम5 वर्ण होने के लिए आवश्यक है.",
-                    "maxlength": "आपके पुष्टिकरण पासवर्ड 50 वर्णों से अधिक नहीं हो सकता."
+                    "required": "आपके पुष्टिकरण पासवर्ड की आवश्यकता है।",
+                    "minlength": "आपके पुष्टिकरण पासवर्ड कम से कम १ अक्षर का होना आवश्यक हैं।",
+                    "maxlength": "आपके पुष्टिकरण पासवर्ड ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकता।"
                 },
                 "email": {
-                    "required": "अपने ई-मेल की आवश्यकता है.",
-                    "invalid": "अपने ई-मेल अमान्य है.",
-                    "minlength": "अपने ई-मेल कम से कम 5 वर्ण होने के लिए आवश्यक है.",
-                    "maxlength": "अपने ई-मेल 50 वर्णों से अधिक नहीं हो सकता."
+                    "required": "आपके ई-मेल की आवश्यकता है।",
+                    "invalid": "आपका ई-मेल अमान्य है।",
+                    "minlength": "आपका ई-मेल कम से कम १ अक्षर का होना आवश्यक हैं।",
+                    "maxlength": "आपका ई-मेल ५० अक्षर बतौर मात्रा से अधिक नहीं हो सकताा।"
                 }
             }
         },
@@ -128,16 +128,16 @@
             "title": "हटाने की कार्रवाई की पुष्टि करें"
         },
         "validation": {
-            "required": "यह फ़ील्ड आवश्यक है.",
-            "minlength": "इस फ़ील्ड में कम से कम {{ min }} वर्ण होने आवश्यक है.",
-            "maxlength": "फ़ील्ड {{ max }} वर्णों से अधिक नहीं हो सकता.",
-            "min": "यह फ़ील्ड  {{ min }} से अधिक होना चाहिए.",
-            "max": "यह फ़ील्ड  {{ max }} से अधिक नहीं हो सकता  .",
-            "minbytes": "यह फ़ील्ड {{ min }} बाइट्स से अधिक होना चाहिए.",
-            "maxbytes": "यह फ़ील्ड {{ max }} बाइट्स से अधिक नहीं होना चाहिए.",
-            "pattern": "यह फ़ील्ड {{ pattern }} पैटर्न का पालन करना चाहिए.",
-            "number": "यह फ़ील्ड कोई संख्या होनी चाहिए.",
-            "datetimelocal": "यह फ़ील्ड कोई दिनांक या समय होनी चाहिए."
+            "required": "यह फ़ील्ड आवश्यक है।",
+            "minlength": "इस फ़ील्ड में कम से कम {{ min }} वर्ण होने आवश्यक है।",
+            "maxlength": "फ़ील्ड {{ max }} वर्णों से अधिक नहीं हो सकता।",
+            "min": "यह फ़ील्ड  {{ min }} से अधिक होना चाहिए।",
+            "max": "यह फ़ील्ड  {{ max }} से अधिक नहीं हो सकता।",
+            "minbytes": "यह फ़ील्ड {{ min }} बाइट्स से अधिक होना चाहिए।",
+            "maxbytes": "यह फ़ील्ड {{ max }} बाइट्स से अधिक नहीं होना चाहिए।",
+            "pattern": "यह फ़ील्ड {{ pattern }} पैटर्न का पालन करना चाहिए।",
+            "number": "यह फ़ील्ड कोई संख्या होनी चाहिए।",
+            "datetimelocal": "यह फ़ील्ड कोई दिनांक या समय होनी चाहिए।"
         }
     },
     "error": {
@@ -150,6 +150,8 @@
         "emailexists": "ई-मेल पहले से ही उपयोग में है!",
         "idexists": "एक नई एंटिटी {{ entityName }} पहले से ही एक ID है नहीं कर सकता",
         "idnull": "Invalid ID",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

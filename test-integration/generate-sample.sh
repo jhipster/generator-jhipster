@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -11,8 +11,8 @@ function ctrl_c() {
 function usage() {
     me=$(basename "$0")
     echo
-    echo "Usage: $me generate <destination> <sample_name> [sql|sqllight|sqlfull|micro|uaa|mongodb|cassandra|couchbase] | list"
-    echo 
+    echo "Usage: $me generate <destination> <sample_name> [sql|sqllight|sqlfull|micro|mongodb|cassandra|couchbase] | list"
+    echo
     echo "Examples:"
     echo "$me generate /tmp/ngx-default/ ngx-default sql"
     echo "$me generate /tmp/ngx-default/ ngx-session-cassandra-fr cassandra"
@@ -26,7 +26,7 @@ function generateProject() {
     echo "JHI_FOLDER_APP=$JHI_FOLDER_APP"
     echo "JHI_APP=$JHI_APP"
     echo "JHI_ENTITY=$JHI_ENTITY"
-    
+
     if [ ! -d "$JHI_FOLDER_APP" ]; then
         echo "*** Create $JHI_FOLDER_APP"
         mkdir -p "$JHI_FOLDER_APP"

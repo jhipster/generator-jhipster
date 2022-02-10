@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "ਉਪਭੋਗਤਾ [<strong>{{username}}</strong>] ਲਈ ਉਪਭੋਗਤਾ ਸੈਟਿੰਗਾਂ",
+        "form": {
+            "firstname": "ਪਹਿਲਾ ਨਾਮ",
+            "firstname.placeholder": "ਤੁਹਾਡਾ ਪਹਿਲਾ ਨਾਮ",
+            "lastname": "ਆਖਰੀ ਨਾਮ",
+            "lastname.placeholder": "ਤੁਹਾਡਾ ਆਖਰੀ ਨਾਮ",
+            "language": "ਭਾਸ਼ਾ",
+            "button": "ਸੇਵ"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong> ਇੱਕ ਅਸ਼ੁੱਧੀ ਹੋਈ ਹੈ! </strong> ਸੈਟਿੰਗਾਂ ਨੂੰ ਸੇਵ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ ।",
+                "emailexists": "<strong>ਈਮੇਲ ਪਹਿਲਾਂ ਹੀ ਵਰਤੋਂ ਅਧੀਨ ਹੈ!</strong> ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਹੋਰ ਚੁਣੋ ।"
+            },
+            "success": "<strong>ਸੈਟਿੰਗਾਂ ਸੇਵ ਕੀਤੀਆਂ ਗਈਆਂ ।</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "ਤੁਹਾਡਾ ਪਹਿਲਾ ਨਾਮ ਲੋੜੀਂਦਾ ਹੈ ।",
+                    "minlength": "ਤੁਹਾਡਾ ਪਹਿਲਾ ਨਾਮ ਘੱਟੋ ਘੱਟ 1 ਅੱਖਰ ਦਾ ਹੋਣਾ ਜਰੂਰੀ ਹੈ ।",
+                    "maxlength": "ਤੁਹਾਡਾ ਪਹਿਲਾ ਨਾਮ 50 ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦਾ ।"
+                },
+                "lastname": {
+                    "required": "ਤੁਹਾਡਾ ਆਖਰੀ ਨਾਮ ਲੋੜੀਂਦਾ ਹੈ ।",
+                    "minlength": "ਤੁਹਾਡਾ ਆਖਰੀ ਨਾਮ ਘੱਟੋ ਘੱਟ 1 ਅੱਖਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ।",
+                    "maxlength": "ਤੁਹਾਡਾ ਆਖਰੀ ਨਾਮ 50 ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋ ਸਕਦਾ ।"
+                }
+            }
+        }
+    }
+}

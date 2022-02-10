@@ -34,7 +34,7 @@
             >
             </b-form-input>
           </b-form-group>
-          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
+          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <% if (authenticationTypeSession && databaseTypeNo) { %> hidden<% } %>>
             <span v-text="$t('login.form.rememberme')">Remember me</span>
           </b-form-checkbox>
           <div>

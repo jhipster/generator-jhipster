@@ -46,7 +46,8 @@
                     "code": "Code",
                     "count": "Numëri",
                     "mean": "Mesi",
-                    "average": "Mesatarja"
+                    "average": "Mesatarja",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

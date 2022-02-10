@@ -35,8 +35,11 @@
     </div>
     <b-modal ref="healthModal">
       <h4 slot="modal-title" v-if="currentHealth" class="modal-title" id="showHealthLabel">
-        <% if (enableTranslation) { %>
-        <span v-text="$t('health.indicator.' + baseName(currentHealth.name))" /> <% } else { %> <span class="text-capitalize">{{ baseName(currentHealth.name) }}</span><% } %>
+<%_ if (enableTranslation) { _%>
+        <span v-text="$t('health.indicator.' + baseName(currentHealth.name))" />
+<%_ } else { _%>
+        <span class="text-capitalize">{{ baseName(currentHealth.name) }}</span>
+<%_ } _%>
         {{ subSystemName(currentHealth.name) }}
       </h4>
       <health-modal :current-health="currentHealth"></health-modal>

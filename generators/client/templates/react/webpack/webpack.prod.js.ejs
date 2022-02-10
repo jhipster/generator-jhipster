@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,16 +21,18 @@ const webpackMerge = require('webpack-merge').merge;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const sass = require('sass');
+<%_ if (enableI18nRTL) { _%>
+const postcssRTLCSS = require('postcss-rtlcss');
+<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = async () => webpackMerge(await commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
   entry: {
@@ -38,16 +40,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
   },
   output: {
     path: utils.root('<%= DIST_DIR %>'),
-    filename: 'app/[name].[hash].bundle.js',
-    chunkFilename: 'app/[name].[hash].chunk.js'
+    filename: 'app/[name].[contenthash].bundle.js',
+    chunkFilename: 'app/[name].[chunkhash].chunk.js'
   },
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.s?css$/,
-        loader: 'stripcomment-loader'
-      },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -58,7 +55,16 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             }
           },
           'css-loader',
-          'postcss-loader',
+          {
+            loader: 'postcss-loader',
+<%_ if (enableI18nRTL) { _%>
+            options: {
+              postcssOptions: {
+                plugins: [postcssRTLCSS()],
+              },
+            },
+<%_ } _%>
+          },
           {
             loader: 'sass-loader',
             options: { implementation: sass }
@@ -71,15 +77,12 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     runtimeChunk: false,
     minimizer: [
       new TerserPlugin({
-        cache: true,
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
           ecma: 6,
           toplevel: true,
           module: true,
-          beautify: false,
-          comments: false,
           compress: {
             warnings: false,
             ecma: 6,
@@ -99,19 +102,16 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           }
         }
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new CssMinimizerPlugin({
+        parallel: true,
+      })
     ]
   },
   plugins: [
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
-      filename: 'content/[name].[hash].css',
-      chunkFilename: 'content/[name].[hash].css'
-    }),
-    new MomentLocalesPlugin({
-      localesToKeep: [
-        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
-      ]
+      filename: 'content/[name].[contenthash].css',
+      chunkFilename: 'content/[name].[chunkhash].css'
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,

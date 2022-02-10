@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source $(dirname $0)/00-init-env.sh
 
@@ -20,33 +20,7 @@ fi
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
-launchCurlOrE2e() {
-    retryCount=1
-    maxRetry=10
-    httpUrl="http://localhost:8080"
-    if [[ "$JHI_APP" == *"micro"* ]]; then
-        httpUrl="http://localhost:8081/management/health"
-    fi
-
-    rep=$(curl -v "$httpUrl")
-    status=$?
-    while [ "$status" -ne 0 ] && [ "$retryCount" -le "$maxRetry" ]; do
-        echo "*** [$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
-        retryCount=$((retryCount+1))
-        sleep 10
-        rep=$(curl -v "$httpUrl")
-        status=$?
-    done
-
-    if [ "$status" -ne 0 ]; then
-        echo "*** [$(date)] Not connected after" $retryCount " retries."
-        return 1
-    fi
-
-    if [ "$JHI_E2E" != 1 ]; then
-        return 0
-    fi
-
+launchE2eTests() {
     retryCount=0
     maxRetry=1
     until [ "$retryCount" -ge "$maxRetry" ]
@@ -62,25 +36,41 @@ launchCurlOrE2e() {
         sleep 15
     done
     return $result
+    return $?
+}
 
+launchCurlTests() {
+    endpointsToTest=("$@")
+    retryCount=1
+    maxRetry=10
+    httpUrl="http://localhost:8080"
+
+    if [[ "$JHI_APP" == *"micro"* ]]; then
+        httpUrl="http://localhost:8081"
+    fi
+
+    for endpoint in "${endpointsToTest[@]}"; do
+        curl -fv "$httpUrl$endpoint"
+        status=$?
+        while [ "$status" -ne 0 ] && [ "$retryCount" -le "$maxRetry" ]; do
+            echo "*** [$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
+            retryCount=$((retryCount+1))
+            sleep 10
+            curl -fv "$httpUrl$endpoint"
+            status=$?
+        done
+
+        if [ "$status" -ne 0 ]; then
+            echo "*** [$(date)] Not connected after" $retryCount " retries."
+            return 1
+        fi
+    done
     return $?
 }
 #-------------------------------------------------------------------------------
 # Run the application
 #-------------------------------------------------------------------------------
 if [ "$JHI_RUN_APP" == 1 ]; then
-    if [[ "$JHI_APP" == *"uaa"* ]]; then
-        cd "$JHI_FOLDER_UAA"
-        java \
-            -jar app.jar \
-            --spring.profiles.active=dev \
-            --logging.level.ROOT=OFF \
-            --logging.level.org.zalando=OFF \
-            --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF &
-        sleep 80
-    fi
-
     cd "$JHI_FOLDER_APP"
     # Run the app packaged as war/jar
     if [[ "$JHI_WAR" == 1 ]]; then
@@ -90,8 +80,8 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             --logging.level.ROOT=OFF \
             --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
-            --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF &
+            --logging.level.tech.jhipster=OFF \
+            --logging.level.tech.jhipster.sample=OFF &
             echo $! > .pidRunApp
     else
         java \
@@ -100,13 +90,26 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             --logging.level.ROOT=OFF \
             --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
-            --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF &
+            --logging.level.tech.jhipster=OFF \
+            --logging.level.tech.jhipster.sample=OFF &
         echo $! > .pidRunApp
     fi
     sleep 40
 
-    launchCurlOrE2e
+    # Curl some test endpoints
+    endpointsToTest=(
+        '/'
+        '/management/health'
+        '/management/health/liveness'
+        '/management/health/readiness'
+    )
+    launchCurlTests "${endpointsToTest[@]}"
+
+    # Run E2E tests
+    if [ "$JHI_E2E" == 1 ]; then
+        launchE2eTests
+    fi
+
     resultRunApp=$?
     kill $(cat .pidRunApp)
 

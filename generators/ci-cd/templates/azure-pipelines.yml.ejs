@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,13 +19,14 @@
 jobs:
 - job: Test
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-20.04'
   variables:
     NODE_VERSION: <%= NODE_VERSION %>
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
   steps:
 <%_ if (!skipClient) { _%>
@@ -37,6 +38,16 @@ jobs:
       versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
 <%_ } _%>
+<%_ if (cypressTests || protractorTests) {
+  const commented = applicationTypeGateway ? '# ' : ''; _%>
+  <%= commented %>- task: Bash@3
+  <%= commented %>  inputs:
+  <%= commented %>    targetType: 'inline'
+  <%= commented %>    script: |
+  <%= commented %>      wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  <%= commented %>      sudo apt install ./google-chrome-stable_current_amd64.deb
+  <%= commented %>  displayName: 'TOOLS: install Chrome'
+<%_ } _%>
   #----------------------------------------------------------------------
   # Tests
   #----------------------------------------------------------------------
@@ -46,32 +57,91 @@ jobs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
 <%_ } _%>
+<%_ if (cicdIntegrationsSnyk) { _%>
+  - script: |
+      curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+      chmod +x snyk
+    displayName: 'INSTALL: Snyk CLI'
+  - script: ./snyk test --all-projects || true
+    displayName: 'CHECK: Snyk test'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+  - script: ./snyk monitor --all-projects
+    displayName: 'CHECK: Snyk monitor'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+<%_ } _%>
   <%_ if (!skipServer) { _%>
-    <%_ if (buildTool === 'maven') { _%>
-  - script: |
-      chmod +x mvnw
-      ./mvnw -ntp checkstyle:check
-      ./mvnw -ntp clean verify -P-webpack
-  <%_ } else if (buildTool === 'gradle') { _%>
-  - script: |
-      chmod +x gradlew
-      ./gradlew checkstyleNohttp
-      ./gradlew clean test integrationTest
+    <%_ if (buildToolMaven) { _%>
+  - script: chmod +x mvnw
+    <%_ } else if (buildToolGradle) { _%>
+  - script: chmod +x gradlew
     <%_ } _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
     displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/<%= buildDir %>test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
   <%_ } _%>
 <%_ if (!skipClient) { _%>
   - task: Npm@1
     inputs:
       command: 'custom'
-      customCommand: 'run <%= frontTestCommand %>'
+      customCommand: ' run ci:frontend:test'
     displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/<%= buildDir %>test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
 <%_ } _%>
 <%_ if (!skipServer) { _%>
-  <%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw -ntp verify -Pprod -DskipTests
-  <%_ } else if (buildTool === 'gradle') { _%>
-  - script: ./gradlew bootJar -Pprod -x test
-  <%_ } _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
     displayName: 'TESTS: packaging'
+<%_ } _%>
+<%_ if (cypressTests || protractorTests) {
+    const commented = applicationTypeGateway ? '# ' : ''; _%>
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:package'
+  <%= commented %>  displayName: 'E2E: Package'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:prepare'
+  <%= commented %>  displayName: 'E2E: Prepare'
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:run'
+  <%= commented %>  displayName: 'E2E: Run'
+  <%_ if(cypressTests) { _%>
+  <%= commented %>  env:
+  <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
+  <%= commented %>    CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+  <%= commented %>    CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  <%= commented %>- task: PublishPipelineArtifact@1
+  <%= commented %>  inputs:
+  <%= commented %>    artifactName: 'cypress-screenshots'
+  <%= commented %>    targetPath: '$(Build.SourcesDirectory)/<%= buildDir %>cypress/screenshots'
+  <%= commented %>  condition: failed()
+  <%= commented %>  displayName: 'E2E: Publish Cypress Screenshots'
+  <%_ } _%>
+  <%= commented %>- task: Npm@1
+  <%= commented %>  inputs:
+  <%= commented %>    command: 'custom'
+  <%= commented %>    customCommand: ' run ci:e2e:teardown'
+  <%= commented %>  displayName: 'E2E: Teardown'
 <%_ } _%>

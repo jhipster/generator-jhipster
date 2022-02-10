@@ -2,7 +2,7 @@ application {
   config {
     applicationType monolith,
     baseName jhipsterSampleApplication,
-    packageName io.github.jhipster.sample,
+    packageName tech.jhipster.sample,
     authenticationType jwt,
     prodDatabaseType postgresql,
     buildTool maven,
@@ -138,7 +138,7 @@ relationship ManyToOne {
   BankAccount{user(login)} to User
 }
 relationship ManyToMany {
-  Operation{theLabel(labelName)} to TheLabel{operation}
+  Operation{theLabel(labelName)} to TheLabel{operation(named)}
 }
 
 relationship OneToMany {

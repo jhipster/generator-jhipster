@@ -1,0 +1,17 @@
+application {
+  config {
+    baseName app1,
+    applicationType monolith,
+    packageName com.my.app1
+  }
+}
+application {
+  config {
+    baseName app2,
+    applicationType monolith,
+    packageName com.my.app2
+  }
+  entities BankAccount
+}
+
+entity BankAccount

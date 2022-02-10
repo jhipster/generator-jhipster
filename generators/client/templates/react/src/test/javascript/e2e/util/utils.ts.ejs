@@ -65,8 +65,8 @@ export const waitUntilCount = async (elementArrayFinder: ElementArrayFinder, exp
     `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
   );
 };
-<%_ if (authenticationType !== 'oauth2') { _%>
-    <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+    <%_ if (!databaseTypeCassandra) { _%>
 
 export const getModifiedDateSortButton = (): ElementFinder => element(by.id('modified-date-sort'));
     <%_ } _%>

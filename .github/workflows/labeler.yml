@@ -1,0 +1,13 @@
+name: 'Pull Request Labeler'
+on:
+  pull_request_target:
+    branches-ignore:
+      - 'dependabot/**'
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v3.0.2
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'

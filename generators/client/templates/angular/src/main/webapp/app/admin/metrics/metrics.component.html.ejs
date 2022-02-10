@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,67 +17,53 @@
  limitations under the License.
 -%>
 <div>
-    <h2>
-        <span id="metrics-page-heading" jhiTranslate="metrics.title" data-cy="metricsPageHeading">Application Metrics</span>
+  <h2>
+    <span id="metrics-page-heading" <%= jhiPrefix %>Translate="metrics.title" data-cy="metricsPageHeading">Application Metrics</span>
 
-        <button class="btn btn-primary float-right" (click)="refresh()">
-            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
-        </button>
-    </h2>
+    <button class="btn btn-primary float-right" (click)="refresh()">
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="metrics.refresh.button">Refresh</span>
+    </button>
+  </h2>
 
-    <h3 jhiTranslate="metrics.jvm.title">JVM Metrics</h3>
+  <h3 <%= jhiPrefix %>Translate="metrics.jvm.title">JVM Metrics</h3>
 
-    <div class="row" *ngIf="metrics && !updatingMetrics">
-        <jhi-jvm-memory
-            class="col-md-4"
-            [updating]="updatingMetrics"
-            [jvmMemoryMetrics]="metrics.jvm">
-        </jhi-jvm-memory>
+  <div class="row" *ngIf="metrics && !updatingMetrics">
+    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics" [jvmMemoryMetrics]="metrics.jvm"></<%= jhiPrefixDashed %>-jvm-memory>
 
-        <jhi-jvm-threads
-            class="col-md-4"
-            [threadData]="threads">
-        </jhi-jvm-threads>
+    <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads"></<%= jhiPrefixDashed %>-jvm-threads>
 
-        <jhi-metrics-system
-            class="col-md-4"
-            [updating]="updatingMetrics"
-            [systemMetrics]="metrics.processMetrics">
-        </jhi-metrics-system>
-    </div>
+    <<%= jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics" [systemMetrics]="metrics.processMetrics"></<%= jhiPrefixDashed %>-metrics-system>
+  </div>
 
-    <div *ngIf="metrics && metricsKeyExists('garbageCollector')">
-        <h3 jhiTranslate="metrics.jvm.gc.title">Garbage collector statistics</h3>
+  <<%= jhiPrefixDashed %>-metrics-garbagecollector
+    *ngIf="metrics && metricsKeyExists('garbageCollector')"
+    [updating]="updatingMetrics"
+    [garbageCollectorMetrics]="metrics.garbageCollector"
+  ></<%= jhiPrefixDashed %>-metrics-garbagecollector>
 
-        <jhi-metrics-garbagecollector
-            [updating]="updatingMetrics"
-            [garbageCollectorMetrics]="metrics.garbageCollector">
-        </jhi-metrics-garbagecollector>
-    </div>
+  <div class="well well-lg" *ngIf="updatingMetrics" <%= jhiPrefix %>Translate="metrics.updating">Updating...</div>
 
-    <div class="well well-lg" *ngIf="updatingMetrics" jhiTranslate="metrics.updating">Updating...</div>
+  <<%= jhiPrefixDashed %>-metrics-request
+    *ngIf="metrics && metricsKeyExists('http.server.requests')"
+    [updating]="updatingMetrics"
+    [requestMetrics]="metrics['http.server.requests']"
+  ></<%= jhiPrefixDashed %>-metrics-request>
 
-    <jhi-metrics-request
-        *ngIf="metrics && metricsKeyExists('http.server.requests')"
-        [updating]="updatingMetrics"
-        [requestMetrics]="metrics['http.server.requests']">
-    </jhi-metrics-request>
+  <<%= jhiPrefixDashed %>-metrics-endpoints-requests
+    *ngIf="metrics && metricsKeyExists('services')"
+    [updating]="updatingMetrics"
+    [endpointsRequestsMetrics]="metrics.services"
+  ></<%= jhiPrefixDashed %>-metrics-endpoints-requests>
 
-    <jhi-metrics-endpoints-requests
-        *ngIf="metrics && metricsKeyExists('services')"
-        [updating]="updatingMetrics"
-        [endpointsRequestsMetrics]="metrics.services">
-    </jhi-metrics-endpoints-requests>
+  <<%= jhiPrefixDashed %>-metrics-cache
+    *ngIf="metrics && metricsKeyExists('cache')"
+    [updating]="updatingMetrics"
+    [cacheMetrics]="metrics.cache"
+  ></<%= jhiPrefixDashed %>-metrics-cache>
 
-    <jhi-metrics-cache
-        *ngIf="metrics && metricsKeyExists('cache')"
-        [updating]="updatingMetrics"
-        [cacheMetrics]="metrics.cache">
-    </jhi-metrics-cache>
-
-    <jhi-metrics-datasource
-        *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
-        [updating]="updatingMetrics"
-        [datasourceMetrics]="metrics.databases">
-    </jhi-metrics-datasource>
+  <<%= jhiPrefixDashed %>-metrics-datasource
+    *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
+    [updating]="updatingMetrics"
+    [datasourceMetrics]="metrics.databases"
+  ></<%= jhiPrefixDashed %>-metrics-datasource>
 </div>

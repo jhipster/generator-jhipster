@@ -1,0 +1,97 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%#
+ This is a fragment file, it will be merged into to root template if available.
+ EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
+-%>
+<&_ if (fragment.importSection) { -&>
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+  <%_ if (relationships.length > 0) { _%>
+import org.springframework.data.neo4j.core.schema.Relationship;
+  <%_ } _%>
+<&_ } -&>
+
+<&_ if (fragment.annotationSection) { -&>
+@Node
+<&_ } -&>
+
+<%_ for (const field of fields) { _%>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+  <%_ if (field.id && !embedded) { _%>
+    @Id
+    @GeneratedValue(UUIDStringGenerator.class)
+  <%_ } else { _%>
+    @Property("<%=field.fieldNameUnderscored %>")
+  <%_ } _%>
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+    @Property("<%=field.fieldNameUnderscored %>_content_type")
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const relationship of relationships) { -%>
+  <%_ const relationshipForwardReference = "HAS_" + _.toUpper(_.snakeCase(relationship.relationshipName)); %>
+  <%_ const relationshipBackReference = "HAS_" + _.toUpper(_.snakeCase(relationship.otherEntityRelationshipName)); %>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+    <%_ if (relationship.ownerSide) { _%>
+    @Relationship(value = "<%= relationshipBackReference %>", direction = Relationship.Direction.INCOMING)
+    <%_ } else { _%>
+    @Relationship("<%= relationshipForwardReference %>")
+    <%_ } _%>
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const relationship of relationships) { _%>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
+    public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+        this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
+      <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
+        <%_ if (relationship.otherRelationship) { _%>
+          <%_ if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().add(this);
+          <%_ } _%>
+        <%_ } _%>
+      <%_ } _%>
+        return this;
+    }
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const relationship of relationships) { _%>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
+    public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+        this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
+      <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
+        <%_ if (relationship.otherRelationship) { _%>
+          <%_ if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().remove(this);
+          <%_ } _%>
+        <%_ } _%>
+      <%_ } _%>
+        return this;
+    }
+<&_ } -&>
+<%_ } _%>

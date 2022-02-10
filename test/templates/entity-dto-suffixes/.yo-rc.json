@@ -11,7 +11,7 @@
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
     "searchEngine": "no",
-        "buildTool": "maven",
+    "buildTool": "maven",
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": [

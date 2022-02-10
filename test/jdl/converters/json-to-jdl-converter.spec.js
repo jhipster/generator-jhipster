@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,25 +24,25 @@ const { expect } = require('chai');
 const { convertToJDL } = require('../../../jdl/converters/json-to-jdl-converter');
 
 describe('JSONToJDLConverter', () => {
-    describe('convertToJDL', () => {
-        context('when there is a yo-rc file in the passed directory', () => {
-            let dir;
-            let jdlFilename;
-            let jdlFileContent;
+  describe('convertToJDL', () => {
+    context('when there is a yo-rc file in the passed directory', () => {
+      let dir;
+      let jdlFilename;
+      let jdlFileContent;
 
-            context('without entities', () => {
-                before(() => {
-                    dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'only_app');
-                    jdlFilename = 'app.jdl';
-                    convertToJDL(dir);
-                    jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
-                });
-                after(() => {
-                    fs.unlinkSync(path.join(dir, jdlFilename));
-                });
+      context('without entities', () => {
+        before(() => {
+          dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'only_app');
+          jdlFilename = 'app.jdl';
+          convertToJDL(dir);
+          jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
+        });
+        after(() => {
+          fs.unlinkSync(path.join(dir, jdlFilename));
+        });
 
-                it('should write a JDL file with the application', () => {
-                    expect(jdlFileContent).to.equal(`application {
+        it('should write a JDL file with the application', () => {
+          expect(jdlFileContent).to.equal(`application {
   config {
     applicationType microservice
     authenticationType jwt
@@ -54,18 +54,21 @@ describe('JSONToJDLConverter', () => {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
-    otherModules []
+    otherModules [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
     packageName com.mycompany.myapp
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -77,21 +80,21 @@ describe('JSONToJDLConverter', () => {
 }
 
 `);
-                });
-            });
-            context('with entities', () => {
-                before(() => {
-                    dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'app_with_entities');
-                    jdlFilename = 'app.jdl';
-                    convertToJDL(dir);
-                    jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
-                });
-                after(() => {
-                    fs.unlinkSync(path.join(dir, jdlFilename));
-                });
+        });
+      });
+      context('with entities', () => {
+        before(() => {
+          dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'app_with_entities');
+          jdlFilename = 'app.jdl';
+          convertToJDL(dir);
+          jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
+        });
+        after(() => {
+          fs.unlinkSync(path.join(dir, jdlFilename));
+        });
 
-                it('should export apps & entities', () => {
-                    expect(jdlFileContent).to.equal(`application {
+        it('should export apps & entities', () => {
+          expect(jdlFileContent).to.equal(`application {
   config {
     applicationType microservice
     authenticationType jwt
@@ -102,18 +105,21 @@ describe('JSONToJDLConverter', () => {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.myapp
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -185,42 +191,42 @@ relationship ManyToMany {
 noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region, Task
 paginate Country with pager
 `);
-                });
-            });
         });
-        context('when there is no yo-rc file in the passed directory', () => {
-            context('with no JHipster app', () => {
-                let dir;
+      });
+    });
+    context('when there is no yo-rc file in the passed directory', () => {
+      context('with no JHipster app', () => {
+        let dir;
 
-                before(() => {
-                    dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'empty_dir');
-                    fs.mkdirSync(dir);
-                });
-                after(() => {
-                    fs.rmdirSync(dir);
-                });
+        before(() => {
+          dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'empty_dir');
+          fs.mkdirSync(dir);
+        });
+        after(() => {
+          fs.rmdirSync(dir);
+        });
 
-                it('does not fail', () => {
-                    expect(() => convertToJDL(dir)).not.to.throw();
-                });
-            });
-            context('with several JHipster apps', () => {
-                let rootDir;
-                let jdlFilename;
-                let jdlFileContent;
+        it('does not fail', () => {
+          expect(() => convertToJDL(dir)).not.to.throw();
+        });
+      });
+      context('with several JHipster apps', () => {
+        let rootDir;
+        let jdlFilename;
+        let jdlFileContent;
 
-                beforeEach(() => {
-                    rootDir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'multi_apps');
-                    jdlFilename = 'app.jdl';
-                    convertToJDL(rootDir);
-                    jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
-                });
-                afterEach(() => {
-                    fs.unlinkSync(path.join(rootDir, jdlFilename));
-                });
+        beforeEach(() => {
+          rootDir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'multi_apps');
+          jdlFilename = 'app.jdl';
+          convertToJDL(rootDir);
+          jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
+        });
+        afterEach(() => {
+          fs.unlinkSync(path.join(rootDir, jdlFilename));
+        });
 
-                it('should export each app', () => {
-                    expect(jdlFileContent).to.equal(`application {
+        it('should export each app', () => {
+          expect(jdlFileContent).to.equal(`application {
   config {
     applicationType microservice
     authenticationType jwt
@@ -231,18 +237,21 @@ paginate Country with pager
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.app1
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -265,18 +274,21 @@ application {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.app2
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -299,18 +311,21 @@ application {
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
+    enableGradleEnterprise false
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation false
+    gradleEnterpriseHost ""
     jhiPrefix jhi
     jhipsterVersion "6.0.1"
     jwtSecretKey "HIDDEN"
-    languages [en, fr]
+    languages []
     messageBroker false
     nativeLanguage en
     otherModules []
     packageName com.mycompany.app3
     prodDatabaseType mysql
+    reactive false
     searchEngine false
     serverPort 8081
     serviceDiscoveryType eureka
@@ -339,25 +354,25 @@ relationship OneToOne {
 
 noFluentMethod Region, Country, Location
 `);
-                });
-            });
         });
-        context('when passing an output file', () => {
-            let dir;
-            let output;
-
-            before(() => {
-                dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'only_app');
-                output = 'exported.jdl';
-                convertToJDL(dir, output);
-            });
-            after(() => {
-                fs.unlinkSync(path.join(dir, output));
-            });
-
-            it('should output it to the output file', () => {
-                expect(fs.readFileSync(path.join(dir, output), 'utf-8')).not.to.be.null;
-            });
-        });
+      });
     });
+    context('when passing an output file', () => {
+      let dir;
+      let output;
+
+      before(() => {
+        dir = path.join(__dirname, '..', 'test-files', 'json_to_jdl_converter', 'only_app');
+        output = 'exported.jdl';
+        convertToJDL(dir, output);
+      });
+      after(() => {
+        fs.unlinkSync(path.join(dir, output));
+      });
+
+      it('should output it to the output file', () => {
+        expect(fs.readFileSync(path.join(dir, output), 'utf-8')).not.to.be.null;
+      });
+    });
+  });
 });

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@
 package <%= packageName %>.security.jwt;
 
 import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.management.SecurityMetersService;
 
 import java.security.Key;
 import java.util.*;
@@ -31,11 +32,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import io.github.jhipster.config.JHipsterProperties;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+
+import tech.jhipster.config.JHipsterProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,7 +56,10 @@ class TokenProviderTest {
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         String base64Secret = "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8";
         jHipsterProperties.getSecurity().getAuthentication().getJwt().setBase64Secret(base64Secret);
-        tokenProvider = new TokenProvider(jHipsterProperties);
+
+        SecurityMetersService securityMetersService = new SecurityMetersService(new SimpleMeterRegistry());
+
+        tokenProvider = new TokenProvider(jHipsterProperties, securityMetersService);
         key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(base64Secret));
 
         ReflectionTestUtils.setField(tokenProvider, "key", key);
@@ -101,6 +109,34 @@ class TokenProviderTest {
         boolean isTokenValid = tokenProvider.validateToken("");
 
         assertThat(isTokenValid).isFalse();
+    }
+
+    @Test
+    void testKeyIsSetFromSecretWhenSecretIsNotEmpty() {
+        final String secret = "NwskoUmKHZtzGRKJKVjsJF7BtQMMxNWi";
+        JHipsterProperties jHipsterProperties = new JHipsterProperties();
+        jHipsterProperties.getSecurity().getAuthentication().getJwt().setSecret(secret);
+
+        SecurityMetersService securityMetersService = new SecurityMetersService(new SimpleMeterRegistry());
+
+        TokenProvider tokenProvider = new TokenProvider(jHipsterProperties, securityMetersService);
+
+        Key key = (Key) ReflectionTestUtils.getField(tokenProvider, "key");
+        assertThat(key).isNotNull().isEqualTo(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    void testKeyIsSetFromBase64SecretWhenSecretIsEmpty() {
+        final String base64Secret = "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8";
+        JHipsterProperties jHipsterProperties = new JHipsterProperties();
+        jHipsterProperties.getSecurity().getAuthentication().getJwt().setBase64Secret(base64Secret);
+
+        SecurityMetersService securityMetersService = new SecurityMetersService(new SimpleMeterRegistry());
+
+        TokenProvider tokenProvider = new TokenProvider(jHipsterProperties, securityMetersService);
+
+        Key key = (Key) ReflectionTestUtils.getField(tokenProvider, "key");
+        assertThat(key).isNotNull().isEqualTo(Keys.hmacShaKeyFor(Decoders.BASE64.decode(base64Secret)));
     }
 
     private Authentication createAuthentication() {

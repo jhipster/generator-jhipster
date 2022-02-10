@@ -1,13 +1,14 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +23,7 @@ const FieldIssue = require('./issues/field-issue');
 let issues;
 
 module.exports = {
-    checkFields,
+  checkFields,
 };
 
 /**
@@ -33,35 +34,35 @@ module.exports = {
  * @return {Array} the found entity issues.
  */
 function checkFields(entityName, fieldDeclarations) {
-    if (fieldDeclarations.length === 0) {
-        return [];
-    }
-    issues = [];
-    checkForDuplicatedFields(entityName, fieldDeclarations);
-    return issues;
+  if (fieldDeclarations.length === 0) {
+    return [];
+  }
+  issues = [];
+  checkForDuplicatedFields(entityName, fieldDeclarations);
+  return issues;
 }
 
 function checkForDuplicatedFields(entityName, fieldDeclarations) {
-    const fieldNames = new Set();
-    const duplicatedFieldIssues = new Map(); // key: fieldName, value: issue
-    fieldDeclarations.forEach(fieldDeclaration => {
-        const fieldName = fieldDeclaration.children.NAME[0].image;
-        if (fieldNames.has(fieldName)) {
-            if (!duplicatedFieldIssues.has(fieldName)) {
-                duplicatedFieldIssues.set(
-                    fieldName,
-                    new FieldIssue({
-                        ruleName: Rules.RuleNames.FLD_DUPLICATED,
-                        fieldName,
-                        entityName,
-                    })
-                );
-            }
-        } else {
-            fieldNames.add(fieldName);
-        }
-    });
-    duplicatedFieldIssues.forEach(issue => {
-        issues.push(issue);
-    });
+  const fieldNames = new Set();
+  const duplicatedFieldIssues = new Map(); // key: fieldName, value: issue
+  fieldDeclarations.forEach(fieldDeclaration => {
+    const fieldName = fieldDeclaration.children.NAME[0].image;
+    if (fieldNames.has(fieldName)) {
+      if (!duplicatedFieldIssues.has(fieldName)) {
+        duplicatedFieldIssues.set(
+          fieldName,
+          new FieldIssue({
+            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            fieldName,
+            entityName,
+          })
+        );
+      }
+    } else {
+      fieldNames.add(fieldName);
+    }
+  });
+  duplicatedFieldIssues.forEach(issue => {
+    issues.push(issue);
+  });
 }

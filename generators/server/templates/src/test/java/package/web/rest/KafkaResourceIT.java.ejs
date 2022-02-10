@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,14 +28,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-<%_ } else { _%>
-import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -55,11 +56,11 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     private static boolean started = false;
     private static KafkaContainer kafkaContainer;
 
-    <%_ if (!reactive) { _%>
-    private MockMvc restMockMvc;
-    <%_ } else { _%>
+<%_ if (reactive) { _%>
     private WebTestClient client;
-    <%_ } _%>
+<%_ } else { _%>
+    private MockMvc restMockMvc;
+<%_ } _%>
 
     @BeforeAll
     static void startServer() {
@@ -72,7 +73,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     private static void startTestcontainer() {
         // TODO: withNetwork will need to be removed soon
         // See discussion at https://github.com/jhipster/generator-jhipster/issues/11544#issuecomment-609065206
-        kafkaContainer = new KafkaContainer("<%= KAFKA_VERSION %>").withNetwork(null);
+        kafkaContainer = new KafkaContainer(DockerImageName.parse("<%= DOCKER_KAFKA %>")).withNetwork(null);
         kafkaContainer.start();
     }
 
@@ -88,25 +89,25 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
         <%= upperFirstCamelCase(baseName) %>KafkaResource kafkaResource = new <%= upperFirstCamelCase(baseName) %>KafkaResource(kafkaProperties);
 
-        <%_ if (!reactive) { _%>
-        restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
-        <%_ } else { _%>
+<%_ if (reactive) { _%>
         client = WebTestClient.bindToController(kafkaResource).build();
-        <%_ } _%>
+<%_ } else { _%>
+        restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
+<%_ } _%>
     }
 
     @Test
     void producesMessages()<% if (!reactive) { %> throws Exception<% } %> {
-        <%_ if (!reactive) { _%>
-        restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-        <%_ } else { _%>
-        client.post().uri("/api/jhipster-kafka/publish/topic-produce?message=value-produce")
+<%_ if (reactive) { _%>
+        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce")
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON);
-        <%_ } _%>
+<%_ } else { _%>
+        restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+<%_ } _%>
 
         Map<String, Object> consumerProps = new HashMap<>(getConsumerProps("group-produce"));
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
@@ -125,7 +126,17 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
         producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
 
-        <%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+        String value = client.get().uri("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume")
+            .accept(MediaType.TEXT_EVENT_STREAM)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
+            .returnResult(String.class)
+            .getResponseBody().blockFirst(Duration.ofSeconds(10));
+
+        assertThat(value).isEqualTo("value-consume");
+<%_ } else { _%>
         MvcResult mvcResult = restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume"))
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
@@ -139,17 +150,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             }
         }
         fail("Expected content data:value-consume not received");
-        <%_ } else { _%>
-        String value = client.get().uri("/api/jhipster-kafka/consume?topic=topic-consume")
-            .accept(MediaType.TEXT_EVENT_STREAM)
-            .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
-            .returnResult(String.class)
-            .getResponseBody().blockFirst(Duration.ofSeconds(10));
-
-        assertThat(value).isEqualTo("value-consume");
-        <%_ } _%>
+<%_ } _%>
     }
 
     private Map<String, String> getProducerProps() {
@@ -170,4 +171,3 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         return consumerProps;
     }
 }
-

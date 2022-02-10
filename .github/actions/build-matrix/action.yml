@@ -1,0 +1,234 @@
+#
+# Copyright 2013-2022 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: 'Compare generated applications'
+description: 'Experimental compare generated applications action'
+inputs:
+  workflow-file-prefix:
+    description: 'Workflow file prefix'
+    required: false
+    default: workflow
+  skip-workflow:
+    description: 'Skip the workflow'
+    required: false
+    default: >-
+      ${{
+        contains(github.event.head_commit.message, '[ci skip]') ||
+        contains(github.event.head_commit.message, '[skip ci]') ||
+        contains(github.event.pull_request.title, '[skip ci]') ||
+        contains(github.event.pull_request.title, '[ci skip]') ||
+        github.event.action == 'closed' ||
+        contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')
+      }}
+outputs:
+  matrix:
+    description: 'Build Matrix'
+    value: ${{ steps.build-matrix.outputs.matrix }}
+  skip-workflow:
+    description: 'Skip workflow'
+    value: ${{ inputs.skip-workflow }}
+  client:
+    description: 'Client files has changed'
+    value: ${{ steps.build-changes.outputs.client }}
+  common:
+    description: 'Common files has changed'
+    value: ${{ steps.build-changes.outputs.common }}
+  server:
+    description: 'Server files has changed'
+    value: ${{ steps.build-changes.outputs.server }}
+  workspaces:
+    description: 'Workspaces files has changed'
+    value: ${{ steps.build-changes.outputs.workspaces }}
+  e2e:
+    description: 'E2E files has changed'
+    value: ${{ steps.build-changes.outputs.e2e }}
+  any:
+    description: 'Any files has changed'
+    value: ${{ steps.build-changes.outputs.any }}
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v2.4.0
+      with:
+        node-version: 14
+    - name: 'Check changes'
+      id: build-changes
+      run: |
+        CLIENT=false
+        SERVER=false
+        COMMON=false
+        WORKSPACES=false
+        E2E=false
+        ANY=false
+        if [[ "true" == "${{inputs.skip-workflow}}" ]]; then
+          echo "::set-output name=angular::false"
+          echo "::set-output name=react::false"
+          echo "::set-output name=vue::false"
+          echo "::set-output name=client-common::false"
+
+          echo "::set-output name=client::${CLIENT}"
+          echo "::set-output name=server::${SERVER}"
+          echo "::set-output name=common::${COMMON}"
+          echo "::set-output name=workspaces::${WORKSPACES}"
+          echo "::set-output name=e2e::${E2E}"
+          echo "::set-output name=any::${ANY}"
+          echo "::set-output name=matrix::{}"
+          exit 0
+        fi
+
+        if [[ "true" == "${{github.event.pull_request || 'true'}}" ]]; then
+          echo "::set-output name=angular::true"
+          echo "::set-output name=react::true"
+          echo "::set-output name=vue::true"
+          echo "::set-output name=client-common::true"
+
+          echo "::set-output name=client::true"
+          echo "::set-output name=server::true"
+          echo "::set-output name=common::true"
+          echo "::set-output name=workspaces::true"
+          echo "::set-output name=e2e::true"
+          echo "::set-output name=any::true"
+          echo "::set-output name=matrix::{}"
+          exit 0
+        fi
+
+        echo "::group::Check Angular"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/*client/**/angular/**' \
+          'generators/*client/**/*-angular*' \
+          || ANGULAR=true
+        echo "::endgroup::"
+
+        echo "::group::Check React"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/*client/**/react/**' \
+          'generators/*client/**/*-react*' \
+          || REACT=true
+        echo "::endgroup::"
+
+        echo "::group::Check Vue"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/*client/**/vue/**' \
+          'generators/*client/**/*-vue*' \
+          || VUE=true
+        echo "::endgroup::"
+
+        echo "::group::Check Client Common"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/*client/**' \
+          ':^*-angular*' \
+          ':^**/angular/**' \
+          ':^*-react*' \
+          ':^**/react/**' \
+          ':^*-vue*' \
+          ':^**/vue/**' \
+          || CLIENT_COMMON=true
+        echo "::endgroup::"
+
+        echo "::group::Check Client"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/*client/**' \
+          || CLIENT=true E2E=true ANY=true
+        echo "::endgroup::"
+
+        echo "::group::Check Server"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/*server/**' \
+          'generators/database-changelog' \
+          'generators/database-changelog-liquibase' \
+          || SERVER=true E2E=true ANY=true
+        echo "::endgroup::"
+
+        echo "::group::Check Common"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          '.github/actions' \
+          '.github/workflows' \
+          'generators/*.*' \
+          'generators/app' \
+          'generators/bootstrap' \
+          'generators/common' \
+          'generators/entities' \
+          'generators/entity' \
+          'generators/entity-i18n' \
+          'generators/languages' \
+          'lib' \
+          'test-integration' \
+          'utils' \
+          || CLIENT=true SERVER=true COMMON=true E2E=true ANY=true
+        echo "::endgroup::"
+
+        echo "::group::Check E2E"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/cypress' \
+          || E2E=true ANY=true
+        echo "::endgroup::"
+
+        echo "::group::Check Workspaces"
+        git -c color.ui=always diff --exit-code @~1 -- \
+          'generators/workspaces' \
+          'generators/docker-compose' \
+          || WORKSPACES=true E2E=true ANY=true
+        echo "::endgroup::"
+
+        echo "::set-output name=angular::${ANGULAR}"
+        echo "::set-output name=react::${REACT}"
+        echo "::set-output name=vue::${VUE}"
+        echo "::set-output name=client-common::${CLIENT_COMMON}"
+
+        echo "::set-output name=client::${CLIENT}"
+        echo "::set-output name=server::${SERVER}"
+        echo "::set-output name=common::${COMMON}"
+        echo "::set-output name=workspaces::${WORKSPACES}"
+        echo "::set-output name=e2e::${E2E}"
+        echo "::set-output name=any::${ANY}"
+      shell: bash
+
+    - name: 'Build matrix'
+      id: build-matrix
+      run: |
+        echo '{ "include" : [] }' > matrix.json
+
+        if [[ "true" == "${{ steps.build-changes.outputs.angular }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
+          echo "::group::Workflows Angular"
+          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-angular.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
+
+        if [[ "true" == "${{ steps.build-changes.outputs.react }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
+          echo "::group::Workflows React"
+          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-react.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
+
+        if [[ "true" == "${{ steps.build-changes.outputs.vue }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
+          echo "::group::Workflows Vue"
+          test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-vue.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
+
+        MATRIX=$(cat matrix.json)
+        rm matrix.json
+        MATRIX="${MATRIX//'%'/'%25'}"
+        MATRIX="${MATRIX//$'\n'/'%0A'}"
+        MATRIX="${MATRIX//$'\r'/'%0D'}"
+        echo "::set-output name=matrix::$MATRIX"
+      shell: bash

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,20 +18,11 @@
 -%>
 package <%= packageName %>.security;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
-<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.IntegrationTest;
+<%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
@@ -40,11 +31,7 @@ import <%= packageName %>.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (databaseType === 'neo4j' || cacheProvider === 'redis' || reactiveSqlTestContainers) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 <%_ } _%>
@@ -52,14 +39,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 <%_ if (!reactive) { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import java.util.UUID;
 <%_ } _%>
 import java.util.Locale;
@@ -70,23 +57,14 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
  */
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
-<%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
 @Transactional
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
+<%_ if (databaseTypeCouchbase) { _%>
 @WithMockUser("test-user-one")
 <%_ } _%>
-class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+@IntegrationTest
+class DomainUserDetailsServiceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
     private static final String USER_ONE_LOGIN = "test-user-one";
     private static final String USER_ONE_EMAIL = "test-user-one@localhost";
@@ -103,17 +81,17 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
 
     @BeforeEach
     public void init() {
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
-        <%_ } _%>
-        <%_ if (databaseType !== 'sql' || reactive) { _%>
+<%_ } _%>
+<%_ if (!databaseTypeSql || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 
-        <%_ } _%>
+<%_ } _%>
         <%= asEntity('User') %> userOne = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
         userOne.setId(UUID.randomUUID().toString());
-        <%_ } _%>
+<%_ } _%>
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
         userOne.setActivated(true);
@@ -121,15 +99,15 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
         userOne.setFirstName("userOne");
         userOne.setLastName("doe");
         userOne.setLangKey("en");
-        <%_ if (databaseType === 'sql' && reactive) { _%>
-        userOne.setCreatedBy(Constants.SYSTEM_ACCOUNT);
-        <%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+        userOne.setCreatedBy(Constants.SYSTEM);
+<%_ } _%>
         userRepository.save(userOne)<% if (reactive) { %>.block()<% } %>;
 
         <%= asEntity('User') %> userTwo = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
         userTwo.setId(UUID.randomUUID().toString());
-        <%_ } _%>
+<%_ } _%>
         userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.random(60));
         userTwo.setActivated(true);
@@ -137,15 +115,15 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
         userTwo.setFirstName("userTwo");
         userTwo.setLastName("doe");
         userTwo.setLangKey("en");
-        <%_ if (databaseType === 'sql' && reactive) { _%>
-        userTwo.setCreatedBy(Constants.SYSTEM_ACCOUNT);
-        <%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+        userTwo.setCreatedBy(Constants.SYSTEM);
+<%_ } _%>
         userRepository.save(userTwo)<% if (reactive) { %>.block()<% } %>;
 
         <%= asEntity('User') %> userThree = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
         userThree.setId(UUID.randomUUID().toString());
-        <%_ } _%>
+<%_ } _%>
         userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.random(60));
         userThree.setActivated(false);
@@ -153,9 +131,9 @@ class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extend
         userThree.setFirstName("userThree");
         userThree.setLastName("doe");
         userThree.setLangKey("en");
-        <%_ if (databaseType === 'sql' && reactive) { _%>
-        userThree.setCreatedBy(Constants.SYSTEM_ACCOUNT);
-        <%_ } _%>
+<%_ if (databaseTypeSql && reactive) { _%>
+        userThree.setCreatedBy(Constants.SYSTEM);
+<%_ } _%>
         userRepository.save(userThree)<% if (reactive) { %>.block()<% } %>;
     }
 

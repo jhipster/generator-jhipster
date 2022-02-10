@@ -9,9 +9,9 @@ in the cluster. Follow [this link](https://knative.dev/docs/install/) for instru
 
 ```
 <%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-<%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
+  <%_ if (appConfigs[i].baseName.toLowerCase() !== appConfigs[i].targetImageName) { _%>
     $ docker image tag <%= appConfigs[i].baseName.toLowerCase() %> <%= appConfigs[i].targetImageName %>
-<%_ } _%>
+  <%_ } _%>
 $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 <%_ } _%>
 ```
@@ -20,16 +20,16 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 ## Deployment
 
 You can deploy all your apps by running the below terminal command:
-<%_ if (generatorType === 'k8s') { _%>
+<%_ if (generatorTypeK8s) { _%>
 ```
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
 ```
 <%_ } _%>
-<%_ if (generatorType === 'helm') { _%>
+<%_ if (generatorTypeHelm) { _%>
 ```
 bash helm-knative-apply.sh (or) ./helm-knative-apply.sh
 ```
-    
+
 `helm-apply.sh` will always do a clean install. Any of the existing charts with the same identity gets removed first and then it does a clean install.
 
 You can upgrade all your apps (if you have made any changes to the generated manifests) by running the following bash command:

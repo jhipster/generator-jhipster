@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,43 +18,58 @@
 -%>
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { errorRoute } from './layouts/error/error.route';
 import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
-import { Authority } from 'app/shared/constants/authority.constants';
+import { Authority } from 'app/config/authority.constants';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
-const LAYOUT_ROUTES = [
-    navbarRoute,
-    ...errorRoute
-];
-
 @NgModule({
-    imports: [
-        RouterModule.forRoot(
-            [
-                {
-                    path: 'admin',
-                    data: {
-                        authorities: [Authority.ADMIN]
-                    },
-                    canActivate: [UserRouteAccessService],
-                    loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule)
-                },
-                <%_ if (!skipUserManagement) { _%>
-                {
-                    path: 'account',
-                    loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
-                },
-                <%_ } _%>
-                ...LAYOUT_ROUTES
-            ],
-            { enableTracing: DEBUG_INFO_ENABLED }
-        )
-    ],
-    exports: [
-        RouterModule
-    ]
+  imports: [
+    RouterModule.forRoot(
+      [
+<%_ if (!applicationTypeMicroservice) { _%>
+        {
+          path: 'admin',
+          data: {
+            authorities: [Authority.ADMIN],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
+        },
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+        {
+          path: 'account',
+          loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
+        },
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+        {
+          path: 'login',
+          loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+        },
+<%_ } _%>
+        {
+          path: '<%= applicationTypeMicroservice ? lowercaseBaseName : '' %>',
+          loadChildren: () => import(`./entities/entity-routing.module`).then(m => m.EntityRoutingModule),
+        },
+<%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+        {
+          path: '<%= remote.lowercaseBaseName %>',
+          loadChildren: () => import(`<%= remote.lowercaseBaseName %>/entity-routing`).then(m => m.EntityRoutingModule),
+        },
+  <%_ } _%>
+<%_ } _%>
+        navbarRoute,
+        ...errorRoute,
+      ],
+      { enableTracing: DEBUG_INFO_ENABLED }
+    ),
+  ],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

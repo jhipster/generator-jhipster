@@ -1,0 +1,77 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_ if (fragment.importsSection) { -&>
+<%_ if (applicationTypeMicroservice) { _%>
+const { DefinePlugin } = require('webpack');
+<%_ } _%>
+<&_ } -&>
+<&_ if (fragment.moduleFederationSection) { -&>
+<%_ if (applicationTypeGateway) { _%>
+        remotes: {
+  <%_ for (const remote of microfrontends) { _%>
+          '@<%= remote.lowercaseBaseName %>': `<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js`,
+  <%_ } _%>
+        },
+<%_ } _%>
+<%_ if (applicationTypeMicroservice) { _%>
+        exposes: {
+          './entities-router': './<%= CLIENT_MAIN_SRC_DIR %>app/router/entities',
+          './entities-menu': './<%= CLIENT_MAIN_SRC_DIR %>app/entities/entities-menu',
+        },
+<%_ } _%>
+        shared: {
+          axios: { singleton: true, shareScope: 'default' },
+          'vue-loader': { eager: true, singleton: false, shareScope: 'default' },
+          'bootstrap-vue': { singleton: true, shareScope: 'default' },
+          vue: { singleton: true, shareScope: 'default' },
+          vuelidate: { singleton: true, shareScope: 'default' },
+          'vue-class-component': { singleton: true, shareScope: 'default' },
+          'vue-i18n': { singleton: true, shareScope: 'default' },
+          'vue-router': { singleton: true, shareScope: 'default' },
+          'vue2-filters': { singleton: true, shareScope: 'default' },
+          vuex: { singleton: true, shareScope: 'default' },
+          'vue-property-decorator': { singleton: true, shareScope: 'default' },
+          '@/shared/security/authority': {
+            singleton: true,
+            shareScope: 'default',
+            import: '@/shared/security/authority',
+            requiredVersion: appVersion,
+          },
+          '@/shared/alert/alert.service': {
+            singleton: true,
+            shareScope: 'default',
+            import: '@/shared/alert/alert.service',
+            requiredVersion: appVersion,
+          },
+          '@/locale/translation.service': {
+            singleton: true,
+            shareScope: 'default',
+            import: '@/locale/translation.service',
+            requiredVersion: appVersion,
+          },
+        },
+<&_ } -&>
+<&_ if (fragment.pluginsSection) { -&>
+<%_ if (applicationTypeMicroservice) { _%>
+      new DefinePlugin({
+        <%= _.upperCase(baseName) %>_I18N_RESOURCES_PREFIX: JSON.stringify(''),
+      }),
+<%_ } _%>
+<&_ } -&>
+

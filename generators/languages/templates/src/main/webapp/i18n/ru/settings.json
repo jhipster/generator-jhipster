@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Произошла ошибка!</strong> Настройки не могут быть сохранены.",
-                "emailexists": "<strong>Email уже используется!</strong> Пожалуйста, попробуйте другой."
+                "emailexists": "<strong>Эл. почта уже используется!</strong> Пожалуйста, попробуйте другой."
             },
             "success": "<strong>Настройки сохранены!</strong>",
             "validate": {

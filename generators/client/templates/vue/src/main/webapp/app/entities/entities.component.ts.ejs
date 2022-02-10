@@ -1,0 +1,20 @@
+import { Component, Provide, Vue } from 'vue-property-decorator';
+
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { %>
+import UserService from '@/entities/user/user.service';
+<%_ } _%>
+<%_ for (entity of this.localEntities.filter(entity => !entity.embedded)) { _%>
+import <%= entity.entityAngularName %>Service from './<%= entity.entityFolderName %>/<%= entity.entityFileName %>.service';
+<%_ } _%>
+// jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
+
+@Component
+export default class Entities extends Vue {
+<%_ if (!skipUserManagement || authenticationTypeOauth2) { %>
+  @Provide('userService') private userService = () => new UserService();
+<%_ } _%>
+<%_ for (entity of this.localEntities.filter(entity => !entity.embedded)) { _%>
+  @Provide('<%= entity.entityInstance %>Service') private <%= entity.entityInstance %>Service = () => new <%= entity.entityAngularName %>Service();
+<%_ } _%>
+  // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
+}

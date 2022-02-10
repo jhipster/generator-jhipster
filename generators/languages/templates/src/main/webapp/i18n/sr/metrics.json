@@ -46,7 +46,8 @@
                     "code": "Code",
                     "count": "Broj",
                     "mean": "Sredja Vrednost",
-                    "average": "Prosek"
+                    "average": "Prosek",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

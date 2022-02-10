@@ -2,7 +2,7 @@
     "userManagement": {
         "home": {
             "title": "वापरकर्ते",
-            "refreshListLabel": "Refresh list",
+            "refreshListLabel": "यादी रिफ्रेश करा",
             "createLabel": "नवीन वापरकर्ता तयार करा",
             "createOrEditLabel": "तयार करा किंवा वापरकर्ता संपादित"
         },

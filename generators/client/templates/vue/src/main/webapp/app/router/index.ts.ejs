@@ -5,21 +5,21 @@ Component.registerHooks([
   'beforeRouteLeave',
   'beforeRouteUpdate' // for vue-router 2.2+
 ])
-import Router from 'vue-router';
+import Router, { RouteConfig } from 'vue-router';
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
 <%_ if (!skipUserManagement) { _%>
-import account from "@/router/account.ts";
+import account from "@/router/account";
 <%_ } _%>
-import admin from "@/router/admin.ts";
-import entities from "@/router/entities.ts";
-import pages from "@/router/pages.ts";
+import admin from "@/router/admin";
+import entities from "@/router/entities";
+import pages from "@/router/pages";
 
 Vue.use(Router);
 
 // prettier-ignore
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -43,7 +43,23 @@ export default new Router({
     ...account,
 <%_ } _%>
     ...admin,
-    ...entities,
+    entities,
     ...pages
   ]
 });
+
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+export const lazyRoutes = Promise.all([
+  <%_ for (const remote of microfrontends) { _%>
+  import('@<%= remote.lowercaseBaseName %>/entities-router')
+    .then(<%= remote.lowercaseBaseName %>Router => {
+      router.addRoute(<%= remote.lowercaseBaseName %>Router.default as RouteConfig);
+      return <%= remote.lowercaseBaseName %>Router.default;
+    }).catch(() => {
+      console.log("Error loading <%= remote.lowercaseBaseName %> menus. Make sure it's up.");
+    }),
+  <%_ } _%>
+]);
+
+<%_ } _%>
+export default router;

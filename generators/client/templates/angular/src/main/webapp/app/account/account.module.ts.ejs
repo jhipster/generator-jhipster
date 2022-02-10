@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,11 +20,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
-
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import { SessionsComponent } from './sessions/sessions.component';
 <%_ } _%>
-import { PasswordStrengthBarComponent } from './password/password-strength-bar.component';
+import { PasswordStrengthBarComponent } from './password/password-strength-bar/password-strength-bar.component';
 import { RegisterComponent } from './register/register.component';
 import { ActivateComponent } from './activate/activate.component';
 import { PasswordComponent } from './password/password.component';
@@ -34,21 +33,18 @@ import { SettingsComponent } from './settings/settings.component';
 import { accountState } from './account.route';
 
 @NgModule({
-    imports: [
-        SharedModule,
-        RouterModule.forChild(accountState)
-    ],
-    declarations: [
-        ActivateComponent,
-        RegisterComponent,
-        PasswordComponent,
-        PasswordStrengthBarComponent,
-        PasswordResetInitComponent,
-        PasswordResetFinishComponent,
-        <%_ if (authenticationType === 'session') { _%>
-        SessionsComponent,
-        <%_ } _%>
-        SettingsComponent
-    ]
+  imports: [SharedModule, RouterModule.forChild(accountState)],
+  declarations: [
+    ActivateComponent,
+    RegisterComponent,
+    PasswordComponent,
+    PasswordStrengthBarComponent,
+    PasswordResetInitComponent,
+    PasswordResetFinishComponent,
+    <%_ if (authenticationTypeSession) { _%>
+    SessionsComponent,
+    <%_ } _%>
+    SettingsComponent,
+  ],
 })
 export class AccountModule {}

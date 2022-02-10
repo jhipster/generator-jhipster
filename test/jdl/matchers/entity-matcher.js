@@ -1,7 +1,7 @@
 module.exports = {
-    matchEntity,
+  matchEntity,
 };
 
 function matchEntity(jdlEntity) {
-    return jdlEntity && jdlEntity.name && jdlEntity.tableName && jdlEntity.fields;
+  return jdlEntity && jdlEntity.name && jdlEntity.tableName && jdlEntity.fields;
 }

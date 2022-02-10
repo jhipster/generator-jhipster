@@ -46,7 +46,8 @@
                     "code": "کد",
                     "count": "تعداد",
                     "mean": "حد وسط",
-                    "average": "میانگین"
+                    "average": "میانگین",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

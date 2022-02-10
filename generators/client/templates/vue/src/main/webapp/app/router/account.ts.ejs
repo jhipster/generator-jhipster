@@ -8,7 +8,7 @@ import {Authority} from "@/shared/security/authority";
   const ResetPasswordFinish = () => import('@/account/reset-password/finish/reset-password-finish.vue');
   const ChangePassword = () => import('@/account/change-password/change-password.vue');
   const Settings = () => import('@/account/settings/settings.vue');
-  <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
+  <%_ if (authenticationTypeSession && !skipUserManagement) { _%>
   const Sessions = () => import('@/account/sessions/sessions.vue');
   <%_ } _%>
 <%_ } _%>
@@ -41,7 +41,7 @@ export default [
       component: ChangePassword,
       meta: { authorities: [Authority.USER] }
     },
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationTypeSession) { _%>
     {
       path: '/account/sessions',
       name: 'Sessions',
@@ -54,5 +54,6 @@ export default [
       name: 'Settings',
       component: Settings,
       meta: { authorities: [Authority.USER] }
-    }<% } %>
+    }
+<%_ } _%>
 ]

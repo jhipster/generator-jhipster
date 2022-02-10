@@ -1,4 +1,4 @@
-<%_ if (app.prodDatabaseType === 'mysql') { _%>
+<%_ if (app.prodDatabaseTypeMysql) { _%>
 mysql:
   enabled: true
   mysqlDatabase: <%= app.baseName.toLowerCase() %>
@@ -10,7 +10,7 @@ mysql:
   initializationFiles:
     grant.sql: |-
       grant all privileges on *.* to root@'%' identified by '' with grant option;
-<%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+<%_ } else if (app.prodDatabaseTypePostgres) { _%>
 postgresql:
   enabled: true
   postgresqlUsername: <%= app.baseName.toLowerCase() %>
@@ -23,7 +23,7 @@ postgresql:
     podAnnotations:
       sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
+<%_ } else if (app.prodDatabaseTypeMariadb) { _%>
 mariadb:
   enabled: true
   replication:
@@ -38,7 +38,7 @@ mariadb:
     annotations:
       sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseType === 'mongodb') { _%>
+<%_ } else if (app.prodDatabaseTypeMongodb) { _%>
 mongodb:
   enabled: true
 mongodb-replicaset:
@@ -47,11 +47,74 @@ mongodb-replicaset:
   podAnnotations:
     sidecar.istio.io/inject: "false"
   <%_ } _%>
-<%_ } else if (app.prodDatabaseType === 'couchbase') { _%>
-couchdb:
+<%_ } else if (app.prodDatabaseTypeCouchbase) { _%>
+couchbase-operator:
   enabled: true
-  allowAdminParty: true
-  clusterSize: 3
-  persistentVolume:
-    enabled: true
+  buckets:
+    default: nil
+    <%= app.baseName.toLowerCase() %>:
+      replicas: <%= app.dbPeerCount - 1 %>
+  users:
+    <%= app.baseName.toLowerCase() %>:
+      authSecret: couchbase-secret
+      authDomain: local
+      roles:
+        - name: bucket_admin
+          bucket: <%= app.baseName.toLowerCase() %>
+        - name: bucket_full_access
+          bucket: <%= app.baseName.toLowerCase() %>
+        - name: fts_admin
+          bucket: <%= app.baseName.toLowerCase() %>
+        - name: fts_searcher
+          bucket: <%= app.baseName.toLowerCase() %>
+  cluster:
+    antiAffinity: true
+    image: <%= DOCKER_COUCHBASE %>
+    security:
+      adminSecret: couchbase-secret
+    servers:
+      default:
+    <%_ if (kubernetesUseDynamicStorage) { _%>
+        volumeMounts:
+          default: pvc-default
+          data: pvc-data
+          index: pvc-index
+    <%_ } _%>
+        services:
+          - data
+          - query
+          - index
+          - search
+        size: <%= app.dbPeerCount %>
+    cluster:
+      dataServiceMemoryQuota: 500Mi
+      indexServiceMemoryQuota: 300Mi
+      searchServiceMemoryQuota: 300Mi
+      indexStorageSetting: plasma
+      indexer:
+        storageMode: plasma
+    <%_ if (kubernetesUseDynamicStorage) { _%>
+    volumeClaimTemplates:
+      - metadata:
+          name: pvc-default
+        spec:
+          storageClassName: <%= kubernetesStorageClassName %>
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: pvc-data
+        spec:
+          storageClassName: <%= kubernetesStorageClassName %>
+          resources:
+            requests:
+              storage: 1Gi
+      - metadata:
+          name: pvc-index
+        spec:
+          storageClassName: <%= kubernetesStorageClassName %>
+          resources:
+            requests:
+              storage: 1Gi
+    <%_ } _%>
 <%_ } _%>

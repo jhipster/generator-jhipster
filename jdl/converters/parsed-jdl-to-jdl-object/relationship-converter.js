@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,33 +29,36 @@ module.exports = { convertRelationships };
  * @param {Array<Object>} parsedRelationships - the parsed relationships.
  * @param {Function} annotationToOptionConverter - the function that can convert annotations to options.
  * @param {Object} conversionOptions - conversion options
- * @param {Boolean} conversionOptions.generateBidirectionalOneToMany - whether to generate bidirectional one-to-many.
+ * @param {Boolean} conversionOptions.unidirectionalRelationships - whether to generate bidirectional one-to-many.
  * @return {Array<JDLRelationship>} the converted JDL relationships.
  */
 function convertRelationships(parsedRelationships, annotationToOptionConverter, conversionOptions = {}) {
-    if (!parsedRelationships) {
-        throw new Error('Relationships have to be passed so as to be converted.');
+  if (!parsedRelationships) {
+    throw new Error('Relationships have to be passed so as to be converted.');
+  }
+  const { unidirectionalRelationships } = conversionOptions;
+  return parsedRelationships.map(parsedRelationship => {
+    const relationshipConfiguration = {
+      from: parsedRelationship.from.name,
+      to: parsedRelationship.to.name,
+      type: upperFirst(_.camelCase(parsedRelationship.cardinality)),
+      injectedFieldInFrom: parsedRelationship.from.injectedField,
+      injectedFieldInTo: parsedRelationship.to.injectedField,
+      isInjectedFieldInFromRequired: parsedRelationship.from.required,
+      isInjectedFieldInToRequired: parsedRelationship.to.required,
+      commentInFrom: formatComment(parsedRelationship.from.javadoc),
+      commentInTo: formatComment(parsedRelationship.to.javadoc),
+      options: {
+        global: annotationToOptionConverter.call(undefined, parsedRelationship.options.global),
+        source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
+        destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
+      },
+      unidirectionalRelationships,
+    };
+    if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
+      relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);
+      relationshipConfiguration.injectedFieldInTo = lowerFirst(relationshipConfiguration.from);
     }
-    const { generateBidirectionalOneToMany } = conversionOptions;
-    return parsedRelationships.map(parsedRelationship => {
-        const options = annotationToOptionConverter.call(undefined, parsedRelationship.options);
-        const relationshipConfiguration = {
-            from: parsedRelationship.from.name,
-            to: parsedRelationship.to.name,
-            type: upperFirst(_.camelCase(parsedRelationship.cardinality)),
-            injectedFieldInFrom: parsedRelationship.from.injectedField,
-            injectedFieldInTo: parsedRelationship.to.injectedField,
-            isInjectedFieldInFromRequired: parsedRelationship.from.required,
-            isInjectedFieldInToRequired: parsedRelationship.to.required,
-            commentInFrom: formatComment(parsedRelationship.from.javadoc),
-            commentInTo: formatComment(parsedRelationship.to.javadoc),
-            options,
-            generateBidirectionalOneToMany,
-        };
-        if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {
-            relationshipConfiguration.injectedFieldInFrom = lowerFirst(relationshipConfiguration.to);
-            relationshipConfiguration.injectedFieldInTo = lowerFirst(relationshipConfiguration.from);
-        }
-        return new JDLRelationship(relationshipConfiguration);
-    });
+    return new JDLRelationship(relationshipConfiguration);
+  });
 }

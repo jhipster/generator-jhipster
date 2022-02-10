@@ -1,0 +1,386 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import <%= packageName %>.security.AuthoritiesConstants;
+<%_ if (authenticationTypeJwt) { _%>
+import <%= packageName %>.security.jwt.JWTFilter;
+import <%= packageName %>.security.jwt.TokenProvider;
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
+import <%= packageName %>.security.SecurityUtils;
+import <%= packageName %>.security.oauth2.AudienceValidator;
+import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+  <%_ } _%>
+import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.beans.factory.annotation.Value;
+<%_ } _%>
+import tech.jhipster.config.JHipsterProperties;
+<%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+import <%= packageName %>.web.filter.SpaWebFilter;
+<%_ } _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.core.convert.converter.Converter;
+<%_ } _%>
+import org.springframework.http.HttpMethod;
+<%_ if (authenticationTypeSession) { _%>
+import org.springframework.http.HttpStatus;
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+<%_ } _%>
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+<%_ if (authenticationTypeSession) { _%>
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+<%_ } _%>
+import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
+<%_ } _%>
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+<%_ } _%>
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+  <%_ } _%>
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+  <%_ if (authenticationTypeSession || skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.User;
+  <%_ } _%>
+  <%_ if (skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.UserDetails;
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ } _%>
+import org.springframework.security.web.server.SecurityWebFilterChain;
+<%_ if (authenticationTypeSession) { _%>
+import org.springframework.security.web.server.WebFilterExchange;
+import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
+import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+<%_ } _%>
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
+<%_ if (applicationTypeMicroservice) { _%>
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
+<%_ } _%>
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+<%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
+import org.springframework.util.StringUtils;
+<%_ } _%>
+import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+
+import java.util.HashSet;
+import java.util.Set;
+<%_ if (applicationType === 'gateway') { _%>
+import java.util.function.Consumer;
+<%_ } _%>
+<%_ } _%>
+
+import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
+
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+@Import(SecurityProblemSupport.class)
+public class SecurityConfiguration {
+
+    private final JHipsterProperties jHipsterProperties;
+
+<%_ if (!skipUserManagement) { _%>
+    private final ReactiveUserDetailsService userDetailsService;
+
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+    private final TokenProvider tokenProvider;
+<%_ } _%>
+
+<%_ if (authenticationTypeOauth2) { _%>
+    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
+    private String issuerUri;
+  <%_ if (applicationTypeGateway) { _%>
+
+    private final ReactiveClientRegistrationRepository clientRegistrationRepository;
+  <%_ } _%>
+<%_ } _%>
+    private final SecurityProblemSupport problemSupport;
+
+    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && applicationTypeGateway) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+<%_ if (authenticationTypeOauth2 && applicationTypeGateway) { _%>
+        this.clientRegistrationRepository = clientRegistrationRepository;
+<%_ } _%>
+<%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
+        this.userDetailsService = userDetailsService;
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+        this.tokenProvider = tokenProvider;
+<%_ } _%>
+        this.jHipsterProperties = jHipsterProperties;
+        this.problemSupport = problemSupport;
+    }
+
+<%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
+        UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+        authenticationManager.setPasswordEncoder(passwordEncoder());
+        return authenticationManager;
+    }
+
+<%_ } else if (!authenticationTypeOauth2) { _%>
+    @Bean
+    public MapReactiveUserDetailsService userDetailsService(SecurityProperties properties) {
+        SecurityProperties.User user = properties.getUser();
+        UserDetails userDetails = User
+            .withUsername(user.getName())
+            .password("{noop}" + user.getPassword())
+            .roles(StringUtils.toStringArray(user.getRoles()))
+            .build();
+        return new MapReactiveUserDetailsService(userDetails);
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService) {
+        return new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+    }
+
+<%_ } _%>
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        // @formatter:off
+        http
+            .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
+                pathMatchers(HttpMethod.OPTIONS, "/**")
+            )))
+            .csrf()
+<%_ if ((authenticationTypeSession || authenticationTypeOauth2) && !applicationTypeMicroservice) { _%>
+                .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            // See https://github.com/spring-projects/spring-security/issues/5766
+            .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
+<%_ } else { _%>
+                .disable()
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+            .addFilterAt(new SpaWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+            .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
+<%_ } _%>
+<%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
+            .authenticationManager(reactiveAuthenticationManager())
+<%_ } _%>
+            .exceptionHandling()
+                .accessDeniedHandler(problemSupport)
+                .authenticationEntryPoint(problemSupport)
+<%_ if (authenticationTypeSession) { _%>
+        .and()
+            .formLogin()
+            .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
+            .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
+            .authenticationSuccessHandler(this::onAuthenticationSuccess)
+            .authenticationFailureHandler(this::onAuthenticationError)
+        .and()
+            .logout()
+            .logoutUrl("/api/logout")
+            .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler())
+<%_ } _%>
+        .and()
+            .headers()
+            .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
+            .and()
+                .referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+            .and()
+                .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
+            .and()
+                .frameOptions().disable()
+<%_ if (applicationTypeMicroservice) { _%>
+        .and()
+            .requestCache()
+            .requestCache(NoOpServerRequestCache.getInstance())
+<%_ } _%>
+        .and()
+            .authorizeExchange()
+<%_ if (!skipClient) { _%>
+            .pathMatchers("/").permitAll()
+            .pathMatchers("/*.*").permitAll()
+<%_ } _%>
+            .pathMatchers("/api/authenticate").permitAll()
+<%_ if (!skipUserManagement) { _%>
+            .pathMatchers("/api/register").permitAll()
+            .pathMatchers("/api/activate").permitAll()
+            .pathMatchers("/api/account/reset-password/init").permitAll()
+            .pathMatchers("/api/account/reset-password/finish").permitAll()
+<%_ } _%>
+            .pathMatchers("/api/auth-info").permitAll()
+            .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .pathMatchers("/api/**").authenticated()
+<%_ if (applicationTypeGateway) { _%>
+            // microfrontend resources are loaded by webpack without authentication, they need to be public
+            .pathMatchers("/services/*/*.js").permitAll()
+            .pathMatchers("/services/*/*.js.map").permitAll()
+            .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+<%_ } _%>
+<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
+            .pathMatchers("/services/**").authenticated()
+<%_ } _%>
+            .pathMatchers("/management/health").permitAll()
+            .pathMatchers("/management/health/**").permitAll()
+            .pathMatchers("/management/info").permitAll()
+            .pathMatchers("/management/prometheus").permitAll()
+            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+<%_ if (authenticationTypeOauth2) { _%>
+
+        http<%_ if (applicationTypeGateway || applicationTypeMonolith) { _%><%_ if (applicationTypeGateway) { _%>.oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))<%_ } else { _%>.oauth2Login()
+            .and()<%_ } _%>
+            <% } %>
+            .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter());
+        http.oauth2Client();
+<%_ } _%>
+        // @formatter:on
+        return http.build();
+    }
+<%_ if (authenticationTypeOauth2) { _%>
+
+  <%_ if (applicationTypeGateway) { _%>
+    private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
+        ReactiveClientRegistrationRepository clientRegistrationRepository) {
+        DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
+            new DefaultServerOAuth2AuthorizationRequestResolver(clientRegistrationRepository);
+        if (this.issuerUri.contains("auth0.com")) {
+            authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
+        }
+        return  authorizationRequestResolver;
+    }
+
+    private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
+        return customizer -> customizer
+            .authorizationRequestUri(uriBuilder ->
+                uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience())
+                    .build());
+    }
+  <%_ } _%>
+
+    Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
+        return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
+    }
+
+    /**
+     * Map authorities from "groups" or "roles" claim in ID Token.
+     *
+     * @return a {@link ReactiveOAuth2UserService} that has the groups from the IdP.
+     */
+    @Bean
+    public ReactiveOAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        final OidcReactiveOAuth2UserService delegate = new OidcReactiveOAuth2UserService();
+
+        return (userRequest) -> {
+            // Delegate to the default implementation for loading a user
+            return delegate.loadUser(userRequest).map(user -> {
+                Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+                user.getAuthorities().forEach(authority -> {
+                    if (authority instanceof OidcUserAuthority) {
+                        OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
+                    }
+                });
+
+                return new DefaultOidcUser(mappedAuthorities, user.getIdToken(), user.getUserInfo());
+            });
+        };
+    }
+
+    @Bean
+    ReactiveJwtDecoder jwtDecoder() {
+        NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
+
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return jwtDecoder;
+    }
+
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+
+    private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {
+        exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        return Mono.empty();
+    }
+
+    private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
+        exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+        return Mono.empty();
+    }
+<%_ } _%>
+}

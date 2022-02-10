@@ -19,17 +19,17 @@ let wrapper: Wrapper<ErrorClass>;
   let loginService: LoginService;
 
   beforeEach(() => {
-    <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationTypeJwt) { _%>
     loginService = { openLogin: jest.fn() };
-    <%_ } else if (authenticationType === 'session') { _%>
+<%_ } else if (authenticationTypeSession) { _%>
     loginService = { openLogin: jest.fn(), logout: jest.fn() };
-    <%_ } else if (authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
     loginService = { login: jest.fn(), logout: jest.fn() };
-    <%_ } _%>
+<%_ } _%>
     wrapper = shallowMount<ErrorClass>(Error, {
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       store,
       router,
       localVue,
@@ -39,18 +39,18 @@ let wrapper: Wrapper<ErrorClass>;
     });
     error = wrapper.vm;
   });
-  
+
   it('should have retrieve custom error on routing', () => {
     error.beforeRouteEnter({meta: { errorMessage: customErrorMsg}}, null, cb => cb(error));
 
     expect(error.errorMessage).toBe(customErrorMsg);
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should have set forbidden error on routing', () => {
@@ -59,11 +59,11 @@ let wrapper: Wrapper<ErrorClass>;
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeTruthy();
     expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalled();
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalled();
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should have set not found error on routing', () => {
@@ -72,11 +72,11 @@ let wrapper: Wrapper<ErrorClass>;
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeTruthy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should have retrieve custom error on init', () => {
@@ -85,11 +85,11 @@ let wrapper: Wrapper<ErrorClass>;
     expect(error.errorMessage).toBe(customErrorMsg);
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should have set forbidden error on init', () => {
@@ -98,11 +98,11 @@ let wrapper: Wrapper<ErrorClass>;
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeTruthy();
     expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalled();
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalled();
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should have set not found error on init', () => {
@@ -111,11 +111,11 @@ let wrapper: Wrapper<ErrorClass>;
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeTruthy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
+<%_ } _%>
   });
 
   it('should have set default on init', () => {
@@ -124,10 +124,10 @@ let wrapper: Wrapper<ErrorClass>;
     expect(error.errorMessage).toBeNull();
     expect(error.error403).toBeFalsy();
     expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
+<%_ } else { _%>
     expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
+<%_ } _%>
   });
 });

@@ -1,0 +1,38 @@
+<%_ const reactivePrefix = reactive ? 'Reactive' : '' %>
+package <%= packageName %>.config;
+
+import java.time.Duration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.<%= reactivePrefix %>OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.<%= reactivePrefix %>OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.registration.<%= reactivePrefix %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.Default<%= reactivePrefix %>OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.<%= reactive ? 'server.Server' : '' %>OAuth2AuthorizedClientRepository;
+
+@Configuration
+public class OAuth2Configuration {
+
+    @Bean
+    public <%= reactivePrefix %>OAuth2AuthorizedClientManager authorizedClientManager(
+        <%= reactivePrefix %>ClientRegistrationRepository clientRegistrationRepository,
+        <%= reactive ? 'Server' : '' %>OAuth2AuthorizedClientRepository authorizedClientRepository
+    ) {
+        Default<%= reactivePrefix %>OAuth2AuthorizedClientManager authorizedClientManager = new Default<%= reactivePrefix %>OAuth2AuthorizedClientManager(
+            clientRegistrationRepository,
+            authorizedClientRepository
+        );
+
+        authorizedClientManager.setAuthorizedClientProvider(
+            <%= reactivePrefix %>OAuth2AuthorizedClientProviderBuilder
+                .builder()
+                .authorizationCode()
+                .refreshToken(builder -> builder.clockSkew(Duration.ofMinutes(1)))
+                .clientCredentials()
+                .password()
+                .build()
+        );
+
+        return authorizedClientManager;
+    }
+}

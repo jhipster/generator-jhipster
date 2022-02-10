@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,8 +22,8 @@ const { createFolderIfItDoesNotExist, doesFileExist } = require('../../utils/fil
 const { GENERATOR_NAME, writeConfigFile } = require('../export-utils');
 
 module.exports = {
-    exportApplications,
-    exportApplication,
+  exportApplications,
+  exportApplication,
 };
 
 /**
@@ -31,12 +31,12 @@ module.exports = {
  * @param {Array<Object>} applications -  the formatted applications to export
  */
 function exportApplications(applications) {
-    if (!applications) {
-        throw new Error('Applications have to be passed to be exported.');
-    }
-    applications.forEach(application => {
-        writeApplicationFileForMultipleApplications(application);
-    });
+  if (!applications) {
+    throw new Error('Applications have to be passed to be exported.');
+  }
+  applications.forEach(application => {
+    writeApplicationFileForMultipleApplications(application);
+  });
 }
 
 /**
@@ -44,7 +44,7 @@ function exportApplications(applications) {
  * @param {Object} application - the formatted JHipster application to export.
  */
 function exportApplication(application) {
-    writeConfigFile(application);
+  writeConfigFile(application);
 }
 
 /**
@@ -52,12 +52,12 @@ function exportApplication(application) {
  * @param application the application.
  */
 function writeApplicationFileForMultipleApplications(application) {
-    const applicationBaseName = application[GENERATOR_NAME].baseName;
-    if (doesFileExist(applicationBaseName)) {
-        throw new Error(
-            `A file named '${applicationBaseName}' already exists, so a folder of the same name can't be created for the application.`
-        );
-    }
-    createFolderIfItDoesNotExist(applicationBaseName);
-    writeConfigFile(application, path.join(applicationBaseName, '.yo-rc.json'));
+  const applicationBaseName = application[GENERATOR_NAME].baseName;
+  if (doesFileExist(applicationBaseName)) {
+    throw new Error(
+      `A file named '${applicationBaseName}' already exists, so a folder of the same name can't be created for the application.`
+    );
+  }
+  createFolderIfItDoesNotExist(applicationBaseName);
+  writeConfigFile(application, path.join(applicationBaseName, '.yo-rc.json'));
 }

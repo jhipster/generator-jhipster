@@ -1,0 +1,168 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+let searchType = 'Search';
+if (paginationPagination || paginationInfiniteScroll) {
+    searchType = 'SearchWithPagination';
+}
+_%>
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+<%_ if (fieldsContainDate) { _%>
+import { map } from 'rxjs/operators';
+import dayjs from 'dayjs/esm';
+<%_ } _%>
+
+import { isPresent } from 'app/core/util/operators';
+<%_ if (fieldsContainLocalDate) { _%>
+import { DATE_FORMAT } from 'app/config/input.constants';
+<%_ } _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { createRequestOption } from 'app/core/request/request-util';
+<%_ if (searchEngine) { _%>
+import { <%= searchType %> } from 'app/core/request/request.model';
+<%_ } _%>
+import { I<%= entityAngularName %>, get<%= entityAngularName %>Identifier } from '../<%= entityFileName %>.model';
+
+export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
+export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
+
+@Injectable({ providedIn: 'root' })
+export class <%= entityAngularName %>Service {
+    protected resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
+<%_ if (searchEngine) { _%>
+    protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/<%= entityApiUrl %>'<% if (applicationTypeGateway && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
+<%_ } _%>
+
+    constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+
+<%_ if (!readOnly) { _%>
+    create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
+    <%_ if (fieldsContainDate) { _%>
+        const copy = this.convertDateFromClient(<%= entityInstance %>);
+    <%_ } _%>
+        return this.http.post<I<%= entityAngularName %>>(this.resourceUrl,
+                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                { observe: 'response' })
+        <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
+    }
+
+    update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
+    <%_ if (fieldsContainDate) { _%>
+        const copy = this.convertDateFromClient(<%= entityInstance %>);
+    <%_ } _%>
+        return this.http.put<I<%= entityAngularName %>>(`${this.resourceUrl}/${get<%= entityAngularName %>Identifier(<%= entityInstance %>) as <%= primaryKey.tsType %>}`,
+                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                { observe: 'response' })
+        <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
+    }
+
+    partialUpdate(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
+    <%_ if (fieldsContainDate) { _%>
+        const copy = this.convertDateFromClient(<%= entityInstance %>);
+    <%_ } _%>
+        return this.http.patch<I<%= entityAngularName %>>(`${this.resourceUrl}/${get<%= entityAngularName %>Identifier(<%= entityInstance %>) as <%= primaryKey.tsType %>}`,
+                <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
+                { observe: 'response' })
+        <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
+    }
+<%_ } _%>
+
+    find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
+        return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
+    }
+
+    query(req?: any): Observable<EntityArrayResponseType> {
+        const options = createRequestOption(req);
+        return this.http.get<I<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
+    }
+
+<%_ if (!readOnly) { _%>
+    delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
+        return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    }
+<%_ } _%>
+
+<%_ if (searchEngine) { _%>
+    search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
+        const options = createRequestOption(req);
+        return this.http.get<I<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
+    }
+<%_ } _%>
+
+    add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection: I<%= entityAngularName %>[], ...<%= entityInstancePlural %>ToCheck: (I<%= entityAngularName %> | null | undefined)[]): I<%= entityAngularName %>[] {
+        const <%= entityInstancePlural %>: I<%= entityAngularName %>[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
+        if (<%= entityInstancePlural %>.length > 0) {
+            const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => get<%= entityAngularName %>Identifier(<%= entityInstance %>Item)!);
+            const <%= entityInstancePlural %>ToAdd = <%= entityInstancePlural %>.filter(<%= entityInstance %>Item => {
+                const <%= entityInstance %>Identifier = get<%= entityAngularName %>Identifier(<%= entityInstance %>Item);
+                if (<%= entityInstance %>Identifier == null || <%= entityInstance %>CollectionIdentifiers.includes(<%= entityInstance %>Identifier)) {
+                    return false;
+                }
+                <%= entityInstance %>CollectionIdentifiers.push(<%= entityInstance %>Identifier);
+                return true;
+            });
+            return [...<%= entityInstancePlural %>ToAdd, ...<%= entityInstance %>Collection];
+        }
+        return <%= entityInstance %>Collection;
+    }
+
+<%_ if (fieldsContainDate) { _%>
+    protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
+        return Object.assign({}, <%= entityInstance %>, {
+    <%_ for (const field of fields) { _%>
+        <%_ if (field.fieldTypeTimed) { _%>
+        <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.toJSON() : undefined,
+        <%_ } _%>
+        <%_ if (field.fieldTypeLocalDate) { _%>
+        <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.isValid() ? <%= entityInstance %>.<%= field.fieldName %>.format(DATE_FORMAT) : undefined,
+        <%_ } _%>
+    <%_ } _%>
+        });
+    }
+
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+    <%_ for (const field of fields) { _%>
+        <%_ if (field.fieldTypeTemporal) { _%>
+            res.body.<%= field.fieldName %> = res.body.<%= field.fieldName %> ? dayjs(res.body.<%= field.fieldName %>) : undefined;
+        <%_ } _%>
+    <%_ } _%>
+        }
+        return res;
+    }
+
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
+    <%_ for (const field of fields) { _%>
+        <%_ if (field.fieldTypeTemporal) { _%>
+                <%= entityInstance %>.<%= field.fieldName %> = <%= entityInstance %>.<%= field.fieldName %> ? dayjs(<%= entityInstance %>.<%= field.fieldName %>) : undefined;
+        <%_ } _%>
+    <%_ } _%>
+            });
+        }
+        return res;
+    }
+<%_ } _%>
+}

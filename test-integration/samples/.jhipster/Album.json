@@ -1,45 +1,45 @@
 {
-    "name": "Album",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": ["required"]
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "artist",
-            "otherEntityRelationshipName": "album",
-            "relationshipName": "artist",
-            "otherEntityField": "name",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "genre",
-            "otherEntityRelationshipName": "album",
-            "relationshipName": "genre",
-            "otherEntityField": "name",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "track",
-            "otherEntityRelationshipName": "album",
-            "relationshipName": "track"
-        }
-    ],
-    "changelogDate": "20200417191023",
-    "entityTableName": "album",
-    "dto": "no",
-    "pagination": "no",
-    "service": "no",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*"
+  "name": "Album",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "artist",
+      "otherEntityRelationshipName": "album",
+      "relationshipName": "artist",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "genre",
+      "otherEntityRelationshipName": "album",
+      "relationshipName": "genre",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "track",
+      "otherEntityRelationshipName": "album",
+      "relationshipName": "track"
+    }
+  ],
+  "changelogDate": "20200417191023",
+  "entityTableName": "album",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
 }

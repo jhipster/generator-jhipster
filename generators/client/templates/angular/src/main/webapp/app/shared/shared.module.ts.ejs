@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,49 +17,54 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
+
 import { SharedLibsModule } from './shared-libs.module';
 <%_ if (enableTranslation) { _%>
 import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
+import { TranslateDirective } from './language/translate.directive';
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalComponent } from '../core/login/login-modal.component';
-<%_ } _%>
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
-import { DurationPipe } from './duration.pipe';
+import { DurationPipe } from './date/duration.pipe';
+import { FormatMediumDatetimePipe } from './date/format-medium-datetime.pipe';
+import { FormatMediumDatePipe } from './date/format-medium-date.pipe';
+import { SortByDirective } from './sort/sort-by.directive';
+import { SortDirective } from './sort/sort.directive';
+import { ItemCountComponent } from './pagination/item-count.component';
 
 @NgModule({
-    imports: [
-        SharedLibsModule
-    ],
-    declarations: [
-        <%_ if (enableTranslation) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        AlertComponent,
-        AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
-        HasAnyAuthorityDirective,
-        DurationPipe
-    ],
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    entryComponents: [LoginModalComponent],
-    <%_ } _%>
-    exports: [
-        SharedLibsModule,
-        <%_ if (enableTranslation) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        AlertComponent,
-        AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
-        HasAnyAuthorityDirective,
-        DurationPipe
-    ]
+  imports: [SharedLibsModule],
+  declarations: [
+<%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
+<%_ } _%>
+    AlertComponent,
+    AlertErrorComponent,
+    HasAnyAuthorityDirective,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    SortByDirective,
+    SortDirective,
+    ItemCountComponent,
+  ],
+  exports: [
+    SharedLibsModule,
+<%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
+<%_ } _%>
+    AlertComponent,
+    AlertErrorComponent,
+    HasAnyAuthorityDirective,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    SortByDirective,
+    SortDirective,
+    ItemCountComponent,
+  ],
 })
 export class SharedModule {}

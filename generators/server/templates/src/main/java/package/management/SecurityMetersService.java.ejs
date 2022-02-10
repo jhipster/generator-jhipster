@@ -1,0 +1,68 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.management;
+
+import org.springframework.stereotype.Service;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+
+@Service
+public class SecurityMetersService {
+
+    public static final String INVALID_TOKENS_METER_NAME = "security.authentication.invalid-tokens";
+    public static final String INVALID_TOKENS_METER_DESCRIPTION = "Indicates validation error count of the tokens presented by the clients.";
+    public static final String INVALID_TOKENS_METER_BASE_UNIT = "errors";
+    public static final String INVALID_TOKENS_METER_CAUSE_DIMENSION = "cause";
+
+    private final Counter tokenInvalidSignatureCounter;
+    private final Counter tokenExpiredCounter;
+    private final Counter tokenUnsupportedCounter;
+    private final Counter tokenMalformedCounter;
+
+    public SecurityMetersService(MeterRegistry registry) {
+        this.tokenInvalidSignatureCounter = invalidTokensCounterForCauseBuilder("invalid-signature").register(registry);
+        this.tokenExpiredCounter = invalidTokensCounterForCauseBuilder("expired").register(registry);
+        this.tokenUnsupportedCounter = invalidTokensCounterForCauseBuilder("unsupported").register(registry);
+        this.tokenMalformedCounter = invalidTokensCounterForCauseBuilder("malformed").register(registry);
+    }
+
+    private Counter.Builder invalidTokensCounterForCauseBuilder(String cause) {
+        return Counter.builder(INVALID_TOKENS_METER_NAME)
+            .baseUnit(INVALID_TOKENS_METER_BASE_UNIT)
+            .description(INVALID_TOKENS_METER_DESCRIPTION)
+            .tag(INVALID_TOKENS_METER_CAUSE_DIMENSION, cause);
+    }
+
+    public void trackTokenInvalidSignature() {
+        this.tokenInvalidSignatureCounter.increment();
+    }
+
+    public void trackTokenExpired() {
+        this.tokenExpiredCounter.increment();
+    }
+
+    public void trackTokenUnsupported() {
+        this.tokenUnsupportedCounter.increment();
+    }
+
+    public void trackTokenMalformed() {
+        this.tokenMalformedCounter.increment();
+    }
+}

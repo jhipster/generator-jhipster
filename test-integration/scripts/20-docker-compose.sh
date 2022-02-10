@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 source $(dirname $0)/00-init-env.sh
@@ -9,6 +9,7 @@ source $(dirname $0)/00-init-env.sh
 cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/keycloak.yml ]; then
     docker-compose -f src/main/docker/keycloak.yml up -d
+    sleep 20
 fi
 if [ -a src/main/docker/elasticsearch.yml ]; then
     docker-compose -f src/main/docker/elasticsearch.yml up -d
@@ -55,5 +56,8 @@ if [ -a src/main/docker/jhipster-registry.yml ]; then
 fi
 if [ "$JHI_SONAR" = 1 ]; then
     docker-compose -f src/main/docker/sonar.yml up -d
+fi
+if [ -a src/main/docker/zipkin.yml ]; then
+    docker-compose -f src/main/docker/zipkin.yml up -d
 fi
 docker ps -a

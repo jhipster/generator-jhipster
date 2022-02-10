@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,17 +23,17 @@ const constants = require('../../generator-constants');
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = class extends needleServer {
-    addlog(logName, level) {
-        this.addlogToMaster(logName, level, 'jhipster-needle-logback-add-log');
-    }
+  addlog(logName, level) {
+    this.addlogToMaster(logName, level, 'jhipster-needle-logback-add-log');
+  }
 
-    addlogToMaster(logName, level, needle) {
-        const errorMessage = `${chalk.yellow('Reference to ') + logName} ${chalk.yellow('not added.\n')}`;
-        const fullPath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
-        const content = `<logger name="${logName}" level="${level}"/>`;
+  addlogToMaster(logName, level, needle) {
+    const errorMessage = `${chalk.yellow('Reference to ') + logName} ${chalk.yellow('not added.\n')}`;
+    const fullPath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
+    const content = `<logger name="${logName}" level="${level}"/>`;
 
-        const rewriteFileModel = this.generateFileModel(fullPath, needle, content);
+    const rewriteFileModel = this.generateFileModel(fullPath, needle, content);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 };

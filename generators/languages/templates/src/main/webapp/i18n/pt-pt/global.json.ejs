@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Administração",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Gateway",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "Gestão de utilizadores",
                 "tracker": "Atividade dos utilizadores",
                 "metrics": "Métricas",
@@ -150,6 +150,8 @@
         "emailexists": "E-mail em uso!",
         "idexists": "Um novo {{entityName}} não pode ter um ID",
         "idnull": "ID inválido",
+        "idinvalid": "Invalid Id",
+        "idnotfound": "ID cannot be found",
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

@@ -1,0 +1,57 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_
+  // Register sections and max allowed fragments, 0 for unlimited.
+  fragments.registerSections({
+    propertiesSection: 0,
+  });
+-&>
+rootProject.name=<%= dasherizedBaseName %>
+profile=dev
+
+<&- fragments.propertiesSection({join: '/n/n'}) -&>
+## below are some of the gradle performance improvement settings that can be used as required, these are not enabled by default
+
+## The Gradle daemon aims to improve the startup and execution time of Gradle.
+## The daemon is enabled by default in Gradle 3+ setting this to false will disable this.
+## https://docs.gradle.org/current/userguide/gradle_daemon.html#sec:ways_to_disable_gradle_daemon
+## uncomment the below line to disable the daemon
+
+#org.gradle.daemon=false
+
+## Specifies the JVM arguments used for the daemon process.
+## The setting is particularly useful for tweaking memory settings.
+## Default value: -Xmx1024m -XX:MaxPermSize=256m
+## uncomment the below line to override the daemon defaults
+
+#org.gradle.jvmargs=-Xmx1024m -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+
+## When configured, Gradle will run in incubating parallel mode.
+## This option should only be used with decoupled projects. More details, visit
+## http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
+## uncomment the below line to enable parallel mode
+
+#org.gradle.parallel=true
+
+## Enables new incubating mode that makes Gradle selective when configuring projects.
+## Only relevant projects are configured which results in faster builds for large multi-projects.
+## http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:configuration_on_demand
+## uncomment the below line to enable the selective mode
+
+#org.gradle.configureondemand=true

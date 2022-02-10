@@ -1,0 +1,36 @@
+@ChangelogDate(20200804040000)
+entity UserMapsId {
+}
+
+@ChangelogDate(20200804050000)
+entity UserMapsIdDto {
+}
+
+@ChangelogDate(20200804060000)
+entity UserRelationship {
+}
+
+@ChangelogDate(20200804070000)
+entity UserRelationshipDto {
+}
+
+relationship OneToOne {
+  UserMapsId to @Id User
+  UserRelationship{oneToOne} to User
+  UserRelationshipDto{oneToOneDto} to User
+  UserRelationship{oneToOneMapsId} to UserMapsId{oneToOneMapsIdBack}
+}
+
+relationship ManyToOne {
+  UserRelationship{manyToOne} to User
+  UserRelationshipDto{manyToOneMapsId} to User
+  UserRelationship{manyToOneMapsId} to UserMapsId{manyToOneMapsIdBack}
+}
+
+relationship ManyToMany {
+  UserRelationship{manyToMany} to User
+  UserRelationshipDto{manyToManyMapsId} to User
+  UserRelationship{manyToManyMapsId} to UserMapsId{manyToManyMapsIdBack}
+}
+
+dto UserRelationshipDto with mapstruct

@@ -1,0 +1,141 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<!DOCTYPE html>
+<html class="no-js" lang="<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title><%= baseName %></title>
+    <meta name="description" content="Description for <%= baseName %>" />
+    <%_ if (enableTranslation) { _%>
+    <meta name="google" content="notranslate" />
+    <%_ } _%>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#000000" />
+    <%_ if (clientFramework === ANGULAR) { _%>
+    <base href="/" />
+    <%_ } _%>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webapp" />
+    <link rel="stylesheet" href="content/css/loading.css" />
+    <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
+  </head>
+  <body>
+    <!--[if lt IE 9]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+<%_ if (clientFrameworkAngular) { _%>
+    <<%= jhiPrefixDashed %>-main>
+<%_ } else { _%>
+    <div id="<% if (clientFrameworkReact) { %>root<% } else { %>app<% } %>">
+<%_ } _%>
+      <div class="app-loading">
+        <div class="lds-pacman">
+          <div><div></div><div></div><div></div></div>
+          <div><div></div><div></div><div></div></div>
+        </div>
+      </div>
+      <div class="app-loading">
+        <div id="jhipster-error" style="display: none">
+          <!-- This content is for troubleshooting purpose and will be removed when app renders -->
+          <h1>An error has occurred :-(</h1>
+          <h2>Usual error causes</h2>
+          <ol>
+            <li>You started the application from an IDE and you didn't run <code style="color:red"><%= clientPackageManager %> start</code> or <code style="color:red"><%= clientPackageManager %> run webapp:build</code>.</li>
+            <li>You had a network error while running <code style="color:red"><%= clientPackageManager %> install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the JHipster error logs, you will probably have the cause of the error.</li>
+            <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
+          </ol>
+          <h2>Building the client side code again</h2>
+          <p>If you want to go fast, run <code style="color:red"><% if (buildToolMaven) { %>./mvnw<% } else if (buildToolGradle) { %>./gradlew<% } %></code> to build and run everything.</p>
+          <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
+          <ol>
+            <li>Install npm dependencies with the command <code style="color:red"><%= clientPackageManager %> install</code></li>
+            <li>Build the client with the command <code style="color:red"><%= clientPackageManager %> run webapp:build</code> or <code style="color:red"><%= clientPackageManager %> start</code></li>
+            <li>Start the server with <code style="color:red"><% if (buildToolMaven) { %>./mvnw<% } else if (buildToolGradle) { %>./gradlew<% } %></code> or using your IDE</li>
+          </ol>
+
+          <h2>Getting more help</h2>
+
+          <h3>If you have a question on how to use JHipster</h3>
+          <p>
+            Go to Stack Overflow with the <a href="http://stackoverflow.com/tags/jhipster" target="_blank" rel="noopener noreferrer">"jhipster"</a> tag.
+          </p>
+
+          <h3>If you have a bug or a feature request</h3>
+          <p>
+            First read our <a href="https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">contributing guidelines</a>.
+          </p>
+          <p>
+            Then, fill a ticket on our <a href="https://github.com/jhipster/generator-jhipster/issues/new/choose" target="_blank" rel="noopener noreferrer">bug tracker</a>, we'll be happy to resolve your issue!
+          </p>
+
+          <h3>If you want to chat with contributors and other users</h3>
+          <p>
+            Join our chat room on <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">Gitter.im</a>. Please note that this is a public chat room, and that we expect you to respect other people and write in a correct English language!
+          </p>
+          <!-- end of troubleshooting content -->
+        </div>
+      </div>
+    <%_ if (clientFrameworkAngular) { _%>
+    </<%= jhiPrefixDashed %>-main>
+    <%_ } else { _%>
+    </div>
+    <%_ } _%>
+    <noscript>
+      <h1>You must enable JavaScript to view this page.</h1>
+    </noscript>
+    <script type="text/javascript">
+      // show an error message if the app loading takes more than 4 sec
+      window.onload = function () {
+        setTimeout(showError, 4000);
+      };
+      function showError() {
+        var errorElm = document.getElementById('jhipster-error');
+        if (errorElm && errorElm.style) {
+          errorElm.style.display = 'block';
+        }
+      }
+    </script>
+    <%_ if (!clientFrameworkAngular) { _%>
+    <!-- uncomment this for adding service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(function () {
+              console.log('Service Worker Registered');
+            });
+        });
+      }
+    </script>
+    -->
+    <%_ } _%>
+    <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>-->
+  </body>
+</html>

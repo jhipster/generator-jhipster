@@ -1,10 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 if [[ -a $(dirname $0)/00-init-env.sh ]]; then
     source $(dirname $0)/00-init-env.sh
 else
     echo "*** 00-init-env.sh not found"
+fi
+
+echo "11-generate-entities.sh script is deprecated, use 11-generate-config.sh instead"
+if [[ "$JHI_GENERATE_SKIP_CONFIG" == "1" ]]; then
+    exit 1
 fi
 
 #-------------------------------------------------------------------------------
@@ -16,7 +21,9 @@ moveEntity() {
 }
 
 prepareFolder() {
-    rm -rf "$JHI_FOLDER_APP"
+    if [[$(dirname $(pwd)) != $(dirname $JHI_FOLDER_APP)]]; then
+      rm -rf "$JHI_FOLDER_APP"
+    fi
     mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 }
 #-------------------------------------------------------------------------------
@@ -57,24 +64,16 @@ elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
 
-    moveEntity CassTestEntity
-    moveEntity CassTestMapstructEntity
-    moveEntity CassTestServiceClassEntity
-    moveEntity CassTestServiceImplEntity
+    moveEntity FieldTestEntity
+    moveEntity FieldTestServiceImplEntity
+    moveEntity FieldTestMapstructAndServiceClassEntity
+    moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "micro" ]]; then
     moveEntity MicroserviceBankAccount
     moveEntity MicroserviceOperation
     moveEntity MicroserviceLabel
 
-    moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructAndServiceClassEntity
-    moveEntity FieldTestServiceClassAndJpaFilteringEntity
-    moveEntity FieldTestServiceImplEntity
-    moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPaginationEntity
-
-elif [[ "$JHI_ENTITY" == "uaa" ]]; then
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructAndServiceClassEntity
     moveEntity FieldTestServiceClassAndJpaFilteringEntity

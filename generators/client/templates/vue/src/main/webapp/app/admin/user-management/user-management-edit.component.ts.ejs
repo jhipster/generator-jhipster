@@ -2,6 +2,7 @@ import { email, maxLength, minLength, required } from 'vuelidate/lib/validators'
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
+import AlertService from '@/shared/alert/alert.service';
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -36,7 +37,9 @@ const validations: any = {
   validations
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
-  @Inject('userService') private userManagementService: () => UserManagementService;
+  @Inject('userManagementService') private userManagementService: () => UserManagementService;
+  @Inject('alertService') private alertService: () => AlertService;
+
   public userAccount: IUser;
   public isSaving = false;
   public authorities: any[] = [];
@@ -65,7 +68,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
       });
   }
 
-  public init(userId: <% if (pkType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>): void {
+  public init(userId: <% if (userPrimaryKeyTypeString || userPrimaryKeyTypeUUID) { %>string<% } else { %>number<% } %>): void {
     this.userManagementService().get(userId).then(res => {
       this.userAccount = res.data;
     });
@@ -87,11 +90,14 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
           solid: true,
           autoHideDelay: 5000,
         });
+      }).catch(error => {
+        this.isSaving = true;
+        this.alertService().showHttpError(this,error.response);
       });
     } else {
-      <%_ if (!enableTranslation) { _%>
+<%_ if (!enableTranslation) { _%>
       this.userAccount.langKey = 'en';
-      <%_ } _%>
+<%_ } _%>
       this.userManagementService().create(this.userAccount).then(res => {
         this.returnToList();
         this.$root.$bvToast.toast(this.getMessageFromHeader(res).toString(), {
@@ -101,6 +107,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
           solid: true,
           autoHideDelay: 5000,
         });
+      }).catch(error => {
+        this.isSaving = true;
+        this.alertService().showHttpError(this,error.response);
       });
     }
   }

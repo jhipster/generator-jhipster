@@ -1,0 +1,173 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+  const notSortableFieldsAfterSearch = !searchEngine ? '' : fields
+      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal)
+      .map(field => `'${field.fieldName}'`)
+      .join(', ');
+_%>
+import { Component, OnInit } from '@angular/core';
+import { <%_ if (!paginationNo) { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
+<%_ if (paginationPagination) { _%>
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
+<%_ } else if (searchEngine) { _%>
+import { ActivatedRoute } from '@angular/router';
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ } _%>
+
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+<%_ if (!paginationNo) { %>
+import { ASC, DESC, ITEMS_PER_PAGE<%_ if (paginationPagination) { _%>, SORT<%_ } _%> } from 'app/config/pagination.constants';
+<%_ } _%>
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+<%_ if (!readOnly) { _%>
+import { <%= entityAngularName %>DeleteDialogComponent } from '../delete/<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
+<%_ if (fieldsContainBlob) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { ParseLinks } from 'app/core/util/parse-links.service';
+<%_ } _%>
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
+    templateUrl: './<%= entityFileName %>.component.html'
+})
+export class <%= entityAngularName %>Component implements OnInit {
+<%_ if (paginationPagination) { _%>
+<%- include('pagination-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
+<%_ } else if (paginationInfiniteScroll) { _%>
+<%- include('infinite-scroll-template', { notSortableFieldsAfterSearch: notSortableFieldsAfterSearch }); -%>
+<%_ } else if (paginationNo) { _%>
+<%- include('no-pagination-template'); -%>
+<%_ } _%>
+
+<%_ if (primaryKey) { _%>
+    track<%= primaryKey.nameCapitalized %>(index: number, item: I<%= entityAngularName %>): <%= primaryKey.tsType %> {
+        return item.<%= primaryKey.name %>!;
+    }
+
+<%_ } _%>
+<%_ if (fieldsContainBlob) { _%>
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(base64String: string, contentType: string | null | undefined): void {
+        return this.dataUtils.openFile(base64String, contentType);
+    }
+<%_ } _%>
+
+<%_
+let eventCallBack = 'this.loadAll()';
+if (paginationPagination) {
+    eventCallBack = 'this.loadPage()';
+} else if (paginationInfiniteScroll) {
+    eventCallBack = 'this.reset()';
+}
+_%>
+
+<%_ if (!readOnly) { _%>
+    delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
+        const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+        // unsubscribe not needed because closed completes on modal close
+        modalRef.closed.subscribe(reason => {
+            if (reason === 'deleted') {
+                <%= eventCallBack %>;
+            }
+        });
+    }
+<%_ } _%>
+
+<%_ if (!paginationNo) { _%>
+    protected sort(): string[] {
+        const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
+        if (this.predicate !== '<%- primaryKey.name %>') {
+            result.push('<%- primaryKey.name %>');
+        }
+        return result;
+    }
+
+    <%_ if (paginationPagination) { _%>
+    protected handleNavigation(): void {
+        combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+            const page = params.get('page');
+            const pageNumber = +(page ?? 1);
+            const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
+            const predicate = sort[0];
+            const ascending = sort[1] === ASC;
+            if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
+                this.predicate = predicate;
+                this.ascending = ascending;
+                this.loadPage(pageNumber, true);
+            }
+        });
+    }
+
+    protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+        this.totalItems = Number(headers.get('X-Total-Count'));
+        this.page = page;
+        <%_ if (searchEngine) { _%>
+        this.ngbPaginationPage = this.page;
+        <%_ } _%>
+        if (navigate) {
+            this.router.navigate(['/<%= entityPage %>'], {
+                queryParams: {
+                    page: this.page,
+                    size: this.itemsPerPage,
+        <%_ if (searchEngine) { _%>
+                    search: this.currentSearch,
+        <%_ } _%>
+                    sort: this.predicate + ',' + (this.ascending ? ASC : DESC)
+                }
+            });
+        }
+        this.<%= entityInstancePlural %> = data ?? [];
+        this.ngbPaginationPage = this.page;
+    }
+
+    protected onError(): void {
+        this.ngbPaginationPage = this.page ?? 1;
+    }
+
+    <%_ } else if (paginationInfiniteScroll) { _%>
+    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
+        const linkHeader = headers.get('link');
+        if (linkHeader) {
+            this.links = this.parseLinks.parse(linkHeader);
+        } else {
+            this.links = {
+                last: 0,
+            };
+        }
+        if (data) {
+            for (const d of data) {
+                this.<%= entityInstancePlural %>.push(d);
+            }
+        }
+    }
+
+    <%_ } _%>
+<%_ } _%>
+}

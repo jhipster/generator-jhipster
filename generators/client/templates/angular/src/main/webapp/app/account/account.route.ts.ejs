@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,24 +23,26 @@ import { passwordRoute } from './password/password.route';
 import { passwordResetFinishRoute } from './password-reset/finish/password-reset-finish.route';
 import { passwordResetInitRoute } from './password-reset/init/password-reset-init.route';
 import { registerRoute } from './register/register.route';
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationTypeSession) { _%>
 import { sessionsRoute } from './sessions/sessions.route';
 <%_ } _%>
 import { settingsRoute } from './settings/settings.route';
 
 const ACCOUNT_ROUTES = [
-    activateRoute,
-    passwordRoute,
-    passwordResetFinishRoute,
-    passwordResetInitRoute,
-    registerRoute,
-    <%_ if (authenticationType === 'session') { _%>
-    sessionsRoute,
-    <%_ } _%>
-    settingsRoute
+  activateRoute,
+  passwordRoute,
+  passwordResetFinishRoute,
+  passwordResetInitRoute,
+  registerRoute,
+  <%_ if (authenticationTypeSession) { _%>
+  sessionsRoute,
+  <%_ } _%>
+  settingsRoute,
 ];
 
-export const accountState: Routes = [{
+export const accountState: Routes = [
+  {
     path: '',
-    children: ACCOUNT_ROUTES
-}];
+    children: ACCOUNT_ROUTES,
+  },
+];

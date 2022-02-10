@@ -1,14 +1,14 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,10 +26,10 @@ const { readJSONFile } = require('../readers/json-file-reader');
 const { convertApplicationToJDL } = require('./json-to-jdl-application-converter');
 const { convertEntitiesToJDL } = require('./json-to-jdl-entity-converter');
 const { exportToJDL: exportJDLObject } = require('../exporters/jdl-exporter');
-const { SKIP_USER_MANAGEMENT } = require('../jhipster/unary-options');
+const { OptionNames } = require('../jhipster/application-options');
 
 module.exports = {
-    convertToJDL,
+  convertToJDL,
 };
 
 /**
@@ -38,68 +38,71 @@ module.exports = {
  * @param output the file where the JDL will be written
  */
 function convertToJDL(directory = '.', output = 'app.jdl') {
-    let jdlObject;
-    if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
-        jdlObject = getJDLObjectFromSingleApplication(directory);
-    } else {
-        try {
-            jdlObject = getJDLObjectFromMultipleApplications(directory);
-        } catch (error) {
-            return;
-        }
+  let jdlObject;
+  if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
+    jdlObject = getJDLObjectFromSingleApplication(directory);
+  } else {
+    try {
+      jdlObject = getJDLObjectFromMultipleApplications(directory);
+    } catch (error) {
+      return;
     }
-    exportJDLObject(jdlObject, path.join(directory, output));
+  }
+  exportJDLObject(jdlObject, path.join(directory, output));
 }
 
 function getJDLObjectFromMultipleApplications(directory) {
-    const subDirectories = getSubdirectories(directory);
-    if (subDirectories.length === 0) {
-        throw new Error('There are no subdirectories.');
-    }
-    let jdlObject = new JDLObject();
-    subDirectories.forEach(subDirectory => {
-        jdlObject = getJDLObjectFromSingleApplication(path.join(directory, subDirectory), jdlObject);
-    });
-    return jdlObject;
+  const subDirectories = getSubdirectories(directory);
+  if (subDirectories.length === 0) {
+    throw new Error('There are no subdirectories.');
+  }
+  let jdlObject = new JDLObject();
+  subDirectories.forEach(subDirectory => {
+    jdlObject = getJDLObjectFromSingleApplication(path.join(directory, subDirectory), jdlObject);
+  });
+  return jdlObject;
 }
 
 function getJDLObjectFromSingleApplication(directory, existingJDLObject = new JDLObject()) {
-    const yoRcFileContent = readJSONFile(path.join(directory, '.yo-rc.json'));
-    const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
-    const jdlApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });
-    if (!doesDirectoryExist(path.join(directory, '.jhipster'))) {
-        existingJDLObject.addApplication(jdlApplication);
-        return existingJDLObject;
-    }
-    const entities = getJSONEntityFiles(directory);
-    const skippedUserManagement = existingJDLObject ? existingJDLObject.hasOption(SKIP_USER_MANAGEMENT) : false;
-    const jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement });
-    entities.forEach((entity, entityName) => jdlApplication.addEntityName(entityName));
-    jdlObject.addApplication(jdlApplication);
-    return mergeJDLObjects(existingJDLObject, jdlObject);
+  const yoRcFileContent = readJSONFile(path.join(directory, '.yo-rc.json'));
+  const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
+  const jdlApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });
+  if (!doesDirectoryExist(path.join(directory, '.jhipster'))) {
+    existingJDLObject.addApplication(jdlApplication);
+    return existingJDLObject;
+  }
+  const entities = getJSONEntityFiles(directory);
+  const skippedUserManagement = jdlApplication.getConfigurationOptionValue(OptionNames.SKIP_USER_MANAGEMENT);
+  const jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement });
+  entities.forEach((entity, entityName) => jdlApplication.addEntityName(entityName));
+  jdlObject.addApplication(jdlApplication);
+  return mergeJDLObjects(existingJDLObject, jdlObject);
 }
 
 function cleanYoRcFileContent(yoRcFileContent) {
-    const [generatorName] = Object.keys(yoRcFileContent);
-    delete yoRcFileContent[generatorName].promptValues;
-    if (yoRcFileContent[generatorName].blueprints) {
-        yoRcFileContent[generatorName].blueprints = yoRcFileContent[generatorName].blueprints.map(blueprint => blueprint.name);
-    }
-    return yoRcFileContent;
+  const [generatorName] = Object.keys(yoRcFileContent);
+  delete yoRcFileContent[generatorName].promptValues;
+  if (yoRcFileContent[generatorName].blueprints) {
+    yoRcFileContent[generatorName].blueprints = yoRcFileContent[generatorName].blueprints.map(blueprint => blueprint.name);
+  }
+  if (yoRcFileContent[generatorName].otherModules) {
+    yoRcFileContent[generatorName].otherModules = yoRcFileContent[generatorName].otherModules.map(module => module.name);
+  }
+  return yoRcFileContent;
 }
 
 function getJSONEntityFiles(applicationDirectory) {
-    const entities = new Map();
-    fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
-        const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
-        if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
-            const entityName = file.slice(0, file.indexOf('.json'));
-            entities.set(entityName, readJSONFile(jsonFilePath));
-        }
-    });
-    return entities;
+  const entities = new Map();
+  fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
+    const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
+    if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
+      const entityName = file.slice(0, file.indexOf('.json'));
+      entities.set(entityName, readJSONFile(jsonFilePath));
+    }
+  });
+  return entities;
 }
 
 function getSubdirectories(rootDirectory) {
-    return fs.readdirSync(path.join(rootDirectory)).filter(file => doesDirectoryExist(path.join(rootDirectory, file)));
+  return fs.readdirSync(path.join(rootDirectory)).filter(file => doesDirectoryExist(path.join(rootDirectory, file)));
 }

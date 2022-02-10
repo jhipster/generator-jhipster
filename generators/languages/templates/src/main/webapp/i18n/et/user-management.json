@@ -2,7 +2,7 @@
     "userManagement": {
         "home": {
             "title": "Kasutajad",
-            "refreshListLabel": "Refresh list",
+            "refreshListLabel": "Värskenda nimekirja",
             "createLabel": "Lisa uus kasutaja",
             "createOrEditLabel": "Lisa või muuda kasutaja"
         },

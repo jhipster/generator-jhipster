@@ -2,7 +2,7 @@
     "userManagement": {
         "home": {
             "title": "Пользователи",
-            "refreshListLabel": "Refresh list",
+            "refreshListLabel": "Обновить список",
             "createLabel": "Создать нового пользователя",
             "createOrEditLabel": "Создать или отредактировать пользователя"
         },
@@ -18,7 +18,7 @@
         "login": "Логин",
         "firstName": "Имя",
         "lastName": "Фамилия",
-        "email": "Email",
+        "email": "Эл. почта",
         "activated": "Активен",
         "deactivated": "Неактивен",
         "profiles": "Профили",

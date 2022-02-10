@@ -1,0 +1,430 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+let entityActionName = entityInstance.toUpperCase();
+let entityActionNamePlural = entityInstancePlural.toUpperCase();
+_%>
+import axios from 'axios';
+
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import sinon from 'sinon';
+<%_ if (paginationInfiniteScroll) { _%>
+import { parseHeaderForLinks } from 'react-jhipster';
+<%_ } _%>
+
+import reducer, {
+<%_ if (!readOnly) { _%>
+  createEntity,
+  deleteEntity,
+<%_ } _%>
+  getEntities,
+<%_ if (searchEngine) { _%>
+  searchEntities,
+<%_ } _%>
+  getEntity,
+<%_ if (!readOnly) { _%>
+  updateEntity,
+  partialUpdateEntity,
+<%_ } _%>
+  reset
+} from './<%= entityFileName %>.reducer';
+import { EntityState } from 'app/shared/reducers/reducer.utils';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
+
+describe('Entities reducer tests', () => {
+
+  function isEmpty(element): boolean {
+    if (element instanceof Array) {
+      return element.length === 0;
+    } else {
+      return Object.keys(element).length === 0;
+    }
+  }
+
+  const initialState: EntityState<I<%= entityReactName %>> = {
+    loading: false,
+    errorMessage: null,
+    entities: [],
+    entity: defaultValue,
+<%_ if (paginationInfiniteScroll) { _%>
+    links: {
+      next: 0
+    },
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+    totalItems: 0,
+<%_ } _%>
+    updating: false,
+    updateSuccess: false
+  };
+
+  function testInitialState(state) {
+    expect(state).toMatchObject({
+      loading: false,
+      errorMessage: null,
+      updating: false,
+      updateSuccess: false
+    });
+    expect(isEmpty(state.entities));
+    expect(isEmpty(state.entity));
+  }
+
+  function testMultipleTypes(types, payload, testFunction, error?) {
+    types.forEach(e => {
+      testFunction(reducer(undefined, { type: e, payload, error }));
+    });
+  }
+
+  describe('Common', () => {
+    it('should return the initial state', () => {
+      testInitialState(reducer(undefined, { type: '' }));
+    });
+  });
+
+  describe('Requests', () => {
+    it('should set state to loading', () => {
+      testMultipleTypes(
+        [
+          getEntities.pending.type,
+<%_ if (searchEngine) { _%>
+          searchEntities.pending.type,
+<%_ } _%>
+          getEntity.pending.type
+        ],
+        {},
+        state => {
+          expect(state).toMatchObject({
+            errorMessage: null,
+            updateSuccess: false,
+            loading: true
+          });
+        }
+      );
+    });
+
+<%_ if (!readOnly) { _%>
+    it('should set state to updating', () => {
+      testMultipleTypes(
+        [
+          createEntity.pending.type,
+          updateEntity.pending.type,
+          partialUpdateEntity.pending.type,
+          deleteEntity.pending.type
+        ],
+        {},
+        state => {
+          expect(state).toMatchObject({
+            errorMessage: null,
+            updateSuccess: false,
+            updating: true
+          });
+        }
+      );
+    });
+<%_ } _%>
+
+    it('should reset the state', () => {
+      expect(
+        reducer({ ...initialState, loading: true }, reset())).toEqual({
+          ...initialState
+      });
+    });
+  });
+
+  describe('Failures', () => {
+    it('should set a message in errorMessage', () => {
+      testMultipleTypes(
+        [
+          getEntities.rejected.type,
+<%_ if (searchEngine) { _%>
+          searchEntities.rejected.type,
+<%_ } _%>
+          getEntity.rejected.type,
+<%_ if (!readOnly) { _%>
+          createEntity.rejected.type,
+          updateEntity.rejected.type,
+          partialUpdateEntity.rejected.type,
+          deleteEntity.rejected.type
+<%_ } _%>
+        ],
+        'some message',
+        state => {
+          expect(state).toMatchObject({
+            errorMessage: 'error message',
+            updateSuccess: false,
+            updating: false
+          });
+        },
+        {
+          message: 'error message',
+        }
+      );
+    });
+  });
+
+  describe('Successes', () => {
+    it('should fetch all entities', () => {
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
+<%_ if (paginationInfiniteScroll) { _%>
+      const links = parseHeaderForLinks(payload.headers.link);
+<%_ } _%>
+      expect(reducer(undefined, {
+        type: getEntities.fulfilled.type,
+        payload
+      })).toEqual({
+      ...initialState,
+<%_ if (paginationInfiniteScroll) { _%>
+      links,
+<%_ } _%>
+      loading: false,
+<%_ if (!paginationNo) { _%>
+      totalItems: payload.headers['x-total-count'],
+<%_ } _%>
+      entities: payload.data
+      });
+    });
+<%_ if (searchEngine) { _%>
+    it('should search all entities', () => {
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
+  <%_ if (paginationInfiniteScroll) { _%>
+      const links = parseHeaderForLinks(payload.headers.link);
+  <%_ } _%>
+      expect(reducer(undefined, {
+        type: searchEntities.fulfilled.type,
+        payload
+      })).toEqual({
+      ...initialState,
+  <%_ if (paginationInfiniteScroll) { _%>
+      links,
+  <%_ } _%>
+      loading: false,
+  <%_ if (!paginationNo) { _%>
+      totalItems: payload.headers['x-total-count'],
+  <%_ } _%>
+      entities: payload.data
+      });
+    });
+<%_ } _%>
+
+    it('should fetch a single entity', () => {
+      const payload = { data: { 1: 'fake1' } };
+      expect(
+        reducer(undefined, {
+          type: getEntity.fulfilled.type,
+          payload
+        })
+      ).toEqual({
+        ...initialState,
+        loading: false,
+        entity: payload.data
+      });
+    });
+
+<%_ if (!readOnly) { _%>
+    it('should create/update entity', () => {
+      const payload = { data: 'fake payload' };
+      expect(reducer(undefined, {
+        type: createEntity.fulfilled.type,
+        payload
+      })).toEqual({
+        ...initialState,
+        updating: false,
+        updateSuccess: true,
+        entity: payload.data
+      });
+    });
+
+    it('should delete entity', () => {
+      const payload = 'fake payload';
+      const toTest = reducer(undefined,
+        {
+          type: deleteEntity.fulfilled.type,
+          payload
+        });
+      expect(toTest).toMatchObject({
+        updating: false,
+        updateSuccess: true
+      });
+    });
+<%_ } _%>
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.patch = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches FETCH_<%= entityActionName %>_LIST actions', async () => {
+      const expectedActions = [
+        {
+          type: getEntities.pending.type
+        },
+        {
+          type: getEntities.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getEntities({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+<%_ if (searchEngine) { _%>
+    it('dispatches SEARCH_<%= entityActionNamePlural %> actions', async () => {
+      const expectedActions = [
+        {
+          type: searchEntities.pending.type
+        },
+        {
+          type: searchEntities.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(searchEntities({}));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+<%_ } _%>
+
+    it('dispatches FETCH_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: getEntity.pending.type
+        },
+        {
+          type: getEntity.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getEntity(42666));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+
+<%_ if (!readOnly) { _%>
+    it('dispatches CREATE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: createEntity.pending.type
+        },
+        <%_ if (!paginationInfiniteScroll) { _%>
+        {
+          type: getEntities.pending.type
+        },
+        <%_ } _%>
+        {
+          type: createEntity.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(createEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
+    });
+
+    it('dispatches UPDATE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: updateEntity.pending.type
+        },
+        <%_ if (!paginationInfiniteScroll) { _%>
+        {
+          type: getEntities.pending.type
+        },
+        <%_ } _%>
+        {
+          type: updateEntity.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(updateEntity(<%- generateTestEntityPrimaryKey(primaryKey, 1) %>));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
+    });
+
+    it('dispatches PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: partialUpdateEntity.pending.type
+        },
+        <%_ if (!paginationInfiniteScroll) { _%>
+        {
+          type: getEntities.pending.type
+        },
+        <%_ } _%>
+        {
+          type: partialUpdateEntity.fulfilled.type,
+          payload: resolvedObject
+
+        }
+      ];
+      await store.dispatch(partialUpdateEntity({ <%- primaryKey.name %>: <%- generateTestEntityId(primaryKey.type) %> }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
+    });
+
+    it('dispatches DELETE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: deleteEntity.pending.type
+        },
+        <%_ if (!paginationInfiniteScroll) { _%>
+        {
+          type: getEntities.pending.type
+        },
+        <%_ } _%>
+        {
+          type: deleteEntity.fulfilled.type,
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(deleteEntity(42666));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      <%_ if (!paginationInfiniteScroll) { _%>
+      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+      <%_ } _%>
+    });
+<%_ } _%>
+
+    it('dispatches RESET actions', async () => {
+      const expectedActions = [reset()];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});

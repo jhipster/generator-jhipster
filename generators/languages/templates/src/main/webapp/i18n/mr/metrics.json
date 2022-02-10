@@ -46,7 +46,8 @@
                     "code": "कोड",
                     "count": "गणना",
                     "mean": "मध्य ",
-                    "average": "सरासरी"
+                    "average": "सरासरी",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "ठीक ",

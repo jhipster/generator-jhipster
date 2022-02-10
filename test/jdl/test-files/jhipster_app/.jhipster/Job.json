@@ -4,8 +4,7 @@
     {
       "relationshipName": "employee",
       "otherEntityName": "employee",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "relationshipType": "many-to-one"
     },
     {
       "relationshipType": "many-to-many",

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,41 +17,43 @@
  limitations under the License.
 -%>
 <div>
-    <h2 id="session-page-heading" jhiTranslate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account">Active sessions for [<b>{{ account.login }}</b>]</h2>
+  <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account">Active sessions for [<strong>{{ account.login }}</strong>]</h2>
 
-    <div class="alert alert-success" *ngIf="success" jhiTranslate="sessions.messages.success">
-        <strong>Session invalidated!</strong>
-    </div>
+  <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="sessions.messages.success">
+    <strong>Session invalidated!</strong>
+  </div>
 
-    <div class="alert alert-danger" *ngIf="error" jhiTranslate="sessions.messages.error">
-        <strong>An error has occurred!</strong> The session could not be invalidated.
-    </div>
+  <div class="alert alert-danger" *ngIf="error" <%= jhiPrefix %>Translate="sessions.messages.error">
+    <strong>An error has occurred!</strong> The session could not be invalidated.
+  </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped" aria-describedby="session-page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" jhiTranslate="sessions.table.ipaddress">IP Address</th>
-                    <th scope="col" jhiTranslate="sessions.table.useragent">User agent</th>
-                    <th scope="col" jhiTranslate="sessions.table.date">Date</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let session of sessions">
-                    <td>{{ session.ipAddress }}</td>
-                    <td>{{ session.userAgent }}</td>
-                    <td>{{ session.tokenDate | date:'longDate' }}</td>
-                    <td>
-                        <button type="submit"
-                                class="btn btn-primary"
-                                (click)="invalidate(session.series)"
-                                jhiTranslate="sessions.table.button">
-                            Invalidate
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="table-responsive">
+    <table class="table table-striped" aria-describedby="session-page-heading">
+      <thead>
+        <tr>
+          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.ipaddress">IP Address</th>
+          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.useragent">User agent</th>
+          <th scope="col" <%= jhiPrefix %>Translate="sessions.table.date">Date</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let session of sessions">
+          <td>{{ session.ipAddress }}</td>
+          <td>{{ session.userAgent }}</td>
+          <td>{{ session.tokenDate | date:'longDate' }}</td>
+          <td>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              (click)="invalidate(session.series)"
+              <%= jhiPrefix %>Translate="sessions.table.button"
+            >
+              Invalidate
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

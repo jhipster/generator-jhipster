@@ -20,7 +20,7 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 <%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 - <%= appConfigs[i].baseName %> (<%= appConfigs[i].applicationType %> application)
 - <%= appConfigs[i].baseName %>'s <%= appConfigs[i].prodDatabaseType %> database
-<%_ if (appConfigs[i].searchEngine) { _%>
+<%_ if (appConfigs[i].searchEngine && !appConfigs[i].searchEngineCouchbase) { _%>
 - <%= appConfigs[i].baseName %>'s <%= appConfigs[i].searchEngine %> search engine
 <%_ } _%>
 <%_ } _%>
@@ -39,6 +39,6 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 - [Prometheus Alertmanager](http://localhost:9093)
 - [Grafana](http://localhost:3000)
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (usesOauth2) { _%>
 - [Keycloak server](http://localhost:9080)
 <%_ } _%>

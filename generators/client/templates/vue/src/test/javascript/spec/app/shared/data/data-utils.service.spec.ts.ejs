@@ -34,15 +34,15 @@ describe('Formatter i18n', () => {
   });
 
   it('should open file', () => {
-    let result = null;
-    window.open = jest.fn().mockImplementationOnce(() => {
-      return {'document': {write: data => result = data}};
+    window.open = jest.fn().mockReturnValue({});
+    const objectURL = 'blob:http://localhost:9000/xxx';
+    URL.createObjectURL = jest.fn().mockImplementationOnce(() => {
+      return objectURL;
     });
 
     dataUtilsService.openFile('text', 'data');
-    expect(result).toBe('<iframe src="data:text;base64,data" frameborder="0"' +
-      ' style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; ' +
-      'height:100%;" allowfullscreen></iframe>');
+
+    expect(window.open).toBeCalledWith(objectURL);
   });
 
   it('should check text ends with suffix', () => {

@@ -1,120 +1,84 @@
-import TrackerService from '@/admin/tracker/tracker.service';
+import { createLocalVue } from '@vue/test-utils';
 import * as sinon from 'sinon';
 import VueRouter from 'vue-router';
+import { Subject } from 'rxjs';
+
+import TrackerService from '@/admin/tracker/tracker.service';
+import * as config from '@/shared/config/config';
+import { defaultAccountState } from '@/shared/config/store/account-store';
+
+const localVue = createLocalVue();
+const store = config.initVueXStore(localVue);
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
   let routerStub: any;
 
+  let mockStomp: any;
+
   beforeEach(() => {
+    store.replaceState({
+      ...store.state,
+      accountStore: { ...defaultAccountState },
+    });
     routerStub = sinon.createStubInstance<VueRouter>(VueRouter);
+    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/' }));
     routerStub.afterEach = sinon.spy();
-    trackerService = new TrackerService(routerStub);
+
+    trackerService = new TrackerService(routerStub, store<%_ if (authenticationTypeSession) { _%>,{ get: jest.fn()}<%_ } %>);
+
+    const watch$ = new Subject<any>();
+
+    mockStomp = {
+      publish: sinon.stub(),
+      watch: sinon.stub().callsFake(() => watch$),
+      configure: sinon.stub(),
+      activate: sinon.stub(),
+      deactivate: sinon.stub(),
+      connected$: new Subject<any>(),
+    };
+
+    trackerService.stomp = mockStomp;
+    trackerService['buildUrl'] = () => '';
   });
 
-  it('Should connetion and listener be initialized', () => {
-    expect(trackerService.connection).toBeDefined();
-    expect(trackerService.listener).toBeDefined();
+  it('Should subscribe router activity', async () => {
+    expect(routerStub.afterEach.calledOnce).toBeTruthy();
   });
 
-  it('Should return listener', () => {
+  it('Should call activate on authenticated', async () => {
     // WHEN
-    const receiveResult = trackerService.receive();
+    store.commit('authenticated', {});
+    await localVue.nextTick();
 
     // THEN
-    expect(receiveResult).toBe(trackerService.listener);
+    expect(mockStomp.activate.calledOnce).toBeTruthy();
   });
 
-  it('Should not send activity for disconnected client', () => {
+  it('Should send activity on connected', async () => {
     // GIVEN
-    const stompClientStub: any = sinon.stub();
-    stompClientStub.send = sinon.spy();
-    trackerService.stompClient = stompClientStub;
-
-    // WHEN
-    trackerService.sendActivity();
-
-    // THEN
-    expect(stompClientStub.send.notCalled).toBeTruthy();
-  });
-
-  it('Should send activity', () => {
-    // GIVEN
-    const stompClientStub: any = sinon.stub();
-    stompClientStub.connected = true;
-    stompClientStub.send = sinon.spy();
-    trackerService.stompClient = stompClientStub;
     sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/admin' }));
 
     // WHEN
-    trackerService.sendActivity();
+    mockStomp.connected$.next({});
 
     // THEN
-    expect(stompClientStub.send.calledOnce).toBeTruthy();
-    expect(stompClientStub.send.calledOnceWithExactly('/topic/activity',
-      JSON.stringify({ page: '/admin' }), {})).toBeTruthy();
+    expect(mockStomp.publish.callCount).toBe(1);
+    expect(
+      mockStomp.publish.calledOnceWithExactly({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) })
+    ).toBeTruthy();
   });
 
-  it('Should connected for the first time', () => {
+  it('Should disconnect on logout', async () => {
     // GIVEN
-    const connectedPromise = sinon.spy();
-    trackerService.connectedPromise = connectedPromise;
+    store.commit('authenticated', {});
+    await localVue.nextTick();
 
     // WHEN
-    trackerService.afterConnect();
+    store.commit('logout');
+    await localVue.nextTick();
 
     // THEN
-    expect(connectedPromise.calledOnceWith('success'));
-    expect(trackerService.alreadyConnectedOnce).toBeTruthy();
-    expect(trackerService.connectedPromise).toBeNull();
-    expect(routerStub.afterEach.calledOnce).toBeTruthy();
+    expect(mockStomp.deactivate.calledOnce).toBeTruthy();
   });
-
-  it('Should connected for the second time', () => {
-    // GIVEN
-    const connectedPromise = sinon.spy();
-    trackerService.connectedPromise = connectedPromise;
-    trackerService.alreadyConnectedOnce = true;
-
-    // WHEN
-    trackerService.afterConnect();
-
-    // THEN
-    expect(connectedPromise.calledOnceWith('success'));
-    expect(trackerService.alreadyConnectedOnce).toBeTruthy();
-    expect(trackerService.connectedPromise).toBeNull();
-    expect(routerStub.afterEach.calledOnce).toBeFalsy();
-  });
-
-  it('Should unsubscribe', () => {
-    // GIVEN
-    const subscriberStub: any = sinon.stub();
-    subscriberStub.unsubscribe = sinon.spy();
-    trackerService.listener = null;
-    trackerService.subscriber = subscriberStub;
-
-    // WHEN
-    trackerService.unsubscribe();
-
-    // THEN
-    expect(subscriberStub.unsubscribe.calledOnce).toBeTruthy();
-    expect(trackerService.listener).toBeDefined();
-  });
-
-  it('Should disconnect', () => {
-    // GIVEN
-    const stompClientStub: any = sinon.stub();
-    stompClientStub.disconnect = sinon.spy();
-    trackerService.stompClient = stompClientStub;
-
-    // WHEN
-    trackerService.disconnect();
-
-    // THEN
-    expect(routerStub.afterEach.calledOnce).toBeTruthy();
-    expect(stompClientStub.disconnect.calledOnce).toBeTruthy();
-    expect(trackerService.stompClient).toBeNull();
-    expect(trackerService.alreadyConnectedOnce).toBeFalsy();
-  });
-
 });

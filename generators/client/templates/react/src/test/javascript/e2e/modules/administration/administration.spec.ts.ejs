@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,14 +27,14 @@ const expect = chai.expect;
 describe('Administration', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  const username = process.env.E2E_USERNAME || 'admin';
-  const password = process.env.E2E_PASSWORD || 'admin';
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     await signInPage.waitUntilDisplayed();
 
     await signInPage.username.sendKeys(username);
@@ -42,13 +42,13 @@ describe('Administration', () => {
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 
-    <%_ } else { _%>
+<%_ } else { _%>
     await signInPage.loginWithOAuth(username, password);
-    <%_ } _%>
+<%_ } _%>
     await waitUntilDisplayed(navBarPage.adminMenu);
   });
 
-  <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
   it('should load user management', async () => {
     await navBarPage.clickOnAdminMenuItem('user-management');
     const heading = element(by.id('user-management-page-heading'));
@@ -56,7 +56,7 @@ describe('Administration', () => {
     // Title should be equal to 'Users'
     expect(await heading.isPresent()).to.be.true;
   });
-  <%_ } _%>
+<%_ } _%>
 
   it('should load metrics', async () => {
     await navBarPage.clickOnAdminMenuItem('metrics');

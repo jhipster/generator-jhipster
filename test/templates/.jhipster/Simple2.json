@@ -1,0 +1,20 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "simpleId",
+            "fieldType": "Long",
+            "javadoc": "The simple Id"
+        },
+        {
+            "fieldName": "simpleName",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160926101211",
+    "entityTableName": "simple",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

@@ -46,7 +46,8 @@
                     "code": "Kode",
                     "count": "Antal",
                     "mean": "Middel",
-                    "average": "Gennemsnit"
+                    "average": "Gennemsnit",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

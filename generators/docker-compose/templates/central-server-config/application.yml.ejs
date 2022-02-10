@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,44 +18,26 @@
 -%>
 #common configuration shared between all applications
 configserver:
-    name: Docker JHipster Registry
-    status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in Docker
-   
-jhipster:
-    security:
-        authentication:
-            jwt:
-                base64-secret: <%= jwtSecretKey %>
-<%_ if (monitoring === 'prometheus') { _%>
-    metrics:
-        logs: # do not report metrics in the logs
-            enabled: false
+  name: Docker JHipster Registry
+  status: Connected to <% if (serviceDiscoveryEureka) { %>the JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %> running in Docker
 
+jhipster:
+  security:
+    authentication:
+      jwt:
+        base64-secret: <%= jwtSecretKey %>
+<%_ if (monitoringPrometheus) { _%>
 management:
-    metrics:
-        export:
-            prometheus:
-                enabled: true
-<%_ } _%>  
-<%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
-spring:
-    <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
-    cloud:
-        consul:
-            discovery:
-                tags:
-                    - traefik.enable=true
-                    - traefik.frontend.login.rule=PathPrefix:/login
-                    - traefik.frontend.login.priority=1001
-                    - traefik.frontend.oauth.rule=PathPrefix:/oauth2
-                    - traefik.frontend.oauth.priority=1001
-    <%_ } _%>
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 <%_ } _%>
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 eureka:
-    client:
-        service-url:
-            defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
+  client:
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
 <%_ } _%>
 
 

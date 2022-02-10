@@ -46,7 +46,8 @@
                     "code": "Code",
                     "count": "Aantal",
                     "mean": "Mediaan",
-                    "average": "Gemiddelde"
+                    "average": "Gemiddelde",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Ok",

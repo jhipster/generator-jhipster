@@ -1,11 +1,12 @@
 import LoginService from '@/account/login.service';
-<%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
 import axios from 'axios';
+import sinon from 'sinon';
 
-const mockedAxios: any = axios;
-jest.mock('axios', () => ({
-  post: jest.fn()
-}));
+const axiosStub = {
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post'),
+};
 <%_ } _%>
 
 describe('Login Service test suite', () => {
@@ -15,9 +16,41 @@ describe('Login Service test suite', () => {
     loginService = new LoginService();
   });
 
-  <%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   it('should build url for login', () => {
     const loc = {href: '', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /accessdenied', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/accessdenied' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /forbidden', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/forbidden' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /accessdenied', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/accessdenied' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
+  });
+
+  it('should build url for login with loc.pathname equals to /forbidden', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/forbidden' };
 
     loginService.login(loc);
 
@@ -31,13 +64,13 @@ describe('Login Service test suite', () => {
 
     expect(loc.href).toBe('//localhost:<%= serverPort %>/oauth2/authorization/oidc');
   });
-  <%_ } _%>
+<%_ } _%>
 
-  <%_ if (authenticationType !== 'jwt') { _%>
+<%_ if (!authenticationTypeJwt) { _%>
   it('should call global logout when asked to', () => {
     loginService.logout();
 
-    expect(mockedAxios.post).toHaveBeenCalledWith('api/logout');
+    expect(axiosStub.post.calledWith('api/logout')).toBeTruthy();
   });
-  <%_ } _%>
+<%_ } _%>
 });

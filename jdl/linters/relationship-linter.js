@@ -1,13 +1,14 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +24,7 @@ const RelationshipTypes = require('../jhipster/relationship-types');
 let issues;
 
 module.exports = {
-    checkRelationships,
+  checkRelationships,
 };
 
 /**
@@ -33,39 +34,39 @@ module.exports = {
  * @return {Array} the found relationship issues.
  */
 function checkRelationships(relationshipDeclarations) {
-    if (!relationshipDeclarations || relationshipDeclarations.length === 0) {
-        return [];
-    }
-    issues = [];
-    checkForCollapsibleRelationships(relationshipDeclarations);
-    return issues;
+  if (!relationshipDeclarations || relationshipDeclarations.length === 0) {
+    return [];
+  }
+  issues = [];
+  checkForCollapsibleRelationships(relationshipDeclarations);
+  return issues;
 }
 
 function checkForCollapsibleRelationships(relationshipDeclarations) {
-    const sortedRelationships = {
-        [RelationshipTypes.ONE_TO_ONE]: [],
-        [RelationshipTypes.ONE_TO_MANY]: [],
-        [RelationshipTypes.MANY_TO_ONE]: [],
-        [RelationshipTypes.MANY_TO_MANY]: [],
-    };
-    relationshipDeclarations.forEach(relationshipDeclaration => {
-        const type = relationshipDeclaration.children.relationshipType[0].children.RELATIONSHIP_TYPE[0].image;
-        const from = relationshipDeclaration.children.relationshipBody[0].children.from[0].children.NAME[0].image;
-        const to = relationshipDeclaration.children.relationshipBody[0].children.to[0].children.NAME[0].image;
-        sortedRelationships[type].push({ from, to });
-    });
-    Object.keys(sortedRelationships).forEach(type => {
-        if (sortedRelationships[type].length > 1) {
-            sortedRelationships[type].forEach(relationship => {
-                issues.push(
-                    new RelationshipIssue({
-                        ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
-                        from: relationship.from,
-                        to: relationship.to,
-                        type,
-                    })
-                );
-            });
-        }
-    });
+  const sortedRelationships = {
+    [RelationshipTypes.ONE_TO_ONE]: [],
+    [RelationshipTypes.ONE_TO_MANY]: [],
+    [RelationshipTypes.MANY_TO_ONE]: [],
+    [RelationshipTypes.MANY_TO_MANY]: [],
+  };
+  relationshipDeclarations.forEach(relationshipDeclaration => {
+    const type = relationshipDeclaration.children.relationshipType[0].children.RELATIONSHIP_TYPE[0].image;
+    const from = relationshipDeclaration.children.relationshipBody[0].children.from[0].children.NAME[0].image;
+    const to = relationshipDeclaration.children.relationshipBody[0].children.to[0].children.NAME[0].image;
+    sortedRelationships[type].push({ from, to });
+  });
+  Object.keys(sortedRelationships).forEach(type => {
+    if (sortedRelationships[type].length > 1) {
+      sortedRelationships[type].forEach(relationship => {
+        issues.push(
+          new RelationshipIssue({
+            ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+            from: relationship.from,
+            to: relationship.to,
+            type,
+          })
+        );
+      });
+    }
+  });
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,34 +18,31 @@
 -%>
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "es2020",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "baseUrl": "<%= CLIENT_MAIN_SRC_DIR %>",
+    "outDir": "./<%= DIST_DIR %>",
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "sourceMap": true,
+<%_ if (protractorTests) { // Prevents Jest and Mocha types conflicts. See https://github.com/jhipster/generator-jhipster/pull/13083 _%>
     "skipLibCheck": true,
-    "outDir": "<%= DIST_DIR %>app",
-    "lib": ["es7", "dom"],
-    "baseUrl": "./",
-    "paths": {
-      "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
-    },
-    "importHelpers": true,
-    "downlevelIteration": true,
+<%_ } _%>
     "declaration": false,
-    "forceConsistentCasingInFileNames": true
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
-    "fullTemplateTypeCheck": true,
+    "strictInputAccessModifiers": true,
     "strictTemplates": true,
     "preserveWhitespaces": true
-  },
-  "exclude": ["<%= CLIENT_TEST_SRC_DIR %>cypress"]
+  }
 }
-

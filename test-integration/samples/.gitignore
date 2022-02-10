@@ -3,3 +3,4 @@
 !*/*.jdl
 !.jhipster/*
 *-sample/.yo-rc.json
+!jdl-entities/*

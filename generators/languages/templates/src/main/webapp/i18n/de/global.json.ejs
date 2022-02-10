@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,9 +38,9 @@
             },
             "admin": {
                 "main": "Administration",
-                <%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationTypeGateway) { _%>
                 "gateway": "Gateway",
-                <%_ } _%>
+<%_ } _%>
                 "userManagement": "Benutzerverwaltung",
                 "tracker": "Benutzer Aktivitäten",
                 "metrics": "Metriken",
@@ -104,7 +104,7 @@
             "id" : "ID"
         },
         "ribbon": {
-            "dev": "Development"
+            "dev": "Entwicklung"
         },
         "item-count": "Ergebnis {{first}} - {{second}} von {{total}} Elemente."
     },
@@ -150,9 +150,11 @@
         "emailexists": "Email wird bereits verwendet!",
         "idexists": "Ein neuer {{entityName}} kann noch keine ID haben",
         "idnull": "Ungültige ID",
+        "idinvalid": "Ungültige ID",
+        "idnotfound": "ID konnte nicht gefunden werden",
         "file": {
-            "could.not.extract": "Could not extract file",
-            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+            "could.not.extract": "Datei konnte nicht extrahiert werden",
+            "not.image": "Es wird erwartet, dass die Datei ein Bild ist. Die Datei ist jedoch vom Typ \"{{ fileType }}\""
         }
     },
     "footer": "Dies ist Ihre Fußzeile"

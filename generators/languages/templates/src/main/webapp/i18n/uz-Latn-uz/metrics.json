@@ -46,7 +46,8 @@
                     "code": "Kod",
                     "count": "Soni",
                     "mean": "O'rtacha",
-                    "average": "O'rtacha"
+                    "average": "O'rtacha",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "OK",

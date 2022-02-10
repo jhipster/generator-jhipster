@@ -1,0 +1,87 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.repository.rowmapper;
+
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
+
+import io.r2dbc.spi.Row;
+
+/**
+ * This service provides helper function dealing with the low level {@link Row} and Spring's {@link R2dbcCustomConversions}, so type conversions can be applied.
+ */
+@Component
+public class ColumnConverter {
+
+    private final ConversionService conversionService;
+    private final R2dbcCustomConversions conversions;
+
+    public ColumnConverter(R2dbcCustomConversions conversions, R2dbcConverter r2dbcConverter) {
+        this.conversionService = r2dbcConverter.getConversionService();
+        this.conversions = conversions;
+    }
+
+    /**
+     * Converts the value to the target class with the help of the {@link ConversionService}.
+     * @param value to convert.
+     * @param target class.
+     * @param <T> the parameter for the intended type.
+     * @return the value which can be constructed from the input.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T convert(@Nullable Object value, @Nullable Class<T> target) {
+
+        if (value == null || target == null || ClassUtils.isAssignableValue(target, value)) {
+            return (T) value;
+        }
+
+        if (conversions.hasCustomReadTarget(value.getClass(), target)) {
+            return conversionService.convert(value, target);
+        }
+
+        if (Enum.class.isAssignableFrom(target)) {
+            return (T) Enum.valueOf((Class<Enum>) target, value.toString());
+        }
+
+        return conversionService.convert(value, target);
+    }
+
+    /**
+     * Convert a value from the {@link Row} to a type - throws an exception, it it's impossible.
+     * @param row which contains the column values.
+     * @param target class.
+     * @param columnName the name of the column which to convert.
+     * @param <T> the parameter for the intended type.
+     * @return the value which can be constructed from the input.
+     */
+    public <T> T fromRow(Row row, String columnName, Class<T> target) {
+        try {
+            // try, directly the driver
+            return row.get(columnName, target);
+        } catch (Exception e) {
+            Object obj = row.get(columnName);
+            return convert(obj, target);
+        }
+    }
+
+}

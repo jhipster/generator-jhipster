@@ -1,0 +1,127 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import sinon from 'sinon';
+import configureStore from 'redux-mock-store';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
+
+import register, { handleRegister, reset } from './register.reducer';
+
+describe('Creating account tests', () => {
+  const initialState = {
+    loading: false,
+    registrationSuccess: false,
+    registrationFailure: false,
+    errorMessage: null,
+    successMessage: null,
+  };
+
+<%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+<%_ } _%>
+  it('should return the initial state', () => {
+    expect(register(undefined, { type: '' })).toEqual({
+      ...initialState,
+    });
+  });
+
+  it('should detect a request', () => {
+    expect(register(undefined, { type: handleRegister.pending.type })).toEqual({
+      ...initialState,
+      loading: true
+    });
+  });
+
+  it('should handle RESET', () => {
+    expect(
+      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '', successMessage: '' }, reset())
+    ).toEqual({
+      ...initialState,
+    });
+  });
+
+  it('should handle CREATE_ACCOUNT success', () => {
+    expect(
+      register(undefined, {
+        type: handleRegister.fulfilled.type,
+        payload: 'fake payload',
+      })
+    ).toEqual({
+      ...initialState,
+      registrationSuccess: true,
+    <%_ if (enableTranslation) { _%>
+      successMessage: 'register.messages.success'
+    <%_ } else { _%>
+      successMessage: 'Registration saved! Please check your email for confirmation.'
+    <%_ } _%>
+    });
+  });
+
+  it('should handle CREATE_ACCOUNT failure', () => {
+    const error = { message: 'fake error' };
+    expect(
+      register(undefined, {
+        type: handleRegister.rejected.type,
+        error,
+      })
+    ).toEqual({
+      ...initialState,
+      registrationFailure: true,
+      errorMessage: error.message,
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk]);
+      store = mockStore({});
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
+
+      const expectedActions = [
+        {
+          type: handleRegister.pending.type,
+        },
+        {
+          type: handleRegister.fulfilled.type,
+          payload: resolvedObject,
+        }
+      ];
+      await store.dispatch(handleRegister({ login: '', email: '', password: '' }));
+      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
+      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+    });
+    it('dispatches RESET actions', async () => {
+      await store.dispatch(reset());
+      expect(store.getActions()[0]).toMatchObject(reset());
+    });
+  });
+});

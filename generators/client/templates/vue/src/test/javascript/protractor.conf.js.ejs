@@ -45,7 +45,7 @@ exports.config = {
       .window()
       .setSize(1280, 1024);
     // @ts-ignore
-    browser.ignoreSynchronization = true;
+    browser.waitForAngularEnabled(false);
     // Disable animations
     // @ts-ignore
     browser.executeScript('document.body.className += " notransition";');

@@ -8,12 +8,12 @@
       <div class="card jh-card">
         <router-view></router-view>
       </div>
-      <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       <b-modal id="login-page" hide-footer lazy>
         <span data-cy="loginTitle" slot="modal-title" id="login-title" v-text="$t('login.title')">Sign in</span>
         <login-form></login-form>
       </b-modal>
-      <%_ } %>
+<%_ } %>
       <jhi-footer></jhi-footer>
     </div>
   </div>

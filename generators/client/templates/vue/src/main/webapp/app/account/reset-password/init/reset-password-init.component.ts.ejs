@@ -38,7 +38,7 @@ export default class ResetPasswordInit extends Vue {
       .then(() => {
         this.success = true;
       })
-      .catch(error => {
+      .catch(() => {
         this.success = null;
         this.error = 'ERROR';
       });

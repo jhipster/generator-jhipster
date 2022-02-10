@@ -5,21 +5,21 @@ const fse = require('fs-extra');
 const expectedFiles = require('./utils/expected-files');
 
 describe('JHipster generator common', () => {
-    before(done => {
-        helpers
-            .run(require.resolve('../generators/common'))
-            .inTmpDir(dir => {
-                fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
-            })
-            .withOptions({
-                fromCli: true,
-                skipInstall: true,
-                skipChecks: true,
-            })
-            .on('end', done);
-    });
+  before(done => {
+    helpers
+      .run(require.resolve('../generators/common'))
+      .inTmpDir(dir => {
+        fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
+      })
+      .withOptions({
+        fromCli: true,
+        skipInstall: true,
+        skipChecks: true,
+      })
+      .on('end', done);
+  });
 
-    it('creates common files', () => {
-        assert.file(expectedFiles.common);
-    });
+  it('creates common files', () => {
+    assert.file(expectedFiles.common);
+  });
 });

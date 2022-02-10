@@ -1,0 +1,48 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%#
+ This is a fragment file, it will be merged into to root template if available.
+ EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
+-%>
+<&_ if (fragment.customCliSection) { -&>
+[Angular CLI][] with 
+<&_ } -&>
+<&_ if (fragment.developmentSection) { -&>
+### Using Angular CLI
+
+You can also use [Angular CLI][] to generate some custom client code.
+
+For example, the following command:
+
+```
+ng generate component my-component
+```
+
+will generate few files:
+
+```
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
+create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
+update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
+```
+
+<&_ } -&>
+<&_ if (fragment.referenceSection) { _&>
+[Angular CLI]: https://cli.angular.io/
+<&_ } -&>

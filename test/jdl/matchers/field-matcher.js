@@ -1,7 +1,7 @@
 module.exports = {
-    matchField,
+  matchField,
 };
 
 function matchField(jdlField) {
-    return jdlField && jdlField.name && jdlField.type && jdlField.validations && jdlField.options;
+  return jdlField && jdlField.name && jdlField.type && jdlField.validations && jdlField.options;
 }

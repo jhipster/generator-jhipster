@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,8 +18,8 @@
 -%>
 package <%= packageName %>.config;
 
-import io.github.jhipster.config.JHipsterDefaults;
-import io.github.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.JHipsterDefaults;
+import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.CacheControl;
@@ -52,7 +52,7 @@ class StaticResourcesWebConfigurerTest {
     }
 
     @Test
-    void shouldAppendResourceHandlerAndInitiliazeIt() {
+    void shouldAppendResourceHandlerAndInitializeIt() {
 
         staticResourcesWebConfiguration.addResourceHandlers(resourceHandlerRegistry);
 
@@ -80,7 +80,7 @@ class StaticResourcesWebConfigurerTest {
 
 
     @Test
-    void shoudCreateCacheControlBasedOnJhipsterDefaultProperties() {
+    void shouldCreateCacheControlBasedOnJhipsterDefaultProperties() {
         CacheControl cacheExpected = CacheControl.maxAge(JHipsterDefaults.Http.Cache.timeToLiveInDays, TimeUnit.DAYS).cachePublic();
         assertThat(staticResourcesWebConfiguration.getCacheControl())
             .extracting(CacheControl::getHeaderValue)
@@ -88,7 +88,7 @@ class StaticResourcesWebConfigurerTest {
     }
 
     @Test
-    void shoudCreateCacheControlWithSpecificConfigurationInProperties() {
+    void shouldCreateCacheControlWithSpecificConfigurationInProperties() {
         props.getHttp().getCache().setTimeToLiveInDays(MAX_AGE_TEST);
         CacheControl cacheExpected = CacheControl.maxAge(MAX_AGE_TEST, TimeUnit.DAYS).cachePublic();
         assertThat(staticResourcesWebConfiguration.getCacheControl())

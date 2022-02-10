@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,56 +17,52 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient<% if (authenticationType !== 'oauth2') { %>, HttpHeaders<% } %> } from '@angular/common/http';
+import { HttpClient<% if (!authenticationTypeOauth2) { %>, HttpHeaders<% } %> } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
 
-import { SERVER_API_URL } from 'app/app.constants';
-<%_ if (authenticationType === 'oauth2') { _%>
-import { Logout } from 'app/core/login/logout.model';
+import { ApplicationConfigService } from '../config/application-config.service';
+<%_ if (authenticationTypeOauth2) { _%>
+import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
-import { Login } from 'app/core/login/login.model';
-
-export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
+import { Login } from 'app/login/login.model';
 <%_ } _%>
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-    constructor(
-        private http: HttpClient
-    ) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
 
-    login(credentials: Login): Observable<{}> {
-        const data =
-            `username=${encodeURIComponent(credentials.username)}` +
-            `&password=${encodeURIComponent(credentials.password)}` +
-            `&remember-me=${credentials.rememberMe}` +
-            '&submit=Login';
+  login(credentials: Login): Observable<{}> {
+    const data =
+      `username=${encodeURIComponent(credentials.username)}` +
+      `&password=${encodeURIComponent(credentials.password)}` +
+      `&remember-me=${credentials.rememberMe ? 'true' : 'false'}` +
+      '&submit=Login';
 
-        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });
-    }
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/authentication'), data, { headers });
+  }
 
-    logout(): Observable<void> {
-        // logout from the server
-        return this.http.post(LOGOUT_URL, {}).pipe(
-            map(() => {
-                // to get a new csrf token call the api
-                this.http.get(SERVER_API_URL + 'api/account').subscribe();
-            })
-        );
-    }
+  logout(): Observable<void> {
+    // logout from the server
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/logout'), {}).pipe(
+      map(() => {
+        // to get a new csrf token call the api
+        this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe();
+      })
+    );
+  }
 
-    <%_ } else { _%>
+<%_ } else { _%>
 
-    logout(): Observable<Logout> {
-        return this.http.post<Logout>(SERVER_API_URL + 'api/logout', {});
-    }
+  logout(): Observable<Logout> {
+    return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
+  }
 
-    <%_ } _%>
+<%_ } _%>
 }

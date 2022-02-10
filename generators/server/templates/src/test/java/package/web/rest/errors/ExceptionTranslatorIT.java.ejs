@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,34 +18,22 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-import <%= packageName %>.RedisTestContainerExtension;
-<%_ } _%>
-import <%= packageName %>.<%= mainClass %>;
-<%_ if (authenticationType === 'uaa') { _%>
-import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import <%= packageName %>.config.TestSecurityConfiguration;
-<%_ } _%>
+import <%= packageName %>.IntegrationTest;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-<%_ if (!reactive) { _%>
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-<%_ if (testsNeedCsrf) { _%>
+  <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-<%_ } _%>
+  <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -57,21 +45,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WithMockUser
 @AutoConfigureMockMvc
-<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
-@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
-<%_ } else if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
-<%_ } _%>
-class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+@IntegrationTest
+class ExceptionTranslatorIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private MockMvc mockMvc;
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 
     @Test
     void testConcurrencyFailure() throws Exception {
@@ -80,7 +59,7 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
     }
-    <%_ } _%>
+<%_ } _%>
 
     @Test
     void testMethodArgumentNotValid() throws Exception {
@@ -90,7 +69,7 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
              .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
              .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("NotNull"));
+             .andExpect(jsonPath("$.fieldErrors.[0].message").value("must not be null"));
     }
 
     @Test
@@ -156,143 +135,3 @@ class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends Abs
     }
 
 }
-<%_ } _%>
-<%_ if (reactive) { _%>
-<%_ if (testsNeedCsrf) { _%>
-import org.junit.jupiter.api.BeforeEach;
-
-<%_ } _%>
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ if (testsNeedCsrf) { _%>
-
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
-<%_ } _%>
-
-/**
- * Integration tests {@link ExceptionTranslator} controller advice.
- */
-@WithMockUser
-@AutoConfigureWebTestClient
-<%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
-class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-
-    @Autowired
-    private WebTestClient webTestClient;
-    <%_ if (testsNeedCsrf) { _%>
-
-    @BeforeEach
-    public void setupCsrf() {
-        webTestClient = webTestClient.mutateWith(csrf());
-    }
-    <%_ } _%>
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-
-    @Test
-    void testConcurrencyFailure() {
-        webTestClient.get().uri("/api/exception-translator-test/concurrency-failure")
-            .exchange()
-            .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
-    }
-    <%_ } _%>
-
-    @Test
-    void testMethodArgumentNotValid() {
-         webTestClient.post().uri("/api/exception-translator-test/method-argument")
-             .contentType(MediaType.APPLICATION_JSON)
-             .bodyValue("{}")
-             .exchange()
-             .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-             .expectBody()
-             .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_VALIDATION)
-             .jsonPath("$.fieldErrors.[0].objectName").isEqualTo("test")
-             .jsonPath("$.fieldErrors.[0].field").isEqualTo("test")
-             .jsonPath("$.fieldErrors.[0].message").isEqualTo("NotNull");
-    }
-
-    @Test
-    void testMissingRequestPart() {
-        webTestClient.get().uri("/api/exception-translator-test/missing-servlet-request-part")
-            .exchange()
-            .expectStatus().isBadRequest()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.400");
-    }
-
-    @Test
-    void testMissingRequestParameter() {
-        webTestClient.get().uri("/api/exception-translator-test/missing-servlet-request-parameter")
-            .exchange()
-            .expectStatus().isBadRequest()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.400");
-    }
-
-    @Test
-    void testAccessDenied() {
-        webTestClient.get().uri("/api/exception-translator-test/access-denied")
-            .exchange()
-            .expectStatus().isForbidden()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.403")
-            .jsonPath("$.detail").isEqualTo("test access denied!");
-    }
-
-    @Test
-    void testUnauthorized() {
-        webTestClient.get().uri("/api/exception-translator-test/unauthorized")
-            .exchange()
-            .expectStatus().isUnauthorized()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.401")
-            .jsonPath("$.path").isEqualTo("/api/exception-translator-test/unauthorized")
-            .jsonPath("$.detail").isEqualTo("test authentication failed!");
-    }
-
-    @Test
-    void testMethodNotSupported() {
-        webTestClient.post().uri("/api/exception-translator-test/access-denied")
-            .exchange()
-            .expectStatus().isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.405")
-            .jsonPath("$.detail").isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' not supported\"");
-    }
-
-    @Test
-    void testExceptionWithResponseStatus() {
-        webTestClient.get().uri("/api/exception-translator-test/response-status")
-            .exchange()
-            .expectStatus().isBadRequest()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.400")
-            .jsonPath("$.title").isEqualTo("test response status");
-    }
-
-    @Test
-    void testInternalServerError() {
-        webTestClient.get().uri("/api/exception-translator-test/internal-server-error")
-            .exchange()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.500")
-            .jsonPath("$.title").isEqualTo("Internal Server Error");
-    }
-
-}
-<%_ } _%>

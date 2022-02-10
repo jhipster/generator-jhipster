@@ -1,10 +1,10 @@
 {
     "tracker": {
-        "title": "Real-time उपयोगकर्ता गतिविधियों",
+        "title": "उपयोगकर्ता की वास्तविक समय गतिविधियों",
         "table": {
-            "userlogin": "उपयोगकर्ता ",
+            "userlogin": "उपयोगकर्ता",
             "ipaddress": "IP Address",
-            "userAgent": "उपयोगकर्ता  agent",
+            "userAgent": "उपयोगकर्ता प्रतिनिधि",
             "page": "वर्तमान पृष्ठ",
             "time": "समय"
         }

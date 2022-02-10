@@ -1,0 +1,130 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%#
+ This is a fragment file, it will be merged into to root template if available.
+ EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
+-%>
+<&_ if (fragment.importSection) { -&>
+import javax.persistence.*;
+<%_ if ((databaseTypePostgres && fieldsContainTextBlob) || (fieldsContainUUID && (databaseTypeMysql || databaseTypeMariadb))) { _%>
+import org.hibernate.annotations.Type;
+<%_ } _%>
+<&_ } -&>
+
+<&_ if (fragment.annotationSection) { -&>
+@Entity
+@Table(name = "<%= entityTableName %>")
+<&_ } -&>
+
+<%_ for (const field of fields) { -%>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+  <%_ if (field.id) { _%>
+    @Id
+    <%_ if (field.jpaGeneratedValue === 'identity') { _%>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    <%_ } else if (field.jpaGeneratedValue === 'sequence') { _%>
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    <%_ } else if (field.jpaGeneratedValue) { _%>
+    @GeneratedValue
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (field.fieldIsEnum) { _%>
+    @Enumerated(EnumType.STRING)
+  <%_ } _%>
+  <%_ if (field.fieldTypeBytes) { _%>
+    @Lob
+    <%_ if (databaseTypePostgres && field.blobContentTypeText) { _%>
+    @Type(type = "org.hibernate.type.TextType")
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (field.fieldTypeTemporal || field.fieldTypeDuration) { _%>
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
+  <%_ } else if (field.fieldTypeBigDecimal) { _%>
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
+  <%_ } else if (field.fieldTypeUUID && (databaseTypeMysql || databaseTypeMariadb)) { _%>
+    @Type(type = "uuid-char")
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
+  <%_ } else { _%>
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"<% if (field.fieldValidate === true) { %><% if (field.fieldValidationMaxLength) { %>, length = <%= field.fieldValidateRulesMaxlength %><% } %><% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %><% } %>)
+  <%_ } _%>
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const field of fields.filter(field => field.fieldWithContentType)) { -%>
+<&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
+    @Column(
+        name = "<%- field.fieldNameAsDatabaseColumn %>_content_type"
+        <%_ if (field.fieldValidationRequired) { %>, nullable = false<% } _%>
+    )
+<&_ } -&>
+<%_ } -%>
+
+<%_ for (const relationship of relationships) { -%>
+<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
+  <%_ if (relationship.relationshipOneToMany) { -%>
+    @OneToMany(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
+  <%_ } else if (relationship.relationshipManyToOne) { -%>
+    @ManyToOne<% if (relationship.relationshipRequired) { %>(optional = false)<% } %>
+      <%_ if (relationship.relationshipValidate) { _%>
+    <%- include('relationship_validators', { relationship }); -%>
+      <%_ } _%>
+  <%_ } else if (relationship.relationshipManyToMany) { -%>
+    @ManyToMany<% if (!relationship.ownerSide) { %>(mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>")<% } %>
+      <%_ if (relationship.ownerSide) { _%>
+        <%_ if (relationship.relationshipValidate) { _%>
+    <%- include('relationship_validators', { relationship }); -%>
+        <%_ } _%>
+    @JoinTable(name = "<%= relationship.joinTable.name %>",
+               joinColumns = <%= entity.primaryKey.fields.length > 1 ? '{' : '' %>
+                   <%_ entity.primaryKey.fields.forEach((field, idx) => { _%>
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${entityTableName}_${field.columnName}` %>")
+                   <%_ }); _%>
+               <%= entity.primaryKey.fields.length > 1 ? '}' : '' %>,
+               inverseJoinColumns = <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
+                   <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
+                   <%= idx === 0 ? '' : ',' %>@JoinColumn(name = "<%= `${relationship.columnName}_${field.columnName}` %>"))
+                   <%_ }); _%>
+               <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
+      <%_ } _%>
+  <%_ } else { -%>
+      <%_ if (relationship.ignoreOtherSideProperty) { -%>
+    @JsonIgnoreProperties(value = {
+        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%= otherRelationship.relationshipReferenceField %>",
+        <%_ }); _%>
+    }, allowSetters = true)
+      <%_ } _%>
+      <%_ if (relationship.ownerSide) { -%>
+    @OneToOne<% if (relationship.relationshipRequired) { %>(optional = false)<% } %>
+        <%_ if (relationship.relationshipValidate) { _%>
+    <%- include('relationship_validators', { relationship }); -%>
+        <%_ } _%>
+        <%_ if (relationship.id) { %>
+    @MapsId
+    @JoinColumn(name = "<%= relationship.otherEntity.primaryKey.fields[0].columnName %>")
+        <%_ } else { _%>
+    @JoinColumn(unique = true)
+        <%_ } _%>
+      <%_ } else { _%>
+    @OneToOne(mappedBy = "<%= relationship.otherEntityRelationshipName %>")
+      <%_ } -%>
+  <%_ } -%>
+<&_ } -&>
+<%_ } -%>

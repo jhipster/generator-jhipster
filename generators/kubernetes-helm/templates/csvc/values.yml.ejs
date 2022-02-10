@@ -9,20 +9,20 @@ kafka:
   zookeeper:
     enabled: true
     replicas: 3
-    <%_ if (istio) { _%>
+  <%_ if (istio) { _%>
     podAnnotations:
       sidecar.istio.io/inject: "false"
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
-<%_ if (monitoring === 'prometheus') { _%>
+<%_ if (monitoringPrometheus) { _%>
 prometheus:
   enabled: true
   server:
     name: jhipster-prometheus
-    <%_ if (istio) { _%>
+  <%_ if (istio) { _%>
     podAnnotations:
       sidecar.istio.io/inject: "false"
-    <%_ } _%>
+  <%_ } _%>
     service:
       servicePort: 9090
   nodeExporter:
@@ -36,7 +36,7 @@ grafana:
   podAnnotations:
     sidecar.istio.io/inject: "false"
   <%_ } _%>
-  <%_ if (!istio && kubernetesServiceType === 'Ingress') { _%>
+  <%_ if (!istio && kubernetesServiceTypeIngress) { _%>
   ingress:
     enabled: true
     hosts:

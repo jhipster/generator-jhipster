@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
+import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import * as config from '@/shared/config/config';
@@ -9,7 +10,6 @@ import MetricsClass from '@/admin/metrics/metrics.component';
 import MetricsService from '@/admin/metrics/metrics.service';
 
 const localVue = createLocalVue();
-const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -22,9 +22,9 @@ localVue.directive('b-modal', {});
 localVue.directive('b-progress', {});
 localVue.directive('b-progress-bar', {});
 
-jest.mock('axios', () => ({
-  get: jest.fn()
-}));
+const axiosStub = {
+  get: sinon.stub(axios, 'get'),
+};
 
 describe('Metrics Component', () => {
   let wrapper: Wrapper<MetricsClass>;
@@ -145,21 +145,21 @@ describe('Metrics Component', () => {
         'cache.removals' : 0.0,
         'cache.evictions' : 0.0
       },
-      'io.github.jhipster.domain.Authority' : {
+      'tech.jhipster.domain.Authority' : {
         'cache.gets.miss' : 0.0,
         'cache.puts' : 2.0,
         'cache.gets.hit' : 0.0,
         'cache.removals' : 0.0,
         'cache.evictions' : 0.0
       },
-      'io.github.jhipster.domain.User.authorities' : {
+      'tech.jhipster.domain.User.authorities' : {
         'cache.gets.miss' : 0.0,
         'cache.puts' : 1.0,
         'cache.gets.hit' : 0.0,
         'cache.removals' : 0.0,
         'cache.evictions' : 0.0
       },
-      'io.github.jhipster.domain.User' : {
+      'tech.jhipster.domain.User' : {
         'cache.gets.miss' : 0.0,
         'cache.puts' : 1.0,
         'cache.gets.hit' : 0.0,
@@ -233,12 +233,12 @@ describe('Metrics Component', () => {
   };
 
   beforeEach(() => {
-    mockedAxios.get.mockReturnValue(Promise.resolve({ data: { timers: [], gauges: []} }));
+    axiosStub.get.resolves({ data: { timers: [], gauges: []} });
     wrapper = shallowMount<MetricsClass>(Metrics, {
       store,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       stubs: {
         bModal: true,
@@ -255,15 +255,15 @@ describe('Metrics Component', () => {
   describe('refresh', () => {
     it('should call refresh on init', async () => {
       // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({ data: response }));
+      axiosStub.get.resolves({ data: response });
 
       // WHEN
       metricsComponent.refresh();
       await metricsComponent.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith('management/jhimetrics');
-      expect(mockedAxios.get).toHaveBeenCalledWith('management/threaddump');
+      expect(axiosStub.get.calledWith('management/jhimetrics')).toBeTruthy();
+      expect(axiosStub.get.calledWith('management/threaddump')).toBeTruthy();
       expect(metricsComponent.metrics).toHaveProperty('jvm');
       expect(metricsComponent.metrics).toEqual(response);
       expect(metricsComponent.threadStats).toEqual({

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,36 +18,71 @@
 -%>
 package <%= packageName %>.cucumber.stepdefs;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import <%= packageName %>.web.rest.UserResource;
+import <%= packageName %>.security.AuthoritiesConstants;
+
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } _%>
 
 public class UserStepDefs extends StepDefs {
 
     @Autowired
     private UserResource userResource;
 
-    private MockMvc restUserMockMvc;
+<%_ if (reactive) { _%>
+    private WebTestClient userResourceMock;
+<%_ } else { _%>
+    private MockMvc userResourceMock;
+<%_ } _%>
 
     @Before
     public void setup() {
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
+        User principal = new User("username", "", true, true, true, true, grantedAuthorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            principal,
+            principal.getPassword(),
+            principal.getAuthorities()
+        );
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
     }
 
     @When("I search user {string}")
     public void i_search_user(String userId) throws Throwable {
-        actions = restUserMockMvc.perform(get("/api/users/" + userId)
-                .accept(MediaType.APPLICATION_JSON));
+<%_ if (reactive) { _%>
+        actions = userResourceMock.get().uri("/api/admin/users/" + userId)
+<%_ } else { _%>
+        actions = userResourceMock.perform(get("/api/admin/users/" + userId)
+<%_ } _%>
+                    .accept(MediaType.APPLICATION_JSON)<% if (!reactive) { %>)<%_ } _%>;
     }
 
     @Then("the user is found")

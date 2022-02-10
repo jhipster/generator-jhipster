@@ -7,7 +7,6 @@
       "relationshipValidateRules": "required",
       "relationshipName": "country",
       "otherEntityName": "country",
-      "otherEntityField": "id",
       "ownerSide": true,
       "otherEntityRelationshipName": "location"
     }

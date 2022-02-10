@@ -2,13 +2,13 @@
     "error": {
         "title": "Vealeht!",
         "http": {
-            "400": "Bad request.",
+            "400": "Vigane päring.",
             "403": "Teil puuduvad õigused selle lehe nägemiseks.",
             "404": "Lehte ei ole olemas.",
-            "405": "The HTTP verb you used is not supported for this URL.",
-            "500": "Internal server error."
+            "405": "See URL ei toeta teie poolt kasutatud HTTP päringu meetodit.",
+            "500": "Serveri sisemine viga."
         },
-        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-        "validation": "Validation error on the server."
+        "concurrencyFailure": "Teine kasutaja muutis teiega samal ajal andmeid. Teie muutused on tagasi lükatud.",
+        "validation": "Valideerimisviga serveris."
     }
 }

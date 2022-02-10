@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 <%_ if (enableTranslation) { _%>
-import VueI18n from 'vue-i18n';
+import VueI18n, { DateTimeFormats } from 'vue-i18n';
 import <%=jhiPrefixCapitalized%>Formatter from './formatter';
 <%_ } _%>
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
@@ -55,7 +55,7 @@ import { translationStore } from '@/shared/config/store/translation-store';
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
-const dateTimeFormats = {
+const dateTimeFormats: DateTimeFormats = {
   // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
 }
 <%_ } _%>
@@ -64,7 +64,9 @@ export function initVueApp(vue) {
   vue.use(VueCookie);
   vue.use(Vuelidate);
   vue.use(Vue2Filters);
-  setupAxiosInterceptors(() => console.log('Unauthorized!'));
+  setupAxiosInterceptors(
+    () => console.log('Unauthorized!'),
+    () => console.log('Server error!'));
   filters.initFilters();
 }
 
@@ -126,9 +128,9 @@ export function initVueXStore(vue) {
   return new Vuex.Store({
     modules: {
       accountStore,
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       translationStore,
-      <%_ } _%>
+<%_ } _%>
     },
   });
 }

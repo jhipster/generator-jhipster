@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,15 +18,14 @@
 -%>
 import 'react-toastify/dist/ReactToastify.css';
 import './app.<%= styleSheetExt %>';
+import 'app/config/dayjs.ts';
 
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Card } from 'reactstrap';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { hot } from 'react-hot-loader';
 
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
 <%_ if (enableTranslation) { _%>
@@ -41,13 +40,22 @@ import AppRoutes from 'app/routes';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
-export interface IAppProps extends StateProps, DispatchProps {}
+export const App = () => {
+  const dispatch = useAppDispatch();
 
-export const App = (props: IAppProps) => {
   useEffect(() => {
-    props.getSession();
-    props.getProfile();
+    dispatch(getSession());
+    dispatch(getProfile());
   }, []);
+
+<%_ if (enableTranslation) { _%>
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
+<%_ } _%>
+  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+  const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [AUTHORITIES.ADMIN]));
+  const ribbonEnv = useAppSelector(state => state.applicationProfile.ribbonEnv);
+  const isInProduction = useAppSelector(state => state.applicationProfile.inProduction);
+  const isOpenAPIEnabled = useAppSelector(state => state.applicationProfile.isOpenAPIEnabled);
 
   const paddingTop = '60px';
   return (
@@ -56,15 +64,14 @@ export const App = (props: IAppProps) => {
         <ToastContainer position={toast.POSITION.TOP_LEFT} className="toastify-container" toastClassName="toastify-toast"/>
         <ErrorBoundary>
           <Header
-            isAuthenticated={props.isAuthenticated}
-            isAdmin={props.isAdmin}
-          <%_ if (enableTranslation) { _%>
-            currentLocale={props.currentLocale}
-            onLocaleChange={props.setLocale}
-          <%_ } _%>
-            ribbonEnv={props.ribbonEnv}
-            isInProduction={props.isInProduction}
-            isOpenAPIEnabled={props.isOpenAPIEnabled}
+            isAuthenticated={isAuthenticated}
+            isAdmin={isAdmin}
+<%_ if (enableTranslation) { _%>
+            currentLocale={currentLocale}
+<%_ } _%>
+            ribbonEnv={ribbonEnv}
+            isInProduction={isInProduction}
+            isOpenAPIEnabled={isOpenAPIEnabled}
           />
         </ErrorBoundary>
         <div className="container-fluid view-container" id="app-view-container">
@@ -80,20 +87,4 @@ export const App = (props: IAppProps) => {
   );
 };
 
-const mapStateToProps = ({ authentication, applicationProfile<% if (enableTranslation) { %>, locale<% } %> }: IRootState) => ({
-  <%_ if (enableTranslation) { _%>
-  currentLocale: locale.currentLocale,
-  <%_ } _%>
-  isAuthenticated: authentication.isAuthenticated,
-  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
-  ribbonEnv: applicationProfile.ribbonEnv,
-  isInProduction: applicationProfile.inProduction,
-  isOpenAPIEnabled: applicationProfile.isOpenAPIEnabled
-});
-
-const mapDispatchToProps = { <% if (enableTranslation) { %>setLocale, <% } %>getSession, getProfile };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(hot(module)(App));
+export default App;

@@ -1,0 +1,318 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+jest.mock('app/core/auth/state-storage.service');
+<%_ if (communicationSpringWebsocket) { _%>
+jest.mock('app/core/tracker/tracker.service');
+<%_ } _%>
+
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { of } from 'rxjs';
+<%_ } _%>
+import { NgxWebstorageModule<% if (enableTranslation) { %>, SessionStorageService<% } %> } from 'ngx-webstorage';
+
+import { Account } from 'app/core/auth/account.model';
+import { Authority } from 'app/config/authority.constants';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+<%_ if (communicationSpringWebsocket) { _%>
+import { TrackerService } from 'app/core/tracker/tracker.service';
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+<%_ } _%>
+
+import { AccountService } from './account.service';
+
+function accountWithAuthorities(authorities: string[]): Account {
+  return {
+    activated: true,
+    authorities,
+    email: '',
+    firstName: '',
+    langKey: '',
+    lastName: '',
+    login: '',
+    imageUrl: '',
+  };
+}
+
+describe('Account Service', () => {
+  let service: AccountService;
+<%_ if (!skipUserManagement) { _%>
+  let applicationConfigService: ApplicationConfigService;
+<%_ } _%>
+  let httpMock: HttpTestingController;
+  let mockStorageService: StateStorageService;
+  let mockRouter: Router;
+<%_ if (communicationSpringWebsocket) { _%>
+  let mockTrackerService: TrackerService;
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+  let mockTranslateService: TranslateService;
+  let sessionStorageService: SessionStorageService;
+<%_ } _%>
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([]),
+<%_ if (enableTranslation) { _%>
+        TranslateModule.forRoot(),
+<%_ } _%>
+        NgxWebstorageModule.forRoot()
+      ],
+      providers: [
+<%_ if (communicationSpringWebsocket) { _%>
+        TrackerService,
+<%_ } _%>
+        StateStorageService,
+      ],
+    });
+
+    service = TestBed.inject(AccountService);
+<%_ if (!skipUserManagement) { _%>
+    applicationConfigService = TestBed.inject(ApplicationConfigService);
+<%_ } _%>
+    httpMock = TestBed.inject(HttpTestingController);
+    mockStorageService = TestBed.inject(StateStorageService);
+    mockRouter = TestBed.inject(Router);
+    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
+<%_ if (communicationSpringWebsocket) { _%>
+
+    mockTrackerService = TestBed.inject(TrackerService);
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+
+    mockTranslateService = TestBed.inject(TranslateService);
+    jest.spyOn(mockTranslateService, 'use').mockImplementation(() => of(''));
+    sessionStorageService = TestBed.inject(SessionStorageService);
+<%_ } _%>
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+<%_ if (!skipUserManagement) { _%>
+describe('save', () => {
+  it('should call account saving endpoint with correct values', () => {
+    // GIVEN
+    const account = accountWithAuthorities([]);
+
+    // WHEN
+    service.save(account).subscribe();
+    const testRequest = httpMock.expectOne({ method: 'POST', url: applicationConfigService.getEndpointFor('api/account') });
+    testRequest.flush({});
+
+    // THEN
+    expect(testRequest.request.body).toEqual(account);
+  });
+});
+
+<%_ } _%>
+  describe('authenticate', () => {
+    it('authenticationState should emit null if input is null', () => {
+      // GIVEN
+      let userIdentity: Account | null = accountWithAuthorities([]);
+      service.getAuthenticationState().subscribe(account => (userIdentity = account));
+
+      // WHEN
+      service.authenticate(null);
+
+      // THEN
+      expect(userIdentity).toBeNull();
+      expect(service.isAuthenticated()).toBe(false);
+<%_ if (communicationSpringWebsocket) { _%>
+      expect(mockTrackerService.disconnect).toHaveBeenCalled();
+      expect(mockTrackerService.connect).not.toHaveBeenCalled();
+<%_ } _%>
+    });
+
+    it('authenticationState should emit the same account as was in input parameter', () => {
+      // GIVEN
+      const expectedResult = accountWithAuthorities([]);
+      let userIdentity: Account | null = null;
+      service.getAuthenticationState().subscribe(account => (userIdentity = account));
+
+      // WHEN
+      service.authenticate(expectedResult);
+
+      // THEN
+      expect(userIdentity).toEqual(expectedResult);
+      expect(service.isAuthenticated()).toBe(true);
+<%_ if (communicationSpringWebsocket) { _%>
+      expect(mockTrackerService.connect).toHaveBeenCalled();
+      expect(mockTrackerService.disconnect).not.toHaveBeenCalled();
+<%_ } _%>
+    });
+  });
+
+  describe('identity', () => {
+    it('should call /account only once if last call have not returned', () => {
+      // When I call
+      service.identity().subscribe();
+      // Once more
+      service.identity().subscribe();
+      // Then there is only request
+      httpMock.expectOne({ method: 'GET' });
+    });
+
+    it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
+      // Given the user is authenticated
+      service.identity().subscribe();
+      httpMock.expectOne({ method: 'GET' }).flush({});
+
+      // When I call
+      service.identity().subscribe();
+
+      // Then there is no second request
+      httpMock.expectNone({ method: 'GET' });
+
+      // When I log out
+      service.authenticate(null);
+      // and then call
+      service.identity().subscribe();
+
+      // Then there is a new request
+      httpMock.expectOne({ method: 'GET' });
+    });
+
+<%_ if (enableTranslation) { _%>
+    describe('should change the language on authentication if necessary', () => {
+      it('should change language if user has not changed language manually', () => {
+        // GIVEN
+        sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? undefined : 'otherSessionStorageValue'));
+
+        // WHEN
+        service.identity().subscribe();
+        httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+        // THEN
+        expect(mockTranslateService.use).toHaveBeenCalledWith('accountLang');
+      });
+
+      it('should not change language if user has changed language manually', () => {
+        // GIVEN
+        sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? 'sessionLang' : undefined));
+
+        // WHEN
+        service.identity().subscribe();
+        httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+        // THEN
+        expect(mockTranslateService.use).not.toHaveBeenCalled();
+      });
+    });
+
+<%_ } _%>
+    describe('navigateToStoredUrl', () => {
+      it('should navigate to the previous stored url post successful authentication', () => {
+        // GIVEN
+        mockStorageService.getUrl = jest.fn(() => 'admin/users?page=0');
+
+        // WHEN
+        service.identity().subscribe();
+        httpMock.expectOne({ method: 'GET' }).flush({});
+
+        // THEN
+        expect(mockStorageService.getUrl).toHaveBeenCalledTimes(1);
+        expect(mockStorageService.clearUrl).toHaveBeenCalledTimes(1);
+        expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('admin/users?page=0');
+      });
+
+      it('should not navigate to the previous stored url when authentication fails', () => {
+        // WHEN
+        service.identity().subscribe();
+        httpMock.expectOne({ method: 'GET' }).error(new ErrorEvent(''));
+
+        // THEN
+        expect(mockStorageService.getUrl).not.toHaveBeenCalled();
+        expect(mockStorageService.clearUrl).not.toHaveBeenCalled();
+        expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
+      });
+
+      it('should not navigate to the previous stored url when no such url exists post successful authentication', () => {
+        // GIVEN
+        mockStorageService.getUrl = jest.fn(() => null);
+
+        // WHEN
+        service.identity().subscribe();
+        httpMock.expectOne({ method: 'GET' }).flush({});
+
+        // THEN
+        expect(mockStorageService.getUrl).toHaveBeenCalledTimes(1);
+        expect(mockStorageService.clearUrl).not.toHaveBeenCalled();
+        expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('hasAnyAuthority', () => {
+    describe('hasAnyAuthority string parameter', () => {
+      it('should return false if user is not logged', () => {
+        const hasAuthority = service.hasAnyAuthority(Authority.USER);
+        expect(hasAuthority).toBe(false);
+      });
+
+      it('should return false if user is logged and has not authority', () => {
+        service.authenticate(accountWithAuthorities([Authority.USER]));
+
+        const hasAuthority = service.hasAnyAuthority(Authority.ADMIN);
+
+        expect(hasAuthority).toBe(false);
+      });
+
+      it('should return true if user is logged and has authority', () => {
+        service.authenticate(accountWithAuthorities([Authority.USER]));
+
+        const hasAuthority = service.hasAnyAuthority(Authority.USER);
+
+        expect(hasAuthority).toBe(true);
+      });
+    });
+
+    describe('hasAnyAuthority array parameter', () => {
+      it('should return false if user is not logged', () => {
+        const hasAuthority = service.hasAnyAuthority([Authority.USER]);
+        expect(hasAuthority).toBeFalsy();
+      });
+
+      it('should return false if user is logged and has not authority', () => {
+        service.authenticate(accountWithAuthorities([Authority.USER]));
+
+        const hasAuthority = service.hasAnyAuthority([Authority.ADMIN]);
+
+        expect(hasAuthority).toBe(false);
+      });
+
+      it('should return true if user is logged and has authority', () => {
+        service.authenticate(accountWithAuthorities([Authority.USER]));
+
+        const hasAuthority = service.hasAnyAuthority([Authority.USER, Authority.ADMIN]);
+
+        expect(hasAuthority).toBe(true);
+      });
+    });
+  });
+});

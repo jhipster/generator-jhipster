@@ -22,5 +22,5 @@ entity B
 entity C
 
 relationship OneToMany {
-  @id A{b required} to B{a}
+  @annotationOnSource(toto) A{b required} to @annotationOnDestination B{a}
 }

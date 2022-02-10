@@ -1,13 +1,14 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,20 +21,20 @@ const Validator = require('./validator');
 const { isReservedClassName } = require('../jhipster/reserved-keywords');
 
 class EntityValidator extends Validator {
-    constructor() {
-        super('entity', ['name', 'tableName']);
-    }
+  constructor() {
+    super('entity', ['name', 'tableName']);
+  }
 
-    validate(jdlEntity) {
-        super.validate(jdlEntity);
-        checkForReservedClassName(jdlEntity);
-    }
+  validate(jdlEntity) {
+    super.validate(jdlEntity);
+    checkForReservedClassName(jdlEntity);
+  }
 }
 
 module.exports = EntityValidator;
 
 function checkForReservedClassName(jdlEntity) {
-    if (isReservedClassName(jdlEntity.name)) {
-        throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
-    }
+  if (isReservedClassName(jdlEntity.name)) {
+    throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
+  }
 }

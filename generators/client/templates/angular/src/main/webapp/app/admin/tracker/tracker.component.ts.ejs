@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,47 +23,45 @@ import { TrackerService } from 'app/core/tracker/tracker.service';
 import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-tracker',
-    templateUrl: './tracker.component.html'
+  selector: '<%= jhiPrefixDashed %>-tracker',
+  templateUrl: './tracker.component.html',
 })
 export class TrackerComponent implements OnInit, OnDestroy {
-    activities: TrackerActivity[] = [];
-    subscription?: Subscription;
+  activities: TrackerActivity[] = [];
+  subscription?: Subscription;
 
-    constructor(
-        private trackerService: TrackerService
-    ) {}
+  constructor(private trackerService: TrackerService) {}
 
-    showActivity(activity: TrackerActivity): void {
-        let existingActivity = false;
+  showActivity(activity: TrackerActivity): void {
+    let existingActivity = false;
 
-        for (let index = 0; index < this.activities.length; index++) {
-            if (this.activities[index].sessionId === activity.sessionId) {
-                existingActivity = true;
-                if ( activity.page === 'logout' ) {
-                    this.activities.splice(index, 1);
-                } else {
-                    this.activities[index] = activity;
-                }
-            }
+    for (let index = 0; index < this.activities.length; index++) {
+      if (this.activities[index].sessionId === activity.sessionId) {
+        existingActivity = true;
+        if (activity.page === 'logout') {
+          this.activities.splice(index, 1);
+        } else {
+          this.activities[index] = activity;
         }
-
-        if (!existingActivity && (activity.page !== 'logout')) {
-            this.activities.push(activity);
-        }
+      }
     }
 
-    ngOnInit(): void {
-        this.trackerService.subscribe();
-        this.subscription = this.trackerService.receive().subscribe((activity: TrackerActivity) => {
-            this.showActivity(activity);
-        });
+    if (!existingActivity && activity.page !== 'logout') {
+      this.activities.push(activity);
     }
+  }
 
-    ngOnDestroy(): void {
-        this.trackerService.unsubscribe();
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
+  ngOnInit(): void {
+    this.trackerService.subscribe();
+    this.subscription = this.trackerService.receive().subscribe((activity: TrackerActivity) => {
+      this.showActivity(activity);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.trackerService.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
+  }
 }

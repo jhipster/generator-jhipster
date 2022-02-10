@@ -2,7 +2,7 @@ application {
   config {
     applicationType monolith,
     baseName jhipsterSampleApplication,
-    packageName io.github.jhipster.sample,
+    packageName tech.jhipster.sample,
     authenticationType jwt,
     prodDatabaseType postgresql,
     buildTool maven,

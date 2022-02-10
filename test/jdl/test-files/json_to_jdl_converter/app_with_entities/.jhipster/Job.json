@@ -7,14 +7,12 @@
       "otherEntityRelationshipName": "job",
       "relationshipName": "task",
       "otherEntityName": "task",
-      "otherEntityField": "id",
       "ownerSide": true
     },
     {
       "relationshipName": "employee",
       "otherEntityName": "employee",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "relationshipType": "many-to-one"
     }
   ],
   "fields": [

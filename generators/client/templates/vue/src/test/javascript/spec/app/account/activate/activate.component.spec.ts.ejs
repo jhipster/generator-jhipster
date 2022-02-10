@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
+import sinon from 'sinon';
 
 import * as config from '@/shared/config/config';
 import Activate from '@/account/activate/activate.vue';
@@ -8,7 +9,6 @@ import ActivateService from '@/account/activate/activate.service';
 import LoginService from '@/account/login.service';
 
 const localVue = createLocalVue();
-const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -16,10 +16,10 @@ const i18n = config.initI18N(localVue);
 <%_ } _%>
 const store = config.initVueXStore(localVue);
 
-jest.mock('axios', () => ({
-  get: jest.fn(),
-  post: jest.fn()
-}));
+const axiosStub = {
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post'),
+};
 
 describe('Activate Component', () => {
 
@@ -27,13 +27,12 @@ describe('Activate Component', () => {
   let activate: ActivateClass;
 
   beforeEach(() => {
-    mockedAxios.get.mockReset();
-    mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    axiosStub.get.resolves({});
 
     wrapper = shallowMount<ActivateClass>(Activate, {
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       i18n,
-      <%_ } _%>
+<%_ } _%>
       localVue,
       provide: {
         activateService: () => new ActivateService(),
@@ -44,7 +43,7 @@ describe('Activate Component', () => {
   });
 
   it('should display error when activation fails using route', async () => {
-    mockedAxios.get.mockReturnValue(Promise.reject({}));
+    axiosStub.get.rejects({});
     activate.beforeRouteEnter({query: {key: 'invalid-key'}}, null, cb => cb(activate));
     await activate.$nextTick();
 
@@ -54,7 +53,7 @@ describe('Activate Component', () => {
 
   it('should display error when activation fails', async () => {
 
-    mockedAxios.get.mockReturnValue(Promise.reject({}));
+    axiosStub.get.rejects({});
     activate.init('invalid-key');
     await activate.$nextTick();
 
@@ -64,7 +63,7 @@ describe('Activate Component', () => {
 
   it('should display success when activation succeeds', async () => {
 
-    mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    axiosStub.get.resolves({});
 
     activate.init('valid-key');
     await activate.$nextTick();

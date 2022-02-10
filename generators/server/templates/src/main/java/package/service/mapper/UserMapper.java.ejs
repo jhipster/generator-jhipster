@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,16 +18,21 @@
 -%>
 package <%= packageName %>.service.mapper;
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 /**
  * Mapper for the entity {@link <%= asEntity('User') %>} and its DTO called {@link <%= asDto('User') %>}.
@@ -49,14 +54,25 @@ public class UserMapper {
         return new <%= asDto('User') %>(user);
     }
 
-    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('User') %>> userDTOs) {
+    public List<<%= asDto('AdminUser') %>> usersToAdminUserDTOs(List<<%= asEntity('User') %>> users) {
+        return users.stream()
+            .filter(Objects::nonNull)
+            .map(this::userToAdminUserDTO)
+            .collect(Collectors.toList());
+    }
+
+    public <%= asDto('AdminUser') %> userToAdminUserDTO(<%= asEntity('User') %> user) {
+        return new <%= asDto('AdminUser') %>(user);
+    }
+
+    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('AdminUser') %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public <%= asEntity('User') %> userDTOToUser(<%= asDto('User') %> userDTO) {
+    public <%= asEntity('User') %> userDTOToUser(<%= asDto('AdminUser') %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {
@@ -66,24 +82,24 @@ public class UserMapper {
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
             user.setEmail(userDTO.getEmail());
-            <%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (!databaseTypeCassandra) { _%>
             user.setImageUrl(userDTO.getImageUrl());
-            <%_ } _%>
+<%_ } _%>
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
-            <%_ } _%>
-            <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
             Set<String> authorities = this.cleanNullStringAuthorities(userDTO.getAuthorities());
             user.setAuthorities(authorities);
-            <%_ } _%>
+<%_ } _%>
             return user;
         }
     }
 
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
         Set<Authority> authorities = new HashSet<>();
@@ -98,8 +114,8 @@ public class UserMapper {
 
         return authorities;
     }
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
 
     private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
         Set<String> authorities = new HashSet<>();
@@ -112,14 +128,73 @@ public class UserMapper {
 
         return authorities;
     }
-    <%_ } _%>
+<%_ } _%>
 
-    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public <%= asEntity('User') %> userFromId(<%= user.primaryKey.type %> id) {
         if (id == null) {
             return null;
         }
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setId(id);
         return user;
+    }
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    public <%= asDto('User') %> toDtoId(<%= asEntity('User') %> user) {
+        if (user == null) {
+            return null;
+        }
+        <%= asDto('User') %> userDto = new <%= asDto('User') %>();
+        userDto.setId(user.getId());
+        return userDto;
+    }
+
+    @Named("idSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    public Set<<%= asDto('User') %>> toDtoIdSet(Set<<%= asEntity('User') %>> users) {
+        if ( users == null ) {
+            return Collections.emptySet();
+        }
+
+        Set<<%= asDto('User') %>> userSet = new HashSet<>();
+        for ( <%= asEntity('User') %> userEntity : users ) {
+            userSet.add( this.toDtoId( userEntity ) );
+        }
+
+        return userSet;
+    }
+
+    @Named("login")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
+    public <%= asDto('User') %> toDtoLogin(<%= asEntity('User') %> user) {
+        if (user == null) {
+            return null;
+        }
+        <%= asDto('User') %> userDto = new <%= asDto('User') %>();
+        userDto.setId(user.getId());
+        userDto.setLogin(user.getLogin());
+        return userDto;
+    }
+
+    @Named("loginSet")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
+    public Set<<%= asDto('User') %>> toDtoLoginSet(Set<<%= asEntity('User') %>> users) {
+        if ( users == null ) {
+            return Collections.emptySet();
+        }
+
+        Set<<%= asDto('User') %>> userSet = new HashSet<>();
+        for ( <%= asEntity('User') %> userEntity : users ) {
+            userSet.add( this.toDtoLogin( userEntity ) );
+        }
+
+        return userSet;
     }
 }

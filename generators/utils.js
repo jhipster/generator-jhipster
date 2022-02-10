@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,38 +32,45 @@ const FileUtils = require('../jdl/utils/file-utils');
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
 module.exports = {
-    rewrite,
-    rewriteFile,
-    replaceContent,
-    classify,
-    rewriteJSONFile,
-    copyWebResource,
-    renderContent,
-    deepFind,
-    getJavadoc,
-    buildEnumInfo,
-    getEnumInfo,
-    copyObjectProps,
-    decodeBase64,
-    getDBTypeFromDBValue,
-    getBase64Secret,
-    getRandomHex,
-    checkStringInFile,
-    checkRegexInFile,
-    loadYoRc,
-    packageNameToNamespace,
-    stringHashCode,
-    gitExec,
-    isGitInstalled,
-    vueReplaceTranslation,
-    vueAddPageToRouterImport,
-    vueAddPageToRouter,
-    vueAddPageServiceToMainImport,
-    vueAddPageServiceToMain,
-    vueAddPageProtractorConf,
-    languageSnakeCase,
-    languageToJavaLanguage,
+  rewrite,
+  rewriteFile,
+  replaceContent,
+  classify,
+  rewriteJSONFile,
+  copyWebResource,
+  renderContent,
+  deepFind,
+  escapeRegExp,
+  getJavadoc,
+  buildEnumInfo,
+  getEnumInfo,
+  copyObjectProps,
+  decodeBase64,
+  getDBTypeFromDBValue,
+  getBase64Secret,
+  getRandomHex,
+  checkStringInFile,
+  checkRegexInFile,
+  loadYoRc,
+  packageNameToNamespace,
+  stringHashCode,
+  gitExec,
+  isGitInstalled,
+  vueReplaceTranslation,
+  vueAddPageToRouterImport,
+  vueAddPageToRouter,
+  vueAddPageServiceToMainImport,
+  vueAddPageServiceToMain,
+  vueAddPageProtractorConf,
+  languageSnakeCase,
+  languageToJavaLanguage,
+  addSectionsCondition,
+  mergeSections,
 };
+
+const databaseTypes = require('../jdl/jhipster/database-types');
+
+const SQL = databaseTypes.SQL;
 
 /**
  * Rewrite file with passed arguments
@@ -71,13 +78,20 @@ module.exports = {
  * @param {object} generator reference to the generator
  */
 function rewriteFile(args, generator) {
-    args.path = args.path || process.cwd();
-    const fullPath = path.join(args.path, args.file);
+  let fullPath;
+  if (args.path) {
+    fullPath = generator.destinationPath(path.join(args.path, args.file));
+  } else {
+    fullPath = generator.destinationPath(args.file);
+  }
+  if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
+    fullPath = `${fullPath}.jhi`;
+  }
 
-    args.haystack = generator.fs.read(fullPath);
-    const body = rewrite(args);
-    generator.fs.write(fullPath, body);
-    return args.haystack !== body;
+  args.haystack = generator.fs.read(fullPath);
+  const body = rewrite(args);
+  generator.fs.write(fullPath, body);
+  return args.haystack !== body;
 }
 
 /**
@@ -86,15 +100,17 @@ function rewriteFile(args, generator) {
  * @param {object} generator reference to the generator
  */
 function replaceContent(args, generator) {
-    args.path = args.path || process.cwd();
-    const fullPath = path.join(args.path, args.file);
+  let fullPath = generator.destinationPath(args.file);
+  if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
+    fullPath = `${fullPath}.jhi`;
+  }
 
-    const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
+  const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
-    const currentBody = generator.fs.read(fullPath);
-    const newBody = currentBody.replace(re, args.content);
-    generator.fs.write(fullPath, newBody);
-    return newBody !== currentBody;
+  const currentBody = generator.fs.read(fullPath);
+  const newBody = currentBody.replace(re, args.content);
+  generator.fs.write(fullPath, newBody);
+  return newBody !== currentBody;
 }
 
 /**
@@ -104,7 +120,7 @@ function replaceContent(args, generator) {
  * @returns {string} string with regular expressions escaped
  */
 function escapeRegExp(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
 }
 
 /**
@@ -116,48 +132,80 @@ function escapeRegExp(str) {
  * @returns {string} string where CRLF is replaced with LF in Windows
  */
 function normalizeLineEndings(str) {
-    const isWin32 = os.platform() === 'win32';
-    return isWin32 ? str.replace(/\r\n/g, '\n') : str;
+  const isWin32 = os.platform() === 'win32';
+  return isWin32 ? str.replace(/\r\n/g, '\n') : str;
+}
+
+/**
+ * Change spaces sequences and '>' to allow any number of spaces or new line prefix
+ *
+ * @param {string} str string
+ * @returns {string} string where CRLF is replaced with LF in Windows
+ */
+function convertToPrettierExpressions(str) {
+  return str.replace(/\s+/g, '([\\s\n]*)').replace(/>+/g, '(\n?[\\s]*)>');
 }
 
 /**
  * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
+ * @param {string[]} args.splicable       - content to be added.
+ * @param {boolean} [args.prettierAware]  - apply prettier aware expressions before looking for applied needles.
+ * @param {string|RegExp} [args.regexp]    - use another content for looking for applied needles.
  * @returns {*} re-written file
  */
 function rewrite(args) {
-    // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n'));
-
-    if (re.test(normalizeLineEndings(args.haystack))) {
-        return args.haystack;
+  // check if splicable is already in the body text
+  let re;
+  if (args.regexp) {
+    re = args.regexp;
+    if (!re.test) {
+      re = escapeRegExp(re);
     }
-
-    const lines = args.haystack.split('\n');
-
-    let otherwiseLineIndex = -1;
-    lines.forEach((line, i) => {
-        if (line.includes(args.needle)) {
-            otherwiseLineIndex = i;
-        }
-    });
-
-    let spaces = 0;
-    while (lines[otherwiseLineIndex].charAt(spaces) === ' ') {
-        spaces += 1;
+  } else {
+    re = args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
+  }
+  if (!re.test) {
+    if (args.prettierAware) {
+      re = convertToPrettierExpressions(re);
     }
+    re = new RegExp(re);
+  }
 
-    let spaceStr = '';
+  if (re.test(normalizeLineEndings(args.haystack))) {
+    return args.haystack;
+  }
 
-    // eslint-disable-next-line no-cond-assign
-    while ((spaces -= 1) >= 0) {
-        spaceStr += ' ';
+  const lines = args.haystack.split('\n');
+
+  let otherwiseLineIndex = -1;
+  lines.forEach((line, i) => {
+    if (line.includes(args.needle)) {
+      otherwiseLineIndex = i;
     }
+  });
 
-    lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
+  if (otherwiseLineIndex === -1) {
+    console.warn(`Needle ${args.needle} not found at file ${args.file}`);
+    return args.haystack;
+  }
 
-    return lines.join('\n');
+  let spaces = 0;
+  while (lines[otherwiseLineIndex].charAt(spaces) === ' ') {
+    spaces += 1;
+  }
+
+  let spaceStr = '';
+
+  // eslint-disable-next-line no-cond-assign
+  while ((spaces -= 1) >= 0) {
+    spaceStr += ' ';
+  }
+
+  lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
+
+  return lines.join('\n');
 }
 
 /**
@@ -169,8 +217,8 @@ function rewrite(args) {
  * @returns {string} 'class'-ified string
  */
 function classify(string) {
-    string = string.replace(/[\W_](\w)/g, match => ` ${match[1].toUpperCase()}`).replace(/\s/g, '');
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  string = string.replace(/[\W_](\w)/g, match => ` ${match[1].toUpperCase()}`).replace(/\s/g, '');
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /**
@@ -181,9 +229,10 @@ function classify(string) {
  * @param {object} generator reference to the generator
  */
 function rewriteJSONFile(filePath, rewriteFile, generator) {
-    const jsonObj = generator.fs.readJSON(filePath);
-    rewriteFile(jsonObj, generator);
-    generator.fs.writeJSON(filePath, jsonObj, null, 2);
+  filePath = generator.destinationPath(filePath);
+  const jsonObj = generator.fs.readJSON(filePath);
+  rewriteFile(jsonObj, generator);
+  generator.fs.writeJSON(filePath, jsonObj, null, 2);
 }
 
 /**
@@ -198,34 +247,34 @@ function rewriteJSONFile(filePath, rewriteFile, generator) {
  * @param {any} template template
  */
 function copyWebResource(source, dest, regex, type, generator, opt = {}, template) {
-    if (generator.enableTranslation) {
-        generator.template(source, dest, generator, opt);
-    } else {
-        dest = generator.destinationPath(dest);
-        if (!dest) {
-            return;
-        }
-        renderContent(source, generator, generator, opt, body => {
-            body = body.replace(regex, '');
-            switch (type) {
-                case 'html':
-                    body = replacePlaceholders(body, generator);
-                    break;
-                case 'js':
-                    body = replaceTitle(body, generator);
-                    if (dest.endsWith('error.route.ts')) {
-                        body = replaceErrorMessage(body, generator);
-                    }
-                    break;
-                case 'jsx':
-                    body = replaceTranslation(body, generator);
-                    break;
-                default:
-                    break;
-            }
-            generator.fs.write(dest, body);
-        });
+  if (generator.enableTranslation) {
+    generator.template(source, dest, generator, opt);
+  } else {
+    dest = generator.destinationPath(dest);
+    if (!dest) {
+      return;
     }
+    renderContent(source, generator, generator, opt, body => {
+      body = body.replace(regex, '');
+      switch (type) {
+        case 'html':
+          body = replacePlaceholders(body, generator);
+          break;
+        case 'js':
+          body = replaceTitle(body, generator);
+          if (dest.endsWith('error.route.ts')) {
+            body = replaceErrorMessage(body, generator);
+          }
+          break;
+        case 'jsx':
+          body = replaceTranslation(body, generator);
+          break;
+        default:
+          break;
+      }
+      generator.fs.write(dest, body);
+    });
+  }
 }
 
 /**
@@ -235,22 +284,35 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
  * @param {object} generator reference to the generator
  * @param {any} context context
  * @param {object} options options
- * @param {function} cb callback function
+ * @param {function} [cb] callback function
+ * @return {Promise<String>} Promise rendered content
  */
 function renderContent(source, generator, context, options, cb) {
-    options = {
-        root: generator.templatePath(),
-        context: generator,
-        ...options,
-    };
-    ejs.renderFile(generator.templatePath(source), context, options, (err, res) => {
-        if (!err) {
-            cb(res);
-        } else {
-            generator.warning(`Copying template ${source} failed. [${err}]`);
-            throw err;
-        }
-    });
+  options = {
+    root: options.root || generator.jhipsterTemplatesFolders || generator.templatePath(),
+    context: generator,
+    ...options,
+  };
+  if (context.entityClass) {
+    const basename = path.basename(source);
+    if (context.configOptions && context.configOptions.sharedEntities) {
+      Object.values(context.configOptions.sharedEntities).forEach(entity => {
+        entity.resetFakerSeed(`${context.entityClass}-${basename}`);
+      });
+    } else if (context.resetFakerSeed) {
+      context.resetFakerSeed(basename);
+    }
+  }
+  const promise = ejs.renderFile(generator.templatePath(source), context, options);
+  if (cb) {
+    return promise
+      .then(res => cb(res))
+      .catch(err => {
+        generator.warning(`Copying template ${source} failed. [${err}]`);
+        throw err;
+      });
+  }
+  return promise;
 }
 
 /**
@@ -260,8 +322,8 @@ function renderContent(source, generator, context, options, cb) {
  * @returns string with pageTitle replaced
  */
 function replaceTitle(body, generator) {
-    const regex = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
-    return replaceTranslationKeysWithText(body, generator, regex);
+  const regex = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+  return replaceTranslationKeysWithText(body, generator, regex);
 }
 
 /**
@@ -271,8 +333,8 @@ function replaceTitle(body, generator) {
  * @returns string with pageTitle replaced
  */
 function replaceErrorMessage(body, generator) {
-    const regex = /errorMessage[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
-    return replaceTranslationKeysWithText(body, generator, regex);
+  const regex = /errorMessage[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+  return replaceTranslationKeysWithText(body, generator, regex);
 }
 
 /**
@@ -283,20 +345,20 @@ function replaceErrorMessage(body, generator) {
  * @returns string with pageTitle replaced
  */
 function replaceTranslationKeysWithText(body, generator, regex) {
-    let match;
+  let match;
 
-    // eslint-disable-next-line no-cond-assign
-    while ((match = regex.exec(body)) !== null) {
-        // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
-        const key = match[1];
-        const target = key;
-        const jsonData = geti18nJson(key, generator);
-        const keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
+  // eslint-disable-next-line no-cond-assign
+  while ((match = regex.exec(body)) !== null) {
+    // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
+    const key = match[1];
+    const target = key;
+    const jsonData = geti18nJson(key, generator);
+    const keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
 
-        body = body.replace(target, keyValue !== undefined ? keyValue : generator.baseName);
-    }
+    body = body.replace(target, keyValue !== undefined ? keyValue : generator.baseName);
+  }
 
-    return body;
+  return body;
 }
 
 /**
@@ -306,21 +368,21 @@ function replaceTranslationKeysWithText(body, generator, regex) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-    const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
-    let match;
+  const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
+  let match;
 
-    // eslint-disable-next-line no-cond-assign
-    while ((match = re.exec(body)) !== null) {
-        // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
-        const key = match[2];
-        const target = match[1];
-        const jsonData = geti18nJson(key, generator);
-        const keyValue = jsonData !== undefined ? deepFind(jsonData, key, true) : undefined; // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+  // eslint-disable-next-line no-cond-assign
+  while ((match = re.exec(body)) !== null) {
+    // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
+    const key = match[2];
+    const target = match[1];
+    const jsonData = geti18nJson(key, generator);
+    const keyValue = jsonData !== undefined ? deepFind(jsonData, key, true) : undefined; // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
 
-        body = body.replace(target, keyValue !== undefined ? keyValue : '');
-    }
+    body = body.replace(target, keyValue !== undefined ? keyValue : '');
+  }
 
-    return body;
+  return body;
 }
 
 /**
@@ -330,32 +392,32 @@ function replacePlaceholders(body, generator) {
  * @returns string with Translate components replaced
  */
 function replaceTranslation(body, generator) {
-    const replaceRegex = (re, defultReplaceText) => {
-        let match;
-        // eslint-disable-next-line no-cond-assign
-        while ((match = re.exec(body)) !== null) {
-            // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
-            const key = match[2];
-            const target = match[1];
-            const limit = match[4]; // string indicating validation limit (e.g. "{ max: 4 }")
-            const jsonData = geti18nJson(key, generator);
-            let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
-            if (!keyValue) {
-                keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
-            }
-            if (limit) {
-                // Replace "{{ placeholder }}" with numeric limit
-                keyValue = keyValue.replace(/{{.+}}/, /{.+:\s(.+)\s}/.exec(limit)[1]);
-            }
+  const replaceRegex = (re, defultReplaceText) => {
+    let match;
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
+      // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
+      const key = match[2];
+      const target = match[1];
+      const limit = match[4]; // string indicating validation limit (e.g. "{ max: 4 }")
+      const jsonData = geti18nJson(key, generator);
+      let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
+      if (!keyValue) {
+        keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+      }
+      if (limit) {
+        // Replace "{{ placeholder }}" with numeric limit
+        keyValue = keyValue.replace(/{{.+}}/, /{.+:\s(.+)\s}/.exec(limit)[1]);
+      }
 
-            body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
-        }
-    };
+      body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
+    }
+  };
 
-    replaceRegex(/(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g, '""');
-    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, "''");
+  replaceRegex(/(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g, '""');
+  replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, "''");
 
-    return body;
+  return body;
 }
 
 /**
@@ -365,40 +427,40 @@ function replaceTranslation(body, generator) {
  * @returns parsed json file
  */
 function geti18nJson(key, generator) {
-    const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
-    const names = [];
-    let result;
-    const namePrefix = _.kebabCase(key.split('.')[0]);
-    if (['entity', 'error', 'footer'].includes(namePrefix)) {
-        names.push('global');
-        if (namePrefix === 'error') {
-            names.push('error');
-        }
-    } else {
-        names.push(namePrefix);
+  const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
+  const names = [];
+  let result;
+  const namePrefix = _.kebabCase(key.split('.')[0]);
+  if (['entity', 'error', 'footer'].includes(namePrefix)) {
+    names.push('global');
+    if (namePrefix === 'error') {
+      names.push('error');
     }
-    for (let i = 0; i < names.length; i++) {
-        let filename = `${i18nDirectory + names[i]}.json`;
-        let render;
-        if (!shelljs.test('-f', filename)) {
-            filename = `${filename}.ejs`;
-            render = true;
-        }
-        try {
-            let file = generator.fs.read(filename);
-            file = render ? ejs.render(file, generator, {}) : file;
-            file = JSON.parse(file);
-            if (result === undefined) {
-                result = file;
-            } else {
-                result = { ...result, ...file };
-            }
-        } catch (err) {
-            generator.log(err);
-            generator.log(`Error in file: ${filename}`);
-        }
+  } else {
+    names.push(namePrefix);
+  }
+  for (let i = 0; i < names.length; i++) {
+    let filename = `${i18nDirectory + names[i]}.json`;
+    let render;
+    if (!shelljs.test('-f', filename)) {
+      filename = `${filename}.ejs`;
+      render = true;
     }
-    return result;
+    try {
+      let file = generator.fs.read(filename);
+      file = render ? ejs.render(file, generator, {}) : file;
+      file = JSON.parse(file);
+      if (result === undefined) {
+        result = file;
+      } else {
+        result = { ...result, ...file };
+      }
+    } catch (err) {
+      generator.log(err);
+      generator.log(`Error in file: ${filename}`);
+    }
+  }
+  return result;
 }
 
 /**
@@ -408,43 +470,43 @@ function geti18nJson(key, generator) {
  * @param placeholder placeholder
  */
 function deepFind(obj, path, placeholder) {
-    const paths = path.split('.');
-    let current = obj;
-    if (placeholder) {
-        // dirty fix for placeholders, the json files needs to be corrected
-        paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
-        paths.pop();
+  const paths = path.split('.');
+  let current = obj;
+  if (placeholder) {
+    // dirty fix for placeholders, the json files needs to be corrected
+    paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
+    paths.pop();
+  }
+  for (let i = 0; i < paths.length; ++i) {
+    if (current[paths[i]] === undefined) {
+      return undefined;
     }
-    for (let i = 0; i < paths.length; ++i) {
-        if (current[paths[i]] === undefined) {
-            return undefined;
-        }
-        current = current[paths[i]];
-    }
-    return current;
+    current = current[paths[i]];
+  }
+  return current;
 }
 
 /**
  * Convert passed block of string to javadoc formatted string.
  *
  * @param {string} text text to convert to javadoc format
- * @param {number} indentSize indent size
+ * @param {number} indentSize indent size (default 0)
  * @returns javadoc formatted string
  */
-function getJavadoc(text, indentSize) {
-    if (!text) {
-        text = '';
-    }
-    if (text.includes('"')) {
-        text = text.replace(/"/g, '\\"');
-    }
-    let javadoc = `${_.repeat(' ', indentSize)}/**`;
-    const rows = text.split('\n');
-    for (let i = 0; i < rows.length; i++) {
-        javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} * ${rows[i]}`;
-    }
-    javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
-    return javadoc;
+function getJavadoc(text, indentSize = 0) {
+  if (!text) {
+    text = '';
+  }
+  if (text.includes('"')) {
+    text = text.replace(/"/g, '\\"');
+  }
+  let javadoc = `${_.repeat(' ', indentSize)}/**`;
+  const rows = text.split('\n');
+  for (let i = 0; i < rows.length; i++) {
+    javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} * ${rows[i]}`;
+  }
+  javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
+  return javadoc;
 }
 
 /**
@@ -454,19 +516,20 @@ function getJavadoc(text, indentSize) {
  * @return {Object} the enum info.
  */
 function getEnumInfo(field, clientRootFolder) {
-    const fieldType = field.fieldType;
-    // Todo: check if the next line does a side-effect and refactor it.
-    field.enumInstance = _.lowerFirst(fieldType);
-    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
-    const customValuesState = getCustomValuesState(enums);
-    return {
-        enumName: fieldType,
-        enumInstance: field.enumInstance,
-        enums,
-        ...customValuesState,
-        enumValues: getEnums(enums, customValuesState),
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-    };
+  const fieldType = field.fieldType;
+  // Todo: check if the next line does a side-effect and refactor it.
+  field.enumInstance = _.lowerFirst(fieldType);
+  const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+  const customValuesState = getCustomValuesState(enums);
+  return {
+    enumName: fieldType,
+    javadoc: field.fieldTypeJavadoc && getJavadoc(field.fieldTypeJavadoc),
+    enumInstance: field.enumInstance,
+    enums,
+    ...customValuesState,
+    enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
+    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+  };
 }
 
 /**
@@ -478,20 +541,20 @@ function getEnumInfo(field, clientRootFolder) {
  * @param {string} clientRootFolder
  */
 function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
-    const fieldType = field.fieldType;
-    field.enumInstance = _.lowerFirst(fieldType);
-    const enums = field.fieldValues.replace(/\s/g, '').split(',');
-    const enumsWithCustomValue = getEnumsWithCustomValue(enums);
-    return {
-        enumName: fieldType,
-        enumValues: field.fieldValues.split(',').join(', '),
-        enumInstance: field.enumInstance,
-        enums,
-        enumsWithCustomValue,
-        frontendAppName,
-        packageName,
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
-    };
+  const fieldType = field.fieldType;
+  field.enumInstance = _.lowerFirst(fieldType);
+  const enums = field.fieldValues.replace(/\s/g, '').split(',');
+  const enumsWithCustomValue = getEnumsWithCustomValue(enums);
+  return {
+    enumName: fieldType,
+    enumValues: field.fieldValues.split(',').join(', '),
+    enumInstance: field.enumInstance,
+    enums,
+    enumsWithCustomValue,
+    frontendAppName,
+    packageName,
+    clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+  };
 }
 
 /**
@@ -501,57 +564,66 @@ function buildEnumInfo(field, frontendAppName, packageName, clientRootFolder) {
  * @return {*}
  */
 function getEnumsWithCustomValue(enums) {
-    return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
-        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
-            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
-            const enumValueName = matches[1];
-            const enumValueCustomValue = matches[3];
-            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
-        } else {
-            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
-        }
-        return enumsWithCustomValueArray;
-    }, []);
+  return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+    if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+      const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+      const enumValueName = matches[1];
+      const enumValueCustomValue = matches[3];
+      enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
+    } else {
+      enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+    }
+    return enumsWithCustomValueArray;
+  }, []);
 }
 
 function getCustomValuesState(enumValues) {
-    const state = {
-        withoutCustomValue: 0,
-        withCustomValue: 0,
-    };
-    enumValues.forEach(enumValue => {
-        if (doesTheEnumValueHaveACustomValue(enumValue)) {
-            state.withCustomValue++;
-        } else {
-            state.withoutCustomValue++;
-        }
-    });
-    return {
-        withoutCustomValues: state.withCustomValue === 0,
-        withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
-        withCustomValues: state.withoutCustomValue === 0,
-    };
+  const state = {
+    withoutCustomValue: 0,
+    withCustomValue: 0,
+  };
+  enumValues.forEach(enumValue => {
+    if (doesTheEnumValueHaveACustomValue(enumValue)) {
+      state.withCustomValue++;
+    } else {
+      state.withoutCustomValue++;
+    }
+  });
+  return {
+    withoutCustomValues: state.withCustomValue === 0,
+    withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
+    withCustomValues: state.withoutCustomValue === 0,
+  };
 }
 
-function getEnums(enums, customValuesState) {
-    if (customValuesState.withoutCustomValues) {
-        return enums.map(enumValue => ({ name: enumValue, value: enumValue }));
+function getEnums(enums, customValuesState, comments) {
+  if (customValuesState.withoutCustomValues) {
+    return enums.map(enumValue => ({
+      name: enumValue,
+      value: enumValue,
+      comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
+    }));
+  }
+  return enums.map(enumValue => {
+    if (!doesTheEnumValueHaveACustomValue(enumValue)) {
+      return {
+        name: enumValue.trim(),
+        value: enumValue.trim(),
+        comment: comments && comments[enumValue] && getJavadoc(comments[enumValue], 4),
+      };
     }
-    return enums.map(enumValue => {
-        if (!doesTheEnumValueHaveACustomValue(enumValue)) {
-            return { name: enumValue.trim(), value: enumValue.trim() };
-        }
-        // eslint-disable-next-line no-unused-vars
-        const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-        return {
-            name: matched[1],
-            value: matched[2],
-        };
-    });
+    // eslint-disable-next-line no-unused-vars
+    const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
+    return {
+      name: matched[1],
+      value: matched[2],
+      comment: comments && comments[matched[1]] && getJavadoc(comments[matched[1]], 4),
+    };
+  });
 }
 
 function doesTheEnumValueHaveACustomValue(enumValue) {
-    return enumValue.includes('(');
+  return enumValue.includes('(');
 }
 /**
  * Copy object props from source to destination
@@ -559,8 +631,8 @@ function doesTheEnumValueHaveACustomValue(enumValue) {
  * @param {*} fromObj
  */
 function copyObjectProps(toObj, fromObj) {
-    // we use Object.assign instead of spread as we want to mutilate the object.
-    Object.assign(toObj, fromObj);
+  // we use Object.assign instead of spread as we want to mutilate the object.
+  Object.assign(toObj, fromObj);
 }
 
 /**
@@ -569,14 +641,14 @@ function copyObjectProps(toObj, fromObj) {
  * @param encoding the encoding to decode into. default to 'utf-8'
  */
 function decodeBase64(string, encoding = 'utf-8') {
-    return Buffer.from(string, 'base64').toString(encoding);
+  return Buffer.from(string, 'base64').toString(encoding);
 }
 
 function loadYoRc(filePath = '.yo-rc.json') {
-    if (!FileUtils.doesFileExist(filePath)) {
-        return undefined;
-    }
-    return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+  if (!FileUtils.doesFileExist(filePath)) {
+    return undefined;
+  }
+  return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
 }
 
 /**
@@ -584,10 +656,10 @@ function loadYoRc(filePath = '.yo-rc.json') {
  * @param {string} db - db
  */
 function getDBTypeFromDBValue(db) {
-    if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
-        return 'sql';
-    }
-    return db;
+  if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
+    return SQL;
+  }
+  return db;
 }
 
 /**
@@ -595,7 +667,7 @@ function getDBTypeFromDBValue(db) {
  * @param {int} len the length to use, defaults to 50
  */
 function getRandomHex(len = 50) {
-    return crypto.randomBytes(len).toString('hex');
+  return crypto.randomBytes(len).toString('hex');
 }
 
 /**
@@ -603,8 +675,14 @@ function getRandomHex(len = 50) {
  * @param {string} value the value used to get base64 secret
  * @param {int} len the length to use for random hex, defaults to 50
  */
-function getBase64Secret(value, len = 50) {
-    return Buffer.from(value || getRandomHex(len)).toString('base64');
+function getBase64Secret(value = '', len = 50) {
+  if (this && this.options && this.options.reproducibleTests) {
+    if (value) {
+      return `SECRET-${value}-${len}`;
+    }
+    return `SECRET--${len}`;
+  }
+  return Buffer.from(value || getRandomHex(len)).toString('base64');
 }
 
 /**
@@ -615,8 +693,8 @@ function getBase64Secret(value, len = 50) {
  * @returns {boolean} true if string is in file, false otherwise
  */
 function checkStringInFile(path, search, generator) {
-    const fileContent = generator.fs.read(path);
-    return fileContent.includes(search);
+  const fileContent = generator.fs.read(generator.destinationPath(path));
+  return fileContent.includes(search);
 }
 
 /**
@@ -627,8 +705,8 @@ function checkStringInFile(path, search, generator) {
  * @returns {boolean} true if regex is matched in file, false otherwise
  */
 function checkRegexInFile(path, regex, generator) {
-    const fileContent = generator.fs.read(path);
-    return fileContent.match(regex);
+  const fileContent = generator.fs.read(generator.destinationPath(path));
+  return fileContent.match(regex);
 }
 
 /**
@@ -637,7 +715,7 @@ function checkRegexInFile(path, regex, generator) {
  * @returns {string} namespace of the blueprint
  */
 function packageNameToNamespace(packageName) {
-    return packageName.replace('generator-', '');
+  return packageName.replace('generator-', '');
 }
 
 /**
@@ -646,18 +724,18 @@ function packageNameToNamespace(packageName) {
  * @returns {number} returns the calculated hash code.
  */
 function stringHashCode(str) {
-    let hash = 0;
+  let hash = 0;
 
-    for (let i = 0; i < str.length; i++) {
-        const character = str.charCodeAt(i);
-        hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
-        hash |= 0; // eslint-disable-line no-bitwise
-    }
+  for (let i = 0; i < str.length; i++) {
+    const character = str.charCodeAt(i);
+    hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+    hash |= 0; // eslint-disable-line no-bitwise
+  }
 
-    if (hash < 0) {
-        hash *= -1;
-    }
-    return hash;
+  if (hash < 0) {
+    hash *= -1;
+  }
+  return hash;
 }
 
 /**
@@ -670,26 +748,26 @@ function stringHashCode(str) {
  * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
  */
 function gitExec(args, options = {}, callback) {
-    if (typeof options === 'function') {
-        callback = options;
-        options = {};
-    }
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
 
-    if (options.async === undefined) options.async = callback !== undefined;
-    if (options.silent === undefined) options.silent = true;
-    if (options.trace === undefined) options.trace = true;
+  if (options.async === undefined) options.async = callback !== undefined;
+  if (options.silent === undefined) options.silent = true;
+  if (options.trace === undefined) options.trace = true;
 
-    if (!Array.isArray(args)) {
-        args = [args];
-    }
-    const command = `git ${args.join(' ')}`;
-    if (options.trace) {
-        console.info(command);
-    }
-    if (callback) {
-        return shelljs.exec(command, options, callback);
-    }
-    return shelljs.exec(command, options);
+  if (!Array.isArray(args)) {
+    args = [args];
+  }
+  const command = `git ${args.join(' ')}`;
+  if (options.trace) {
+    console.info(command);
+  }
+  if (callback) {
+    return shelljs.exec(command, options, callback);
+  }
+  return shelljs.exec(command, options);
 }
 
 /**
@@ -700,9 +778,9 @@ function gitExec(args, options = {}, callback) {
  * @return {boolean} true if installed; false otherwise..
  */
 function isGitInstalled(callback) {
-    const code = gitExec('--version', { trace: false }).code;
-    if (callback) callback(code);
-    return code === 0;
+  const code = gitExec('--version', { trace: false }).code;
+  if (callback) callback(code);
+  return code === 0;
 }
 
 /**
@@ -711,112 +789,157 @@ function isGitInstalled(callback) {
  * @param {*} files
  */
 function vueReplaceTranslation(generator, files) {
-    for (let i = 0; i < files.length; i++) {
-        const filePath = `${generator.CLIENT_MAIN_SRC_DIR}${files[i]}`;
-        // Match the below attributes and the $t() method
-        const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
-            .map(s => `${s}="\\$t\\(.*?\\)"`)
-            .join(')|(');
-        this.replaceContent(
-            {
-                file: filePath,
-                pattern: new RegExp(` ?(${regexp})`, 'g'),
-                content: '',
-            },
-            generator
-        );
-    }
+  for (let i = 0; i < files.length; i++) {
+    const filePath = `${generator.CLIENT_MAIN_SRC_DIR}${files[i]}`;
+    // Match the below attributes and the $t() method
+    const regexp = ['v-text', 'v-bind:placeholder', 'v-html', 'v-bind:title', 'v-bind:label', 'v-bind:value', 'v-bind:html']
+      .map(s => `${s}="\\$t\\(.*?\\)"`)
+      .join(')|(');
+    replaceContent(
+      {
+        file: filePath,
+        pattern: new RegExp(` ?(${regexp})`, 'g'),
+        content: '',
+      },
+      generator
+    );
+  }
 }
 
 function vueAddPageToRouterImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
-    this.rewriteFile(
-        {
-            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-            needle: 'jhipster-needle-add-entity-to-router-import',
-            splicable: [
-                generator.stripMargin(
-                    // prettier-ignore
-                    `|// prettier-ignore
+  rewriteFile(
+    {
+      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+      needle: 'jhipster-needle-add-entity-to-router-import',
+      splicable: [
+        generator.stripMargin(
+          // prettier-ignore
+          `|// prettier-ignore
                 |const ${pageName} = () => import('@/pages/${pageFolderName}/${pageFilename}.vue');`
-                ),
-            ],
-        },
-        generator
-    );
+        ),
+      ],
+    },
+    generator
+  );
 }
 
 function vueAddPageToRouter(generator, pageName, pageFilename) {
-    this.rewriteFile(
-        {
-            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
-            needle: 'jhipster-needle-add-entity-to-router',
-            splicable: [
-                generator.stripMargin(
-                    // prettier-ignore
-                    `|{
+  rewriteFile(
+    {
+      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
+      needle: 'jhipster-needle-add-entity-to-router',
+      splicable: [
+        generator.stripMargin(
+          // prettier-ignore
+          `|{
                     |    path: '/pages/${pageFilename}',
                     |    name: '${pageName}',
                     |    component: ${pageName},
                     |    meta: { authorities: [Authority.USER] }
                     |  },`
-                ),
-            ],
-        },
-        generator
-    );
+        ),
+      ],
+    },
+    generator
+  );
 }
 
 function vueAddPageServiceToMainImport(generator, pageName, pageFolderName, pageFilename = pageFolderName) {
-    this.rewriteFile(
-        {
-            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-            needle: 'jhipster-needle-add-entity-service-to-main-import',
-            splicable: [
-                generator.stripMargin(
-                    // prettier-ignore
-                    `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
-                ),
-            ],
-        },
-        generator
-    );
+  rewriteFile(
+    {
+      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+      needle: 'jhipster-needle-add-entity-service-to-main-import',
+      splicable: [
+        generator.stripMargin(
+          // prettier-ignore
+          `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFilename}.service';`
+        ),
+      ],
+    },
+    generator
+  );
 }
 
 function vueAddPageServiceToMain(generator, pageName, pageInstance) {
-    this.rewriteFile(
-        {
-            file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
-            needle: 'jhipster-needle-add-entity-service-to-main',
-            splicable: [
-                generator.stripMargin(
-                    // prettier-ignore
-                    `|${pageInstance}Service: () => new ${pageName}Service(),`
-                ),
-            ],
-        },
-        generator
-    );
+  rewriteFile(
+    {
+      file: `${generator.CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+      needle: 'jhipster-needle-add-entity-service-to-main',
+      splicable: [
+        generator.stripMargin(
+          // prettier-ignore
+          `|${pageInstance}Service: () => new ${pageName}Service(),`
+        ),
+      ],
+    },
+    generator
+  );
 }
 
 function vueAddPageProtractorConf(generator) {
-    this.rewriteFile(
-        {
-            file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
-            needle: 'jhipster-needle-add-protractor-tests',
-            splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
-        },
-        generator
-    );
+  rewriteFile(
+    {
+      file: `${generator.CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+      needle: 'jhipster-needle-add-protractor-tests',
+      splicable: [generator.stripMargin("'./e2e/pages/**/*.spec.ts',")],
+    },
+    generator
+  );
 }
 
 function languageSnakeCase(language) {
-    // Template the message server side properties
-    return language.replace(/-/g, '_');
+  // Template the message server side properties
+  return language.replace(/-/g, '_');
 }
 
 function languageToJavaLanguage(language) {
-    // Template the message server side properties
-    const langProp = languageSnakeCase(language);
-    // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-    return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+  // Template the message server side properties
+  const langProp = languageSnakeCase(language);
+  // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+  return langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+}
+
+/**
+ * @private
+ * Utility function add condition to every block in addition to the already existing condition.
+ */
+function addSectionsCondition(files, commonCondition) {
+  return Object.fromEntries(
+    Object.entries(files).map(([sectionName, sectionValue]) => {
+      sectionValue = sectionValue.map(block => {
+        const { condition } = block;
+        let newCondition = commonCondition;
+        if (typeof condition === 'function') {
+          newCondition = (...args) => {
+            return commonCondition(...args) && condition(...args);
+          };
+        } else if (condition !== undefined) {
+          newCondition = (...args) => commonCondition(...args) && condition;
+        }
+        block = {
+          ...block,
+          condition: newCondition,
+        };
+        return block;
+      });
+      return [sectionName, sectionValue];
+    })
+  );
+}
+
+/**
+ * @private
+ * Utility function to merge sections (jhipster files structure)
+ * Merging { foo: [blocks1], bar: [block2]} and { foo: [blocks3], bar: [block4]}
+ * Results in { foo: [blocks1, block3], bar: [block2, block4]}
+ */
+function mergeSections(...allFiles) {
+  const generated = {};
+  for (const files of allFiles) {
+    for (const [sectionName, sectionValue] of Object.entries(files)) {
+      generated[sectionName] = generated[sectionName] || [];
+      generated[sectionName].push(...sectionValue);
+    }
+  }
+  return generated;
 }

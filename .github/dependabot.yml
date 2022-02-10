@@ -1,41 +1,101 @@
 version: 2
 updates:
-    - package-ecosystem: 'npm'
-      directory: '/'
-      schedule:
-          interval: 'weekly'
-      open-pull-requests-limit: 10
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
+    labels:
+      - 'theme: jhipster-internals'
+      - 'theme: dependencies'
+    ignore:
+      # ESM only version
+      - dependency-name: 'p-queue'
+        versions: ['>=7']
+      - dependency-name: 'os-locale'
+        versions: ['>=6']
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/angular/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/angular/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
+    versioning-strategy: increase
+    labels:
+      - 'theme: angular'
+      - 'theme: dependencies'
+    ignore:
+      # https://github.com/ng-bootstrap/ng-bootstrap/issues/3899
+      - dependency-name: 'bootstrap'
+        versions: ['>=5']
+      # Should match generated project node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/common/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
+  - package-ecosystem: 'npm'
+    directory: '/generators/common/templates/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
+    versioning-strategy: increase
+    labels:
+      - 'theme: dependencies'
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/react/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/common/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
+    versioning-strategy: increase
+    labels:
+      - 'theme: front'
+      - 'theme: dependencies'
 
-    - package-ecosystem: 'npm'
-      directory: '/generators/client/templates/vue/'
-      schedule:
-          interval: 'daily'
-      open-pull-requests-limit: 5
-      versioning-strategy: increase
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/react/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
+    versioning-strategy: increase
+    labels:
+      - 'theme: react'
+      - 'theme: dependencies'
+    ignore:
+      # Should match generated project node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
 
-    - package-ecosystem: 'github-actions'
-      directory: '/'
-      schedule:
-          interval: 'weekly'
-      open-pull-requests-limit: 10
+  - package-ecosystem: 'npm'
+    directory: '/generators/client/templates/vue/'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 10
+    rebase-strategy: 'disabled'
+    versioning-strategy: increase
+    labels:
+      - 'theme: vue'
+      - 'theme: dependencies'
+    ignore:
+      # vue3 dependency
+      - dependency-name: 'vue-loader'
+        versions: ['>=16']
+      # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
+      - dependency-name: 'bootstrap'
+        versions: ['>=5']
+      # Should match generated project node major version.
+      - dependency-name: '@types/node'
+        versions: ['>=17']
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    labels:
+      - 'theme: github_actions'
+      - 'theme: CI builds'

@@ -1,0 +1,127 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+jest.mock('app/login/login.service');
+
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
+import { NgxWebstorageModule } from 'ngx-webstorage';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
+
+import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { LoginService } from 'app/login/login.service';
+
+import { NavbarComponent } from './navbar.component';
+
+describe('Navbar Component', () => {
+  let comp: NavbarComponent;
+  let fixture: ComponentFixture<NavbarComponent>;
+  let accountService: AccountService;
+  let profileService: ProfileService;
+  const account: Account = {
+    activated: true,
+    authorities: [],
+    email: '',
+    firstName: 'John',
+    langKey: '',
+    lastName: 'Doe',
+    login: 'john.doe',
+    imageUrl: '',
+  };
+
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientTestingModule,
+          RouterTestingModule.withRoutes([]),
+<%_ if (enableTranslation) { _%>
+          TranslateModule.forRoot(),
+<%_ } _%>
+          NgxWebstorageModule.forRoot()
+        ],
+        declarations: [NavbarComponent],
+        providers: [LoginService],
+      })
+        .overrideTemplate(NavbarComponent, '')
+        .compileComponents();
+    })
+  );
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(NavbarComponent);
+    comp = fixture.componentInstance;
+    accountService = TestBed.inject(AccountService);
+    profileService = TestBed.inject(ProfileService);
+  });
+
+  it('Should call profileService.getProfileInfo on init', () => {
+    // GIVEN
+    jest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
+
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(profileService.getProfileInfo).toHaveBeenCalled();
+  });
+
+  it('Should hold current authenticated user in variable account', () => {
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(comp.account).toBeNull();
+
+    // WHEN
+    accountService.authenticate(account);
+
+    // THEN
+    expect(comp.account).toEqual(account);
+
+    // WHEN
+    accountService.authenticate(null);
+
+    // THEN
+    expect(comp.account).toBeNull();
+  });
+
+  it('Should hold current authenticated user in variable account if user is authenticated before page load', () => {
+    // GIVEN
+    accountService.authenticate(account);
+
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(comp.account).toEqual(account);
+
+    // WHEN
+    accountService.authenticate(null);
+
+    // THEN
+    expect(comp.account).toBeNull();
+  });
+});

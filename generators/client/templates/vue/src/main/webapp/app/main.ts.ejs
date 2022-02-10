@@ -5,32 +5,36 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
 import Vue2Filters from 'vue2-filters';
 import { ToastPlugin } from 'bootstrap-vue';
-import router from './router';
+import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import JhiSortIndicatorComponent from "./shared/sort/jhi-sort-indicator.vue";
 import InfiniteLoading from 'vue-infinite-loading';
+<%_ if (withAdminUi) { _%>
 import HealthService from './admin/health/health.service';
 import MetricsService from './admin/metrics/metrics.service';
 import LogsService from './admin/logs/logs.service';
+import ConfigurationService from '@/admin/configuration/configuration.service';
+<%_ } _%>
 <%_ if (!skipUserManagement) { _%>
 import ActivateService from './account/activate/activate.service';
 import RegisterService from './account/register/register.service';
-import UserManagementService from '@/admin/user-management/user-management.service';
-<%_ } %>
+import UserManagementService from './admin/user-management/user-management.service';
+<%_ } _%>
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
+import AlertService from './shared/alert/alert.service';
 
+import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-import ConfigurationService from '@/admin/configuration/configuration.service';
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
 import GatewayService from '@/admin/gateway/gateway.service';
-<%_ } %>
-<%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
 import TrackerService from './admin/tracker/tracker.service';
 <%_ } _%>
 /* tslint:disable */
@@ -53,22 +57,27 @@ const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = config.initVueXStore(Vue);
 
-<%_ if (websocket === 'spring-websocket') { _%>
-const trackerService = new TrackerService(router);
+<%_ if (communicationSpringWebsocket) { _%>
+const trackerService = new TrackerService(router, store<%_ if (authenticationTypeSession) { _%>, (<any>Vue).cookie<%_ } _%>);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
 const loginService = new LoginService();
-const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
+const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>(<any>Vue).cookie, <%_ } _%>router);
 
-router.beforeEach((to, from, next) => {
-
+router.beforeEach(async (to, from, next) => {
   if (!to.matched.length) {
-    next('/not-found');
-  }
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    await lazyRoutes;
+    if (router.match(to.fullPath).matched.length > 0) {
+      next(to.fullPath);
+      return;
+    }
 
-  if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
+<%_ } _%>
+    next('/not-found');
+  } else if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
     accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
       if (!value) {
         sessionStorage.setItem('requested-url', to.fullPath);
@@ -91,28 +100,35 @@ new Vue({
   router,
   provide: {
     loginService: () => loginService,
-    <%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement) { _%>
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
-    userService: () => new UserManagementService(),
-    <%_ } %>
-    healthService: () => new HealthService(),
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+    userManagementService: () => new UserManagementService(),
+<%_ } _%>
+<%_ if (applicationTypeGateway && serviceDiscoveryType) { %>
     gatewayService: () => new GatewayService(),
-    <%_ } %>
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+    healthService: () => new HealthService(),
     configurationService: () => new ConfigurationService(),
     logsService: () => new LogsService(),
     metricsService: () => new MetricsService(),
-    <%_ if (websocket === 'spring-websocket') { _%>
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
     trackerService: () => trackerService,
-    <%_ } _%>
-    <%_ if (enableTranslation) { _%>
+<%_ } %>
+<%_ if (enableTranslation) { _%>
     translationService: () => translationService,
-    <%_ } _%>
+<%_ } _%>
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    accountService: () => accountService
-
+    accountService: () => accountService,
+    alertService: () => new AlertService(),
+<%_ if (applicationTypeMicroservice && microfrontend) { _%>
+    microfrontendI18n: false,
+<%_ } _%>
   },
-<%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
-  store
+<%_ if (enableTranslation) { _%>
+  i18n,
+<%_ } _%>
+  store,
 });

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { AccountService } from 'app/core/auth/account.service';
 
@@ -33,33 +34,38 @@ import { AccountService } from 'app/core/auth/account.service';
  * ```
  */
 @Directive({
-    selector: '[<%= jhiPrefix %>HasAnyAuthority]'
+  selector: '[<%= jhiPrefix %>HasAnyAuthority]',
 })
 export class HasAnyAuthorityDirective implements OnDestroy {
-    private authorities: string[] = [];
-    private authenticationSubscription?: Subscription;
+  private authorities!: string | string[];
 
-    constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
+  private readonly destroy$ = new Subject<void>();
 
-    @Input()
-    set <%= jhiPrefix %>HasAnyAuthority(value: string|string[]) {
-        this.authorities = typeof value === 'string' ? [ value ] : value;
+  constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
+
+  @Input()
+  set <%= jhiPrefix %>HasAnyAuthority(value: string | string[]) {
+    this.authorities = value;
+    this.updateView();
+    // Get notified each time authentication state changes.
+    this.accountService
+      .getAuthenticationState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
         this.updateView();
-        // Get notified each time authentication state changes.
-        this.authenticationSubscription = this.accountService.getAuthenticationState().subscribe(() => this.updateView());
-    }
+      });
+  }
 
-    ngOnDestroy(): void {
-        if (this.authenticationSubscription) {
-            this.authenticationSubscription.unsubscribe();
-        }
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-    private updateView(): void {
-        const hasAnyAuthority = this.accountService.hasAnyAuthority(this.authorities)
-        this.viewContainerRef.clear();
-        if (hasAnyAuthority) {
-            this.viewContainerRef.createEmbeddedView(this.templateRef);
-        }
+  private updateView(): void {
+    const hasAnyAuthority = this.accountService.hasAnyAuthority(this.authorities);
+    this.viewContainerRef.clear();
+    if (hasAnyAuthority) {
+      this.viewContainerRef.createEmbeddedView(this.templateRef);
     }
+  }
 }

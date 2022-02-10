@@ -46,7 +46,8 @@
                     "code": "Codi",
                     "count": "Contador",
                     "mean": "mitja",
-                    "average": "mitjana"
+                    "average": "mitjana",
+                    "max": "Max"
                 },
                 "code": {
                     "ok": "Correcte",

@@ -1,0 +1,17 @@
+{
+  "login": "user",
+<%_ if (!authenticationTypeOauth2) { _%>
+  "password": "$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K",
+<% } %>
+  "firstName": "User",
+  "lastName": "User",
+  "email": "user@localhost",
+  "activated": true,
+  "langKey": "<%= nativeLanguage %>",
+  "createdBy": "system",
+  "lastModifiedBy": "system",
+  "authorities": [
+    "ROLE_USER"
+  ],
+  "_class": "<%= packageName %>.domain.<%= asEntity('User') %>"
+}

@@ -5,23 +5,16 @@ import VueRouter from 'vue-router';
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
-<%_ if (websocket === 'spring-websocket') { _%>
-import TrackerService from '@/admin/tracker/tracker.service';
-<%_ } _%>
-
 export default class AccountService {
 
   constructor(
     private store: Store<any>,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     private translationService: TranslationService,
-    <%_ } _%>
-    <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
     private cookie: any,
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
-    private trackerService: TrackerService,
-    <%_ } _%>
+<%_ } _%>
     private router: VueRouter
   ) {
     this.init();
@@ -33,7 +26,7 @@ export default class AccountService {
 
   public retrieveProfiles(): Promise<boolean> {
     return new Promise(resolve => {
-      axios.get('management/info').then(res => {
+      axios.get<any>('management/info').then(res => {
         if (res.data && res.data.activeProfiles) {
           this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
           this.store.commit('setActiveProfiles', res.data['activeProfiles']);
@@ -46,31 +39,30 @@ export default class AccountService {
   public retrieveAccount(): Promise<boolean> {
     return new Promise(resolve => {
       axios
-        .get('api/account').then((response) => {
+        .get<any>('api/account').then((response) => {
         this.store.commit('authenticate');
         const account = response.data;
         if (account) {
           this.store.commit('authenticated', account);
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
           if (this.store.getters.currentLanguage !== account.langKey) {
             this.store.commit('currentLanguage', account.langKey);
           }
-          <%_ } _%>
+<%_ } _%>
           if(sessionStorage.getItem('requested-url')) {
             this.router.replace(sessionStorage.getItem("requested-url"));
             sessionStorage.removeItem("requested-url");
           }
-          <%_ if (websocket === 'spring-websocket') { _%>
-          this.trackerService.connect();
-          <%_ } _%>
         } else {
           this.store.commit('logout');
-          this.router.push('/', () => {});
+          if (this.router.currentRoute.path !== '/') {
+            this.router.push('/');
+          }
           sessionStorage.removeItem("requested-url");
         }
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         this.translationService.refreshTranslation(this.store.getters.currentLanguage);
-        <%_ } _%>
+<%_ } _%>
         resolve(true);
       }).catch(() => {
         this.store.commit('logout');
@@ -85,21 +77,19 @@ export default class AccountService {
     }
 
     if (!this.authenticated || !this.userAuthorities) {
-      const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
+      const token = <%_ if (authenticationTypeJwt) { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
       if (!this.store.getters.account && !this.store.getters.logon && token) {
-        return this.retrieveAccount();
-      } else {
-        return new Promise(resolve => { resolve(false); });;
+        return this.retrieveAccount().then(resp => {
+          if (resp) {
+            return this.checkAuthorities(authorities);
+          }
+          return Promise.resolve(false);
+        });
       }
+      return Promise.resolve(false);
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return new Promise(resolve => { resolve(true); });;
-      }
-    }
-
-    return new Promise(resolve => { resolve(false); });;
+    return this.checkAuthorities(authorities);
   }
 
   public get authenticated(): boolean {
@@ -107,6 +97,17 @@ export default class AccountService {
   }
 
   public get userAuthorities(): any {
-    return this.store.getters.account.authorities;
+    return this.store.getters.account?.authorities;
+  }
+
+  private checkAuthorities(authorities: any): Promise<boolean> {
+    if (this.userAuthorities) {
+      for (const authority of authorities) {
+        if (this.userAuthorities.includes(authority)) {
+          return Promise.resolve(true);
+        }
+      }
+    }
+    return Promise.resolve(false);
   }
 }

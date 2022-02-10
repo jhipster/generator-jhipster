@@ -1,0 +1,22 @@
+@ChangelogDate(20200804035400)
+@EntityPackage("app.custom")
+entity CustomPackageParent {
+  parentName String
+}
+
+@ChangelogDate(20200804035401)
+@EntityPackage("app.child")
+entity CustomPackageChild {
+  childName String
+}
+
+relationship OneToMany {
+  CustomPackageParent to CustomPackageChild
+}
+
+relationship ManyToOne {
+  CustomPackageChild to User
+}
+
+dto CustomPackageParent, CustomPackageChild with mapstruct
+service CustomPackageParent, CustomPackageChild with serviceClass

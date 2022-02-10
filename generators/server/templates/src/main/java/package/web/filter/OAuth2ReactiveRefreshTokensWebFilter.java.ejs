@@ -1,0 +1,70 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.filter;
+
+import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+
+/**
+ * Refresh oauth2 tokens based on TokenRelayGatewayFilterFactory.
+ */
+@Component
+public class OAuth2ReactiveRefreshTokensWebFilter implements WebFilter {
+
+    private final ReactiveOAuth2AuthorizedClientManager clientManager;
+
+    public OAuth2ReactiveRefreshTokensWebFilter(ReactiveOAuth2AuthorizedClientManager clientManager) {
+        this.clientManager = clientManager;
+    }
+
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        return exchange
+            .getPrincipal()
+            .filter(principal -> principal instanceof OAuth2AuthenticationToken)
+            .cast(OAuth2AuthenticationToken.class)
+            .flatMap(authentication -> authorizedClient(exchange, authentication))
+            .thenReturn(exchange)
+            .flatMap(chain::filter);
+    }
+
+    private Mono<OAuth2AuthorizedClient> authorizedClient(ServerWebExchange exchange, OAuth2AuthenticationToken oauth2Authentication) {
+        String clientRegistrationId = oauth2Authentication.getAuthorizedClientRegistrationId();
+        OAuth2AuthorizeRequest request = OAuth2AuthorizeRequest
+            .withClientRegistrationId(clientRegistrationId)
+            .principal(oauth2Authentication)
+            .attribute(ServerWebExchange.class.getName(), exchange)
+            .build();
+        if (clientManager == null) {
+            return Mono.error(
+                new IllegalStateException(
+                    "No ReactiveOAuth2AuthorizedClientManager bean was found. Did you include the " +
+                    "org.springframework.boot:spring-boot-starter-oauth2-client dependency?"
+                )
+            );
+        }
+        return clientManager.authorize(request);
+    }
+}

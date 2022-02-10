@@ -4,7 +4,7 @@ Description:
 Example:
     jhipster entity Foo
 
-    This will create:
+    Should create something like:
         .jhipster/Foo.json
         src/main/java/package/domain/Foo.java
         src/main/java/package/repository/FooRepository.java

@@ -5,10 +5,13 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
 
 @Component
 export default class <%= entityAngularName %>Details extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
+  @Inject('alertService') private alertService: () => AlertService;
+
   public <%= entityInstance %>: I<%= entityAngularName %> = {};
 
   beforeRouteEnter(to, from, next) {
@@ -22,6 +25,8 @@ export default class <%= entityAngularName %>Details extends <% if (fieldsContai
   public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
     this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
       this.<%= entityInstance %> = res;
+    }).catch(error => {
+      this.alertService().showHttpError(this,error.response);
     });
   }
 

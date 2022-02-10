@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,35 +18,36 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigurationService, Bean, PropertySource } from './configuration.service';
+import { ConfigurationService } from './configuration.service';
+import { Bean, PropertySource } from './configuration.model';
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-configuration',
-    templateUrl: './configuration.component.html'
+  selector: '<%= jhiPrefixDashed %>-configuration',
+  templateUrl: './configuration.component.html',
 })
 export class ConfigurationComponent implements OnInit {
-    allBeans!: Bean[];
-    beans: Bean[] = [];
-    beansFilter = '';
-    beansAscending = true;
-    propertySources: PropertySource[] = [];
+  allBeans!: Bean[];
+  beans: Bean[] = [];
+  beansFilter = '';
+  beansAscending = true;
+  propertySources: PropertySource[] = [];
 
-    constructor(
-        private configurationService: ConfigurationService
-    ) {}
+  constructor(private configurationService: ConfigurationService) {}
 
-    ngOnInit(): void {
-        this.configurationService.getBeans().subscribe(beans => {
-            this.allBeans = beans;
-            this.filterAndSortBeans();
-        });
+  ngOnInit(): void {
+    this.configurationService.getBeans().subscribe(beans => {
+      this.allBeans = beans;
+      this.filterAndSortBeans();
+    });
 
-        this.configurationService.getPropertySources().subscribe(propertySources => (this.propertySources = propertySources));
-    }
+    this.configurationService.getPropertySources().subscribe(propertySources => (this.propertySources = propertySources));
+  }
 
-    filterAndSortBeans(): void {
-        this.beans = this.allBeans
-            .filter(bean => !this.beansFilter || bean.prefix.toLowerCase().includes(this.beansFilter.toLowerCase()))
-            .sort((a, b) => (a.prefix < b.prefix ? (this.beansAscending ? -1 : 1) : this.beansAscending ? 1 : -1));
-    }
+  filterAndSortBeans(): void {
+    const beansAscendingValue = this.beansAscending ? -1 : 1;
+    const beansAscendingValueReverse = this.beansAscending ? 1 : -1;
+    this.beans = this.allBeans
+      .filter(bean => !this.beansFilter || bean.prefix.toLowerCase().includes(this.beansFilter.toLowerCase()))
+      .sort((a, b) => (a.prefix < b.prefix ? beansAscendingValue : beansAscendingValueReverse));
+  }
 }

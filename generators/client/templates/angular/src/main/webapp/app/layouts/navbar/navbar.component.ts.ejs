@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -8,7 +8,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,97 +16,125 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit<% if (enableTranslation && applicationTypeGateway) { %>, Compiler, Injector, NgModuleFactory, Type<% } %> } from '@angular/core';
 import { Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { TranslateService } from '@ngx-translate/core';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { VERSION } from 'app/app.constants';
 <%_ if (enableTranslation) { _%>
-import { LANGUAGES } from 'app/core/language/language.constants';
+import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
+import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
-<%_ } _%>
-import { LoginService } from 'app/core/login/login.service';
+import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: [
-        'navbar.scss'
-    ]
+  selector: '<%= jhiPrefixDashed %>-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-    inProduction?: boolean;
-    isNavbarCollapsed = true;
+  inProduction?: boolean;
+  isNavbarCollapsed = true;
+<%_ if (enableTranslation) { _%>
+  languages = LANGUAGES;
+<%_ } _%>
+  openAPIEnabled?: boolean;
+  version = '';
+  account: Account | null = null;
+  entitiesNavbarItems: any[] = [];
+<%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+  <%= remote.lowercaseBaseName %>EntityNavbarItems: any[] = [];
+  <%_ } _%>
+<%_ } _%>
+
+  constructor(
+    private loginService: LoginService,
+<%_ if (enableTranslation) { _%>
+    private translateService: TranslateService,
+    private sessionStorageService: SessionStorageService,
+  <%_ if (applicationTypeGateway) { _%>
+    private compiler: Compiler,
+    private injector: Injector,
+  <%_ } _%>
+<%_ } _%>
+    private accountService: AccountService,
+    private profileService: ProfileService,
+    private router: Router
+  ) {
+    if (VERSION) {
+      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
+    }
+  }
+
+  ngOnInit(): void {
+    this.entitiesNavbarItems = EntityNavbarItems;
+    this.profileService.getProfileInfo().subscribe(profileInfo => {
+      this.inProduction = profileInfo.inProduction;
+      this.openAPIEnabled = profileInfo.openAPIEnabled;
+    });
+
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    <%_ if (applicationTypeGateway) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+      import('<%= remote.lowercaseBaseName %>/entity-navbar-items').then(
+        <%= enableTranslation ? 'async ' : '' %>({ EntityNavbarItems: <%= remote.capitalizedBaseName %>EntityNavbarItems }) => {
+          this.<%= remote.lowercaseBaseName %>EntityNavbarItems = <%= remote.capitalizedBaseName %>EntityNavbarItems;
     <%_ if (enableTranslation) { _%>
-    languages = LANGUAGES;
+          const { LazyTranslationModule } = await import('<%= remote.lowercaseBaseName %>/translation-module');
+          this.loadModule(LazyTranslationModule as Type<any>);
     <%_ } _%>
-    openAPIEnabled?: boolean;
-    version: string;
+        },
+        error => {
+          // eslint-disable-next-line no-console
+          console.log('Error loading <%= remote.lowercaseBaseName %> entities', error);
+        }
+      );
+  <%_ } _%>
+<%_ } _%>
+    });
+  }
 
-    constructor(
-        private loginService: LoginService,
-        <%_ if (enableTranslation) { _%>
-        private languageService: JhiLanguageService,
-        private sessionStorage: SessionStorageService,
-        <%_ } _%>
-        private accountService: AccountService,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        private loginModalService: LoginModalService,
-        <%_ } _%>
-        private profileService: ProfileService,
-        private router: Router
-    ) {
-        this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
-    }
+<%_ if (enableTranslation) { _%>
+  changeLanguage(languageKey: string): void {
+    this.sessionStorageService.store('locale', languageKey);
+    this.translateService.use(languageKey);
+  }
+<%_ } _%>
 
-    ngOnInit(): void {
-        this.profileService.getProfileInfo().subscribe((profileInfo) => {
-            this.inProduction = profileInfo.inProduction;
-            this.openAPIEnabled = profileInfo.openAPIEnabled;
-        });
-    }
+  collapseNavbar(): void {
+    this.isNavbarCollapsed = true;
+  }
 
-    <%_ if (enableTranslation) { _%>
-    changeLanguage(languageKey: string): void {
-        this.sessionStorage.store('locale', languageKey);
-        this.languageService.changeLanguage(languageKey);
-    }
-    <%_ } _%>
+  login(): void {
+<%_ if (!authenticationTypeOauth2) { _%>
+    this.router.navigate(['/login']);
+<%_ } else { _%>
+    this.loginService.login();
+<%_ } _%>
+  }
 
-    collapseNavbar(): void {
-        this.isNavbarCollapsed = true;
-    }
+  logout(): void {
+    this.collapseNavbar();
+    this.loginService.logout();
+    this.router.navigate(['']);
+  }
 
-    isAuthenticated(): boolean {
-        return this.accountService.isAuthenticated();
-    }
+  toggleNavbar(): void {
+    this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  }
+<%_ if (enableTranslation && applicationTypeGateway) { _%>
 
-    login(): void {
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        this.loginModalService.open();
-        <%_ } else { _%>
-        this.loginService.login();
-        <%_ } _%>
-    }
-
-    logout(): void {
-        this.collapseNavbar();
-        this.loginService.logout();
-        this.router.navigate(['']);
-    }
-
-    toggleNavbar(): void {
-        this.isNavbarCollapsed = !this.isNavbarCollapsed;
-    }
-
-    getImageUrl(): string {
-        return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
-    }
+  private loadModule(moduleType: Type<any>): void {
+    const moduleFactory = this.compiler.compileModuleAndAllComponentsSync(moduleType);
+    moduleFactory.ngModuleFactory.create(this.injector);
+  }
+<%_ } _%>
 }

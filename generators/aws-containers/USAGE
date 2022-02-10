@@ -1,5 +1,0 @@
-Description:
-    Initializes an AWS application and generates a Docker container that is ready to push to AWS.
-
-Example:
-    jhipster aws-containers

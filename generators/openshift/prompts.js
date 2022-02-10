@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,72 +17,73 @@
  * limitations under the License.
  */
 const dockerPrompts = require('../docker-prompts');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
+const { StorageTypes } = require('../../jdl/jhipster/openshift-platform-types');
+
+const { EPHEMERAL, PERSISTENT } = StorageTypes;
+
+const NO_DATABASE = databaseTypes.NO;
 
 module.exports = {
-    askForOpenShiftNamespace,
-    askForStorageType,
-    ...dockerPrompts,
+  askForOpenShiftNamespace,
+  askForStorageType,
+  ...dockerPrompts,
 };
 
-function askForOpenShiftNamespace() {
-    if (this.regenerate) return;
-    const done = this.async();
+async function askForOpenShiftNamespace() {
+  if (this.regenerate) return;
 
-    const prompts = [
-        {
-            type: 'input',
-            name: 'openshiftNamespace',
-            message: 'What should we use for the OpenShift namespace?',
-            default: this.openshiftNamespace ? this.openshiftNamespace : 'default',
-        },
-    ];
+  const prompts = [
+    {
+      type: 'input',
+      name: 'openshiftNamespace',
+      message: 'What should we use for the OpenShift namespace?',
+      default: this.openshiftNamespace ? this.openshiftNamespace : 'default',
+    },
+  ];
 
-    this.prompt(prompts).then(props => {
-        this.openshiftNamespace = props.openshiftNamespace;
-        done();
-    });
+  const props = await this.prompt(prompts);
+  this.openshiftNamespace = props.openshiftNamespace;
 }
 
-function askForStorageType() {
-    if (this.regenerate) return;
-    const done = this.async();
+async function askForStorageType() {
+  if (this.regenerate) return;
 
-    let storageEnabled = false;
-    this.appConfigs.some((appConfig, index) => {
-        if (appConfig.prodDatabaseType !== 'no' || appConfig.searchEngine === 'elasticsearch' || appConfig.monitoring === 'prometheus') {
-            storageEnabled = true;
-            return storageEnabled;
-        }
-        return false;
-    });
-
-    if (storageEnabled === false) {
-        done();
-        return;
+  let storageEnabled = false;
+  this.appConfigs.some((appConfig, index) => {
+    if (appConfig.prodDatabaseType !== NO_DATABASE || appConfig.searchEngine === ELASTICSEARCH || appConfig.monitoring === PROMETHEUS) {
+      storageEnabled = true;
+      return storageEnabled;
     }
+    return false;
+  });
 
-    // prompt this only when prodDatabaseType !== 'no' for any of the chosen apps
-    const prompts = [
+  if (storageEnabled === false) {
+    return;
+  }
+
+  // prompt this only when prodDatabaseType !== 'no' for any of the chosen apps
+  const prompts = [
+    {
+      type: 'list',
+      name: 'storageType',
+      message: 'Which *type* of database storage would you like to use?',
+      choices: [
         {
-            type: 'list',
-            name: 'storageType',
-            message: 'Which *type* of database storage would you like to use?',
-            choices: [
-                {
-                    value: 'persistent',
-                    name: 'Persistent Storage',
-                },
-                {
-                    value: 'ephemeral',
-                    name: 'Ephemeral Storage',
-                },
-            ],
-            default: 'ephemeral',
+          value: PERSISTENT,
+          name: 'Persistent Storage',
         },
-    ];
+        {
+          value: EPHEMERAL,
+          name: 'Ephemeral Storage',
+        },
+      ],
+      default: EPHEMERAL,
+    },
+  ];
 
-    this.prompt(prompts).then(props => {
-        this.storageType = props.storageType;
-        done();
-    });
+  const props = await this.prompt(prompts);
+  this.storageType = props.storageType;
 }

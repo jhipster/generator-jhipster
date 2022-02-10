@@ -1,0 +1,90 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+package <%= packageName %>.config;
+
+import io.mongock.runner.springboot.EnableMongock;
+import tech.jhipster.config.JHipsterConstants;
+import tech.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
+import tech.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+<%_ if (reactive) { _%>
+import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
+<%_ } _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
+<%_ } _%>
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.convert.converter.Converter;
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+<%_ } _%>
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
+import org.springframework.data.mongodb.repository.config.Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import java.util.ArrayList;
+import java.util.List;
+
+@Configuration
+@EnableMongock
+<%_ if (searchEngineElasticsearch) { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
+<%_ } else { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
+<%_ } _%>
+@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
+<%_ if (reactive) { _%>
+@Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
+<%_ } else { _%>
+@Import(value = MongoAutoConfiguration.class)
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
+<%_ } _%>
+public class DatabaseConfiguration {
+
+    @Bean
+    public ValidatingMongoEventListener validatingMongoEventListener() {
+        return new ValidatingMongoEventListener(validator());
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }
+
+    @Bean
+    public MongoCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(DateToZonedDateTimeConverter.INSTANCE);
+        converters.add(ZonedDateTimeToDateConverter.INSTANCE);
+        return new MongoCustomConversions(converters);
+    }
+
+}

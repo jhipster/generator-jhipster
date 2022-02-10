@@ -5,7 +5,6 @@
     },
     "applicationType": "monolith",
     "baseName": "jhipster",
-    "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
     "clientTheme": "none",
