@@ -6,7 +6,7 @@ Object {
     "stateCleared": "modified",
   },
   ".devcontainer/Dockerfile": Object {
-     "stateCleared": "modified",
+    "stateCleared": "modified",
   },
   ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",

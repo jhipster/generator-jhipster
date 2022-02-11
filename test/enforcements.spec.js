@@ -66,7 +66,6 @@ describe('Enforce some developments patterns', () => {
         [
           ['src/main/webapp', '<%= CLIENT_MAIN_SRC_DIR %>'],
           ['src/test/javascript', '<%= CLIENT_TEST_SRC_DIR %>'],
-          [' Java ', ' <%= backendName %> '],
         ].forEach(([notSpected, replacement]) => {
           const regex = new RegExp(notSpected, 'g');
           const regexSeparator = new RegExp(`${notSpected}/`, 'g');
