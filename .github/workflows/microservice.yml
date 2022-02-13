@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: React
+name: Microservice
 concurrency:
   # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
   group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
@@ -29,16 +29,14 @@ on:
       - 'skip_ci*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/*client/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/angular/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/*client/**'
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
@@ -64,8 +62,10 @@ jobs:
         working-directory: ${{ github.workspace }}/app
     if: >-
       !contains(github.event.head_commit.message, '[angular]') &&
+      !contains(github.event.head_commit.message, '[react]') &&
       !contains(github.event.head_commit.message, '[vue]') &&
       !contains(github.event.pull_request.title, '[angular]') &&
+      !contains(github.event.pull_request.title, '[react]') &&
       !contains(github.event.pull_request.title, '[vue]') &&
       !contains(github.event.head_commit.message, '[ci skip]') &&
       !contains(github.event.head_commit.message, '[skip ci]') &&
@@ -79,71 +79,22 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04]
-        cache: [react]
+        cache: [microservice]
         app-sample:
-          - react-default
-          - react-maven-mysql-es-noi18n-mapsid
-          - react-maven-h2mem-memcached
-          - react-maven-cassandra-session-redis
-          - react-gradle-mysql-es-noi18n-mapsid
-          - react-gradle-h2mem-memcached
-          - react-gradle-cassandra-session-redis
-          - ms-react-gateway-consul-jwt
-          - ms-react-gateway-consul-oauth2
+          - ms-micro-eureka-jwt
+          - ms-micro-eureka-infinispan
         include:
-          - app-sample: react-default
-            entity: sql
-            environment: prod
+          - app-sample: ms-micro-eureka-jwt
+            entity: micro
+            environment: dev
             war: 0
-            e2e: 1
+            e2e: 0
             testcontainers: 0
-          - app-sample: react-maven-mysql-es-noi18n-mapsid
-            entity: sqlfull
-            environment: prod
+          - app-sample: ms-micro-eureka-infinispan
+            entity: micro
+            environment: dev
             war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: react-maven-h2mem-memcached
-            entity: sql
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: react-maven-cassandra-session-redis
-            entity: cassandra
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: react-gradle-mysql-es-noi18n-mapsid
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: react-gradle-h2mem-memcached
-            entity: sql
-            environment: prod
-            war: 1
-            e2e: 1
-            testcontainers: 0
-          - app-sample: react-gradle-cassandra-session-redis
-            entity: cassandra
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: ms-react-gateway-consul-jwt
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ms-react-gateway-consul-oauth2
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 1
+            e2e: 0
             testcontainers: 0
     steps:
       #----------------------------------------------------------------------
@@ -159,7 +110,8 @@ jobs:
         uses: ./generator-jhipster/.github/actions/setup
         with:
           entities-sample: ${{ matrix.entity }}
-          application-sample: ${{ matrix.app-sample }}
+          jdl-entities-sample: ${{ matrix.jdl-entity }}
+          application-sample: ${{ matrix.jhi-app-sample || matrix.app-sample }}
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
