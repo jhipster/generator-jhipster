@@ -193,7 +193,6 @@ jobs:
             testcontainers: 0
           - app-sample: jdl-default
             entity: jdl
-            jdl-entity: '*'
             environment: prod
             war: 0
             e2e: 1
