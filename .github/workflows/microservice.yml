@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: Angular
+name: Microservice
 concurrency:
   # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
   group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
@@ -29,16 +29,14 @@ on:
       - 'skip_ci*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/react/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/*client/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
     paths-ignore:
       - 'package*.json'
-      - 'generators/*client/templates/react/**'
-      - 'generators/*client/templates/vue/**'
+      - 'generators/*client/**'
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
@@ -63,8 +61,10 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     if: >-
+      !contains(github.event.head_commit.message, '[angular]') &&
       !contains(github.event.head_commit.message, '[react]') &&
       !contains(github.event.head_commit.message, '[vue]') &&
+      !contains(github.event.pull_request.title, '[angular]') &&
       !contains(github.event.pull_request.title, '[react]') &&
       !contains(github.event.pull_request.title, '[vue]') &&
       !contains(github.event.head_commit.message, '[ci skip]') &&
@@ -79,125 +79,23 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04]
-        cache: [angular]
+        cache: [microservice]
         app-sample:
-          - ngx-default
-          - ngx-default-additional
-          - ngx-mysql-es-noi18n-mapsid
-          - ngx-mariadb-oauth2-infinispan
-          - ngx-mongodb-kafka-cucumber
-          - ngx-h2mem-ws-nol2
-          - ngx-couchbase
-          - ngx-gradle-couchbase-search
-          - ngx-gradle-fr
-          - ngx-gradle-mysql-es-noi18n-mapsid
-          - ngx-gradle-mariadb-oauth2-infinispan
-          - ngx-gradle-mongodb-kafka-cucumber
-          - ngx-gradle-h2disk-ws-nocache
-          - ms-ngx-gateway-eureka-jwt
-          - ms-ngx-gateway-eureka-oauth2
-          - jdl-default
+          - ms-micro-eureka-jwt
+          - ms-micro-eureka-infinispan
         include:
-          - app-sample: ngx-default
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: ngx-default-additional
-            entity: none
-            jhi-app-sample: ngx-default
-            jdl-entity: '*'
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-            sonar-analyse: 'false'
-          - app-sample: ngx-mysql-es-noi18n-mapsid
-            entity: sql
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ngx-mariadb-oauth2-infinispan
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ngx-mongodb-kafka-cucumber
-            entity: mongodb
+          - app-sample: ms-micro-eureka-jwt
+            entity: micro
             environment: dev
             war: 0
-            e2e: 1
+            e2e: 0
             testcontainers: 0
-          - app-sample: ngx-h2mem-ws-nol2
-            entity: sql
+          - app-sample: ms-micro-eureka-infinispan
+            entity: micro
             environment: dev
             war: 0
-            e2e: 1
+            e2e: 0
             testcontainers: 0
-          - app-sample: ngx-couchbase
-            entity: couchbase
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: ngx-gradle-couchbase-search
-            entity: couchbase
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: ngx-gradle-fr
-            entity: sql
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ngx-gradle-mysql-es-noi18n-mapsid
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: ngx-gradle-mariadb-oauth2-infinispan
-            entity: sql
-            environment: dev
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - app-sample: ngx-gradle-mongodb-kafka-cucumber
-            entity: mongodb
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ngx-gradle-h2disk-ws-nocache
-            entity: sql
-            environment: dev
-            war: 1
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ms-ngx-gateway-eureka-jwt
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ms-ngx-gateway-eureka-oauth2
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: jdl-default
-            entity: jdl
-            jdl-entity: '*'
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
