@@ -74,12 +74,16 @@ jobs:
         cache: [angular]
         suite:
           - blog-store
+          - blog-store-react-jwt-consul
           - blog-store-microfrontend
           - vue-blog-store-microfrontend
         include:
           - suite: blog-store
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
+            # Scripts wait for gateway to start, delay for microservices to start.
+            e2e-delay: 120
+          - suite: blog-store-react-jwt-consul
+            extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
           - suite: blog-store-microfrontend
