@@ -88,6 +88,8 @@ jobs:
           - react-gradle-mysql-es-noi18n-mapsid
           - react-gradle-h2mem-memcached
           - react-gradle-cassandra-session-redis
+          - ms-react-gateway-consul-jwt
+          - ms-react-gateway-consul-oauth2
         include:
           - app-sample: react-default
             entity: sql
@@ -131,6 +133,18 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
+          - app-sample: ms-react-gateway-consul-jwt
+            entity: sqllight
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 0
+          - app-sample: ms-react-gateway-consul-oauth2
+            entity: sqllight
+            environment: prod
+            war: 0
+            e2e: 1
+            testcontainers: 0
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
