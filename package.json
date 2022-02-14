@@ -115,7 +115,7 @@
     "simple-git": "3.2.4",
     "then-request": "6.0.2",
     "uuid": "8.3.2",
-    "winston": "3.5.1",
+    "winston": "3.6.0",
     "yeoman-environment": "3.9.1",
     "yeoman-generator": "5.6.1"
   },
