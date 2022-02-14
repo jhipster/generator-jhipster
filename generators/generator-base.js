@@ -2030,14 +2030,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get the an camelCase value.
-   * @param {string} value string to convert
-   */
-  camelCase(value) {
-    return _.camelCase(value);
-  }
-
-  /**
    * get the an upperFirst camelCase value.
    * @param {string} value string to convert
    */

@@ -274,7 +274,7 @@ jhipster:
   database:
     couchbase:
       bucket-name: <%= baseName %>
-      scope-name: <%= camelCase(baseName) %>
+      scope-name: <%= camelizedBaseName %>
 <%_ } _%>
 <%_ if (!cacheProviderNo) { _%>
   cache: # Cache configuration
