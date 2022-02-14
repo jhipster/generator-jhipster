@@ -138,11 +138,11 @@
 <%_ if (!databaseTypeCassandra) { _%>
 
   <div *ngIf="users">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
         [(page)]="page"
