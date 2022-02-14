@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <div>
-  <div class="row justify-content-center">
+  <div class="d-flex justify-content-center">
     <div class="col-md-8">
       <h1 <%= jhiPrefix %>Translate="register.title" data-cy="registerTitle">Registration</h1>
 
@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <div class="row justify-content-center">
+  <div class="d-flex justify-content-center">
     <div class="col-md-8">
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
         <div class="form-group">
