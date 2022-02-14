@@ -134,6 +134,15 @@ function writeCouchbaseFiles() {
         this.removeFile(`${this.javaDir}repository/SearchCouchbaseRepository.java`);
         this.removeFile(`${this.testDir}repository/CustomCouchbaseRepositoryTest.java`);
       }
+
+      if (this.isJhipsterVersionLessThan('7.6.1')) {
+        this.removeFolder(`${constants.SERVER_MAIN_SRC_DIR}${this.javaDir}config/couchbase`);
+        this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`);
+        this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`);
+        this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`);
+        this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`);
+        this.removeFile(`${constants.SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__user.json`);
+      }
     },
 
     async writeCouchbaseFiles() {
