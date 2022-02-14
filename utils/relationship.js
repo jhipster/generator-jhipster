@@ -160,7 +160,6 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     columnName: generator.getColumnName(relationshipName),
     columnNamePrefix:
       relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${generator.getColumnName(relationshipName)}_`,
-    otherEntityInstance: _.lowerFirst(otherEntityName),
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: _.upperFirst(otherEntityName),
     otherEntityTableName:

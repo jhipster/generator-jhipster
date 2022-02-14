@@ -70,9 +70,9 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     String JOIN = <%
         notEmbeddedRelationships.forEach(function (relationship, index) {
           if (!relationship.collection) { %>
-            " LEFT JOIN `<%= relationship.otherEntityInstance %>` `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
+            " LEFT JOIN `<%= relationship.otherEntity.entityInstance %>` `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
           } else { %>
-            " LEFT NEST `<%= relationship.otherEntityInstance %>` `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
+            " LEFT NEST `<%= relationship.otherEntity.entityInstance %>` `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
           }
           if (index < notEmbeddedRelationships.length - 1) { %>
             + <%
