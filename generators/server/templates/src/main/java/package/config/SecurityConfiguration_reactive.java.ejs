@@ -112,6 +112,7 @@ import org.springframework.security.web.server.authentication.HttpStatusServerEn
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
+import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 <%_ if (applicationTypeMicroservice) { _%>
 import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
@@ -255,7 +256,7 @@ public class SecurityConfiguration {
             .and()
                 .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
             .and()
-                .frameOptions().deny()
+                .frameOptions().mode(Mode.DENY)
 <%_ if (applicationTypeMicroservice) { _%>
         .and()
             .requestCache()
