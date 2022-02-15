@@ -65,16 +65,16 @@ _%>
             <%_ } _%>
                         <div *ngIf="editForm.get('<%= fieldName %>')!.value" class="form-text text-danger clearfix">
             <%_ if (field.blobContentTypeAny) { _%>
-                            <a class="pull-left" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open">open</a><br>
-                            <span class="pull-left">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
+                            <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open">open</a><br>
+                            <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
             <%_ } else { _%>
-                            <span class="pull-left">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
+                            <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
             <%_ } _%>
             <%_ if (field.blobContentTypeImage) { _%>
-                            <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
+                            <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-end">
             <%_ } else { _%>
                             <button type="button" (click)="editForm.patchValue({<%= fieldName %>: null});editForm.patchValue({<%= fieldName %>ContentType: null});"
-                                    class="btn btn-secondary btn-xs pull-right">
+                                    class="btn btn-secondary btn-xs pull-end">
             <%_ } _%>
                                 <fa-icon icon="times"></fa-icon>
                             </button>
