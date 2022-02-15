@@ -46,7 +46,7 @@
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label" for="login" <%= jhiPrefix %>Translate="global.form.username.label">Username</label>
           <input
             type="text"
@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label">Email</label>
           <input
             type="email"
@@ -141,7 +141,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label" for="password" <%= jhiPrefix %>Translate="global.form.newpassword.label">New password</label>
           <input
             type="password"
@@ -187,7 +187,7 @@
           <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerForm.get('password')!.value"></<%= jhiPrefixDashed %>-password-strength-bar>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label" for="confirmPassword" <%= jhiPrefix %>Translate="global.form.confirmpassword.label">New password confirmation</label>
           <input
             type="password"

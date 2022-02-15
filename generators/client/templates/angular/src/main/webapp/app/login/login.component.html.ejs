@@ -29,7 +29,7 @@
         <strong>Failed to sign in!</strong> Please check your credentials and try again.
       </div>
       <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="username-label" for="username" <%= jhiPrefix %>Translate="global.form.username.label">Login</label>
           <input
             type="text"
@@ -43,7 +43,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label for="password" <%= jhiPrefix %>Translate="login.form.password">Password</label>
           <input
             type="password"
