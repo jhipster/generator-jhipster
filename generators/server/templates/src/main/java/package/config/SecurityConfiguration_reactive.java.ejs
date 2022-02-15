@@ -255,7 +255,7 @@ public class SecurityConfiguration {
             .and()
                 .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
             .and()
-                .frameOptions().disable()
+                .frameOptions().deny()
 <%_ if (applicationTypeMicroservice) { _%>
         .and()
             .requestCache()
