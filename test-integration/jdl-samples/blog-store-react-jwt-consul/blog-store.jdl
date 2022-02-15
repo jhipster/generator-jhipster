@@ -88,6 +88,7 @@ paginate Product with pagination
 
 microservice Product with store
 microservice Blog, Post, Tag with blog
+service all with serviceImpl
 
 deployment {
   deploymentType docker-compose,
