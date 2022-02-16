@@ -129,6 +129,7 @@ module.exports = async (config, options, targetOptions) => {
       postcssOptions.plugins.push(postcssRTLCSS());
       return postcssOptions;
     };
+    // https://github.com/angular/angular-cli/blob/4b9199d97f3bcb10710b5049b04d8a04436e2dd4/packages/angular_devkit/build_angular/src/webpack/configs/styles.ts#L201-L202
     options.postcssOptions.config = false;
   });
 
