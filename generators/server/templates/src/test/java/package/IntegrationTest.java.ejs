@@ -27,13 +27,10 @@ import tech.jhipster.config.JHipsterConstants;
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-import <%= packageName %>.config.MongoDbTestContainerExtension;
+import <%= packageName %>.config.EmbeddedMongo;
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.config.CassandraTestContainerExtension;
-<%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-import <%= packageName %>.config.KafkaTestContainerExtension;
+import <%= packageName %>.config.EmbeddedCassandra;
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
@@ -44,11 +41,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
-import <%= packageName %>.config.JhipsterIntegrationTestProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeCassandra || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers || databaseTypeMongodb) { _%>
+<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -76,20 +69,14 @@ import java.lang.annotation.Target;
 @ExtendWith(CouchbaseTestContainerExtension.class)
 @ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCassandra) { _%>
-@EnableConfigurationProperties(value = JhipsterIntegrationTestProperties.class)
-<%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-@ExtendWith(MongoDbTestContainerExtension.class)
+@EmbeddedMongo
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-@ExtendWith(CassandraTestContainerExtension.class)
+@EmbeddedCassandra
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
-<%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-@ExtendWith(KafkaTestContainerExtension.class)
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)

@@ -1593,11 +1593,11 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/config/MongoDbTestContainerExtension.java",
+          "file": "package/config/MongoDbTestContainer.java",
           "renameTo": [Function],
         },
         Object {
-          "file": "package/config/JhipsterIntegrationTestProperties.java",
+          "file": "package/config/EmbeddedMongo.java",
           "renameTo": [Function],
         },
         Object {
@@ -1863,7 +1863,11 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/config/KafkaTestContainerExtension.java",
+          "file": "package/config/KafkaTestContainer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/EmbeddedKafka.java",
           "renameTo": [Function],
         },
       ],
@@ -1887,11 +1891,11 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/config/CassandraTestContainerExtension.java",
+          "file": "package/config/CassandraTestContainer.java",
           "renameTo": [Function],
         },
         Object {
-          "file": "package/config/JhipsterIntegrationTestProperties.java",
+          "file": "package/config/EmbeddedCassandra.java",
           "renameTo": [Function],
         },
         Object {

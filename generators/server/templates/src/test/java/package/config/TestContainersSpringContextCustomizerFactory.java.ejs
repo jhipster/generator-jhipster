@@ -26,18 +26,14 @@ import org.cassandraunit.CQLDataLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+
 import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
-<%_ if (messageBrokerKafka) { _%>
-import org.testcontainers.containers.KafkaContainer;
-<%_ } _%>
-
-
-<%_ if (databaseTypeMongodb) { _%>
-import org.testcontainers.containers.MongoDBContainer;
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.testcontainers.containers.CassandraContainer;
 <%_ } _%>
@@ -46,38 +42,67 @@ import org.testcontainers.containers.CassandraContainer;
 public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
+<%_ if (messageBrokerKafka) { _%>
+    private static KafkaTestContainer kafkaBean;
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+    private static MongoDbTestContainer mongoDbBean;
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+    private static CassandraTestContainer cassandraBean;
+<%_ } _%>
 
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
+
         return (context, mergedConfig) -> {
-<%_ if (databaseTypeMongodb) { _%>
-            MongoDBContainer databaseContainer = (MongoDBContainer) MongoDbTestContainerExtension.getThreadContainer().get();
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-            CassandraContainer databaseContainer = (CassandraContainer) CassandraTestContainerExtension.getThreadContainer().get();
-<%_ } _%>
+            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
             TestPropertyValues testValues = TestPropertyValues.empty();
-            if (databaseContainer != null) {
-                testValues = testValues
 <%_ if (databaseTypeMongodb) { _%>
-                    .and("spring.data.mongodb.uri=" + databaseContainer.getReplicaSetUrl());
+        EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
+        if (null != mongoAnnotation) {
+            log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
+            if (mongoDbBean == null) {
+                log.info("Warming up the mongo database");
+                mongoDbBean =  new MongoDbTestContainer();
+                beanFactory.initializeBean(mongoDbBean, MongoDbTestContainer.class.getName().toLowerCase());
+                beanFactory.registerSingleton(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
+                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
+            }
+            testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
+        }
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-                    .and("spring.data.cassandra.port=" +  databaseContainer.getMappedPort(CassandraContainer.CQL_PORT))
-                    .and("spring.data.cassandra.contact-points=" +  databaseContainer.getHost())
-                    .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
-                    .and("spring.data.cassandra.local-datacenter=" + databaseContainer.getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
-                    .and("spring.data.cassandra.cluster-name=" + databaseContainer.getCluster().getMetadata().getClusterName());
-<%_ } _%>
-            } else {
-                log.error("test container database configuration has not been set because container has not started");
+        EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
+        if (null != cassandraAnnotation) {
+            log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
+            if (cassandraBean == null) {
+                log.info("Warming up the cassandra database");
+                cassandraBean =  new CassandraTestContainer();
+                beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
+                beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
+                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
             }
+            testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
+                    .and("spring.data.cassandra.contact-points=" +  cassandraBean.getCassandraContainer().getHost())
+                    .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
+                    .and("spring.data.cassandra.local-datacenter=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
+                    .and("spring.data.cassandra.cluster-name=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName());
+        }
+<%_ } _%>
+
 <%_ if (messageBrokerKafka) { _%>
-            KafkaContainer brokerContainer = (KafkaContainer) KafkaTestContainerExtension.getThreadContainer().get();
-            if (brokerContainer != null) {
-                testValues = testValues.and("kafka.bootstrap-servers=" + brokerContainer.getBootstrapServers());
-            } else {
-                log.error("test container database configuration has not been set because container has not started");
+            EmbeddedKafka kafkaAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedKafka.class);
+            if (null != kafkaAnnotation) {
+                log.debug("detected the EmbeddedKafka annotation on class {}", testClass.getName());
+                if (kafkaBean == null) {
+                    log.info("Warming up the kafka broker");
+                    kafkaBean = new KafkaTestContainer();
+                    beanFactory.initializeBean(kafkaBean, KafkaTestContainer.class.getName().toLowerCase());
+                    beanFactory.registerSingleton(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
+                    ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
+                }
+                testValues = testValues.and("kafka.bootstrap-servers=" + kafkaBean.getKafkaContainer().getBootstrapServers());
             }
 <%_ } _%>
             testValues.applyTo(context);

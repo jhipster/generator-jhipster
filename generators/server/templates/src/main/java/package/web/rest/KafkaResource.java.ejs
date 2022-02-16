@@ -56,6 +56,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import <%= packageName %>.config.KafkaProperties;
 
+import static org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event;
+
 @RestController
 @RequestMapping("/api/<%= dasherizedBaseName %>-kafka")
 public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
@@ -117,12 +119,11 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
             boolean exitLoop = false;
             while (!exitLoop) {
                 try {
-                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));
+                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
                     for (ConsumerRecord<String, String> record : records) {
                         log.info("kafka message received and resent through Sse: {}" , record.value());
-                        emitter.send(record.value());
+                        emitter.send(event().data(record.value()));
                     }
-                    emitter.send(SseEmitter.event().comment(""));
                 } catch (Exception ex) {
                     log.trace("Complete with error {}", ex.getMessage(), ex);
                     emitter.completeWithError(ex);
