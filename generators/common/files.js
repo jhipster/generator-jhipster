@@ -55,12 +55,10 @@ const commonFiles = {
         {
           file: 'devcontainer/devcontainer.json',
           renameTo: () => '.devcontainer/devcontainer.json',
-          method: 'copy',
         },
         {
           file: 'devcontainer/Dockerfile',
           renameTo: () => '.devcontainer/Dockerfile',
-          method: 'copy',
         },
       ],
     },

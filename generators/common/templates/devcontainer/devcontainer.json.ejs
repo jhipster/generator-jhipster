@@ -1,18 +1,19 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.209.6/containers/java
 {
-	"name": "Java",
+	"name": "<%= capitalizedBaseName %>",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
 			// Update the VARIANT arg to pick a Java version: 11, 17
 			// Append -bullseye or -buster to pin to an OS version.
 			// Use the -bullseye variants on local arm64/Apple Silicon.
-			"VARIANT": "11",
+			"VARIANT": "<%= JAVA_VERSION %>",
 			// Options
-			"INSTALL_MAVEN": "true",
-			"INSTALL_GRADLE": "false",
-			"NODE_VERSION": "lts/*"
+			"INSTALL_MAVEN": "<%= buildToolMaven %>",
+			"MAVEN_VERSION": "<%= MAVEN_VERSION %>",
+			"INSTALL_GRADLE": "buildToolGradle",
+			"NODE_VERSION": "<%= NODE_VERSION.split('.')[0] %>"
 		}
 	},
 
@@ -26,7 +27,9 @@
 		"vscjava.vscode-java-pack",
 		"pivotal.vscode-boot-dev-pack",
 		"ms-vscode.vscode-typescript-tslint-plugin",
+<%_ if(clientFrameworkAngular) { _%>
 		"angular.ng-template",
+<%_ } _%>
 		"firsttris.vscode-jest-runner",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
