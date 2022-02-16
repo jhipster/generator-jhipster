@@ -10,7 +10,7 @@ application {
     packageName com.okta.developer.gateway
     applicationType gateway
     clientFramework angular
-    authenticationType oauth2
+    authenticationType jwt
     prodDatabaseType postgresql
     testFrameworks [cypress]
     creationTimestamp 1617901618886
@@ -25,7 +25,7 @@ application {
     packageName com.okta.developer.blog
     applicationType microservice
     clientFramework angular
-    authenticationType oauth2
+    authenticationType jwt
     prodDatabaseType postgresql
     serverPort 8081
     testFrameworks [cypress]
@@ -41,7 +41,7 @@ application {
     packageName com.okta.developer.store
     applicationType microservice
     clientFramework angular
-    authenticationType oauth2
+    authenticationType jwt
     prodDatabaseType postgresql
     serverPort 8082
     testFrameworks [cypress]

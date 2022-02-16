@@ -73,23 +73,23 @@ jobs:
         os: [ubuntu-20.04]
         cache: [angular]
         suite:
-          - blog-store
-          - blog-store-react-jwt-consul
-          - blog-store-microfrontend
-          - vue-blog-store-microfrontend
+          - ms-ngx-eureka-oauth2
+          - ms-react-jwt-consul
+          - mf-ngx-eureka-jwt
+          - mf-vue-consul-oauth2
         include:
-          - suite: blog-store
+          - suite: ms-ngx-eureka-oauth2
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
-          - suite: blog-store-react-jwt-consul
+          - suite: ms-react-jwt-consul
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
-          - suite: blog-store-microfrontend
+          - suite: mf-ngx-eureka-jwt
             extra-args: --workspaces --monorepository
             skip-backend-tests: 1
-          - suite: vue-blog-store-microfrontend
+          - suite: mf-vue-consul-oauth2
             extra-args: --workspaces --monorepository
             skip-backend-tests: 1
     steps:
