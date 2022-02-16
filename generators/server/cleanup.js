@@ -8,6 +8,9 @@
  * @param {string} mainResourceDir - Main resources directory
  * @param {string} testResourceDir - Test resources directory
  */
+const { CASSANDRA, MONGODB } = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
   if (generator.isJhipsterVersionLessThan('3.5.0')) {
     generator.removeFile(`${javaDir}domain/util/JSR310DateTimeSerializer.java`);
@@ -125,7 +128,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
     generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
 
-    if (generator.databaseType === 'cassandra') {
+    if (generator.databaseType === CASSANDRA) {
       generator.removeFile(`${javaDir}config/metrics/package-info.java`);
       generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
       generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
@@ -133,7 +136,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
       generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
       generator.removeFile(`${testDir}config/CassandraConfigurationIT.java`);
     }
-    if (generator.searchEngine === 'elasticsearch') {
+    if (generator.searchEngine === ELASTICSEARCH) {
       generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
     }
   }
@@ -145,9 +148,13 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
   }
   if (generator.isJhipsterVersionLessThan('7.6.1')) {
-    generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
+    if (generator.databaseType === MONGODB) {
+      generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
+    }
     generator.removeFile(`${testDir}TestContainersSpringContextCustomizerFactory.java`);
-    generator.removeFile(`${testDir}AbstractCassandraTest.java`);
+    if (generator.databaseType === CASSANDRA) {
+      generator.removeFile(`${testDir}AbstractCassandraTest.java`);
+    }
   }
 }
 

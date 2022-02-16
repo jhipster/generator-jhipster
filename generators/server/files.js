@@ -108,12 +108,12 @@ const mongoDbFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/config/MongoDbTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}config/MongoDbTestContainerExtension.java`,
+          file: 'package/config/MongoDbTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MongoDbTestContainer.java`,
         },
         {
-          file: 'package/config/JhipsterIntegrationTestProperties.java',
-          renameTo: generator => `${generator.testDir}config/JhipsterIntegrationTestProperties.java`,
+          file: 'package/config/EmbeddedMongo.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedMongo.java`,
         },
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
@@ -225,12 +225,12 @@ const cassandraFiles = {
           renameTo: generator => `${generator.testDir}CassandraKeyspaceIT.java`,
         },
         {
-          file: 'package/config/CassandraTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}config/CassandraTestContainerExtension.java`,
+          file: 'package/config/CassandraTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/CassandraTestContainer.java`,
         },
         {
-          file: 'package/config/JhipsterIntegrationTestProperties.java',
-          renameTo: generator => `${generator.testDir}config/JhipsterIntegrationTestProperties.java`,
+          file: 'package/config/EmbeddedCassandra.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedCassandra.java`,
         },
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
@@ -1460,8 +1460,28 @@ const baseServerFiles = {
           renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
         },
         {
-          file: 'package/config/KafkaTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}config/KafkaTestContainerExtension.java`,
+          file: 'package/config/KafkaTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/KafkaTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedKafka.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedKafka.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
         },
       ],
     },

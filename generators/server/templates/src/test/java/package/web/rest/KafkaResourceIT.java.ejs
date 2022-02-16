@@ -30,14 +30,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.EmbeddedKafka;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
 import org.springframework.test.web.servlet.MvcResult;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -55,6 +54,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
+@EmbeddedKafka
 class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
     @Autowired
@@ -94,9 +94,8 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     void consumesMessages()<% if (!reactive) { %> throws Exception<% } %> {
         Map<String, Object> producerProps = new HashMap<>(kafkaProperties.getProducerProps());
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
-
-        producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
 <%_ if (reactive) { _%>
+        producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
         String value = client.get().uri("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume")
             .accept(MediaType.TEXT_EVENT_STREAM)
             .exchange()
@@ -110,12 +109,13 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
             .andReturn();
+        producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
         for (int i = 0; i < 100; i++) {
-            Thread.sleep(200);
             String content = mvcResult.getResponse().getContentAsString();
             if (content.contains("data:value-consume")) {
                 return;
             }
+            Thread.sleep(100);
         }
         fail("Expected content data:value-consume not received");
 <%_ } _%>
