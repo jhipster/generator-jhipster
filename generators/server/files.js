@@ -1823,7 +1823,6 @@ function writeFiles() {
       if (this.isJhipsterVersionLessThan('7.6.1')) {
         if (this.authenticationTypeOauth2 && !this.databaseTypeNo) {
           this.removeFile(`${this.mainJavaPackageDir}web/rest/UserResource.java`);
-          this.removeFile(`${this.testJavaPackageDir}web/rest/UserResourceIT.java`);
         }
       }
     },
