@@ -780,6 +780,12 @@
             <artifactId>feign-reactor-spring-configuration</artifactId>
         </dependency>
 <%_ } _%>
+<%_ if (!reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-data</artifactId>
+        </dependency>
+<%_ } _%>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
