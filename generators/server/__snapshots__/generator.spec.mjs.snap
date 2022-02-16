@@ -978,10 +978,6 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/web/rest/UserResource.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/web/rest/PublicUserResource.java",
           "renameTo": [Function],
         },
