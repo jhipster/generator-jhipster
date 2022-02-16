@@ -228,4 +228,29 @@ ui bootstrap tweaks
   white-space: nowrap;
 }
 
+.dropdown-menu {
+  padding-left: 0px;
+}
+
+/* ==========================================================================
+postcss-rtl currently have problem with inline css
+========================================================================== */
+/* page-ribbon.component.scss */
+.ribbon {
+  left: -3.5em;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/* navbar.component.scss */
+.navbar {
+  ul.navbar-nav {
+    .nav-item {
+      margin-left: 0.5em;
+    }
+  }
+}
 /* jhipster-needle-scss-add-main JHipster will add new css style */
