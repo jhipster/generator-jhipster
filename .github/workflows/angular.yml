@@ -94,9 +94,6 @@ jobs:
           - ngx-gradle-mariadb-oauth2-infinispan
           - ngx-gradle-mongodb-kafka-cucumber
           - ngx-gradle-h2disk-ws-nocache
-          - ms-ngx-gateway-eureka-jwt
-          - ms-ngx-gateway-eureka-oauth2
-          - jdl-default
         include:
           - app-sample: ngx-default
             entity: sqlfull
@@ -179,24 +176,6 @@ jobs:
             war: 1
             e2e: 1
             testcontainers: 0
-          - app-sample: ms-ngx-gateway-eureka-jwt
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ms-ngx-gateway-eureka-oauth2
-            entity: sqllight
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: jdl-default
-            entity: jdl
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
