@@ -512,13 +512,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           const dockerFile = `src/main/docker/${databaseType}.yml`;
           if (databaseType === CASSANDRA) {
             scriptsStorage.set({
-              'docker:db:await': 'wait-on tcp:9042 && sleep 20',
+              'docker:db:await': 'wait-on -t 1800000 tcp:9042 && sleep 20',
             });
           }
           if (databaseType === COUCHBASE) {
             scriptsStorage.set({
               'docker:db:await':
-                'echo "Waiting for Couchbase to start" && wait-on http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"',
+                'echo "Waiting for Couchbase to start" && wait-on -t 1800000 http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"',
             });
           }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
@@ -538,7 +538,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
         if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
           dockerAwaitScripts.push(
-            'echo "Waiting for Elasticsearch to start" && wait-on "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"'
+            'echo "Waiting for Elasticsearch to start" && wait-on -t 1800000 "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"'
           );
         }
 
@@ -553,11 +553,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
               dockerAwaitScripts.push(
-                'echo "Waiting for jhipster-registry to start" && wait-on http-get://localhost:8761/management/health && echo "jhipster-registry started"'
+                'echo "Waiting for jhipster-registry to start" && wait-on -t 1800000 http-get://localhost:8761/management/health && echo "jhipster-registry started"'
               );
             } else if (dockerConfig === 'keycloak') {
               dockerAwaitScripts.push(
-                'echo "Waiting for keycloak to start" && wait-on http-get://localhost:9080/auth/realms/jhipster -t 30000 && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"'
+                'echo "Waiting for keycloak to start" && wait-on -t 1800000 http-get://localhost:9080/auth/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"'
               );
             }
 
@@ -642,12 +642,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (scriptsStorage.get('e2e')) {
           scriptsStorage.set({
             'ci:server:await':
-              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t 1800000 http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
             'e2e:devserver':
-              'concurrently -k -s first "npm run backend:start" "npm start" "wait-on http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"',
+              'concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t 1800000 http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"',
           });
         }
       },
