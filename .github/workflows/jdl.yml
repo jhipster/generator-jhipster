@@ -88,10 +88,8 @@ jobs:
             e2e-delay: 120
           - suite: mf-ngx-eureka-jwt
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
           - suite: mf-vue-consul-oauth2
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
