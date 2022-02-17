@@ -97,5 +97,5 @@ deployment {
   appsFolders [store, blog, gateway]
   dockerRepositoryName "hipsterslabs"
   monitoring no
-  serviceDiscoveryType eureka
+  serviceDiscoveryType consul
 }
