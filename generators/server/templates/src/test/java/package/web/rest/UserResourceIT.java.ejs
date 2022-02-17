@@ -479,24 +479,23 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
-<%_ } _%>
 
     @Test
-<%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-<%_ } _%>
+  <%_ } _%>
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-<%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
+  <%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
         authorityRepository
             .findById(AuthoritiesConstants.USER)
             .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
             .block();
-<%_ } _%>
+  <%_ } _%>
 
         // Get all the users
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         <%= asDto('AdminUser') %> foundUser = webTestClient.get().uri("/api/admin/users?sort=id,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -508,14 +507,14 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(foundUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-  <%_ if (!databaseTypeCassandra) { _%>
+    <%_ if (!databaseTypeCassandra) { _%>
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-  <%_ } _%>
+    <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-  <%_ if (databaseTypeSql && !applicationTypeMicroservice) { _%>
+    <%_ if (databaseTypeSql && !applicationTypeMicroservice) { _%>
         assertThat(foundUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
-  <%_ } _%>
-<%_ } else { _%>
+    <%_ } _%>
+  <%_ } else { _%>
         restUserMockMvc.perform(get("/api/admin/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -524,37 +523,37 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-  <%_ if (!databaseTypeCassandra) { _%>
+    <%_ if (!databaseTypeCassandra) { _%>
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
-  <%_ } _%>
+    <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
-<%_ } _%>
+  <%_ } _%>
     }
 
     @Test
-<%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-<%_ } _%>
+  <%_ } _%>
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-<%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
+  <%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
         authorityRepository
             .findById(AuthoritiesConstants.USER)
             .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
             .block();
-<%_ } _%>
+  <%_ } _%>
 
-<%_ if (searchEngineElasticsearch) { _%>
+  <%_ if (searchEngineElasticsearch) { _%>
         mockUserSearchRepository.save(user);
-<%_ } _%>
-<%_ if (cacheManagerIsAvailable) { _%>
+  <%_ } _%>
+  <%_ if (cacheManagerIsAvailable) { _%>
 
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
-<%_ } _%>
+  <%_ } _%>
 
         // Get the user
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/admin/users/{login}", user.getLogin())
             .exchange()
             .expectStatus().isOk()
@@ -564,16 +563,16 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
             .jsonPath("$.firstName").isEqualTo(DEFAULT_FIRSTNAME)
             .jsonPath("$.lastName").isEqualTo(DEFAULT_LASTNAME)
             .jsonPath("$.email").isEqualTo(DEFAULT_EMAIL)
-  <%_ if (!databaseTypeCassandra) { _%>
+    <%_ if (!databaseTypeCassandra) { _%>
             .jsonPath("$.imageUrl").isEqualTo(DEFAULT_IMAGEURL)
-  <%_ } _%>
+    <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY)<%
                 if (!databaseTypeSql || applicationTypeMicroservice) { %>;
             <%_ } else { _%>
             .jsonPath("$.authorities")
             .isEqualTo(AuthoritiesConstants.USER);
             <% } %>
-<%_ } else { _%>
+  <%_ } else { _%>
         restUserMockMvc.perform(get("/api/admin/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -581,36 +580,35 @@ class UserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandra
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-  <%_ if (!databaseTypeCassandra) { _%>
+    <%_ if (!databaseTypeCassandra) { _%>
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
-  <%_ } _%>
+    <%_ } _%>
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
-<%_ } _%>
+  <%_ } _%>
 
-<%_ if (cacheProviderMemcached) { _%>
+  <%_ if (cacheProviderMemcached) { _%>
         if (!(cacheManager instanceof NoOpCacheManager)) {
             assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         }
-<%_ } else if (cacheManagerIsAvailable) { _%>
+  <%_ } else if (cacheManagerIsAvailable) { _%>
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
-<%_ } _%>
+  <%_ } _%>
     }
 
     @Test
-<%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-<%_ } _%>
+  <%_ } _%>
     void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/admin/users/unknown")
             .exchange()
             .expectStatus().isNotFound();
-<%_ } else { _%>
+  <%_ } else { _%>
         restUserMockMvc.perform(get("/api/admin/users/unknown"))
             .andExpect(status().isNotFound());
-<%_ } _%>
+  <%_ } _%>
     }
-<%_ if (!authenticationTypeOauth2) { _%>
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>

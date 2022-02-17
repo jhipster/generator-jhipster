@@ -9,7 +9,6 @@ application {
     baseName gateway
     packageName com.okta.developer.gateway
     applicationType gateway
-    clientFramework vue
     authenticationType oauth2
     prodDatabaseType postgresql
     testFrameworks [cypress]
@@ -24,11 +23,10 @@ application {
     baseName blog
     packageName com.okta.developer.blog
     applicationType microservice
-    clientFramework vue
     authenticationType oauth2
     prodDatabaseType postgresql
+    searchEngine elasticsearch
     serverPort 8081
-    testFrameworks [cypress]
     creationTimestamp 1617901618887
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
@@ -40,11 +38,10 @@ application {
     baseName store,
     packageName com.okta.developer.store
     applicationType microservice
-    clientFramework vue
     authenticationType oauth2
     prodDatabaseType postgresql
+    enableHibernateCache false
     serverPort 8082
-    testFrameworks [cypress]
     creationTimestamp 1617901618888
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
@@ -75,7 +72,6 @@ entity Product {
 }
 
 relationship ManyToOne {
-  Blog{user(login)} to User
   Post{blog(name)} to Blog
 }
 

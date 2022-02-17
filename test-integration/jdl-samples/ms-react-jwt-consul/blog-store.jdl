@@ -9,8 +9,10 @@ application {
     baseName gateway
     packageName com.okta.developer.gateway
     applicationType gateway
-    authenticationType oauth2
+    clientFramework react
+    authenticationType jwt
     prodDatabaseType postgresql
+    serviceDiscoveryType consul
     testFrameworks [cypress]
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
@@ -23,8 +25,9 @@ application {
     baseName blog
     packageName com.okta.developer.blog
     applicationType microservice
-    authenticationType oauth2
+    authenticationType jwt
     prodDatabaseType postgresql
+    serviceDiscoveryType consul
     searchEngine elasticsearch
     serverPort 8081
     creationTimestamp 1617901618887
@@ -38,8 +41,9 @@ application {
     baseName store,
     packageName com.okta.developer.store
     applicationType microservice
-    authenticationType oauth2
+    authenticationType jwt
     prodDatabaseType postgresql
+    serviceDiscoveryType consul
     enableHibernateCache false
     serverPort 8082
     creationTimestamp 1617901618888
@@ -72,7 +76,6 @@ entity Product {
 }
 
 relationship ManyToOne {
-  Blog{user(login)} to User
   Post{blog(name)} to Blog
 }
 
@@ -85,11 +88,12 @@ paginate Product with pagination
 
 microservice Product with store
 microservice Blog, Post, Tag with blog
+service all with serviceImpl
 
 deployment {
   deploymentType docker-compose,
   appsFolders [store, blog, gateway]
   dockerRepositoryName "hipsterslabs"
   monitoring no
-  serviceDiscoveryType eureka
+  serviceDiscoveryType consul
 }
