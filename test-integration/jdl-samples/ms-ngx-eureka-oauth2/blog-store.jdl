@@ -72,7 +72,6 @@ entity Product {
 }
 
 relationship ManyToOne {
-  Blog{user(login)} to User
   Post{blog(name)} to Blog
 }
 

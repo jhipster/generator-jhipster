@@ -187,6 +187,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
         this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
+        this.DOCKER_ZIPKIN = constants.DOCKER_ZIPKIN;
 
         this.JAVA_VERSION = constants.JAVA_VERSION;
         this.JAVA_COMPATIBLE_VERSIONS = constants.JAVA_COMPATIBLE_VERSIONS;
@@ -348,10 +349,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
         this.mainJavaDir = SERVER_MAIN_SRC_DIR;
+        this.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/`;
         this.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
-        this.mainJavaPackageDir = `${SERVER_MAIN_RES_DIR}${this.packageFolder}/`;
         this.testJavaDir = SERVER_TEST_SRC_DIR;
-        this.testJavaPackageDir = `${SERVER_MAIN_RES_DIR}${this.packageFolder}/`;
+        this.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${this.packageFolder}/`;
         this.testResourceDir = SERVER_TEST_RES_DIR;
         this.srcMainDir = MAIN_DIR;
         this.srcTestDir = TEST_DIR;

@@ -77,6 +77,7 @@ const DOCKER_JENKINS = 'jenkins/jenkins:lts-jdk11';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.42.1';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
+const DOCKER_ZIPKIN = 'openzipkin/zipkin:2.23';
 
 // Kubernetes versions
 const KUBERNETES_CORE_API_VERSION = 'v1';
@@ -418,6 +419,7 @@ const constants = {
   KUBERNETES_INGRESS_API_VERSION,
   KUBERNETES_ISTIO_NETWORKING_API_VERSION,
   KUBERNETES_RBAC_API_VERSION,
+  DOCKER_ZIPKIN,
 
   HELM_KAFKA,
   HELM_ELASTICSEARCH,

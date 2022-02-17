@@ -65,8 +65,9 @@ const createProgram = ({ executableName = CLI_NAME, executableVersion = JHIPSTER
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp())
-      .addOption(new Option('--prefer-global', 'Run jhipster installed globally').hideHelp())
-      .addOption(new Option('--prefer-local', 'Run jhipster installed locally').hideHelp())
+      .addOption(new Option('--bundled', 'Use JHipster generators bundled with current cli'))
+      .addOption(new Option('--prefer-global', 'Alias for --blundled').hideHelp())
+      .addOption(new Option('--prefer-local', 'Prefer JHipster generators installed in current folder node repository.').hideHelp())
   );
 };
 
@@ -103,13 +104,14 @@ const buildCommands = ({
 }) => {
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
+    const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, useOptions = {} } = opts;
     program
       .command(cmdName, '', { isDefault: cmdName === defaultCommand })
-      .description(opts.desc + (opts.blueprint ? chalk.yellow(` (blueprint: ${opts.blueprint})`) : ''))
-      .addCommandArguments(opts.argument)
-      .addCommandOptions(opts.options)
-      .addHelpText('after', opts.help)
-      .addAlias(opts.alias)
+      .description(desc + (blueprint ? chalk.yellow(` (blueprint: ${blueprint})`) : ''))
+      .addCommandArguments(argument)
+      .addCommandOptions(commandOptions)
+      .addHelpText('after', commandHelp)
+      .addAlias(alias)
       .excessArgumentsCallback(function (receivedArgs) {
         rejectExtraArgs({ program, command: this, extraArgs: receivedArgs });
       })
@@ -134,10 +136,10 @@ const buildCommands = ({
           );
           return;
         }
-        if (!opts.cliOnly || cmdName === 'jdl') {
-          if (opts.blueprint) {
+        if (!cliOnly || cmdName === 'jdl') {
+          if (blueprint) {
             // Blueprint only command.
-            const generator = await env.create(`${packageNameToNamespace(opts.blueprint)}:${cmdName}`, { options: { help: true } });
+            const generator = await env.create(`${packageNameToNamespace(blueprint)}:${cmdName}`, { options: { help: true } });
             command.addGeneratorArguments(generator._arguments).addGeneratorOptions(generator._options);
           } else {
             const generatorName = cmdName === 'jdl' ? 'app' : cmdName;
@@ -207,6 +209,7 @@ const buildCommands = ({
         const options = {
           ...program.opts(),
           ...cmdOptions,
+          ...useOptions,
           commandName: cmdName,
           blueprints: envBuilder.getBlueprintsOption(),
         };
@@ -219,7 +222,7 @@ const buildCommands = ({
         printLogo();
         printBlueprintLogo();
 
-        if (opts.cliOnly) {
+        if (cliOnly) {
           logger.debug('Executing CLI only script');
           return loadCommand(cmdName)(args, options, env, envBuilder);
         }
@@ -231,7 +234,7 @@ const buildCommands = ({
             errors => done(errors.find(error => error))
           );
         }
-        const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
+        const namespace = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
         const generatorCommand = getCommand(namespace, args, opts);
         return env.run(generatorCommand, options).then(done, done);
       });

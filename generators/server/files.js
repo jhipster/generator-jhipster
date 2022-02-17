@@ -257,6 +257,7 @@ const baseServerFiles = {
         'grafana/provisioning/dashboards/dashboard.yml',
         'grafana/provisioning/dashboards/JVM.json',
         'grafana/provisioning/datasources/datasource.yml',
+        'zipkin.yml',
       ],
     },
     {
@@ -371,6 +372,7 @@ const baseServerFiles = {
       ],
     },
     {
+      condition: generator => !generator.skipClient,
       templates: [
         { file: 'npmw', method: 'copy', noEjs: true },
         { file: 'npmw.cmd', method: 'copy', noEjs: true },
@@ -1500,7 +1502,6 @@ const baseServerFiles = {
           file: 'package/repository/UserRepository.java',
           renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,
         },
-        { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
         {
           file: 'package/web/rest/PublicUserResource.java',
           renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
@@ -1816,6 +1817,14 @@ function writeFiles() {
       this.testDir = `${this.packageFolder}/`;
 
       this.generateKeyStore();
+    },
+
+    cleanupFiles() {
+      if (this.isJhipsterVersionLessThan('7.6.1')) {
+        if (this.authenticationTypeOauth2 && !this.databaseTypeNo) {
+          this.removeFile(`${this.mainJavaPackageDir}web/rest/UserResource.java`);
+        }
+      }
     },
 
     cleanupOldServerFiles() {

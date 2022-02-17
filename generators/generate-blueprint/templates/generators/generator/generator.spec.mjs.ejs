@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2021 the original author or authors from the JHipster project.
+ Copyright 2013-2022 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import helpers from 'yeoman-test';
 import expect from 'expect';
+
+import { helpers, lookups } from '#test-utils';
 
 describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
@@ -27,11 +28,10 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
         .create('jhipster:<%= subGenerator %>')
         .withOptions({
           reproducible: true,
+          defaults: true,
           blueprint: '<%= application.baseName %>',
         })
-        .withEnvironment(env => {
-          env.lookup();
-        })
+        .withLookups(lookups)
         .run();
     });
 

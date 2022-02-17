@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2021 the original author or authors from the JHipster project.
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -257,7 +257,10 @@ export default class extends BaseBlueprintGenerator {
             'yeoman-test': `${packagejs.devDependencies['yeoman-test']}`,
           },
           engines: {
-            node: '^14.17.1 || >=16.0.0',
+            node: '>=16.13.0',
+          },
+          imports: {
+            '#test-utils': './test/utils.mjs',
           },
         });
       },

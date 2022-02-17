@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const { State } = require('mem-fs-editor');
-const _ = require('lodash');
 const {
   createConflicterCheckTransform,
   createConflicterStatusTransform,
@@ -33,20 +32,27 @@ const BaseGenerator = require('../generator-base');
 const { LOADING_PRIORITY, PRE_CONFLICTS_PRIORITY } = require('../../lib/constants/priorities.cjs').compat;
 
 const { MultiStepTransform } = require('../../utils/multi-step-transform');
-const { defaultConfig } = require('../generator-defaults');
+const { GENERATOR_UPGRADE } = require('../generator-list');
 const { prettierTransform, generatedAnnotationTransform } = require('../generator-transforms');
 const { formatDateForChangelog, prepareFieldForLiquibaseTemplates } = require('../../utils/liquibase');
-const { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates, loadRequiredConfigIntoEntity } = require('../../utils/entity');
+const { prepareEntityForTemplates, prepareEntityPrimaryKeyForTemplates } = require('../../utils/entity');
 const { prepareFieldForTemplates } = require('../../utils/field');
+const { createUserEntity } = require('../../utils/user');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
-const { SQL } = require('../../jdl/jhipster/database-types');
 const { CommonDBTypes } = require('../../jdl/jhipster/field-types');
 
-const { STRING: TYPE_STRING, LONG: TYPE_LONG } = CommonDBTypes;
+const { LONG: TYPE_LONG } = CommonDBTypes;
 
 module.exports = class extends BaseGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', customCommitTask: true, ...features });
+
+    if (this.options.help) return;
+
+    if (!this.options.upgradeCommand) {
+      const { commandName } = this.options;
+      this.options.upgradeCommand = commandName === GENERATOR_UPGRADE;
+    }
   }
 
   _postConstruct() {
@@ -153,13 +159,16 @@ module.exports = class extends BaseGenerator {
     const { withGeneratedFlag } = this.jhipsterConfig;
 
     // JDL writes directly to disk, set the file as modified so prettier will be applied
-    stream = stream.pipe(
-      patternSpy(file => {
-        if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
-          setModifiedFileState(file);
-        }
-      }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
-    );
+    const { upgradeCommand, ignoreErrors } = this.options;
+    if (!upgradeCommand) {
+      stream = stream.pipe(
+        patternSpy(file => {
+          if (file.contents && !hasState(file) && !this.options.reproducibleTests) {
+            setModifiedFileState(file);
+          }
+        }, '**/{.yo-rc.json,.jhipster/*.json}').name('jhipster:config-files:modify')
+      );
+    }
 
     const conflicterStatus = {
       fileActions: [
@@ -177,8 +186,7 @@ module.exports = class extends BaseGenerator {
     const createApplyPrettierTransform = () => {
       const prettierOptions = { packageJson: true, java: !this.skipServer && !this.jhipsterConfig.skipServer };
       // Prettier is clever, it uses correct rules and correct parser according to file extension.
-      const ignoreErrors = this.options.commandName === 'upgrade' || this.options.ignoreErrors;
-      return prettierTransform(prettierOptions, this, ignoreErrors);
+      return prettierTransform(prettierOptions, this, upgradeCommand || ignoreErrors);
     };
 
     const createForceWriteConfigFiles = () =>
@@ -214,71 +222,7 @@ module.exports = class extends BaseGenerator {
     const changelogDateDate = this.jhipsterConfig.creationTimestamp ? new Date(this.jhipsterConfig.creationTimestamp) : new Date();
     const changelogDate = formatDateForChangelog(changelogDateDate);
 
-    const userEntityDefinition = this.readEntityJson('User');
-    if (userEntityDefinition) {
-      if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
-        this.warning('Relationships on the User entity side will be disregarded');
-      }
-      if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
-        this.warning('Fields on the User entity side (other than id) will be disregarded');
-      }
-    }
-
-    // Create entity definition for built-in entity to make easier to deal with relationships.
-    const user = {
-      name: 'User',
-      builtIn: true,
-      entityTableName: `${this.getTableName(this.jhipsterConfig.jhiPrefix)}_user`,
-      relationships: [],
-      changelogDate,
-      fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
-      dto: true,
-    };
-
-    loadRequiredConfigIntoEntity(user, this.jhipsterConfig);
-    // Fallback to defaults for test cases.
-    loadRequiredConfigIntoEntity(user, defaultConfig);
-
-    const oauth2 = user.authenticationType === OAUTH2;
-    const userIdType = oauth2 || user.databaseType !== SQL ? TYPE_STRING : this.getPkType(user.databaseType);
-    const fieldValidateRulesMaxlength = userIdType === TYPE_STRING ? 100 : undefined;
-
-    let idField = user.fields.find(field => field.fieldName === 'id');
-    if (!idField) {
-      idField = {};
-      user.fields.unshift(idField);
-    }
-    _.defaults(idField, {
-      fieldName: 'id',
-      fieldType: userIdType,
-      fieldValidateRulesMaxlength,
-      fieldTranslationKey: 'global.field.id',
-      fieldNameHumanized: 'ID',
-      id: true,
-      builtIn: true,
-    });
-
-    if (!user.fields.some(field => field.fieldName === 'login')) {
-      user.fields.push({
-        fieldName: 'login',
-        fieldType: TYPE_STRING,
-        builtIn: true,
-      });
-    }
-
-    if (!user.fields.some(field => field.fieldName === 'firstName')) {
-      user.fields.push({
-        fieldName: 'firstName',
-        fieldType: TYPE_STRING,
-      });
-    }
-
-    if (!user.fields.some(field => field.fieldName === 'lastName')) {
-      user.fields.push({
-        fieldName: 'lastName',
-        fieldType: TYPE_STRING,
-      });
-    }
+    const user = createUserEntity.call(this, { changelogDate });
 
     prepareEntityForTemplates(user, this);
     prepareEntityPrimaryKeyForTemplates(user, this);
@@ -289,6 +233,8 @@ module.exports = class extends BaseGenerator {
     });
     this.configOptions.sharedEntities.User = user;
 
+    const oauth2 = user.authenticationType === OAUTH2;
+    const userIdType = user.primaryKey.type;
     const liquibaseFakeData = oauth2
       ? []
       : [
