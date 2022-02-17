@@ -257,7 +257,6 @@ const baseServerFiles = {
         'grafana/provisioning/dashboards/dashboard.yml',
         'grafana/provisioning/dashboards/JVM.json',
         'grafana/provisioning/datasources/datasource.yml',
-        'zipkin.yml',
       ],
     },
     {
@@ -332,6 +331,11 @@ const baseServerFiles = {
         { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' },
         { file: 'config/realm-config/jhipster-users-0.json', method: 'copy', renameTo: () => 'realm-config/jhipster-users-0.json' },
       ],
+    },
+    {
+      condition: generator => generator.serviceDiscoveryType || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
+      path: DOCKER_DIR,
+      templates: ['zipkin.yml'],
     },
   ],
   serverBuild: [
