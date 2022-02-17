@@ -174,7 +174,9 @@ jobs:
       - name: 'MERGE: generate base'
         continue-on-error: true
         id: base-app
-        if: github.event.pull_request
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: jdl-disable-compare')
         uses: ./generator-jhipster/.github/actions/compare-base
         with:
           extra-args: '--skip-jhipster-dependencies ${{ matrix.extra-args }}'
