@@ -42,12 +42,12 @@ const printJHipsterLogo = () => {
   console.log(logo);
 };
 
-const createProgram = ({ executableName = CLI_NAME, executableVersion = JHIPSTER_VERSION } = {}) => {
+const createProgram = ({ executableName = CLI_NAME, executableVersion } = {}) => {
   return (
     new JHipsterCommand()
       .name(executableName)
       .storeOptionsAsProperties(false)
-      .version(executableVersion)
+      .version(executableVersion ? `${executableVersion} (generator-jhipster ${JHIPSTER_VERSION})` : JHIPSTER_VERSION)
       .addHelpText('after', moreInfo)
       // JHipster common options
       .option(

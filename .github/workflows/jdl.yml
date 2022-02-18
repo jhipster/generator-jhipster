@@ -88,10 +88,8 @@ jobs:
             e2e-delay: 120
           - suite: mf-ngx-eureka-jwt
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
           - suite: mf-vue-consul-oauth2
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -174,7 +172,9 @@ jobs:
       - name: 'MERGE: generate base'
         continue-on-error: true
         id: base-app
-        if: github.event.pull_request
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: jdl-disable-compare')
         uses: ./generator-jhipster/.github/actions/compare-base
         with:
           extra-args: '--skip-jhipster-dependencies ${{ matrix.extra-args }}'
