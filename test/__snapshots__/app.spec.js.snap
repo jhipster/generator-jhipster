@@ -15949,9 +15949,6 @@ Object {
   "src/main/webapp/content/scss/global.scss": Object {
     "stateCleared": "modified",
   },
-  "src/main/webapp/content/scss/rtl.scss": Object {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/content/scss/vendor.scss": Object {
     "stateCleared": "modified",
   },

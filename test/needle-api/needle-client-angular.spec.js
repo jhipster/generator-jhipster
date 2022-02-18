@@ -106,12 +106,12 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">
-          <fa-icon icon="iconName1" [fixedWidth]="true"></fa-icon>
-          <span jhiTranslate="global.menu.routerName1">Router Name 1</span>
-        </a>
-      </li>
+        <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">
+            <fa-icon icon="iconName1" [fixedWidth]="true"></fa-icon>
+            <span jhiTranslate="global.menu.routerName1">Router Name 1</span>
+          </a>
+        </li>
 `
     );
   });
@@ -124,12 +124,12 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
-          <li>
-            <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
-            </a>
-          </li>
+            <li>
+              <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>
+              </a>
+            </li>
 `
     );
   });
@@ -142,18 +142,18 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     assert.fileContent(
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="routerName3"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>
-            </a>
-          </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="routerName3"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>
+              </a>
+            </li>
 `
     );
   });

@@ -24,8 +24,8 @@
       <tr>
         <th scope="col">Method</th>
         <th scope="col">Endpoint url</th>
-        <th scope="col" class="text-right">Count</th>
-        <th scope="col" class="text-right">Mean</th>
+        <th scope="col" class="text-end">Count</th>
+        <th scope="col" class="text-end">Mean</th>
       </tr>
     </thead>
     <tbody>
@@ -33,8 +33,8 @@
         <tr *ngFor="let method of entry.value | keyvalue">
           <td>{{ method.key }}</td>
           <td>{{ entry.key }}</td>
-          <td class="text-right">{{ method.value!.count }}</td>
-          <td class="text-right">{{ method.value!.mean | number: '1.0-3' }}</td>
+          <td class="text-end">{{ method.value!.count }}</td>
+          <td class="text-end">{{ method.value!.mean | number: '1.0-3' }}</td>
         </tr>
       </ng-container>
     </tbody>
