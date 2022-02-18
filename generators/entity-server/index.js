@@ -181,7 +181,7 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       cleanupOldElasticSearchFiles() {
         if (!this.searchEngineElasticsearch) return;
-        if (this.isJhipsterVersionLessThan('6.6.1')) {
+        if (this.isJhipsterVersionLessThan('7.6.1')) {
           this.removeFile(`${this.entityAbsoluteFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
         }
       },
