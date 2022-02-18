@@ -765,7 +765,7 @@
         </dependency>
   <%_ } _%>
 <%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ if (!reactive && databaseTypeSql) { _%>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
