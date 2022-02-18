@@ -38,32 +38,31 @@ class TechnicalStructureTest {
         .layer("Client").definedBy("..client..")
 <%_ } _%>
         .layer("Web").definedBy("..web..")
-<%_ if (!databaseTypeNo || authenticationTypeOauth2) { _%>
-        .layer("Service").definedBy("..service..")
-<%_ } _%>
+        .optionalLayer("Service").definedBy("..service..")
         .layer("Security").definedBy("..security..")
 <%_ if (!databaseTypeNo) { _%>
         .layer("Persistence").definedBy("..repository..")
         .layer("Domain").definedBy("..domain..")
 <%_ } _%>
 
-<%_ if (messageBrokerKafka) { _%>
-        .whereLayer("Config").mayOnlyBeAccessedByLayers("Web")
-<%_ } else { _%>
         .whereLayer("Config").mayNotBeAccessedByAnyLayer()
-<%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
         .whereLayer("Client").mayNotBeAccessedByAnyLayer()
 <%_ } _%>
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
-<%_ if (!databaseTypeNo || authenticationTypeOauth2) { _%>
         .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
-<%_ } _%>
-        .whereLayer("Security").mayOnlyBeAccessedByLayers(<% if (applicationTypeMicroservice) { %>"Client", <% } %>"Web"<% if (!databaseTypeNo || authenticationTypeOauth2) { %>, "Service"<% } %>, "Config")
+        .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", <% if (applicationTypeMicroservice) { %>"Client", <% } %>"Service", "Web")
 <%_ if (!databaseTypeNo) { _%>
         .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
 <%_ } _%>
 
-        .ignoreDependency(belongToAnyOf(<%= mainClass %>.class), alwaysTrue());
+        .ignoreDependency(belongToAnyOf(<%= mainClass %>.class), alwaysTrue())
+        .ignoreDependency(alwaysTrue(), belongToAnyOf(
+<%_ if (messageBrokerKafka) { _%>
+            <%= packageName %>.config.KafkaProperties.class,
+<%_ } _%>
+            <%= packageName %>.config.ApplicationProperties.class,
+            <%= packageName %>.config.Constants.class
+        ));
 }
