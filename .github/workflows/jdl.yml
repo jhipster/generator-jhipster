@@ -189,7 +189,7 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'PREPARE: npm install'
         if: steps.compare.outputs.equals != 'true'
-        run: ./npmw install
+        run: npm install
       - name: 'TESTS: backend'
         id: backend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
