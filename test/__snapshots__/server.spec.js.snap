@@ -65,6 +65,15 @@ Object {
   "src/main/docker/app.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/central-server-config/README.md": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/docker-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/central-server-config/localhost-config/application.yml": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },
@@ -75,6 +84,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jhipster-control-center.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jhipster-registry.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/docker/jib/entrypoint.sh": Object {
@@ -107,13 +119,13 @@ Object {
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/client/UserFeignClientInterceptor.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/AsyncConfiguration.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/Constants.java": Object {
@@ -123,6 +135,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/FeignConfiguration.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": Object {
@@ -248,9 +263,6 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/UserJWTController.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": Object {
     "stateCleared": "modified",
   },
@@ -284,9 +296,6 @@ Object {
   "src/main/java/com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/ManagedUserVM.java": Object {
     "stateCleared": "modified",
   },
@@ -309,6 +318,12 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-prod.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": Object {
@@ -336,6 +351,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/static/index.html": Object {
     "stateCleared": "modified",
   },
   "src/main/resources/templates/error.html": Object {
@@ -506,9 +524,6 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/TestUtil.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/rest/UserJWTControllerIT.java": Object {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": Object {
     "stateCleared": "modified",
   },
@@ -525,6 +540,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/bootstrap.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": Object {
