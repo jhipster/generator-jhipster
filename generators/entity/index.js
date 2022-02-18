@@ -45,6 +45,7 @@ const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const {
   prepareEntityForTemplates,
+  prepareEntityServerDomainForTemplates,
   prepareEntityPrimaryKeyForTemplates,
   loadRequiredConfigIntoEntity,
   derivedPrimaryKeyProperties,
@@ -649,16 +650,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       loadDomain() {
-        const entity = this.context;
-        const { entityPackage, packageName, packageFolder, persistClass } = entity;
-        let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
-        if (entityPackage) {
-          entityAbsolutePackage = [packageName, entityPackage].join('.');
-          entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
-        }
-        entity.entityAbsolutePackage = entityAbsolutePackage;
-        entity.entityAbsoluteFolder = entityAbsoluteFolder;
-        entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
+        prepareEntityServerDomainForTemplates(this.context);
       },
     };
   }
