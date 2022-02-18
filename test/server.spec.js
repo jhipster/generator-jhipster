@@ -7,7 +7,7 @@ const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const angularfiles = require('../generators/client/files-angular').files;
 const { JWT, OAUTH2 } = require('../jdl/jhipster/authentication-types');
-const { GATEWAY } = require('../jdl/jhipster/application-types');
+const { GATEWAY, MICROSERVICE } = require('../jdl/jhipster/application-types');
 const { CAFFEINE, EHCACHE } = require('../jdl/jhipster/cache-types');
 const { SQL, H2_MEMORY, POSTGRESQL } = require('../jdl/jhipster/database-types');
 const { MAVEN } = require('../jdl/jhipster/build-tool-types');
@@ -126,6 +126,7 @@ describe('JHipster server generator', () => {
           enableTranslation: true,
           nativeLanguage: 'en',
           languages: ['fr', 'en'],
+          applicationType: MICROSERVICE,
         })
         .run();
     });
