@@ -19,6 +19,8 @@
 
 const _ = require('lodash');
 const pluralize = require('pluralize');
+const path = require('path');
+
 const { createFaker } = require('./faker');
 const { parseLiquibaseChangelogDate } = require('./liquibase');
 const { entityDefaultConfig } = require('../generators/generator-defaults');
@@ -238,6 +240,18 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   _derivedProperties(entityWithConfig);
 
   return entityWithConfig;
+}
+
+function prepareEntityServerDomainForTemplates(entity) {
+  const { entityPackage, packageName, packageFolder, persistClass } = entity;
+  let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
+  if (entityPackage) {
+    entityAbsolutePackage = [packageName, entityPackage].join('.');
+    entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
+  }
+  entity.entityAbsolutePackage = entityAbsolutePackage;
+  entity.entityAbsoluteFolder = entityAbsoluteFolder;
+  entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
 }
 
 function derivedPrimaryKeyProperties(primaryKey) {
@@ -467,6 +481,7 @@ function loadRequiredConfigIntoEntity(entity, config) {
 
 module.exports = {
   prepareEntityForTemplates,
+  prepareEntityServerDomainForTemplates,
   prepareEntityPrimaryKeyForTemplates,
   loadRequiredConfigIntoEntity,
   derivedPrimaryKeyProperties,
