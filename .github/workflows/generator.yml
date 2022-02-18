@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [16.13.1]
+        node_version: [16.14.0]
         os: [ubuntu-20.04]
         cache: [other]
     steps:
