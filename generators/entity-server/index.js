@@ -179,6 +179,12 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
+      cleanupOldElasticSearchFiles() {
+        if (!this.searchEngineElasticsearch) return;
+        if (this.isJhipsterVersionLessThan('6.6.1')) {
+          this.removeFile(`${this.entityAbsoluteFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
+        }
+      },
       ...writeFiles(),
       ...super._missingPostWriting(),
     };
