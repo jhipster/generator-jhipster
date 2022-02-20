@@ -94,8 +94,8 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     void consumesMessages()<% if (!reactive) { %> throws Exception<% } %> {
         Map<String, Object> producerProps = new HashMap<>(kafkaProperties.getProducerProps());
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
-<%_ if (reactive) { _%>
         producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
+<%_ if (reactive) { _%>
         String value = client.get().uri("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume")
             .accept(MediaType.TEXT_EVENT_STREAM)
             .exchange()
@@ -109,13 +109,12 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
             .andReturn();
-        producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
         for (int i = 0; i < 100; i++) {
+            Thread.sleep(100);
             String content = mvcResult.getResponse().getContentAsString();
             if (content.contains("data:value-consume")) {
                 return;
             }
-            Thread.sleep(100);
         }
         fail("Expected content data:value-consume not received");
 <%_ } _%>
