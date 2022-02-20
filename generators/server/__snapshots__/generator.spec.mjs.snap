@@ -1870,6 +1870,22 @@ Object {
           "file": "package/config/EmbeddedKafka.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+        Object {
+          "file": "testcontainers.properties",
+        },
       ],
     },
     Object {

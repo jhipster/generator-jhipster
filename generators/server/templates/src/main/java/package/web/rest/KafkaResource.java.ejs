@@ -124,6 +124,7 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
                         log.info("kafka message received and resent through Sse: {}" , record.value());
                         emitter.send(event().data(record.value()));
                     }
+                    emitter.send(SseEmitter.event().comment(""));
                 } catch (Exception ex) {
                     log.trace("Complete with error {}", ex.getMessage(), ex);
                     emitter.completeWithError(ex);
