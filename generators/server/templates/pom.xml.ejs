@@ -695,6 +695,12 @@
             <groupId>com.github.vladimir-bukhtoyarov</groupId>
             <artifactId>bucket4j-jcache</artifactId>
         </dependency>
+  <%_ if (authenticationTypeOauth2 && reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
         <dependency>
@@ -706,6 +712,18 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-webclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-cloud</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-spring-configuration</artifactId>
+        </dependency>
   <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -715,6 +733,10 @@
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (serviceDiscoveryType) { _%>
@@ -742,32 +764,6 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
   <%_ } _%>
-<%_ } _%>
-<%_ if (applicationTypeGateway && authenticationTypeOauth2 && reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-webclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-cloud</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-spring-configuration</artifactId>
-        </dependency>
 <%_ } _%>
 <%_ if (!reactive) { _%>
         <dependency>
