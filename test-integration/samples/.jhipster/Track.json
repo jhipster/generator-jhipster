@@ -1,30 +1,24 @@
 {
+  "applications": "*",
+  "changelogDate": "20200417190923",
+  "clientRootFolder": "",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "track",
+  "fields": [{ "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] }],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
   "name": "Track",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    }
-  ],
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "album",
       "otherEntityRelationshipName": "track",
       "relationshipName": "album",
-      "otherEntityField": "name"
+      "relationshipType": "many-to-one"
     }
   ],
-  "changelogDate": "20200417190923",
-  "entityTableName": "track",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "service": "no"
 }

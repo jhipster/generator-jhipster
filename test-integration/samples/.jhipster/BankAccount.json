@@ -1,14 +1,8 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    { "relationshipName": "user", "otherEntityName": "user", "relationshipType": "many-to-one", "otherEntityField": "login" },
-    {
-      "relationshipName": "operation",
-      "otherEntityName": "operation",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "bankAccount"
-    }
-  ],
+  "angularJSSuffix": "mySuffix",
+  "changelogDate": "20200804163352",
+  "clientRootFolder": "test-root",
+  "dto": "no",
   "fields": [
     { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] },
     { "fieldName": "guid", "fieldType": "UUID" },
@@ -25,11 +19,17 @@
     { "fieldName": "attachment", "fieldType": "byte[]", "fieldTypeBlobContent": "any" },
     { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
   ],
-  "changelogDate": "20200804163352",
-  "dto": "no",
-  "pagination": "no",
+  "fluentMethods": true,
   "jpaMetamodelFiltering": true,
-  "service": "serviceImpl",
-  "angularJSSuffix": "mySuffix",
-  "clientRootFolder": "test-root"
+  "pagination": "no",
+  "relationships": [
+    { "otherEntityField": "login", "otherEntityName": "user", "relationshipName": "user", "relationshipType": "many-to-one" },
+    {
+      "otherEntityName": "operation",
+      "otherEntityRelationshipName": "bankAccount",
+      "relationshipName": "operation",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
 }

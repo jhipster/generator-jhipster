@@ -1,29 +1,24 @@
 {
-  "fluentMethods": true,
+  "changelogDate": "20190117074746",
   "clientRootFolder": "",
+  "databaseType": "sql",
+  "dto": "no",
+  "entityTableName": "child_entity_wo_dto",
+  "fields": [{ "fieldName": "date", "fieldType": "Instant" }],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "pagination": "no",
   "relationships": [
     {
-      "relationshipName": "mapsIdParentEntityWithoutDTO",
-      "otherEntityName": "mapsIdParentEntityWithoutDTO",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "id",
-      "ownerSide": true,
       "id": true,
-      "otherEntityRelationshipName": "mapsIdChildEntityWithoutDTO"
+      "otherEntityField": "id",
+      "otherEntityName": "mapsIdParentEntityWithoutDTO",
+      "otherEntityRelationshipName": "mapsIdChildEntityWithoutDTO",
+      "ownerSide": true,
+      "relationshipName": "mapsIdParentEntityWithoutDTO",
+      "relationshipType": "one-to-one"
     }
   ],
-  "fields": [
-    {
-      "fieldName": "date",
-      "fieldType": "Instant"
-    }
-  ],
-  "changelogDate": "20190117074746",
-  "dto": "no",
   "searchEngine": false,
-  "service": "no",
-  "entityTableName": "child_entity_wo_dto",
-  "databaseType": "sql",
-  "jpaMetamodelFiltering": false,
-  "pagination": "no"
+  "service": "no"
 }
