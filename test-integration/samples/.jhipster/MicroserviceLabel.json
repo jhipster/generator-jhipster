@@ -1,25 +1,20 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "operation",
-      "otherEntityName": "microserviceOperation",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "label"
-    }
-  ],
-  "fields": [
-    {
-      "fieldName": "label",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "minlength"],
-      "fieldValidateRulesMinlength": "3"
-    }
-  ],
   "changelogDate": "20150805124936",
   "dto": "no",
-  "pagination": "pagination",
+  "fields": [
+    { "fieldName": "label", "fieldType": "String", "fieldValidateRules": ["required", "minlength"], "fieldValidateRulesMinlength": "3" }
+  ],
+  "fluentMethods": true,
   "jpaMetamodelFiltering": true,
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "microserviceOperation",
+      "otherEntityRelationshipName": "label",
+      "ownerSide": false,
+      "relationshipName": "operation",
+      "relationshipType": "many-to-many"
+    }
+  ],
   "service": "serviceClass"
 }

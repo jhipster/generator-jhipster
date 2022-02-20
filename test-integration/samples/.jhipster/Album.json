@@ -1,45 +1,34 @@
 {
+  "applications": "*",
+  "changelogDate": "20200417191023",
+  "clientRootFolder": "",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "album",
+  "fields": [{ "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] }],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
   "name": "Album",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    }
-  ],
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "one-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "artist",
       "otherEntityRelationshipName": "album",
+      "ownerSide": true,
       "relationshipName": "artist",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "one-to-one"
     },
     {
-      "relationshipType": "one-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "genre",
       "otherEntityRelationshipName": "album",
+      "ownerSide": true,
       "relationshipName": "genre",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "one-to-one"
     },
-    {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "track",
-      "otherEntityRelationshipName": "album",
-      "relationshipName": "track"
-    }
+    { "otherEntityName": "track", "otherEntityRelationshipName": "album", "relationshipName": "track", "relationshipType": "one-to-many" }
   ],
-  "changelogDate": "20200417191023",
-  "entityTableName": "album",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*"
+  "service": "no"
 }

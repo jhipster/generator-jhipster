@@ -1,29 +1,24 @@
 {
-  "fluentMethods": true,
+  "changelogDate": "20190117075155",
   "clientRootFolder": "",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "maps_id_child_entity_withdto",
+  "fields": [{ "fieldName": "date", "fieldType": "Instant" }],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "pagination": "no",
   "relationships": [
     {
-      "relationshipName": "mapsIdParentEntityWithDTO",
-      "otherEntityName": "mapsIdParentEntityWithDTO",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "id",
-      "ownerSide": true,
       "id": true,
-      "otherEntityRelationshipName": "mapsIdChildEntityWithDTO"
+      "otherEntityField": "id",
+      "otherEntityName": "mapsIdParentEntityWithDTO",
+      "otherEntityRelationshipName": "mapsIdChildEntityWithDTO",
+      "ownerSide": true,
+      "relationshipName": "mapsIdParentEntityWithDTO",
+      "relationshipType": "one-to-one"
     }
   ],
-  "fields": [
-    {
-      "fieldName": "date",
-      "fieldType": "Instant"
-    }
-  ],
-  "changelogDate": "20190117075155",
-  "dto": "mapstruct",
   "searchEngine": false,
-  "service": "serviceImpl",
-  "entityTableName": "maps_id_child_entity_withdto",
-  "databaseType": "sql",
-  "jpaMetamodelFiltering": false,
-  "pagination": "no"
+  "service": "serviceImpl"
 }

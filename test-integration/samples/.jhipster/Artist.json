@@ -1,22 +1,16 @@
 {
-  "name": "Artist",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    }
-  ],
-  "relationships": [],
+  "applications": "*",
   "changelogDate": "20200417190723",
-  "entityTableName": "artist",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "artist",
+  "fields": [{ "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] }],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Artist",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
 }

@@ -1,28 +1,11 @@
 {
-  "fluentMethods": true,
-  "relationships": [],
+  "changelogDate": "20160208184039",
+  "dto": "no",
   "fields": [
-    {
-      "fieldName": "stringBob",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "stringRequiredBob",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "stringMinlengthBob",
-      "fieldType": "String",
-      "fieldValidateRules": ["minlength"],
-      "fieldValidateRulesMinlength": 0
-    },
-    {
-      "fieldName": "stringMaxlengthBob",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": 20
-    },
+    { "fieldName": "stringBob", "fieldType": "String" },
+    { "fieldName": "stringRequiredBob", "fieldType": "String", "fieldValidateRules": ["required"] },
+    { "fieldName": "stringMinlengthBob", "fieldType": "String", "fieldValidateRules": ["minlength"], "fieldValidateRulesMinlength": 0 },
+    { "fieldName": "stringMaxlengthBob", "fieldType": "String", "fieldValidateRules": ["maxlength"], "fieldValidateRulesMaxlength": 20 },
     {
       "fieldName": "stringPatternBob",
       "fieldType": "String",
@@ -30,179 +13,45 @@
       "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
       "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
     },
-    {
-      "fieldName": "integerBob",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "integerRequiredBob",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "integerMinBob",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["min"],
-      "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "integerMaxBob",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["max"],
-      "fieldValidateRulesMax": 100
-    },
-    {
-      "fieldName": "longBob",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "longRequiredBob",
-      "fieldType": "Long",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "longMinBob",
-      "fieldType": "Long",
-      "fieldValidateRules": ["min"],
-      "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "longMaxBob",
-      "fieldType": "Long",
-      "fieldValidateRules": ["max"],
-      "fieldValidateRulesMax": 100
-    },
-    {
-      "fieldName": "floatBob",
-      "fieldType": "Float"
-    },
-    {
-      "fieldName": "floatRequiredBob",
-      "fieldType": "Float",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "floatMinBob",
-      "fieldType": "Float",
-      "fieldValidateRules": ["min"],
-      "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "floatMaxBob",
-      "fieldType": "Float",
-      "fieldValidateRules": ["max"],
-      "fieldValidateRulesMax": 100
-    },
-    {
-      "fieldName": "doubleRequiredBob",
-      "fieldType": "Double",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "doubleMinBob",
-      "fieldType": "Double",
-      "fieldValidateRules": ["min"],
-      "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "doubleMaxBob",
-      "fieldType": "Double",
-      "fieldValidateRules": ["max"],
-      "fieldValidateRulesMax": 100
-    },
-    {
-      "fieldName": "bigDecimalRequiredBob",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "bigDecimalMinBob",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["min"],
-      "fieldValidateRulesMin": 0
-    },
-    {
-      "fieldName": "bigDecimalMaxBob",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["max"],
-      "fieldValidateRulesMax": 100
-    },
-    {
-      "fieldName": "localDateBob",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "localDateRequiredBob",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "instantBob",
-      "fieldType": "Instant"
-    },
-    {
-      "fieldName": "instanteRequiredBob",
-      "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "zonedDateTimeBob",
-      "fieldType": "ZonedDateTime"
-    },
-    {
-      "fieldName": "zonedDateTimeRequiredBob",
-      "fieldType": "ZonedDateTime",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "durationBob",
-      "fieldType": "Duration"
-    },
-    {
-      "fieldName": "durationRequiredBob",
-      "fieldType": "Duration",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "booleanBob",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "booleanRequiredBob",
-      "fieldType": "Boolean",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "enumBob",
-      "fieldType": "EnumFieldClass",
-      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
-    },
+    { "fieldName": "integerBob", "fieldType": "Integer" },
+    { "fieldName": "integerRequiredBob", "fieldType": "Integer", "fieldValidateRules": ["required"] },
+    { "fieldName": "integerMinBob", "fieldType": "Integer", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
+    { "fieldName": "integerMaxBob", "fieldType": "Integer", "fieldValidateRules": ["max"], "fieldValidateRulesMax": 100 },
+    { "fieldName": "longBob", "fieldType": "Long" },
+    { "fieldName": "longRequiredBob", "fieldType": "Long", "fieldValidateRules": ["required"] },
+    { "fieldName": "longMinBob", "fieldType": "Long", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
+    { "fieldName": "longMaxBob", "fieldType": "Long", "fieldValidateRules": ["max"], "fieldValidateRulesMax": 100 },
+    { "fieldName": "floatBob", "fieldType": "Float" },
+    { "fieldName": "floatRequiredBob", "fieldType": "Float", "fieldValidateRules": ["required"] },
+    { "fieldName": "floatMinBob", "fieldType": "Float", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
+    { "fieldName": "floatMaxBob", "fieldType": "Float", "fieldValidateRules": ["max"], "fieldValidateRulesMax": 100 },
+    { "fieldName": "doubleRequiredBob", "fieldType": "Double", "fieldValidateRules": ["required"] },
+    { "fieldName": "doubleMinBob", "fieldType": "Double", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
+    { "fieldName": "doubleMaxBob", "fieldType": "Double", "fieldValidateRules": ["max"], "fieldValidateRulesMax": 100 },
+    { "fieldName": "bigDecimalRequiredBob", "fieldType": "BigDecimal", "fieldValidateRules": ["required"] },
+    { "fieldName": "bigDecimalMinBob", "fieldType": "BigDecimal", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
+    { "fieldName": "bigDecimalMaxBob", "fieldType": "BigDecimal", "fieldValidateRules": ["max"], "fieldValidateRulesMax": 100 },
+    { "fieldName": "localDateBob", "fieldType": "LocalDate" },
+    { "fieldName": "localDateRequiredBob", "fieldType": "LocalDate", "fieldValidateRules": ["required"] },
+    { "fieldName": "instantBob", "fieldType": "Instant" },
+    { "fieldName": "instanteRequiredBob", "fieldType": "Instant", "fieldValidateRules": ["required"] },
+    { "fieldName": "zonedDateTimeBob", "fieldType": "ZonedDateTime" },
+    { "fieldName": "zonedDateTimeRequiredBob", "fieldType": "ZonedDateTime", "fieldValidateRules": ["required"] },
+    { "fieldName": "durationBob", "fieldType": "Duration" },
+    { "fieldName": "durationRequiredBob", "fieldType": "Duration", "fieldValidateRules": ["required"] },
+    { "fieldName": "booleanBob", "fieldType": "Boolean" },
+    { "fieldName": "booleanRequiredBob", "fieldType": "Boolean", "fieldValidateRules": ["required"] },
+    { "fieldName": "enumBob", "fieldType": "EnumFieldClass", "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3" },
     {
       "fieldName": "enumRequiredBob",
       "fieldType": "EnumRequiredFieldClass",
-      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
     },
-    {
-      "fieldName": "uuidBob",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "uuidRequiredBob",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "byteImageBob",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "image"
-    },
-    {
-      "fieldName": "byteImageRequiredBob",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "image",
-      "fieldValidateRules": ["required"]
-    },
+    { "fieldName": "uuidBob", "fieldType": "UUID" },
+    { "fieldName": "uuidRequiredBob", "fieldType": "UUID", "fieldValidateRules": ["required"] },
+    { "fieldName": "byteImageBob", "fieldType": "byte[]", "fieldTypeBlobContent": "image" },
+    { "fieldName": "byteImageRequiredBob", "fieldType": "byte[]", "fieldTypeBlobContent": "image", "fieldValidateRules": ["required"] },
     {
       "fieldName": "byteImageMinbytesBob",
       "fieldType": "byte[]",
@@ -217,17 +66,8 @@
       "fieldValidateRules": ["maxbytes"],
       "fieldValidateRulesMaxbytes": 10000
     },
-    {
-      "fieldName": "byteAnyBob",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any"
-    },
-    {
-      "fieldName": "byteAnyRequiredBob",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any",
-      "fieldValidateRules": ["required"]
-    },
+    { "fieldName": "byteAnyBob", "fieldType": "byte[]", "fieldTypeBlobContent": "any" },
+    { "fieldName": "byteAnyRequiredBob", "fieldType": "byte[]", "fieldTypeBlobContent": "any", "fieldValidateRules": ["required"] },
     {
       "fieldName": "byteAnyMinbytesBob",
       "fieldType": "byte[]",
@@ -242,21 +82,12 @@
       "fieldValidateRules": ["maxbytes"],
       "fieldValidateRulesMaxbytes": 10000
     },
-    {
-      "fieldName": "byteTextBob",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text"
-    },
-    {
-      "fieldName": "byteTextRequiredBob",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text",
-      "fieldValidateRules": ["required"]
-    }
+    { "fieldName": "byteTextBob", "fieldType": "byte[]", "fieldTypeBlobContent": "text" },
+    { "fieldName": "byteTextRequiredBob", "fieldType": "byte[]", "fieldTypeBlobContent": "text", "fieldValidateRules": ["required"] }
   ],
-  "changelogDate": "20160208184039",
-  "dto": "no",
-  "service": "serviceClass",
+  "fluentMethods": true,
   "jpaMetamodelFiltering": true,
-  "pagination": "no"
+  "pagination": "no",
+  "relationships": [],
+  "service": "serviceClass"
 }

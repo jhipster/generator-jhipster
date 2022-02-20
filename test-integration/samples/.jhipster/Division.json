@@ -1,54 +1,37 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipType": "one-to-many",
-      "relationshipName": "divisionsPlace",
-      "otherEntityName": "place",
-      "otherEntityRelationshipName": "owner"
-    },
-    {
-      "relationshipType": "many-to-many",
-      "relationshipName": "preferredPlace",
-      "otherEntityName": "place",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "preferredDivision"
-    }
-  ],
+  "changelogDate": "20170626061520",
+  "clientRootFolder": "test-root",
+  "dto": "no",
+  "entityTableName": "division",
   "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "shortName",
-      "fieldType": "String",
-      "fieldValidateRules": ["unique"]
-    },
-    {
-      "fieldName": "numberOfPeople",
-      "fieldType": "Long"
-    },
+    { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required", "unique"] },
+    { "fieldName": "shortName", "fieldType": "String", "fieldValidateRules": ["unique"] },
+    { "fieldName": "numberOfPeople", "fieldType": "Long" },
     {
       "fieldName": "divisionType",
       "fieldType": "DivisionType",
-      "fieldValues": "SCHOOL,CLASS,SUBGROUP",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SCHOOL,CLASS,SUBGROUP"
+    },
+    { "fieldName": "colorBackground", "fieldType": "String" },
+    { "fieldName": "colorText", "fieldType": "String" }
+  ],
+  "fluentMethods": true,
+  "pagination": "no",
+  "relationships": [
+    {
+      "otherEntityName": "place",
+      "otherEntityRelationshipName": "owner",
+      "relationshipName": "divisionsPlace",
+      "relationshipType": "one-to-many"
     },
     {
-      "fieldName": "colorBackground",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "colorText",
-      "fieldType": "String"
+      "otherEntityName": "place",
+      "otherEntityRelationshipName": "preferredDivision",
+      "ownerSide": false,
+      "relationshipName": "preferredPlace",
+      "relationshipType": "many-to-many"
     }
   ],
-  "changelogDate": "20170626061520",
-  "entityTableName": "division",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "clientRootFolder": "test-root"
+  "service": "no"
 }

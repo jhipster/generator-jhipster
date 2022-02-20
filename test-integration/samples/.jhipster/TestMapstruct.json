@@ -1,70 +1,65 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "testMapstructOwnerOneToOne",
-      "otherEntityName": "testManyRelPaginDTO",
-      "relationshipType": "one-to-one",
-      "otherEntityRelationshipName": "backTestMapstructOwnerOneToOne",
-      "ownerSide": true
-    },
-    {
-      "relationshipName": "testMapstructOwnerManyToMany",
-      "otherEntityName": "testManyRelPaginDTO",
-      "relationshipType": "many-to-many",
-      "otherEntityRelationshipName": "backTestMapstructOwnerManyToMany",
-      "ownerSide": true
-    },
-    {
-      "relationshipName": "testMapstructOwnerManyToOne",
-      "otherEntityName": "testManyRelPaginDTO",
-      "relationshipType": "many-to-one",
-      "otherEntityRelationshipName": "backTestMapstructOwnerManyToOne"
-    },
-    {
-      "relationshipName": "testMapstructBackOneToOne",
-      "otherEntityName": "testManyRelPaginDTO",
-      "relationshipType": "one-to-one",
-      "otherEntityRelationshipName": "backTestMapstructBackOneToOne",
-      "ownerSide": false
-    },
-    {
-      "relationshipName": "testMapstructBackManyToMany",
-      "otherEntityName": "testManyRelPaginDTO",
-      "relationshipType": "many-to-many",
-      "otherEntityRelationshipName": "backTestMapstructBackManyToMany",
-      "ownerSide": false
-    },
-    {
-      "relationshipName": "testMapstructBackManyToOne",
-      "otherEntityName": "testManyRelPaginDTO",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "backTestMapstructBackManyToOne"
-    },
-    {
-      "relationshipName": "userManyToOne",
-      "otherEntityName": "user",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "login"
-    },
-    {
-      "relationshipName": "userManyToMany",
-      "otherEntityName": "user",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "login",
-      "ownerSide": true
-    },
-    {
-      "relationshipName": "userOneToOne",
-      "otherEntityName": "user",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "login",
-      "ownerSide": true
-    }
-  ],
-  "fields": [],
   "changelogDate": "20160208210112",
   "dto": "mapstruct",
-  "service": "no",
-  "pagination": "no"
+  "fields": [],
+  "fluentMethods": true,
+  "pagination": "no",
+  "relationships": [
+    {
+      "otherEntityName": "testManyRelPaginDTO",
+      "otherEntityRelationshipName": "backTestMapstructOwnerOneToOne",
+      "ownerSide": true,
+      "relationshipName": "testMapstructOwnerOneToOne",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "testManyRelPaginDTO",
+      "otherEntityRelationshipName": "backTestMapstructOwnerManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testMapstructOwnerManyToMany",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "testManyRelPaginDTO",
+      "otherEntityRelationshipName": "backTestMapstructOwnerManyToOne",
+      "relationshipName": "testMapstructOwnerManyToOne",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "testManyRelPaginDTO",
+      "otherEntityRelationshipName": "backTestMapstructBackOneToOne",
+      "ownerSide": false,
+      "relationshipName": "testMapstructBackOneToOne",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "testManyRelPaginDTO",
+      "otherEntityRelationshipName": "backTestMapstructBackManyToMany",
+      "ownerSide": false,
+      "relationshipName": "testMapstructBackManyToMany",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "testManyRelPaginDTO",
+      "otherEntityRelationshipName": "backTestMapstructBackManyToOne",
+      "relationshipName": "testMapstructBackManyToOne",
+      "relationshipType": "one-to-many"
+    },
+    { "otherEntityField": "login", "otherEntityName": "user", "relationshipName": "userManyToOne", "relationshipType": "many-to-one" },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "ownerSide": true,
+      "relationshipName": "userManyToMany",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "ownerSide": true,
+      "relationshipName": "userOneToOne",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "no"
 }

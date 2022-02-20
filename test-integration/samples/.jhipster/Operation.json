@@ -1,41 +1,30 @@
 {
+  "changelogDate": "20150805125055",
+  "clientRootFolder": "test-root",
+  "dto": "no",
+  "fields": [
+    { "fieldName": "date", "fieldType": "Instant", "fieldValidateRules": ["required"] },
+    { "fieldName": "description", "fieldType": "String" },
+    { "fieldName": "amount", "fieldType": "BigDecimal", "fieldValidateRules": ["required"] }
+  ],
   "fluentMethods": true,
+  "pagination": "infinite-scroll",
   "relationships": [
     {
-      "relationshipName": "bankAccount",
-      "otherEntityName": "bankAccount",
-      "relationshipType": "many-to-one",
       "otherEntityField": "name",
-      "otherEntityRelationshipName": "operation"
+      "otherEntityName": "bankAccount",
+      "otherEntityRelationshipName": "operation",
+      "relationshipName": "bankAccount",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "label",
-      "otherEntityName": "label",
-      "relationshipType": "many-to-many",
       "otherEntityField": "labelName",
+      "otherEntityName": "label",
+      "otherEntityRelationshipName": "operation",
       "ownerSide": true,
-      "otherEntityRelationshipName": "operation"
+      "relationshipName": "label",
+      "relationshipType": "many-to-many"
     }
   ],
-  "fields": [
-    {
-      "fieldName": "date",
-      "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "amount",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    }
-  ],
-  "changelogDate": "20150805125055",
-  "dto": "no",
-  "service": "no",
-  "pagination": "infinite-scroll",
-  "clientRootFolder": "test-root"
+  "service": "no"
 }

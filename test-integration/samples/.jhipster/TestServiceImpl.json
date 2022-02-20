@@ -1,52 +1,47 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "testManyToOne",
-      "otherEntityName": "testManyToOne",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "testServiceImpl"
-    },
-    {
-      "relationshipName": "testManyToMany",
-      "otherEntityName": "testManyToMany",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "testServiceImpl"
-    },
-    {
-      "relationshipName": "testOneToOne",
-      "otherEntityName": "testOneToOne",
-      "relationshipType": "one-to-one",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "testServiceImpl"
-    },
-    {
-      "relationshipName": "userOneToMany",
-      "otherEntityName": "user",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "login"
-    },
-    {
-      "relationshipName": "userManyToMany",
-      "otherEntityName": "user",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "login",
-      "ownerSide": true
-    },
-    {
-      "relationshipName": "userOneToOne",
-      "otherEntityName": "user",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "login",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "parent"
-    }
-  ],
-  "fields": [],
   "changelogDate": "20160208210115",
   "dto": "no",
-  "service": "serviceImpl",
+  "fields": [],
+  "fluentMethods": true,
   "jpaMetamodelFiltering": true,
-  "pagination": "no"
+  "pagination": "no",
+  "relationships": [
+    {
+      "otherEntityName": "testManyToOne",
+      "otherEntityRelationshipName": "testServiceImpl",
+      "relationshipName": "testManyToOne",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "testManyToMany",
+      "otherEntityRelationshipName": "testServiceImpl",
+      "ownerSide": false,
+      "relationshipName": "testManyToMany",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "testOneToOne",
+      "otherEntityRelationshipName": "testServiceImpl",
+      "ownerSide": false,
+      "relationshipName": "testOneToOne",
+      "relationshipType": "one-to-one"
+    },
+    { "otherEntityField": "login", "otherEntityName": "user", "relationshipName": "userOneToMany", "relationshipType": "many-to-one" },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "ownerSide": true,
+      "relationshipName": "userManyToMany",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "parent",
+      "ownerSide": true,
+      "relationshipName": "userOneToOne",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceImpl"
 }

@@ -1,67 +1,67 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "testEntity",
-      "otherEntityName": "testEntity",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "testManyToMany"
-    },
-    {
-      "relationshipName": "testServiceClass",
-      "otherEntityName": "testServiceClass",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "testManyToMany"
-    },
-    {
-      "relationshipName": "testServiceImpl",
-      "otherEntityName": "testServiceImpl",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "testManyToMany"
-    },
-    {
-      "relationshipName": "testInfiniteScroll",
-      "otherEntityName": "testInfiniteScroll",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "testManyToMany"
-    },
-    {
-      "relationshipName": "testPagination",
-      "otherEntityName": "testPagination",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "testManyToMany"
-    },
-    {
-      "relationshipName": "testCustomTableName",
-      "otherEntityName": "testCustomTableName",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "testManyToMany"
-    },
-    {
-      "relationshipName": "superMegaLargeTestEntity",
-      "otherEntityName": "superMegaLargeTestEntity",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "id",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "superMegaLargeTestManyToMany"
-    }
-  ],
-  "fields": [],
+  "angularJSSuffix": "mySuffix",
   "changelogDate": "20160208210535",
   "dto": "no",
-  "service": "no",
-  "angularJSSuffix": "mySuffix",
-  "pagination": "no"
+  "fields": [],
+  "fluentMethods": true,
+  "pagination": "no",
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "testEntity",
+      "otherEntityRelationshipName": "testManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testEntity",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "testServiceClass",
+      "otherEntityRelationshipName": "testManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testServiceClass",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "testServiceImpl",
+      "otherEntityRelationshipName": "testManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testServiceImpl",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "testInfiniteScroll",
+      "otherEntityRelationshipName": "testManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testInfiniteScroll",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "testPagination",
+      "otherEntityRelationshipName": "testManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testPagination",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "testCustomTableName",
+      "otherEntityRelationshipName": "testManyToMany",
+      "ownerSide": true,
+      "relationshipName": "testCustomTableName",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "superMegaLargeTestEntity",
+      "otherEntityRelationshipName": "superMegaLargeTestManyToMany",
+      "ownerSide": true,
+      "relationshipName": "superMegaLargeTestEntity",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
 }
