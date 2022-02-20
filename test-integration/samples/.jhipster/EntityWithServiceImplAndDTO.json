@@ -1,15 +1,10 @@
 {
-  "fluentMethods": true,
-  "relationships": [],
-  "fields": [
-    {
-      "fieldName": "louis",
-      "fieldType": "String"
-    }
-  ],
   "changelogDate": "20160806123742",
-  "entityTableName": "entity_with_service_impl_and_dto",
   "dto": "mapstruct",
+  "entityTableName": "entity_with_service_impl_and_dto",
+  "fields": [{ "fieldName": "louis", "fieldType": "String" }],
+  "fluentMethods": true,
   "pagination": "no",
+  "relationships": [],
   "service": "serviceImpl"
 }

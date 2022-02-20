@@ -1,54 +1,34 @@
 {
+  "changelogDate": "20170626061521",
+  "clientRootFolder": "test-root",
+  "dto": "no",
+  "entityTableName": "place",
+  "fields": [
+    { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] },
+    { "fieldName": "numberOfSeats", "fieldType": "Long" },
+    { "fieldName": "shortName", "fieldType": "String" },
+    { "fieldName": "colorBackground", "fieldType": "String" },
+    { "fieldName": "colorText", "fieldType": "String" },
+    { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
+  ],
   "fluentMethods": true,
+  "pagination": "no",
   "relationships": [
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
+      "otherEntityName": "division",
       "otherEntityRelationshipName": "preferredPlace",
+      "ownerSide": true,
       "relationshipName": "preferredDivision",
-      "otherEntityName": "division",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "name",
+      "otherEntityName": "division",
+      "otherEntityRelationshipName": "divisionsPlace",
       "relationshipName": "owner",
-      "otherEntityName": "division",
-      "otherEntityField": "name",
-      "otherEntityRelationshipName": "divisionsPlace"
+      "relationshipType": "many-to-one"
     }
   ],
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "numberOfSeats",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "shortName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "colorBackground",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "colorText",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text"
-    }
-  ],
-  "changelogDate": "20170626061521",
-  "entityTableName": "place",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "clientRootFolder": "test-root"
+  "service": "no"
 }

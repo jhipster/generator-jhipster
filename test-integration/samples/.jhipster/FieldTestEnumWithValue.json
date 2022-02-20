@@ -1,32 +1,20 @@
 {
-  "name": "FieldTestEnumWithValue",
-  "fields": [
-    {
-      "fieldName": "myFieldA",
-      "fieldType": "MyEnumA",
-      "fieldValues": "AAA,BBB"
-    },
-    {
-      "fieldName": "myFieldB",
-      "fieldType": "MyEnumB",
-      "fieldValues": "AAA (aaa_aaa),BBB"
-    },
-    {
-      "fieldName": "myFieldC",
-      "fieldType": "MyEnumC",
-      "fieldValues": "AAA (aaa_aaa),BBB (b and b)"
-    }
-  ],
-  "relationships": [],
+  "applications": "*",
   "changelogDate": "20200415193919",
-  "entityTableName": "entity_with_enums",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_with_enums",
+  "fields": [
+    { "fieldName": "myFieldA", "fieldType": "MyEnumA", "fieldValues": "AAA,BBB" },
+    { "fieldName": "myFieldB", "fieldType": "MyEnumB", "fieldValues": "AAA (aaa_aaa),BBB" },
+    { "fieldName": "myFieldC", "fieldType": "MyEnumC", "fieldValues": "AAA (aaa_aaa),BBB (b and b)" }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "FieldTestEnumWithValue",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
 }
