@@ -124,7 +124,7 @@
     "ejs-lint": "1.2.1",
     "eslint": "8.9.0",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-prettier": "8.3.0",
+    "eslint-config-prettier": "8.4.0",
     "eslint-plugin-chai-friendly": "^0.7.1",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-mocha": "10.0.3",
