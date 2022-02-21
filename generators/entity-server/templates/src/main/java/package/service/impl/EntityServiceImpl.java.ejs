@@ -213,7 +213,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
     @Transactional(readOnly = true)
     <%_ } _%>
     public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKey.type %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true}); -%>
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true, relationshipsContainEagerLoad}); -%>
     }
 
 <%_ if (!serviceImpl) { _%>
