@@ -392,7 +392,7 @@ public class <%= entityClass %>Resource {
     @Transactional(readOnly = true)
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> get<%= entityClass %>(@PathVariable <%= primaryKey.type %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false, relationshipsContainEagerLoad}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 <%_ if (!readOnly) { _%>

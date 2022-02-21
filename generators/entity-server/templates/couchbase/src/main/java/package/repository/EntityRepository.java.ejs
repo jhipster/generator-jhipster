@@ -42,14 +42,6 @@ import java.util.Optional;
 import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_
-let importList = fieldsContainOwnerManyToMany;
-for (r of relationships) {
-  if (r.relationshipManyToOne && r.otherEntityUser) {
-    importList = true;
-  }
-}
-_%>
 <%_ if (primaryKey.typeUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
