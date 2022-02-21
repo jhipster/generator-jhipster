@@ -27,6 +27,11 @@ import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongToAnyOf;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
+<%_
+  const hasClientLayer = !reactive && (applicationTypeMicroservice || applicationTypeGateway);
+  const hasDomainLayer = !databaseTypeNo;
+  const hasConstants = !skipUserManagement || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j;
+_%>
 @AnalyzeClasses(packagesOf = <%= mainClass %>.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {
 
@@ -34,35 +39,37 @@ class TechnicalStructureTest {
     @ArchTest
     static final ArchRule respectsTechnicalArchitectureLayers = layeredArchitecture()
         .layer("Config").definedBy("..config..")
-<%_ if (applicationTypeMicroservice) { _%>
+<%_ if (hasClientLayer) { _%>
         .layer("Client").definedBy("..client..")
 <%_ } _%>
         .layer("Web").definedBy("..web..")
         .optionalLayer("Service").definedBy("..service..")
         .layer("Security").definedBy("..security..")
-<%_ if (!databaseTypeNo) { _%>
+<%_ if (hasDomainLayer) { _%>
         .layer("Persistence").definedBy("..repository..")
         .layer("Domain").definedBy("..domain..")
 <%_ } _%>
 
         .whereLayer("Config").mayNotBeAccessedByAnyLayer()
-<%_ if (applicationTypeMicroservice) { _%>
+<%_ if (hasClientLayer) { _%>
         .whereLayer("Client").mayNotBeAccessedByAnyLayer()
 <%_ } _%>
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
         .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
-        .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", <% if (applicationTypeMicroservice) { %>"Client", <% } %>"Service", "Web")
-<%_ if (!databaseTypeNo) { _%>
+        .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", <% if (hasClientLayer) { %>"Client", <% } %>"Service", "Web")
+<%_ if (hasDomainLayer) { _%>
         .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
 <%_ } _%>
 
         .ignoreDependency(belongToAnyOf(<%= mainClass %>.class), alwaysTrue())
         .ignoreDependency(alwaysTrue(), belongToAnyOf(
+<%_ if (hasConstants) { _%>
+            <%= packageName %>.config.Constants.class,
+<%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
             <%= packageName %>.config.KafkaProperties.class,
 <%_ } _%>
-            <%= packageName %>.config.ApplicationProperties.class,
-            <%= packageName %>.config.Constants.class
+            <%= packageName %>.config.ApplicationProperties.class
         ));
 }
