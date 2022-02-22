@@ -49,12 +49,12 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
     }
 
     default <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable) {
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         return findAllById(toIds(findAllIds(pageable)));
-    <%_ } else { _%>
+<%_ } else { _%>
         Page<T> page = findAllIds(pageable);
         return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
-    <%_ } _%>
+<%_ } _%>
     }
 
     default <%= listOrFlux %><T> findAll(Sort sort) {
@@ -62,13 +62,13 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
     }
 
     default <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll() {
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         return toIds(findAllIds())
             .collectList()
             .flatMap(this::deleteAllById);
-    <%_ } else { _%>
+<%_ } else { _%>
         deleteAllById(toIds(findAllIds()));
-    <%_ } _%>
+<%_ } _%>
     }
 
     @Query(FIND_IDS_QUERY)
@@ -82,12 +82,12 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
 
     @SuppressWarnings("unchecked")
     default <%= listOrFlux %><ID> toIds(<%= listOrFlux %><T> entities) {
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         return entities.mapNotNull(entity -> (ID) getEntityInformation().getId(entity));
-    <%_ } else { _%>
+<%_ } else { _%>
         return entities.stream()
             .map(entity -> (ID) getEntityInformation().getId(entity))
             .collect(Collectors.toList());
-    <%_ } _%>
+<%_ } _%>
     }
 }
