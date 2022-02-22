@@ -40,6 +40,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
 
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
+import static org.hamcrest.Matchers.is;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.MockMvc;
@@ -72,29 +73,42 @@ public class UserStepDefs extends StepDefs {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
+<%_ if (reactive) { _%>
+        this.userResourceMock = WebTestClient.bindToController(userResource).build();
+<%_ } else { _%>
         this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
+<%_ } _%>
     }
 
     @When("I search user {string}")
     public void i_search_user(String userId) throws Throwable {
 <%_ if (reactive) { _%>
-        actions = userResourceMock.get().uri("/api/admin/users/" + userId)
+        actions = userResourceMock.get().uri("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON).exchange();
 <%_ } else { _%>
-        actions = userResourceMock.perform(get("/api/admin/users/" + userId)
+        actions = userResourceMock.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
 <%_ } _%>
-                    .accept(MediaType.APPLICATION_JSON)<% if (!reactive) { %>)<%_ } _%>;
     }
 
     @Then("the user is found")
     public void the_user_is_found() throws Throwable {
+<%_ if (reactive) { _%>
+        actions
+            .expectStatus().isOk()
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE);
+<%_ } else { _%>
         actions
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+<%_ } _%>
     }
 
     @Then("his last name is {string}")
     public void his_last_name_is(String lastName) throws Throwable {
+<%_ if (reactive) { _%>
+        actions.expectBody().jsonPath("$.lastName").value(is(lastName));
+<%_ } else { _%>
         actions.andExpect(jsonPath("$.lastName").value(lastName));
+<%_ } _%>
     }
 
 }

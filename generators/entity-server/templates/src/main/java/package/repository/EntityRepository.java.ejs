@@ -41,16 +41,8 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_
-if (databaseTypeSql || databaseTypeMongodb) {
-  let importList = fieldsContainOwnerManyToMany;
-  for (r of relationships) {
-    if (r.relationshipManyToOne && r.otherEntityUser) {
-      importList = true;
-    }
-  }
-_%>
-  <%_ if (importList || relationshipsContainEagerLoad) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+  <%_ if (relationshipsContainEagerLoad || relationships.some(r => r.relationshipManyToOne && r.otherEntityUser)) { _%>
 import java.util.List;
   <%_ } _%>
   <%_ if (relationshipsContainEagerLoad) { _%>
