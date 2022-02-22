@@ -44,17 +44,17 @@ import java.util.stream.Collectors;
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
-    <%_ if (!embedded) { _%>
+  <%_ if (!embedded) { _%>
 @Document
 @TypeAlias(TYPE_NAME)
 @Collection(TYPE_NAME)
-    <%_ } _%>
+  <%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.classStaticFieldsSection) { -&>
-    <%_ if (!embedded) { _%>
+  <%_ if (!embedded) { _%>
     public static final String TYPE_NAME = "<%= entityInstance %>";
-    <%_ } _%>
+  <%_ } _%>
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
