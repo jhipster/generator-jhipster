@@ -74,7 +74,7 @@ jobs:
         cache: [angular]
         suite:
           - ms-ngx-eureka-oauth2
-          - ms-react-jwt-consul
+          - ms-react-consul-jwt
           - mf-ngx-eureka-jwt
           - mf-vue-consul-oauth2
         include:
@@ -82,7 +82,7 @@ jobs:
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
-          - suite: ms-react-jwt-consul
+          - suite: ms-react-consul-jwt
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
