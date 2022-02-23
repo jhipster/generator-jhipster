@@ -1,51 +1,98 @@
-
 /*
- * This is a microservice blog sample with Gateway and two microservice applications
- * This uses JHipster registry for service discovery and OIDC authentication
+ * Microservice stack sample to test compilation and base gateway/microservices functionality.
+ *
+ * Test focus:
+ * - serviceDiscovery: eureka
+ * - authenticationType: oauth2
+ * - databaseType: ?
+ * - testFrameworks: cypress, cucumber, gatling
+ *
+ * Imperative focus:
+ * - cacheProvider: caffeine
+ *
+ * Matrix:
+ * - reactive: true, false
+ * - buildTool: maven, gradle
  */
- 
+
+/* reactive, maven */
 application {
   config {
-    baseName gateway
-    packageName com.okta.developer.gateway
     applicationType gateway
     authenticationType oauth2
-    prodDatabaseType postgresql
-    testFrameworks [cypress]
+    baseName gateway
+    buildTool maven
+    clientFramework angularX
     creationTimestamp 1617901618886
+    databaseType no
+    jhiPrefix custom
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.gateway
+    serviceDiscoveryType eureka
+    testFrameworks [cypress, cucumber, gatling]
   }
-  entities Blog, Post, Tag, Product
+  entities *
 }
 
+/* imperative, maven */
 application {
   config {
-    baseName blog
-    packageName com.okta.developer.blog
     applicationType microservice
     authenticationType oauth2
-    prodDatabaseType postgresql
-    searchEngine elasticsearch
-    serverPort 8081
+    baseName blog
+    buildTool maven
+    cacheProvider caffeine
     creationTimestamp 1617901618887
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.blog
+    prodDatabaseType postgresql
+    serverPort 8081
+    serviceDiscoveryType eureka
+    testFrameworks [cucumber, gatling]
   }
   entities Blog, Post, Tag
 }
 
+/* imperative, gradle, entitySuffix/dtoSuffix */
 application {
   config {
-    baseName store,
-    packageName com.okta.developer.store
     applicationType microservice
     authenticationType oauth2
-    prodDatabaseType postgresql
-    enableHibernateCache false
-    serverPort 8082
+    baseName store,
+    buildTool gradle
+    cacheProvider caffeine
     creationTimestamp 1617901618888
+    dtoSuffix Rest
+    entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.store
+    prodDatabaseType postgresql
+    serverPort 8082
+    serviceDiscoveryType eureka
+    testFrameworks [cucumber, gatling]
   }
   entities Product
+}
+
+/* reactive, gradle, entitySuffix/dtoSuffix */
+application {
+  config {
+    applicationType microservice
+    authenticationType oauth2
+    baseName notification,
+    buildTool gradle
+    creationTimestamp 1617901618889
+    // dtoSuffix Rest
+    // entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.notification
+    prodDatabaseType postgresql
+    reactive true
+    serverPort 8083
+    serviceDiscoveryType eureka
+    testFrameworks [cucumber, gatling]
+  }
+  entities Notification
 }
 
 @ChangelogDate(20210408164810)
@@ -71,6 +118,11 @@ entity Product {
   image ImageBlob
 }
 
+@ChangelogDate(20210408164814)
+entity Notification {
+  title String required
+}
+
 relationship ManyToOne {
   Post{blog(name)} to Blog
 }
@@ -82,12 +134,17 @@ relationship ManyToMany {
 paginate Post, Tag with infinite-scroll
 paginate Product with pagination
 
+service Product with serviceClass
+service Notification with serviceImpl
+dto Blog, Post, Tag with mapstruct
+
 microservice Product with store
 microservice Blog, Post, Tag with blog
+microservice Notification with notification
 
 deployment {
   deploymentType docker-compose,
-  appsFolders [store, blog, gateway]
+  appsFolders [gateway, store, blog, notification]
   dockerRepositoryName "hipsterslabs"
   monitoring no
   serviceDiscoveryType eureka

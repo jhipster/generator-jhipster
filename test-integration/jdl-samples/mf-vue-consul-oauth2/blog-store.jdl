@@ -1,57 +1,106 @@
-
 /*
- * This is a microservice blog sample with Gateway and two microservice applications
- * This uses JHipster registry for service discovery and OIDC authentication
+ * Microservice stack sample to test compilation and base microfrontend functionality.
+ *
+ * Test focus:
+ * - serviceDiscovery: consul
+ * - authenticationType: oauth2
+ * - clientFramework: vue with microfrontend
+ * - prodDatabaseType: mysql
+ * - testFrameworks: cypress
+ *
+ * Imperative focus:
+ * - cacheProvider: memcached
+ *
+ * Matrix:
+ * - reactive: true, false
+ * - buildTool: maven, gradle
  */
- 
+
+/* reactive, maven */ 
 application {
   config {
-    baseName gateway
-    packageName com.okta.developer.gateway
     applicationType gateway
-    clientFramework vue
     authenticationType oauth2
-    prodDatabaseType postgresql
-    serviceDiscoveryType consul
-    testFrameworks [cypress]
+    baseName gateway
+    buildTool maven
+    clientFramework vue
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.gateway
+    prodDatabaseType mysql
+    serviceDiscoveryType consul
+    testFrameworks [cypress]
   }
-  entities Blog, Post, Tag, Product
+  entities *
 }
 
+/* imperative, maven */
 application {
   config {
-    baseName blog
-    packageName com.okta.developer.blog
     applicationType microservice
-    clientFramework vue
     authenticationType oauth2
-    prodDatabaseType postgresql
+    baseName blog
+    buildTool maven
+    cacheProvider memcached
+    clientFramework vue
+    creationTimestamp 1617901618887
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.blog
+    prodDatabaseType mysql
     serverPort 8081
     serviceDiscoveryType consul
     testFrameworks [cypress]
-    creationTimestamp 1617901618887
-    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
   entities Blog, Post, Tag
 }
 
+/* imperative, gradle, entitySuffix/dtoSuffix */
 application {
   config {
-    baseName store,
-    packageName com.okta.developer.store
     applicationType microservice
-    clientFramework vue
     authenticationType oauth2
-    prodDatabaseType postgresql
+    baseName store,
+    buildTool gradle
+    cacheProvider memcached
+    clientFramework vue
+    creationTimestamp 1617901618888
+    dtoSuffix Rest
+    entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.store
+    prodDatabaseType mysql
     serverPort 8082
     serviceDiscoveryType consul
     testFrameworks [cypress]
-    creationTimestamp 1617901618888
-    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
   }
   entities Product
+}
+
+/* reactive, gradle, entitySuffix/dtoSuffix */
+application {
+  config {
+    applicationType microservice
+    authenticationType oauth2
+    baseName notification,
+    buildTool gradle
+    clientFramework vue
+    creationTimestamp 1617901618889
+    // dtoSuffix Rest
+    // entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.notification
+    prodDatabaseType mysql
+    reactive true
+    serverPort 8083
+    serviceDiscoveryType consul
+    testFrameworks [cypress]
+  }
+  entities Notification
+}
+
+@ChangelogDate(20210408164809)
+entity UserData {
+  address String
 }
 
 @ChangelogDate(20210408164810)
@@ -77,6 +126,17 @@ entity Product {
   image ImageBlob
 }
 
+/*
+relationship OneToOne {
+  @Id UserData{user(login)} to User
+}
+*/
+
+@ChangelogDate(20210408164814)
+entity Notification {
+  title String required
+}
+
 relationship ManyToOne {
   Blog{user(login)} to User
   Post{blog(name)} to Blog
@@ -89,12 +149,17 @@ relationship ManyToMany {
 paginate Post, Tag with infinite-scroll
 paginate Product with pagination
 
+service Product with serviceClass
+service Notification with serviceImpl
+dto Blog, Post, Tag with mapstruct
+
 microservice Product with store
 microservice Blog, Post, Tag with blog
+microservice Notification with notification
 
 deployment {
   deploymentType docker-compose,
-  appsFolders [store, blog, gateway]
+  appsFolders [gateway, store, blog, notification]
   dockerRepositoryName "hipsterslabs"
   monitoring no
   serviceDiscoveryType consul
