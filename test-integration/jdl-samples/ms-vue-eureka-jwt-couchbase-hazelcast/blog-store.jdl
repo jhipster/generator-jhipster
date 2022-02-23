@@ -1,0 +1,160 @@
+/*
+ * Microservice stack sample to test compilation and base gateway/microservices functionality.
+ *
+ * Test focus:
+ * - serviceDiscovery: eureka
+ * - authenticationType: jwt
+ * - databaseType: couchbase
+ * - testFrameworks: cypress, cucumber, gatling
+ *
+ * Imperative focus:
+ * - cacheProvider: hazelcast
+ *
+ * Matrix:
+ * - reactive: true, false
+ * - buildTool: maven, gradle
+ */
+
+/* reactive, maven */
+application {
+  config {
+    applicationType gateway
+    authenticationType jwt
+    baseName gateway
+    buildTool maven
+    clientFramework vue
+    creationTimestamp 1617901618886
+    databaseType couchbase
+    jhiPrefix custom
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.gateway
+    serviceDiscoveryType eureka
+    testFrameworks [cypress, cucumber, gatling]
+  }
+  entities *
+}
+
+/* imperative, maven */
+application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName blog
+    buildTool maven
+    cacheProvider hazelcast
+    creationTimestamp 1617901618887
+    databaseType couchbase
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.blog
+    serverPort 8081
+    serviceDiscoveryType eureka
+    testFrameworks [cucumber, gatling]
+  }
+  entities Blog, Post, Tag
+}
+
+/* imperative, gradle, entitySuffix/dtoSuffix */
+application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName store,
+    buildTool gradle
+    cacheProvider hazelcast
+    creationTimestamp 1617901618888
+    databaseType couchbase
+    dtoSuffix Rest
+    entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.store
+    serverPort 8082
+    serviceDiscoveryType eureka
+    testFrameworks [cucumber, gatling]
+  }
+  entities Product
+}
+
+/* reactive, gradle, entitySuffix/dtoSuffix */
+application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName notification,
+    buildTool gradle
+    creationTimestamp 1617901618889
+    databaseType couchbase
+    dtoSuffix Rest
+    entitySuffix Entity
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    packageName com.okta.developer.notification
+    reactive true
+    serverPort 8083
+    serviceDiscoveryType eureka
+    testFrameworks [cucumber, gatling]
+  }
+  entities Notification
+}
+
+@ChangelogDate(20210408164809)
+entity UserData {
+  address String
+}
+
+@ChangelogDate(20210408164810)
+entity Blog {
+  name String required minlength(3)
+  handle String required minlength(2)
+}
+
+@ChangelogDate(20210408164811)
+entity Post {
+  title String required
+}
+
+@ChangelogDate(20210408164812)
+entity Tag {
+  name String required minlength(2)
+}
+
+@ChangelogDate(20210408164813)
+entity Product {
+  title String required
+  price BigDecimal required min(0)
+  image ImageBlob
+}
+
+@ChangelogDate(20210408164814)
+entity Notification {
+  title String required
+}
+
+relationship OneToOne {
+  @Id UserData{user(login)} to User
+}
+
+relationship ManyToOne {
+  Post{blog(name)} to Blog
+}
+
+relationship ManyToMany {
+  Post{tag(name)} to Tag{post}
+}
+
+paginate Post, Tag with infinite-scroll
+paginate Product with pagination
+
+service Product with serviceClass
+service Notification with serviceImpl
+dto Blog, Post, Tag, Notification with mapstruct
+
+microservice Product with store
+microservice Blog, Post, Tag with blog
+microservice Notification with notification
+
+deployment {
+  deploymentType docker-compose,
+  appsFolders [gateway, store, blog, notification]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType eureka
+}
