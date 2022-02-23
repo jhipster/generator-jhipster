@@ -1267,7 +1267,7 @@ jobs:
         run: |
           GIT_TAG=:\${GITHUB_REF#refs/tags/}
           DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
-          ./gradlew jib -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username=\\"\${{ secrets.DOCKER_USERNAME }}\\" -Djib.to.auth.password=\\"\${{ secrets.DOCKER_PASSWORD }}\\"
+          ./gradlew jib -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username=\\"\${{ secrets.DOCKER_USERNAME }}\\" -Djib.to.auth.password=\\"\${{ secrets.DOCKER_PASSWORD }}\\" -Pprod
       - name: \\"E2E: Package\\"
         run: npm run ci:e2e:package
       - name: \\"E2E: Prepare\\"
@@ -1512,7 +1512,7 @@ jobs:
         run: |
           GIT_TAG=:\${GITHUB_REF#refs/tags/}
           DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
-          ./mvnw -ntp jib:build -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username=\\"\${{ secrets.DOCKER_USERNAME }}\\" -Djib.to.auth.password=\\"\${{ secrets.DOCKER_PASSWORD }}\\"
+          ./mvnw -ntp jib:build -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username=\\"\${{ secrets.DOCKER_USERNAME }}\\" -Djib.to.auth.password=\\"\${{ secrets.DOCKER_PASSWORD }}\\" -Pprod
       - name: \\"E2E: Package\\"
         run: npm run ci:e2e:package
       - name: \\"E2E: Prepare\\"
