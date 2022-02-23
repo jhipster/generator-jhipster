@@ -75,17 +75,16 @@ jobs:
         suite:
           - ms-ngx-eureka-oauth2-mongodb-caffeine
           - ms-react-consul-jwt-cassandra-redis
+          - ms-vue-eureka-jwt-couchbase-hazelcast
           - mf-ngx-eureka-jwt-psql-ehcache
           - mf-vue-consul-oauth2-mysql-memcached
         include:
           - suite: ms-ngx-eureka-oauth2-mongodb-caffeine
             extra-args: --workspaces --monorepository
-            # Scripts wait for gateway to start, delay for microservices to start.
-            e2e-delay: 0
           - suite: ms-react-consul-jwt-cassandra-redis
             extra-args: --workspaces --monorepository
-            # Scripts wait for gateway to start, delay for microservices to start.
-            e2e-delay: 0
+          - suite: ms-vue-eureka-jwt-couchbase-hazelcast
+            extra-args: --workspaces --monorepository
           - suite: mf-ngx-eureka-jwt-psql-ehcache
             extra-args: --workspaces --monorepository
           - suite: mf-vue-consul-oauth2-mysql-memcached

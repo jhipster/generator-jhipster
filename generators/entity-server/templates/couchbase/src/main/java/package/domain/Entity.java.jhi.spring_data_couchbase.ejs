@@ -23,7 +23,7 @@
 <&_ if (fragment.staticImportSection) { -&>
 <%_ if (!embedded) { _%>
 import static <%= packageName %>.config.Constants.ID_DELIMITER;
-import static <%= packageName %>.domain.<%= entityClass %>.TYPE_NAME;
+import static <%= packageName %>.domain.<%= persistClass %>.TYPE_NAME;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
 <&_ } -&>
