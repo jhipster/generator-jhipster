@@ -73,16 +73,16 @@ jobs:
         os: [ubuntu-20.04]
         cache: [angular]
         suite:
-          - ms-ngx-eureka-oauth2-caffeine
-          - ms-react-consul-jwt-redis
+          - ms-ngx-eureka-oauth2-mongodb-caffeine
+          - ms-react-consul-jwt-cassandra-redis
           - mf-ngx-eureka-jwt-psql-ehcache
           - mf-vue-consul-oauth2-mysql-memcached
         include:
-          - suite: ms-ngx-eureka-oauth2-caffeine
+          - suite: ms-ngx-eureka-oauth2-mongodb-caffeine
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
-          - suite: ms-react-consul-jwt-redis
+          - suite: ms-react-consul-jwt-cassandra-redis
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
             e2e-delay: 120
