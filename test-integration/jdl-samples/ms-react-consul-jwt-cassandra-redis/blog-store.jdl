@@ -2,97 +2,102 @@
  * Microservice stack sample to test compilation and base gateway/microservices functionality.
  *
  * Test focus:
- * - serviceDiscovery: eureka
- * - authenticationType: oauth2
- * - databaseType: ?
+ * - serviceDiscovery: consul
+ * - authenticationType: jwt
+ * - databaseType: cassandra
  * - testFrameworks: cypress, cucumber, gatling
  *
  * Imperative focus:
- * - cacheProvider: caffeine
+ * - cacheProvider: redis
  *
  * Matrix:
  * - reactive: true, false
  * - buildTool: maven, gradle
  */
 
-/* reactive, maven */
+/* reactive, gradle */
 application {
   config {
     applicationType gateway
-    authenticationType oauth2
+    authenticationType jwt
     baseName gateway
-    buildTool maven
-    clientFramework angularX
+    buildTool gradle
+    clientFramework react
     creationTimestamp 1617901618886
-    databaseType no
     jhiPrefix custom
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
-    serviceDiscoveryType eureka
+    prodDatabaseType postgresql
+    serviceDiscoveryType consul
     testFrameworks [cypress, cucumber, gatling]
   }
   entities *
 }
 
-/* imperative, maven */
+/* imperative, gradle */
 application {
   config {
     applicationType microservice
-    authenticationType oauth2
+    authenticationType jwt
     baseName blog
-    buildTool maven
-    cacheProvider caffeine
+    buildTool gradle
+    cacheProvider redis
     creationTimestamp 1617901618887
+    databaseType cassandra
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
-    prodDatabaseType postgresql
     serverPort 8081
-    serviceDiscoveryType eureka
+    serviceDiscoveryType consul
     testFrameworks [cucumber, gatling]
   }
   entities Blog, Post, Tag
 }
 
-/* imperative, gradle, entitySuffix/dtoSuffix */
+/* imperative, maven, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
-    authenticationType oauth2
+    authenticationType jwt
     baseName store,
-    buildTool gradle
-    cacheProvider caffeine
+    buildTool maven
+    cacheProvider redis
     creationTimestamp 1617901618888
+    databaseType cassandra
     dtoSuffix Rest
     entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.store
-    prodDatabaseType postgresql
     serverPort 8082
-    serviceDiscoveryType eureka
+    serviceDiscoveryType consul
     testFrameworks [cucumber, gatling]
   }
   entities Product
 }
 
-/* reactive, gradle, entitySuffix/dtoSuffix */
+/* reactive, maven, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
-    authenticationType oauth2
+    authenticationType jwt
     baseName notification,
-    buildTool gradle
+    buildTool maven
     creationTimestamp 1617901618889
+    databaseType cassandra
     // dtoSuffix Rest
     // entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.notification
-    prodDatabaseType postgresql
     reactive true
     serverPort 8083
-    serviceDiscoveryType eureka
+    serviceDiscoveryType consul
     testFrameworks [cucumber, gatling]
   }
   entities Notification
+}
+
+@ChangelogDate(20210408164809)
+entity UserData {
+  address String
 }
 
 @ChangelogDate(20210408164810)
@@ -123,6 +128,10 @@ entity Notification {
   title String required
 }
 
+relationship OneToOne {
+  @Id UserData{user(login)} to User
+}
+
 relationship ManyToOne {
   Post{blog(name)} to Blog
 }
@@ -147,5 +156,5 @@ deployment {
   appsFolders [gateway, store, blog, notification]
   dockerRepositoryName "hipsterslabs"
   monitoring no
-  serviceDiscoveryType eureka
+  serviceDiscoveryType consul
 }
