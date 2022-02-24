@@ -2,9 +2,9 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * Test focus:
+ * - clientFramework: vue with microfrontend
  * - serviceDiscovery: consul
  * - authenticationType: oauth2
- * - clientFramework: vue with microfrontend
  * - prodDatabaseType: mysql
  * - testFrameworks: cypress
  *
