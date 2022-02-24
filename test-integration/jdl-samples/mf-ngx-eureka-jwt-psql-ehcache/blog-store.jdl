@@ -2,14 +2,14 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * Test focus:
+ * - clientFramework: angularX with microfrontend
  * - serviceDiscovery: eureka
  * - authenticationType: jwt
- * - clientFramework: angularX with microfrontend
  * - prodDatabaseType: postgresql
  * - testFrameworks: cypress
  *
  * Imperative focus:
- * - cacheProvider: memcached
+ * - cacheProvider: ehcache
  *
  * Matrix:
  * - reactive: true, false
