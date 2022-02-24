@@ -81,11 +81,11 @@ jobs:
           - suite: ms-ngx-eureka-oauth2-mongodb-caffeine
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
-            e2e-delay: 120
+            e2e-delay: 0
           - suite: ms-react-consul-jwt-cassandra-redis
             extra-args: --workspaces --monorepository
             # Scripts wait for gateway to start, delay for microservices to start.
-            e2e-delay: 120
+            e2e-delay: 0
           - suite: mf-ngx-eureka-jwt-psql-ehcache
             extra-args: --workspaces --monorepository
           - suite: mf-vue-consul-oauth2-mysql-memcached
