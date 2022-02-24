@@ -24,10 +24,12 @@ application {
     buildTool gradle
     clientFramework react
     creationTimestamp 1617901618886
+    // TODO switch to cassandra
+    // databaseType cassandra
+    prodDatabaseType postgresql
     jhiPrefix custom
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
-    prodDatabaseType postgresql
     serviceDiscoveryType consul
     testFrameworks [cypress, cucumber, gatling]
   }
@@ -43,7 +45,9 @@ application {
     buildTool gradle
     cacheProvider redis
     creationTimestamp 1617901618887
-    databaseType cassandra
+    // TODO switch to cassandra
+    // databaseType cassandra
+    prodDatabaseType postgresql
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
     serverPort 8081
@@ -62,7 +66,9 @@ application {
     buildTool maven
     cacheProvider redis
     creationTimestamp 1617901618888
-    databaseType cassandra
+    // TODO switch to cassandra
+    // databaseType cassandra
+    prodDatabaseType postgresql
     dtoSuffix Rest
     entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
@@ -82,7 +88,9 @@ application {
     baseName notification,
     buildTool maven
     creationTimestamp 1617901618889
-    databaseType cassandra
+    // TODO switch to cassandra
+    // databaseType cassandra
+    prodDatabaseType postgresql
     // dtoSuffix Rest
     // entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
@@ -140,8 +148,9 @@ relationship ManyToMany {
   Post{tag(name)} to Tag{post}
 }
 
-paginate Post, Tag with infinite-scroll
-paginate Product with pagination
+// Cassandra not compatible with pagination
+// paginate Post, Tag with infinite-scroll
+// paginate Product with pagination
 
 service Product with serviceClass
 service Notification with serviceImpl
