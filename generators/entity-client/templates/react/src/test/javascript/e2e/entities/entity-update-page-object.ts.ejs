@@ -30,7 +30,7 @@ let elementGetter = `getText()`;
 let openBlockComment = ``;
 let closeBlockComment = ``;
 if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
+    elementGetter = `getAttribute('${jhiPrefix}Translate')`;
 }
 for (let relationship of relationships) {
   if (relationship.relationshipRequired) {
