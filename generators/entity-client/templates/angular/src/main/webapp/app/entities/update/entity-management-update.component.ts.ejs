@@ -166,7 +166,7 @@ _%>
 
             this.updateForm(<%= entityInstance %>);
 
-<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.ownerSide && !rel.otherEntityIsEmbedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
         });
@@ -308,7 +308,7 @@ _%>
 <%_ } _%>
     }
 
-<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.ownerSide && !rel.otherEntityIsEmbedded).length > 0) { _%>
     protected loadRelationshipsOptions(): void {
     <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
         <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && !rel.otherEntityUser); %>

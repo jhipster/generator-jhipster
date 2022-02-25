@@ -31,11 +31,11 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
 public interface PersistentTokenRepository extends CouchbaseRepository<PersistentToken, String> {
 
     default Optional<PersistentToken> findBySeries(String series) {
-        return findById(PersistentToken.PREFIX + ID_DELIMITER + series);
+        return findById(series);
     }
 
     default void deleteBySeries(String series) {
-        deleteById(PersistentToken.PREFIX + ID_DELIMITER + series);
+        deleteById(series);
     }
 
     default List<PersistentToken> findByUser(<%= asEntity('User') %> user) {

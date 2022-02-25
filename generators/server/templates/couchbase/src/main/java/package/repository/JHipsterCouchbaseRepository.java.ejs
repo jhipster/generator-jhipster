@@ -19,96 +19,75 @@
 package <%= packageName %>.repository;
 
 import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
-import org.springframework.data.couchbase.repository.ScanConsistency;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.couchbase.repository.*;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.NoRepositoryBean;
-<%_ if (searchEngineCouchbase) { _%>
-import com.couchbase.client.java.search.SearchQuery;
-import com.couchbase.client.java.search.queries.DocIdQuery;
-import com.couchbase.client.java.search.queries.QueryStringQuery;
-import java.util.LinkedList;
-<%_ } _%>
 
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
-import org.springframework.data.domain.Page;
-<%_ } _%>
-
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.data.couchbase.core.query.Query;
-
-import static java.lang.String.format;
+<%_ } _%>
 
 /**
- * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
+ * Couchbase specific {@link org.springframework.data.repository.Repository} interface that use KV first approach to optimize requests.
  */
 <%_
     let listOrFlux = reactive ? 'Flux' : 'List';
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @NoRepositoryBean
+@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
 public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
 
-    static String pageableStatement(Pageable pageable) {
-        return pageableStatement(pageable, "");
+    String FIND_IDS_QUERY = "SELECT meta().id as __id, 0 as __cas FROM #{#n1ql.bucket} WHERE #{#n1ql.filter}";
+
+    default <%= listOrFlux %><T> findAll() {
+        return findAllById(toIds(findAllIds()));
     }
 
-    static String pageableStatement(Pageable pageable, String prefix) {
-        Sort sort = Sort.by(
-            pageable.getSort().stream()
-                .map(order -> {
-                    String property = order.getProperty();
-                    if ("id".equals(property)) {
-                        return order.withProperty(format("meta(%s).id", prefix));
-                    }
-                    if (prefix.isEmpty()) {
-                        return order;
-                    }
-                    return order.withProperty(format("%s.%s", prefix, property));
-                })
-                .collect(Collectors.toList()));
-        return new Query()
-            .limit(pageable.getPageSize())
-            .skip(pageable.getOffset())
-            .with(sort)
-            .export();
-    }
-
-<%_ if (searchEngineCouchbase) { _%>
-    static SearchQuery searchQuery(String queryString) {
-        List<String> ids = new LinkedList<>();
-        for (String r : queryString.split(" ")) {
-            if (r.indexOf("id:") == 0) {
-                ids.add(r.substring(3));
-                queryString = queryString.replace(r, "").replaceAll("[ ]+", " ").trim();
-            }
-        }
-        QueryStringQuery query = SearchQuery.queryString(queryString);
-        if (ids.size() != 0) {
-            DocIdQuery docIdQuery = SearchQuery.docId(ids.toArray(new String[0]));
-            if (!queryString.isEmpty()) {
-                return SearchQuery.conjuncts(query, docIdQuery);
-            }
-            return docIdQuery;
-        }
-        return query;
-    }
+    default <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable) {
+<%_ if (reactive) { _%>
+        return findAllById(toIds(findAllIds(pageable)));
+<%_ } else { _%>
+        Page<T> page = findAllIds(pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
 <%_ } _%>
+    }
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><T> findAll();
+    default <%= listOrFlux %><T> findAll(Sort sort) {
+        return findAllById(toIds(findAllIds(sort)));
+    }
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><T> findAll(Sort sort);
+    default <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll() {
+<%_ if (reactive) { _%>
+        return toIds(findAllIds())
+            .collectList()
+            .flatMap(this::deleteAllById);
+<%_ } else { _%>
+        deleteAllById(toIds(findAllIds()));
+<%_ } _%>
+    }
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable);
+    @Query(FIND_IDS_QUERY)
+    <%= listOrFlux %><T> findAllIds();
 
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll();
+    @Query(FIND_IDS_QUERY)
+    <%= pageOrFlux %><T> findAllIds(Pageable pageable);
+
+    @Query(FIND_IDS_QUERY)
+    <%= listOrFlux %><T> findAllIds(Sort sort);
+
+    @SuppressWarnings("unchecked")
+    default <%= listOrFlux %><ID> toIds(<%= listOrFlux %><T> entities) {
+<%_ if (reactive) { _%>
+        return entities.mapNotNull(entity -> (ID) getEntityInformation().getId(entity));
+<%_ } else { _%>
+        return entities.stream()
+            .map(entity -> (ID) getEntityInformation().getId(entity))
+            .collect(Collectors.toList());
+<%_ } _%>
+    }
 }
