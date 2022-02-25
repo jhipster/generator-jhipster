@@ -86,6 +86,7 @@
 <%_ } _%>
         <profile.api-docs />
         <profile.tls />
+        <profile.e2e />
 
         <!-- Dependency versions -->
         <jhipster-dependencies.version><%= JHIPSTER_DEPENDENCIES_VERSION %></jhipster-dependencies.version>
@@ -2024,7 +2025,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -2166,6 +2167,9 @@
 <%_ if (cypressTests || protractorTests) { _%>
         <profile>
             <id>e2e</id>
+            <properties>
+                <profile.e2e>,e2e</profile.e2e>
+            </properties>
             <build>
                 <finalName>e2e</finalName>
                 <pluginManagement>

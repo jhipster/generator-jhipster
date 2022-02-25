@@ -103,10 +103,6 @@ const couchbaseFiles = {
           file: 'package/CouchbaseTestContainerExtension.java',
           renameTo: generator => `${generator.testDir}CouchbaseTestContainerExtension.java`,
         },
-        {
-          file: 'package/config/DatabaseConfigurationIT.java',
-          renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`,
-        },
       ],
     },
   ],
