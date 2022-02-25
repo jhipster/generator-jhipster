@@ -20,7 +20,8 @@ package <%= packageName %>;
 
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (databaseTypeCouchbase) { _%>
-import <%= packageName %>.CouchbaseTestContainerExtension;
+import org.springframework.test.context.ActiveProfiles;
+import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.AbstractNeo4jIT;
@@ -63,6 +64,7 @@ import java.lang.annotation.Target;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @ExtendWith(CouchbaseTestContainerExtension.class)
+@ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 @ExtendWith(MongoDbTestContainerExtension.class)

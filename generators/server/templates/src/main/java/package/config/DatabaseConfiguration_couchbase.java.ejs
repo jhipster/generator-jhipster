@@ -58,13 +58,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.Duration;
 import java.util.*;
 <%_ if (reactive) { _%>
 import java.lang.reflect.Field;
 import org.springframework.data.repository.util.QueryExecutionConverters;
 import reactor.core.publisher.Flux;
 <%_ } _%>
-
 
 @Configuration
 @EnableConfigurationProperties(CouchbaseProperties.class)
@@ -173,6 +173,13 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
         couchmove.migrate();
         couchmove.buildN1qlDeferredIndexes(getScopeName());
+        return couchmove;
+    }
+
+    @Bean
+    @Profile({JHipsterConstants.SPRING_PROFILE_TEST, "e2e"})
+    public Couchmove waitForIndexes(Couchmove couchmove) {
+        couchmove.waitForN1qlIndexes(getScopeName(), Duration.ofSeconds(60));
         return couchmove;
     }
 
