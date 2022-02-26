@@ -112,7 +112,7 @@ _%>
     public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
         R2dbcConverter converter) {
-        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= entityClass %>.class)), entityOperations, converter);
+        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= Class %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
@@ -132,7 +132,7 @@ _%>
     }
 
     RowsFetchSpec<<%= persistClass %>> createQuery(Pageable pageable, Criteria criteria) {
-        List<Expression> columns = <%= persistClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
+        List<Expression> columns = <%= entityClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
 <%_ }); _%>
