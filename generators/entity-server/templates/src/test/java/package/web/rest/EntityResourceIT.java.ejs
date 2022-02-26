@@ -554,7 +554,7 @@ _%>
                 em.deleteAll("<%= rel.joinTable.name %>").block();
     <%_ } _%>
   <%_ }); _%>
-                em.deleteAll(<%= entityClass %>.class).block();
+                em.deleteAll(<%= persistClass %>.class).block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
