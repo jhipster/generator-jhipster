@@ -224,7 +224,7 @@ eureka:
     environment:
       - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
       - USER=docker-cassandra-migration
-      - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     build:
       context: 05-cassandra/src/main/docker
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
