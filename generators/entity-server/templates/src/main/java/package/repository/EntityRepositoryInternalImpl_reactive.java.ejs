@@ -112,7 +112,7 @@ _%>
     public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
         R2dbcConverter converter) {
-        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= Class %>.class)), entityOperations, converter);
+        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= persistClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
