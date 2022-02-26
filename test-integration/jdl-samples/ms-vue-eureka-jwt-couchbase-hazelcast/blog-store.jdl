@@ -140,7 +140,8 @@ relationship ManyToMany {
   Post{tag(name)} to Tag{post}
 }
 
-paginate Post, Tag with infinite-scroll
+// TODO reenable pagination with relationships
+// paginate Post, Tag with infinite-scroll
 paginate Product with pagination
 
 service Product with serviceClass
