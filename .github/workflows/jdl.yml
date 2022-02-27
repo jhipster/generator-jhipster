@@ -223,7 +223,7 @@ jobs:
           name: screenshots-${{ matrix.suite }}
           path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs on failure
-        if: failure()
+        if: always()
         uses: jwalton/gh-docker-logs@v2
       - name: 'ANALYSIS: Sonar analysis'
         if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse == 'true'
