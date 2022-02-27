@@ -346,7 +346,7 @@ public class <%= entityClass %>Resource {
      * @param request a {@link ServerHttpRequest} request.
   <%_ } _%>
 <%_ } _%>
-<%_ if (!jpaMetamodelFiltering && relationshipsContainEagerLoad) { _%>
+<%_ if (!jpaMetamodelFiltering && implementsEagerLoadApis) { _%>
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
@@ -392,7 +392,7 @@ public class <%= entityClass %>Resource {
     @Transactional(readOnly = true)
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> get<%= entityClass %>(@PathVariable <%= primaryKey.type %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false, relationshipsContainEagerLoad}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 <%_ if (!readOnly) { _%>

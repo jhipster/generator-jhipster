@@ -51,7 +51,7 @@ import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<%_ if (!paginationNo || relationshipsContainEagerLoad) { _%>
+<%_ if (!paginationNo || implementsEagerLoadApis) { _%>
   <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
   <%_ } _%>
@@ -150,7 +150,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
     public <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
 <%_ if (paginationNo) { _%>
-        return <%= entityInstance %>Repository.<% if (relationshipsContainEagerLoad) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dtoMapstruct) { %><% if (!reactive) { %>.stream()<% } %>
+        return <%= entityInstance %>Repository.<% if (implementsEagerLoadApis) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dtoMapstruct) { %><% if (!reactive) { %>.stream()<% } %>
             .map(<%= entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
 <%_ } else { _%>
@@ -159,7 +159,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
 <%_ } _%>
     }
 
-<%_ if (relationshipsContainEagerLoad) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
 
   <%_ if (!serviceImpl) { _%>
     /**
@@ -213,7 +213,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
     @Transactional(readOnly = true)
     <%_ } _%>
     public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKey.type %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true, relationshipsContainEagerLoad}); -%>
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true, implementsEagerLoadApis}); -%>
     }
 
 <%_ if (!serviceImpl) { _%>

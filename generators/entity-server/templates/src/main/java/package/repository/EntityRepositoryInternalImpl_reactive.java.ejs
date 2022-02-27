@@ -38,13 +38,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
-<%_ if (databaseTypeSql) { _%>
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 import static org.springframework.data.relational.core.query.Criteria.where;
-  <%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (containsBagRelationships) { _%>
 import static org.springframework.data.relational.core.query.Query.query;
-  <%_ } _%>
+<%_ } _%>
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -58,7 +57,6 @@ import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.repository.support.MappingRelationalEntityInformation;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.r2dbc.core.RowsFetchSpec;
-<%_ } _%>
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <% relationships.forEach(function(rel) {
@@ -156,7 +154,7 @@ _%>
         return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.name %>").is(id)).one();
     }
 
-<%_ if (relationshipsContainEagerLoad) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
 
     @Override
     public Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id) {
@@ -190,10 +188,10 @@ _%>
             return entityManager.insert(entity);
         }
 <%_ } _%>
-        return super.save(entity)<% if (fieldsContainOwnerManyToMany) { %>.flatMap((S e) -> updateRelations(e))<% } %>;
+        return super.save(entity)<% if (containsBagRelationships) { %>.flatMap((S e) -> updateRelations(e))<% } %>;
     }
 
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (containsBagRelationships) { _%>
     protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
   <%_ relationships.filter(function(rel) {
     return (rel.relationshipManyToMany && rel.ownerSide);

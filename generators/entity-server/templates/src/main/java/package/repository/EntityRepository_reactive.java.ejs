@@ -22,15 +22,11 @@ import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.couchbase.core.query.Query;
-import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
-<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 <%_ } _%>
-<%_ if (!paginationNo || relationshipsContainEagerLoad || databaseTypeSql) { _%>
+<%_ if (!paginationNo || implementsEagerLoadApis || databaseTypeSql) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
@@ -39,16 +35,16 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.data.relational.core.query.Criteria;
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-  <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.mongodb.repository.Query;
   <%_ } _%>
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_ if (databaseTypeCouchbase || databaseTypeSql || !paginationNo || relationshipsContainEagerLoad) { _%>
+<%_ if (databaseTypeSql || !paginationNo || implementsEagerLoadApis) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
-<%_ if (relationshipsContainEagerLoad || databaseTypeSql) { _%>
+<%_ if (implementsEagerLoadApis || databaseTypeSql) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
@@ -61,13 +57,13 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>ReactiveCrud<% } if (databaseTypeMongodb) { %>ReactiveMongo<% } if (databaseTypeCouchbase) { %>ReactiveN1qlCouchbase<% } if (databaseTypeNeo4j) { %>ReactiveNeo4j<% } if (databaseTypeCassandra) { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>><% if (databaseTypeSql) { %>, <%= entityClass %>RepositoryInternal<% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { %>ReactiveCrud<% } if (databaseTypeMongodb) { %>ReactiveMongo<% } if (databaseTypeNeo4j) { %>ReactiveNeo4j<% } if (databaseTypeCassandra) { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>><% if (databaseTypeSql) { %>, <%= entityClass %>RepositoryInternal<% } %> {
 
 <%_ if (!paginationNo) { _%>
     Flux<<%= persistClass %>> findAllBy(Pageable pageable);
 <%_ } _%>
-<%_ if (relationshipsContainEagerLoad) { _%>
-  <%_ if (databaseTypeCouchbase || databaseTypeMongodb) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
+  <%_ if (databaseTypeMongodb) { _%>
 
     @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
@@ -90,7 +86,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (implementsEagerLoadApis) { _%>
 
     @Override
     Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
@@ -138,10 +134,8 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeSql) { 
 
     @Override
     Mono<Void> deleteById(<%= primaryKey.type %> id);
-<%_ } _%>
-
 }
-<%_ if (databaseTypeSql) { _%>
+
 interface <%= entityClass %>RepositoryInternal {
     <S extends <%= persistClass %>> Mono<S> save(S entity);
 
@@ -153,7 +147,7 @@ interface <%= entityClass %>RepositoryInternal {
 
     Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
 
-  <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (implementsEagerLoadApis) { _%>
 
     Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
 
@@ -162,8 +156,6 @@ interface <%= entityClass %>RepositoryInternal {
     Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
 
     Mono<Void> deleteById(<%= primaryKey.type %> id);
-
   <%_ } _%>
-
-}
 <%_ } _%>
+}

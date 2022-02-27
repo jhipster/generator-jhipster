@@ -92,7 +92,7 @@ import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCa
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
-<%_ if (!serviceNo && fieldsContainOwnerManyToMany) { _%>
+<%_ if (!serviceNo && implementsEagerLoadApis) { _%>
 import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 <%_ } _%>
 <%_ if (dtoMapstruct) { _%>
@@ -108,7 +108,7 @@ import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (searchEngineElasticsearch || fieldsContainOwnerManyToMany || cacheProviderRedis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
+<%_ if (searchEngineElasticsearch || implementsEagerLoadApis || cacheProviderRedis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -119,7 +119,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !paginationNo || fieldsContainOwnerManyToMany) { _%>
+<%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
@@ -141,7 +141,7 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (fieldsContainBlob) { _%>
 import org.springframework.util.Base64Utils;
 <%_ } _%>
-<%_ if (reactive && (fieldsContainOwnerManyToMany || searchEngineElasticsearch)) { _%>
+<%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -173,7 +173,7 @@ import java.time.ZoneId;
 <%_ if (fieldsContainInstant) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (!reactive && implementsEagerLoadApis) { _%>
 import java.util.ArrayList;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
@@ -209,7 +209,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
   <%_ } _%>
 <%_ } _%>
-<%_ if (searchEngineElasticsearch || fieldsContainOwnerManyToMany) { _%>
+<%_ if (searchEngineElasticsearch || implementsEagerLoadApis) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -226,7 +226,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 @IntegrationTest
-<%_ if (cacheProviderRedis || searchEngineElasticsearch || fieldsContainOwnerManyToMany) { _%>
+<%_ if (cacheProviderRedis || searchEngineElasticsearch || implementsEagerLoadApis) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -432,7 +432,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     @Autowired
     private UserRepository userRepository;
 <%_ } _%>
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
 
     @Mock
     private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;
@@ -442,7 +442,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     @Autowired
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
 <%_ } if (!serviceNo) { _%>
-  <%_ if (fieldsContainOwnerManyToMany) { _%>
+  <%_ if (implementsEagerLoadApis) { _%>
 
     @Mock
     private <%= entityClass %>Service <%= entityInstance %>ServiceMock;
@@ -887,7 +887,7 @@ _%>
   if (field.fieldTypeZonedDateTime) { %>)<% } else
   if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
-<% if (fieldsContainOwnerManyToMany && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
+<% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
     void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
