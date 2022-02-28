@@ -88,7 +88,7 @@ eureka:
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscouchbase-couchbase-node:
     build:
-      context: 10-couchbase\\\\src\\\\main\\\\docker
+      context: 10-couchbase/src/main/docker
       dockerfile: couchbase/Couchbase.Dockerfile
     environment:
       - TYPE=WORKER
@@ -97,7 +97,7 @@ eureka:
       - AUTO_REBALANCE=false
   mscouchbase-couchbase:
     build:
-      context: 10-couchbase\\\\src\\\\main\\\\docker
+      context: 10-couchbase/src/main/docker
       dockerfile: couchbase/Couchbase.Dockerfile
     environment:
       - TYPE=MASTER
@@ -226,10 +226,10 @@ eureka:
       - USER=docker-cassandra-migration
       - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     build:
-      context: 05-cassandra\\\\src\\\\main\\\\docker
+      context: 05-cassandra/src/main/docker
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
     volumes:
-      - 05-cassandra\\\\src\\\\main\\\\resources\\\\config\\\\cql:/cql:ro
+      - 05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
     image: cassandra:3.11.11
 
@@ -559,7 +559,7 @@ eureka:
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmongodb-mongodb-node:
     build:
-      context: 04-mongo\\\\src\\\\main\\\\docker
+      context: 04-mongo/src/main/docker
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
@@ -728,7 +728,7 @@ eureka:
       - JHIPSTER_REGISTRY_PASSWORD=admin
   mscouchbase-couchbase:
     build:
-      context: 10-couchbase\\\\src\\\\main\\\\docker
+      context: 10-couchbase/src/main/docker
       dockerfile: couchbase/Couchbase.Dockerfile
     environment:
       - BUCKET=mscouchbase
