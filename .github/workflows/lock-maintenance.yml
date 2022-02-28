@@ -10,7 +10,7 @@ jobs:
     if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
       - run: npm install -g npm@latest
