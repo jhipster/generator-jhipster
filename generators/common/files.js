@@ -52,14 +52,6 @@ const commonFiles = {
           file: 'sonar-project.properties',
           renameTo: () => 'sonar-project.properties',
         },
-        {
-          file: 'devcontainer/devcontainer.json',
-          renameTo: () => '.devcontainer/devcontainer.json',
-        },
-        {
-          file: 'devcontainer/Dockerfile',
-          renameTo: () => '.devcontainer/Dockerfile',
-        },
       ],
     },
   ],
