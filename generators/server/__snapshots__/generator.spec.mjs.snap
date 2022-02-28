@@ -260,11 +260,6 @@ Object {
           "noEjs": true,
         },
         Object {
-          "file": ".mvn/wrapper/MavenWrapperDownloader.java",
-          "method": "copy",
-          "noEjs": true,
-        },
-        Object {
           "file": "pom.xml",
           "options": Object {
             "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
