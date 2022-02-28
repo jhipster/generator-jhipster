@@ -23,11 +23,15 @@ import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ if (relationships.length !== 0) { _%>
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Pageable;
+import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.ScanConsistency;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
   <%_ } else { _%>
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import java.util.List;
   <%_ } _%>
 <%_ } _%>
@@ -60,9 +64,9 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
       for (const relationship of notEmbeddedRelationships) {
           if (relationship.collection) {
-            %> ", (SELECT `<%= relationship.relationshipFieldName %>`.*, meta(`<%= relationship.relationshipFieldName %>`).id FROM `<%= relationship.relationshipFieldNamePlural %>` `<%= relationship.relationshipFieldName %>`) as `<%= relationship.relationshipFieldNamePlural %>`"  + <%
+            %> ", ARRAY OBJECT_ADD(item, 'id', meta(item).id) FOR item IN `<%= relationship.relationshipFieldNamePlural %>` END AS `<%= relationship.relationshipFieldNamePlural %>`"  + <%
           } else {
-            %> ", (SELECT `<%= relationship.relationshipFieldName %>`.*, meta(`<%= relationship.relationshipFieldName %>`).id)[0] as `<%= relationship.relationshipFieldName %>`" + <%
+            %> ", OBJECT_ADD(`<%= relationship.relationshipFieldName %>`, 'id', meta(`<%= relationship.relationshipFieldName %>`).id) AS `<%= relationship.relationshipFieldName %>`" + <%
           }
       } %>
         " FROM #{#n1ql.bucket} b";
@@ -81,8 +85,19 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
 
     String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
 
-    @Query(SELECT + JOIN + WHERE)
-    <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable);
+    default <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable) {
+        return
+        <% if (!reactive) { %>new PageImpl<>(<% } %>
+            findAll(pageableStatement(pageable, "b"))
+        <% if (!reactive) { %>,
+            pageable,
+            count()
+        )<% } %>;
+    }
+
+    @Query(SELECT + JOIN + WHERE + " #{[0]}")
+    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    <%= listOrFlux %><<%= persistClass %>> findAll(String pageableStatement);
 
     @Query(SELECT + JOIN + WHERE)
     <%= listOrFlux %><<%= persistClass %>> findAll();
@@ -95,8 +110,16 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
     <%= listOrFlux %><<%= persistClass %>> search(String queryString);
 
-    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
-    <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable);
+    default <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable) {
+        return
+            <% if (!reactive) { %>new PageImpl<>(<% } %>
+                search(queryString, pageableStatement(pageable, "b"))
+            <% if (!reactive) { %>)<% } %>;
+    }
+
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION + " #{[1]}")
+    <%= listOrFlux %><<%= persistClass %>> search(String queryString, String pageableStatement);
 <%_ } _%>
 
 }

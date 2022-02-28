@@ -12,7 +12,7 @@
     { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
   ],
   "fluentMethods": true,
-  "pagination": "no",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityField": "name",
