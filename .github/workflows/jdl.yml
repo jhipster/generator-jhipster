@@ -73,21 +73,22 @@ jobs:
         os: [ubuntu-20.04]
         cache: [angular]
         suite:
-          - blog-store
-          - blog-store-microfrontend
-          - vue-blog-store-microfrontend
+          - ms-ngx-eureka-oauth2-mongodb-caffeine
+          - ms-react-consul-jwt-cassandra-redis
+          - ms-vue-eureka-jwt-couchbase-hazelcast
+          - mf-ngx-eureka-jwt-psql-ehcache
+          - mf-vue-consul-oauth2-mysql-memcached
         include:
-          - suite: blog-store
+          - suite: ms-ngx-eureka-oauth2-mongodb-caffeine
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
-            # Scripts wait for gateway to start, delay for microservices to start.
-            e2e-delay: 120
-          - suite: blog-store-microfrontend
+          - suite: ms-react-consul-jwt-cassandra-redis
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
-          - suite: vue-blog-store-microfrontend
+          - suite: ms-vue-eureka-jwt-couchbase-hazelcast
             extra-args: --workspaces --monorepository
-            skip-backend-tests: 1
+          - suite: mf-ngx-eureka-jwt-psql-ehcache
+            extra-args: --workspaces --monorepository
+          - suite: mf-vue-consul-oauth2-mysql-memcached
+            extra-args: --workspaces --monorepository
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -105,7 +106,7 @@ jobs:
           application-environment: ${{ matrix.environment || 'prod' }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
           enable-testcontainers: ${{ matrix.testcontainers == 1 }}
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v2
@@ -170,7 +171,9 @@ jobs:
       - name: 'MERGE: generate base'
         continue-on-error: true
         id: base-app
-        if: github.event.pull_request
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: jdl-disable-compare')
         uses: ./generator-jhipster/.github/actions/compare-base
         with:
           extra-args: '--skip-jhipster-dependencies ${{ matrix.extra-args }}'
@@ -220,7 +223,7 @@ jobs:
           name: screenshots-${{ matrix.suite }}
           path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs on failure
-        if: failure()
+        if: always()
         uses: jwalton/gh-docker-logs@v2
       - name: 'ANALYSIS: Sonar analysis'
         if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse == 'true'

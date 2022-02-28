@@ -257,7 +257,6 @@ const baseServerFiles = {
         'grafana/provisioning/dashboards/dashboard.yml',
         'grafana/provisioning/dashboards/JVM.json',
         'grafana/provisioning/datasources/datasource.yml',
-        'zipkin.yml',
       ],
     },
     {
@@ -332,6 +331,11 @@ const baseServerFiles = {
         { file: 'config/realm-config/jhipster-realm.json', renameTo: () => 'realm-config/jhipster-realm.json' },
         { file: 'config/realm-config/jhipster-users-0.json', method: 'copy', renameTo: () => 'realm-config/jhipster-users-0.json' },
       ],
+    },
+    {
+      condition: generator => generator.serviceDiscoveryType || generator.applicationTypeGateway || generator.applicationTypeMicroservice,
+      path: DOCKER_DIR,
+      templates: ['zipkin.yml'],
     },
   ],
   serverBuild: [
@@ -1502,7 +1506,6 @@ const baseServerFiles = {
           file: 'package/repository/UserRepository.java',
           renameTo: generator => `${generator.javaDir}repository/UserRepository.java`,
         },
-        { file: 'package/web/rest/UserResource.java', renameTo: generator => `${generator.javaDir}web/rest/UserResource.java` },
         {
           file: 'package/web/rest/PublicUserResource.java',
           renameTo: generator => `${generator.javaDir}web/rest/PublicUserResource.java`,
@@ -1818,6 +1821,14 @@ function writeFiles() {
       this.testDir = `${this.packageFolder}/`;
 
       this.generateKeyStore();
+    },
+
+    cleanupFiles() {
+      if (this.isJhipsterVersionLessThan('7.6.1')) {
+        if (this.authenticationTypeOauth2 && !this.databaseTypeNo) {
+          this.removeFile(`${this.mainJavaPackageDir}web/rest/UserResource.java`);
+        }
+      }
     },
 
     cleanupOldServerFiles() {

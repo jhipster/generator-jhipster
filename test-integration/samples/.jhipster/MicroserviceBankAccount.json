@@ -1,13 +1,6 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "operation",
-      "otherEntityName": "microserviceOperation",
-      "relationshipType": "one-to-many",
-      "otherEntityRelationshipName": "bankAccount"
-    }
-  ],
+  "changelogDate": "20200804163350",
+  "dto": "mapstruct",
   "fields": [
     { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] },
     { "fieldName": "bankNumber", "fieldType": "Integer" },
@@ -22,9 +15,16 @@
     { "fieldName": "attachment", "fieldType": "byte[]", "fieldTypeBlobContent": "any" },
     { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
   ],
-  "changelogDate": "20200804163350",
-  "dto": "mapstruct",
-  "pagination": "no",
+  "fluentMethods": true,
   "jpaMetamodelFiltering": true,
+  "pagination": "no",
+  "relationships": [
+    {
+      "otherEntityName": "microserviceOperation",
+      "otherEntityRelationshipName": "bankAccount",
+      "relationshipName": "operation",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "service": "serviceImpl"
 }

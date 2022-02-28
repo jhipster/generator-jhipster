@@ -1,81 +1,75 @@
 {
-  "name": "JpaFilteringRelationship",
+  "applications": ["jhipster"],
+  "changelogDate": "20200820222306",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "jpa_filtering_relationship",
   "fields": [
-    {
-      "fieldName": "createdBy",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "createdOn",
-      "fieldType": "Instant"
-    }
+    { "fieldName": "createdBy", "fieldType": "String" },
+    { "fieldName": "createdOn", "fieldType": "Instant" }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "JpaFilteringRelationship",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "requiredOneToOneOtherSide",
-      "relationshipValidateRules": "required",
+      "ownerSide": true,
       "relationshipName": "requiredOneToOne",
-      "otherEntityField": "id",
-      "ownerSide": true
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required"
     },
     {
-      "relationshipType": "one-to-one",
+      "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "oneToOneOtherSide",
+      "ownerSide": true,
       "relationshipName": "oneToOne",
-      "otherEntityField": "id",
-      "ownerSide": true
+      "relationshipType": "one-to-one"
     },
     {
-      "relationshipType": "one-to-many",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "oneToManyOtherSide",
-      "relationshipName": "oneToMany"
+      "relationshipName": "oneToMany",
+      "relationshipType": "one-to-many"
     },
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "jpaFilteringRelationship",
-      "relationshipValidateRules": "required",
       "relationshipName": "requiredManyToOne",
-      "otherEntityField": "id"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     },
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "jpaFilteringRelationship",
       "relationshipName": "manyToOne",
-      "otherEntityField": "id"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "requiredManyToManyOtherSide",
-      "relationshipValidateRules": "required",
+      "ownerSide": true,
       "relationshipName": "requiredManyToMany",
-      "otherEntityField": "id",
-      "ownerSide": true
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": "required"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
       "otherEntityRelationshipName": "manyToManyOtherSide",
+      "ownerSide": true,
       "relationshipName": "manyToMany",
-      "otherEntityField": "id",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     }
   ],
-  "changelogDate": "20200820222306",
-  "entityTableName": "jpa_filtering_relationship",
-  "dto": "mapstruct",
-  "pagination": "pagination",
   "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": ["jhipster"],
   "skipUiGrouping": false
 }

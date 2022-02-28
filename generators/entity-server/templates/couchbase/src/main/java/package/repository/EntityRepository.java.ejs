@@ -20,44 +20,31 @@ package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 
-<%_ if (relationships.length !== 0 || searchEngineCouchbase) { _%>
+<%_ if (relationships.length !== 0) { _%>
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Pageable;
-import com.couchbase.client.java.query.QueryScanConsistency;
-import org.springframework.data.couchbase.repository.ScanConsistency;
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
   <%_ } else { _%>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import java.util.List;
   <%_ } _%>
 <%_ } _%>
 <%_ if (relationships.length !== 0 && !reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-import static <%= packageName %>.repository.JHipsterCouchbaseRepository.searchQuery;
-<%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_
-let importList = fieldsContainOwnerManyToMany;
-for (r of relationships) {
-  if (r.relationshipManyToOne && r.otherEntityUser) {
-    importList = true;
-  }
-}
-_%>
 <%_ if (primaryKey.typeUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
+import static <%= packageName %>.domain.<%= persistClass %>.TYPE_NAME;
+
 /**
  * Spring Data Couchbase repository for the <%= persistClass %> entity.
  */
-<%_ if (!relationshipsContainEagerLoad) { _%>
+<%_ if (!implementsEagerLoadApis) { _%>
 @SuppressWarnings("unused")
 <%_ } _%>
 <%_
@@ -66,12 +53,12 @@ import java.util.UUID;
     let pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @Repository
-public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %><% if (searchEngine) { %>, CouchbaseSearchRepository<<%= persistClass %>, <%= primaryKey.type %>><% } %> {
   <%_
-  if (relationships.length !== 0) { %>
-
+  var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntityIsEmbedded)
+  if (notEmbeddedRelationships.length !== 0) { %>
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
-      for (const relationship of relationships) {
+      for (const relationship of notEmbeddedRelationships) {
           if (relationship.collection) {
             %> ", (SELECT `<%= relationship.relationshipFieldName %>`.*, meta(`<%= relationship.relationshipFieldName %>`).id FROM `<%= relationship.relationshipFieldNamePlural %>` `<%= relationship.relationshipFieldName %>`) as `<%= relationship.relationshipFieldNamePlural %>`"  + <%
           } else {
@@ -81,58 +68,35 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
         " FROM #{#n1ql.bucket} b";
 
     String JOIN = <%
-        relationships.forEach(function (relationship, index) {
+        notEmbeddedRelationships.forEach(function (relationship, index) {
           if (!relationship.collection) { %>
-            " LEFT JOIN #{#n1ql.bucket} `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
+            " LEFT JOIN `<%= relationship.otherEntity.entityInstance %>` `<%= relationship.relationshipFieldName %>` ON KEYS b.`<%= relationship.relationshipFieldName %>`"<%
           } else { %>
-            " LEFT NEST #{#n1ql.bucket} `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
+            " LEFT NEST `<%= relationship.otherEntity.entityInstance %>` `<%= relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%= relationship.relationshipFieldNamePlural %>`"<%
           }
-          if (index < relationships.length - 1) { %>
+          if (index < notEmbeddedRelationships.length - 1) { %>
             + <%
           }
         }); %>;
 
-    default <%= pageOrFlux %><<%= persistClass %>> findAll<% if (reactive) {%>By<% } %>(Pageable pageable) {
-        return
-        <% if (!reactive) { %>new PageImpl<>(<% } %>
-            findAllBy(pageableStatement(pageable, "b"))
-        <% if (!reactive) { %>,
-            pageable,
-            count()
-        )<% } %>;
-    }
+    String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
 
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} #{[0]}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-    <%= listOrFlux %><<%= persistClass %>> findAllBy(String pageableStatement);
+    @Query(SELECT + JOIN + WHERE)
+    <%= pageOrFlux %><<%= persistClass %>> findAll(Pageable pageable);
 
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter}")
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+    @Query(SELECT + JOIN + WHERE)
     <%= listOrFlux %><<%= persistClass %>> findAll();
 
     @Query(SELECT + " USE KEYS $1" + JOIN)
-    @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
     <%= optionalOrMono %><<%= persistClass %>> findById(String id);<%
     } _%>
 
-<%_ if (searchEngineCouchbase) { _%>
-  <%_ if (relationships.length === 0) { _%>
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND SEARCH(#{#n1ql.bucket}, #{[0]}) #{[1]}")
-  <%_ } else { _%>
-    @Query(SELECT + JOIN + " WHERE b.#{#n1ql.filter} AND SEARCH(b, #{[0]}) #{[1]}")
-  <%_ } _%>
-    <%= listOrFlux %><<%= persistClass %>> search(String queryString, String pageableStatement);
+<%_ if (searchEngine && notEmbeddedRelationships.length !== 0) { _%>
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
+    <%= listOrFlux %><<%= persistClass %>> search(String queryString);
 
-    default <%= listOrFlux %><<%= persistClass %>> search(String queryString) {
-        return search(searchQuery(queryString).toString(), "");
-    }
-
-    default <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable) {
-        return
-            <% if (!reactive) { %>new PageImpl<>(<% } %>
-                search(searchQuery(queryString).toString(), pageableStatement(pageable<% if (relationships.length !== 0) { %>, "b"<% } %>))
-            <% if (!reactive) { %>)<% } %>;
-    }
+    @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
+    <%= pageOrFlux %><<%= persistClass %>> search(String queryString, Pageable pageable);
 <%_ } _%>
 
 }

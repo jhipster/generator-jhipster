@@ -56,13 +56,13 @@ export class MetricsModalThreadsComponent implements OnInit {
 
   getBadgeClass(threadState: ThreadState): string {
     if (threadState === ThreadState.Runnable) {
-      return 'badge-success';
+      return 'bg-success';
     } else if (threadState === ThreadState.Waiting) {
-      return 'badge-info';
+      return 'bg-info';
     } else if (threadState === ThreadState.TimedWaiting) {
-      return 'badge-warning';
+      return 'bg-warning';
     } else if (threadState === ThreadState.Blocked) {
-      return 'badge-danger';
+      return 'bg-danger';
     }
     return '';
   }

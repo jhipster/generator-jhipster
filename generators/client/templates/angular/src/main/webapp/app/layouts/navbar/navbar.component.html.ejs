@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 <nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemePrimary) { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+  <div class="container-fluid">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img"></span>
     <span <%= jhiPrefix %>Translate="global.title" class="navbar-title"><%= capitalizedBaseName %></span>
@@ -35,7 +36,7 @@
     <fa-icon icon="bars"></fa-icon>
   </a>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
           <span>
@@ -73,7 +74,7 @@
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span
     <%_ if (enableTranslation) { _%>
-              [jhiTranslate]="entityNavbarItem.translationKey"
+              [<%= jhiPrefix %>Translate]="entityNavbarItem.translationKey"
     <%_ } _%>
               >{{entityNavbarItem.name}}</span>
             </a>
@@ -238,5 +239,6 @@
         </ul>
       </li>
     </ul>
+  </div>
   </div>
 </nav>

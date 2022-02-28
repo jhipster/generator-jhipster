@@ -1,5 +1,7 @@
 {
-  "fluentMethods": true,
+  "angularJSSuffix": "mySuffix",
+  "changelogDate": "20150805124839",
+  "dto": "mapstruct",
   "fields": [
     { "fieldName": "userId", "fieldType": "UUID" },
     { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] },
@@ -14,9 +16,7 @@
     { "fieldName": "operationsFile", "fieldType": "byte[]" },
     { "fieldName": "accountType", "fieldType": "AccountTypeEnum", "fieldValues": "STANDARD,PREMIUM" }
   ],
-  "changelogDate": "20150805124839",
-  "dto": "mapstruct",
-  "service": "serviceImpl",
-  "angularJSSuffix": "mySuffix",
-  "pagination": "no"
+  "fluentMethods": true,
+  "pagination": "no",
+  "service": "serviceImpl"
 }

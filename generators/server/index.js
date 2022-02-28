@@ -68,6 +68,8 @@ const NO_WEBSOCKET = websocketTypes.FALSE;
 
 const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, MAIN_DIR, TEST_DIR } = constants;
 
+const WAIT_TIMEOUT = 3 * 60000;
+
 module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
     super(args, options, { unique: 'namespace', ...features });
@@ -349,10 +351,10 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
         this.mainJavaDir = SERVER_MAIN_SRC_DIR;
+        this.mainJavaPackageDir = `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/`;
         this.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
-        this.mainJavaPackageDir = `${SERVER_MAIN_RES_DIR}${this.packageFolder}/`;
         this.testJavaDir = SERVER_TEST_SRC_DIR;
-        this.testJavaPackageDir = `${SERVER_MAIN_RES_DIR}${this.packageFolder}/`;
+        this.testJavaPackageDir = `${SERVER_TEST_SRC_DIR}${this.packageFolder}/`;
         this.testResourceDir = SERVER_TEST_RES_DIR;
         this.srcMainDir = MAIN_DIR;
         this.srcTestDir = TEST_DIR;
@@ -512,13 +514,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           const dockerFile = `src/main/docker/${databaseType}.yml`;
           if (databaseType === CASSANDRA) {
             scriptsStorage.set({
-              'docker:db:await': 'wait-on tcp:9042 && sleep 20',
+              'docker:db:await': `wait-on -t ${WAIT_TIMEOUT} tcp:9042 && sleep 20`,
             });
           }
           if (databaseType === COUCHBASE) {
             scriptsStorage.set({
-              'docker:db:await':
-                'echo "Waiting for Couchbase to start" && wait-on http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"',
+              'docker:db:await': `echo "Waiting for Couchbase to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8091/ui/index.html && sleep 30 && echo "Couchbase started"`,
             });
           }
           if (databaseType === COUCHBASE || databaseType === CASSANDRA) {
@@ -538,7 +539,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         }
         if (this.jhipsterConfig.searchEngine === ELASTICSEARCH) {
           dockerAwaitScripts.push(
-            'echo "Waiting for Elasticsearch to start" && wait-on "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"'
+            `echo "Waiting for Elasticsearch to start" && wait-on -t ${WAIT_TIMEOUT} "http-get://localhost:9200/_cluster/health?wait_for_status=green&timeout=60s" && echo "Elasticsearch started"`
           );
         }
 
@@ -553,11 +554,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               dockerBuild.push(`npm run docker:${dockerConfig}:build`);
             } else if (dockerConfig === 'jhipster-registry') {
               dockerAwaitScripts.push(
-                'echo "Waiting for jhipster-registry to start" && wait-on http-get://localhost:8761/management/health && echo "jhipster-registry started"'
+                `echo "Waiting for jhipster-registry to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:8761/management/health && echo "jhipster-registry started"`
               );
             } else if (dockerConfig === 'keycloak') {
               dockerAwaitScripts.push(
-                'echo "Waiting for keycloak to start" && wait-on http-get://localhost:9080/auth/realms/jhipster -t 30000 && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"'
+                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/auth/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
               );
             }
 
@@ -633,7 +634,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run docker:db:await --if-present && npm run docker:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts() {
@@ -641,13 +642,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
           scriptsStorage.set({
-            'ci:server:await':
-              'echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"',
+            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
-            'e2e:devserver':
-              'concurrently -k -s first "npm run backend:start" "npm start" "wait-on http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"',
+            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
           });
         }
       },

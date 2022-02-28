@@ -20,8 +20,6 @@ package <%= packageName %>.web.rest;
 
 <%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.AbstractCassandraTest;
-<%_ } else if (databaseTypeCouchbase) { _%>
-import <%= packageName %>.CouchbaseTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
@@ -29,7 +27,7 @@ import <%= packageName %>.config.Constants;
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
 <%_ if (authenticationTypeSession && !reactive) { _%>
@@ -51,9 +49,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
-<%_ if (databaseTypeCouchbase) { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -103,6 +98,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
   <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } _%>
+<%_ if (databaseTypeCouchbase) { _%>
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultHandlers.exportTestSecurityContext;
 <%_ } _%>
 
 /**
@@ -341,6 +339,9 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
+        <%_ if (databaseTypeCouchbase) { _%>
+            .andDo(exportTestSecurityContext())
+        <%_ } _%>
             .andExpect(status().isBadRequest());
 <%_ } else { _%>
         accountWebTestClient.post().uri("/api/register")
@@ -537,6 +538,9 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
+        <%_ if (databaseTypeCouchbase) { _%>
+            .andDo(exportTestSecurityContext())
+        <%_ } _%>
             .andExpect(status().isCreated());
 <%_ } _%>
 
@@ -903,6 +907,9 @@ class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassan
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
+        <%_ if (databaseTypeCouchbase) { _%>
+            .andDo(exportTestSecurityContext())
+        <%_ } _%>
             .andExpect(status().isBadRequest());
 <%_ } _%>
 

@@ -30,7 +30,7 @@ import org.springframework.data.domain.PageImpl;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
@@ -65,7 +65,7 @@ public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>
 <%_ if (reactive) { _%>
 
 interface <%= entityClass %>SearchRepositoryInternal {
-    Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+    Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
@@ -77,23 +77,21 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     }
 
     @Override
-    public Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
+    public Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
   <%_ if (!paginationNo) { _%>
-        List<FieldSortBuilder> builders = new SortToFieldSortBuilderConverter().convert(pageable.getSort());
+        List<SortBuilder<?>> builders = new SortToSortBuilderListConverter().convert(pageable.getSort());
 
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder().withQuery(queryStringQuery(query))
             .withPageable(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
-        builders.stream().forEach(builder -> {
-            queryBuilder.withSort(builder);
-        });
+        queryBuilder.withSorts(builders);            
 
         NativeSearchQuery nativeSearchQuery = queryBuilder.build();
   <%_ } else { _%>
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
   <%_ } _%>
         return reactiveElasticsearchTemplate
-            .search(nativeSearchQuery, <%= entityClass %>.class)
+            .search(nativeSearchQuery, <%= persistClass %>.class)
             .map(SearchHit::getContent);
     }
 }
@@ -101,9 +99,9 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
 interface <%= entityClass %>SearchRepositoryInternal {
   <%_ if (paginationNo) { _%>
-    Stream<<%= entityClass %>> search(String query);
+    Stream<<%= persistClass %>> search(String query);
   <%_ } else { _%>
-    Page<<%= entityClass %>> search(String query, Pageable pageable);
+    Page<<%= persistClass %>> search(String query, Pageable pageable);
   <%_ } _%>
 }
 
@@ -117,19 +115,19 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
   <%_ if (paginationNo) { _%>
     @Override
-    public Stream<<%= entityClass %>> search(String query) {
+    public Stream<<%= persistClass %>> search(String query) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         return elasticsearchTemplate
-            .search(nativeSearchQuery, <%= entityClass %>.class)
+            .search(nativeSearchQuery, <%= persistClass %>.class)
             .map(SearchHit::getContent)
             .stream();
     }
   <%_ } else { _%>
     @Override
-    public Page<<%= entityClass %>> search(String query, Pageable pageable) {
+    public Page<<%= persistClass %>> search(String query, Pageable pageable) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         nativeSearchQuery.setPageable(pageable);
-        List<<%= entityClass %>> hits = elasticsearchTemplate.search(nativeSearchQuery, <%= entityClass %>.class).map(SearchHit::getContent)
+        List<<%= persistClass %>> hits = elasticsearchTemplate.search(nativeSearchQuery, <%= persistClass %>.class).map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
 

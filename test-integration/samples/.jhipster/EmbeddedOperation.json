@@ -1,23 +1,23 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "documentBankAccount",
-      "otherEntityName": "documentBankAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "name",
-      "otherEntityRelationshipName": "embeddedOperation"
-    }
-  ],
+  "changelogDate": "20200804163351",
+  "clientRootFolder": "test-root",
+  "dto": "mapstruct",
+  "embedded": true,
   "fields": [
     { "fieldName": "date", "fieldType": "Instant", "fieldValidateRules": ["required"] },
     { "fieldName": "description", "fieldType": "String" },
     { "fieldName": "amount", "fieldType": "BigDecimal", "fieldValidateRules": ["required"] }
   ],
-  "changelogDate": "20200804163351",
-  "dto": "mapstruct",
-  "service": "no",
+  "fluentMethods": true,
   "pagination": "infinite-scroll",
-  "clientRootFolder": "test-root",
-  "embedded": true
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "documentBankAccount",
+      "otherEntityRelationshipName": "embeddedOperation",
+      "relationshipName": "documentBankAccount",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
 }

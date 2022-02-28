@@ -1,0 +1,91 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.repository;
+
+import org.springframework.data.couchbase.repository.Query;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.couchbase.repository.ScanConsistency;
+import org.springframework.data.domain.*;
+import org.springframework.data.repository.NoRepositoryBean;
+import com.couchbase.client.java.search.SearchQuery;
+import com.couchbase.client.java.search.queries.DocIdQuery;
+import com.couchbase.client.java.search.queries.QueryStringQuery;
+import java.util.LinkedList;
+
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
+
+import java.util.List;
+
+/**
+ * Couchbase specific {@link org.springframework.data.repository.Repository} interface for search queries.
+ */
+<%_
+    let listOrFlux = reactive ? 'Flux' : 'List';
+    let pageOrFlux = reactive ? 'Flux' : 'Page';
+_%>
+@NoRepositoryBean
+public interface CouchbaseSearchRepository<T, ID> extends JHipsterCouchbaseRepository<T, ID> {
+
+    String SEARCH_CONDITION = "SEARCH(b, #{T(<%= packageName %>.repository.CouchbaseSearchRepository).searchQuery([0]).toString()})";
+
+    static SearchQuery searchQuery(String queryString) {
+        List<String> ids = new LinkedList<>();
+        for (String r : queryString.split(" ")) {
+            if (r.indexOf("id:") == 0) {
+                ids.add(r.substring(3));
+                queryString = queryString.replace(r, "").replaceAll("[ ]+", " ").trim();
+            }
+        }
+        QueryStringQuery query = SearchQuery.queryString(queryString);
+        if (ids.size() != 0) {
+            DocIdQuery docIdQuery = SearchQuery.docId(ids.toArray(new String[0]));
+            if (!queryString.isEmpty()) {
+                return SearchQuery.conjuncts(query, docIdQuery);
+            }
+            return docIdQuery;
+        }
+        return query;
+    }
+
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    default <%= listOrFlux %><T> search(String queryString) {
+        return findAllById(toIds(searchIds(queryString)));
+    }
+
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    default <%= pageOrFlux %><T> search(String queryString, Pageable pageable) {
+    <%_ if (reactive) { _%>
+        return findAllById(toIds(searchIds(queryString, pageable)));
+    <%_ } else { _%>
+        Page<T> page = searchIds(queryString, pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+    <%_ } _%>
+    }
+
+    @Query(FIND_IDS_QUERY + " AND " + SEARCH_CONDITION)
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    <%= listOrFlux %><T> searchIds(String queryString);
+
+    @Query(FIND_IDS_QUERY + " AND " + SEARCH_CONDITION)
+    @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
+    <%= pageOrFlux %><T> searchIds(String queryString, Pageable pageable);
+}

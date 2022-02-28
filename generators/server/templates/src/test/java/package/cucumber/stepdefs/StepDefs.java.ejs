@@ -18,10 +18,18 @@
 -%>
 package <%= packageName %>.cucumber.stepdefs;
 
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
 import org.springframework.test.web.servlet.ResultActions;
+<%_ } _%>
 
 public abstract class StepDefs {
 
+<%_ if (reactive) { _%>
+    protected WebTestClient.ResponseSpec actions;
+<%_ } else { _%>
     protected ResultActions actions;
+<%_ } _%>
 
 }

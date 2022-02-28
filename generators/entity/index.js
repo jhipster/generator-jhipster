@@ -45,6 +45,7 @@ const statistics = require('../statistics');
 const { isReservedClassName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const {
   prepareEntityForTemplates,
+  prepareEntityServerDomainForTemplates,
   prepareEntityPrimaryKeyForTemplates,
   loadRequiredConfigIntoEntity,
   derivedPrimaryKeyProperties,
@@ -71,16 +72,14 @@ const { IMAGE, TEXT } = BlobTypes;
 
 const { PaginationTypes, ServiceTypes } = require('../../jdl/jhipster/entity-options');
 
-const { PAGINATION } = PaginationTypes;
-const NO_PAGINATION = PaginationTypes.NO;
-const NO_SERVICE = ServiceTypes.NO;
+const { NO: NO_PAGINATION } = PaginationTypes;
+const { NO: NO_SERVICE } = ServiceTypes;
 
 const { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN } = require('../../jdl/jhipster/validations');
 
 /* constants used throughout */
-const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+const { SUPPORTED_VALIDATION_RULES, JHIPSTER_CONFIG_DIR } = constants;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 
 class EntityGenerator extends BaseBlueprintGenerator {
   constructor(args, options, features) {
@@ -649,16 +648,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       loadDomain() {
-        const entity = this.context;
-        const { entityPackage, packageName, packageFolder, persistClass } = entity;
-        let { entityAbsolutePackage = packageName, entityAbsoluteFolder = packageFolder } = entity;
-        if (entityPackage) {
-          entityAbsolutePackage = [packageName, entityPackage].join('.');
-          entityAbsoluteFolder = path.join(packageFolder, entityPackage.replace(/\./g, '/'));
-        }
-        entity.entityAbsolutePackage = entityAbsolutePackage;
-        entity.entityAbsoluteFolder = entityAbsoluteFolder;
-        entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
+        prepareEntityServerDomainForTemplates(this.context);
       },
     };
   }
@@ -727,7 +717,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
           if (!this.context.differentRelationships[entityType]) {
             this.context.differentRelationships[entityType] = [];
           }
-          this.context.differentRelationships[entityType].push(relationship);
+          if (!relationship.otherEntityIsEmbedded) {
+            this.context.differentRelationships[entityType].push(relationship);
+          }
         });
       },
 
@@ -858,20 +850,23 @@ class EntityGenerator extends BaseBlueprintGenerator {
        * Process relationships that should be loaded eagerly.
        */
       processEagerLoadRelationships() {
-        this.context.relationships
-          .filter(relationship => relationship.relationshipEagerLoad === undefined)
-          .forEach(relationship => {
+        this.context.relationships.forEach(relationship => {
+          relationship.bagRelationship = !relationship.embedded && relationship.ownerSide && relationship.collection;
+          if (relationship.relationshipEagerLoad === undefined) {
             relationship.relationshipEagerLoad =
-              !relationship.embedded &&
-              // Allows the entity to force earger load every relationship
-              (this.context.eagerLoad ||
-                (this.context.paginate !== PAGINATION &&
-                  relationship.relationshipType === 'many-to-many' &&
-                  relationship.ownerSide === true)) &&
-              // Neo4j & Couchbase eagerly loads relations by default
-              ![NEO4J, COUCHBASE].includes(this.context.databaseType);
-          });
+              relationship.bagRelationship ||
+              this.context.eagerLoad ||
+              // Fetch relationships if otherEntityField differs otherwise the id is enough
+              (relationship.ownerSide && relationship.otherEntity.primaryKey.name !== relationship.otherEntityField);
+          }
+        });
         this.context.relationshipsContainEagerLoad = this.context.relationships.some(relationship => relationship.relationshipEagerLoad);
+        this.context.containsBagRelationships = this.context.relationships.some(relationship => relationship.bagRelationship);
+        this.context.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerReationships apis
+          ![CASSANDRA, COUCHBASE].includes(this.context.databaseType) &&
+          // Only sql and mongodb provides *WithEagerReationships apis for imperative implementation
+          (this.context.reactive || [SQL, MONGODB].includes(this.context.databaseType)) &&
+          this.context.relationshipsContainEagerLoad;
         this.context.eagerRelations = this.context.relationships.filter(rel => rel.relationshipEagerLoad);
         this.context.regularEagerRelations = this.context.eagerRelations.filter(rel => rel.id !== true);
 

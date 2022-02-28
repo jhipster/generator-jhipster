@@ -42,12 +42,12 @@ const printJHipsterLogo = () => {
   console.log(logo);
 };
 
-const createProgram = ({ executableName = CLI_NAME, executableVersion = JHIPSTER_VERSION } = {}) => {
+const createProgram = ({ executableName = CLI_NAME, executableVersion } = {}) => {
   return (
     new JHipsterCommand()
       .name(executableName)
       .storeOptionsAsProperties(false)
-      .version(executableVersion)
+      .version(executableVersion ? `${executableVersion} (generator-jhipster ${JHIPSTER_VERSION})` : JHIPSTER_VERSION)
       .addHelpText('after', moreInfo)
       // JHipster common options
       .option(
@@ -65,8 +65,9 @@ const createProgram = ({ executableName = CLI_NAME, executableVersion = JHIPSTER
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addOption(new Option('--from-jdl', 'Allow every option jdl forwards').default(false).hideHelp())
-      .addOption(new Option('--prefer-global', 'Run jhipster installed globally').hideHelp())
-      .addOption(new Option('--prefer-local', 'Run jhipster installed locally').hideHelp())
+      .addOption(new Option('--bundled', 'Use JHipster generators bundled with current cli'))
+      .addOption(new Option('--prefer-global', 'Alias for --blundled').hideHelp())
+      .addOption(new Option('--prefer-local', 'Prefer JHipster generators installed in current folder node repository.').hideHelp())
   );
 };
 

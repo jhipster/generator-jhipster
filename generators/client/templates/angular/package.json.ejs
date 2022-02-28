@@ -45,7 +45,7 @@
 <%_ } _%>
     "bootstrap": "<%= dependabotPackageJson.dependencies.bootstrap %>",
     <%_ if (!clientThemeNone) { _%>
-    "bootswatch": "<%= dependabotPackageJson.dependencies.bootstrap %>",
+    "bootswatch": "<%= dependabotPackageJson.dependencies.bootswatch %>",
     <%_ } _%>
     "dayjs": "<%= dependabotPackageJson.dependencies['dayjs'] %>",
     <%_ if (authenticationTypeSession && websocket === 'spring-websocket') { _%>
@@ -53,6 +53,7 @@
     <%_ } _%>
     "ngx-infinite-scroll": "<%= dependabotPackageJson.dependencies['ngx-infinite-scroll'] %>",
     "ngx-webstorage": "<%= dependabotPackageJson.dependencies['ngx-webstorage'] %>",
+    "@popperjs/core": "<%= dependabotPackageJson.dependencies['@popperjs/core'] %>",
     "rxjs": "<%= dependabotPackageJson.dependencies['rxjs'] %>",
     "swagger-ui-dist": "<%= dependabotPackageJson.dependencies['swagger-ui-dist'] %>",
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -122,6 +123,9 @@
     "jest-sonar-reporter": "<%= dependabotPackageJson.devDependencies['jest-sonar-reporter'] %>",
     "prettier": "<%= dependabotPackageJson.devDependencies['prettier'] %>",
     "prettier-plugin-packagejson": "<%= dependabotPackageJson.devDependencies['prettier-plugin-packagejson'] %>",
+<%_ if (enableI18nRTL) { _%>
+    "postcss-rtlcss": "<%= dependabotPackageJson.devDependencies['postcss-rtlcss'] %>",
+<%_ } _%>
     "rimraf": "<%= dependabotPackageJson.devDependencies['rimraf'] %>",
     "ts-jest": "<%= dependabotPackageJson.devDependencies['ts-jest'] %>",
     "typescript": "<%= dependabotPackageJson.devDependencies['typescript'] %>",

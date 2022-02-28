@@ -1,0 +1,5 @@
+CREATE COLLECTION `${bucket}`.`${scope}`.`<%= entityInstance %>`;
+
+CREATE INDEX `<%= entityInstance %>_type` ON `${bucket}`.`${scope}`.`<%= entityInstance %>`(type)
+    WHERE `type` = "<%= entityInstance %>"
+    WITH { "defer_build" : true };

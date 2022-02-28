@@ -14,7 +14,6 @@ Object {
         "grafana/provisioning/dashboards/dashboard.yml",
         "grafana/provisioning/dashboards/JVM.json",
         "grafana/provisioning/datasources/datasource.yml",
-        "zipkin.yml",
       ],
     },
     Object {
@@ -125,6 +124,13 @@ Object {
           "method": "copy",
           "renameTo": [Function],
         },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        "zipkin.yml",
       ],
     },
     Object {
@@ -975,10 +981,6 @@ Object {
         },
         Object {
           "file": "package/repository/UserRepository.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/web/rest/UserResource.java",
           "renameTo": [Function],
         },
         Object {

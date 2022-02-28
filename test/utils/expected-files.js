@@ -783,11 +783,12 @@ const expectedFiles = {
   ],
 
   couchbase: [
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`,
-    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__user.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_collections.n1ql`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.2__create_indexes.n1ql`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/authority/ROLE_ADMIN.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/authority/ROLE_USER.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user/admin.json`,
+    `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user/user.json`,
     `${DOCKER_DIR}couchbase.yml`,
     `${DOCKER_DIR}couchbase-cluster.yml`,
     `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,
@@ -801,7 +802,7 @@ const expectedFiles = {
     `${DOCKER_DIR}neo4j.yml`,
   ],
 
-  couchbaseSearch: [`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/JHipsterCouchbaseRepositoryTest.java`],
+  couchbaseSearch: [`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CouchbaseSearchRepositoryTest.java`],
 
   cassandra: [
     `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,

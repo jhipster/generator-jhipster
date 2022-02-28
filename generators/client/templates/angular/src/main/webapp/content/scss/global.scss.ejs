@@ -122,6 +122,10 @@ Generic styles
   word-break: break-all;
 }
 
+.form-control {
+  background-color: #fff;
+}
+
 .readonly {
   background-color: #eee;
   opacity: 1;
@@ -224,4 +228,29 @@ ui bootstrap tweaks
   white-space: nowrap;
 }
 
+.dropdown-menu {
+  padding-left: 0px;
+}
+
+/* ==========================================================================
+angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
+========================================================================== */
+/* page-ribbon.component.scss */
+.ribbon {
+  left: -3.5em;
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/* navbar.component.scss */
+.navbar {
+  ul.navbar-nav {
+    .nav-item {
+      margin-left: 0.5em;
+    }
+  }
+}
 /* jhipster-needle-scss-add-main JHipster will add new css style */

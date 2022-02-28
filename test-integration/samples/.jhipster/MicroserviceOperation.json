@@ -1,40 +1,29 @@
 {
-  "fluentMethods": true,
-  "relationships": [
-    {
-      "relationshipName": "bankAccount",
-      "otherEntityName": "microserviceBankAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "name",
-      "otherEntityRelationshipName": "operation"
-    },
-    {
-      "relationshipName": "label",
-      "otherEntityName": "microserviceLabel",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "label",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "operation"
-    }
-  ],
-  "fields": [
-    {
-      "fieldName": "date",
-      "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "amount",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    }
-  ],
   "changelogDate": "20150805125054",
   "dto": "no",
-  "service": "no",
-  "pagination": "infinite-scroll"
+  "fields": [
+    { "fieldName": "date", "fieldType": "Instant", "fieldValidateRules": ["required"] },
+    { "fieldName": "description", "fieldType": "String" },
+    { "fieldName": "amount", "fieldType": "BigDecimal", "fieldValidateRules": ["required"] }
+  ],
+  "fluentMethods": true,
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "microserviceBankAccount",
+      "otherEntityRelationshipName": "operation",
+      "relationshipName": "bankAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "label",
+      "otherEntityName": "microserviceLabel",
+      "otherEntityRelationshipName": "operation",
+      "ownerSide": true,
+      "relationshipName": "label",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
 }

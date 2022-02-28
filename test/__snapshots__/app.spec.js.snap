@@ -113,9 +113,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -554,9 +551,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
@@ -1964,9 +1958,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -3334,9 +3325,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -4669,9 +4657,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
@@ -6015,9 +6000,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
@@ -7373,9 +7355,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
@@ -8754,9 +8733,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -10106,9 +10082,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -11069,9 +11042,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/zipkin.yml": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
@@ -12429,9 +12399,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -13754,9 +13721,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -15076,9 +15040,6 @@ Object {
   "src/main/docker/sonar.yml": Object {
     "stateCleared": "modified",
   },
-  "src/main/docker/zipkin.yml": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": Object {
     "stateCleared": "modified",
   },
@@ -16070,9 +16031,6 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/global.scss": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/content/scss/rtl.scss": Object {
     "stateCleared": "modified",
   },
   "src/main/webapp/content/scss/vendor.scss": Object {

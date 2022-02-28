@@ -31,7 +31,7 @@ _%>
         <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
+            <button class="btn btn-info me-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
                 <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
             </button>
@@ -52,23 +52,22 @@ _%>
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 <%_ if (searchEngine) { _%>
 
-    <div class="row">
+    <form name="searchForm" class="row row-cols-sm-auto align-items-center">
         <div class="col-sm-12">
-            <form name="searchForm" class="form-inline">
-                <div class="input-group w-100 mt-3">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
+            <div class="input-group w-100 mt-3">
+                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search">Query</label>
+                <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
 
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-                        <fa-icon icon="search"></fa-icon>
-                    </button>
+                <button class="btn btn-info" (click)="search(currentSearch)">
+                    <fa-icon icon="search"></fa-icon>
+                </button>
 
-                    <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-                        <fa-icon icon="trash-alt"></fa-icon>
-                    </button>
-                </div>
-            </form>
+                <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                    <fa-icon icon="trash-alt"></fa-icon>
+                </button>
+            </div>
         </div>
-    </div>
+    </form>
 <%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
@@ -82,7 +81,7 @@ _%>
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
 <%_ } _%>
-<%_ for (const relationship of relationships) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
     <%_ if (relationship.relationshipManyToOne
             || (relationship.relationshipOneToOne && relationship.ownerSide)
             || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
@@ -126,7 +125,7 @@ _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
     <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships) {
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
     const ownerSide = relationship.ownerSide;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
@@ -160,7 +159,7 @@ _%>
                     </td>
     <%_ } _%>
 <%_ } _%>
-                    <td class="text-right">
+                    <td class="text-end">
                         <div class="btn-group">
                             <button type="submit"
                                     [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
@@ -195,11 +194,11 @@ _%>
 <%_ if (paginationPagination) { _%>
 
     <div *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
-        <div class="row justify-content-center">
+        <div class="d-flex justify-content-center">
             <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
         </div>
 
-        <div class="row justify-content-center">
+        <div class="d-flex justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
         </div>
     </div>
