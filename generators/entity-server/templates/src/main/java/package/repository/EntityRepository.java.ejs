@@ -20,13 +20,13 @@ package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 
-<%_ if (relationshipsContainEagerLoad) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 import org.springframework.data.jpa.repository.*;
-  <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.repository.query.Param;
   <%_ } _%>
 <%_ } _%>
@@ -42,10 +42,10 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
-  <%_ if (relationshipsContainEagerLoad || relationships.some(r => r.relationshipManyToOne && r.otherEntityUser)) { _%>
+  <%_ if (implementsEagerLoadApis || relationships.some(r => r.relationshipManyToOne && r.otherEntityUser)) { _%>
 import java.util.List;
   <%_ } _%>
-  <%_ if (relationshipsContainEagerLoad) { _%>
+  <%_ if (implementsEagerLoadApis) { _%>
 import java.util.Optional;
   <%_ } _%>
 <%_ } _%>
@@ -57,7 +57,7 @@ import java.util.UUID;
 /**
  * Spring Data <%= officialDatabaseType %> repository for the <%= persistClass %> entity.
  */
-<%_ if (!relationshipsContainEagerLoad) { _%>
+<%_ if (!implementsEagerLoadApis) { _%>
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
@@ -69,7 +69,7 @@ public interface <%= entityClass %>Repository extends <% if (containsBagRelation
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
   <%_ } _%>
 <%_ } _%>
-<%_ if (relationshipsContainEagerLoad) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
   <%_ if (databaseTypeSql) { _%>
 
     <%_ const containsToOneEagerRelationship = relationships.some(relationship => relationship.relationshipEagerLoad && !relationship.bagRelationship); _%>

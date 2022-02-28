@@ -44,7 +44,7 @@ import static <%= packageName %>.domain.<%= persistClass %>.TYPE_NAME;
 /**
  * Spring Data Couchbase repository for the <%= persistClass %> entity.
  */
-<%_ if (!relationshipsContainEagerLoad) { _%>
+<%_ if (!implementsEagerLoadApis) { _%>
 @SuppressWarnings("unused")
 <%_ } _%>
 <%_
