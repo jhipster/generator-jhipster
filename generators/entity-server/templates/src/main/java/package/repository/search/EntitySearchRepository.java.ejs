@@ -65,7 +65,7 @@ public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>
 <%_ if (reactive) { _%>
 
 interface <%= entityClass %>SearchRepositoryInternal {
-    Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+    Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
@@ -77,7 +77,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     }
 
     @Override
-    public Flux<<%= entityClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
+    public Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
   <%_ if (!paginationNo) { _%>
         List<SortBuilder<?>> builders = new SortToSortBuilderListConverter().convert(pageable.getSort());
 
@@ -91,7 +91,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
   <%_ } _%>
         return reactiveElasticsearchTemplate
-            .search(nativeSearchQuery, <%= entityClass %>.class)
+            .search(nativeSearchQuery, <%= persistClass %>.class)
             .map(SearchHit::getContent);
     }
 }
@@ -99,9 +99,9 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
 interface <%= entityClass %>SearchRepositoryInternal {
   <%_ if (paginationNo) { _%>
-    Stream<<%= entityClass %>> search(String query);
+    Stream<<%= persistClass %>> search(String query);
   <%_ } else { _%>
-    Page<<%= entityClass %>> search(String query, Pageable pageable);
+    Page<<%= persistClass %>> search(String query, Pageable pageable);
   <%_ } _%>
 }
 
@@ -115,19 +115,19 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
   <%_ if (paginationNo) { _%>
     @Override
-    public Stream<<%= entityClass %>> search(String query) {
+    public Stream<<%= persistClass %>> search(String query) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         return elasticsearchTemplate
-            .search(nativeSearchQuery, <%= entityClass %>.class)
+            .search(nativeSearchQuery, <%= persistClass %>.class)
             .map(SearchHit::getContent)
             .stream();
     }
   <%_ } else { _%>
     @Override
-    public Page<<%= entityClass %>> search(String query, Pageable pageable) {
+    public Page<<%= persistClass %>> search(String query, Pageable pageable) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         nativeSearchQuery.setPageable(pageable);
-        List<<%= entityClass %>> hits = elasticsearchTemplate.search(nativeSearchQuery, <%= entityClass %>.class).map(SearchHit::getContent)
+        List<<%= persistClass %>> hits = elasticsearchTemplate.search(nativeSearchQuery, <%= persistClass %>.class).map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
 
