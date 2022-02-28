@@ -88,7 +88,6 @@ const generatedAnnotationTransform = generator => {
   return passthrough(file => {
     if (
       !file.path.endsWith('package-info.java') &&
-      !file.path.endsWith('MavenWrapperDownloader.java') &&
       path.extname(file.path) === '.java' &&
       !isFileStateDeleted(file) &&
       !file.path.endsWith('GeneratedByJHipster.java')

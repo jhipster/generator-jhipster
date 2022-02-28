@@ -371,7 +371,6 @@ const baseServerFiles = {
         { file: 'mvnw.cmd', method: 'copy', noEjs: true },
         { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
         { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
-        { file: '.mvn/wrapper/MavenWrapperDownloader.java', method: 'copy', noEjs: true },
         { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },
       ],
     },
