@@ -1,1 +1,0 @@
-# Central configuration sources details
