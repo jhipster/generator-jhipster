@@ -641,8 +641,9 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
         if (scriptsStorage.get('e2e')) {
+          const applicationWaitTimeout = WAIT_TIMEOUT * (this.applicationTypeGateway ? 2 : 1);
           scriptsStorage.set({
-            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
+            'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} http-get://localhost:$npm_package_config_backend_port/management/health && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
