@@ -1,0 +1,40 @@
+<div>
+  <h2>
+    <span id="health-page-heading" data-cy="healthPageHeading">Health Checks</span>
+
+    <button class="btn btn-primary float-end" (click)="refresh()"><fa-icon icon="sync"></fa-icon> <span>Refresh</span></button>
+  </h2>
+
+  <div class="table-responsive">
+    <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
+      <thead>
+        <tr>
+          <th scope="col">Service Name</th>
+          <th scope="col" class="text-center">Status</th>
+          <th scope="col" class="text-center">Details</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="health">
+        <tr *ngFor="let componentHealth of health.components | keyvalue">
+          <td>
+            <span class="text-capitalize">{{ componentHealth.key }}</span>
+          </td>
+          <td class="text-center">
+            <span class="badge" [ngClass]="getBadgeClass(componentHealth.value!.status)">
+              {{ componentHealth.value!.status }}
+            </span>
+          </td>
+          <td class="text-center">
+            <a
+              class="hand"
+              (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })"
+              *ngIf="componentHealth.value!.details"
+            >
+              <fa-icon icon="eye"></fa-icon>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

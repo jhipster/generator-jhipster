@@ -1,0 +1,15 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  jhipster-postgresql:
+    image: postgres:14.2
+    # volumes:
+    #   - ~/volumes/jhipster/jhipster/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=jhipster
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:5432:5432

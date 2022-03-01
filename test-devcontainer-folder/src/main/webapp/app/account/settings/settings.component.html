@@ -1,0 +1,107 @@
+<div>
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <h2 *ngIf="account">
+        User settings for [<strong>{{ account.login }}</strong
+        >]
+      </h2>
+
+      <div class="alert alert-success" *ngIf="success">
+        <strong>Settings saved!</strong>
+      </div>
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="account" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="firstName">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="firstName"
+            name="firstName"
+            placeholder="Your first name"
+            formControlName="firstName"
+            data-cy="firstname"
+          />
+
+          <div
+            *ngIf="
+              settingsForm.get('firstName')!.invalid && (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="settingsForm.get('firstName')?.errors?.required">
+              Your first name is required.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('firstName')?.errors?.minlength">
+              Your first name is required to be at least 1 character.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('firstName')?.errors?.maxlength">
+              Your first name cannot be longer than 50 characters.
+            </small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="lastName">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            name="lastName"
+            placeholder="Your last name"
+            formControlName="lastName"
+            data-cy="lastname"
+          />
+
+          <div
+            *ngIf="settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="settingsForm.get('lastName')?.errors?.required">
+              Your last name is required.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('lastName')?.errors?.minlength">
+              Your last name is required to be at least 1 character.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('lastName')?.errors?.maxlength">
+              Your last name cannot be longer than 50 characters.
+            </small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Your email"
+            formControlName="email"
+            data-cy="email"
+          />
+
+          <div *ngIf="settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)">
+            <small class="form-text text-danger" *ngIf="settingsForm.get('email')?.errors?.required"> Your email is required. </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('email')?.errors?.email"> Your email is invalid. </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('email')?.errors?.minlength">
+              Your email is required to be at least 5 characters.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="settingsForm.get('email')?.errors?.maxlength">
+              Your email cannot be longer than 100 characters.
+            </small>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="settingsForm.invalid" class="btn btn-primary" data-cy="submit">Save</button>
+      </form>
+    </div>
+  </div>
+</div>

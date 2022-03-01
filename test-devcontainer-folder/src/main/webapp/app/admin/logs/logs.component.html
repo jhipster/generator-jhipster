@@ -1,0 +1,74 @@
+<div class="table-responsive" *ngIf="loggers">
+  <h2 id="logs-page-heading" data-cy="logsPageHeading">Logs</h2>
+
+  <p>There are {{ loggers.length }} loggers.</p>
+
+  <span>Filter</span>
+  <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
+
+  <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
+    <thead>
+      <tr jhiSort [(predicate)]="orderProp" [(ascending)]="ascending" (sortChange)="filterAndSort()">
+        <th jhiSortBy="name" scope="col"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+        <th jhiSortBy="level" scope="col"><span>Level</span> <fa-icon icon="sort"></fa-icon></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let logger of filteredAndOrderedLoggers">
+        <td>
+          <small>{{ logger.name | slice: 0:140 }}</small>
+        </td>
+        <td>
+          <button
+            (click)="changeLevel(logger.name, 'TRACE')"
+            [ngClass]="logger.level === 'TRACE' ? 'btn-primary' : 'btn-light'"
+            class="btn btn-sm"
+          >
+            TRACE
+          </button>
+
+          <button
+            (click)="changeLevel(logger.name, 'DEBUG')"
+            [ngClass]="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
+            class="btn btn-sm"
+          >
+            DEBUG
+          </button>
+
+          <button
+            (click)="changeLevel(logger.name, 'INFO')"
+            [ngClass]="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
+            class="btn btn-sm"
+          >
+            INFO
+          </button>
+
+          <button
+            (click)="changeLevel(logger.name, 'WARN')"
+            [ngClass]="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
+            class="btn btn-sm"
+          >
+            WARN
+          </button>
+
+          <button
+            (click)="changeLevel(logger.name, 'ERROR')"
+            [ngClass]="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
+            class="btn btn-sm"
+          >
+            ERROR
+          </button>
+
+          <button
+            (click)="changeLevel(logger.name, 'OFF')"
+            [ngClass]="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
+            class="btn btn-sm"
+          >
+            OFF
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

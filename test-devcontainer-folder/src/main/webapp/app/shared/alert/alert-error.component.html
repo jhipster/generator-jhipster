@@ -1,0 +1,7 @@
+<div class="alerts" role="alert">
+  <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
+    <ngb-alert *ngIf="alert.message" [type]="alert.type" (closed)="close(alert)">
+      <pre [innerHTML]="alert.message"></pre>
+    </ngb-alert>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  jhipster-sonar:
+    image: sonarqube:9.3.0-community
+    # Authentication is turned off for out of the box experience while trying out SonarQube
+    # For real use cases delete sonar.forceAuthentication variable or set sonar.forceAuthentication=true
+    environment:
+      - sonar.forceAuthentication=false
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9001:9000
