@@ -20,6 +20,7 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
+const normalize = require('normalize-path');
 
 const BaseDockerGenerator = require('../generator-base-docker');
 const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, WRITING_PRIORITY } =
@@ -175,7 +176,7 @@ module.exports = class extends BaseDockerGenerator {
           // Add database configuration
           const database = appConfig.prodDatabaseType;
           if (database !== NO_DATABASE && database !== ORACLE) {
-            const relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
+            const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[databaseServiceName];
@@ -195,7 +196,7 @@ module.exports = class extends BaseDockerGenerator {
                 envVariable.includes('CREATE_KEYSPACE_SCRIPT')
               );
               cassandraMigrationConfig.environment.push(createKeyspaceScript);
-              const cqlFilesRelativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`);
+              const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
               cassandraMigrationConfig.volumes[0] = `${cqlFilesRelativePath}:/cql:ro`;
 
               parentConfiguration[`${databaseServiceName}-migration`] = cassandraMigrationConfig;
