@@ -73,7 +73,7 @@
     "source-map-loader": "3.0.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "3.3.1",
-    "swagger-ui-dist": "4.5.2",
+    "swagger-ui-dist": "4.6.0",
     "terser-webpack-plugin": "5.3.1",
     "thread-loader": "3.0.4",
     "ts-jest": "27.1.3",
