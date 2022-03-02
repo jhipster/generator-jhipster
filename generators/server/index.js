@@ -476,6 +476,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           this.removeFile(`${this.mainJavaPackageDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
           this.removeFile(`${this.testJavaDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
         }
+        if (this.isJhipsterVersionLessThan('7.7.1')) {
+          if (this.buildToolMaven) {
+            this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
+          }
+        }
       },
       ...writeFiles(),
       ...super._missingPostWriting(),
