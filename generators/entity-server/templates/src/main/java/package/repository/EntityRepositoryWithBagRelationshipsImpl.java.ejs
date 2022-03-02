@@ -25,9 +25,9 @@ import java.util.UUID;
 <%_ } _%>
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.hibernate.annotations.QueryHints;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -37,7 +37,7 @@ import <%= packageName %>.domain.<%= persistClass %>;
  * Utility repository to load bag relationships based on https://vladmihalcea.com/hibernate-multiplebagfetchexception/
  */
 public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%= entityClass %>RepositoryWithBagRelationships {
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
  
     @Override
