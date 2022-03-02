@@ -2719,6 +2719,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       this.jhipsterConfig.pkType = options.pkType;
     }
 
+    if (options.cacheProvider !== undefined) {
+      this.jhipsterConfig.cacheProvider = options.cacheProvider;
+    }
+
+    if (options.enableHibernateCache !== undefined) {
+      this.jhipsterConfig.enableHibernateCache = options.enableHibernateCache;
+    }
+
     if (options.microfrontend) {
       this.jhipsterConfig.microfrontend = options.microfrontend;
     }
