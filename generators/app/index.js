@@ -280,6 +280,16 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       type: Boolean,
     });
 
+    this.option('cache-provider', {
+      desc: 'Cache provider',
+      type: String,
+    });
+
+    this.option('enable-hibernate-cache', {
+      desc: 'Enable hibernate cache',
+      type: Boolean,
+    });
+
     // Just constructing help, stop here
     if (this.options.help) {
       return;
