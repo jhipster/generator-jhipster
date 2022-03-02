@@ -455,6 +455,13 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   /** @inheritdoc */
   _writing() {
     return {
+      cleanupServer() {
+        if (this.isJhipsterVersionLessThan('7.7.1')) {
+          if (this.buildToolMaven) {
+            this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
+          }
+        }
+      },
       cleanupCucumberTests() {
         if (!this.cucumberTests) return undefined;
         if (this.isJhipsterVersionLessThan('7.4.2')) {
