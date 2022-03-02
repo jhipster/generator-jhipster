@@ -455,13 +455,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   /** @inheritdoc */
   _writing() {
     return {
-      cleanupServer() {
-        if (this.isJhipsterVersionLessThan('7.7.1')) {
-          if (this.buildToolMaven) {
-            this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
-          }
-        }
-      },
       cleanupCucumberTests() {
         if (!this.cucumberTests) return undefined;
         if (this.isJhipsterVersionLessThan('7.4.2')) {
@@ -482,6 +475,11 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         if (this.isJhipsterVersionLessThan('7.4.2')) {
           this.removeFile(`${this.mainJavaPackageDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
           this.removeFile(`${this.testJavaDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+        }
+        if (this.isJhipsterVersionLessThan('7.7.1')) {
+          if (this.buildToolMaven) {
+            this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
+          }
         }
       },
       ...writeFiles(),
