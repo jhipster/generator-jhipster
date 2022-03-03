@@ -809,6 +809,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
         const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
         if (!javaVersion.match(new RegExp(`(${JAVA_COMPATIBLE_VERSIONS.map(ver => `^${ver}`).join('|')})`))) {
           const [latest, ...others] = JAVA_COMPATIBLE_VERSIONS.reverse();
+          JAVA_COMPATIBLE_VERSIONS.reverse();
           this.warning(
             `Java ${others.reverse().join(', ')} or ${latest} are not found on your computer. Your Java version is: ${chalk.yellow(
               javaVersion
