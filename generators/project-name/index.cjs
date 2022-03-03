@@ -18,6 +18,8 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const { startCase } = require('lodash');
+
 const { generateMixedChain } = require('../../lib/support/mixin.cjs');
 const {
   INITIALIZING_PRIORITY,
@@ -104,7 +106,7 @@ module.exports = class extends MixedChain {
               name: PROJECT_NAME,
               type: 'input',
               message: 'What is the project name of your application?',
-              default: () => this._getDefaultProjectName(),
+              default: answers => this._getDefaultProjectName(answers[BASE_NAME]),
             },
           ],
           this.config
@@ -168,10 +170,11 @@ module.exports = class extends MixedChain {
    */
 
   /**
+   * @param String baseName - Base name to be derived
    * @returns default app name
    */
-  _getDefaultProjectName() {
-    return defaultConfig.projectName;
+  _getDefaultProjectName(baseName) {
+    return baseName ? `${startCase(baseName)} Application` : defaultConfig.projectName;
   }
 
   /**
@@ -180,7 +183,7 @@ module.exports = class extends MixedChain {
    * @returns Boolean
    */
   _validateBaseName(input) {
-    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+    if (!/^([\w-]*)$/.test(input)) {
       return 'Your base name cannot contain special characters or a blank space';
     }
     if (/_/.test(input)) {

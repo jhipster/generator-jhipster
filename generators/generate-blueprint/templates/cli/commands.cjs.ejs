@@ -19,7 +19,8 @@
 module.exports = {
 <% for (const command of commands) { %>
   '<%= command %>': {
-    desc: 'Run <%= command %>',
+    desc: 'Run <%= command %> sub-generator (<%= baseName %> blueprint)',
+    blueprint: 'generator-jhipster-<%= baseName %>',
   },
 <% } %>
 };

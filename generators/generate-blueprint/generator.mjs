@@ -45,6 +45,7 @@ import {
   GENERATORS,
   PRIORITIES,
   SUB_GENERATORS,
+  ADDITIONAL_SUB_GENERATORS,
   WRITTEN,
 } from './constants.mjs';
 
@@ -120,6 +121,16 @@ export default class extends BaseBlueprintGenerator {
           await this.prompt(subGeneratorPrompts(subGenerator), subGeneratorStorage);
         }
       },
+      async eachAdditionalSubGenerator() {
+        const additionalSubGenerators = this.config.get(ADDITIONAL_SUB_GENERATORS) || '';
+        for (const subGenerator of additionalSubGenerators
+          .split(',')
+          .map(sub => sub.trim())
+          .filter(Boolean)) {
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
+          await this.prompt(subGeneratorPrompts(subGenerator, true), subGeneratorStorage);
+        }
+      },
     };
   }
 
@@ -161,7 +172,8 @@ export default class extends BaseBlueprintGenerator {
     return {
       prepareCommands() {
         this.application.commands = [];
-        for (const generator of this.application[SUB_GENERATORS]) {
+        if (!this.application[GENERATORS]) return;
+        for (const generator of Object.keys(this.application[GENERATORS])) {
           const subGeneratorConfig = this.getSubGeneratorStorage(generator).getAll();
           if (subGeneratorConfig.command) {
             this.application.commands.push(generator);
@@ -184,8 +196,10 @@ export default class extends BaseBlueprintGenerator {
           sections: files,
           context: this.application,
         });
-        // function to use directly template
-        for (const generator of this.jhipsterConfig[SUB_GENERATORS] || []) {
+      },
+      async writingGenerators() {
+        if (!this.application[GENERATORS]) return;
+        for (const generator of Object.keys(this.application[GENERATORS])) {
           const subGeneratorStorage = this.getSubGeneratorStorage(generator);
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
@@ -199,6 +213,7 @@ export default class extends BaseBlueprintGenerator {
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
             generator,
+            customGenerator,
             jhipsterGenerator,
             subGenerator: generator,
             generatorClass: upperFirst(camelCase(jhipsterGenerator)),

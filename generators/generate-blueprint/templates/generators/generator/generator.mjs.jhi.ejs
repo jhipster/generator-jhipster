@@ -35,7 +35,6 @@ import {
 } from 'generator-jhipster/esm/priorities';
 <%_ } _%>
 
-
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
 export async function createGenerator(env) {
@@ -57,13 +56,15 @@ export default class extends <%= generatorClass %>Generator {
     super(args, opts, { taskPrefix: PRIORITY_PREFIX, ...features });
 
     if (this.options.help) return;
+<%_ if (!customGenerator) { _%>
 
     if (!this.options.jhipsterContext) {
       throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints <%= application.baseName %>')}`);
     }
-<%_ if (sbs) { _%>
+  <%_ if (sbs) { _%>
 
     this.sbsBlueprint = true
+  <%_ } _%>
 <%_ } _%>
   }
 
@@ -73,6 +74,9 @@ export default class extends <%= generatorClass %>Generator {
 
   get [<%= priority.constant %>]() {
     return {
+  <%_ if (!sbs) { _%>
+      ...super._<%= priority.name %>(),
+  <%_ } _%>
       async <%= priority.name %>TemplateTask() {
   <%_ if (priority.name == 'writing') { %>
         await this.writeFiles({
@@ -85,9 +89,6 @@ export default class extends <%= generatorClass %>Generator {
         });
   <%_ } %>
       },
-  <%_ if (!sbs) { _%>
-      ...super._<%= priority.name %>(),
-  <%_ } _%>
     };
   }
 <& } -&>
