@@ -35,7 +35,6 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const environment = require('./environment');
 const proxyConfig = require('./proxy.conf');
 
-
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '../<%= MAIN_SRC_DIR %>i18n'), {
@@ -111,6 +110,18 @@ module.exports = async (config, options, targetOptions) => {
   }
 
   const patterns = [
+    {
+      // https://github.com/swagger-api/swagger-ui/blob/v4.6.1/swagger-ui-dist-package/README.md
+      context: require('swagger-ui-dist').getAbsoluteFSPath(),
+      from: '*.{js,css,html,png}',
+      to: 'swagger-ui/',
+      globOptions: { ignore: ['**/index.html'] },
+    },
+    {
+      from: require.resolve('axios/dist/axios.min.js'), 
+      to: 'swagger-ui/',
+    },
+    { from: './<%= CLIENT_MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
     // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
   ];
 
