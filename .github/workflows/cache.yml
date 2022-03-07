@@ -36,7 +36,7 @@ jobs:
         working-directory: ${{ github.workspace }}/app
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           path: generator-jhipster
       - name: 'SETUP: environment'
