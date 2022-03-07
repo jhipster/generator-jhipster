@@ -43,5 +43,5 @@ jobs:
       github.event.action != 'closed' &&
       !contains(github.event.pull_request.user.login, 'dependabot')
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
