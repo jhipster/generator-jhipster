@@ -84,15 +84,12 @@ jobs:
           - ngx-default
           - ngx-default-additional
           - ngx-mysql-es-noi18n-mapsid
-          - ngx-mariadb-oauth2-infinispan
           - ngx-mongodb-kafka-cucumber
           - ngx-h2mem-ws-nol2
           - ngx-couchbase
           - ngx-gradle-couchbase-search
           - ngx-gradle-fr
-          - ngx-gradle-mysql-es-noi18n-mapsid
           - ngx-gradle-mariadb-oauth2-infinispan
-          - ngx-gradle-mongodb-kafka-cucumber
           - ngx-gradle-h2disk-ws-nocache
         include:
           - app-sample: ngx-default
@@ -112,12 +109,6 @@ jobs:
             sonar-analyse: 'false'
           - app-sample: ngx-mysql-es-noi18n-mapsid
             entity: sql
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: ngx-mariadb-oauth2-infinispan
-            entity: sqlfull
             environment: prod
             war: 0
             e2e: 1
@@ -152,24 +143,12 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-sample: ngx-gradle-mysql-es-noi18n-mapsid
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
           - app-sample: ngx-gradle-mariadb-oauth2-infinispan
             entity: sql
             environment: dev
             war: 0
             e2e: 1
             testcontainers: 1
-          - app-sample: ngx-gradle-mongodb-kafka-cucumber
-            entity: mongodb
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 0
           - app-sample: ngx-gradle-h2disk-ws-nocache
             entity: sql
             environment: dev

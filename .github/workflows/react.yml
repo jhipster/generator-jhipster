@@ -82,11 +82,8 @@ jobs:
         cache: [react]
         app-sample:
           - react-default
-          - react-maven-mysql-es-noi18n-mapsid
           - react-maven-h2mem-memcached
-          - react-maven-cassandra-session-redis
           - react-gradle-mysql-es-noi18n-mapsid
-          - react-gradle-h2mem-memcached
           - react-gradle-cassandra-session-redis
         include:
           - app-sample: react-default
@@ -95,34 +92,16 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-sample: react-maven-mysql-es-noi18n-mapsid
-            entity: sqlfull
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
           - app-sample: react-maven-h2mem-memcached
             entity: sql
             environment: prod
             war: 0
             e2e: 1
             testcontainers: 0
-          - app-sample: react-maven-cassandra-session-redis
-            entity: cassandra
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
           - app-sample: react-gradle-mysql-es-noi18n-mapsid
             entity: sqlfull
             environment: prod
             war: 0
-            e2e: 1
-            testcontainers: 0
-          - app-sample: react-gradle-h2mem-memcached
-            entity: sql
-            environment: prod
-            war: 1
             e2e: 1
             testcontainers: 0
           - app-sample: react-gradle-cassandra-session-redis
