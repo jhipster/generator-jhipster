@@ -82,13 +82,10 @@ jobs:
         cache: [angular]
         suite:
           - webflux-mongodb
-          - webflux-mongodb-es-session
           - webflux-mongodb-oauth2
-          - webflux-gateway-jwt
-          - webflux-gateway-oauth2
           - webflux-psql
           - webflux-psql-additional
-          - webflux-mariadb-gradle
+          - webflux-gradle-session-mariadb-es
           - webflux-couchbase
         include:
           - suite: webflux-mongodb
@@ -98,30 +95,9 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - suite: webflux-mongodb-es-session
-            app-sample: webflux-mongodb-es-session
-            entity: mongodb
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
           - suite: webflux-mongodb-oauth2
             app-sample: webflux-mongodb-oauth2
             entity: mongodb
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - suite: webflux-gateway-jwt
-            app-sample: webflux-gateway-jwt
-            entity: none
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-          - suite: webflux-gateway-oauth2
-            app-sample: webflux-gateway-oauth2
-            entity: none
             environment: prod
             war: 0
             e2e: 1
@@ -135,13 +111,13 @@ jobs:
             testcontainers: 0
           - suite: webflux-psql-additional
             jdl-sample: webflux-psql,custom-domain
-          - suite: webflux-mariadb-gradle
-            app-sample: webflux-mariadb-gradle
+          - suite: webflux-gradle-session-mariadb-es
+            app-sample: webflux-gradle-session-mariadb-es
             entity: sqllight
             environment: prod
             war: 0
             e2e: 1
-            testcontainers: 0
+            testcontainers: 1
           - suite: webflux-couchbase
             app-sample: webflux-couchbase
             entity: couchbase
