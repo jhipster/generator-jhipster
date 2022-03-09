@@ -42,9 +42,13 @@ const LoginModal = (props: ILoginModalProps) => {
 
   const { loginError, handleClose } = props;
 
+  const handleLoginSubmit = e => {
+    handleSubmit(login)(e);
+  };
+
   return (
     <Modal isOpen={props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
-      <Form onSubmit={handleSubmit(login)}>
+      <Form onSubmit={handleLoginSubmit}>
           <ModalHeader id="login-title" data-cy="loginTitle" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
           <ModalBody>
             <Row>
