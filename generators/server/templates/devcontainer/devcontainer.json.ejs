@@ -36,7 +36,19 @@
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3001, 4200, 8080, 9000, 18080],
+	"forwardPorts": [
+<%_ if(clientFrameworkAngular) { _%>
+	  4200,
+<%_ } _%>
+<%_ if(clientFrameworkReact || clientFrameworkVue) { _%>
+	  9060,
+<%_ } _%>
+<%_ if(!skipClient) { _%>
+          3001,
+	  9000,
+<%_ } _%>
+	  <%= serverPort %>
+	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
