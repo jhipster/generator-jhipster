@@ -142,7 +142,7 @@ module.exports = class extends BaseBlueprintGenerator {
           {
             base: [
               {
-                templates: ['.gitignore'],
+                templates: ['.gitignore', '.npmrc'],
               },
             ],
           },
