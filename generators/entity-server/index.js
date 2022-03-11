@@ -168,6 +168,17 @@ module.exports = class extends BaseBlueprintGenerator {
         this.reactiveUniqueEntityTypes = new Set(this.reactiveEagerRelations.map(rel => rel.otherEntityNameCapitalized));
         this.reactiveUniqueEntityTypes.add(this.entityClass);
       },
+
+      relationshipsSqlDerivedProperties() {
+        if (!this.databaseTypeSql) return;
+        for (const relationship of this.relationships) {
+          if (!relationship.otherEntity.embedded) {
+            relationship.joinColumnNames = relationship.otherEntity.primaryKey.fields.map(
+              otherField => `${relationship.columnNamePrefix}${otherField.columnName}`
+            );
+          }
+        }
+      },
     };
   }
 
@@ -209,7 +220,11 @@ module.exports = class extends BaseBlueprintGenerator {
     return this._postWriting();
   }
 
-  /* Private methods used in templates */
+  /**
+   * @deprecated
+   * TODO remove for v8
+   * Private methods used in templates
+   */
   _getJoinColumnName(relationship) {
     if (relationship.id === true) {
       return 'id';
