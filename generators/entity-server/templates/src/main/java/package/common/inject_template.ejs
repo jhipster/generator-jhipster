@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const beans = [];
+<%_
+  const beans = [];
   if (viaService) {
     beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
     beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
@@ -49,8 +50,16 @@
   }
 _%>
 
-    <%= beans.map(bean => `private final ${bean.class} ${bean.instance};`).join('\n\n    ') %>
+<%_ for (const bean of beans) { _%>
+    private final <%= bean.class %> <%= bean.instance %>;
 
-    public <%= constructorName %>(<%= beans.map(bean => `${bean.class} ${bean.instance}`).join(', ') %>) {
-        <%= beans.map(bean => `this.${bean.instance} = ${bean.instance};`).join('\n        ') %>
+<%_ } _%>
+    public <%= constructorName %>(
+<%_ for (const bean of beans) { _%>
+        <%= bean.class %> <%= bean.instance %><% if (bean !== beans[beans.length -1]) { %>,<% } %>
+<%_ } _%>
+    ) {
+<%_ for (const bean of beans) { _%>
+        this.<%= bean.instance %> = <%= bean.instance %>;
+<%_ } _%>
     }
