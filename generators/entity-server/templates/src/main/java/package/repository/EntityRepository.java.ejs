@@ -26,7 +26,7 @@ import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 import org.springframework.data.jpa.repository.*;
-  <%_ if (implementsEagerLoadApis) { _%>
+  <%_ if (implementsEagerLoadApis && containsToOneEagerRelationship) { _%>
 import org.springframework.data.repository.query.Param;
   <%_ } _%>
 <%_ } _%>
