@@ -1101,7 +1101,7 @@ jobs:
 
 exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Gradle Angular NPM should match files snapshot 1`] = `
 Object {
-  ".github/workflows/github-actions.yml": Object {
+  ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
@@ -1109,7 +1109,7 @@ jobs:
     name: \\"Gradle Wrapper Validation\\"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
   pipeline:
     name: sampleMysql pipeline
@@ -1123,11 +1123,11 @@ jobs:
       JHI_DISABLE_WEBPACK_LOGS: true
       NG_CLI_ANALYTICS: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.14.0
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
           java-version: 11
@@ -1188,7 +1188,7 @@ jobs:
 
 exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Gradle Angular NPM with full options should match files snapshot 1`] = `
 Object {
-  ".github/workflows/github-actions.yml": Object {
+  ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
@@ -1196,7 +1196,7 @@ jobs:
     name: \\"Gradle Wrapper Validation\\"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
   pipeline:
     name: sampleMysql pipeline
@@ -1210,11 +1210,11 @@ jobs:
       JHI_DISABLE_WEBPACK_LOGS: true
       NG_CLI_ANALYTICS: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.14.0
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
           java-version: 11
@@ -1358,7 +1358,7 @@ services:
 
 exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Maven Angular NPM should match files snapshot 1`] = `
 Object {
-  ".github/workflows/github-actions.yml": Object {
+  ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
@@ -1374,11 +1374,11 @@ jobs:
       JHI_DISABLE_WEBPACK_LOGS: true
       NG_CLI_ANALYTICS: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.14.0
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
           java-version: 11
@@ -1439,7 +1439,7 @@ jobs:
 
 exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: Maven Angular NPM with full options should match files snapshot 1`] = `
 Object {
-  ".github/workflows/github-actions.yml": Object {
+  ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
@@ -1455,11 +1455,11 @@ jobs:
       JHI_DISABLE_WEBPACK_LOGS: true
       NG_CLI_ANALYTICS: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.14.0
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
           java-version: 11
@@ -1625,7 +1625,7 @@ services:
 
 exports[`JHipster CI-CD Sub Generator GitHub Actions tests GitHub Actions: autoconfigure should match files snapshot 1`] = `
 Object {
-  ".github/workflows/github-actions.yml": Object {
+  ".github/workflows/main.yml": Object {
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
@@ -1641,11 +1641,11 @@ jobs:
       JHI_DISABLE_WEBPACK_LOGS: true
       NG_CLI_ANALYTICS: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.14.0
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: \\"temurin\\"
           java-version: 11
