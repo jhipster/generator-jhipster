@@ -51,7 +51,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - webflux-couchbase
 - webflux-couchbase-session
 - webflux-couchbase-oauth2
-- webflux-mysql
+- webflux-mysql-kafka
 - webflux-psql
 
 ## Entity configurations

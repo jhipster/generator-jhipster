@@ -72,13 +72,14 @@ spring:
     exclude:
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
 <%_ } _%>
-<%_ if (serviceDiscoveryEureka) { _%>
+<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul || messageBrokerKafka) { _%>
   cloud:
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
     config:
       enabled: false
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
-  cloud:
     consul:
       discovery:
         enabled: false
@@ -87,6 +88,23 @@ spring:
         enabled: false
       enabled: false
 <%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+    stream:
+      kafka:
+        binder:
+          replicationFactor: 1
+          auto-create-topics: true
+        bindings:
+          binding-in-sse:
+            destination: sse-topic
+            content-type: text/plain
+            group: <%= dasherizedBaseName %>
+          binding-out-sse:
+            destination: sse-topic
+            content-type: text/plain
+            group: <%= dasherizedBaseName %>
+<%_ } _%>
+
 <%_ if (databaseTypeSql && !reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -224,17 +242,6 @@ jhipster:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
       key: <%= rememberMeKey %>
-<%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-kafka:
-  consumer:
-    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    group.id: <%= dasherizedBaseName %>
-    auto.offset.reset: earliest
-  producer:
-    key.serializer: org.apache.kafka.common.serialization.StringSerializer
-    value.serializer: org.apache.kafka.common.serialization.StringSerializer
 <%_ } _%>
 
 # ===================================================================

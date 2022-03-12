@@ -10,6 +10,7 @@
  */
 const { CASSANDRA, MONGODB } = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
   if (generator.isJhipsterVersionLessThan('3.5.0')) {
@@ -81,7 +82,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   }
   if (generator.isJhipsterVersionLessThan('5.8.0')) {
     generator.removeFile(`${javaDir}config/MetricsConfiguration.java`);
-    if (generator.databaseType === 'cassandra') {
+    if (generator.databaseType === CASSANDRA) {
       generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
     }
   }
@@ -154,6 +155,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${testDir}TestContainersSpringContextCustomizerFactory.java`);
     if (generator.databaseType === CASSANDRA) {
       generator.removeFile(`${testDir}AbstractCassandraTest.java`);
+    }
+  }
+  if (generator.isJhipsterVersionLessThan('7.7.0')) {
+    if (generator.messageBroker === KAFKA) {
+      generator.removeFile(`${javaDir}config/KafkaProperties.java`);
     }
   }
 }

@@ -460,11 +460,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:oracle-xe"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (reactive) { _%>
-    implementation "io.projectreactor.kafka:reactor-kafka"
-  <%_ } else { _%>
-    implementation "org.apache.kafka:kafka-clients"
-  <%_ } _%>
+    implementation "org.springframework.cloud:spring-cloud-stream"
+    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+    testImplementation "org.springframework.cloud:spring-cloud-stream-test-support"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {

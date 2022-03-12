@@ -16,13 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.cucumber;
+package <%= packageName %>.config;
 
-import <%= packageName %>.IntegrationTest;
-import io.cucumber.junit.platform.engine.Cucumber;
+import org.springframework.cloud.stream.annotation.Output;
+import org.springframework.messaging.MessageChannel;
 
-@Cucumber
-@IntegrationTest
-class CucumberIT {
+public interface KafkaSseProducer {
 
+    String CHANNELNAME = "binding-out-sse";
+
+    @Output(CHANNELNAME)
+    MessageChannel output();
 }
