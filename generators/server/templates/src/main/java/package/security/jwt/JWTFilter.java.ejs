@@ -75,7 +75,7 @@ public class JWTFilter <% if (reactive) { %>implements WebFilter<% } else { %>ex
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
 <%_ if (reactive) { _%>
-            return chain.filter(exchange).subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
+            return chain.filter(exchange).contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
         }
         return chain.filter(exchange);
 <%_ } else { _%>
