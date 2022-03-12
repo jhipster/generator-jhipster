@@ -254,6 +254,7 @@ Object {
       "path": Array [
         "id",
       ],
+      "propertyName": "id",
       "readonly": true,
       "reference": "[reference]",
       "relationshipsPath": Array [],
@@ -320,6 +321,7 @@ Object {
       "path": Array [
         "login",
       ],
+      "propertyName": "login",
       "reference": "[reference]",
       "relationshipsPath": Array [],
       "tsType": "string",
@@ -385,6 +387,7 @@ Object {
       "path": Array [
         "firstName",
       ],
+      "propertyName": "firstName",
       "reference": "[reference]",
       "relationshipsPath": Array [],
       "tsType": "string",
@@ -450,6 +453,7 @@ Object {
       "path": Array [
         "lastName",
       ],
+      "propertyName": "lastName",
       "reference": "[reference]",
       "relationshipsPath": Array [],
       "tsType": "string",
@@ -657,6 +661,7 @@ Object {
       "path": Array [
         "id",
       ],
+      "propertyName": "id",
       "readonly": true,
       "reference": "[reference]",
       "relationshipsPath": Array [],
@@ -921,6 +926,7 @@ Object {
       "path": Array [
         "id",
       ],
+      "propertyName": "id",
       "readonly": true,
       "reference": "[reference]",
       "relationshipsPath": Array [],
