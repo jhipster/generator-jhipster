@@ -89,13 +89,14 @@ export const UserManagement = (props: RouteComponentProps<any>) => {
     getUsersFromProps();
   };
 
-  const toggleActive = user => () =>
+  const toggleActive = user => () => {
     dispatch(
       updateUser({
         ...user,
         activated: !user.activated,
       })
     );
+  };
 
   const { match } = props;
   const account = useAppSelector(state => state.authentication.account);

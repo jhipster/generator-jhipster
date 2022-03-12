@@ -18,6 +18,7 @@
 -%>
 package <%= packageName %>.repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 <%_ if (fieldsContainUUID) { _%>
@@ -61,7 +62,7 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
 <%_ for (const relationship of relationships.filter(relationship => relationship.bagRelationship)) { _%>
             .map(this::fetch<%= relationship.relationshipNameCapitalizedPlural %>)
 <%_ } _%>
-            .get();
+            .orElse(Collections.emptyList());
     }
 <%_ for (const relationship of relationships.filter(relationship => relationship.bagRelationship)) { _%>
 
