@@ -176,6 +176,10 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
     otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
 
+  _.defaults(relationship, {
+    propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
+  });
+
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !generator.isBuiltInUser(otherEntityName)) {
       generator.warning(
