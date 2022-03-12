@@ -240,6 +240,7 @@ function _derivedProperties(field) {
 
 function prepareFieldForTemplates(entityWithConfig, field, generator) {
   _.defaults(field, {
+    propertyName: field.fieldName,
     fieldNameCapitalized: _.upperFirst(field.fieldName),
     fieldNameUnderscored: _.snakeCase(field.fieldName),
     fieldNameHumanized: _.startCase(field.fieldName),
