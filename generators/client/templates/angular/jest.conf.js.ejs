@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const { pathsToModuleNameMapper } = require('ts-jest/utils')
+const { pathsToModuleNameMapper } = require('ts-jest')
 
 const { compilerOptions: { paths = {}, baseUrl = './' } } = require('./tsconfig.json');
 const environment = require('./webpack/environment');
