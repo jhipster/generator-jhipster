@@ -106,7 +106,7 @@ public class TokenProvider {
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
 <%_ if (reactive) { _%>
-            .serializeToJsonWith(new JacksonSerializer())
+            .serializeToJsonWith(new JacksonSerializer<>())
 <%_ } _%>
             .compact();
     }
