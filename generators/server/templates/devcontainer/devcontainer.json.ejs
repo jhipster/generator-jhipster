@@ -1,0 +1,64 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.209.6/containers/java
+{
+  "name": "<%= capitalizedBaseName %>",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      // Update the VARIANT arg to pick a Java version: 11, 17
+      // Append -bullseye or -buster to pin to an OS version.
+      // Use the -bullseye variants on local arm64/Apple Silicon.
+      "VARIANT": "11",
+      // Options
+      "INSTALL_MAVEN": "<%= buildToolMaven %>",
+      "INSTALL_GRADLE": "<%= buildToolGradle %>",
+      "NODE_VERSION": "lts/*"
+    }
+  },
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "java.home": "/docker-java-home"
+  },
+	
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+<%_ if(clientFrameworkAngular) { _%>
+    "angular.ng-template",
+<%_ } _%>
+<%_ if(!skipClient) { _%>
+    "christian-kohler.npm-intellisense",
+    "firsttris.vscode-jest-runner",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "dbaeumer.vscode-eslint",
+<%_ } _%>
+    "vscjava.vscode-java-pack",
+    "pivotal.vscode-boot-dev-pack",
+    "esbenp.prettier-vscode"
+	],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [
+<%_ if(clientFrameworkAngular) { _%>
+    4200,
+<%_ } _%>
+<%_ if(clientFrameworkReact || clientFrameworkVue) { _%>
+    9060,
+<%_ } _%>
+<%_ if(!skipClient) { _%>
+    3001,
+    9000,
+<%_ } _%>
+    <%= serverPort %>
+  ],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "java -version",
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "vscode",
+  "features": {
+    "docker-in-docker": "latest",
+    "docker-from-docker": "latest"
+  }
+}
