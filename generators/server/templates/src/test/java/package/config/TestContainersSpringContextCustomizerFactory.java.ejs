@@ -37,6 +37,9 @@ import org.springframework.boot.test.util.TestPropertyValues;
 <%_ if (databaseTypeCassandra) { _%>
 import org.testcontainers.containers.CassandraContainer;
 <%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+import org.testcontainers.containers.KafkaContainer;
+<%_ } _%>
 
 
 public class TestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
@@ -102,7 +105,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                     beanFactory.registerSingleton(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
                     ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
                 }
-                testValues = testValues.and("kafka.bootstrap-servers=" + kafkaBean.getKafkaContainer().getBootstrapServers());
+                testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getMappedPort(KafkaContainer.KAFKA_PORT));
             }
 <%_ } _%>
             testValues.applyTo(context);

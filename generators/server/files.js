@@ -1119,8 +1119,12 @@ const baseServerFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/KafkaProperties.java',
-          renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`,
+          file: 'package/config/KafkaSseConsumer.java',
+          renameTo: generator => `${generator.javaDir}config/KafkaSseConsumer.java`,
+        },
+        {
+          file: 'package/config/KafkaSseProducer.java',
+          renameTo: generator => `${generator.javaDir}config/KafkaSseProducer.java`,
         },
       ],
     },
@@ -1205,7 +1209,17 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA,
+      condition: generator => generator.messageBroker === KAFKA && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/KafkaResource_reactive.java',
+          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResource.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1456,10 +1470,6 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/web/rest/KafkaResourceIT.java',
-          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
-        },
-        {
           file: 'package/config/KafkaTestContainer.java',
           renameTo: generator => `${generator.testDir}config/KafkaTestContainer.java`,
         },
@@ -1470,6 +1480,26 @@ const baseServerFiles = {
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
           renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA && !generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/KafkaResourceIT.java',
+          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA && generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/KafkaResourceIT_reactive.java',
+          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
         },
       ],
     },

@@ -883,7 +883,11 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/config/KafkaProperties.java",
+          "file": "package/config/KafkaSseConsumer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/KafkaSseProducer.java",
           "renameTo": [Function],
         },
       ],
@@ -1326,6 +1330,16 @@ Object {
       "templates": Array [
         Object {
           "file": "package/web/filter/SpaWebFilter.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/KafkaResource_reactive.java",
           "renameTo": [Function],
         },
       ],
@@ -1859,10 +1873,6 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/web/rest/KafkaResourceIT.java",
-          "renameTo": [Function],
-        },
-        Object {
           "file": "package/config/KafkaTestContainer.java",
           "renameTo": [Function],
         },
@@ -1872,6 +1882,26 @@ Object {
         },
         Object {
           "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/KafkaResourceIT.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/KafkaResourceIT_reactive.java",
           "renameTo": [Function],
         },
       ],

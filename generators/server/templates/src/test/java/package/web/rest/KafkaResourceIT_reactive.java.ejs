@@ -19,11 +19,8 @@
 package <%= packageName %>.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -33,13 +30,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.cloud.stream.test.binder.MessageCollector;
+import org.springframework.http.MediaType;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MimeTypeUtils;
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.EmbeddedKafka;
@@ -50,13 +47,10 @@ import <%= packageName %>.config.KafkaSseProducer;
 @AutoConfigureMockMvc
 @WithMockUser
 @EmbeddedKafka
-class SampleMongoKafkaKafkaResourceIT {
+class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
     @Autowired
-    private MessageCollector collector;
-
-    @Autowired
-    private MockMvc restMockMvc;
+    private WebTestClient client;
 
     @Autowired
     @Qualifier(KafkaSseProducer.CHANNELNAME)
@@ -66,37 +60,40 @@ class SampleMongoKafkaKafkaResourceIT {
     @Qualifier(KafkaSseConsumer.CHANNELNAME)
     private MessageChannel input;
 
+    @Autowired
+    private MessageCollector collector;
+
     @Test
-    void producesMessages() throws Exception {
-        restMockMvc
-            .perform(post("/api/sample-mongo-kafka-kafka/publish?message=value-produce"))
-            .andExpect(status().isOk());
+    void producesMessages() throws InterruptedException {
+        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce")
+            .exchange()
+            .expectStatus()
+            .isNoContent();
+
         BlockingQueue<Message<?>> messages = collector.forChannel(output);
         GenericMessage<String> payload = (GenericMessage<String>) messages.take();
         assertThat(payload.getPayload()).isEqualTo("value-produce");
     }
 
     @Test
-    void consumesMessages() throws Exception {
+    void consumesMessages() {
         Map<String, Object> map = new HashMap<>();
         map.put(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.TEXT_PLAIN_VALUE);
         MessageHeaders headers = new MessageHeaders(map);
         Message<String> testMessage = new GenericMessage<>("value-consume", headers);
-        MvcResult mvcResult = restMockMvc
-            .perform(get("/api/sample-mongo-kafka-kafka/register"))
-            .andExpect(status().isOk())
-            .andExpect(request().asyncStarted())
-            .andReturn();
-        for (int i = 0; i < 100; i++) {
-            input.send(testMessage);
-            Thread.sleep(100);
-            String content = mvcResult.getResponse().getContentAsString();
-            if (content.contains("data:value-consume")) {
-                restMockMvc
-                    .perform(get("/api/sample-mongo-kafka-kafka/unregister"));
-                return;
-            }
-        }
-        fail("Expected content data:value-consume not received");
+        input.send(testMessage);
+        String value = client
+            .get()
+            .uri("/api/<%= dasherizedBaseName %>-kafka/consume")
+            .accept(MediaType.TEXT_EVENT_STREAM)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
+            .returnResult(String.class)
+            .getResponseBody()
+            .blockFirst(Duration.ofSeconds(10));
+        assertThat(value).isEqualTo("value-consume");
     }
 }

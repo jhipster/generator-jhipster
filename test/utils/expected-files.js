@@ -692,10 +692,14 @@ const expectedFiles = {
   oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/login/logout.model.ts`],
 
   messageBroker: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaProperties.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaSseConsumer.java`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaSseProducer.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResourceIT.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/KafkaTestContainer.java`,
     `${DOCKER_DIR}kafka.yml`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
   ],
 
   swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`, `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/OpenApiConfiguration.java`],
@@ -776,10 +780,13 @@ const expectedFiles = {
   mongodb: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/dbmigrations/package-info.java`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/MongoDbTestContainer.java`,
     `${DOCKER_DIR}mongodb.yml`,
     `${DOCKER_DIR}mongodb-cluster.yml`,
     `${DOCKER_DIR}mongodb/MongoDB.Dockerfile`,
     `${DOCKER_DIR}mongodb/scripts/init_replicaset.js`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
   ],
 
   couchbase: [
@@ -810,12 +817,16 @@ const expectedFiles = {
     `${SERVER_MAIN_RES_DIR}config/cql/drop-keyspace.cql`,
     `${SERVER_MAIN_RES_DIR}config/cql/changelog/00000000000000_create-tables.cql`,
     `${SERVER_MAIN_RES_DIR}config/cql/changelog/00000000000001_insert_default_users.cql`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/CassandraTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/CassandraKeyspaceIT.java`,
     `${DOCKER_DIR}cassandra/Cassandra-Migration.Dockerfile`,
     `${DOCKER_DIR}cassandra/scripts/autoMigrate.sh`,
     `${DOCKER_DIR}cassandra/scripts/execute-cql.sh`,
     `${DOCKER_DIR}cassandra-cluster.yml`,
     `${DOCKER_DIR}cassandra-migration.yml`,
     `${DOCKER_DIR}cassandra.yml`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
   ],
 
   elasticsearch: [
