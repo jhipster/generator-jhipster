@@ -2,6 +2,12 @@
 
 exports[`JHipster generator App with skip client Gradle creates expected files for default configuration with skip client option enabled 1`] = `
 Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -457,6 +463,12 @@ Object {
 
 exports[`JHipster generator App with skip client Maven creates expected files for default configuration with skip client option enabled 1`] = `
 Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -1826,6 +1838,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -3175,6 +3193,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -4509,6 +4533,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -5841,6 +5871,12 @@ Object {
 exports[`JHipster generator Auth options JWT authentication creates expected files with JWT authentication 1`] = `
 Object {
   ".browserslistrc": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
   ".editorconfig": Object {
@@ -7189,6 +7225,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -8533,6 +8575,12 @@ Object {
 exports[`JHipster generator Default configuration with Gradle creates expected default files for gradle 1`] = `
 Object {
   ".browserslistrc": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
   ".editorconfig": Object {
@@ -9902,6 +9950,12 @@ Object {
 
 exports[`JHipster generator Default configuration with React creates expected default files for react 1`] = `
 Object {
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -10850,6 +10904,12 @@ Object {
 exports[`JHipster generator Default configuration with using npm flag creates expected default files 1`] = `
 Object {
   ".browserslistrc": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
   ".editorconfig": Object {
@@ -12198,6 +12258,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -13511,6 +13577,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -14819,6 +14891,12 @@ Object {
 exports[`JHipster generator i18n with RTL support creates expected default files for i18n with RTL support 1`] = `
 Object {
   ".browserslistrc": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
   ".editorconfig": Object {

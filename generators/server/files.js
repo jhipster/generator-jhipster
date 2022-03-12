@@ -340,7 +340,11 @@ const baseServerFiles = {
   ],
   serverBuild: [
     {
-      templates: [{ file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } }],
+      templates: [
+        { file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } },
+        { file: 'devcontainer/devcontainer.json', renameTo: () => '.devcontainer/devcontainer.json' },
+        { file: 'devcontainer/Dockerfile', renameTo: () => '.devcontainer/Dockerfile' },
+      ],
     },
     {
       condition: generator => generator.buildTool === GRADLE,

@@ -188,6 +188,14 @@ Object {
             "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
           },
         },
+        Object {
+          "file": "devcontainer/devcontainer.json",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "devcontainer/Dockerfile",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {

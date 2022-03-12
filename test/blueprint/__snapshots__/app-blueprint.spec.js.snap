@@ -5,6 +5,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
@@ -1349,6 +1355,12 @@ Object {
 exports[`JHipster application generator with blueprint generate application with a version-compatible blueprint creates expected default files for server and angularX 1`] = `
 Object {
   ".browserslistrc": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
     "stateCleared": "modified",
   },
   ".editorconfig": Object {
