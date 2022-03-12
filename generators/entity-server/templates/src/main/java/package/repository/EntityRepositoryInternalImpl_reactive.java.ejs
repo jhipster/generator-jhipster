@@ -135,9 +135,8 @@ _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
 <%_ }); _%>
         SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)
-<%_ reactiveEagerRelations.forEach(function(rel) {
-            const colName = _getJoinColumnName(rel); _%>
-            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))
+<%_ reactiveEagerRelations.forEach(function(rel) { _%>
+            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))
 <%_ }); _%>;
 
         String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
