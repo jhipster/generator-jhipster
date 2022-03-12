@@ -10,7 +10,7 @@ const expectedFiles = {
   gitlab: ['.gitlab-ci.yml'],
   circle: ['.circleci/config.yml'],
   azure: ['azure-pipelines.yml'],
-  github: ['.github/workflows/github-actions.yml'],
+  github: ['.github/workflows/main.yml'],
   dockerRegistry: ['src/main/docker/docker-registry.yml'],
 };
 
@@ -643,19 +643,19 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.file(expectedFiles.github);
       });
       it('contains Docker, Sonar, Heroku, Snyk', () => {
-        assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sonar.com/);
-        assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*jhipster-publish-docker/);
-        assert.fileContent('.github/workflows/github-actions.yml', /mvnw.*sample-mysql/);
-        assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
+        assert.fileContent('.github/workflows/main.yml', /mvnw.*sonar.com/);
+        assert.fileContent('.github/workflows/main.yml', /mvnw.*jhipster-publish-docker/);
+        assert.fileContent('.github/workflows/main.yml', /mvnw.*sample-mysql/);
+        assert.fileContent('.github/workflows/main.yml', /snyk/);
       });
       it('contains distributionManagement in pom.xml', () => {
         assert.fileContent('pom.xml', /distributionManagement/);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.github/workflows/github-actions.yml', /run ci:e2e:package/);
-        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_ENABLE_RECORD: true/);
-        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_PROJECT_ID/);
-        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_RECORD_KEY/);
+        assert.fileContent('.github/workflows/main.yml', /run ci:e2e:package/);
+        assert.fileContent('.github/workflows/main.yml', /CYPRESS_ENABLE_RECORD: true/);
+        assert.fileContent('.github/workflows/main.yml', /CYPRESS_PROJECT_ID/);
+        assert.fileContent('.github/workflows/main.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
@@ -682,16 +682,16 @@ describe('JHipster CI-CD Sub Generator', () => {
         assert.file(expectedFiles.github);
       });
       it('contains Docker, Sonar, Heroku', () => {
-        assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*jhipster-publish-docker/);
-        assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*sonar.com/);
-        assert.fileContent('.github/workflows/github-actions.yml', /gradlew.*deployHeroku/);
-        assert.fileContent('.github/workflows/github-actions.yml', /snyk/);
+        assert.fileContent('.github/workflows/main.yml', /gradlew.*jhipster-publish-docker/);
+        assert.fileContent('.github/workflows/main.yml', /gradlew.*sonar.com/);
+        assert.fileContent('.github/workflows/main.yml', /gradlew.*deployHeroku/);
+        assert.fileContent('.github/workflows/main.yml', /snyk/);
       });
       it('contains Cypress', () => {
-        assert.fileContent('.github/workflows/github-actions.yml', /run ci:e2e:package/);
-        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_ENABLE_RECORD: false/);
-        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_PROJECT_ID/);
-        assert.fileContent('.github/workflows/github-actions.yml', /CYPRESS_RECORD_KEY/);
+        assert.fileContent('.github/workflows/main.yml', /run ci:e2e:package/);
+        assert.fileContent('.github/workflows/main.yml', /CYPRESS_ENABLE_RECORD: false/);
+        assert.fileContent('.github/workflows/main.yml', /CYPRESS_PROJECT_ID/);
+        assert.fileContent('.github/workflows/main.yml', /CYPRESS_RECORD_KEY/);
       });
     });
     describe('GitHub Actions: autoconfigure', () => {

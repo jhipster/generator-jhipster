@@ -234,7 +234,7 @@ module.exports = class extends BaseBlueprintGenerator {
           this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
         if (this.pipeline === 'github') {
-          this.template('github-actions.yml.ejs', '.github/workflows/github-actions.yml');
+          this.template('github-actions.yml.ejs', '.github/workflows/main.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {
