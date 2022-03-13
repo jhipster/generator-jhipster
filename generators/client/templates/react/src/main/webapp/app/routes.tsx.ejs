@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React<% if (applicationTypeGateway && microfrontend) { %>, { Suspense }<% } %> from 'react';
-import { Switch <% if (communicationSpringWebsocket) { %>, useLocation <% } %>} from 'react-router-dom';
+import { Switch <% if (communicationSpringWebsocket) { %>, useLocation <% } %><% if (applicationTypeGateway && microfrontend) { %>, Route <% } %>} from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -91,14 +91,16 @@ const Routes = () => {
 <%_ if (authenticationTypeOauth2) { _%>
         <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
 <%_ } _%>
-        <PrivateRoute path="/<%= microfrontend ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-        <Suspense fallback={loading}>
-          <PrivateRoute path="/<%= remote.lowercaseBaseName %>/" component={<%= remote.capitalizedBaseName %>Routes} hasAnyAuthorities={[AUTHORITIES.USER]} />
-        </Suspense>
+        <Route path="/<%= remote.lowercaseBaseName %>/">
+          <Suspense fallback={loading}>
+            <PrivateRoute component={<%= remote.capitalizedBaseName %>Routes} hasAnyAuthorities={[AUTHORITIES.USER]} />
+          </Suspense>
+        </Route>
   <%_ } _%>
 <%_ } _%>
+        <PrivateRoute path="/<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
         <ErrorBoundaryRoute component={PageNotFound} />
       </Switch>
     </div>
