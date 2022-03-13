@@ -53,7 +53,7 @@ export default () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(addSourcePrefix('services/blog/'));
+    dispatch(addSourcePrefix('services/<%= lowercaseBaseName %>/'));
   }, []);
 
   <%_ } _%>

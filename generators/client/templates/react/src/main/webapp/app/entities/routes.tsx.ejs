@@ -32,7 +32,7 @@ export default ({ match }) => {
 <%_ if (applicationTypeMicroservice) { _%>
   const store = getStore() as any;
   if (store.injectReducer && Object.keys(entitiesReducers).length > 0) {
-    store.injectReducer('blog', combineReducers(entitiesReducers as ReducersMapObject));
+    store.injectReducer('<%= lowercaseBaseName %>', combineReducers(entitiesReducers as ReducersMapObject));
   }
 <%_ } _%>
   return (
