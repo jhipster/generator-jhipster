@@ -34,6 +34,7 @@ module.exports = ({ serve }) => {
   return {
     optimization: {
       moduleIds: 'named',
+      chunkIds: 'named',
       runtimeChunk: false,
     },
     plugins: [
