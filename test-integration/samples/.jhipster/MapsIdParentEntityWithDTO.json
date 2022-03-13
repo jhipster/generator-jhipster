@@ -3,7 +3,7 @@
   "clientRootFolder": "",
   "databaseType": "sql",
   "dto": "mapstruct",
-  "entityTableName": "maps_id_parent_entity_withdto",
+  "entityTableName": "maps_id_parent_with_dto",
   "fields": [{ "fieldName": "name", "fieldType": "String" }],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,

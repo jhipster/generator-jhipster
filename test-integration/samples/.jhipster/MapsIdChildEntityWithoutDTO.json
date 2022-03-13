@@ -3,7 +3,7 @@
   "clientRootFolder": "",
   "databaseType": "sql",
   "dto": "no",
-  "entityTableName": "child_entity_wo_dto",
+  "entityTableName": "maps_id_child_wo_dto",
   "fields": [{ "fieldName": "date", "fieldType": "Instant" }],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
