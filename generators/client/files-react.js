@@ -275,12 +275,12 @@ const files = {
     {
       condition: generator => generator.microfrontend,
       path: REACT_DIR,
-      templates: ['main.tsx'],
+      templates: ['main.tsx', 'shared/error/error-loading.tsx'],
     },
     {
       condition: generator => generator.microfrontend && generator.applicationTypeGateway,
       path: CLIENT_MAIN_SRC_DIR,
-      templates: ['microfrontends/entities-menu.tsx', 'microfrontends/entities-routes.tsx', 'app/shared/error/error-loading.tsx'],
+      templates: ['microfrontends/entities-menu.tsx', 'microfrontends/entities-routes.tsx'],
     },
   ],
   clientTestFw: [
