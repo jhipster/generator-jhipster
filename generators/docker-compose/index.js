@@ -30,7 +30,7 @@ const writeFiles = require('./files').writeFiles;
 const { GATEWAY, MONOLITH } = require('../../jdl/jhipster/application-types');
 const { PROMETHEUS } = require('../../jdl/jhipster/monitoring-types');
 const { EUREKA } = require('../../jdl/jhipster/service-discovery-types');
-const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, ORACLE } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, MONGODB, ORACLE } = require('../../jdl/jhipster/database-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
 const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
 const { MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
@@ -180,7 +180,8 @@ module.exports = class extends BaseDockerGenerator {
             const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[databaseServiceName];
-            if (database !== MARIADB) delete databaseYamlConfig.ports;
+            // Don't export database ports
+            delete databaseYamlConfig.ports;
 
             if (database === CASSANDRA) {
               // node config
