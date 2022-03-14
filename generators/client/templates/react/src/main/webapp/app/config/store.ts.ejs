@@ -31,12 +31,11 @@ import websocketMiddleware from './websocket-middleware';
 import translationMiddleware from './translation-middleware';
 <%_ } _%>
 
-const store = configureInjectableStore(
-  configureStore({
-    reducer: sharedReducers,
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({
-        serializableCheck: {
+const store = configureStore({
+  reducer: sharedReducers,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
         // Ignore these field paths in all actions
         ignoredActionPaths: ['payload.config', 'payload.request', 'error', 'meta.arg'],
       },
@@ -52,8 +51,10 @@ const store = configureInjectableStore(
 <%_ } _%>
       loggerMiddleware
     ),
-  })
-);
+});
+<%_ if (microfrontend || applicationTypeGateway) { _%>
+
+const injectableStore = configureInjectableStore(store);
 
 // Allow to lazy load reducers https://github.com/reduxjs/redux/blob/master/docs/usage/CodeSplitting.md
 interface InjectableStore<S = any, A extends Action = AnyAction> extends Store<S, A> {
@@ -78,7 +79,11 @@ export function configureInjectableStore(storeToInject) {
   return injectableStore;
 }
 
+const getStore = () => injectableStore;
+<%_ } else { _%>
+
 const getStore = () => store;
+<%_ } _%>
 
 export type IRootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
