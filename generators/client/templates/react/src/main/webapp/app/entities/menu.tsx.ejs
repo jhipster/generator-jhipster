@@ -36,10 +36,8 @@ class EntitiesMenu extends React.Component {
     );
   }
 }
-
-export default EntitiesMenu;
 <%_ } else { _%>
-export default () => {
+const EntitiesMenu = () => {
   <%_ if (applicationTypeMicroservice) { _%>
   const store = getStore() as any;
   const [change, setChange] = useState(store.getState().locale.lastChange);
@@ -65,3 +63,5 @@ export default () => {
   );
 };
 <%_ } _%>
+
+export default EntitiesMenu as React.ComponentType<any>;
