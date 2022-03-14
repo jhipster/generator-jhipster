@@ -5,6 +5,12 @@ Object {
   ".browserslistrc": Object {
     "stateCleared": "modified",
   },
+  ".devcontainer/Dockerfile": Object {
+    "stateCleared": "modified",
+  },
+  ".devcontainer/devcontainer.json": Object {
+    "stateCleared": "modified",
+  },
   ".editorconfig": Object {
     "stateCleared": "modified",
   },
