@@ -41,7 +41,9 @@ import passwordReset from 'app/modules/account/password-reset/password-reset.red
 import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
 <%_ } _%>
+<%_ if (applicationTypeMonolith) { _%>
 import entitiesReducers from 'app/entities/reducers';
+<%_ } _%>
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {
@@ -68,8 +70,6 @@ const rootReducer: ReducersMapObject = {
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 <%_ if (applicationTypeMonolith) { _%>
   ...entitiesReducers,
-<%_ } else { _%>
-  <%= lowercaseBaseName %>: Object.keys(entitiesReducers).length > 0 ? combineReducers(entitiesReducers as ReducersMapObject) : undefined,
 <%_ } _%>
 };
 
