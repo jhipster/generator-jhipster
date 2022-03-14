@@ -32,7 +32,6 @@ const { DefinePlugin } = require('webpack');
 <%_ if (applicationTypeMicroservice) { _%>
         exposes: {
           './entities-menu': './<%= CLIENT_MAIN_SRC_DIR %>app/entities/menu',
-          './entities-reducers': './<%= CLIENT_MAIN_SRC_DIR %>app/entities/reducers',
           './entities-routes': './<%= CLIENT_MAIN_SRC_DIR %>app/entities/routes',
         },
 <%_ } _%>
@@ -61,6 +60,11 @@ const { DefinePlugin } = require('webpack');
           'app/shared/layout/menus/menu-item': {
             singleton: true,
             import: 'app/shared/layout/menus/menu-item',
+            requiredVersion: appVersion,
+          },
+          'app/shared/reducers': {
+            singleton: true,
+            import: 'app/shared/reducers',
             requiredVersion: appVersion,
           },
           'app/shared/reducers/locale': {
