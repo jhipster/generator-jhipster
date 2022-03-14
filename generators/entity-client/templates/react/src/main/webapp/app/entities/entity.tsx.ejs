@@ -40,10 +40,17 @@ import {
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+<%_ if (!paginationNo) { _%>
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+<%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 <%_ if (fieldsContainDuration) { _%>
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import {
 <%_ if (searchEngine) { _%>
   searchEntities,
@@ -53,13 +60,6 @@ import {
   reset,
 <%_ } _%>
 } from './<%= entityFileName %>.reducer';
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-<%_ if (!paginationNo) { _%>
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-<%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>) => {
   const dispatch = useAppDispatch();
