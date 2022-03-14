@@ -16,7 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { AnyAction, Action, Store, Reducer, ReducersMapObject, configureStore, ThunkAction, combineReducers } from '@reduxjs/toolkit';
+import {
+  AnyAction,
+  configureStore,
+  ThunkAction,
+<%_ if (microfrontend || applicationTypeGateway) { _%>
+  Action,
+  Store,
+  Reducer,
+  ReducersMapObject,
+  combineReducers,
+<%_ } _%>
+} from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
