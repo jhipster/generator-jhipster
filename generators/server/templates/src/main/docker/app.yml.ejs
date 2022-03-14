@@ -77,11 +77,7 @@ _%>
 <%_ if (databaseTypeCassandra) { _%>
       - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
 <%_ } _%>
-<%_ if (prodDatabaseTypeMariadb) { _%>
-      - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
-<%_ } else if (prodDatabaseTypeMssql) { _%>
-      - JHIPSTER_SLEEP=60 # gives time for mssql server to start
-<%_ } else if (applicationTypeGateway) { _%>
+<%_ if (applicationTypeGateway) { _%>
       - JHIPSTER_SLEEP=60 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incomming requests.
 <%_ } else { _%>
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
