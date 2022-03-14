@@ -43,6 +43,12 @@ import {
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
+<%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
+import { mapIdList } from 'app/shared/util/entity-utils';
+<%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+
 <%_
 let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
@@ -90,22 +96,17 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
     <%_ } _%>
   <%_ } _%>
 <%_ }); _%>
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 import {
   getEntity,
   updateEntity,
   createEntity,
   reset
 } from './<%= entityFileName %>.reducer';
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
-<%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
-import { mapIdList } from 'app/shared/util/entity-utils';
-<%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
-<%_ enumImports.forEach( (importedPath, importedType) => { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
-<%_ }); _%>
 
 export const <%= entityReactName %>Update = (props: RouteComponentProps<{id: string}>) => {
   const dispatch = useAppDispatch();
