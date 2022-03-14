@@ -369,6 +369,9 @@ function cleanup() {
   if (this.isJhipsterVersionLessThan('7.4.1')) {
     this.removeFile('.npmrc');
   }
+  if (this.isJhipsterVersionLessThan('7.7.1')) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`);
+  }
 }
 
 function writeFiles() {
