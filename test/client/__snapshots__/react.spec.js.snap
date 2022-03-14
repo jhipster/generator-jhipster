@@ -188,6 +188,9 @@ Object {
   "src/main/webapp/app/shared/error/error-boundary.tsx": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/error/error-loading.tsx": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/error/page-not-found.tsx": Object {
     "stateCleared": "modified",
   },
