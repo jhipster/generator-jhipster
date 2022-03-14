@@ -59,7 +59,7 @@ export const LocaleSlice = createSlice({
       state.lastChange = TranslatorContext.context.lastChange.getTime();
       state.loadedKeys = state.loadedKeys.concat(action.payload);
     },
-    addSourcePrefix(state, action) {
+    addTranslationSourcePrefix(state, action) {
       const sourcePrefix = action.payload;
       if (!state.sourcePrefixes.includes(sourcePrefix)) {
         state.sourcePrefixes = state.sourcePrefixes.concat(sourcePrefix);
@@ -68,7 +68,7 @@ export const LocaleSlice = createSlice({
   },
 });
 
-export const { updateLocale, addSourcePrefix, loaded } = LocaleSlice.actions;
+export const { updateLocale, addTranslationSourcePrefix, loaded } = LocaleSlice.actions;
 
 // Reducer
 export default LocaleSlice.reducer;

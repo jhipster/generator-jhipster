@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { createListenerMiddleware } from '@reduxjs/toolkit';
-import { updateLocale, addSourcePrefix, loadLocale, loaded } from 'app/shared/reducers/locale';
+import { updateLocale, addTranslationSourcePrefix, loadLocale, loaded } from 'app/shared/reducers/locale';
 import getStore from './store';
 
 const listenerMiddleware = createListenerMiddleware();
@@ -42,7 +42,7 @@ listenerMiddleware.startListening({
 });
 
 listenerMiddleware.startListening({
-  actionCreator: addSourcePrefix,
+  actionCreator: addTranslationSourcePrefix,
   async effect(action) {
     const store = getStore();
     const { currentLocale, loadedKeys } = store.getState().locale;

@@ -21,7 +21,7 @@ import { Translate } from 'react-jhipster';
 
 import MenuItem from 'app/shared/layout/menus/menu-item';
 <%_ if (applicationTypeMicroservice) { _%>
-import { addSourcePrefix } from 'app/shared/reducers/locale';
+import { addTranslationSourcePrefix } from 'app/shared/reducers/locale';
 import getStore, { useAppDispatch } from 'app/config/store';
 <%_ } _%>
 
@@ -39,7 +39,7 @@ const EntitiesMenu = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(addSourcePrefix('services/<%= lowercaseBaseName %>/'));
+    dispatch(addTranslationSourcePrefix('services/<%= lowercaseBaseName %>/'));
   }, []);
 
 <%_ } _%>
