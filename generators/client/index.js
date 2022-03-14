@@ -408,10 +408,10 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
         if (this.clientFrameworkAngular) {
           const conditional = this.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
           this.addWebpackConfig(`${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`);
-        } else if (this.clientFrameworkVue) {
+        } else if (this.clientFrameworkVue || this.clientFrameworkReact) {
           this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })");
         } else {
-          this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })");
+          throw new Error(`Client framework ${this.clientFramework} doesn't support microfrontends`);
         }
       },
     };
