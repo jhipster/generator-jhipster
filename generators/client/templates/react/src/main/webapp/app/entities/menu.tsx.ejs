@@ -25,20 +25,8 @@ import { addSourcePrefix } from 'app/shared/reducers/locale';
 import getStore, { useAppDispatch } from 'app/config/store';
 <%_ } _%>
 
-<%_ if (applicationTypeGateway) { _%>
-class EntitiesMenu extends React.Component {
-  render() {
-    return (
-      <>
-        {/* prettier-ignore */}
-        {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
-      </>
-    );
-  }
-}
-<%_ } else { _%>
 const EntitiesMenu = () => {
-  <%_ if (applicationTypeMicroservice) { _%>
+<%_ if (applicationTypeMicroservice) { _%>
   const store = getStore() as any;
   const [change, setChange] = useState(store.getState().locale.lastChange);
   let lastChange = change;
@@ -54,7 +42,7 @@ const EntitiesMenu = () => {
     dispatch(addSourcePrefix('services/<%= lowercaseBaseName %>/'));
   }, []);
 
-  <%_ } _%>
+<%_ } _%>
   return (
     <>
       {/* prettier-ignore */}
@@ -62,6 +50,5 @@ const EntitiesMenu = () => {
     </>
   );
 };
-<%_ } _%>
 
 export default EntitiesMenu as React.ComponentType<any>;
