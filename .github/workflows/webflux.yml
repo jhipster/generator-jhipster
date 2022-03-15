@@ -83,6 +83,7 @@ jobs:
         suite:
           - webflux-mongodb
           - webflux-mongodb-oauth2
+          - webflux-mysql-kafka
           - webflux-psql
           - webflux-psql-additional
           - webflux-gradle-session-mariadb-es
