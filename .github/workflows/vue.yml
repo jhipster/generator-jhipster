@@ -230,9 +230,6 @@ jobs:
         id: e2e
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:run --if-present
-      - name: 'E2E: Teardown'
-        if: always() && matrix.e2e == 1 && steps.compare.outputs.equals != 'true'
-        run: npm run ci:e2e:teardown
       - name: 'BACKEND: Store failure logs'
         uses: actions/upload-artifact@v2
         if: always() && steps.backend.outcome == 'failure'
