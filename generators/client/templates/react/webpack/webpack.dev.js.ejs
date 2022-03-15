@@ -88,14 +88,14 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         '/login',<% } %>
         '/auth'
       ],
-      target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
+      target: `http${options.tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
       secure: false,
       changeOrigin: options.tls
     }<% if (communicationSpringWebsocket) { %>,{
       context: [
         '/websocket'
       ],
-      target: 'ws://127.0.0.1:<%= serverPort %>',
+      target: 'ws://127.0.0.1:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
       ws: true
     }<% } %>],
     https: options.tls,
