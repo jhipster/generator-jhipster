@@ -512,7 +512,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           } else {
             scriptsStorage.set({
               'docker:db:up': `docker-compose -f src/main/docker/${prodDatabaseType}.yml up -d`,
-              'docker:db:down': `docker-compose -f src/main/docker/${prodDatabaseType}.yml down -v --remove-orphans`,
+              'docker:db:down': `docker-compose -f src/main/docker/${prodDatabaseType}.yml down -v`,
             });
           }
         } else {
@@ -531,12 +531,12 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             scriptsStorage.set({
               'docker:db:build': `docker-compose -f ${dockerFile} build`,
               'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker-compose -f ${dockerFile} down -v --remove-orphans`,
+              'docker:db:down': `docker-compose -f ${dockerFile} down -v`,
             });
           } else if (this.fs.exists(this.destinationPath(dockerFile))) {
             scriptsStorage.set({
               'docker:db:up': `docker-compose -f ${dockerFile} up -d`,
-              'docker:db:down': `docker-compose -f ${dockerFile} down -v --remove-orphans`,
+              'docker:db:down': `docker-compose -f ${dockerFile} down -v`,
             });
           } else {
             scriptsStorage.set('docker:db:up', `echo "Docker for db ${databaseType} not configured for application ${this.baseName}"`);
@@ -569,7 +569,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
             scriptsStorage.set(`docker:${dockerConfig}:up`, `docker-compose -f ${dockerFile} up -d`);
             dockerOthersUp.push(`npm run docker:${dockerConfig}:up`);
-            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker-compose -f ${dockerFile} down -v --remove-orphans`);
+            scriptsStorage.set(`docker:${dockerConfig}:down`, `docker-compose -f ${dockerFile} down -v`);
             dockerOthersDown.push(`npm run docker:${dockerConfig}:down`);
           }
         });
