@@ -22,25 +22,16 @@ import { Translate } from 'react-jhipster';
 import MenuItem from 'app/shared/layout/menus/menu-item';
 <%_ if (applicationTypeMicroservice) { _%>
 import { addTranslationSourcePrefix } from 'app/shared/reducers/locale';
-import getStore, { useAppDispatch } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 <%_ } _%>
 
 const EntitiesMenu = () => {
 <%_ if (applicationTypeMicroservice) { _%>
-  const store = getStore() as any;
-  const [change, setChange] = useState(store.getState().locale.lastChange);
-  let lastChange = change;
-  store.subscribe(() => {
-    if (lastChange !== store.getState().locale.lastChange) {
-      lastChange = store.getState().locale.lastChange;
-      setChange(lastChange);
-    }
-  });
-
+  const lastChange = useAppSelector(state => state.locale.lastChange);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(addTranslationSourcePrefix('services/<%= lowercaseBaseName %>/'));
-  }, []);
+  }, [lastChange]);
 
 <%_ } _%>
   return (
