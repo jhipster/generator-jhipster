@@ -90,6 +90,7 @@ jobs:
           - ngx-gradle-couchbase-search
           - ngx-gradle-fr
           - ngx-gradle-mariadb-oauth2-infinispan
+          - ngx-gradle-mongodb-kafka-cucumber
           - ngx-gradle-h2disk-ws-nocache
         include:
           - app-sample: ngx-default
