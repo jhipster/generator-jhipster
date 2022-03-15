@@ -26,7 +26,7 @@ import { TranslatorContext } from 'react-jhipster';
 const initialState = {
   currentLocale: '',
   sourcePrefixes: [],
-  lastChange: TranslatorContext.context.lastChange.getTime(),
+  lastChange: TranslatorContext.context.lastChange,
   loadedKeys: [],
 };
 
@@ -56,7 +56,7 @@ export const LocaleSlice = createSlice({
       state.currentLocale = currentLocale;
     },
     loaded(state, action) {
-      state.lastChange = TranslatorContext.context.lastChange.getTime();
+      state.lastChange = TranslatorContext.context.lastChange;
       state.loadedKeys = state.loadedKeys.concat(action.payload);
     },
     addTranslationSourcePrefix(state, action) {
