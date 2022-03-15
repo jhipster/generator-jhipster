@@ -176,7 +176,7 @@ class PublicUserResourceIT {
 
         // Get all the users
 <%_ if (reactive) { _%>
-        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
