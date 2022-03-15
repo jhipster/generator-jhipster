@@ -145,12 +145,16 @@ return merge(
       patterns: [
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
         {
-          context: './node_modules/swagger-ui-dist/',
+          // https://github.com/swagger-api/swagger-ui/blob/v4.6.1/swagger-ui-dist-package/README.md
+          context: require('swagger-ui-dist').getAbsoluteFSPath(),
           from: '*.{js,css,html,png}',
           to: 'swagger-ui/',
           globOptions: { ignore: ['**/index.html'] },
         },
-        { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui/' },
+        {
+          from: require.resolve('axios/dist/axios.min.js'), 
+          to: 'swagger-ui/',
+        },
         { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui/' },
 <%_ } _%>
         { from: './<%= MAIN_SRC_DIR %>content/', to: 'content/' },

@@ -12,7 +12,6 @@
     "ngx-infinite-scroll": "10.0.1",
     "ngx-webstorage": "9.0.0",
     "rxjs": "7.5.5",
-    "swagger-ui-dist": "4.6.2",
     "tslib": "2.3.1",
     "zone.js": "0.11.4"
   },

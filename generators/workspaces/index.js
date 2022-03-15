@@ -174,6 +174,7 @@ module.exports = class extends BaseBlueprintGenerator {
             packages: this.packages,
           },
           devDependencies: {
+            rxjs: '^7', // Not required, workaround https://github.com/npm/cli/issues/4437
             concurrently: this.dependabotPackageJson.devDependencies.concurrently,
           },
           scripts: {

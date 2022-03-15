@@ -27,7 +27,7 @@ module.exports = {
   ],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/<%= CLIENT_TEST_SRC_DIR %>spec/**/@(*.)@(spec.ts)'],
-  snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
+  snapshotSerializers: ['jest-serializer-vue'],
   globals: {
 <%_ if (enableTranslation) { _%>
     I18N_HASH: 'generated_hash',
