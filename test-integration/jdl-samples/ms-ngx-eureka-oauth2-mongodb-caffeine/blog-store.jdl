@@ -6,6 +6,7 @@
  * - authenticationType: oauth2
  * - databaseType: mongodb
  * - testFrameworks: cypress, cucumber, gatling
+ * - messageBroker: kafka
  *
  * Imperative focus:
  * - cacheProvider: caffeine
@@ -29,6 +30,7 @@ application {
     prodDatabaseType postgresql
     jhiPrefix custom
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    messageBroker kafka
     packageName com.okta.developer.gateway
     serviceDiscoveryType eureka
     testFrameworks [cypress, cucumber, gatling]
@@ -47,6 +49,7 @@ application {
     creationTimestamp 1617901618887
     databaseType mongodb
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    messageBroker kafka
     packageName com.okta.developer.blog
     serverPort 8081
     serviceDiscoveryType eureka
@@ -68,6 +71,7 @@ application {
     dtoSuffix Rest
     entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    messageBroker kafka
     packageName com.okta.developer.store
     serverPort 8082
     serviceDiscoveryType eureka
@@ -88,6 +92,7 @@ application {
     // dtoSuffix Rest
     // entitySuffix Entity
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
+    messageBroker kafka
     packageName com.okta.developer.notification
     reactive true
     serverPort 8083
