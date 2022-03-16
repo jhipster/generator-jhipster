@@ -65,7 +65,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
     @Test
     void producesMessages() throws InterruptedException {
-        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce")
+        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce")
             .exchange()
             .expectStatus()
             .isNoContent();
