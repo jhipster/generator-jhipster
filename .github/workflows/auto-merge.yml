@@ -12,7 +12,7 @@ jobs:
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v1.3.0
       - name: Enable auto-merge for Dependabot PRs
-        if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'}}
+        if: ${{ steps.dependabot-metadata.outputs.update-type != 'version-update:semver-major' }}
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
