@@ -195,8 +195,7 @@ spring:
         binder:
           replicationFactor: 1
           auto-create-topics: true
-          # Add kafka host to your hosts
-          brokers: kafka:9092
+          brokers: localhost:9092
       bindings:
         binding-in-sse:
           destination: sse-topic
