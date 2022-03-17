@@ -20,6 +20,9 @@
 name: 'Compare generated applications'
 description: 'Experimental compare generated applications action'
 inputs:
+  workflow-samples-file:
+    description: 'Workflow samples file'
+    required: false
   workflow-file-prefix:
     description: 'Workflow file prefix'
     required: false
@@ -221,6 +224,13 @@ runs:
         if [[ "true" == "${{ steps.build-changes.outputs.vue }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
           echo "::group::Workflows Vue"
           test-integration/scripts/99-print-matrix.js generators/client/__workflow/${{ inputs.workflow-file-prefix }}-vue.json
+          cat matrix.json
+          echo "::endgroup::"
+        fi
+
+        if [[ "true" == "${{ steps.build-changes.outputs.any }}" && "" != "${{ inputs.workflow-samples-file }}" ]]; then
+          echo "::group::Workflow default sample (${{ inputs.workflow-samples-file }})"
+          test-integration/scripts/99-print-matrix.js test-integration/workflow-samples/${{ inputs.workflow-samples-file }}.json
           cat matrix.json
           echo "::endgroup::"
         fi
