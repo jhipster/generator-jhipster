@@ -69,7 +69,7 @@ class SampleMongoKafkaKafkaResourceIT {
     @Test
     void producesMessages() throws Exception {
         restMockMvc
-            .perform(post("/api/sample-mongo-kafka-kafka/publish?message=value-produce"))
+            .perform(post("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce"))
             .andExpect(status().isOk());
         BlockingQueue<Message<?>> messages = collector.forChannel(output);
         GenericMessage<String> payload = (GenericMessage<String>) messages.take();
@@ -83,7 +83,7 @@ class SampleMongoKafkaKafkaResourceIT {
         MessageHeaders headers = new MessageHeaders(map);
         Message<String> testMessage = new GenericMessage<>("value-consume", headers);
         MvcResult mvcResult = restMockMvc
-            .perform(get("/api/sample-mongo-kafka-kafka/register"))
+            .perform(get("/api/<%= dasherizedBaseName %>-kafka/register"))
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
             .andReturn();
@@ -93,7 +93,7 @@ class SampleMongoKafkaKafkaResourceIT {
             String content = mvcResult.getResponse().getContentAsString();
             if (content.contains("data:value-consume")) {
                 restMockMvc
-                    .perform(get("/api/sample-mongo-kafka-kafka/unregister"));
+                    .perform(get("/api/<%= dasherizedBaseName %>-kafka/unregister"));
                 return;
             }
         }
