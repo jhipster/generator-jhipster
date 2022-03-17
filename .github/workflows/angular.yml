@@ -118,7 +118,7 @@ jobs:
             environment: dev
             war: 0
             e2e: 1
-            testcontainers: 1
+            testcontainers: 0
           - app-sample: ngx-h2mem-ws-nol2
             entity: sql
             environment: dev
