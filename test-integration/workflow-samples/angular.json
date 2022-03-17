@@ -61,6 +61,38 @@
       "environment": "dev",
       "war": 1,
       "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-mongodb",
+      "app-sample": "webflux-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "ngx-webflux-gradle-mongodb-oauth2",
+      "app-sample": "webflux-mongodb-oauth2",
+      "entity": "mongodb"
+    },
+    {
+      "name": "ngx-webflux-psql-default",
+      "app-sample": "webflux-psql",
+      "entity": "sql",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-psql-additional",
+      "jdl-samples": "webflux-psql,custom-domain",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-gradle-session-mariadb-es",
+      "app-sample": "webflux-gradle-session-mariadb-es",
+      "entity": "sqllight",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-couchbase",
+      "app-sample": "webflux-couchbase",
+      "entity": "couchbase"
     }
   ]
 }
