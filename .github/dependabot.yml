@@ -5,7 +5,6 @@ updates:
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
-    rebase-strategy: 'disabled'
     labels:
       - 'theme: jhipster-internals'
       - 'theme: dependencies'
@@ -23,7 +22,6 @@ updates:
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
-    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: angular'
@@ -41,7 +39,6 @@ updates:
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
-    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: dependencies'
@@ -51,7 +48,6 @@ updates:
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
-    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: front'
@@ -62,7 +58,6 @@ updates:
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
-    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: react'
@@ -77,7 +72,6 @@ updates:
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
-    rebase-strategy: 'disabled'
     versioning-strategy: increase
     labels:
       - 'theme: vue'
