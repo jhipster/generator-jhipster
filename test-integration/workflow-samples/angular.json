@@ -93,6 +93,18 @@
       "name": "ngx-webflux-couchbase",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase"
+    },
+    {
+      "name": "ms-ngx-eureka-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ngx-eureka-oauth2-mongodb-caffeine",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true"
+    },
+    {
+      "name": "mf-ngx-eureka-jwt-psql-ehcache",
+      "jdl-samples": "mf-ngx-eureka-jwt-psql-ehcache",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true"
     }
   ]
 }
