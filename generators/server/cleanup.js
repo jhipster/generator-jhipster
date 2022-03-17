@@ -148,7 +148,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
     generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
   }
-  if (generator.isJhipsterVersionLessThan('7.6.1')) {
+  if (generator.isJhipsterVersionLessThan('7.7.1')) {
     if (generator.databaseType === MONGODB) {
       generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
     }
@@ -156,8 +156,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.databaseType === CASSANDRA) {
       generator.removeFile(`${testDir}AbstractCassandraTest.java`);
     }
-  }
-  if (generator.isJhipsterVersionLessThan('7.7.0')) {
     if (generator.messageBroker === KAFKA) {
       generator.removeFile(`${javaDir}config/KafkaProperties.java`);
     }
