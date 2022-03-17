@@ -1,0 +1,66 @@
+{
+  "include": [
+    {
+      "name": "ngx-default",
+      "app-sample": "ngx-default",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "ngx-default-additional",
+      "entity": "none",
+      "app-sample": "ngx-default",
+      "jdl-entity": "*",
+      "sonar-analyse": "false"
+    },
+    {
+      "name": "ngx-mysql-es-noi18n-mapsid",
+      "app-sample": "ngx-mysql-es-noi18n-mapsid",
+      "entity": "sql",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-mongodb-kafka-cucumber",
+      "app-sample": "ngx-mongodb-kafka-cucumber",
+      "entity": "mongodb",
+      "environment": "dev",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-h2mem-ws-nol2",
+      "app-sample": "ngx-h2mem-ws-nol2",
+      "entity": "sql",
+      "environment": "dev",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-couchbase",
+      "app-sample": "ngx-couchbase",
+      "entity": "couchbase"
+    },
+    {
+      "name": "ngx-gradle-couchbase-search",
+      "app-sample": "ngx-gradle-couchbase-search",
+      "entity": "couchbase"
+    },
+    {
+      "name": "ngx-gradle-fr",
+      "app-sample": "ngx-gradle-fr",
+      "entity": "sql",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-gradle-mariadb-oauth2-infinispan",
+      "app-sample": "ngx-gradle-mariadb-oauth2-infinispan",
+      "entity": "sql",
+      "environment": "dev"
+    },
+    {
+      "name": "ngx-gradle-h2disk-ws-nocache",
+      "app-sample": "ngx-gradle-h2disk-ws-nocache",
+      "entity": "sql",
+      "environment": "dev",
+      "war": 1,
+      "testcontainers": "false"
+    }
+  ]
+}
