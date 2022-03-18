@@ -514,13 +514,17 @@ if (field.fieldTypeString || field.blobContentTypeText) {
         <%_ } else { _%>
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
+            <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         if (TestUtil.findAll(em, <%= asEntity(otherEntityNameCapitalized) %>.class).isEmpty()) {
+            <%_ } _%>
             <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em)<%= createEntityPostfix %>;
             em.persist(<%= otherEntityName %>);
             em.flush();
+            <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         } else {
             <%= otherEntityName %> = TestUtil.findAll(em, <%= asEntity(otherEntityNameCapitalized) %>.class).get(0);
         }
+            <%_ } _%>
           <%_ } else { _%>
         <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ } _%>

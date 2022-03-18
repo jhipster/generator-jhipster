@@ -1,18 +1,20 @@
 {
-  "changelogDate": "20190117075042",
+  "changelogDate": "20220313234025",
   "clientRootFolder": "",
   "databaseType": "sql",
   "dto": "mapstruct",
-  "entityTableName": "maps_id_parent_with_dto",
-  "fields": [{ "fieldName": "name", "fieldType": "String" }],
+  "entityTableName": "maps_id_grandchild_with_dto",
+  "fields": [{ "fieldName": "date", "fieldType": "Instant" }],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
   "pagination": "no",
   "relationships": [
     {
+      "id": true,
+      "otherEntityField": "id",
       "otherEntityName": "mapsIdChildEntityWithDTO",
-      "otherEntityRelationshipName": "mapsIdParentEntityWithDTO",
-      "ownerSide": false,
+      "otherEntityRelationshipName": "mapsIdGrandchildEntityWithDTO",
+      "ownerSide": true,
       "relationshipName": "mapsIdChildEntityWithDTO",
       "relationshipType": "one-to-one"
     }

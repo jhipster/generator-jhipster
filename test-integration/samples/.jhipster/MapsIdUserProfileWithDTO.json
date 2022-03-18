@@ -3,7 +3,7 @@
   "clientRootFolder": "",
   "databaseType": "sql",
   "dto": "mapstruct",
-  "entityTableName": "maps_id_user_profile_withdto",
+  "entityTableName": "maps_id_user_profile_with_dto",
   "fields": [{ "fieldName": "dateOfBirth", "fieldType": "Instant" }],
   "fluentMethods": true,
   "jpaMetamodelFiltering": false,
