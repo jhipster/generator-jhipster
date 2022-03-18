@@ -34,7 +34,6 @@ jobs:
   check-npm-test:
     if: >-
       github.event.action != 'closed'
-    name: npm test
     runs-on: ubuntu-20.04
     timeout-minutes: 20
     strategy:

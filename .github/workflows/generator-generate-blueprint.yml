@@ -17,31 +17,15 @@
 # limitations under the License.
 #
 
-name: Incremental Changelog
+name: Blueprint Generator
 concurrency:
   # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
   group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
   cancel-in-progress: true
-on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
-  pull_request:
-    types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
-    paths:
-      - 'jdl/**'
-      - 'utils/**'
-      - 'test-integration/incremental-changelog-samples/**'
-      - 'generators/entity/**'
-      - 'generators/database-changelog/**'
-      - 'generators/database-changelog-liquibase/**'
+on: [workflow_call]
 jobs:
-  check-incremental-changelog:
-    name: ${{ matrix.app-type }}
-    runs-on: ${{ matrix.os }}
+  check-generator-generate-blueprint:
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
@@ -51,23 +35,8 @@ jobs:
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
-      (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')) &&
-      !contains(github.event.pull_request.user.login, 'dependabot')
+      !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')
     timeout-minutes: 40
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-20.04]
-        cache: [angular]
-        app-type:
-          - liquibase-jdl-rename-field
-        include:
-          - app-type: liquibase-jdl-rename-field
-            entity: jdl
-            liquibase: jdl
-            environment: prod
-            war: 0
-            e2e: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -76,15 +45,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: generator-jhipster
+          fetch-depth: 2
       - name: 'SETUP: environment'
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
         with:
-          application-sample: ${{ matrix.app-type }}
-          entities-sample: ${{ matrix.entity }}
-          application-environment: ${{ matrix.environment }}
-          application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
-          enable-testcontainers: ${{ matrix.testcontainers == 1 }}
+          application-sample: ngx-default
+          executable: jhipster-foo
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
@@ -98,9 +65,9 @@ jobs:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json') }}
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-generate-blueprint
           restore-keys: |
-            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-generate-blueprint
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
@@ -111,17 +78,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load gradle cache'
-        if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v2.1.7
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
-            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
@@ -131,45 +87,44 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'GENERATION: install JHipster'
         run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - name: 'GENERATION: generate blueprint'
+        run: |
+          cd ..
+          mkdir generator-jhipster-foo
+          cd generator-jhipster-foo
+          cp $JHI_INTEG/generate-blueprint-samples/default/.yo-rc.json .
+          jhipster generate-blueprint --force --skip-jhipster-dependencies
+          npm link generator-jhipster
+          npm link
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --with-entities --force --skip-jhipster-dependencies --creation-timestamp '2020-01-01'
-        env:
-          JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
-      - name: 'GENERATION: incremental project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --incremental-changelog --with-entities --force
-        env:
-          JHI_SAMPLES: ${{ github.workspace }}/generator-jhipster/test-integration/incremental-changelog-samples
-          JHI_APP: ${{ matrix.app-type }}-post
-      - name: 'GENERATION: incremental changes'
-        run: |
-          git add .
-          git -c color.ui=always diff --cached
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }} --blueprints foo
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - name: 'TESTS: Start docker-compose containers'
-        run: $JHI_SCRIPTS/20-docker-compose.sh
+      - name: 'TESTS: blueprint files should be written'
+        run: |
+          ls template-file-app
+          ls template-file-client
+          ls template-file-common
+          ls template-file-cypress
+          ls template-file-server
       - name: 'TESTS: backend'
-        run: $JHI_SCRIPTS/21-tests-backend.sh
-      - name: 'TESTS: frontend'
-        run: $JHI_SCRIPTS/22-tests-frontend.sh
-      - name: 'TESTS: packaging'
-        run: $JHI_SCRIPTS/23-package.sh
-      - name: 'E2E: Run'
-        id: e2e
-        run: $JHI_SCRIPTS/24-tests-e2e.sh
+        id: backend
+        if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1
+        run: npm run ci:backend:test
+      - name: 'BACKEND: Store failure logs'
+        uses: actions/upload-artifact@v2
+        if: always() && steps.backend.outcome == 'failure'
+        with:
+          name: log-${{ matrix.app-sample }}
+          path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v2
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.app-type }}
+          name: screenshots-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
-      - name: 'ANALYSIS: Sonar analysis'
-        run: $JHI_SCRIPTS/25-sonar-analyze.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
