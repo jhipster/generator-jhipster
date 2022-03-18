@@ -808,6 +808,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.otherEntities = _.uniq(this.context.relationships.map(rel => rel.otherEntity));
       },
 
+      checkUpdatableEntity() {
+        this.context.updatableEntity = this.context.fields.some(field => !field.id && !field.transient) ||
+          this.context.relationships.some(relationship => !relationship.id && relationship.ownerSide);
+      },
+
       processOtherReferences() {
         this.context.otherReferences = this.context.otherRelationships.map(relationship => relationship.reference);
         this.context.allReferences
