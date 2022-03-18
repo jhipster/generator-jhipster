@@ -48,7 +48,7 @@ on:
       - 'generators/generate-blueprint/**'
       - 'generators/*/*.m?c?js'
 jobs:
-  applications:
+  check-blueprint-generator:
     runs-on: ubuntu-20.04
     defaults:
       run:

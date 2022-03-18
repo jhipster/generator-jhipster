@@ -39,7 +39,7 @@ on:
       - 'generators/database-changelog/**'
       - 'generators/database-changelog-liquibase/**'
 jobs:
-  applications:
+  check-incremental-changelog:
     name: ${{ matrix.app-type }}
     runs-on: ${{ matrix.os }}
     defaults:
