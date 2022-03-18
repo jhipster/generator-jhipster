@@ -49,11 +49,7 @@ _%>
   <% } %>
     return existing<%= entityClass %>;
     })
-  <%_
-    // avoid exception if no fields need to be saved (as nothing is to be updated)
-    const hasUpdatableFields = fields.filter(field => !field.id && !field.transient).length > 0;
-  _%>
-  <% if (!hasUpdatableFields) { %>// <%} %>.<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+  <% if (!updatableEntity) { %>// <%} %>.<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);

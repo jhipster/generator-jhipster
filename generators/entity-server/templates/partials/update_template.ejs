@@ -23,8 +23,6 @@ const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
 const entityToDtoReference = mapper + '::' + 'toDto';
 const returnPrefix = (returnDirectly && !searchEngineElasticsearch) ? 'return' : instanceType + ' result =';
-// if the entity has no fields except the id a call to save will produce an exception
-const needsSaveCall = fields.filter(field => !field.id && !field.transient).length > 0;
 let resultEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
@@ -61,7 +59,7 @@ if (isUsingMapsId) {
     <%_ if (isPersisted) { _%>
         <%= persistInstance %>.setIsPersisted();
     <%_ } _%>
-    <%_ if (needsSaveCall) { _%>
+    <%_ if (updatableEntity) { _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
     <%_ } else { _%>
         // no save call needed as we have no fields that can be updated
