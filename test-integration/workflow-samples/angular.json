@@ -98,13 +98,15 @@
       "name": "ms-ngx-eureka-oauth2-mongodb-caffeine",
       "jdl-samples": "ms-ngx-eureka-oauth2-mongodb-caffeine",
       "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "workspaces": "true",
+      "testcontainers": "false"
     },
     {
       "name": "mf-ngx-eureka-jwt-psql-ehcache",
       "jdl-samples": "mf-ngx-eureka-jwt-psql-ehcache",
       "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "workspaces": "true",
+      "testcontainers": "false"
     }
   ]
 }

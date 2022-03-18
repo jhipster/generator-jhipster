@@ -28,7 +28,8 @@
       "name": "ms-react-consul-jwt-cassandra-redis",
       "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
       "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "workspaces": "true",
+      "testcontainers": "false"
     }
   ]
 }
