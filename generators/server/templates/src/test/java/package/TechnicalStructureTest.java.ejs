@@ -67,9 +67,6 @@ class TechnicalStructureTest {
 <%_ if (hasConstants) { _%>
             <%= packageName %>.config.Constants.class,
 <%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-            <%= packageName %>.config.KafkaProperties.class,
-<%_ } _%>
             <%= packageName %>.config.ApplicationProperties.class
         ));
 }

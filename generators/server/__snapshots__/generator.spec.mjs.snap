@@ -258,6 +258,11 @@ Object {
           "noEjs": true,
         },
         Object {
+          "file": ".mvn/jvm.config",
+          "method": "copy",
+          "noEjs": true,
+        },
+        Object {
           "file": ".mvn/wrapper/maven-wrapper.jar",
           "method": "copy",
           "noEjs": true,
@@ -878,7 +883,11 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/config/KafkaProperties.java",
+          "file": "package/config/KafkaSseConsumer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/KafkaSseProducer.java",
           "renameTo": [Function],
         },
       ],
@@ -1330,6 +1339,16 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
+          "file": "package/web/rest/KafkaResource_reactive.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/java/",
+      "templates": Array [
+        Object {
           "file": "package/web/rest/KafkaResource.java",
           "renameTo": [Function],
         },
@@ -1588,7 +1607,15 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/MongoDbTestContainerExtension.java",
+          "file": "package/config/MongoDbTestContainer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/EmbeddedMongo.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
           "renameTo": [Function],
         },
       ],
@@ -1600,15 +1627,8 @@ Object {
         Object {
           "file": "META-INF/spring.factories",
         },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
         Object {
-          "file": "package/TestContainersSpringContextCustomizerFactory.java",
-          "renameTo": [Function],
+          "file": "testcontainers.properties",
         },
       ],
     },
@@ -1853,8 +1873,48 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
+          "file": "package/config/KafkaTestContainer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/EmbeddedKafka.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
           "file": "package/web/rest/KafkaResourceIT.java",
           "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/web/rest/KafkaResourceIT_reactive.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+        Object {
+          "file": "testcontainers.properties",
         },
       ],
     },
@@ -1877,8 +1937,28 @@ Object {
           "renameTo": [Function],
         },
         Object {
-          "file": "package/AbstractCassandraTest.java",
+          "file": "package/config/CassandraTestContainer.java",
           "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/EmbeddedCassandra.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+        Object {
+          "file": "testcontainers.properties",
         },
       ],
     },

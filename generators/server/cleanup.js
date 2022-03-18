@@ -8,6 +8,10 @@
  * @param {string} mainResourceDir - Main resources directory
  * @param {string} testResourceDir - Test resources directory
  */
+const { CASSANDRA, MONGODB } = require('../../jdl/jhipster/database-types');
+const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
+const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
+
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
   if (generator.isJhipsterVersionLessThan('3.5.0')) {
     generator.removeFile(`${javaDir}domain/util/JSR310DateTimeSerializer.java`);
@@ -78,7 +82,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   }
   if (generator.isJhipsterVersionLessThan('5.8.0')) {
     generator.removeFile(`${javaDir}config/MetricsConfiguration.java`);
-    if (generator.databaseType === 'cassandra') {
+    if (generator.databaseType === CASSANDRA) {
       generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
     }
   }
@@ -125,7 +129,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
     generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
 
-    if (generator.databaseType === 'cassandra') {
+    if (generator.databaseType === CASSANDRA) {
       generator.removeFile(`${javaDir}config/metrics/package-info.java`);
       generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
       generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
@@ -133,7 +137,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
       generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
       generator.removeFile(`${testDir}config/CassandraConfigurationIT.java`);
     }
-    if (generator.searchEngine === 'elasticsearch') {
+    if (generator.searchEngine === ELASTICSEARCH) {
       generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
     }
   }
@@ -143,6 +147,18 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.isJhipsterVersionLessThan('7.4.2')) {
     generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
     generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+  }
+  if (generator.isJhipsterVersionLessThan('7.7.1')) {
+    if (generator.databaseType === MONGODB) {
+      generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
+    }
+    generator.removeFile(`${testDir}TestContainersSpringContextCustomizerFactory.java`);
+    if (generator.databaseType === CASSANDRA) {
+      generator.removeFile(`${testDir}AbstractCassandraTest.java`);
+    }
+    if (generator.messageBroker === KAFKA) {
+      generator.removeFile(`${javaDir}config/KafkaProperties.java`);
+    }
   }
 }
 

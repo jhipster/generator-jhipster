@@ -32,6 +32,9 @@ Object {
   ".lintstagedrc.js": Object {
     "stateCleared": "modified",
   },
+  ".mvn/jvm.config": Object {
+    "stateCleared": "modified",
+  },
   ".mvn/wrapper/maven-wrapper.jar": Object {
     "stateCleared": "modified",
   },

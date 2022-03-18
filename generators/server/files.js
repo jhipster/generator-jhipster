@@ -108,8 +108,16 @@ const mongoDbFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/MongoDbTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}MongoDbTestContainerExtension.java`,
+          file: 'package/config/MongoDbTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MongoDbTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedMongo.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedMongo.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
         },
       ],
     },
@@ -119,14 +127,8 @@ const mongoDbFiles = {
         {
           file: 'META-INF/spring.factories',
         },
-      ],
-    },
-    {
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
         {
-          file: 'package/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}TestContainersSpringContextCustomizerFactory.java`,
+          file: 'testcontainers.properties',
         },
       ],
     },
@@ -222,7 +224,29 @@ const cassandraFiles = {
           file: 'package/CassandraKeyspaceIT.java',
           renameTo: generator => `${generator.testDir}CassandraKeyspaceIT.java`,
         },
-        { file: 'package/AbstractCassandraTest.java', renameTo: generator => `${generator.testDir}AbstractCassandraTest.java` },
+        {
+          file: 'package/config/CassandraTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/CassandraTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedCassandra.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedCassandra.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
+        },
       ],
     },
   ],
@@ -373,6 +397,7 @@ const baseServerFiles = {
       templates: [
         { file: 'mvnw', method: 'copy', noEjs: true },
         { file: 'mvnw.cmd', method: 'copy', noEjs: true },
+        { file: '.mvn/jvm.config', method: 'copy', noEjs: true },
         { file: '.mvn/wrapper/maven-wrapper.jar', method: 'copy', noEjs: true },
         { file: '.mvn/wrapper/maven-wrapper.properties', method: 'copy', noEjs: true },
         { file: 'pom.xml', options: { interpolate: INTERPOLATE_REGEX } },
@@ -1094,8 +1119,12 @@ const baseServerFiles = {
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
-          file: 'package/config/KafkaProperties.java',
-          renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`,
+          file: 'package/config/KafkaSseConsumer.java',
+          renameTo: generator => `${generator.javaDir}config/KafkaSseConsumer.java`,
+        },
+        {
+          file: 'package/config/KafkaSseProducer.java',
+          renameTo: generator => `${generator.javaDir}config/KafkaSseProducer.java`,
         },
       ],
     },
@@ -1180,7 +1209,17 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA,
+      condition: generator => generator.messageBroker === KAFKA && generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/KafkaResource_reactive.java',
+          renameTo: generator => `${generator.javaDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResource.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1431,8 +1470,48 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
+          file: 'package/config/KafkaTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/KafkaTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedKafka.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedKafka.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA && !generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
           file: 'package/web/rest/KafkaResourceIT.java',
           renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA && generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/web/rest/KafkaResourceIT_reactive.java',
+          renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.messageBroker === KAFKA,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
         },
       ],
     },
@@ -1714,7 +1793,8 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.cucumberTests,
+      condition: generator =>
+        !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1724,7 +1804,8 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.cucumberTests,
+      condition: generator =>
+        !generator.skipUserManagement && generator.cucumberTests && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
       path: SERVER_TEST_RES_DIR,
       templates: [
         {

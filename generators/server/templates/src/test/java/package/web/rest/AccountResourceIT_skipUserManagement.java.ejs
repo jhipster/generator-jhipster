@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
 import <%= packageName %>.IntegrationTest;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -63,7 +60,7 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
-class AccountResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
+class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
 
     @Autowired

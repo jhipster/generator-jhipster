@@ -27,7 +27,10 @@ import tech.jhipster.config.JHipsterConstants;
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-    import <%= packageName %>.MongoDbTestContainerExtension;
+import <%= packageName %>.config.EmbeddedMongo;
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+import <%= packageName %>.config.EmbeddedCassandra;
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
@@ -38,7 +41,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers || databaseTypeMongodb) { _%>
+<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -67,7 +70,10 @@ import java.lang.annotation.Target;
 @ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-@ExtendWith(MongoDbTestContainerExtension.class)
+@EmbeddedMongo
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+@EmbeddedCassandra
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @ExtendWith(AbstractNeo4jIT.class)
