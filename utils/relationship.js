@@ -71,7 +71,12 @@ function prepareRelationshipForTemplates(entityWithConfig, relationship, generat
         }
         return otherSideRelationship.relationshipName === relationship.otherEntityRelationshipName;
       });
-      if (
+      if (!otherRelationship) {
+        // TODO throw error at v8.
+        generator.warning(
+          `Error at '${entityName}' definitions: 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found at '${otherEntityName}'`
+        );
+      } else if (
         otherRelationship &&
         otherRelationship.otherEntityRelationshipName &&
         otherRelationship.otherEntityRelationshipName !== relationship.relationshipName
