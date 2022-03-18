@@ -87,7 +87,6 @@ jobs:
           - webflux-psql-additional
           - webflux-gradle-session-mariadb-es
           - webflux-couchbase
-          - webflux-react
         include:
           - suite: webflux-mongodb
             app-sample: webflux-mongodb
@@ -126,14 +125,6 @@ jobs:
             war: 0
             e2e: 1
             testcontainers: 1
-          - suite: webflux-react
-            app-sample: webflux-react
-            jdl-entity: '*'
-            environment: prod
-            war: 0
-            e2e: 1
-            testcontainers: 1
-            sonar-analyse: 'false'
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -149,7 +140,6 @@ jobs:
         with:
           entities-sample: ${{ matrix.entity || 'none' }}
           jdl-sample: ${{ matrix.jdl-sample || '' }}
-          jdl-entities-sample: ${{ matrix.jdl-entity }}
           application-sample: ${{ matrix.app-sample || 'jdl' }}
           application-environment: ${{ matrix.environment || 'prod' }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
