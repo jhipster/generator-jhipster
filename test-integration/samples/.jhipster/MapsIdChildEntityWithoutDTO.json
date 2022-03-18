@@ -17,6 +17,13 @@
       "ownerSide": true,
       "relationshipName": "mapsIdParentEntityWithoutDTO",
       "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "mapsIdGrandchildEntityWithoutDTO",
+      "otherEntityRelationshipName": "mapsIdChildEntityWithoutDTO",
+      "ownerSide": false,
+      "relationshipName": "mapsIdGrandchildEntityWithoutDTO",
+      "relationshipType": "one-to-one"
     }
   ],
   "searchEngine": false,
