@@ -44,7 +44,7 @@ if (isUsingMapsId) {
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
     <%_ } _%>
-    <%_ if (needsSaveCall) { _%>
+    <%_ if (updatableEntity) { _%>
         <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
     <%_ } else { _%>
         // no save call needed as we have no fields that can be updated
