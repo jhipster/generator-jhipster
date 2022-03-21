@@ -35,10 +35,6 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
-    paths-ignore:
-      - 'package*.json'
-      - 'generators/*client/templates/react/**'
-      - 'generators/*client/templates/vue/**'
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
@@ -75,7 +71,7 @@ jobs:
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
       !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci') &&
-      needs.build-matrix.outputs.any != 'false'
+      needs.build-matrix.outputs.workflow-angular == 'true'
     timeout-minutes: 40
     strategy:
       fail-fast: false

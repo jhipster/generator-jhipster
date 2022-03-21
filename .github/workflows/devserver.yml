@@ -33,8 +33,6 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
-    paths:
-      - 'generators/*client/**'
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04
@@ -61,6 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
+    if: needs.build-matrix.outputs.client == 'true'
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
