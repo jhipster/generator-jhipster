@@ -124,7 +124,7 @@ jobs:
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load gradle cache'
-        if: matrix.gradle == 1 || contains(matrix.name, 'gradle')
+        if: matrix.workspaces == 'true' || matrix.gradle == 1 || contains(matrix.name, 'gradle')
         uses: actions/cache@v2.1.7
         with:
           path: |
