@@ -809,7 +809,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
       },
 
       checkUpdatableEntity() {
-        this.context.updatableEntity = this.context.fields.some(field => !field.id && !field.transient) ||
+        this.context.updatableEntity =
+          this.context.fields.some(field => !field.id && !field.transient) ||
           this.context.relationships.some(relationship => !relationship.id && relationship.ownerSide);
       },
 
