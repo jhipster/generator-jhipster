@@ -43,6 +43,9 @@ jobs:
       client: ${{ steps.build.outputs.client }}
       server: ${{ steps.build.outputs.server }}
       any: ${{ steps.build.outputs.any }}
+      workflow-angular: ${{ steps.build.outputs.workflow-angular }}
+      workflow-react: ${{ steps.build.outputs.workflow-react }}
+      workflow-vue: ${{ steps.build.outputs.workflow-vue }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
         uses: actions/checkout@v3
