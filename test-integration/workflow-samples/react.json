@@ -23,6 +23,13 @@
       "name": "react-gradle-cassandra-session-redis",
       "app-sample": "react-gradle-cassandra-session-redis",
       "entity": "cassandra"
+    },
+    {
+      "name": "ms-react-consul-jwt-cassandra-redis",
+      "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
     }
   ]
 }

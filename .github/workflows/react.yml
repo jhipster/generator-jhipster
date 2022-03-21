@@ -142,6 +142,10 @@ jobs:
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
         run: $JHI_SCRIPTS/04-git-config.sh
+      # Update global NPM for workspaces support
+      - name: 'Install required NPM version'
+        if: matrix.workspaces == 'true'
+        run: npm install -g npm@${{ steps.setup.outputs.npm-version }} || true
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
@@ -150,7 +154,12 @@ jobs:
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
+        run: $JHI_SCRIPTS/12-generate-project.sh --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
+      - name: 'GENERATION: workspace git'
+        if: matrix.workspaces == 'true'
+        run: |
+          git add .
+          git commit -m "Commit workspaces"
       - name: 'GENERATION: jhipster info'
         run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
@@ -175,8 +184,11 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
+      - name: 'PREPARE: npm install'
+        if: steps.compare.outputs.equals != 'true'
+        run: ${{ (matrix.workspaces == 'true' && 'npm') || './npmw' }} install
       - name: 'TESTS: Start docker-compose containers for e2e and backend tests'
-        if: steps.compare.outputs.equals != 'true' && matrix.testcontainers == 'false'
+        if: steps.compare.outputs.equals != 'true' && matrix.testcontainers == 'false' && matrix.workspaces != 'true'
         run: npm run ci:e2e:prepare
       - name: 'TESTS: backend'
         id: backend
@@ -190,7 +202,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
       - name: 'TESTS: Start docker-compose containers for e2e tests'
-        if: steps.compare.outputs.equals != 'true' && matrix.testcontainers != 'false'
+        if: steps.compare.outputs.equals != 'true' && (matrix.testcontainers != 'false' ||  matrix.workspaces == 'true')
         run: npm run ci:e2e:prepare
       - name: 'E2E: Run'
         id: e2e
@@ -201,19 +213,28 @@ jobs:
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.name }}
-          path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
+          path: ${{ steps.setup.outputs.application-path }}/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v2
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.name }}
-          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
+          path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
       - name: Dump docker logs
         if: always()
         uses: jwalton/gh-docker-logs@v2
       - name: 'ANALYSIS: Sonar analysis'
-        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 'false'
+        if: steps.compare.outputs.equals != 'true' && matrix.sonar-analyse != 'false' && matrix.workspaces != 'true'
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  check-react:
+    runs-on: ubuntu-latest
+    needs: [applications]
+    if: >-
+      always() &&
+      (needs.applications.result == 'skipped' || needs.applications.result == 'success') &&
+      github.event.action != 'closed'
+    steps:
+      - run: echo '${{ toJSON(needs) }}'

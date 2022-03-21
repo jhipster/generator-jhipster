@@ -156,3 +156,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  check-dev-server:
+    runs-on: ubuntu-latest
+    needs: [applications]
+    if: >-
+      always() &&
+      (needs.applications.result == 'skipped' || needs.applications.result == 'success') &&
+      github.event.action != 'closed'
+    steps:
+      - run: echo '${{ toJSON(needs) }}'

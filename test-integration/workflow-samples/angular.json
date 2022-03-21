@@ -61,6 +61,52 @@
       "environment": "dev",
       "war": 1,
       "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-mongodb",
+      "app-sample": "webflux-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "ngx-webflux-gradle-mongodb-oauth2",
+      "app-sample": "webflux-mongodb-oauth2",
+      "entity": "mongodb"
+    },
+    {
+      "name": "ngx-webflux-psql-default",
+      "app-sample": "webflux-psql",
+      "entity": "sql",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-psql-additional",
+      "jdl-samples": "webflux-psql,custom-domain",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-gradle-session-mariadb-es",
+      "app-sample": "webflux-gradle-session-mariadb-es",
+      "entity": "sqllight",
+      "testcontainers": "false"
+    },
+    {
+      "name": "ngx-webflux-couchbase",
+      "app-sample": "webflux-couchbase",
+      "entity": "couchbase"
+    },
+    {
+      "name": "ms-ngx-eureka-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ngx-eureka-oauth2-mongodb-caffeine",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
+    },
+    {
+      "name": "mf-ngx-eureka-jwt-psql-ehcache",
+      "jdl-samples": "mf-ngx-eureka-jwt-psql-ehcache",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
     }
   ]
 }
