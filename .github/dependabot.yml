@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
@@ -20,7 +20,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/angular/'
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
@@ -38,7 +38,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/templates/'
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
@@ -48,7 +48,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/common/'
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
@@ -59,7 +59,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/react/'
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
@@ -74,7 +74,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/templates/vue/'
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 10
