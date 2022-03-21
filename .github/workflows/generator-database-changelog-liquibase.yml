@@ -18,30 +18,11 @@
 #
 
 name: Incremental Changelog
-concurrency:
-  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
-  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
-  cancel-in-progress: true
-on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
-  pull_request:
-    types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
-    paths:
-      - 'jdl/**'
-      - 'utils/**'
-      - 'test-integration/incremental-changelog-samples/**'
-      - 'generators/entity/**'
-      - 'generators/database-changelog/**'
-      - 'generators/database-changelog-liquibase/**'
+on: [workflow_call]
 jobs:
-  applications:
+  check-generator-database-changelog-liquibase:
     name: ${{ matrix.app-type }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
@@ -57,8 +38,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
-        cache: [angular]
         app-type:
           - liquibase-jdl-rename-field
         include:
@@ -67,7 +46,6 @@ jobs:
             liquibase: jdl
             environment: prod
             war: 0
-            e2e: 1
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
@@ -98,9 +76,9 @@ jobs:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json') }}
+          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-angular-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-${{ matrix.cache }}-
+            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-angular-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'

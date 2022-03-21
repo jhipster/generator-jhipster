@@ -31,23 +31,18 @@ on:
     branches:
       - '*'
 jobs:
-  generator-jhipster:
+  check-npm-test:
     if: >-
       github.event.action != 'closed'
-    name: npm test
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
-      matrix:
-        node_version: [16.14.0]
-        os: [ubuntu-20.04]
-        cache: [other]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: 16.14.0
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v2.1.7
         with:

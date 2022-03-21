@@ -18,37 +18,9 @@
 #
 
 name: Blueprint Generator
-concurrency:
-  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
-  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
-  cancel-in-progress: true
-on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
-    paths:
-      - 'package*.json'
-      - 'generators/*'
-      - 'cli/**'
-      - 'lib/**'
-      - 'utils/**'
-      - 'generators/generate-blueprint/**'
-      - 'generators/*/*.m?c?js'
-  pull_request:
-    types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
-    paths:
-      - 'package*.json'
-      - 'cli/**'
-      - 'lib/**'
-      - 'utils/**'
-      - 'generators/*'
-      - 'generators/generate-blueprint/**'
-      - 'generators/*/*.m?c?js'
+on: [workflow_call]
 jobs:
-  applications:
+  check-generator-generate-blueprint:
     runs-on: ubuntu-20.04
     defaults:
       run:

@@ -37,6 +37,20 @@
       "app-sample": "vue-session-cassandra-fr",
       "entity": "cassandra",
       "environment": "dev"
+    },
+    {
+      "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
+      "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
+    },
+    {
+      "name": "mf-vue-consul-oauth2-mysql-memcached",
+      "jdl-samples": "mf-vue-consul-oauth2-mysql-memcached",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
     }
   ]
 }
