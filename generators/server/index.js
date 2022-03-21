@@ -480,6 +480,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
           if (this.buildToolMaven) {
             this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
           }
+          this.removeFile(`${this.mainJavaPackageDir}repository/search/SortToSortBuilderListConverter.java`);
         }
       },
       ...writeFiles(),
