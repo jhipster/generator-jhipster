@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Faker = require('@faker-js/faker/lib');
+const { Faker } = require('@faker-js/faker/faker');
 const Randexp = require('randexp');
 
 const { languageToJavaLanguage } = require('../generators/utils');
@@ -46,11 +46,11 @@ function createFaker(nativeLanguage = 'en') {
   nativeLanguage = languageToJavaLanguage(nativeLanguage);
   // Fallback language
   // eslint-disable-next-line global-require
-  const locales = { en: require('@faker-js/faker/lib/locales/en') };
+  const locales = { en: require('@faker-js/faker/locales/en') };
   if (nativeLanguage !== 'en') {
     try {
       // eslint-disable-next-line global-require, import/no-dynamic-require
-      const nativeLanguageLocale = require(`@faker-js/faker/lib/locales/${nativeLanguage}`);
+      const nativeLanguageLocale = require(`@faker-js/faker/locales/${nativeLanguage}`);
       locales[nativeLanguage] = nativeLanguageLocale;
     } catch (error) {
       // Faker not implemented for the native language, fallback to en.
