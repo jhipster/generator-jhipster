@@ -25,7 +25,7 @@ const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + 
 const mapper = entityInstance  + 'Mapper';
 _%>
 <%_ if (viaService) { _%>
-  <%_ if(reactive) { _%>
+  <%_ if (reactive) { _%>
     Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
   <%_ } else { _%>
     Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
@@ -49,7 +49,7 @@ _%>
   <% } %>
     return existing<%= entityClass %>;
     })
-    .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+  <% if (!updatableEntity) { %>// <%} %>.<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
         <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);

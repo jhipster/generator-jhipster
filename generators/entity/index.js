@@ -808,6 +808,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.context.otherEntities = _.uniq(this.context.relationships.map(rel => rel.otherEntity));
       },
 
+      checkUpdatableEntity() {
+        this.context.updatableEntity =
+          this.context.fields.some(field => !field.id && !field.transient) ||
+          this.context.relationships.some(relationship => !relationship.id && relationship.ownerSide);
+      },
+
       processOtherReferences() {
         this.context.otherReferences = this.context.otherRelationships.map(relationship => relationship.reference);
         this.context.allReferences
@@ -835,6 +841,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
       processEntityPrimaryKeysDerivedProperties() {
         if (!this.context.primaryKey) return;
         derivedPrimaryKeyProperties(this.context.primaryKey);
+        this._checkPersistableInterfaceRequirement();
       },
 
       processPrimaryKeyTypesForRelations() {
@@ -1145,6 +1152,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
   _derivedCompositePrimaryKeyProperties(types) {
     this.context.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
+  }
+
+  _checkPersistableInterfaceRequirement() {
+    this.context.requiresPersistableImplementation = this.context.fields.some(field => field.requiresPersistableImplementation);
   }
 }
 

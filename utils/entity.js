@@ -48,6 +48,7 @@ const BASE_TEMPLATE_DATA = {
   existingEnum: false,
   searchEngine: false,
 
+  requiresPersistableImplementation: false,
   fieldsContainDate: false,
   fieldsContainInstant: false,
   fieldsContainUUID: false,
