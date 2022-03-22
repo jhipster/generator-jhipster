@@ -103,7 +103,6 @@ echo "::group::Check Common"
 git -c color.ui=always diff --exit-code @~1 -- \
   '.github/actions' \
   '.github/workflows' \
-  'generators/*.*' \
   'generators/app' \
   'generators/bootstrap' \
   'generators/common' \
@@ -114,6 +113,11 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'lib' \
   'test-integration' \
   'utils' \
+  || CLIENT=true SERVER=true COMMON=true ANY=true
+echo "::endgroup::"
+
+echo "::group::Check Base"
+git -c color.ui=always diff --exit-code @~1 -- $(ls generators/*.*) \
   || CLIENT=true SERVER=true COMMON=true ANY=true
 echo "::endgroup::"
 
