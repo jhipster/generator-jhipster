@@ -46,7 +46,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
   <%_ } _%>
 <%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.SecurityFilterChain;
+import org.springframework.security.web.SecurityFilterChain;
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
