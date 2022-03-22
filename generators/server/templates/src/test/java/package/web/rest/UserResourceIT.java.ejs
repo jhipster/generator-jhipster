@@ -17,7 +17,12 @@
  limitations under the License.
 -%>
 package <%= packageName %>.web.rest;
-
+<%_
+let saveMethod = 'save';
+if (!reactive && databaseTypeSql) {
+    saveMethod = 'saveAndFlush';
+}
+_%>
 import <%= packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -32,10 +37,10 @@ import <%= packageName %>.repository.AuthorityRepository;
 import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
@@ -64,13 +69,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Mono;
@@ -96,9 +99,6 @@ import static org.mockito.Mockito.*;
 <%_ if (reactive && testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } else if (!reactive) { _%>
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-import static org.hamcrest.Matchers.hasItems;
-  <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
   <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -171,13 +171,8 @@ class UserResourceIT {
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 
-    /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
-     *
-     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
+    @SpyBean
+    private UserSearchRepository spiedUserSearchRepository;
 <%_ } _%>
 
     @Autowired
@@ -285,17 +280,10 @@ class UserResourceIT {
 <%_ if (!authenticationTypeOauth2) { _%>
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
-  <%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-  <%_ } _%>
 
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -341,9 +329,7 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -388,14 +374,12 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(user);
+        spiedUserSearchRepository.save(user);
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -433,14 +417,12 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(user);
+        spiedUserSearchRepository.save(user);
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -478,9 +460,6 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -528,9 +507,6 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -542,7 +518,7 @@ class UserResourceIT {
   <%_ } _%>
 
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(user);
+        spiedUserSearchRepository.save(user);
   <%_ } _%>
   <%_ if (cacheManagerIsAvailable) { _%>
 
@@ -593,9 +569,6 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
     void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
   <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/admin/users/unknown")
@@ -608,17 +581,10 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void updateUser() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-  <%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-  <%_ } _%>
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -674,17 +640,10 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-  <%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-  <%_ } _%>
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -741,14 +700,11 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
     void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(user);
+        spiedUserSearchRepository.save(user);
   <%_ } _%>
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -770,7 +726,7 @@ class UserResourceIT {
   <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(anotherUser);
+        spiedUserSearchRepository.save(anotherUser);
   <%_ } _%>
 
         // Update the user
@@ -812,14 +768,12 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
+    @DirtiesContext
     void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(user);
+        spiedUserSearchRepository.save(user);
   <%_ } _%>
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -841,7 +795,7 @@ class UserResourceIT {
   <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        mockUserSearchRepository.save(anotherUser);
+        spiedUserSearchRepository.save(anotherUser);
   <%_ } _%>
 
         // Update the user
@@ -883,16 +837,9 @@ class UserResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
     void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-  <%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.delete(any())).thenReturn(Mono.empty());
-  <%_ } _%>
+        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
         int databaseSizeBeforeDelete = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 

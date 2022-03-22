@@ -1,4 +1,22 @@
 /**
+ * Copyright 2013-2022 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  *
@@ -8,11 +26,8 @@
  * @param {string} mainResourceDir - Main resources directory
  * @param {string} testResourceDir - Test resources directory
  */
-const { CASSANDRA, MONGODB } = require('../../jdl/jhipster/database-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
+  const rootTestDir = generator.TEST_DIR;
   if (generator.isJhipsterVersionLessThan('3.5.0')) {
     generator.removeFile(`${javaDir}domain/util/JSR310DateTimeSerializer.java`);
     generator.removeFile(`${javaDir}domain/util/JSR310LocalDateDeserializer.java`);
@@ -82,7 +97,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   }
   if (generator.isJhipsterVersionLessThan('5.8.0')) {
     generator.removeFile(`${javaDir}config/MetricsConfiguration.java`);
-    if (generator.databaseType === CASSANDRA) {
+    if (generator.databaseTypeCassandra) {
       generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
     }
   }
@@ -129,7 +144,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
     generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
 
-    if (generator.databaseType === CASSANDRA) {
+    if (generator.databaseTypeCassandra) {
       generator.removeFile(`${javaDir}config/metrics/package-info.java`);
       generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
       generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
@@ -137,7 +152,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
       generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
       generator.removeFile(`${testDir}config/CassandraConfigurationIT.java`);
     }
-    if (generator.searchEngine === ELASTICSEARCH) {
+    if (generator.searchEngineElasticsearch) {
       generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
     }
   }
@@ -147,17 +162,43 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.isJhipsterVersionLessThan('7.4.2')) {
     generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
     generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+    generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
+    generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
+
+    if (generator.cucumberTests) {
+      generator.removeFile(`${testResourceDir}cucumber.properties`);
+      generator.removeFile(`${rootTestDir}features/gitkeep`);
+      generator.removeFile(`${rootTestDir}features/user/user.feature`);
+    }
+  }
+  if (generator.isJhipsterVersionLessThan('7.5.1')) {
+    if (generator.reactive && generator.databaseTypeSql) {
+      generator.removeFile(`${javaDir}service/ColumnConverter.java`);
+      generator.removeFile(`${javaDir}service/EntityManager.java`);
+      generator.removeFile(`${testDir}ArchTest.java`);
+    }
+  }
+  if (generator.isJhipsterVersionLessThan('7.6.1')) {
+    if (generator.authenticationTypeOauth2 && !generator.databaseTypeNo) {
+      generator.removeFile(`${javaDir}web/rest/UserResource.java`);
+    }
   }
   if (generator.isJhipsterVersionLessThan('7.7.1')) {
-    if (generator.databaseType === MONGODB) {
+    if (generator.databaseTypeMongodb) {
       generator.removeFile(`${testDir}MongoDbTestContainerExtension.java`);
     }
     generator.removeFile(`${testDir}TestContainersSpringContextCustomizerFactory.java`);
-    if (generator.databaseType === CASSANDRA) {
+    if (generator.databaseTypeCassandra) {
       generator.removeFile(`${testDir}AbstractCassandraTest.java`);
     }
-    if (generator.messageBroker === KAFKA) {
+    if (generator.messageBrokerKafka) {
       generator.removeFile(`${javaDir}config/KafkaProperties.java`);
+    }
+    if (generator.searchEngineElasticsearch && !generator.skipUserManagement) {
+      generator.removeFile(`${testDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
+    }
+    if (generator.buildToolMaven) {
+      generator.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
     }
   }
 }

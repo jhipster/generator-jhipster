@@ -1669,16 +1669,6 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2 && generator.searchEngine === ELASTICSEARCH,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java',
-          renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java`,
-        },
-      ],
-    },
-    {
       condition: generator => !generator.skipUserManagement,
       path: SERVER_MAIN_RES_DIR,
       templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
@@ -1751,12 +1741,29 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.searchEngine === ELASTICSEARCH,
+      condition: generator => generator.searchEngine === ELASTICSEARCH,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java',
-          renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java`,
+          file: 'package/config/EmbeddedElasticsearch.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedElasticsearch.java`,
+        },
+        {
+          file: 'package/config/ElasticsearchTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngine === ELASTICSEARCH,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
         },
       ],
     },
@@ -1907,30 +1914,21 @@ function writeFiles() {
       this.generateKeyStore();
     },
 
-    cleanupFiles() {
-      if (this.isJhipsterVersionLessThan('7.6.1')) {
-        if (this.authenticationTypeOauth2 && !this.databaseTypeNo) {
-          this.removeFile(`${this.mainJavaPackageDir}web/rest/UserResource.java`);
-        }
-      }
-    },
-
     cleanupOldServerFiles() {
       serverCleanup.cleanupOldServerFiles(
         this,
-        `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}/${this.testDir}`,
+        `${SERVER_MAIN_SRC_DIR}${this.javaDir}`,
+        `${SERVER_TEST_SRC_DIR}${this.testDir}`,
         SERVER_MAIN_RES_DIR,
-        SERVER_TEST_RES_DIR
+        SERVER_TEST_RES_DIR,
+        SERVER_TEST_SRC_DIR
       );
     },
 
     writeFiles() {
       return this.writeFilesToDisk(serverFiles);
     },
-
     ...writeCouchbaseFiles(),
-
     ...writeSqlFiles(),
   };
 }
