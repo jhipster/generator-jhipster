@@ -24,7 +24,7 @@ const commonPackageJson = require('./common/templates/package.json');
 
 // Version of Java
 const JAVA_VERSION = '11';
-const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17'];
+const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'];
 
 // Version of Node, NPM
 const NODE_VERSION = '16.14.0';
