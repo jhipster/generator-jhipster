@@ -36,6 +36,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 <%_ if (!applicationTypeMicroservice || !authenticationTypeOauth2) { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -45,7 +46,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
   <%_ } _%>
 <%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
@@ -100,7 +101,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
 <%_ if (authenticationTypeSession && !skipUserManagement) { _%>
@@ -161,9 +162,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
   <%_ if (!skipClient) { _%>
             .antMatchers("/app/**/*.{js,html}")
@@ -178,16 +179,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 <%_ } else { _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
             .antMatchers("/h2-console/**");
     }
   <%_ } _%>
 <%_ } _%>
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
             .csrf()
@@ -284,6 +285,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .oauth2Client();
 <%_ } _%>
+        return http.build();
         // @formatter:on
     }
 <%_ if (authenticationTypeJwt) { _%>
