@@ -77,7 +77,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <start-class><%= packageName %>.<%= mainClass %></start-class>
-        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx512m</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
@@ -393,7 +393,7 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>database-commons</artifactId>
+            <artifactId>cassandra</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>
@@ -616,17 +616,19 @@
             <scope>test</scope>
         </dependency>
 <%_ if (messageBrokerKafka) { _%>
-  <%_ if (reactive) { _%>
         <dependency>
-            <groupId>io.projectreactor.kafka</groupId>
-            <artifactId>reactor-kafka</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
         </dependency>
-  <%_ } else { _%>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
         </dependency>
-  <%_ } _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>kafka</artifactId>
@@ -1416,7 +1418,7 @@
                         </excludes>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>-XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                        <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
 <%_ } _%>
                     </configuration>
                 </plugin>
@@ -1436,7 +1438,7 @@
                         </includes>
 <%_ if (reactive) { _%>
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>-XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                        <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
 <%_ } _%>
                     </configuration>
                     <executions>

@@ -62,7 +62,7 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
     @Override
     public <%= persistClass %> apply(Row row, String prefix) {
         <%= persistClass %> entity = new <%= persistClass %>();
-<%_ fields.forEach(function(field) {
+<%_ fields.filter(field => !field.transient).forEach(function(field) {
   let fieldType = field.fieldType;
   if (field.blobContentTypeText) {
     fieldType = 'String';
@@ -73,7 +73,7 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
         entity.set<%= field.fieldInJavaBeanMethod %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
 <%_ }); _%>
 <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
-        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", <%= rel.otherEntity.primaryKey.type %>.class));
+        entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= rel.joinColumnNames[0] %>", <%= rel.otherEntity.primaryKey.type %>.class));
 <%_ }); _%>
         return entity;
     }

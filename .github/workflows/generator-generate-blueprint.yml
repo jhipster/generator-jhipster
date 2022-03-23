@@ -18,37 +18,9 @@
 #
 
 name: Blueprint Generator
-concurrency:
-  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
-  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
-  cancel-in-progress: true
-on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
-    paths:
-      - 'package*.json'
-      - 'generators/*'
-      - 'cli/**'
-      - 'lib/**'
-      - 'utils/**'
-      - 'generators/generate-blueprint/**'
-      - 'generators/*/*.m?c?js'
-  pull_request:
-    types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
-    paths:
-      - 'package*.json'
-      - 'cli/**'
-      - 'lib/**'
-      - 'utils/**'
-      - 'generators/*'
-      - 'generators/generate-blueprint/**'
-      - 'generators/*/*.m?c?js'
+on: [workflow_call]
 jobs:
-  applications:
+  check-generator-generate-blueprint:
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -84,7 +56,7 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: |
             ~/.npm
@@ -95,7 +67,7 @@ jobs:
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
             ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
@@ -140,9 +112,6 @@ jobs:
         id: backend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1
         run: npm run ci:backend:test
-      - name: 'E2E: Teardown'
-        if: always() && matrix.e2e == 1 && steps.compare.outputs.equals != 'true'
-        run: npm run ci:e2e:teardown
       - name: 'BACKEND: Store failure logs'
         uses: actions/upload-artifact@v2
         if: always() && steps.backend.outcome == 'failure'

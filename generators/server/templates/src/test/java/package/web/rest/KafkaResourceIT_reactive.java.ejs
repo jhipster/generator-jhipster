@@ -1,0 +1,99 @@
+<%#
+ Copyright 2013-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.cloud.stream.test.binder.MessageCollector;
+import org.springframework.http.MediaType;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.GenericMessage;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.util.MimeTypeUtils;
+import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.EmbeddedKafka;
+import <%= packageName %>.config.KafkaSseConsumer;
+import <%= packageName %>.config.KafkaSseProducer;
+
+@IntegrationTest
+@AutoConfigureMockMvc
+@WithMockUser
+@EmbeddedKafka
+class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
+
+    @Autowired
+    private WebTestClient client;
+
+    @Autowired
+    @Qualifier(KafkaSseProducer.CHANNELNAME)
+    private MessageChannel output;
+
+    @Autowired
+    @Qualifier(KafkaSseConsumer.CHANNELNAME)
+    private MessageChannel input;
+
+    @Autowired
+    private MessageCollector collector;
+
+    @Test
+    void producesMessages() throws InterruptedException {
+        client.post().uri("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce")
+            .exchange()
+            .expectStatus()
+            .isNoContent();
+
+        BlockingQueue<Message<?>> messages = collector.forChannel(output);
+        GenericMessage<String> payload = (GenericMessage<String>) messages.take();
+        assertThat(payload.getPayload()).isEqualTo("value-produce");
+    }
+
+    @Test
+    void consumesMessages() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.TEXT_PLAIN_VALUE);
+        MessageHeaders headers = new MessageHeaders(map);
+        Message<String> testMessage = new GenericMessage<>("value-consume", headers);
+        input.send(testMessage);
+        String value = client
+            .get()
+            .uri("/api/<%= dasherizedBaseName %>-kafka/consume")
+            .accept(MediaType.TEXT_EVENT_STREAM)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
+            .returnResult(String.class)
+            .getResponseBody()
+            .blockFirst(Duration.ofSeconds(10));
+        assertThat(value).isEqualTo("value-consume");
+    }
+}

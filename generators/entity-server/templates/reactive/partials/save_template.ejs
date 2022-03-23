@@ -25,7 +25,7 @@ _%>
 <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.save(<%= instanceName %>)
 <%_ } else { _%>
-        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %>)<%if (dtoMapstruct) { %>)<% } -%>
+        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %><%if (dtoMapstruct) { %>)<% } -%>)
     <%_ if (searchEngineElasticsearch) { %>
             .flatMap(<%= entityInstance %>SearchRepository::save)
     <%_ } -%>

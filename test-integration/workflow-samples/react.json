@@ -1,0 +1,42 @@
+{
+  "include": [
+    {
+      "name": "react-default",
+      "app-sample": "react-default",
+      "entity": "sql",
+      "testcontainers": "false"
+    },
+    {
+      "name": "react-maven-h2mem-memcached",
+      "app-sample": "react-maven-h2mem-memcached",
+      "entity": "sql",
+      "testcontainers": "false"
+    },
+    {
+      "name": "react-gradle-mysql-es-noi18n-mapsid",
+      "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
+      "entity": "sqlfull",
+      "gradle": 1,
+      "testcontainers": "false"
+    },
+    {
+      "name": "react-gradle-cassandra-session-redis",
+      "app-sample": "react-gradle-cassandra-session-redis",
+      "entity": "cassandra"
+    },
+    {
+      "name": "ms-react-consul-jwt-cassandra-redis",
+      "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
+    },
+    {
+      "name": "mf-react-eureka-oauth2-mariadb-infinispan",
+      "jdl-samples": "mf-react-eureka-oauth2-mariadb-infinispan",
+      "extra-args": "--workspaces --monorepository",
+      "workspaces": "true",
+      "testcontainers": "false"
+    }
+  ]
+}

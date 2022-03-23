@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
 import <%= packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
@@ -108,7 +105,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } _%>
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
-class PublicUserResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
+class PublicUserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 

@@ -60,9 +60,6 @@ _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%= packageName %>.web.rest.TestUtil;
 <% } %>
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_
@@ -235,7 +232,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser
-class <%= entityClass %>ResourceIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest <% } %>{
+class <%= entityClass %>ResourceIT {
 <%_
 for (field of fields.filter(field => !field.id && !field.transient)) {
 const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
@@ -481,11 +478,16 @@ if (field.fieldTypeString || field.blobContentTypeText) {
      */
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
-        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()<% for (field of fields.filter(field => !field.id && !field.transient)) { %>
+        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()<%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+            .<%= primaryKey.name %>(UUID.randomUUID())
+  <%_ } _%><% for (field of fields.filter(field => !field.id && !field.transient)) { %>
             .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
             .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
   <%_ } else { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+    <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+        <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
+    <%_ } _%>
     <%_ for (field of fields.filter(field => !field.id && !field.transient)) { _%>
         <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
@@ -517,13 +519,17 @@ if (field.fieldTypeString || field.blobContentTypeText) {
         <%_ } else { _%>
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
+            <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         if (TestUtil.findAll(em, <%= asEntity(otherEntityNameCapitalized) %>.class).isEmpty()) {
+            <%_ } _%>
             <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em)<%= createEntityPostfix %>;
             em.persist(<%= otherEntityName %>);
             em.flush();
+            <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         } else {
             <%= otherEntityName %> = TestUtil.findAll(em, <%= asEntity(otherEntityNameCapitalized) %>.class).get(0);
         }
+            <%_ } _%>
           <%_ } else { _%>
         <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ } _%>
@@ -597,6 +603,13 @@ _%>
         // Configure the mock search repository
         when(mock<%= entityClass %>SearchRepository.save(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+  <%_ } _%>
+  <%_ 
+      // overwrite the id field again with null
+      // the create method here is supposed to be used for other tests as well,
+      // which may expect an id to be set (at least in the reactive stack)
+      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(null);
   <%_ } _%>
         // Create the <%= entityClass %>
   <%_ if (dtoMapstruct) { _%>

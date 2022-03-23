@@ -49,6 +49,7 @@ const BASE_TEMPLATE_DATA = {
   searchEngine: false,
   microserviceName: undefined,
 
+  requiresPersistableImplementation: false,
   fieldsContainDate: false,
   fieldsContainInstant: false,
   fieldsContainUUID: false,

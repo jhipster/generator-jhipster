@@ -174,6 +174,7 @@ module.exports = class extends BaseBlueprintGenerator {
             packages: this.packages,
           },
           devDependencies: {
+            rxjs: '^7', // Not required, workaround https://github.com/npm/cli/issues/4437
             concurrently: this.dependabotPackageJson.devDependencies.concurrently,
           },
           scripts: {
@@ -235,7 +236,7 @@ module.exports = class extends BaseBlueprintGenerator {
     if (this.dockerCompose) {
       return {
         'ci:e2e:prepare': 'docker-compose -f docker-compose/docker-compose.yml up -d',
-        'ci:e2e:teardown': 'docker-compose -f docker-compose/docker-compose.yml down -v --remove-orphans',
+        'ci:e2e:teardown': 'docker-compose -f docker-compose/docker-compose.yml down -v',
       };
     }
     return {};

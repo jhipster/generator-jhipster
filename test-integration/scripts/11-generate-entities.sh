@@ -125,8 +125,10 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
 
     moveEntity MapsIdParentEntityWithoutDTO
     moveEntity MapsIdChildEntityWithoutDTO
+    moveEntity MapsIdGrandchildEntityWithoutDTO
     moveEntity MapsIdParentEntityWithDTO
     moveEntity MapsIdChildEntityWithDTO
+    moveEntity MapsIdGrandchildEntityWithDTO
     moveEntity MapsIdUserProfileWithDTO
 
     moveEntity JpaFilteringRelationship

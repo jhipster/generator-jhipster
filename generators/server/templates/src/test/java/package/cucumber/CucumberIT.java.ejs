@@ -18,18 +18,11 @@
 -%>
 package <%= packageName %>.cucumber;
 
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
+import <%= packageName %>.IntegrationTest;
 import io.cucumber.junit.platform.engine.Cucumber;
 
 @Cucumber
-<%_ if (databaseTypeNeo4j) { _%>
-@ExtendWith(AbstractNeo4jIT)
-<%_ } _%>
-class CucumberIT <% if (databaseTypeCassandra) { %>extends AbstractCassandraTest<% } %> {
+@IntegrationTest
+class CucumberIT {
 
 }
