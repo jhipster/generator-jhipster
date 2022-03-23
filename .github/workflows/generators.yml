@@ -43,8 +43,8 @@ jobs:
     steps:
       - run: |
           echo '${{ toJSON(needs) }}'
-          if [[ 'skipped' == '${{ needs.generate-blueprint.result }}' ] || [ 'success' == '${{ needs.generate-blueprint.result }}' ] && \
-              [ 'skipped' == '${{ needs.database-changelog-liquibase.result }}' ] || [ 'success' == '${{ needs.database-changelog-liquibase.result }}' ]]; then
+          if ([ 'skipped' == '${{ needs.generate-blueprint.result }}' ] || [ 'success' == '${{ needs.generate-blueprint.result }}' ]) && \
+              ([ 'skipped' == '${{ needs.database-changelog-liquibase.result }}' ] || [ 'success' == '${{ needs.database-changelog-liquibase.result }}' ]); then
             exit 0
           fi
           if [ 'closed' == '${{ github.event.action }}' ]; then
