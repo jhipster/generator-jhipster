@@ -39,10 +39,15 @@ jobs:
   check-generators:
     runs-on: ubuntu-latest
     needs: [generate-blueprint, database-changelog-liquibase]
-    if: >-
-      always() &&
-      (needs.generate-blueprint.result == 'skipped' || needs.generate-blueprint.result == 'success') &&
-      (needs.database-changelog-liquibase.result == 'skipped' || needs.database-changelog-liquibase.result == 'success') &&
-      github.event.action != 'closed'
+    if: always()
     steps:
-      - run: echo '${{ toJSON(needs) }}'
+      - run: |
+          echo '${{ toJSON(needs) }}'
+          if ([ 'skipped' == '${{ needs.generate-blueprint.result }}' ] || [ 'success' == '${{ needs.generate-blueprint.result }}' ]) && \
+              ([ 'skipped' == '${{ needs.database-changelog-liquibase.result }}' ] || [ 'success' == '${{ needs.database-changelog-liquibase.result }}' ]); then
+            exit 0
+          fi
+          if [ 'closed' == '${{ github.event.action }}' ]; then
+            exit 0
+          fi
+          exit 1

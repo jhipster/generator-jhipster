@@ -158,9 +158,11 @@ jobs:
   check-dev-server:
     runs-on: ubuntu-latest
     needs: [applications]
-    if: >-
-      always() &&
-      (needs.applications.result == 'skipped' || needs.applications.result == 'success') &&
-      github.event.action != 'closed'
+    if: always()
     steps:
-      - run: echo '${{ toJSON(needs) }}'
+      - run: |
+          echo '${{ toJSON(needs) }}'
+          if [ 'skipped' == '${{ needs.applications.result }}' ] || [ 'success' == '${{ needs.applications.result }}' ] || [ 'closed' == '${{ github.event.action }}' ]; then
+            exit 0
+          fi
+          exit 1
