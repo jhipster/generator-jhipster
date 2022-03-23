@@ -65,7 +65,7 @@ const store = configureStore({
 });
 <%_ if (microfrontend || applicationTypeGateway) { _%>
 
-// Allow to lazy load reducers https://github.com/reduxjs/redux/blob/master/docs/usage/CodeSplitting.md
+// Allow lazy loading of reducers https://github.com/reduxjs/redux/blob/master/docs/usage/CodeSplitting.md
 interface InjectableStore<S = any, A extends Action = AnyAction> extends Store<S, A> {
   asyncReducers: ReducersMapObject;
   injectReducer(key: string, reducer: Reducer): void;
