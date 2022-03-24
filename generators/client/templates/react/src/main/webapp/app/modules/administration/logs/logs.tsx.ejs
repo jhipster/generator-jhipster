@@ -40,7 +40,7 @@ export const LogsPage = () => {
 
   const filterFn = l => l.name.toUpperCase().includes(filter.toUpperCase());
 
-  const loggers = logs ? Object.entries(logs.loggers).map(e => ({ name: e[0], level: e[1].effectiveLevel })) : [];
+  const loggers = logs ? Object.entries(logs.loggers).map((e: any) => ({ name: e[0], level: e[1].effectiveLevel })) : [];
 
   return (
     <div>

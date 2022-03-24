@@ -47,6 +47,7 @@ const BASE_TEMPLATE_DATA = {
   haveFieldWithJavadoc: false,
   existingEnum: false,
   searchEngine: false,
+  microserviceName: undefined,
 
   requiresPersistableImplementation: false,
   fieldsContainDate: false,

@@ -76,7 +76,7 @@ const files = {
     {
       condition: generator => generator.enableTranslation,
       path: REACT_DIR,
-      templates: ['config/translation.ts'],
+      templates: ['config/translation.ts', 'config/translation-middleware.ts'],
     },
     {
       condition: generator => generator.websocket === SPRING_WEBSOCKET,
@@ -91,7 +91,11 @@ const files = {
   reactEntities: [
     {
       path: REACT_DIR,
-      templates: [{ file: 'entities/index.tsx', method: 'processJsx' }],
+      templates: [
+        'entities/reducers.ts',
+        { file: 'entities/menu.tsx', method: 'processJsx' },
+        { file: 'entities/routes.tsx', method: 'processJsx' },
+      ],
     },
   ],
   reactMain: [
@@ -263,6 +267,22 @@ const files = {
       ],
     },
   ],
+  microfrontend: [
+    {
+      condition: generator => generator.microfrontend,
+      templates: ['webpack/webpack.microfrontend.js.jhi.react'],
+    },
+    {
+      condition: generator => generator.microfrontend,
+      path: REACT_DIR,
+      templates: ['main.tsx', 'shared/error/error-loading.tsx'],
+    },
+    {
+      condition: generator => generator.microfrontend && generator.applicationTypeGateway,
+      path: CLIENT_MAIN_SRC_DIR,
+      templates: ['microfrontends/entities-menu.tsx', 'microfrontends/entities-routes.tsx'],
+    },
+  ],
   clientTestFw: [
     {
       path: REACT_DIR,
@@ -348,6 +368,9 @@ function cleanup() {
   }
   if (this.isJhipsterVersionLessThan('7.4.1')) {
     this.removeFile('.npmrc');
+  }
+  if (this.isJhipsterVersionLessThan('7.7.1')) {
+    this.removeFile(`${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`);
   }
 }
 

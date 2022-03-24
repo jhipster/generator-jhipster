@@ -212,6 +212,7 @@
     "test": "<%= clientPackageManager %> run jest --",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update --",
     "test:watch": "<%= clientPackageManager %> run jest -- --watch",
+    "watch": "concurrently 'npm run start' npm:backend:start",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
     "webapp:build:dev": "webpack --config webpack/webpack.dev.js --env stats=minimal",
     "webapp:build:prod": "webpack --config webpack/webpack.prod.js --progress=profile",

@@ -34,6 +34,8 @@ module.exports = ({ serve }) => {
   return {
     optimization: {
       moduleIds: 'named',
+      chunkIds: 'named',
+      runtimeChunk: false,
     },
     plugins: [
       new ModuleFederationPlugin({
@@ -48,9 +50,6 @@ module.exports = ({ serve }) => {
     ],
     output: {
       publicPath: 'auto',
-    },
-    optimization: {
-      runtimeChunk: false,
     },
   };
 };
