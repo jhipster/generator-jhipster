@@ -58,6 +58,7 @@ export default class JhiNavbar extends Vue {
     return this.loginService().logout().then(response => {
       this.$store.commit('logout');
   <%_ if (authenticationTypeOauth2) { _%>
+      window.location.href = response.data.logoutUrl;
       const next = response.data?.logoutUrl ?? '/';
       if (this.$route.path !== next) {
         return this.$router.push(next);
