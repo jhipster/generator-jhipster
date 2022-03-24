@@ -18,12 +18,13 @@
 -%>
 
 pluginManagement {
-<%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
     repositories {
+<%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
         maven { url 'https://repo.spring.io/milestone' }
         gradlePluginPortal()
-    }
 <%_ } _%>
+        //jhipster-needle-gradle-plugin-management-repositories - JHipster will add additional entries here
+    }
     plugins {
         id 'org.springframework.boot' version "${springBootVersion}"
         id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
@@ -44,6 +45,7 @@ pluginManagement {
         id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
         id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"
 <%_ } _%>
+        //jhipster-needle-gradle-plugin-management-plugins - JHipster will add additional entries here
     }
 }
 
@@ -52,7 +54,7 @@ plugins {
     id 'com.gradle.enterprise'
     id 'com.gradle.common-custom-user-data-gradle-plugin'
 }
-    
+
 gradleEnterprise {
     server = "<%= gradleEnterpriseHost %>"
     buildScan {
@@ -70,5 +72,5 @@ buildCache {
         url = '<%= gradleEnterpriseHost %>/cache/' // note the trailing slash!
     }
 }
-<%_ } _%>  
+<%_ } _%>
 rootProject.name = "<%= dasherizedBaseName %>"
