@@ -20,6 +20,7 @@ const chalk = require('chalk');
 const needleServer = require('./needle-server');
 
 const buildGradlePath = 'build.gradle';
+const gradleSettingsPath = 'settings.gradle';
 
 module.exports = class extends needleServer {
   addProperty(name, value) {
@@ -90,6 +91,43 @@ module.exports = class extends needleServer {
     repository += '    }';
     const rewriteFileModel = this.generateFileModel(buildGradlePath, 'jhipster-needle-gradle-repositories', repository);
 
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
+
+  addPluginToPluginManagement(id, version) {
+    const errorMessage = `${chalk.yellow('Reference to ')}id ${id} version ${version}${chalk.yellow(' not added.')}`;
+    const rewriteFileModel = this.generateFileModel(
+      gradleSettingsPath,
+      'jhipster-needle-gradle-plugin-management-plugins',
+      `id '${id}' version '${version}'`
+    );
+
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
+
+  addPluginManagementRepository(url, username, password) {
+    const errorMessage = chalk.yellow('Reference to ') + url + chalk.yellow(' not added.');
+    let repository = 'maven {\n';
+    if (url) {
+      repository += `        url "${url}"\n`;
+    }
+    if (username || password) {
+      repository += '        credentials {\n';
+      if (username) {
+        repository += `            username = "${username}"\n`;
+      }
+      if (password) {
+        repository += `            password = "${password}"\n`;
+      }
+      repository += '        }\n';
+    }
+    repository += '    }';
+
+    const rewriteFileModel = this.generateFileModel(
+      gradleSettingsPath,
+      'jhipster-needle-gradle-plugin-management-repositories',
+      repository
+    );
     this.addBlockContentToFile(rewriteFileModel, errorMessage);
   }
 };
