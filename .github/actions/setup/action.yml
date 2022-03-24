@@ -71,7 +71,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: skip_ci-spring_boot_2.6.4
+    default: auto
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
