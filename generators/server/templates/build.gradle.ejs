@@ -520,6 +520,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
 <%_ } _%>
     implementation "org.springframework.security:spring-security-config"
+<%_ if (!reactive && databaseTypeSql) { _%>
+    implementation "org.springframework.security:spring-security-data"
+<%_ } _%>
     implementation "org.springframework.security:spring-security-web"
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
