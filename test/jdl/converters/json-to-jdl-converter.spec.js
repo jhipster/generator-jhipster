@@ -20,8 +20,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const jestExpect = require('expect');
 const { expect } = require('chai');
-const { convertToJDL } = require('../../../jdl/converters/json-to-jdl-converter');
+const { convertToJDL, convertSingleContentToJDL } = require('../../../jdl/converters/json-to-jdl-converter');
 
 describe('JSONToJDLConverter', () => {
   describe('convertToJDL', () => {
@@ -372,6 +373,29 @@ noFluentMethod Region, Country, Location
 
       it('should output it to the output file', () => {
         expect(fs.readFileSync(path.join(dir, output), 'utf-8')).not.to.be.null;
+      });
+    });
+  });
+  describe('convertSingleContentToJDL', () => {
+    context('with microservices attribute', () => {
+      let jdl;
+      before(() => {
+        jdl = convertSingleContentToJDL({
+          'generator-jhipster': {
+            microfrontends: [
+              {
+                baseName: 'foo',
+              },
+              {
+                baseName: 'bar',
+              },
+            ],
+          },
+        });
+      });
+
+      it('should write a JDL file with the application', () => {
+        jestExpect(jdl).toMatch(/microfrontends \[foo, bar\]/);
       });
     });
   });

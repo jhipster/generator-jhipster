@@ -22,6 +22,7 @@ const { expect: jestExpect } = require('expect');
 const fse = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
+const jestExpect = require('expect');
 
 const ApplicationTypes = require('../../jdl/jhipster/application-types');
 const DatabaseTypes = require('../../jdl/jhipster/database-types');
@@ -1921,6 +1922,23 @@ Object {
   "relationshipType": "one-to-one",
 }
 `);
+      });
+    });
+    context('when importing a JDL application with microfrontends', () => {
+      it('should return the microfrontends attributes in the application', () => {
+        const importer = createImporterFromContent(
+          `application {
+  config {
+    microfrontends [foo, bar]
+  }
+}
+`,
+          { skipFileGeneration: true }
+        );
+        const importState = importer.import();
+        jestExpect(JSON.stringify(importState.exportedApplications[0]['generator-jhipster'].microfrontends)).toMatchInlineSnapshot(
+          '"[{\\"baseName\\":\\"foo\\"},{\\"baseName\\":\\"bar\\"}]"'
+        );
       });
     });
   });

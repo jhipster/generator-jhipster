@@ -435,8 +435,16 @@ class JDLProcessor {
       if (relatedApplications.length > 0) {
         applicationWithEntities.config.applications = Object.fromEntries(
           relatedApplications.map(([baseName, config]) => {
-            config.gatewayServerPort = gatewayServerPort;
+            config.gatewayServerPort = config.gatewayServerPort || gatewayServerPort;
             const { clientFramework, serverPort, applicationIndex, devServerPort } = config;
+            if (clientFramework && clientFramework !== 'no') {
+              const gatewayClientFramework = applicationWithEntities.config.clientFramework;
+              if (gatewayClientFramework !== clientFramework) {
+                throw new Error(
+                  `Microfrontends with different client frameworks is not supported ${clientFramework}, ${gatewayClientFramework}`
+                );
+              }
+            }
             return [baseName, { clientFramework, serverPort, applicationIndex, devServerPort }];
           })
         );

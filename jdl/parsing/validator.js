@@ -141,6 +141,7 @@ const configPropsValidations = {
     pattern: ALPHABETIC,
     msg: 'frontendBuilder property',
   },
+  GATEWAY_SERVER_PORT: { type: 'INTEGER' },
   JHIPSTER_VERSION: { type: 'STRING' },
   JHI_PREFIX: {
     type: 'NAME',
@@ -162,6 +163,12 @@ const configPropsValidations = {
     pattern: ALPHANUMERIC,
     msg: 'messageBroker property',
   },
+  MICROFRONTENDS: {
+    type: 'list',
+    pattern: ALPHANUMERIC_UNDERSCORE,
+    msg: 'microfrontends property',
+  },
+  MICROFRONTEND: { type: 'BOOLEAN' },
   NATIVE_LANGUAGE: {
     type: 'NAME',
     pattern: LANGUAGE_PATTERN,

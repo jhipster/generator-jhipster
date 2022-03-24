@@ -23,6 +23,66 @@ const { parse } = require('../../../jdl/parsing/api');
 
 describe('JDLSyntaxValidatorVisitor', () => {
   context('when declaring an application', () => {
+    for (const booleanOption of ['microfrontend']) {
+      context(`and using for ${booleanOption}`, () => {
+        context('a valid value', () => {
+          it('should not report a syntax error', () => {
+            expect(() =>
+              parse(`
+              application {
+                config {
+                  ${booleanOption} true
+                }
+              }`)
+            ).not.to.throw();
+          });
+        });
+        context('an invalid value', () => {
+          it('should report a syntax error', () => {
+            expect(() =>
+              parse(`
+              application {
+                config {
+                  ${booleanOption} 666
+                }
+              }`)
+            ).to.throw(/^A boolean literal is expected, but found: "666"/);
+          });
+        });
+      });
+    }
+    for (const integerOption of ['gatewayServerPort']) {
+      context(`and using for ${integerOption}`, () => {
+        context('a valid value', () => {
+          it('should not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            application {
+              config {
+                ${integerOption} 6666
+              }
+            }`)
+            ).not.to.throw();
+          });
+        });
+
+        context('an invalid value', () => {
+          context('such as letters', () => {
+            it('should report a syntax error', () => {
+              expect(() =>
+                parse(`
+              application {
+                config {
+                  ${integerOption} abc
+                }
+              }`)
+              ).to.throw(/^An integer literal is expected, but found: "abc"/);
+            });
+          });
+        });
+      });
+    }
+
     context('and using for applicationType', () => {
       context('a valid value', () => {
         it('should not report a syntax error for name', () => {
@@ -984,6 +1044,47 @@ describe('JDLSyntaxValidatorVisitor', () => {
               }
             }`)
             ).to.throw(/^A name is expected, but found: "42"/);
+          });
+        });
+      });
+    });
+    context('and using for microfrontends', () => {
+      context('a valid value', () => {
+        it('should not report a syntax error', () => {
+          expect(() =>
+            parse(`
+            application {
+              config {
+                microfrontends [mf_1,mf, mf123]
+              }
+            }`)
+          ).not.to.throw();
+        });
+      });
+
+      context('an invalid value', () => {
+        context('such as having numbers inside the list', () => {
+          it('should report a syntax error', () => {
+            expect(() =>
+              parse(`
+            application {
+              config {
+                microfrontends [mf_1, en, mf-1]
+              }
+            }`)
+            ).to.throw(/^The microfrontends property name must match: (.*), got mf-1.\n(.*)at line: 4, column: 43/);
+          });
+        });
+        context('such as not a list', () => {
+          it('should report a syntax error', () => {
+            expect(() =>
+              parse(`
+            application {
+              config {
+                microfrontends true
+              }
+            }`)
+            ).to.throw(/^An array of names is expected, but found: "true"/);
           });
         });
       });

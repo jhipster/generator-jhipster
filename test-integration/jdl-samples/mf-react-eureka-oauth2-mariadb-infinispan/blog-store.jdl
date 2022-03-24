@@ -16,7 +16,7 @@
  * - buildTool: maven, gradle
  */
 
-/* reactive, maven */ 
+/* reactive, maven */
 application {
   config {
     applicationType gateway
@@ -31,8 +31,9 @@ application {
     prodDatabaseType postgresql
     serviceDiscoveryType eureka
     testFrameworks [cypress]
+    microfrontends [blog, notification, store]
   }
-  entities *
+  entities UserData
 }
 
 /* imperative, maven */
@@ -153,10 +154,6 @@ paginate Product with pagination
 service Product with serviceClass
 service Notification with serviceImpl
 dto Blog, Post, Tag, Notification with mapstruct
-
-microservice Product with store
-microservice Blog, Post, Tag with blog
-microservice Notification with notification
 
 deployment {
   deploymentType docker-compose,
