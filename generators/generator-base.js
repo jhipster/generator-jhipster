@@ -1137,6 +1137,16 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * A new Gradle plugin to plugin management block in settings.gradle
+   *
+   * @param {string} id - plugin id
+   * @param {string} version - explicit plugin version number
+   */
+  addGradlePluginToPluginManagement(id, version) {
+    this.needleApi.serverGradle.addPluginToPluginManagement(id, version);
+  }
+
+  /**
    * Add Gradle plugin to the plugins block
    *
    * @param {string} id - plugin id
@@ -1199,6 +1209,17 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    */
   addGradleMavenRepository(url, username, password) {
     this.needleApi.serverGradle.addMavenRepository(url, username, password);
+  }
+
+  /**
+   * Add a remote Maven repository to the Gradle plugin management block in settings.gradle
+   *
+   * @param {string} url - url of the repository
+   * @param {string} username - (optional) username of the repository credentials
+   * @param {string} password - (optional) password of the repository credentials
+   */
+  addGradlePluginManagementRepository(url, username, password) {
+    this.needleApi.serverGradle.addPluginManagementRepository(url, username, password);
   }
 
   /**
