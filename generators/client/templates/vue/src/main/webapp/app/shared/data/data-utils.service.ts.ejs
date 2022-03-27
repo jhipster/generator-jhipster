@@ -67,7 +67,7 @@ export default class JhiDataUtils extends Vue {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
     fileReader.onload = (e: any) => {
-      const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+      const base64Data = e.target.result.substring(e.target.result.indexOf('base64,') + 'base64,'.length);
       cb(base64Data);
     };
   }
