@@ -84,7 +84,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "5.5.3",
-    "aws-sdk": "2.1096.0",
+    "aws-sdk": "2.1101.0",
     "axios": "0.26.1",
     "chalk": "4.1.2",
     "chevrotain": "10.1.2",
