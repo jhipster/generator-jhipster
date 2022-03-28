@@ -162,8 +162,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.isJhipsterVersionLessThan('7.4.2')) {
     generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
     generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
-    generator.removeFile(`${javaDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
-    generator.removeFile(`${testDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
 
     if (generator.cucumberTests) {
       generator.removeFile(`${testResourceDir}cucumber.properties`);

@@ -51,6 +51,11 @@ if (primaryKey.typeLong) {
 } else if (primaryKey.typeUUID) {
   idValue = idValue + '.toString()';
 }
+let transactionalAnnotation = '';
+if (databaseTypeSql && !reactive) {
+  transactionalAnnotation = '\n    @Transactional';
+}
+
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%= packageName %>.web.rest.TestUtil;
@@ -122,12 +127,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
+<%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
 import org.springframework.test.annotation.DirtiesContext;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
+  <%_ if (databaseTypeSql) { _%>
+import org.springframework.transaction.annotation.Transactional;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (fieldsContainBlob) { _%>
 import org.springframework.util.Base64Utils;
@@ -585,8 +595,10 @@ _%>
     }
 <%_ if (!readOnly) { _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+  <%_ } _%>
     void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
   <%_
@@ -644,7 +656,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void create<%= entityClass %>WithExistingId() throws Exception {
         // Create the <%= entityClass %> with an existing ID
   <%_ if (primaryKey.typeUUID && databaseTypeSql) { _%>
@@ -686,8 +698,10 @@ _%>
     }
 
   <%_ if (databaseTypeSql && isUsingMapsId) { _%>
-    @Test
+    @Test<%= transactionalAnnotation %>
+    <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+    <%_ } _%>
     void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -767,7 +781,7 @@ _%>
       } _%>
       <%_ if (required) { _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void check<%= field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
         int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         // set the field null
@@ -802,8 +816,10 @@ _%>
 <%_ } _%>
 <%_ if (reactive && paginationNo) { _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+  <%_ } _%>
     void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -845,7 +861,10 @@ _%>
     }
 <%_ } _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
+    @DirtiesContext
+  <%_ } _%>
     void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
@@ -937,8 +956,7 @@ _%>
     }
 <%_ } _%>
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
@@ -982,8 +1000,7 @@ _%>
     }
 <%_ if (jpaMetamodelFiltering) {  %>
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1006,8 +1023,7 @@ _%>
     // we can't filter by all the fields.
     if (isFilterableType(searchBy.fieldType)) { _%>
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1019,8 +1035,7 @@ _%>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1032,8 +1047,7 @@ _%>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.notEquals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1045,8 +1059,7 @@ _%>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.in=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1059,8 +1072,7 @@ _%>
     }
     <%_ }
     if (searchBy.fieldTypeString) { _%>
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1072,8 +1084,7 @@ _%>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.contains=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1103,8 +1114,7 @@ _%>
       }
     _%>
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1116,8 +1126,7 @@ _%>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= biggerValue %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1129,8 +1138,7 @@ _%>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= smallerValue %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1142,8 +1150,7 @@ _%>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= biggerValue %>);
     }
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1159,8 +1166,7 @@ _%>
   <%_ }); _%>
   <%_ relationships.forEach((relationship) => { _%>
 
-    @Test
-    @DirtiesContext
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if ((relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id) { _%>
         // Get already existing entity
@@ -1321,7 +1327,7 @@ _%>
   <%_ } _%>
 
 <%_  } _%>
-    @Test
+    @Test<%= transactionalAnnotation %>
     void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>
 <%_ if (reactive) { _%>
@@ -1336,8 +1342,10 @@ _%>
     }
 <%_ if (!readOnly) { _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+  <%_ } _%>
     void putNew<%= entityClass %>() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1410,7 +1418,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void putNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
@@ -1447,7 +1455,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void putWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
@@ -1484,7 +1492,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
@@ -1530,8 +1538,10 @@ _%>
       return { includeField, updateWithValue, testWithConstant, ...field};
     };
   %>
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+  <%_ } _%>
     void partialUpdate<%= entityClass %>WithPatch() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1545,8 +1555,10 @@ _%>
 <%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+  <%_ } _%>
     void fullUpdate<%= entityClass %>WithPatch() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1560,7 +1572,7 @@ _%>
 <%- include('/partials/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, asEntity, callBlock, callListBlock}); -%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void patchNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
@@ -1597,7 +1609,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void patchWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
@@ -1634,7 +1646,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
@@ -1671,7 +1683,7 @@ _%>
   <%_ } _%>
     }
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1680,8 +1692,11 @@ _%>
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+  <%_ if (searchEngineElasticsearch) { _%>
+        <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
+  <%_ } _%>
 
-        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+    int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Delete the <%= entityInstance %>
   <%_ if (reactive) { _%>
@@ -1710,8 +1725,10 @@ _%>
 <%_ } _%>
 <%_ if (searchEngine) { _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
+  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
     @DirtiesContext
+  <%_ } _%>
     void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1723,7 +1740,6 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         spied<%= entityClass %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else if (searchEngineCouchbase) { _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
         // Wait for the <%= entityInstance %> to be indexed
         TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search("id:" + <%= entityInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (reactive) { %>.collectList().block()<% } %>);
   <%_ } _%>

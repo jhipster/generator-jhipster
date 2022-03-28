@@ -141,10 +141,7 @@ const expectedFiles = {
       // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
       `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
     ],
-    entitySearchSpecific: [
-      `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`,
-      `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepositoryMockConfiguration.java`,
-    ],
+    entitySearchSpecific: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`],
     fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
     serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
     gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`],
@@ -832,7 +829,6 @@ const expectedFiles = {
   elasticsearch: [
     `${DOCKER_DIR}elasticsearch.yml`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`,
   ],
 
   cucumber: [

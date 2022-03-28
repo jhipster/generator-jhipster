@@ -1075,16 +1075,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/search/UserSearchRepositoryMockConfiguration.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/main/resources/",
       "templates": Array [
         "templates/mail/activationEmail.html",
@@ -1169,8 +1159,25 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/search/UserSearchRepositoryMockConfiguration.java",
+          "file": "package/config/EmbeddedElasticsearch.java",
           "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/ElasticsearchTestContainer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
         },
       ],
     },
