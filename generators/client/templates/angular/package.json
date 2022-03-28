@@ -9,7 +9,7 @@
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
     "ngx-cookie-service": "13.1.2",
-    "ngx-infinite-scroll": "10.0.1",
+    "ngx-infinite-scroll": "13.0.1",
     "ngx-webstorage": "9.0.0",
     "rxjs": "7.5.5",
     "tslib": "2.3.1",
