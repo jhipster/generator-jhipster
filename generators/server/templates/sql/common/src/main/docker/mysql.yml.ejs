@@ -21,7 +21,6 @@ version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
   <%= baseName.toLowerCase() %>-mysql:
     image: <%= DOCKER_MYSQL %>
-    platform: linux/x86_64
     volumes:
       - ./config/mysql:/etc/mysql/conf.d
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
