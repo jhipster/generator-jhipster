@@ -27,6 +27,18 @@ inputs:
     description: 'Workflow file prefix'
     required: false
     default: workflow
+  skip-changes-detection:
+    description: 'Skip git changes detection'
+    required: false
+    default: ${{ (github.event.pull_request && 'false') || 'true' }}
+  generator-jhipster-directory:
+    description: 'JHipster Generator path'
+    required: false
+    default: ${{ github.workspace }}
+  samples-directory:
+    description: 'Samples path'
+    required: false
+    default: test-integration/workflow-samples
   skip-workflow:
     description: 'Skip the workflow'
     required: false
@@ -81,12 +93,17 @@ runs:
         node-version: 14
     - name: 'Check changes'
       id: build-changes
-      run: test-integration/scripts/99-build-changes.sh
+      run: |
+        SKIP_WORKFLOW=${{inputs.skip-workflow}}
+        SKIP_CHANGES_DETECTION=${{inputs.skip-changes-detection}}
+        cd ${{ inputs.generator-jhipster-directory }}
+        test-integration/scripts/99-build-changes.sh
       shell: bash
 
     - name: 'Build matrix'
       id: build-matrix
       run: |
+        cd ${{ inputs.generator-jhipster-directory }}
         echo '{ "include" : [] }' > matrix.json
 
         if [[ "true" == "${{ steps.build-changes.outputs.angular }}" || "true" == "${{ steps.build-changes.outputs.client-common }}" ]]; then
@@ -112,7 +129,7 @@ runs:
 
         if [[ "true" == "${{ steps.build-changes.outputs.any }}" && "" != "${{ inputs.workflow-samples-file }}" ]]; then
           echo "::group::Workflow default sample (${{ inputs.workflow-samples-file }})"
-          test-integration/scripts/99-print-matrix.js test-integration/workflow-samples/${{ inputs.workflow-samples-file }}.json
+          test-integration/scripts/99-print-matrix.js ${{ inputs.samples-directory }}/${{ inputs.workflow-samples-file }}.json
           cat matrix.json
           echo "::endgroup::"
         fi

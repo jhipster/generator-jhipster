@@ -12,7 +12,7 @@ WORKFLOW_ANGULAR=false
 WORKFLOW_REACT=false
 WORKFLOW_VUE=false
 
-if [[ "true" == "${{inputs.skip-workflow}}" ]]; then
+if [[ "true" == "$SKIP_WORKFLOW" ]]; then
   echo "::set-output name=angular::false"
   echo "::set-output name=react::false"
   echo "::set-output name=vue::false"
@@ -32,7 +32,7 @@ if [[ "true" == "${{inputs.skip-workflow}}" ]]; then
   exit 0
 fi
 
-if [[ "true" == "${{github.event.pull_request || 'true'}}" ]]; then
+if [[ "true" == "$SKIP_CHANGES_DETECTION" ]]; then
   echo "::set-output name=angular::true"
   echo "::set-output name=react::true"
   echo "::set-output name=vue::true"
