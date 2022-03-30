@@ -164,7 +164,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
       @Async
       @Transactional(propagation =  Propagation.REQUIRES_NEW, readOnly = true, isolation = Isolation.READ_COMMITTED)
       public void index(<%= persistClass %> entity) {
-         repository.findOneWithEagerRelationships(entity.getId()).ifPresent(elasticsearchTemplate::save);
+         repository.findOne<% if (implementsEagerLoadApis ) { %>WithEagerRelationships<% } %>(entity.getId()).ifPresent(elasticsearchTemplate::save);
       }
 
 }
