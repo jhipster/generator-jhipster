@@ -116,7 +116,7 @@ interface <%= entityClass %>SearchRepositoryInternal {
     Page<<%= persistClass %>> search(Query query);
   <%_ } _%>
 
-  void index(<%= persistClass %> entity);
+    void index(<%= persistClass %> entity);
 }
 
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
@@ -152,7 +152,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
     @Override
     public Page<<%= persistClass %>> search(Query query) {
-        List<<%= persistClass %>> hits = elasticsearchTemplate.search(query, <%= entityClass %>.class).map(SearchHit::getContent)
+        List<<%= persistClass %>> hits = elasticsearchTemplate.search(query, <%= persistClass %>.class).map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
 
