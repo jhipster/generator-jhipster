@@ -69,7 +69,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
         if (null != mongoAnnotation) {
             log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
             log.info("Warming up the mongo database");
-            mongoDbBean =  new MongoDbTestContainer();
+            if (null == mongoDbBean) {
+                mongoDbBean =  new MongoDbTestContainer();
+            }
             beanFactory.registerSingleton(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
             ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
             beanFactory.initializeBean(mongoDbBean, MongoDbTestContainer.class.getName().toLowerCase());
@@ -81,7 +83,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
         if (null != cassandraAnnotation) {
             log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
             log.info("Warming up the cassandra database");
-            cassandraBean =  new CassandraTestContainer();
+            if (null == cassandraBean) {
+                cassandraBean =  new CassandraTestContainer();
+            }
             beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
             ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
             beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
@@ -97,7 +101,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             if (null != kafkaAnnotation) {
                 log.debug("detected the EmbeddedKafka annotation on class {}", testClass.getName());
                 log.info("Warming up the kafka broker");
-                kafkaBean = new KafkaTestContainer();
+                if (null == kafkaBean) {
+                    kafkaBean = new KafkaTestContainer();
+                }
                 beanFactory.registerSingleton(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
                 ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
                 beanFactory.initializeBean(kafkaBean, KafkaTestContainer.class.getName().toLowerCase());
@@ -109,7 +115,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             if (null != elasticsearchAnnotation) {
                 log.debug("detected the EmbeddedElasticsearch annotation on class {}", testClass.getName());
                 log.info("Warming up the elastic database");
-                elasticsearchBean = new ElasticsearchTestContainer();
+                if (null == elasticsearchBean) {
+                    elasticsearchBean = new ElasticsearchTestContainer();
+                }
                 beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName().toLowerCase(), elasticsearchBean);
                 ((DefaultSingletonBeanRegistry) beanFactory).registerDisposableBean(
                     ElasticsearchTestContainer.class.getName().toLowerCase(),

@@ -38,7 +38,7 @@ public class MongoDbTestContainer implements InitializingBean, DisposableBean {
     @Override
     public void destroy() {
         if (null != mongodbContainer && mongodbContainer.isRunning()) {
-            mongodbContainer.stop();
+//           mongodbContainer.stop();
         }
     }
 

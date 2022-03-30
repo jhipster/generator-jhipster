@@ -30,7 +30,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Base class for starting/stopping Cassandra during tests.
+ * Base class for starting/stopping ElasticSearch during tests.
  */
 public class ElasticsearchTestContainer implements InitializingBean, DisposableBean {
 
@@ -41,7 +41,7 @@ public class ElasticsearchTestContainer implements InitializingBean, DisposableB
     @Override
     public void destroy() {
         if (null != elasticsearchContainer && elasticsearchContainer.isRunning()) {
-            elasticsearchContainer.close();
+//            elasticsearchContainer.close();
         }
     }
 
