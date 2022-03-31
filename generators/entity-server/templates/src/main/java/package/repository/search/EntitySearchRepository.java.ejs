@@ -94,7 +94,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     public Flux<<%= entityClass %>> search(Query query) {
 
         return reactiveElasticsearchTemplate
-            .search(nativeSearchQuery, <%= persistClass %>.class)
+            .search(query, <%= persistClass %>.class)
             .map(SearchHit::getContent);
     }
 }
