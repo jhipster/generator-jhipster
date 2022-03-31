@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const GRADLE_VERSION = '7.4.1';
+const GRADLE_VERSION = '7.4.2';
 const GRADLE = 'gradle';
 const GRADLE_DESCRIPTION = 'Gradle';
 const BUILD_DESTINATION_VALUE = 'build';
