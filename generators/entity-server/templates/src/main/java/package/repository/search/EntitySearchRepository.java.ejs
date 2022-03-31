@@ -71,6 +71,7 @@ public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>
 
 interface <%= entityClass %>SearchRepositoryInternal {
     Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+
     Flux<<%= persistClass %>> search(Query query);
 }
 
@@ -95,6 +96,8 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         NativeSearchQuery nativeSearchQuery = queryBuilder.build();
   <%_ } else { _%>
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+  <%_ if (!paginationNo) { _%>
+        nativeSearchQuery.setPageable(pageable);
   <%_ } _%>
         return search(nativeSearchQuery);
     }
