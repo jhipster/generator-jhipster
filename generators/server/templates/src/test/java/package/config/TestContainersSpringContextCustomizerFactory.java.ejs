@@ -57,6 +57,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 <%_ if (searchEngineElasticsearch) { _%>
     private static ElasticsearchTestContainer elasticsearchBean;
 <%_ } _%>
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+    private static CouchbaseTestContainer couchbaseBean;
+<%_ } _%>
 
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
@@ -64,6 +67,24 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
         return (context, mergedConfig) -> {
             ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
             TestPropertyValues testValues = TestPropertyValues.empty();
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+            EmbeddedCouchbase couchbaseAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCouchbase.class);
+            if (null != couchbaseAnnotation) {
+                log.debug("detected the EmbeddedCouchbase annotation on class {}", testClass.getName());
+                log.info("Warming up the Couchbase database");
+                if (null == couchbaseBean) {
+                couchbaseBean =  new CouchbaseTestContainer();
+            }
+            beanFactory.registerSingleton(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
+            ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
+            beanFactory.initializeBean(couchbaseBean, CouchbaseTestContainer.class.getName().toLowerCase());
+            testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
+            testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
+            testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
+            testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getCouchbaseContainer().getBucketName());
+            testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
+        }
+<%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
         EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
         if (null != mongoAnnotation) {

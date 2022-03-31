@@ -119,6 +119,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
 import org.springframework.http.MediaType;
@@ -940,19 +941,14 @@ _%>
   <%_ } _%>
 
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true")
+        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false")
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
             .andExpect(status().isOk());
   <%_ } _%>
-
-  <%_ if (!serviceNo) { _%>
-        verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
-  <%_ } else { _%>
-        verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
-  <%_ } _%>
+        verify(<%= entityInstance %>RepositoryMock, times(1)).findAll(any(<% if (reactive) { %>Flux.class<% } else { %>Pageable.class<% }%>));
     }
 <%_ } _%>
 
@@ -1019,9 +1015,9 @@ _%>
   <%_ } _%>
     }
 
-  <%_ fields.filter(field => !field.id && !field.transient).forEach((searchBy) => {
-    // we can't filter by all the fields.
-    if (isFilterableType(searchBy.fieldType)) { _%>
+  <%_ fields.filter(field => !field.id && !field.transient).forEach((searchBy) => { /* we can't filter by all the fields. */_%>
+
+    <%_ if (isFilterableType(searchBy.fieldType)) { _%>
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1070,8 +1066,8 @@ _%>
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is null
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.specified=false");
     }
-    <%_ }
-    if (searchBy.fieldTypeString) { _%>
+    <%_ } _%>
+    <%_ if (searchBy.fieldTypeString) { _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
@@ -1172,20 +1168,16 @@ _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.get<%= relationship.relationshipNameCapitalized %>();
     <%_ } else { _%>
-        // Initialize the database
-        <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-    <%_ if (databaseTypeSql && !reactive) { _%>
+      <%_ if (databaseTypeSql && !reactive) { _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %>;
-    if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
-        <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
-        em.persist(<%= relationship.relationshipFieldName %>);
-        em.flush();
-    } else {
-        <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
-    }
-    <%_ } else { _%>
+        if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
+            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        } else {
+            <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
+        }
+      <%_ } else { _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
-    <%_ } _%>
+      <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
