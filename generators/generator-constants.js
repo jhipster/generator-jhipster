@@ -32,7 +32,7 @@ const NPM_VERSION = commonPackageJson.devDependencies.npm;
 const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
 
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
-const JIB_VERSION = '3.2.0';
+const JIB_VERSION = '3.2.1';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.7.1-SNAPSHOT';
