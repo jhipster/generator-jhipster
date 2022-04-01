@@ -31,6 +31,9 @@ on:
     branches:
       - '*'
 
+permissions:
+  contents: read
+
 jobs:
   validation:
     name: 'Validation'

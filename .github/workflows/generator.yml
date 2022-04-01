@@ -30,6 +30,9 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
+permissions:
+  contents: read
+
 jobs:
   check-npm-test:
     if: >-
