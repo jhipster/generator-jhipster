@@ -948,7 +948,7 @@ _%>
         rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
             .andExpect(status().isOk());
   <%_ } _%>
-        verify(<%= entityInstance %>RepositoryMock, times(1)).findAll(any(<% if (reactive) { %>Flux.class<% } else { %>Pageable.class<% }%>));
+        verify(<%= entityInstance %>RepositoryMock, times(1)).findAll<% if (reactive) { %>WithEagerRelationships(any()<% } else { %>(any(Pageable.class)<% } %>);
     }
 <%_ } _%>
 
@@ -1016,7 +1016,6 @@ _%>
     }
 
   <%_ fields.filter(field => !field.id && !field.transient).forEach((searchBy) => { /* we can't filter by all the fields. */_%>
-
     <%_ if (isFilterableType(searchBy.fieldType)) { _%>
 
     @Test<%= transactionalAnnotation %>
@@ -1066,8 +1065,8 @@ _%>
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is null
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.specified=false");
     }
-    <%_ } _%>
-    <%_ if (searchBy.fieldTypeString) { _%>
+      <%_ } _%>
+      <%_ if (searchBy.fieldTypeString) { _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
@@ -1171,6 +1170,7 @@ _%>
       <%_ if (databaseTypeSql && !reactive) { _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %>;
         if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
+            <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
             <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         } else {
             <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);

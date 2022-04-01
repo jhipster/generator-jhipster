@@ -104,10 +104,6 @@ const couchbaseFiles = {
           file: 'package/config/EmbeddedCouchbase.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedCouchbase.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
       ],
     },
   ],

@@ -50,6 +50,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.boot.test.mock.mockito.SpyBean;
+<%_ } _%>
 <%_ if (databaseTypeSql && !reactive && !authenticationTypeOauth2) { _%>
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.auditing.AuditingHandler;
@@ -167,8 +170,8 @@ class UserServiceIT {
      *
      * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
+    @SpyBean
+    private UserSearchRepository spiedUserSearchRepository;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive && !authenticationTypeOauth2) { _%>
 
@@ -351,12 +354,6 @@ class UserServiceIT {
   <%_ if (databaseTypeSql && !reactive) { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
   <%_ } _%>
-  <%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-        when(mockUserSearchRepository.delete(any())).thenReturn(Mono.empty());
-  <%_ } _%>
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
         <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -377,7 +374,7 @@ class UserServiceIT {
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
+        verify(spiedUserSearchRepository, times(1)).delete(user);
   <%_ } _%>
     }
 
@@ -408,7 +405,7 @@ class UserServiceIT {
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, never()).delete(user);
+        verify(spiedUserSearchRepository, never()).delete(user);
   <%_ } _%>
     }
 <%_ } _%>

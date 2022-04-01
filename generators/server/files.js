@@ -1738,6 +1738,16 @@ const baseServerFiles = {
       ],
     },
     {
+      condition: generator => generator.databaseTypeCouchbase,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
       condition: generator => generator.searchEngineElasticsearch,
       path: SERVER_TEST_SRC_DIR,
       templates: [

@@ -81,7 +81,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
             testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
             testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
-            testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getCouchbaseContainer().getBucketName());
+            testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getBucketName());
             testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
         }
 <%_ } _%>

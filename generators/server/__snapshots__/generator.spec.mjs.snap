@@ -1159,6 +1159,16 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
           "file": "package/config/EmbeddedElasticsearch.java",
           "renameTo": [Function],
         },

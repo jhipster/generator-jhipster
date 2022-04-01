@@ -144,7 +144,7 @@ spring:
     cassandra:
       compression: NONE
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
   couchbase:
     bucket:
       name: jhipster
