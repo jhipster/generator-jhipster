@@ -156,6 +156,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   check-dev-server:
+    permissions:
+      contents: none
     runs-on: ubuntu-latest
     needs: [applications]
     if: >-
