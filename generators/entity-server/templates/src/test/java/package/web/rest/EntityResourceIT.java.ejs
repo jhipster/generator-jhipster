@@ -655,7 +655,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(1)).save(test<%= entityClass %>);
+        verify(mock<%= entityClass %>SearchRepository, times(1)).index(test<%= entityClass %>);
   <%_ } _%>
     }
 
@@ -769,7 +769,7 @@ _%>
     <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository).save(<%= persistInstance %>);
+        verify(mock<%= entityClass %>SearchRepository).index(<%= persistInstance %>);
     <%_ } _%>
     }
   <%_ } _%>
@@ -1410,7 +1410,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository).save(test<%= entityClass %>);
+        verify(mock<%= entityClass %>SearchRepository).index(test<%= entityClass %>);
   <%_ } _%>
     }
 
@@ -1595,7 +1595,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
             // Validate the <%= entityClass %> in Elasticsearch
-            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+            verify(mock<%= entityClass %>SearchRepository, times(0)).index(<%= asEntity(entityInstance) %>);
   <%_ } _%>
     }
 
@@ -1632,7 +1632,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
             // Validate the <%= entityClass %> in Elasticsearch
-            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+            verify(mock<%= entityClass %>SearchRepository, times(0)).index(<%= asEntity(entityInstance) %>);
   <%_ } _%>
     }
 
