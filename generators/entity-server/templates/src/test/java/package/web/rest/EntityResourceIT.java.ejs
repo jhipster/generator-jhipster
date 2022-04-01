@@ -601,7 +601,7 @@ _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
   <%_ if (reactive && searchEngineElasticsearch) { _%>
         // Configure the mock search repository
-        when(mock<%= entityClass %>SearchRepository.save(any()))
+        when(mock<%= entityClass %>SearchRepository.index(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
   <%_ } _%>
   <%_ 
@@ -696,7 +696,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        verify(mock<%= entityClass %>SearchRepository, times(0)).index(<%= persistInstance %>);
   <%_ } _%>
     }
 
@@ -1340,7 +1340,7 @@ _%>
     void putNew<%= entityClass %>() throws Exception {
   <%_ if (reactive && searchEngineElasticsearch) { _%>
         // Configure the mock search repository
-        when(mock<%= entityClass %>SearchRepository.save(any()))
+        when(mock<%= entityClass %>SearchRepository.index(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
   <%_ } _%>
         // Initialize the database
@@ -1447,7 +1447,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        verify(mock<%= entityClass %>SearchRepository, times(0)).index(<%= persistInstance %>);
   <%_ } _%>
     }
 
@@ -1484,7 +1484,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        verify(mock<%= entityClass %>SearchRepository, times(0)).index(<%= persistInstance %>);
   <%_ } _%>
     }
 
@@ -1521,7 +1521,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        verify(mock<%= entityClass %>SearchRepository, times(0)).index(<%= persistInstance %>);
   <%_ } _%>
     }
 
@@ -1678,7 +1678,7 @@ _%>
   <%_ if (reactive && searchEngineElasticsearch) { _%>
         // Configure the mock search repository
     <%_ if (!serviceNo) { _%>
-        when(mock<%= entityClass %>SearchRepository.save(any()))
+        when(mock<%= entityClass %>SearchRepository.index(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
     <%_ } _%>
         when(mock<%= entityClass %>SearchRepository.deleteById(any<%= primaryKey.type %>())).thenReturn(Mono.empty());
@@ -1725,7 +1725,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         // Configure the mock search repository
     <%_ if (reactive) { _%>
-        when(mock<%= entityClass %>SearchRepository.save(any()))
+        when(mock<%= entityClass %>SearchRepository.index(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
       <%_ if (!paginationNo) { _%>
         when(mock<%= entityClass %>SearchRepository.count()).thenReturn(Mono.just(1L));
