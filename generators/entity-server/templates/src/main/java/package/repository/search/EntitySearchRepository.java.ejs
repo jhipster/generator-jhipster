@@ -19,7 +19,6 @@
 package <%= entityAbsolutePackage %>.repository.search;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 
 <%_ if (!paginationNo) { _%>
   <%_ if (!reactive) { _%>
@@ -117,11 +116,9 @@ interface <%= entityClass %>SearchRepositoryInternal {
 class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
 
     private final ElasticsearchRestTemplate elasticsearchTemplate;
-    private final <%= entityClass %>Repository repository;
 
-    <%= entityClass %>SearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate, <%= entityClass %>Repository repository) {
+    <%= entityClass %>SearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
         this.elasticsearchTemplate = elasticsearchTemplate;
-        this.repository = repository;
     }
 
   <%_ if (paginationNo) { _%>
@@ -159,7 +156,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     @Async
     @Transactional(propagation =  Propagation.REQUIRES_NEW, readOnly = true, isolation = Isolation.READ_COMMITTED)
     public void index(<%= persistClass %> entity) {
-        repository.find<% if (implementsEagerLoadApis ) { %>OneWithEagerRelationships<% } else { %>ById<% } %>(entity.getId()).ifPresent(elasticsearchTemplate::save);
+        elasticsearchTemplate.save(entity);
     }
 
 }
