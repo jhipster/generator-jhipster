@@ -26,7 +26,7 @@ const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { JWT, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { AUTHENTICATION_TYPE, BASE_NAME, BUILD_TOOL, PACKAGE_FOLDER, PACKAGE_NAME, REACTIVE } = OptionNames;
+const { REACTIVE } = OptionNames;
 
 module.exports = {
   writeFiles,
