@@ -332,6 +332,10 @@ Object {
           "file": "package/IntegrationTest.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/config/SpringBootTestClassOrderer.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1161,6 +1165,18 @@ Object {
         Object {
           "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
           "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+        Object {
+          "file": "testcontainers.properties",
         },
       ],
     },

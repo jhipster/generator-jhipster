@@ -37,7 +37,6 @@ import <%= packageName %>.repository.AuthorityRepository;
 import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= asDto('AdminUser') %>;
@@ -69,7 +68,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
@@ -174,8 +172,8 @@ class UserResourceIT {
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 
-    @SpyBean
-    private UserSearchRepository spiedUserSearchRepository;
+    @Autowired
+    private UserSearchRepository userSearchRepository;
 <%_ } _%>
 
     @Autowired
@@ -286,9 +284,6 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
-  <%_ } _%>
     void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -334,14 +329,16 @@ class UserResourceIT {
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         });
+  <%_ if (!databaseTypeSql) {_%>
+            userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+            userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-  <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
   <%_ } _%>
     void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
@@ -384,20 +381,22 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
-  <%_ } _%>
     void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(user);
+        userSearchRepository.save(user)<% if (reactive) { %>.block()<% } %>;
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -432,20 +431,22 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
-  <%_ } _%>
     void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(user);
+        userSearchRepository.save(user)<% if (reactive) { %>.block()<% } %>;
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -480,6 +481,11 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
@@ -530,14 +536,16 @@ class UserResourceIT {
     <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
   <%_ } _%>
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-  <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
   <%_ } _%>
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
@@ -550,7 +558,7 @@ class UserResourceIT {
   <%_ } _%>
 
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(user);
+        userSearchRepository.save(user);
   <%_ } _%>
   <%_ if (cacheManagerIsAvailable) { _%>
 
@@ -598,6 +606,11 @@ class UserResourceIT {
   <%_ } else if (cacheManagerIsAvailable) { _%>
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
   <%_ } _%>
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
@@ -618,9 +631,6 @@ class UserResourceIT {
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-  <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
   <%_ } _%>
     void updateUser() throws Exception {
         // Initialize the database
@@ -677,14 +687,16 @@ class UserResourceIT {
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
-  <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
   <%_ } _%>
     void updateUserLogin() throws Exception {
         // Initialize the database
@@ -742,20 +754,22 @@ class UserResourceIT {
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
-  <%_ } _%>
     void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(user);
+        userSearchRepository.save(user);
   <%_ } _%>
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -777,7 +791,7 @@ class UserResourceIT {
   <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(anotherUser);
+        userSearchRepository.save(anotherUser);
   <%_ } _%>
 
         // Update the user
@@ -816,20 +830,22 @@ class UserResourceIT {
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
+  <%_ } _%>
     }
 
     @Test
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-  <%_ if (!databaseTypeSql || searchEngineElasticsearch) {_%>
-    @DirtiesContext
-  <%_ } _%>
     void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(user);
+        userSearchRepository.save(user);
   <%_ } _%>
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -851,7 +867,7 @@ class UserResourceIT {
   <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        spiedUserSearchRepository.save(anotherUser);
+        userSearchRepository.save(anotherUser);
   <%_ } _%>
 
         // Update the user
@@ -889,6 +905,11 @@ class UserResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
+  <%_ } _%>
+  <%_ if (!databaseTypeSql) {_%>
+        userRepository.deleteAll();
+  <% } else if (searchEngineElasticsearch) { %>
+        userSearchRepository.deleteAll();
   <%_ } _%>
     }
 

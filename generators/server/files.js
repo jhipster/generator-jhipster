@@ -849,6 +849,10 @@ const baseServerFiles = {
           file: 'package/IntegrationTest.java',
           renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
         },
+        {
+          file: 'package/config/SpringBootTestClassOrderer.java',
+          renameTo: generator => `${generator.testDir}config/SpringBootTestClassOrderer.java`,
+        },
       ],
     },
     {
@@ -1744,6 +1748,18 @@ const baseServerFiles = {
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
           renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeCouchbase,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
         },
       ],
     },

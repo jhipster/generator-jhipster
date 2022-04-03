@@ -73,49 +73,49 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedCouchbase annotation on class {}", testClass.getName());
                 log.info("Warming up the Couchbase database");
                 if (null == couchbaseBean) {
-                couchbaseBean =  new CouchbaseTestContainer();
+                    couchbaseBean =  new CouchbaseTestContainer();
+                }
+                beanFactory.registerSingleton(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
+                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
+                beanFactory.initializeBean(couchbaseBean, CouchbaseTestContainer.class.getName().toLowerCase());
+                testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
+                testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
+                testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
+                testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getBucketName());
+                testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
             }
-            beanFactory.registerSingleton(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
-            ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
-            beanFactory.initializeBean(couchbaseBean, CouchbaseTestContainer.class.getName().toLowerCase());
-            testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
-            testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
-            testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
-            testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getBucketName());
-            testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
-        }
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-        EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
-        if (null != mongoAnnotation) {
-            log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
-            log.info("Warming up the mongo database");
-            if (null == mongoDbBean) {
-                mongoDbBean =  new MongoDbTestContainer();
+            EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
+            if (null != mongoAnnotation) {
+                log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
+                log.info("Warming up the mongo database");
+                if (null == mongoDbBean) {
+                    mongoDbBean =  new MongoDbTestContainer();
+                }
+                beanFactory.registerSingleton(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
+                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
+                beanFactory.initializeBean(mongoDbBean, MongoDbTestContainer.class.getName().toLowerCase());
+                testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
             }
-            beanFactory.registerSingleton(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
-            ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
-            beanFactory.initializeBean(mongoDbBean, MongoDbTestContainer.class.getName().toLowerCase());
-            testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
-        }
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-        EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
-        if (null != cassandraAnnotation) {
-            log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
-            log.info("Warming up the cassandra database");
-            if (null == cassandraBean) {
-                cassandraBean =  new CassandraTestContainer();
+            EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
+            if (null != cassandraAnnotation) {
+                log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
+                log.info("Warming up the cassandra database");
+                if (null == cassandraBean) {
+                    cassandraBean =  new CassandraTestContainer();
+                }
+                beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
+                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
+                beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
+                testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
+                    .and("spring.data.cassandra.contact-points=" +  cassandraBean.getCassandraContainer().getHost())
+                    .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
+                    .and("spring.data.cassandra.local-datacenter=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
+                    .and("spring.data.cassandra.cluster-name=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName());
             }
-            beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-            ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-            beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
-            testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
-                .and("spring.data.cassandra.contact-points=" +  cassandraBean.getCassandraContainer().getHost())
-                .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
-                .and("spring.data.cassandra.local-datacenter=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
-                .and("spring.data.cassandra.cluster-name=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName());
-        }
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
             EmbeddedKafka kafkaAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedKafka.class);
