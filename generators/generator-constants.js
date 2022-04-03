@@ -29,7 +29,7 @@ const JAVA_COMPATIBLE_VERSIONS = ['11', '12', '13', '14', '15', '16', '17', '18'
 // Version of Node, NPM
 const NODE_VERSION = '16.14.0';
 const NPM_VERSION = commonPackageJson.devDependencies.npm;
-const OPENAPI_GENERATOR_CLI_VERSION = '1.0.13-4.3.1';
+const OPENAPI_GENERATOR_CLI_VERSION = '2.4.26';
 
 const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 const JIB_VERSION = '3.2.1';
