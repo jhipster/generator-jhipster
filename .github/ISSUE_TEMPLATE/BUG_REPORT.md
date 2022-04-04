@@ -8,6 +8,8 @@ about: Report a problem with JHipster itself.
 - If you have a support request rather than a bug, please use [Stack Overflow](http://stackoverflow.com/questions/tagged/jhipster) with the JHipster tag.
 - For bug reports it is mandatory to run the command `jhipster info` in your project's root folder, and paste the result here.
 - Tickets opened without any of these pieces of information will be **closed** without any explanation.
+-
+- If this is a potential security issue, please read our security policy and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 -->
 
 ##### **Overview of the issue**
