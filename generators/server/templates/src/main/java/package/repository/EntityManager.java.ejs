@@ -33,6 +33,7 @@ import org.springframework.data.r2dbc.core.StatementMapper;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
 import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.sql.Condition;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.sql.Conditions;
 import org.springframework.data.relational.core.sql.OrderByField;
@@ -93,19 +94,11 @@ public class EntityManager {
      * @param pageable page parameter, or null, if everything needs to be returned
      * @return sql select statement
      */
-    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable, Criteria criteria) {
+    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable) {
         if (pageable != null) {
-            if (criteria != null) {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(Conditions.just(criteria.toString())), entityType, pageable.getSort());
-            } else {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
-            }
+            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
         } else {
-            if (criteria != null) {
-                return createSelectImpl(selectFrom.where(Conditions.just(criteria.toString())), entityType, null);
-            } else {
-                return createSelectImpl(selectFrom, entityType, null);
-            }
+            return createSelectImpl(selectFrom, entityType, null);
         }
     }
 
@@ -116,19 +109,19 @@ public class EntityManager {
      * @param pageable page parameter, or null, if everything needs to be returned
      * @return sql select statement
      */
-    public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Criteria criteria) {
+    public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
         if (pageable != null) {
-            if (criteria != null) {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(Conditions.just(criteria.toString())), entityType, pageable.getSort());
-            } else {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
-            }
+            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
         } else {
-            if (criteria != null) {
-                return createSelectImpl(selectFrom.where(Conditions.just(criteria.toString())), entityType, null);
-            } else {
-                return createSelectImpl(selectFrom, entityType, null);
-            }
+            return createSelectImpl(selectFrom.where(where), entityType, null);
+        }
+    }
+
+    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
+        if (pageable != null) {
+            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
+        } else {
+            return createSelectImpl(selectFrom.where(where), entityType, null);
         }
     }
 
