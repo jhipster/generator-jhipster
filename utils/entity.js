@@ -475,6 +475,8 @@ function loadRequiredConfigIntoEntity(entity, config) {
     authenticationType: config.authenticationType,
     reactive: config.reactive,
     microfrontend: config.microfrontend,
+    packageName: config.packageName,
+    packageFolder: config.packageFolder,
     // Workaround different paths
     clientFramework: config.clientFramework,
   });
