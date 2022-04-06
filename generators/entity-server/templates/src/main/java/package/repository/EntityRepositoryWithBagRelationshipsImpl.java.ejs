@@ -21,9 +21,11 @@ package <%= packageName %>.repository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.HashMap;
 <%_ if (fieldsContainUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
+import java.util.stream.IntStream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,7 +42,7 @@ import <%= packageName %>.domain.<%= persistClass %>;
 public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%= entityClass %>RepositoryWithBagRelationships {
     @PersistenceContext
     private EntityManager entityManager;
- 
+
     @Override
     public Optional<<%= persistClass %>> fetchBagRelationships(Optional<<%= persistClass %>> <%= entityInstance %>) {
         return <%= entityInstance %>
@@ -49,12 +51,12 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
 <%_ } _%>
         ;
     }
- 
+
     @Override
     public Page<<%= persistClass %>> fetchBagRelationships(Page<<%= persistClass %>> <%= entityInstancePlural %>) {
         return new PageImpl<>(fetchBagRelationships(<%= entityInstancePlural %>.getContent()), <%= entityInstancePlural %>.getPageable(), <%= entityInstancePlural %>.getTotalElements());
     }
- 
+
     @Override
     public List<<%= persistClass %>> fetchBagRelationships(List<<%= persistClass %>> <%= entityInstancePlural %>) {
         return Optional
@@ -78,7 +80,10 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
     }
 
     List<<%= persistClass %>> fetch<%= relationship.relationshipNameCapitalizedPlural %>(List<<%= persistClass %>> <%= entityInstancePlural %>) {
-        return entityManager
+        HashMap<Object, Integer> order = new HashMap<Object, Integer>();
+        IntStream.range(0, <%= entityInstancePlural %>.size())
+            .forEach(index -> order.put(<%= entityInstancePlural %>.get(index).get<%= primaryKey.nameCapitalized %>(), index));
+        List<<%= persistClass %>> result = entityManager
             .createQuery(
                 "select distinct <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %> in :<%= entityInstancePlural %>",
                 <%= persistClass %>.class
@@ -86,6 +91,8 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
             .setParameter("<%= entityInstancePlural %>", <%= entityInstancePlural %>)
             .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
+        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.get<%= primaryKey.nameCapitalized %>()), order.get(o2.get<%= primaryKey.nameCapitalized %>())));
+        return result;
     }
 <%_ } _%>
 }
