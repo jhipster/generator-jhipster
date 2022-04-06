@@ -143,19 +143,13 @@ public class EntityManager {
         }
     }
 
-    private String createSelectImpl(SelectOrdered selectFrom, Class<?> entityType, Sort sortParameter) {
-        if (sortParameter != null && sortParameter.isSorted()) {
-            RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
-            if (entity != null) {
-                Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-                selectFrom = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort));
-            }
-        }
-        return createSelect(selectFrom.build());
-    }
-
-    private RelationalPersistentEntity<?> getPersistentEntity(Class<?> entityType) {
-        return r2dbcEntityTemplate.getConverter().getMappingContext().getPersistentEntity(entityType);
+    /**
+     * Generate an actual SQL from the given {@link Select}.
+     * @param select a representation of a select statement.
+     * @return the generated SQL select.
+     */
+    public String createSelect(Select select) {
+        return sqlRenderer.render(select);
     }
 
     /**
@@ -175,15 +169,6 @@ public class EntityManager {
     public Mono<Integer> deleteAll(String tableName) {
         StatementMapper.DeleteSpec delete = statementMapper.createDelete(tableName);
         return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(delete)).fetch().rowsUpdated();
-    }
-
-    /**
-     * Generate an actual SQL from the given {@link Select}.
-     * @param select a representation of a select statement.
-     * @return the generated SQL select.
-     */
-    public String createSelect(Select select) {
-        return sqlRenderer.render(select);
     }
 
     /**
@@ -233,6 +218,21 @@ public class EntityManager {
         return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(deleteSpec)).then();
     }
 
+    private String createSelectImpl(SelectOrdered selectFrom, Class<?> entityType, Sort sortParameter) {
+        if (sortParameter != null && sortParameter.isSorted()) {
+            RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
+            if (entity != null) {
+                Sort sort = updateMapper.getMappedObject(sortParameter, entity);
+                selectFrom = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort));
+            }
+        }
+        return createSelect(selectFrom.build());
+    }
+
+    private RelationalPersistentEntity<?> getPersistentEntity(Class<?> entityType) {
+        return r2dbcEntityTemplate.getConverter().getMappingContext().getPersistentEntity(entityType);
+    }
+
     private static Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
 
         List<OrderByField> fields = new ArrayList<>();
@@ -247,5 +247,4 @@ public class EntityManager {
 
         return fields;
     }
-
 }
