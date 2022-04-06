@@ -56,6 +56,11 @@ import java.util.UUID;
 
 /**
  * Spring Data <%= officialDatabaseType %> repository for the <%= persistClass %> entity.
+<%_ if (containsBagRelationships && databaseTypeSql) { _%>
+ *
+ * When extending this class, extend <%= entityClass %>RepositoryWithBagRelationships too.
+ * For more information refer to https://github.com/jhipster/generator-jhipster/issues/17990.
+<%_ } _%>
  */
 <%_ if (!implementsEagerLoadApis) { _%>
 @SuppressWarnings("unused")
