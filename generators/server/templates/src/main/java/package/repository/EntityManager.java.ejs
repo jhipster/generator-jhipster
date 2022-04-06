@@ -111,17 +111,33 @@ public class EntityManager {
      */
     public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
         if (pageable != null) {
-            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+            if (where != null) {
+                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
+            } else {
+                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+            }
         } else {
-            return createSelectImpl(selectFrom.where(where), entityType, null);
+            if (where != null) {
+                return createSelectImpl(selectFrom.where(where), entityType, null);
+            } else {
+                return createSelectImpl(selectFrom, entityType, null);
+            }
         }
     }
 
     public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
         if (pageable != null) {
-            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
+            if (where != null) {
+                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
+            } else {
+                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+            }
         } else {
-            return createSelectImpl(selectFrom.where(where), entityType, null);
+            if (where != null) {
+                return createSelectImpl(selectFrom.where(where), entityType, null);
+            } else {
+                return createSelectImpl(selectFrom, entityType, null);
+            }
         }
     }
 
