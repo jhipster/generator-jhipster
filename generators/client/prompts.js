@@ -75,6 +75,7 @@ async function askForClient() {
   this.clientFramework = this.jhipsterConfig.clientFramework = answers.clientFramework;
   if (this.clientFramework === NO_CLIENT_FRAMEWORK) {
     this.skipClient = this.jhipsterConfig.skipClient = true;
+    this.cancelCancellableTasks();
   }
 }
 
