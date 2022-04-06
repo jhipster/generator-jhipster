@@ -91,30 +91,24 @@ public class EntityManager {
      * Creates an SQL select statement from the given fragment and pagination parameters.
      * @param selectFrom a representation of a select statement.
      * @param entityType the entity type which holds the table name.
-     * @param pageable page parameter, or null, if everything needs to be returned
+     * @param pageable page parameter, or null, if everything needs to be returned.
+     * @param where condition or null. The condition to apply as where clause.
      * @return sql select statement
      */
-    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable) {
-        if (pageable != null) {
-            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
-        } else {
-            return createSelectImpl(selectFrom, entityType, null);
-        }
-    }
-
-    /**
-     * Creates an SQL select statement from the given fragment and pagination parameters.
-     * @param selectFrom a representation of a select statement.
-     * @param entityType the entity type which holds the table name.
-     * @param pageable page parameter, or null, if everything needs to be returned
-     * @return sql select statement
-     */
-    public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
+    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
         if (pageable != null) {
             if (where != null) {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
+                return createSelectImpl(
+                    selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where),
+                    entityType,
+                    pageable.getSort()
+                );
             } else {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+                return createSelectImpl(
+                    selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()),
+                    entityType,
+                    pageable.getSort()
+                );
             }
         } else {
             if (where != null) {
@@ -125,7 +119,15 @@ public class EntityManager {
         }
     }
 
-    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
+    /**
+     * Creates an SQL select statement from the given fragment and pagination parameters.
+     * @param selectFrom a representation of a select statement.
+     * @param entityType the entity type which holds the table name.
+     * @param pageable page parameter, or null, if everything needs to be returned
+     * @param where condition or null. The condition to apply as where clause.
+     * @return sql select statement
+     */
+    public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
         if (pageable != null) {
             if (where != null) {
                 return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
