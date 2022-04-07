@@ -150,6 +150,7 @@ function askModulesToBeInstalled(done, generator) {
             .then(answers => {
               // [ {name: [moduleName], version:[version]}, ...]
               answers.otherModules.forEach(module => {
+                generator.otherModules = generator.otherModules || [];
                 generator.otherModules.push({ name: module.name, version: module.version });
               });
               generator.jhipsterConfig.otherModules = generator.otherModules;

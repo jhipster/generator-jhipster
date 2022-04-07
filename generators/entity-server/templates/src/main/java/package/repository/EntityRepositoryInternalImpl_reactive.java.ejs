@@ -86,7 +86,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= persistClass %> entity.
+ * <%= springDataDescription %> custom repository implementation for the <%= persistClass %> entity.
  */
 @SuppressWarnings("unused")
 class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%= persistClass %>, <%= primaryKey.type %>> implements <%= entityClass %>RepositoryInternal {
