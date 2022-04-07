@@ -48,42 +48,36 @@ application {
     skipClient: true
   }
 }
+@ReadOnly
 entity E {
-  readOnly: true
 }
 
 paginate * with pager except E
 
 ```
-the resulting (simplified) json object used by the generator (in the .jhipster forlder)
+the resulting (simplified) json object used by the generator
 
+`.yo-rc.json`:
 ```json
 {
-  "applications": [
-    {
-      "application": {
-        "config": {
-          "baseName": "a",
-          "generateClient": true // see the change, and as it is a reasonable default, we may not have to specify it
-        },
-        "entities": [
-          {
-            "entity": {
-              "config": {
-                "queryMethods": true, // reasonable default we may not have to specify it
-                "deleteMethods": false, // result of the readonly option
-                "saveMethods": false, // result of the readonly option
-                "generateEntityLayer": true, // another reasonable default, ... as it is a reasonable default we may not have to specify it
-                "paginate": false // end user choice
-              }
-            }
-          }
-        ]
-      }
-    }
-  ]
+  "generator-jhipster": {
+    "baseName": "a",
+    "generateClient": true // see the change, and as it is a reasonable default, we may not have to specify it
+  }
 }
-
+```
+`.jhipster/E.json`:
+```json
+{
+  "name": "E",
+  "config": {
+    "queryMethods": true, // reasonable default we may not have to specify it
+    "deleteMethods": false, // result of the readonly option
+    "saveMethods": false, // result of the readonly option
+    "generateEntityLayer": true, // another reasonable default, ... as it is a reasonable default we may not have to specify it
+     "paginate": false // end user choice
+  }
+}
 ```
 
 ## Drawbacks
