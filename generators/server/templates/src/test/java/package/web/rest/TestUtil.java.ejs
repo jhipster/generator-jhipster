@@ -54,6 +54,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.time.Duration;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -261,8 +262,8 @@ public final class TestUtil {
                     .next()
                     .switchIfEmpty(Mono.error(new NoSuchElementException()))
             )
-            .retry()
-            .timeout(Duration.ofMinutes(15))
+            .retryWhen(Retry.backoff(5, Duration.ofMinutes(1)))
+            .timeout(Duration.ofSeconds(30))
             .block();
     }
 
