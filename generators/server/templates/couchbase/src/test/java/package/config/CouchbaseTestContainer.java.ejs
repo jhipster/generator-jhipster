@@ -53,7 +53,7 @@ public class CouchbaseTestContainer implements InitializingBean, DisposableBean 
                 .withServiceQuota(CouchbaseService.SEARCH, 1024)
                 .withCredentials("user", "password")
                 .withLogConsumer(new Slf4jLogConsumer(log))
-                .withStartupTimeout(Duration.ofMinutes(10))
+                .withStartupTimeout(Duration.ofMinutes(15))
                 .withReuse(true);
         }
         if (!couchbaseContainer.isRunning()) {

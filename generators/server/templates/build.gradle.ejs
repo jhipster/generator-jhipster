@@ -428,7 +428,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:elasticsearch"
-    testImplementation "org.apache.commons:commons-collections4:4.4"
+    testImplementation "org.apache.commons:commons-collections4"
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
