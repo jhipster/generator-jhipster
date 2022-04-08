@@ -50,6 +50,9 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.repository.support.SimpleR2dbcRepository;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.sql.Column;
+import org.springframework.data.relational.core.sql.Comparison;
+import org.springframework.data.relational.core.sql.Condition;
+import org.springframework.data.relational.core.sql.Conditions;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %>;
@@ -83,7 +86,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= persistClass %> entity.
+ * <%= springDataDescription %> custom repository implementation for the <%= persistClass %> entity.
  */
 @SuppressWarnings("unused")
 class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%= persistClass %>, <%= primaryKey.type %>> implements <%= entityClass %>RepositoryInternal {
@@ -121,15 +124,10 @@ _%>
 
     @Override
     public Flux<<%= persistClass %>> findAllBy(Pageable pageable) {
-        return findAllBy(pageable, null);
+        return createQuery(pageable, null).all();
     }
 
-    @Override
-    public Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria) {
-        return createQuery(pageable, criteria).all();
-    }
-
-    RowsFetchSpec<<%= persistClass %>> createQuery(Pageable pageable, Criteria criteria) {
+    RowsFetchSpec<<%= persistClass %>> createQuery(Pageable pageable, Condition whereClause) {
         List<Expression> columns = <%= entityClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
@@ -138,19 +136,20 @@ _%>
 <%_ reactiveEagerRelations.forEach(function(rel) { _%>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("<%= rel.otherEntity.primaryKey.fields[0].columnName %>", <%= rel.relationshipName %>Table ))
 <%_ }); _%>;
-
-        String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, criteria);
+        // we do not support Criteria here for now as of https://github.com/jhipster/generator-jhipster/issues/18269
+        String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, whereClause);
         return db.sql(select).map(this::process);
     }
 
     @Override
     public Flux<<%= persistClass %>> findAll() {
-        return findAllBy(null, null);
+        return findAllBy(null);
     }
 
     @Override
     public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
-        return createQuery(null, where(EntityManager.ENTITY_ALIAS + ".<%= primaryKey.fields[0].columnName %>").is(id)).one();
+        Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));
+        return createQuery(null, whereClause).one();
     }
 
 <%_ if (implementsEagerLoadApis) { _%>
