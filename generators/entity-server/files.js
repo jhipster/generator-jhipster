@@ -37,7 +37,6 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -375,14 +374,7 @@ function writeFiles() {
     },
 
     cleanupOldServerFiles() {
-      entityServerCleanup.cleanupOldFiles(
-        this,
-        `${SERVER_MAIN_SRC_DIR}${this.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}${this.testDir}`,
-        SERVER_MAIN_RES_DIR,
-        SERVER_TEST_RES_DIR,
-        SERVER_TEST_SRC_DIR
-      );
+      entityServerCleanup.cleanupOldFiles(this, `${SERVER_MAIN_SRC_DIR}${this.javaDir}`, `${SERVER_TEST_SRC_DIR}${this.testDir}`);
     },
 
     writeServerFiles() {

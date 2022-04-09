@@ -36,7 +36,7 @@ public class CouchbaseTestContainer implements InitializingBean, DisposableBean 
     @Override
     public void destroy() {
         if (null != couchbaseContainer && couchbaseContainer.isRunning()) {
-            couchbaseContainer.stop();
+//            couchbaseContainer.stop();
         }
     }
 
@@ -49,12 +49,10 @@ public class CouchbaseTestContainer implements InitializingBean, DisposableBean 
         if (null == couchbaseContainer) {
             DockerImageName dockerImage = DockerImageName.parse("<%= DOCKER_COUCHBASE %>").asCompatibleSubstituteFor("couchbase/server");
             couchbaseContainer = new CouchbaseContainer(dockerImage)
-                .withBucket(new BucketDefinition(getBucketName()).withQuota(100))
-                .withServiceQuota(CouchbaseService.SEARCH, 256)
-                .withServiceQuota(CouchbaseService.INDEX, 256)
+                .withBucket(new BucketDefinition(getBucketName()))
                 .withCredentials("user", "password")
                 .withLogConsumer(new Slf4jLogConsumer(log))
-                .withStartupTimeout(Duration.ofMinutes(15))
+                .withStartupTimeout(Duration.ofMinutes(30))
                 .withReuse(true);
         }
         if (!couchbaseContainer.isRunning()) {

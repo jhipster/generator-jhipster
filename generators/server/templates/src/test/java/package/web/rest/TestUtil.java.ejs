@@ -256,14 +256,11 @@ public final class TestUtil {
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
     public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
-        Mono.defer(
-                () -> Mono.fromCallable(iterableCallable)
-                    .flatMapIterable(Function.identity())
-                    .next()
-                    .switchIfEmpty(Mono.error(new NoSuchElementException()))
-            )
-            .retryWhen(Retry.backoff(5, Duration.ofMinutes(1)))
-            .timeout(Duration.ofSeconds(30))
+        Mono.fromCallable(iterableCallable)
+            .flatMapIterable(Function.identity())
+            .next()
+            .switchIfEmpty(Mono.error(new NoSuchElementException()))
+            .retryWhen(Retry.fixedDelay(180, Duration.ofSeconds(2)))
             .block();
     }
 

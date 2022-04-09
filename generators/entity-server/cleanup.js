@@ -26,7 +26,7 @@
  * @param {string} mainResourceDir - Main resources directory
  * @param {string} testResourceDir - Test resources directory
  */
-function cleanupOldFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
+function cleanupOldFiles(generator, javaDir, testDir) {
   if (generator.isJhipsterVersionLessThan('7.6.1')) {
     if (generator.searchEngineElasticsearch) {
       generator.removeFile(`${javaDir}/repository/search/SortToFieldSortBuilderConverter.java`);
