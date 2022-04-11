@@ -65,10 +65,9 @@ class ClientForwardControllerTest {
 
     @Test
     void getNestedClientEndpoint() throws Exception {
-        restMockMvc.perform(get("/admin/user-management"))
-            .andExpect(status().isOk())
-            .andExpect(forwardedUrl("/"));
+        restMockMvc.perform(get("/admin/user-management")).andExpect(status().isNotFound());
     }
+    
     @Test
     void getUnmappedDottedEndpoint() throws Exception {
         restMockMvc.perform(get("/foo.js")).andExpect(status().isNotFound());
