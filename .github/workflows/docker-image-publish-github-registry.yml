@@ -67,7 +67,7 @@ jobs:
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v3.6.2
+        uses: docker/metadata-action@v3.7.0
         with:
           images: ghcr.io/${{ github.repository }}${{ (steps.login-hub.outcome == 'success' && ',jhipster/jhipster') || ''}}
 
