@@ -18,6 +18,8 @@
 -%>
 name: Generator
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   <%= baseName %>:
     name: npm-test
