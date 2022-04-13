@@ -17,7 +17,7 @@
       "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
       "entity": "sqlfull",
       "gradle": 1,
-      "testcontainers": "false"
+      "testcontainers": "true"
     },
     {
       "name": "react-gradle-cassandra-session-redis",
