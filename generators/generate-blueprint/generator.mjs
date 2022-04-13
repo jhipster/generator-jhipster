@@ -21,6 +21,7 @@ import lodash from 'lodash';
 import { readFile } from 'fs/promises';
 
 import BaseBlueprintGenerator from '../generator-base-blueprint.js';
+import { SKIP_COMMIT_HOOK } from '../init/constants.cjs';
 import {
   PRIORITY_PREFIX,
   INITIALIZING_PRIORITY,
@@ -74,6 +75,9 @@ export default class extends BaseBlueprintGenerator {
     if (this.options.defaults) {
       this.config.defaults(defaultConfig());
     }
+    this.config.defaults({
+      [SKIP_COMMIT_HOOK]: true,
+    });
   }
 
   /** @inheritdoc */
@@ -249,8 +253,8 @@ export default class extends BaseBlueprintGenerator {
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
             mocha: 'mocha generators --no-insight --forbid-only',
-            'prettier-format': 'prettier --write "{,**/}*.{js,cjs,mjs,json,md,yml}"',
-            pretest: 'npm run lint',
+            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,js,cjs,mjs,ts,tsx,css,scss,vue,java}"',
+            pretest: 'npm run prettier-check && npm run lint',
             test: 'npm run mocha --',
             'update-snapshot': 'npm run mocha -- --no-parallel --updateSnapshot',
           },
@@ -346,7 +350,7 @@ To begin to work:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}
 - link JHipster: ${chalk.yellow.bold('npm link generator-jhipster')}
-- test your module in a JHipster project: 
+- test your module in a JHipster project:
     - create a new directory and go into it
     - link the blueprint: ${chalk.yellow.bold(`npm link generator-jhipster-${this.moduleName}`)}
     - launch JHipster with flags: ${chalk.yellow.bold(`jhipster --blueprints ${this.moduleName}`)}
