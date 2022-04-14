@@ -51,6 +51,7 @@ public class CouchbaseTestContainer implements InitializingBean, DisposableBean 
             couchbaseContainer = new CouchbaseContainer(dockerImage)
                 .withBucket(new BucketDefinition(getBucketName()))
                 .withCredentials("user", "password")
+                .withServiceQuota(CouchbaseService.SEARCH, 1024)
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withStartupTimeout(Duration.ofMinutes(30))
                 .withReuse(true);
