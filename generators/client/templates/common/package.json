@@ -11,6 +11,6 @@
     "swagger-ui-dist": "4.10.3"
   },
   "dependencies": {
-    "dayjs": "1.11.0"
+    "dayjs": "1.11.1"
   }
 }
