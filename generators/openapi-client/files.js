@@ -26,7 +26,7 @@ const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { JWT, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const { AUTHENTICATION_TYPE, BASE_NAME, BUILD_TOOL, PACKAGE_FOLDER, PACKAGE_NAME, REACTIVE } = OptionNames;
+const { REACTIVE } = OptionNames;
 
 module.exports = {
   writeFiles,
@@ -45,12 +45,6 @@ function writeFiles() {
 function customizeFiles() {
   return {
     callOpenApiGenerator() {
-      this.baseName = this.config.get(BASE_NAME);
-      this.authenticationType = this.config.get(AUTHENTICATION_TYPE);
-      this.packageName = this.config.get(PACKAGE_NAME);
-      this.packageFolder = this.config.get(PACKAGE_FOLDER);
-      this.buildTool = this.config.get(BUILD_TOOL);
-
       if (Object.keys(this.clientsToGenerate).length === 0) {
         this.log('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
         return;
@@ -66,7 +60,7 @@ function customizeFiles() {
         const inputSpec = this.clientsToGenerate[cliName].spec;
         const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-        const openApiCmd = ['openapi-generator generate'];
+        const openApiCmd = ['openapi-generator-cli generate'];
         let openApiGeneratorName;
         let openApiGeneratorLibrary;
         const additionalParameters = [];
