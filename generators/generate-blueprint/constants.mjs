@@ -25,6 +25,7 @@ const prioritiesForSub = subGenerator => (subGenerator.startsWith('entit') ? ENT
 
 export const GENERATORS = 'generators';
 export const SUB_GENERATORS = 'subGenerators';
+export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
 export const DYNAMIC = 'dynamic';
 export const JS = 'js';
 
@@ -41,6 +42,11 @@ export const options = () => ({
   [SUB_GENERATORS]: {
     desc: 'Sub generators to generate',
     type: Array,
+    scope: 'storage',
+  },
+  [ADDITIONAL_SUB_GENERATORS]: {
+    desc: 'Comma separated additional sub generators to generate',
+    type: String,
     scope: 'storage',
   },
   [DYNAMIC]: {
@@ -73,6 +79,7 @@ export const defaultConfig = () => ({
   [DYNAMIC]: false,
   [JS]: false,
   [SUB_GENERATORS]: [],
+  [ADDITIONAL_SUB_GENERATORS]: '',
 });
 
 export const defaultSubGeneratorConfig = () => ({
@@ -91,6 +98,7 @@ const allSubGeneratorConfig = subGenerator => ({
 export const allGeneratorsConfig = () => ({
   ...requiredConfig,
   [SUB_GENERATORS]: Object.values(GENERATOR_LIST),
+  [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
   [JS]: false,
   [GENERATORS]: Object.fromEntries(
@@ -111,6 +119,17 @@ export const prompts = () => {
       loop: false,
     },
     {
+      type: 'input',
+      name: ADDITIONAL_SUB_GENERATORS,
+      message: 'Comma separated additional sub-generators.',
+      validate: input => {
+        if (input) {
+          return /^([\w,-]*)$/.test(input) ? true : 'Please provide valid generator names';
+        }
+        return true;
+      },
+    },
+    {
       type: 'confirm',
       name: 'cli',
       message: 'Add a cli?',
@@ -119,11 +138,12 @@ export const prompts = () => {
   ];
 };
 
-export const subGeneratorPrompts = subGenerator => {
+export const subGeneratorPrompts = (subGenerator, additionalSubGenerator) => {
   return [
     {
       type: 'confirm',
       name: SBS,
+      when: !additionalSubGenerator,
       message: `Is ${chalk.yellow(subGenerator)} generator a side-by-side blueprint?`,
       default: true,
     },
@@ -139,7 +159,7 @@ export const subGeneratorPrompts = subGenerator => {
       message: `What task do you want do implement at ${chalk.yellow(subGenerator)} generator?`,
       choices: prioritiesForSub(subGenerator),
       pageSize: 30,
-      default: answers => (answers.sbs ? [] : prioritiesForSub(subGenerator)),
+      default: answers => (answers.sbs || additionalSubGenerator ? [] : prioritiesForSub(subGenerator)),
       loop: false,
     },
   ];

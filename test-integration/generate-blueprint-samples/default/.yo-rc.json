@@ -1,5 +1,6 @@
 {
   "generator-jhipster": {
+    "additionalSubGenerators": "",
     "baseName": "foo",
     "cli": true,
     "generators": {
