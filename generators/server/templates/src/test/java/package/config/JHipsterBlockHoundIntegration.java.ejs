@@ -33,6 +33,9 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
 <%_} _%>
+<%_ if (searchEngineElasticsearch) { _%>
+        builder.allowBlockingCallsInside("org.springframework.data.elasticsearch.repository.support.SimpleReactiveElasticsearchRepository", "createIndexAndMappingIfNeeded");
+<%_} _%>
     }
 
 }
