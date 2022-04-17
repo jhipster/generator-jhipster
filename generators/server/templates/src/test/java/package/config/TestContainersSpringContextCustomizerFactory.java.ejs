@@ -73,11 +73,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedCouchbase annotation on class {}", testClass.getName());
                 log.info("Warming up the Couchbase database");
                 if (null == couchbaseBean) {
-                    couchbaseBean =  new CouchbaseTestContainer();
+                    couchbaseBean = beanFactory.createBean(CouchbaseTestContainer.class);
                 }
-                beanFactory.registerSingleton(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
-                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName().toLowerCase(), couchbaseBean);
-                beanFactory.initializeBean(couchbaseBean, CouchbaseTestContainer.class.getName().toLowerCase());
                 testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
                 testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
                 testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
@@ -91,11 +88,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
                 log.info("Warming up the mongo database");
                 if (null == mongoDbBean) {
-                    mongoDbBean =  new MongoDbTestContainer();
+                    mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
                 }
-                beanFactory.registerSingleton(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
-                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
-                beanFactory.initializeBean(mongoDbBean, MongoDbTestContainer.class.getName().toLowerCase());
                 testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
             }
 <%_ } _%>
@@ -105,11 +99,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
                 log.info("Warming up the cassandra database");
                 if (null == cassandraBean) {
-                    cassandraBean =  new CassandraTestContainer();
+                    cassandraBean = beanFactory.createBean(CassandraTestContainer.class);
                 }
-                beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-                beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
                 testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
                     .and("spring.data.cassandra.contact-points=" +  cassandraBean.getCassandraContainer().getHost())
                     .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
@@ -123,11 +114,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedKafka annotation on class {}", testClass.getName());
                 log.info("Warming up the kafka broker");
                 if (null == kafkaBean) {
-                    kafkaBean = new KafkaTestContainer();
+                    kafkaBean = beanFactory.createBean(KafkaTestContainer.class);
                 }
-                beanFactory.registerSingleton(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
-                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
-                beanFactory.initializeBean(kafkaBean, KafkaTestContainer.class.getName().toLowerCase());
                 testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getMappedPort(KafkaContainer.KAFKA_PORT));
             }
 <%_ } _%>
@@ -137,14 +125,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedElasticsearch annotation on class {}", testClass.getName());
                 log.info("Warming up the elastic database");
                 if (null == elasticsearchBean) {
-                    elasticsearchBean = new ElasticsearchTestContainer();
+                    elasticsearchBean = beanFactory.createBean(ElasticsearchTestContainer.class);
                 }
-                beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName().toLowerCase(), elasticsearchBean);
-                ((DefaultSingletonBeanRegistry) beanFactory).registerDisposableBean(
-                    ElasticsearchTestContainer.class.getName().toLowerCase(),
-                    elasticsearchBean
-                );
-                beanFactory.initializeBean(elasticsearchBean, ElasticsearchTestContainer.class.getName().toLowerCase());
                 testValues =
                     testValues.and(
                         "spring.elasticsearch.uris=http://" + elasticsearchBean.getElasticsearchContainer().getHttpHostAddress()

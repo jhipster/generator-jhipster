@@ -108,7 +108,7 @@ import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (searchEngineElasticsearch || implementsEagerLoadApis || cacheProviderRedis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
+<%_ if (implementsEagerLoadApis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -227,7 +227,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 @IntegrationTest
-<%_ if (cacheProviderRedis || searchEngineElasticsearch || implementsEagerLoadApis) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
 <%_ if (reactive) { _%>

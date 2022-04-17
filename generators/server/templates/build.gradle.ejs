@@ -122,7 +122,7 @@ test {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -143,10 +143,8 @@ modernizer {
 }
 
 task integrationTest(type: Test) {
-<%_ if (databaseTypeCouchbase) { _%>
     minHeapSize = "128m"
     maxHeapSize = "512m"
-<%_ } _%>
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"

@@ -41,7 +41,7 @@ public class ElasticsearchTestContainer implements InitializingBean, DisposableB
     @Override
     public void destroy() {
         if (null != elasticsearchContainer && elasticsearchContainer.isRunning()) {
-//            elasticsearchContainer.close();
+            elasticsearchContainer.close();
         }
     }
 

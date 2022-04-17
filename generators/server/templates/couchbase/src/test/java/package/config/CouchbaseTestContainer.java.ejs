@@ -36,7 +36,7 @@ public class CouchbaseTestContainer implements InitializingBean, DisposableBean 
     @Override
     public void destroy() {
         if (null != couchbaseContainer && couchbaseContainer.isRunning()) {
-//            couchbaseContainer.stop();
+            couchbaseContainer.stop();
         }
     }
 
