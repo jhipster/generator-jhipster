@@ -265,7 +265,7 @@ public final class TestUtil {
                 .switchIfEmpty(Mono.error(new NoSuchElementException()))
         )
         .retry()
-        .timeout(Duration.ofMinutes(6))
+        .timeout(Duration.ofMinutes(15))
         .block();
 
     }

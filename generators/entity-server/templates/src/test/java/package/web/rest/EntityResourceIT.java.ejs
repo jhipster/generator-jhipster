@@ -125,6 +125,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
 import org.springframework.http.MediaType;
+<%_ if (searchEngineCouchbase) { _%>
+import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Timeout;
+<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
@@ -1746,6 +1751,9 @@ _%>
 <%_ } _%>
 <%_ if (searchEngine) { _%>
 
+  <%_ if (searchEngineCouchbase) { _%>
+    @Timeout(value = 15, unit = TimeUnit.MINUTES)
+  <%_ } _%>
     @Test<%= transactionalAnnotation %>
     void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
