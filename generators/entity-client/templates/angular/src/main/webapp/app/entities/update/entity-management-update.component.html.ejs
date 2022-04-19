@@ -19,7 +19,7 @@
 <div class="d-flex justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
+            <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" data-cy="<%= entityClass %>CreateUpdateHeading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createOrEditLabel"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.createOrEditLabel') %></h2>
 
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
@@ -65,7 +65,7 @@ _%>
             <%_ } _%>
                         <div *ngIf="editForm.get('<%= fieldName %>')!.value" class="form-text text-danger clearfix">
             <%_ if (field.blobContentTypeAny) { _%>
-                            <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open">open</a><br>
+                            <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getEntityClientTranslation('entity.action.open') %></a><br>
                             <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
             <%_ } else { _%>
                             <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
@@ -111,7 +111,7 @@ _%>
         <%_ if (field.fieldValidationRequired) { _%>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">
-                        This field is required.
+                        <%- this._getEntityClientTranslation('entity.validation.required') %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMinLength) { _%>
@@ -147,13 +147,13 @@ _%>
         <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.number" <%= jhiPrefix %>Translate="entity.validation.number">
-                            This field should be a number.
+                            <%- this._getEntityClientTranslation('entity.validation.number') %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldTypeTimed) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.ZonedDateTimelocal" <%= jhiPrefix %>Translate="entity.validation.ZonedDateTimelocal">
-                            This field should be a date and time.
+                            <%- this._getEntityClientTranslation('entity.validation.ZonedDateTimelocal') %>
                         </small>
         <%_ } _%>
                     </div>
@@ -175,7 +175,7 @@ _%>
     <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide && relationship.otherEntityUser)) { _%>
 
                 <div class="row mb-3">
-                    <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                    <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%- this._getEntityClientTranslation(translationKey) %></label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipFieldName %>">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
@@ -188,7 +188,7 @@ _%>
     <%_ } else if (relationship.relationshipOneToOne && ownerSide) { _%>
 
                 <div class="row mb-3">
-                    <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                    <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%- this._getEntityClientTranslation(translationKey) %></label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>">
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
@@ -201,7 +201,7 @@ _%>
     <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
 
                 <div class="row mb-3">
-                    <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
+                    <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%- this._getEntityClientTranslation(translationKey) %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%= relationshipFieldNamePlural %>">
                         <option [ngValue]="getSelected<%= relationship.otherEntity.entityAngularName %>(<%= otherEntityName %>Option, editForm.get('<%= relationshipFieldNamePlural %>')!.value)" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection; trackBy: track<%= relationship.otherEntity.entityAngularName %>By<%= relationship.otherEntity.primaryKey.nameCapitalized %>">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
@@ -212,7 +212,7 @@ _%>
         <%_ if (relationshipRequired) { _%>
                     <small class="form-text text-danger"
                            *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">
-                        This field is required.
+                        <%- this._getEntityClientTranslation('entity.validation.required') %>
                     </small>
         <%_ } _%>
                 </div>
@@ -222,11 +222,11 @@ _%>
 
             <div>
                 <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel">Cancel</span>
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- this._getEntityClientTranslation('entity.action.cancel') %></span>
                 </button>
 
                 <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save">Save</span>
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save"><%- this._getEntityClientTranslation('entity.action.save') %></span>
                 </button>
             </div>
         </form>

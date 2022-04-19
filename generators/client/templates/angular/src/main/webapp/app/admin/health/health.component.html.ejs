@@ -18,10 +18,10 @@
 -%>
 <div>
   <h2>
-    <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading">Health Checks</span>
+    <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading"><%- this._getClientTranslation('health.title') %></span>
 
     <button class="btn btn-primary float-end" (click)="refresh()">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button">Refresh</span>
+      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button"><%- this._getClientTranslation('health.refresh.button') %></span>
     </button>
   </h2>
 
@@ -29,9 +29,9 @@
     <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
       <thead>
         <tr>
-          <th scope="col" <%= jhiPrefix %>Translate="health.table.service">Service Name</th>
-          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status">Status</th>
-          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details">Details</th>
+          <th scope="col" <%= jhiPrefix %>Translate="health.table.service"><%- this._getClientTranslation('health.table.service') %></th>
+          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status"><%- this._getClientTranslation('health.table.status') %></th>
+          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details"><%- this._getClientTranslation('health.details.details') %></th>
         </tr>
       </thead>
       <tbody *ngIf="health">

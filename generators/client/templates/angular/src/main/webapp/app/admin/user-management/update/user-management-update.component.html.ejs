@@ -19,18 +19,18 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="myUserLabel" <%= jhiPrefix %>Translate="userManagement.home.createOrEditLabel">Create or edit a User</h2>
+      <h2 id="myUserLabel" <%= jhiPrefix %>Translate="userManagement.home.createOrEditLabel"><%- this._getClientTranslation('userManagement.home.createOrEditLabel') %></h2>
 
       <div *ngIf="user">
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
         <div class="mb-3" [hidden]="!user.id">
-          <label <%= jhiPrefix %>Translate="global.field.id">ID</label>
+          <label <%= jhiPrefix %>Translate="global.field.id"><%- this._getClientTranslation('global.field.id') %></label>
           <input type="text" class="form-control" name="id" formControlName="id" readonly />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.login">Login</label>
+          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.login"><%- this._getClientTranslation('userManagement.login') %></label>
           <input type="text" class="form-control" name="login" formControlName="login" />
 
           <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
@@ -39,7 +39,7 @@
               *ngIf="editForm.get('login')?.errors?.required"
               <%= jhiPrefix %>Translate="entity.validation.required"
             >
-              This field is required.
+             <%- this._getClientTranslation('entity.validation.required') %>
             </small>
 
             <small
@@ -56,13 +56,13 @@
               *ngIf="editForm.get('login')?.errors?.pattern"
               <%= jhiPrefix %>Translate="entity.validation.patternLogin"
             >
-              This field can only contain letters, digits and e-mail addresses.
+              <%- this._getClientTranslation('entity.validation.patternLogin') %>
             </small>
           </div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.firstName">First Name</label>
+          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.firstName"><%- this._getClientTranslation('userManagement.firstName') %></label>
           <input type="text" class="form-control" name="firstName" formControlName="firstName" />
 
           <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
@@ -78,7 +78,7 @@
         </div>
 
         <div class="mb-3">
-          <label <%= jhiPrefix %>Translate="userManagement.lastName">Last Name</label>
+          <label <%= jhiPrefix %>Translate="userManagement.lastName"><%- this._getClientTranslation('userManagement.lastName') %></label>
           <input type="text" class="form-control" name="lastName" formControlName="lastName" />
 
           <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
@@ -94,7 +94,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.email">Email</label>
+          <label class="form-label" <%= jhiPrefix %>Translate="userManagement.email"><%- this._getClientTranslation('userManagement.email') %></label>
           <input type="email" class="form-control" name="email" formControlName="email" />
 
           <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
@@ -103,7 +103,7 @@
               *ngIf="editForm.get('email')?.errors?.required"
               <%= jhiPrefix %>Translate="entity.validation.required"
             >
-              This field is required.
+              <%- this._getClientTranslation('entity.validation.required') %>
             </small>
 
             <small
@@ -129,7 +129,7 @@
               *ngIf="editForm.get('email')?.errors?.email"
               <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
             >
-              Your email is invalid.
+             <%- this._getClientTranslation('global.messages.validate.email.invalid') %>
             </small>
           </div>
         </div>
@@ -144,13 +144,13 @@
               name="activated"
               formControlName="activated"
             />
-            <span <%= jhiPrefix %>Translate="userManagement.activated">Activated</span>
+            <span <%= jhiPrefix %>Translate="userManagement.activated"><%- this._getClientTranslation('userManagement.activated') %></span>
           </label>
         </div>
 <%_ if (enableTranslation) { _%>
 
         <div class="mb-3" *ngIf="languages && languages.length > 0">
-          <label <%= jhiPrefix %>Translate="userManagement.langKey">Lang Key</label>
+          <label <%= jhiPrefix %>Translate="userManagement.langKey"><%- this._getClientTranslation('userManagement.langKey') %></label>
           <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
             <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
           </select>
@@ -158,7 +158,7 @@
 <%_ } _%>
 
         <div class="mb-3">
-          <label <%= jhiPrefix %>Translate="userManagement.profiles">Profiles</label>
+          <label <%= jhiPrefix %>Translate="userManagement.profiles"><%- this._getClientTranslation('userManagement.profiles') %></label>
           <select class="form-control" multiple name="authority" formControlName="authorities">
             <option *ngFor="let authority of authorities" [value]="authority">{{ authority }}</option>
           </select>
@@ -167,11 +167,11 @@
 
       <div *ngIf="user">
         <button type="button" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel">Cancel</span>
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- this._getClientTranslation('entity.action.cancel') %></span>
         </button>
 
         <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-          <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save">Save</span>
+          <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save"><%- this._getClientTranslation('entity.action.save') %></span>
         </button>
       </div>
     </form>

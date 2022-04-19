@@ -18,7 +18,7 @@
 -%>
 <form *ngIf="user" name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
   <div class="modal-header">
-    <h4 class="modal-title" <%= jhiPrefix %>Translate="entity.delete.title">Confirm delete operation</h4>
+    <h4 class="modal-title" <%= jhiPrefix %>Translate="entity.delete.title"><%- this._getClientTranslation('entity.delete.title') %></h4>
 
     <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
   </div>
@@ -33,11 +33,11 @@
 
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-      <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel">Cancel</span>
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- this._getClientTranslation('entity.action.cancel') %></span>
     </button>
 
     <button type="submit" class="btn btn-danger">
-      <fa-icon icon="times"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
+      <fa-icon icon="times"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.delete"><%- this._getClientTranslation('entity.action.delete') %></span>
     </button>
   </div>
 </form>
