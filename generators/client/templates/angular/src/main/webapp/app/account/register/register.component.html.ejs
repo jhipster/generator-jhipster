@@ -47,7 +47,7 @@
     <div class="col-md-8">
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
         <div class="mb-3">
-          <label class="form-label" for="login" <%= jhiPrefix %>Translate="global.form.username.label"><%- this._getClientTranslation('global.form.username.label') %></label>
+          <label class="form-label" for="login" <%= jhiPrefix %>Translate="global.form.username.label"><%- this._getClientTranslation('global.form["username.label"]') %></label>
           <input
             type="text"
             class="form-control"
@@ -95,7 +95,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label"><%- this._getClientTranslation('global.form.email.label') %></label>
+          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label"><%- this._getClientTranslation('global.form["email.label"]') %></label>
           <input
             type="email"
             class="form-control"
@@ -142,7 +142,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="password" <%= jhiPrefix %>Translate="global.form.newpassword.label"><%- this._getClientTranslation('global.form.newpassword.label') %></label>
+          <label class="form-label" for="password" <%= jhiPrefix %>Translate="global.form.newpassword.label"><%- this._getClientTranslation('global.form["newpassword.label"]') %></label>
           <input
             type="password"
             class="form-control"
@@ -188,7 +188,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="confirmPassword" <%= jhiPrefix %>Translate="global.form.confirmpassword.label"><%- this._getClientTranslation('global.form.confirmpassword.label') %></label>
+          <label class="form-label" for="confirmPassword" <%= jhiPrefix %>Translate="global.form.confirmpassword.label"><%- this._getClientTranslation('global.form["confirmpassword.label"]') %></label>
           <input
             type="password"
             class="form-control"

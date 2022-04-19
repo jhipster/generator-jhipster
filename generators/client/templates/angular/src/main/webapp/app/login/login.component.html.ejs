@@ -30,7 +30,7 @@
       </div>
       <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
         <div class="mb-3">
-          <label class="username-label" for="username" <%= jhiPrefix %>Translate="global.form.username.label"><%- this._getClientTranslation('global.form.username.label') %></label>
+          <label class="username-label" for="username" <%= jhiPrefix %>Translate="global.form.username.label"><%- this._getClientTranslation('global.form["username.label"]') %></label>
           <input
             type="text"
             class="form-control"
