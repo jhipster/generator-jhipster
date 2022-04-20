@@ -19,6 +19,7 @@
 <div class="table-responsive" *ngIf="loggers">
   <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading"><%- this._getClientTranslation('logs.title') %></h2>
 
+  <!-- TODO: 15964 Translate values -->
   <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }">There are {{ loggers.length }} loggers.</p>
 
   <span <%= jhiPrefix %>Translate="logs.filter"><%- this._getClientTranslation('logs.filter') %></span>

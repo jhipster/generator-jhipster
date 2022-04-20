@@ -26,7 +26,7 @@
 
     <div class="modal-body">
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-
+        <!-- TODO: 15964 Translate values -->
         <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.delete.question" [translateValues]="{ id: <%= entityInstance %>.<%= primaryKey.name %> }">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
     </div>
 

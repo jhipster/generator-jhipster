@@ -48,6 +48,7 @@
 _%>
 
                 <div class="row mb-3"<% if (field.autoGenerate) { %> [hidden]="editForm.get('<%= primaryKey.name %>')!.value == null"<% } %>>
+                    <!-- TODO: 15964 Incomprehensible expression -->
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -79,6 +80,7 @@ _%>
                                 <fa-icon icon="times"></fa-icon>
                             </button>
                         </div>
+                        <!-- TODO: 15964 Incomprehensible expression -->
                         <input type="file" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" (change)="setFileData($event, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" <%= jhiPrefix %>Translate="entity.action.addimage"<% } else { %>false)" <%= jhiPrefix %>Translate="entity.action.addblob"<% } %>/>
                     </div>
         <%_ } _%>
@@ -115,30 +117,35 @@ _%>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMinLength) { _%>
+                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.minlength" <%= jhiPrefix %>Translate="entity.validation.minlength" [translateValues]="{ min: <%= field.fieldValidateRulesMinlength %> }">
                         This field is required to be at least <%= field.fieldValidateRulesMinlength %> characters.
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMaxLength) { _%>
+                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxlength" <%= jhiPrefix %>Translate="entity.validation.maxlength" [translateValues]="{ max: <%= field.fieldValidateRulesMaxlength %> }">
                         This field cannot be longer than <%= field.fieldValidateRulesMaxlength %> characters.
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMin) { _%>
+                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.min" <%= jhiPrefix %>Translate="entity.validation.min" [translateValues]="{ min: <%= field.fieldValidateRulesMin %> }">
                             This field should be at least <%= field.fieldValidateRulesMin %>.
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMax) { _%>
+                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.max" <%= jhiPrefix %>Translate="entity.validation.max" [translateValues]="{ max: <%= field.fieldValidateRulesMax %> }">
                             This field cannot be more than <%= field.fieldValidateRulesMax %>.
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationPattern) { _%>
+                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.pattern" <%= jhiPrefix %>Translate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">
                             This field should follow pattern for "<%= fieldNameHumanized %>".

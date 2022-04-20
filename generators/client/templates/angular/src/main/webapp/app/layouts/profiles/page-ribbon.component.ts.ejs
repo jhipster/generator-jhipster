@@ -26,6 +26,7 @@ import { ProfileService } from './profile.service';
   selector: '<%= jhiPrefixDashed %>-page-ribbon',
   template: `
     <div class="ribbon" *ngIf="ribbonEnv$ | async as ribbonEnv">
+      <!-- TODO: 15964 Dynamic key -->
       <a href=""<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="global.ribbon.{{ ribbonEnv }}"<% } %>>{{ ribbonEnv }}</a>
     </div>
   `,

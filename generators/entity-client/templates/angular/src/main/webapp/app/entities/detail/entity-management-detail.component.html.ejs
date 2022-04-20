@@ -32,9 +32,11 @@
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
+                <!-- TODO: 15964  Incomprehensible expression -->
                 <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= field.fieldNameHumanized %></span></dt>
                 <dd>
     <%_ if (field.fieldIsEnum) { _%>
+                    <!-- TODO: 15964 Dynamic key -->
                     <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
