@@ -216,4 +216,11 @@ module.exports = class extends BaseBlueprintGenerator {
   _getEntityClientTranslation(translationKey) {
     return _.get(this.entityClientTranslations, translationKey, `Translation missing for ${translationKey}`);
   }
+
+  /**
+   * TODO: 15964 Implement clientTranslation
+   */
+  _getClientTranslation(translationKey) {
+      return "TODO Implement clientTranslation";
+    }
 };

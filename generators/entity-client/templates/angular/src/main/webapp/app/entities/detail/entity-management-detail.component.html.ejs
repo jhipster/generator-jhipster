@@ -45,7 +45,7 @@ _%>
                     </div>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
-                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getEntityClientTranslation('entity.action.open') %></a>
+                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getClientTranslation('entity.action.open') %></a>
                         {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
                     </div>
     <%_ } else if (field.fieldTypeDuration) { _%>
@@ -102,14 +102,14 @@ _%>
                     (click)="previousState()"
                     class="btn btn-info"
                     data-cy="entityDetailsBackButton">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- this._getEntityClientTranslation('entity.action.back') %></span>
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back"><%- this._getClientTranslation('entity.action.back') %></span>
             </button>
 <%_ if (!readOnly) { _%>
 
             <button type="button"
                     [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
                     class="btn btn-primary">
-                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit"><%- this._getEntityClientTranslation('entity.action.edit') %></span>
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit"><%- this._getClientTranslation('entity.action.edit') %></span>
             </button>
 <%_ } _%>
         </div>

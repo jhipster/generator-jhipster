@@ -54,7 +54,7 @@ _%>
         <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
         <%_ const values = field.enumValues;
-            const enumImports = generateEntityClientEnumImports(fields); _%> 
+            const enumImports = generateEntityClientEnumImports(fields); _%>
                         <option *ngFor="let <%= _.lowerFirst(fieldType) %> of <%- _.lowerFirst(fieldType) %>Values" [value]="<%= _.lowerFirst(fieldType) %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.' + <%= _.lowerFirst(fieldType) %> | translate }}<% } else { %><%= _.lowerFirst(fieldType) %><% } %></option>
                     </select>
     <%_ } else { _%>
@@ -65,7 +65,7 @@ _%>
             <%_ } _%>
                         <div *ngIf="editForm.get('<%= fieldName %>')!.value" class="form-text text-danger clearfix">
             <%_ if (field.blobContentTypeAny) { _%>
-                            <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getEntityClientTranslation('entity.action.open') %></a><br>
+                            <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value, editForm.get('<%= fieldName %>ContentType')!.value)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getClientTranslation('entity.action.open') %></a><br>
                             <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
             <%_ } else { _%>
                             <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value) }}</span>
@@ -111,7 +111,7 @@ _%>
         <%_ if (field.fieldValidationRequired) { _%>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">
-                        <%- this._getEntityClientTranslation('entity.validation.required') %>
+                        <%- this._getClientTranslation('entity.validation.required') %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMinLength) { _%>
@@ -147,13 +147,13 @@ _%>
         <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.number" <%= jhiPrefix %>Translate="entity.validation.number">
-                            <%- this._getEntityClientTranslation('entity.validation.number') %>
+                            <%- this._getClientTranslation('entity.validation.number') %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldTypeTimed) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.ZonedDateTimelocal" <%= jhiPrefix %>Translate="entity.validation.ZonedDateTimelocal">
-                            <%- this._getEntityClientTranslation('entity.validation.ZonedDateTimelocal') %>
+                            <%- this._getClientTranslation('entity.validation.ZonedDateTimelocal') %>
                         </small>
         <%_ } _%>
                     </div>
@@ -212,7 +212,7 @@ _%>
         <%_ if (relationshipRequired) { _%>
                     <small class="form-text text-danger"
                            *ngIf="editForm.get([<%- buildAngularFormPath(relationship.reference) %>])?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">
-                        <%- this._getEntityClientTranslation('entity.validation.required') %>
+                        <%- this._getClientTranslation('entity.validation.required') %>
                     </small>
         <%_ } _%>
                 </div>
@@ -222,11 +222,11 @@ _%>
 
             <div>
                 <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- this._getEntityClientTranslation('entity.action.cancel') %></span>
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel"><%- this._getClientTranslation('entity.action.cancel') %></span>
                 </button>
 
                 <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save"><%- this._getEntityClientTranslation('entity.action.save') %></span>
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save"><%- this._getClientTranslation('entity.action.save') %></span>
                 </button>
             </div>
         </form>
