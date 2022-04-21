@@ -493,8 +493,16 @@ module.exports = class JHipsterClientGenerator extends BaseBlueprintGenerator {
   /**
    * @experimental
    * Get translation value for a key.
+   *
+   * @param translationKey {string} - key to be translated
+   * @param [data] {object} - template data in case translated value is a template
    */
-  _getClientTranslation(translationKey) {
-    return _.get(this.clientTranslations, translationKey, `Translation missing for ${translationKey}`);
+  _getClientTranslation(translationKey, data) {
+    const translatedValue = _.get(this.clientTranslations, translationKey, `Translation missing for ${translationKey}`);
+    if (!data) {
+      return translatedValue;
+    }
+    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    return compiledTemplate(data);
   }
 };
