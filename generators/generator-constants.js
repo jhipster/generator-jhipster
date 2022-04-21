@@ -42,7 +42,7 @@ const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.6.8.Final';
 
-const JACOCO_VERSION = '0.8.7';
+const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '5.5.7';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 
