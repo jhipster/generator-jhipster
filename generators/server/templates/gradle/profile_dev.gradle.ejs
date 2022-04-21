@@ -16,12 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 <%_ if (devDatabaseTypeH2Disk || devDatabaseTypeH2Memory) { _%>
+dependencies {
     implementation "com.h2database:h2"
-<%_ } _%>
 }
+<%_ } _%>
 
 def profiles = "dev"
 if (project.hasProperty("no-liquibase")) {
