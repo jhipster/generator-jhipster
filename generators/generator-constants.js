@@ -35,14 +35,14 @@ const GRADLE_VERSION = gradleOptions.GRADLE_VERSION;
 const JIB_VERSION = '3.2.1';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '7.8.1';
+const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.6.6';
+const SPRING_BOOT_VERSION = '2.6.7';
 const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
-const HIBERNATE_VERSION = '5.6.7.Final';
+const HIBERNATE_VERSION = '5.6.8.Final';
 
-const JACOCO_VERSION = '0.8.7';
+const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '5.5.7';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 
