@@ -391,7 +391,7 @@ eureka:
       - SPRING_DATA_MONGODB_DATABASE=msmongodb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmongodb-mongodb:
-    image: mongo:4.4.11
+    image: mongo:4.4.13
 
   msmariadb:
     image: msmariadb
@@ -401,7 +401,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.7.1
+    image: mariadb:10.7.3
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -561,10 +561,10 @@ eureka:
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   msmongodb-mongodb-config:
-    image: mongo:4.4.11
+    image: mongo:4.4.13
     command: mongod --configsvr --dbpath /data/db --replSet csvr
   msmongodb-mongodb:
-    image: mongo:4.4.11
+    image: mongo:4.4.13
     command: mongos --configdb csvr/msmongodb-mongodb-config --bind_ip 0.0.0.0
 
   jhipster-registry:
@@ -739,7 +739,7 @@ eureka:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
       - JHIPSTER_REGISTRY_PASSWORD=admin
   msmariadb-mariadb:
-    image: mariadb:10.7.1
+    image: mariadb:10.7.3
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1151,7 +1151,7 @@ eureka:
       - 8761:8761
 
   prometheus:
-    image: prom/prometheus:v2.33.3
+    image: prom/prometheus:v2.35.0
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -1160,7 +1160,7 @@ eureka:
     ports:
       - 9090:9090
   alertmanager:
-    image: prom/alertmanager:v0.23.0
+    image: prom/alertmanager:v0.24.0
     ports:
       - 9093:9093
     volumes:
@@ -1170,7 +1170,7 @@ eureka:
       - \\"--storage.path=/alertmanager\\"
 
   grafana:
-    image: grafana/grafana:8.4.1
+    image: grafana/grafana:8.5.0
     ports:
       - 3000:3000
     volumes:
