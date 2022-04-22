@@ -26,9 +26,8 @@
   <div class="modal-body">
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-    <!-- TODO: 15964 Translate values -->
     <p <%= jhiPrefix %>Translate="userManagement.delete.question" [translateValues]="{ login: user.login }">
-      Are you sure you want to delete this User?
+      <%- this._getClientTranslation('userManagement.delete.question', { login: '{{ user.login }}' }) %>
     </p>
   </div>
 

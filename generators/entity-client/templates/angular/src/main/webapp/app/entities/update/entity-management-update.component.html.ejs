@@ -117,38 +117,33 @@ _%>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMinLength) { _%>
-                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.minlength" <%= jhiPrefix %>Translate="entity.validation.minlength" [translateValues]="{ min: <%= field.fieldValidateRulesMinlength %> }">
-                        This field is required to be at least <%= field.fieldValidateRulesMinlength %> characters.
+                        <%- this._getClientTranslation('entity.validation.minlength', { min: field.fieldValidateRulesMinlength }) %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMaxLength) { _%>
-                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxlength" <%= jhiPrefix %>Translate="entity.validation.maxlength" [translateValues]="{ max: <%= field.fieldValidateRulesMaxlength %> }">
-                        This field cannot be longer than <%= field.fieldValidateRulesMaxlength %> characters.
+                        <%- this._getClientTranslation('entity.validation.maxlength', { max: field.fieldValidateRulesMaxlength }) %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMin) { _%>
-                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.min" <%= jhiPrefix %>Translate="entity.validation.min" [translateValues]="{ min: <%= field.fieldValidateRulesMin %> }">
-                            This field should be at least <%= field.fieldValidateRulesMin %>.
+                            <%- this._getClientTranslation('entity.validation.min', { min: field.fieldValidateRulesMin }) %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationMax) { _%>
-                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.max" <%= jhiPrefix %>Translate="entity.validation.max" [translateValues]="{ max: <%= field.fieldValidateRulesMax %> }">
-                            This field cannot be more than <%= field.fieldValidateRulesMax %>.
+                            <%- this._getClientTranslation('entity.validation.max', { max: field.fieldValidateRulesMax }) %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldValidationPattern) { _%>
-                        <!-- TODO: 15964 Translate values -->
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('<%= fieldName %>')?.errors?.pattern" <%= jhiPrefix %>Translate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">
-                            This field should follow pattern for "<%= fieldNameHumanized %>".
+                            <%- this._getClientTranslation('entity.validation.pattern', { pattern: fieldNameHumanized }) %>
                         </small>
         <%_ } _%>
         <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>

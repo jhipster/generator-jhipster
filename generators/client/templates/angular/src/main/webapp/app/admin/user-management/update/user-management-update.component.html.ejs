@@ -42,14 +42,13 @@
              <%- this._getClientTranslation('entity.validation.required') %>
             </small>
 
-            <!-- TODO: 15964 Translate values -->
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('login')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="entity.validation.maxlength"
               [translateValues]="{ max: 50 }"
             >
-              This field cannot be longer than 50 characters.
+              <%- this._getClientTranslation('entity.validation.maxlength', { max: '50' }) %>
             </small>
 
             <small
@@ -67,14 +66,13 @@
           <input type="text" class="form-control" name="firstName" formControlName="firstName" />
 
           <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
-            <!-- TODO: 15964 Translate values -->
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('firstName')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="entity.validation.maxlength"
               [translateValues]="{ max: 50 }"
             >
-              This field cannot be longer than 50 characters.
+              <%- this._getClientTranslation('entity.validation.maxlength', { max: '50' }) %>
             </small>
           </div>
         </div>
@@ -84,14 +82,13 @@
           <input type="text" class="form-control" name="lastName" formControlName="lastName" />
 
           <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
-            <!-- TODO: 15964 Translate values -->
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('lastName')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="entity.validation.maxlength"
               [translateValues]="{ max: 50 }"
             >
-              This field cannot be longer than 50 characters.
+              <%- this._getClientTranslation('entity.validation.maxlength', { max: '50' }) %>
             </small>
           </div>
         </div>
@@ -109,24 +106,22 @@
               <%- this._getClientTranslation('entity.validation.required') %>
             </small>
 
-            <!-- TODO: 15964 Translate values -->
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('email')?.errors?.maxlength"
               <%= jhiPrefix %>Translate="entity.validation.maxlength"
               [translateValues]="{ max: 100 }"
             >
-              This field cannot be longer than 100 characters.
+              <%- this._getClientTranslation('entity.validation.maxlength', { max: '100' }) %>
             </small>
 
-            <!-- TODO: 15964 Translate values -->
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('email')?.errors?.minlength"
               <%= jhiPrefix %>Translate="entity.validation.minlength"
               [translateValues]="{ min: 5 }"
             >
-              This field is required to be at least 5 characters.
+              <%- this._getClientTranslation('entity.validation.minlength', { min: '5' }) %>
             </small>
 
             <small

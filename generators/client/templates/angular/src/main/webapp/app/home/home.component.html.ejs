@@ -28,9 +28,8 @@
 
     <div [ngSwitch]="account !== null">
       <div class="alert alert-success" *ngSwitchCase="true">
-        <!-- TODO: 15964 Translate values -->
         <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
-          [translateValues]="{ username: account.login }">You are logged in as user "{{ account.login }}".</span>
+          [translateValues]="{ username: account.login }"><%- this._getClientTranslation('home.logged.message', { username: '{{ account.login }}' }) %></span>
       </div>
 
       <div class="alert alert-warning" *ngSwitchCase="false">

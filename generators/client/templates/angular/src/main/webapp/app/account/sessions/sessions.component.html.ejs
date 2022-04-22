@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 <div>
-  <!-- TODO: 15964 Translate values -->
-  <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account">Active sessions for [<strong>{{ account.login }}</strong>]</h2>
+  <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account"><%- this._getClientTranslation('sessions.title', { username: '{{ account.login }}' }) %></h2>
 
   <div class="alert alert-success" *ngIf="success" <%= jhiPrefix %>Translate="sessions.messages.success">
     <%- this._getClientTranslation('sessions.messages.success') %>
