@@ -25,6 +25,7 @@ const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRI
 
 const { writeFiles, addToMenu, replaceTranslations } = require('./files');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
+const { clientI18nFiles } = require('../languages/files');
 
 const utils = require('../utils');
 const {
@@ -52,6 +53,16 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       async loadNativeLanguage() {
         await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
+
+        const context = {};
+        this.loadAppConfig(undefined, context);
+        this.loadDerivedAppConfig(context);
+        this.loadClientConfig(undefined, context);
+        this.loadDerivedClientConfig(context);
+        this.loadServerConfig(undefined, context);
+        this.loadPlatformConfig(undefined, context);
+        this.loadTranslationConfig(undefined, context);
+        await this._loadClientTranslations(context);
       },
       async prepareReact() {
         const entity = this.entity;
@@ -212,15 +223,77 @@ module.exports = class extends BaseBlueprintGenerator {
   /**
    * @experimental
    * Get translation value for a key.
+   *
+   * @param translationKey {string} - key to be translated
+   * @param [data] {object} - template data in case translated value is a template
    */
-  _getEntityClientTranslation(translationKey) {
-    return _.get(this.entityClientTranslations, translationKey, `Translation missing for ${translationKey}`);
+  _getEntityClientTranslation(translationKey, data) {
+    const translatedValue = _.get(this.entityClientTranslations, translationKey, `Translation missing for ${translationKey}`);
+    if (!data) {
+      return translatedValue;
+    }
+    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    return compiledTemplate(data);
   }
 
   /**
-   * TODO: 15964 Implement clientTranslation
+   * @experimental
+   * Load client native translation.
    */
-  _getClientTranslation(translationKey) {
-      return "TODO Implement clientTranslation";
+  async _loadClientTranslations(configContext = this) {
+    if (this.configOptions.clientTranslations) {
+      this.clientTranslations = this.configOptions.clientTranslations;
+      return;
     }
+    const { nativeLanguage } = configContext;
+    this.clientTranslations = this.configOptions.clientTranslations = {};
+    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates/');
+
+    // Prepare and load en translation
+    const translationFiles = await this.writeFiles({
+      sections: clientI18nFiles,
+      rootTemplatesPath,
+      context: {
+        ...configContext,
+        lang: 'en',
+        clientSrcDir: '__tmp__',
+      },
+    });
+
+    // Prepare and load native translation
+    configContext.lang = configContext.nativeLanguage;
+    if (nativeLanguage && nativeLanguage !== 'en') {
+      translationFiles.push(
+        ...(await this.writeFiles({
+          sections: clientI18nFiles,
+          rootTemplatesPath,
+          context: {
+            ...configContext,
+            lang: configContext.nativeLanguage,
+            clientSrcDir: '__tmp__',
+          },
+        }))
+      );
+    }
+    for (const translationFile of translationFiles) {
+      _.merge(this.clientTranslations, this.readDestinationJSON(translationFile));
+      delete this.env.sharedFs.get(translationFile).state;
+    }
+  }
+
+  /**
+   * @experimental
+   * Get translation value for a key.
+   *
+   * @param translationKey {string} - key to be translated
+   * @param [data] {object} - template data in case translated value is a template
+   */
+  _getClientTranslation(translationKey, data) {
+    const translatedValue = _.get(this.clientTranslations, translationKey, `Translation missing for ${translationKey}`);
+    if (!data) {
+      return translatedValue;
+    }
+    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    return compiledTemplate(data);
+  }
 };
