@@ -99,13 +99,16 @@ import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ if (jpaMetamodelFiltering) { _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
-
+<%_ if (searchEngineElasticsearch) { _%>
+import org.assertj.core.util.IterableUtil;
+import org.apache.commons.collections4.IterableUtils;
+<%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (searchEngineElasticsearch || implementsEagerLoadApis || cacheProviderRedis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
+<%_ if (implementsEagerLoadApis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -118,9 +121,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
 import org.springframework.http.MediaType;
+<%_ if (searchEngineCouchbase) { _%>
+import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Timeout;
+<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.TestSecurityContextHolder;
@@ -131,9 +140,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (fieldsContainBlob) { _%>
 import org.springframework.util.Base64Utils;
@@ -223,7 +232,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 @IntegrationTest
-<%_ if (cacheProviderRedis || searchEngineElasticsearch || implementsEagerLoadApis) { _%>
+<%_ if (implementsEagerLoadApis) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -446,13 +455,8 @@ if (field.fieldTypeString || field.blobContentTypeText) {
   <%_ } _%>
 <%_ } if (searchEngineElasticsearch) { _%>
 
-    /**
-     * This repository is mocked in the <%= entityAbsolutePackage %>.repository.search test package.
-     *
-     * @see <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepositoryMockConfiguration
-     */
     @Autowired
-    private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 
@@ -592,6 +596,9 @@ _%>
 <%_ } else if (databaseTypeSql && reactive) {  _%>
         deleteEntities(em);
 <%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+        <%= entityInstance %>SearchRepository.deleteAll()<%= callBlock %>;
+<%_ } _%>
         <%= persistInstance %> = createEntity(<% if (databaseTypeSql) { %>em<% } %>);
     }
 <%_ if (!readOnly) { _%>
@@ -599,12 +606,10 @@ _%>
     @Test<%= transactionalAnnotation %>
     void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-  <%_ if (reactive && searchEngineElasticsearch) { _%>
-        // Configure the mock search repository
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-  <%_ 
+  <%_
       // overwrite the id field again with null
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
@@ -634,6 +639,10 @@ _%>
   <%_ } _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
+  <%_ } _%>
         <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
   <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
     if (field.fieldTypeZonedDateTime) { _%>
@@ -652,11 +661,6 @@ _%>
         // Validate the id for MapsId, the ids must be same
         assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(<%_ if (dtoMapstruct) { _%><%= dtoInstance %><%_ } else { _%>test<%= entityClass %><%_ } _%>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
   <%_ } _%>
-  <%_ if (searchEngineElasticsearch) { _%>
-
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(1)).save(test<%= entityClass %>);
-  <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
@@ -672,6 +676,9 @@ _%>
   <%_ } _%>
 
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
@@ -694,9 +701,8 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
   <%_ if (searchEngineElasticsearch) { _%>
-
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
@@ -707,7 +713,9 @@ _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
     <%_ const alreadyGeneratedEntities = []; _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-
+    <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+    <%_ } _%>
     <%_ for (relationship of relationships) {
       const otherEntityName = relationship.otherEntityName;
       const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
@@ -767,9 +775,8 @@ _%>
         // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
         // assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
     <%_ if (searchEngineElasticsearch) { _%>
-
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository).save(<%= persistInstance %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     <%_ } _%>
     }
   <%_ } _%>
@@ -784,6 +791,9 @@ _%>
     @Test<%= transactionalAnnotation %>
     void check<%= field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
         int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        <%_ } _%>
         // set the field null
         <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>(null);
 
@@ -809,6 +819,11 @@ _%>
         <%_ } _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
+        <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+        <%_ } _%>
+
     }
       <%_ } _%>
     <%_ } _%>
@@ -816,7 +831,7 @@ _%>
 <%_ } _%>
 <%_ if (reactive && paginationNo) { _%>
 
-    @Test
+    @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -934,19 +949,14 @@ _%>
   <%_ } _%>
 
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true")
+        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false")
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
             .andExpect(status().isOk());
   <%_ } _%>
-
-  <%_ if (!serviceNo) { _%>
-        verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
-  <%_ } else { _%>
-        verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
-  <%_ } _%>
+        verify(<%= entityInstance %>RepositoryMock, times(1)).findAll<% if (reactive) { %>WithEagerRelationships(any()<% } else { %>(any(Pageable.class)<% } %>);
     }
 <%_ } _%>
 
@@ -1013,9 +1023,8 @@ _%>
   <%_ } _%>
     }
 
-  <%_ fields.filter(field => !field.id && !field.transient).forEach((searchBy) => {
-    // we can't filter by all the fields.
-    if (isFilterableType(searchBy.fieldType)) { _%>
+  <%_ fields.filter(field => !field.id && !field.transient).forEach((searchBy) => { /* we can't filter by all the fields. */_%>
+    <%_ if (isFilterableType(searchBy.fieldType)) { _%>
 
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1064,8 +1073,8 @@ _%>
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is null
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.specified=false");
     }
-    <%_ }
-    if (searchBy.fieldTypeString) { _%>
+      <%_ } _%>
+      <%_ if (searchBy.fieldTypeString) { _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
@@ -1166,20 +1175,17 @@ _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.get<%= relationship.relationshipNameCapitalized %>();
     <%_ } else { _%>
-        // Initialize the database
-        <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-    <%_ if (databaseTypeSql && !reactive) { _%>
+      <%_ if (databaseTypeSql && !reactive) { _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %>;
-    if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
-        <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
-        em.persist(<%= relationship.relationshipFieldName %>);
-        em.flush();
-    } else {
-        <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
-    }
-    <%_ } else { _%>
+        if (TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).isEmpty()) {
+            <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
+            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        } else {
+            <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= asEntity(relationship.otherEntityNameCapitalized) %>.class).get(0);
+        }
+      <%_ } else { _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
-    <%_ } _%>
+      <%_ } _%>
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
@@ -1338,11 +1344,6 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void putNew<%= entityClass %>() throws Exception {
-  <%_ if (reactive && searchEngineElasticsearch) { _%>
-        // Configure the mock search repository
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-  <%_ } _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1352,6 +1353,10 @@ _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
 
         // Update the <%= entityInstance %>
         <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())<%= reactive ? '.block()' : '.get()' %>;
@@ -1395,8 +1400,8 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
-  <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-    if (field.fieldTypeZonedDateTime) { _%>
+  <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+    <%_ if (field.fieldTypeZonedDateTime) { _%>
         assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
     <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
         assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
@@ -1405,18 +1410,35 @@ _%>
         assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
     <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ }
-  } _%>
+    <%_ } _%>
+  <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+        List<<%= persistClass %>> <%= entityInstance %>SearchList = IterableUtils.toList(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        <%= persistClass %> test<%= entityClass %>Search = <%= entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
+    <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+      <%_ if (field.fieldTypeZonedDateTime) { _%>
+            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+      <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+      <%_ } else if (field.fieldTypeBigDecimal) { _%>
+            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+      <%_ } else { _%>
+            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+      <%_ } _%>
+    <%_ } _%>
 
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository).save(test<%= entityClass %>);
   <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
     void putNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
@@ -1445,15 +1467,18 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
 
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
   <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
     void putWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
@@ -1482,15 +1507,17 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
     void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
@@ -1519,9 +1546,8 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= persistInstance %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
@@ -1565,6 +1591,9 @@ _%>
     @Test<%= transactionalAnnotation %>
     void patchNonExisting<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
@@ -1593,15 +1622,17 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-
-            // Validate the <%= entityClass %> in Elasticsearch
-            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+    int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+    assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
     void patchWithIdMismatch<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
@@ -1630,15 +1661,17 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-
-            // Validate the <%= entityClass %> in Elasticsearch
-            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
     void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+      int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
         <%= asEntity(entityInstance) %>.set<%= primaryKey.nameCapitalized %>(<%- getJavaValueGeneratorForType(primaryKey.type) %>);
 
   <%_ if (dtoMapstruct) { _%>
@@ -1667,22 +1700,14 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-
-            // Validate the <%= entityClass %> in Elasticsearch
-            verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
+
     }
 
     @Test<%= transactionalAnnotation %>
     void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
-  <%_ if (reactive && searchEngineElasticsearch) { _%>
-        // Configure the mock search repository
-    <%_ if (!serviceNo) { _%>
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-    <%_ } _%>
-        when(mock<%= entityClass %>SearchRepository.deleteById(any<%= primaryKey.type %>())).thenReturn(Mono.empty());
-  <%_ } _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1690,8 +1715,14 @@ _%>
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+  <%_ if (searchEngineElasticsearch) { _%>
+        <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
+  <%_ } _%>
 
-        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+    int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+  <%_ if (searchEngineElasticsearch) { _%>
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+  <%_ } _%>
 
         // Delete the <%= entityInstance %>
   <%_ if (reactive) { _%>
@@ -1712,48 +1743,29 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
   <%_ if (searchEngineElasticsearch) { _%>
-
-        // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(1)).deleteById(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
+
     }
 <%_ } _%>
 <%_ if (searchEngine) { _%>
 
+  <%_ if (searchEngineCouchbase) { _%>
+    @Timeout(value = 15, unit = TimeUnit.MINUTES)
+  <%_ } _%>
     @Test<%= transactionalAnnotation %>
     void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
-  <%_ if (searchEngineElasticsearch) { _%>
-        // Configure the mock search repository
-    <%_ if (reactive) { _%>
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-      <%_ if (!paginationNo) { _%>
-        when(mock<%= entityClass %>SearchRepository.count()).thenReturn(Mono.just(1L));
-      <%_ } _%>
-    <%_ } _%>
-  <%_ } _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- getJavaValueGeneratorForType(field.fieldType) %>);
     <%_ } _%>
   <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        <%= persistInstance %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
-    <%_ if (reactive) { _%>
-        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<%_ if (!paginationNo) { _%>, PageRequest.of(0, 20)<% }%>))
-            .thenReturn(Flux.just(<%= persistInstance %>));
-    <%_ } else { _%>
-      <%_ if (!paginationNo) { _%>
-        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>(), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(<%= persistInstance %>), PageRequest.of(0, 1), 1));
-      <%_ } else { _%>
-        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
-            .thenReturn(Stream.of(<%= persistInstance %>));
-      <%_ } _%>
-    <%_ } _%>
+        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else if (searchEngineCouchbase) { _%>
-
         // Wait for the <%= entityInstance %> to be indexed
         TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search("id:" + <%= entityInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (reactive) { %>.collectList().block()<% } %>);
   <%_ } _%>

@@ -20,6 +20,7 @@
 pluginManagement {
     repositories {
 <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+        mavenCentral()
         maven { url 'https://repo.spring.io/milestone' }
         gradlePluginPortal()
 <%_ } _%>

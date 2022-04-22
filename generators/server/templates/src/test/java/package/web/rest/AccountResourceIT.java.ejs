@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (databaseTypeCouchbase) { _%>
-import <%= packageName %>.CouchbaseTestContainerExtension;
-<%_ } _%>
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationTypeSession && !reactive) { _%>
@@ -131,11 +128,6 @@ class AccountResourceIT {
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
-<%_ } _%>
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -203,12 +195,6 @@ class AccountResourceIT {
 
     @Test
     void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
@@ -278,12 +264,6 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testRegisterValid() throws Exception {
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         ManagedUserVM validUser = new ManagedUserVM();
         validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
@@ -471,12 +451,6 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testRegisterDuplicateLogin() throws Exception {
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("alice");
@@ -571,12 +545,6 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testRegisterDuplicateEmail() throws Exception {
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("test-register-duplicate-email");
@@ -716,12 +684,6 @@ class AccountResourceIT {
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
@@ -748,12 +710,6 @@ class AccountResourceIT {
     @Transactional
 <%_ } _%>
     void testActivateAccount()<% if (!reactive) { %> throws Exception<% } %> {
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         final String activationKey = "some activation key";
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
 <%_ if (databaseTypeCassandra) { _%>
@@ -817,12 +773,6 @@ class AccountResourceIT {
 <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
@@ -999,12 +949,6 @@ class AccountResourceIT {
 <%_ } _%>
         userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-<%_ } _%>
         <%= asDto('AdminUser') %> userDTO = new <%= asDto('AdminUser') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");

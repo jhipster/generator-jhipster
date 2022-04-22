@@ -178,6 +178,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
         this.DOCKER_REDIS = constants.DOCKER_REDIS;
         this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
+        this.ELASTICSEARCH_VERSION = constants.ELASTICSEARCH_VERSION;
+        this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
@@ -448,33 +450,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
   /** @inheritdoc */
   _writing() {
     return {
-      cleanupCucumberTests() {
-        if (!this.cucumberTests) return undefined;
-        if (this.isJhipsterVersionLessThan('7.4.2')) {
-          this.removeFile(`${this.testResourceDir}cucumber.properties`);
-          this.removeFile(`${this.srcTestDir}features/gitkeep`);
-          this.removeFile(`${this.srcTestDir}features/user/user.feature`);
-        }
-      },
-      cleanupSql() {
-        if (!this.databaseTypeSql) return undefined;
-        if (this.reactive && this.isJhipsterVersionLessThan('7.5.1')) {
-          this.removeFile(`${this.mainJavaPackageDir}service/ColumnConverter.java`);
-          this.removeFile(`${this.mainJavaPackageDir}service/EntityManager.java`);
-          this.removeFile(`${this.testJavaPackageDir}ArchTest.java`);
-        }
-      },
-      cleanupServer() {
-        if (this.isJhipsterVersionLessThan('7.4.2')) {
-          this.removeFile(`${this.mainJavaPackageDir}config/apidocs/GatewaySwaggerResourcesProvider.java`);
-          this.removeFile(`${this.testJavaDir}config/apidocs/GatewaySwaggerResourcesProviderTest.java`);
-        }
-        if (this.isJhipsterVersionLessThan('7.7.1')) {
-          if (this.buildToolMaven) {
-            this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
-          }
-        }
-      },
       ...writeFiles(),
       ...super._missingPostWriting(),
     };

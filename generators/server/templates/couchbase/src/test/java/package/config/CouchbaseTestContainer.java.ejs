@@ -22,35 +22,46 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.couchbase.*;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
 
-public class KafkaTestContainer implements InitializingBean, DisposableBean {
+import java.time.Duration;
 
-    private KafkaContainer kafkaContainer;
-    private static final Logger log = LoggerFactory.getLogger(KafkaTestContainer.class);
+public class CouchbaseTestContainer implements InitializingBean, DisposableBean {
+
+    private CouchbaseContainer couchbaseContainer;
+    private static final Logger log = LoggerFactory.getLogger(CouchbaseTestContainer.class);
 
     @Override
     public void destroy() {
-        if (null != kafkaContainer && kafkaContainer.isRunning()) {
-            kafkaContainer.close();
+        if (null != couchbaseContainer && couchbaseContainer.isRunning()) {
+            couchbaseContainer.stop();
         }
+    }
+
+    public String getBucketName() {
+        return "testBucket";
     }
 
     @Override
     public void afterPropertiesSet() {
-        if (null == kafkaContainer) {
-            kafkaContainer = new KafkaContainer(DockerImageName.parse("<%= DOCKER_KAFKA %>"))
+        if (null == couchbaseContainer) {
+            DockerImageName dockerImage = DockerImageName.parse("<%= DOCKER_COUCHBASE %>").asCompatibleSubstituteFor("couchbase/server");
+            couchbaseContainer = new CouchbaseContainer(dockerImage)
+                .withBucket(new BucketDefinition(getBucketName()))
+                .withCredentials("user", "password")
+                .withServiceQuota(CouchbaseService.SEARCH, 1024)
                 .withLogConsumer(new Slf4jLogConsumer(log))
+                .withStartupTimeout(Duration.ofMinutes(15))
                 .withReuse(true);
         }
-        if (!kafkaContainer.isRunning()) {
-            kafkaContainer.start();
+        if (!couchbaseContainer.isRunning()) {
+            couchbaseContainer.start();
         }
     }
 
-    public KafkaContainer getKafkaContainer() {
-        return kafkaContainer;
+    public CouchbaseContainer getCouchbaseContainer() {
+        return couchbaseContainer;
     }
 }

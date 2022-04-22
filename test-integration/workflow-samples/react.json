@@ -3,7 +3,7 @@
     {
       "name": "react-default",
       "app-sample": "react-default",
-      "entity": "sql",
+      "entity": "sqlfull",
       "testcontainers": "false"
     },
     {
@@ -15,7 +15,7 @@
     {
       "name": "react-gradle-mysql-es-noi18n-mapsid",
       "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
-      "entity": "sqlfull",
+      "entity": "sqllight",
       "gradle": 1,
       "testcontainers": "false"
     },

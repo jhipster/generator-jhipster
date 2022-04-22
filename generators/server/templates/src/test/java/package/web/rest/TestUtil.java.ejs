@@ -54,6 +54,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.time.Duration;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -254,18 +255,20 @@ public final class TestUtil {
     }
 <%_ } _%>
 <%_ if (searchEngineCouchbase) { _%>
-    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
-        Mono.defer(
-                () -> Mono.fromCallable(iterableCallable)
-                    .flatMapIterable(Function.identity())
-                    .next()
-                    .switchIfEmpty(Mono.error(new NoSuchElementException()))
-            )
-            .retry()
-            .timeout(Duration.ofSeconds(60))
-            .block();
-    }
 
+    public static <T> void retryUntilNotEmpty(Callable<Iterable<T>> iterableCallable) {
+        Mono.defer(() ->
+            Mono
+                .fromCallable(iterableCallable)
+                .flatMapIterable(Function.identity())
+                .next()
+                .switchIfEmpty(Mono.error(new NoSuchElementException()))
+        )
+        .retry()
+        .timeout(Duration.ofMinutes(15))
+        .block();
+
+    }
 <%_ } _%>
 
     private TestUtil() {}
