@@ -229,7 +229,12 @@ module.exports = class extends BaseBlueprintGenerator {
    * @param [data] {object} - template data in case translated value is a template
    */
   _getEntityClientTranslation(translationKey, data) {
-    const translatedValue = _.get(this.entityClientTranslations, translationKey, `Translation missing for ${translationKey}`);
+    const translatedValue = _.get(this.entityClientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const errorMessage = `Entity translation missing for ${translationKey}`;
+      this.warning(`${errorMessage} at ${this.entityClientTranslations}`);
+      return errorMessage;
+    }
     if (!data) {
       return translatedValue;
     }
