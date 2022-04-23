@@ -560,7 +560,11 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
 <%_ } _%>
+<%_ if (reactive) { _%>
+    implementation ("org.springdoc:springdoc-openapi-webflux-core")
+<%_ } else { _%>
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
+<%_ } _%>
 <%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
   <%_ if (reactive) { _%>
