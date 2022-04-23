@@ -23,9 +23,6 @@ import <%= packageName %>.<%= mainClass %>;
 import org.springframework.test.context.ActiveProfiles;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 import <%= packageName %>.config.EmbeddedMongo;
 <%_ } _%>
@@ -38,6 +35,9 @@ import <%= packageName %>.config.EmbeddedCassandra;
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.config.EmbeddedElasticsearch;
 <%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+import <%= packageName %>.config.EmbeddedNeo4j;
+<%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
 <%_ } _%>
@@ -47,7 +47,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
+<%_ if (cacheProviderRedis || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -85,7 +85,7 @@ import java.lang.annotation.Target;
 @EmbeddedElasticsearch
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
-@ExtendWith(AbstractNeo4jIT.class)
+@EmbeddedNeo4j
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)

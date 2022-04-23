@@ -199,6 +199,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
       generator.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.8.1')) {
+    if (generator.databaseTypeNeo4j) {
+      generator.removeFile(`${testDir}AbstractNeo4jIT.java`);
+    }
+  }
 }
 
 module.exports = {
