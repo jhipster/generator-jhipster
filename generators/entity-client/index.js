@@ -229,10 +229,13 @@ module.exports = class extends BaseBlueprintGenerator {
    * @param [data] {object} - template data in case translated value is a template
    */
   _getEntityClientTranslation(translationKey, data) {
+    if (translationKey.startsWith('global.')) {
+      return this._getClientTranslation(translationKey, data);
+    }
     const translatedValue = _.get(this.entityClientTranslations, translationKey);
     if (translatedValue === undefined) {
       const errorMessage = `Entity translation missing for ${translationKey}`;
-      this.warning(`${errorMessage} at ${this.entityClientTranslations}`);
+      this.warning(`${errorMessage} at ${JSON.stringify(this.entityClientTranslations)}`);
       return errorMessage;
     }
     if (!data) {
@@ -295,7 +298,12 @@ module.exports = class extends BaseBlueprintGenerator {
    * @param [data] {object} - template data in case translated value is a template
    */
   _getClientTranslation(translationKey, data) {
-    const translatedValue = _.get(this.clientTranslations, translationKey, `Translation missing for ${translationKey}`);
+    const translatedValue = _.get(this.clientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const errorMessage = `Translation missing for ${translationKey}`;
+      this.warning(`${errorMessage} at ${JSON.stringify(this.clientTranslations)}`);
+      return errorMessage;
+    }
     if (!data) {
       return translatedValue;
     }
