@@ -71,6 +71,20 @@ module.exports = class extends BaseBlueprintGenerator {
     return {
       ...super._missingPreDefault(),
 
+      async loadNativeLanguage() {
+        await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
+
+        const context = {};
+        this.loadAppConfig(undefined, context);
+        this.loadDerivedAppConfig(context);
+        this.loadClientConfig(undefined, context);
+        this.loadDerivedClientConfig(context);
+        this.loadServerConfig(undefined, context);
+        this.loadPlatformConfig(undefined, context);
+        this.loadTranslationConfig(undefined, context);
+        await this._loadClientTranslations(context);
+      },
+
       loadConfigIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
       },
@@ -90,20 +104,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.workaroundRelationshipReactivePostgress = entity.reactive && entity.prodDatabaseType === POSTGRESQL;
         // Reactive with MariaDB doesn't allow null value at Instant fields.
         this.workaroundInstantReactiveMariaDB = entity.reactive && entity.prodDatabaseType === MARIADB;
-      },
-
-      async loadNativeLanguage() {
-        await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
-
-        const context = {};
-        this.loadAppConfig(undefined, context);
-        this.loadDerivedAppConfig(context);
-        this.loadClientConfig(undefined, context);
-        this.loadDerivedClientConfig(context);
-        this.loadServerConfig(undefined, context);
-        this.loadPlatformConfig(undefined, context);
-        this.loadTranslationConfig(undefined, context);
-        await this._loadClientTranslations(context);
       },
     };
   }
