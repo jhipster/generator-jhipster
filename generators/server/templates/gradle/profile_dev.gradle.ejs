@@ -18,11 +18,11 @@
 -%>
 <%_ if (devDatabaseTypeH2Any) { _%>
 dependencies {
-    <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-h2"
-    <%_ } else { _%>
+  <%_ } else { _%>
     liquibaseRuntime "com.h2database:h2"
-    <%_ } _%>
+  <%_ } _%>
     implementation "com.h2database:h2"
 }
 <%_ } _%>
