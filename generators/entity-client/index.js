@@ -73,6 +73,11 @@ module.exports = class extends BaseBlueprintGenerator {
 
       async loadNativeLanguage() {
         await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
+        if (this.entity.primaryKey && this.entity.primaryKey.derived) {
+          const otherEntity = this.entity.primaryKey.relationships[0].otherEntity;
+          // Load derived entity translations for derived fields
+          await this._loadEntityClientTranslations(otherEntity, this.jhipsterConfig, this.entity.entityClientTranslations);
+        }
 
         const context = {};
         this.loadAppConfig(undefined, context);
@@ -196,10 +201,12 @@ module.exports = class extends BaseBlueprintGenerator {
    * @experimental
    * Load entity client native translation.
    */
-  async _loadEntityClientTranslations(entity, configContext = this) {
+  async _loadEntityClientTranslations(entity, configContext = this, entityClientTranslations = entity.entityClientTranslations) {
     const { frontendAppName = this.getFrontendAppName(), nativeLanguage = 'en' } = configContext;
-    entity.entityClientTranslations = entity.entityClientTranslations || {};
-    const { entityClientTranslations } = entity;
+    if (!entityClientTranslations) {
+      entity.entityClientTranslations = entity.entityClientTranslations || {};
+      entityClientTranslations = entity.entityClientTranslations;
+    }
     const rootTemplatesPath = this.fetchFromInstalledJHipster('entity-i18n/templates/');
     const translationFiles = await this.writeFiles({
       sections: entityClientI18nFiles,
