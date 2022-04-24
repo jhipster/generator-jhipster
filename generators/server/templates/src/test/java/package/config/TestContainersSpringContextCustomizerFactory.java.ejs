@@ -60,6 +60,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 <%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
     private static CouchbaseTestContainer couchbaseBean;
 <%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+    private static Neo4jTestContainer neo4jBean;
+<%_ } _%>
 
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
@@ -106,6 +109,20 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                     .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
                     .and("spring.data.cassandra.local-datacenter=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
                     .and("spring.data.cassandra.cluster-name=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName());
+            }
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+            EmbeddedNeo4j neo4jAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedNeo4j.class);
+            if (null != neo4jAnnotation) {
+                log.debug("detected the EmbeddedNeo4j annotation on class {}", testClass.getName());
+                log.info("Warming up the neo4j database");
+                if (null == neo4jBean) {
+                    neo4jBean = beanFactory.createBean(Neo4jTestContainer.class);
+                }
+                testValues =
+                    testValues.and(
+                        "spring.neo4j.uri=" + neo4jBean.getNeo4jContainer().getBoltUrl()
+                    );
             }
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>

@@ -155,8 +155,27 @@ const neo4jFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/AbstractNeo4jIT.java',
-          renameTo: generator => `${generator.testDir}/AbstractNeo4jIT.java`,
+          file: 'package/config/Neo4jTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/Neo4jTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedNeo4j.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedNeo4j.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
         },
       ],
     },

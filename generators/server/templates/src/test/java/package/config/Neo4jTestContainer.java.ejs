@@ -1,0 +1,66 @@
+<%#
+    Copyright 2013-2022 the original author or authors from the JHipster project.
+
+    This file is part of the JHipster project, see https://www.jhipster.tech/
+    for more information.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.testcontainers.containers.Neo4jContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.utility.DockerImageName;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
+/**
+ * Base class for starting/stopping Neo4j during tests.
+ */
+public class Neo4jTestContainer implements InitializingBean, DisposableBean {
+
+    private static final Logger log = LoggerFactory.getLogger(Neo4jTestContainer.class);
+    private static final Integer CONTAINER_STARTUP_TIMEOUT_MINUTES = 10;
+    private Neo4jContainer neo4jContainer;
+
+    @Override
+    public void destroy() {
+        if (null != neo4jContainer && neo4jContainer.isRunning()) {
+            neo4jContainer.close();
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        if (null == neo4jContainer) {
+            neo4jContainer =
+                (Neo4jContainer) new Neo4jContainer(DockerImageName.parse("<%= DOCKER_NEO4J %>"))
+                    .withoutAuthentication()
+                    .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
+                    .withLogConsumer(new Slf4jLogConsumer(log))
+                    .withReuse(true);
+        }
+        if (!neo4jContainer.isRunning()) {
+            neo4jContainer.start();
+        }
+    }
+
+    public Neo4jContainer getNeo4jContainer() {
+        return neo4jContainer;
+    }
+}

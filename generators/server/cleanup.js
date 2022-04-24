@@ -190,6 +190,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   if (generator.isJhipsterVersionLessThan('7.7.1')) {
     generator.removeFile(`${testDir}TestContainersSpringContextCustomizerFactory.java`);
   }
+  if (generator.isJhipsterVersionLessThan('7.8.1')) {
+    if (generator.databaseTypeNeo4j) {
+      generator.removeFile(`${testDir}AbstractNeo4jIT.java`);
+    }
+  }
 }
 
 module.exports = {
