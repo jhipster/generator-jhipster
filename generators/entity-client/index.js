@@ -76,7 +76,7 @@ module.exports = class extends BaseBlueprintGenerator {
         if (this.entity.primaryKey && this.entity.primaryKey.derived) {
           const otherEntity = this.entity.primaryKey.relationships[0].otherEntity;
           // Load derived entity translations for derived fields
-          await this._loadEntityClientTranslations(otherEntity, this.jhipsterConfig, this.entity.entityClientTranslations);
+          // await this._loadEntityClientTranslations(otherEntity, this.jhipsterConfig, this.entity.entityClientTranslations);
         }
 
         const context = {};
