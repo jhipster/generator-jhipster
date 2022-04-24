@@ -639,13 +639,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "io.r2dbc:r2dbc-h2"
   <%_ } _%>
 <%_ } _%>
-<%_ if (devDatabaseTypeH2Any) { _%>
-  <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-h2"
-  <%_ } else { _%>
-    liquibaseRuntime "com.h2database:h2"
-  <%_ } _%>
-<%_ } _%>
 <%_ if (prodDatabaseTypeOracle) { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"
     liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
