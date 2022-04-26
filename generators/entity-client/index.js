@@ -73,11 +73,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
       async loadNativeLanguage() {
         await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
-        if (this.entity.primaryKey && this.entity.primaryKey.derived) {
-          const otherEntity = this.entity.primaryKey.relationships[0].otherEntity;
-          // Load derived entity translations for derived fields
-          // await this._loadEntityClientTranslations(otherEntity, this.jhipsterConfig, this.entity.entityClientTranslations);
-        }
 
         const context = {};
         this.loadAppConfig(undefined, context);
@@ -226,6 +221,12 @@ module.exports = class extends BaseBlueprintGenerator {
       _.merge(entityClientTranslations, this.readDestinationJSON(translationFile));
       delete this.env.sharedFs.get(translationFile).state;
     }
+
+    if (!this.configOptions.entitiesClientTranslations) {
+      this.configOptions.entitiesClientTranslations = {};
+    }
+    this.entitiesClientTranslations = this.configOptions.entitiesClientTranslations;
+    _.merge(this.entitiesClientTranslations, entityClientTranslations);
   }
 
   /**
@@ -239,7 +240,7 @@ module.exports = class extends BaseBlueprintGenerator {
     if (translationKey.startsWith('global.')) {
       return this._getClientTranslation(translationKey, data);
     }
-    const translatedValue = _.get(this.entityClientTranslations, translationKey);
+    const translatedValue = _.get(this.entitiesClientTranslations, translationKey);
     if (translatedValue === undefined) {
       const errorMessage = `Entity translation missing for ${translationKey}`;
       this.warning(`${errorMessage} at ${JSON.stringify(this.entityClientTranslations)}`);
