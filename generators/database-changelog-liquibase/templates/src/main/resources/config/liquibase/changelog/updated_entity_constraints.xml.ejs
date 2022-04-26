@@ -36,7 +36,7 @@ if (hasFieldConstraint) { _%>
     _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
             columnNames="<%= field.columnName %>"
-            constraintName="<%= field.getUXConstraintName(entityTableName) %>"/>
+            constraintName="<%= field.uniqueConstraintName %>"/>
     <%_ }
         if (!field.nullable) {
     _%>
