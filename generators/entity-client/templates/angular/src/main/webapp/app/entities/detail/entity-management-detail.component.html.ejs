@@ -32,7 +32,6 @@
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-                <!-- TODO: 15964  Incomprehensible expression -->
                 <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span></dt>
                 <dd>
     <%_ if (field.fieldIsEnum) { _%>
