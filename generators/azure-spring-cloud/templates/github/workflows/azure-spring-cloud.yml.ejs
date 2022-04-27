@@ -16,7 +16,7 @@ jobs:
         distribution: 'temurin'
         java-version: <%= JAVA_VERSION %>
     - name: Cache Maven archetypes
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
