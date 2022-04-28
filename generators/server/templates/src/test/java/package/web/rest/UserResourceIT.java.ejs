@@ -226,7 +226,7 @@ class UserResourceIT {
 <%_ } _%>
         user.setLogin(DEFAULT_LOGIN<% if (databaseTypeSql) { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
 <%_ if (!authenticationTypeOauth2) { _%>
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        user.setPassword(RandomStringUtils.random(60));
 <%_ } _%>
         user.setActivated(true);
         user.setEmail(<% if (databaseTypeSql) { %>RandomStringUtils.randomAlphabetic(5) + <% } %>DEFAULT_EMAIL);
@@ -777,7 +777,7 @@ class UserResourceIT {
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
         anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
         anotherUser.setFirstName("java");
@@ -853,7 +853,7 @@ class UserResourceIT {
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
         anotherUser.setLogin("jhipster");
-        anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("jhipster@localhost");
         anotherUser.setFirstName("java");
