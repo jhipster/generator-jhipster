@@ -20,9 +20,6 @@ package <%= packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
-<%_ if (devDatabaseTypeH2Any) { _%>
-import org.h2.server.web.WebServlet;
-<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (!skipClient) { _%>
@@ -84,9 +81,6 @@ class WebConfigurerTest {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
 
         assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-<%_ if (devDatabaseTypeH2Any) { _%>
-        verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
-<%_ } _%>
     }
 
     @Test
@@ -94,9 +88,6 @@ class WebConfigurerTest {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
 
         assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-<%_ if (devDatabaseTypeH2Any) { _%>
-        verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
-<%_ } _%>
     }
 
 <%_ if (!skipClient) { _%>

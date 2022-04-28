@@ -142,43 +142,7 @@ modernizer {
     includeTestClasses = true
 }
 
-task integrationTest(type: Test) {
-    minHeapSize = "128m"
-    maxHeapSize = "512m"
-    useJUnitPlatform()
-    description = "Execute integration tests."
-    group = "verification"
-    include "**/*IT*", "**/*IntTest*"
-<%_ if (cucumberTests) { _%>
-    exclude "**/*CucumberIT*"
-<%_ } _%>
-    testLogging {
-        events 'FAILED', 'SKIPPED'
-    }
-    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
-<%_ if (databaseTypeSql) { _%>
-    if (project.hasProperty('testcontainers')) {
-  <%_ if (reactive) { _%>
-        environment 'SPRING_PROFILES_ACTIVE', 'testcontainers'
-  <%_ } else { _%>
-        environment 'spring.profiles.active', 'testcontainers'
-  <%_ } _%>
-    }
-<%_ } _%>
 
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.enabled = false
-<%_ if (reactive) { _%>
-
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-        jvmArgs += [
-            "-XX:+AllowRedefinitionToAddDeleteMethods"
-        ]
-    }
-<%_ } _%>
-}
 <%_ if (cucumberTests) { _%>
 
 task consoleLauncherTest(type: JavaExec) {
@@ -419,6 +383,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 <%_ if (databaseTypeSql) { _%>
   <%_ if (reactive) { _%>
+    testImplementation "org.testcontainers:r2dbc"
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
   <%_ } else { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -441,24 +406,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.boot:spring-boot-starter-validation"
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka) { _%>
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || (databaseTypeSql)) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:testcontainers"
-<%_ } _%>
-<%_ if (prodDatabaseTypeMysql) { _%>
-    testImplementation "org.testcontainers:mysql"
-<%_ } _%>
-<%_ if (prodDatabaseTypeMariadb) { _%>
-    testImplementation "org.testcontainers:mariadb"
-<%_ } _%>
-<%_ if (prodDatabaseTypePostgres) { _%>
-    testImplementation "org.testcontainers:postgresql"
-<%_ } _%>
-<%_ if (prodDatabaseTypeMssql) { _%>
-    testImplementation "org.testcontainers:mssqlserver"
-<%_ } _%>
-<%_ if (prodDatabaseTypeOracle && !reactive) { _%>
-    testImplementation "org.testcontainers:oracle-xe"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     implementation "org.springframework.cloud:spring-cloud-stream"
@@ -566,39 +516,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } else { _%>
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
 <%_ } _%>
-<%_ if (prodDatabaseTypeMysql) { _%>
-    implementation "mysql:mysql-connector-java"
-  <%_ if (reactive) { _%>
-    implementation "dev.miku:r2dbc-mysql"
-  <%_ } else { _%>
-    liquibaseRuntime "mysql:mysql-connector-java"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (prodDatabaseTypePostgres) { _%>
-    implementation "org.postgresql:postgresql"
-  <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-postgresql"
-  <%_ } else { _%>
-    liquibaseRuntime "org.postgresql:postgresql"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (prodDatabaseTypeMariadb) { _%>
-    implementation "org.mariadb.jdbc:mariadb-java-client"
-  <%_ if (reactive) { _%>
-    implementation "org.mariadb:r2dbc-mariadb"
-  <%_ } else { _%>
-    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (prodDatabaseTypeMssql) { _%>
-    implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
-  <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-mssql"
-  <%_ } _%>
-    liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
-    liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
-<%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 <%_ if (databaseTypeSql) { _%>
@@ -633,16 +550,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-    testImplementation "com.h2database:h2"
-  <%_ if (reactive) { _%>
-    testImplementation "io.r2dbc:r2dbc-h2"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (prodDatabaseTypeOracle) { _%>
-    implementation "com.oracle.database.jdbc:ojdbc8"
-    liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     testImplementation "org.testcontainers:kafka"

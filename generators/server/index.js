@@ -29,18 +29,9 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const {
-  CASSANDRA,
-  COUCHBASE,
-  MARIADB,
-  MSSQL,
-  MYSQL,
-  ORACLE,
-  POSTGRESQL,
-  SQL,
-  MONGODB,
-  NEO4J,
-} = require('../../jdl/jhipster/database-types');
+const helper = require('../generator-base-private');
+
+const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -363,29 +354,8 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
 
         if (this.jhipsterConfig.databaseType === SQL) {
           // sql
-          let dbContainer;
-          switch (this.jhipsterConfig.prodDatabaseType) {
-            case MYSQL:
-              dbContainer = this.DOCKER_MYSQL;
-              break;
-            case MARIADB:
-              dbContainer = this.DOCKER_MARIADB;
-              break;
-            case POSTGRESQL:
-              dbContainer = this.DOCKER_POSTGRESQL;
-              break;
-            case MSSQL:
-              dbContainer = this.DOCKER_MSSQL;
-              break;
-            case ORACLE:
-            default:
-              dbContainer = null;
-          }
-          if (dbContainer != null && dbContainer.includes(':')) {
-            this.containerVersion = dbContainer.split(':')[1];
-          } else {
-            this.containerVersion = 'latest';
-          }
+          this.prodContainerVersion = helper.getSqlContainerVersion(this.jhipsterConfig.prodDatabaseType);
+          this.devContainerVersion = helper.getSqlContainerVersion(this.jhipsterConfig.devDatabaseType);
         }
       },
     };

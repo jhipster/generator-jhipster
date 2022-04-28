@@ -103,7 +103,7 @@
   <%_ if (!reactive) { _%>
         <liquibase-hibernate5.version><%= LIQUIBASE_VERSION %></liquibase-hibernate5.version>
   <%_ } _%>
-  <%_ if (devDatabaseTypeH2Disk) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
         <h2.version>1.4.200</h2.version>
   <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
@@ -527,6 +527,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>r2dbc</artifactId>
+            <scope>test</scope>
+        </dependency>
   <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -836,116 +841,6 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-<%_ if (databaseTypeSql && !devDatabaseTypeH2Any) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-  <%_ if (devDatabaseTypeMysql) { _%>
-            <artifactId>mysql</artifactId>
-  <%_ } else if (devDatabaseTypeMariadb) { _%>
-            <artifactId>mariadb</artifactId>
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-            <artifactId>postgresql</artifactId>
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-            <artifactId>mssqlserver</artifactId>
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-            <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-            <scope>provided</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (databaseTypeSql && devDatabaseType !== prodDatabaseType) { _%>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-            <artifactId>mysql</artifactId>
-  <%_ } else if (prodDatabaseTypeMariadb) { _%>
-            <artifactId>mariadb</artifactId>
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-            <artifactId>postgresql</artifactId>
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-            <artifactId>mssqlserver</artifactId>
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-            <artifactId>oracle-xe</artifactId>
-  <%_ } _%>
-            <scope>provided</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (reactive) { _%>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } else { _%>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (devDatabaseTypeMysql || prodDatabaseTypeMysql) { _%>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>dev.miku</groupId>
-            <artifactId>r2dbc-mysql</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeMariadb || prodDatabaseTypeMariadb) { _%>
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>org.mariadb</groupId>
-            <artifactId>r2dbc-mariadb</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeOracle || prodDatabaseTypeOracle) { _%>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <scope>provided</scope>
-        </dependency>
-<%_ } _%>
-<%_ if (devDatabaseTypeMssql || prodDatabaseTypeMssql) { _%>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-mssql</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypePostgres || prodDatabaseTypePostgres) { _%>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ if (reactive) { _%>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-postgresql</artifactId>
-            <scope>provided</scope>
-        </dependency>
-  <%_ } _%>
-<%_ } _%>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
@@ -1201,7 +1096,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
@@ -1444,40 +1338,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${maven-failsafe-plugin.version}</version>
-                    <configuration>
-                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                        <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                        <!-- Force alphabetical order to have a reproducible build -->
-                        <runOrder>alphabetical</runOrder>
-                        <includes>
-                            <include>**/*IT*</include>
-                            <include>**/*IntTest*</include>
-                        </includes>
-<%_ if (reactive) { _%>
-                        <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                        <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
-<%_ } _%>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>integration-test</id>
-                            <goals>
-                                <goal>integration-test</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>verify</id>
-                            <goals>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
                </plugin>
@@ -1578,20 +1438,6 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <dependencies>
-  <%_ if (devDatabaseTypeH2Any) { _%>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>
-    <%_ if (reactive) { _%>
-                <dependency>
-                    <groupId>io.r2dbc</groupId>
-                    <artifactId>r2dbc-h2</artifactId>
-                </dependency>
-    <%_ } _%>
-  <%_ } _%>
-            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -1806,6 +1652,23 @@
                 </dependency>
   <%_ } _%>
 <%_ } _%>
+<%_ if (databaseTypeSql && !devDatabaseTypeH2Any) { _%>
+                <dependency>
+                    <groupId>org.testcontainers</groupId>
+  <%_ if (devDatabaseTypeMysql) { _%>
+                    <artifactId>mysql</artifactId>
+  <%_ } else if (devDatabaseTypeMariadb) { _%>
+                    <artifactId>mariadb</artifactId>
+  <%_ } else if (devDatabaseTypePostgres) { _%>
+                    <artifactId>postgresql</artifactId>
+  <%_ } else if (devDatabaseTypeMssql) { _%>
+                    <artifactId>mssqlserver</artifactId>
+  <%_ } else if (devDatabaseTypeOracle) { _%>
+                    <artifactId>oracle-xe</artifactId>
+  <%_ } _%>
+                    <scope>test</scope>
+                </dependency>
+<%_ } _%>
             </dependencies>
 <%_ if (databaseTypeSql && !reactive) { _%>
             <build>
@@ -1817,6 +1680,42 @@
                 </plugins>
                 <pluginManagement>
                     <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${maven-failsafe-plugin.version}</version>
+                            <configuration>
+                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                                <!-- Force alphabetical order to have a reproducible build -->
+                                <runOrder>alphabetical</runOrder>
+                                <includes>
+                                    <include>**/*IT*</include>
+                                    <include>**/*IntTest*</include>
+                                </includes>
+  <%_ if (reactive) { _%>
+                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=dev</argLine>
+  <%_ } else { _%>
+                                <argLine>${argLine} -Dspring.profiles.active=dev</argLine>
+  <%_ } _%>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>integration-test</id>
+                                    <goals>
+                                        <goal>integration-test</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>verify</id>
+                                    <goals>
+                                        <goal>verify</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
                         <plugin>
                             <groupId>org.liquibase</groupId>
                             <artifactId>liquibase-maven-plugin</artifactId>
@@ -1968,6 +1867,46 @@
             </dependencies>
 <%_ } _%>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${maven-failsafe-plugin.version}</version>
+                            <configuration>
+                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                                <!-- Force alphabetical order to have a reproducible build -->
+                                <runOrder>alphabetical</runOrder>
+                                <includes>
+                                    <include>**/*IT*</include>
+                                    <include>**/*IntTest*</include>
+                                </includes>
+<%_ if (reactive) { _%>
+                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=prod</argLine>
+<%_ } else { _%>
+                                <argLine>${argLine} -Dspring.profiles.active=prod</argLine>
+<%_ } _%>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>integration-test</id>
+                                    <goals>
+                                        <goal>integration-test</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>verify</id>
+                                    <goals>
+                                        <goal>verify</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>

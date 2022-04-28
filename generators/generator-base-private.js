@@ -1201,6 +1201,62 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
    *
    * @param {string} databaseType
    * @param {string} protocol
+   * @param {string} containerVersion
+   * @param {*} options
+   */
+  getTCDBCUrl(databaseType, protocol, containerVersion, options = {}) {
+    if (!protocol) {
+      throw new Error('protocol is required');
+    }
+    if (!options.databaseName) {
+      throw new Error("option 'databaseName' is required");
+    }
+    let dbcUrl = `${protocol}:tc`;
+    if (databaseType === MYSQL) {
+      dbcUrl = `${dbcUrl}:mysql`;
+    } else if (databaseType === MARIADB) {
+      dbcUrl = `${dbcUrl}:mariadb`;
+    } else if (databaseType === POSTGRESQL) {
+      dbcUrl = `${dbcUrl}:postgresql`;
+    } else if (databaseType === ORACLE) {
+      dbcUrl = `${dbcUrl}:oracle:thin`;
+    } else if (databaseType === MSSQL) {
+      if (protocol === 'r2dbc') {
+        dbcUrl = `${dbcUrl}:mssql`;
+      } else {
+        dbcUrl = `${dbcUrl}:sqlserver`;
+      }
+    }
+    if (containerVersion && protocol === 'jdbc') {
+      dbcUrl = `${dbcUrl}:${containerVersion}`;
+    }
+    if ([MYSQL, MARIADB, POSTGRESQL].includes(databaseType)) {
+      dbcUrl = `${dbcUrl}:///${options.databaseName}`;
+    } else if (databaseType === MSSQL) {
+      dbcUrl = `${dbcUrl}://;database=${options.databaseName}`;
+    } else if (databaseType === ORACLE) {
+      dbcUrl = `${dbcUrl}:@///ORCL`;
+    }
+    if (databaseType === MYSQL) {
+      dbcUrl = `${dbcUrl}?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw`;
+    }
+    if (databaseType === MARIADB) {
+      dbcUrl = `${dbcUrl}?useLegacyDatetimeCode=false&serverTimezone=UTC&TC_MY_CNF=testcontainers/mariadb&TC_TMPFS=/testtmpfs:rw`;
+    }
+    if ([POSTGRESQL, ORACLE].includes(databaseType)) {
+      dbcUrl = `${dbcUrl}?TC_TMPFS=/testtmpfs:rw`;
+    }
+    if (protocol === 'r2dbc' && containerVersion) {
+      dbcUrl = `&TC_IMAGE_TAG=${containerVersion}`;
+    }
+    return dbcUrl;
+  }
+
+  /**
+   * Returns the URL for a particular databaseType and protocol
+   *
+   * @param {string} databaseType
+   * @param {string} protocol
    * @param {*} options
    */
   getDBCUrl(databaseType, protocol, options = {}) {
@@ -1259,6 +1315,35 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     return dbcUrl;
   }
 
+  /**
+   * retreives the SQL container docker image version
+   * @param databaseType kind of database you want the container version for
+   * @returns {string|*} the version
+   */
+  getSqlContainerVersion(databaseType) {
+    let dbContainer;
+    switch (databaseType) {
+      case MYSQL:
+        dbContainer = constants.DOCKER_MYSQL;
+        break;
+      case MARIADB:
+        dbContainer = constants.DOCKER_MARIADB;
+        break;
+      case POSTGRESQL:
+        dbContainer = constants.DOCKER_POSTGRESQL;
+        break;
+      case MSSQL:
+        dbContainer = constants.DOCKER_MSSQL;
+        break;
+      case ORACLE:
+      default:
+        dbContainer = null;
+    }
+    if (dbContainer != null && dbContainer.includes(':')) {
+      return dbContainer.split(':')[1];
+    }
+    return 'latest';
+  }
   /**
    * Returns the primary key value based on the primary key type, DB and default value
    *

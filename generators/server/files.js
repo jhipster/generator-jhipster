@@ -1376,9 +1376,12 @@ const baseServerFiles = {
       templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
     {
-      condition: generator => generator.databaseTypeSql && !generator.reactive,
+      condition: generator => generator.databaseTypeSql && generator.devDatabaseType !== generator.prodDatabaseType,
       path: SERVER_TEST_RES_DIR,
-      templates: ['config/application-testcontainers.yml'],
+      templates: [
+        'config/application-dev.yml',
+        'config/application-prod.yml',
+      ],
     },
     {
       condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,
