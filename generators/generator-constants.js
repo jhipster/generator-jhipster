@@ -37,7 +37,7 @@ const JIB_VERSION = '3.2.1';
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.6.7';
+const SPRING_BOOT_VERSION = '2.7.0-RC1';
 const LIQUIBASE_VERSION = '4.6.1';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
 const HIBERNATE_VERSION = '5.6.8.Final';
