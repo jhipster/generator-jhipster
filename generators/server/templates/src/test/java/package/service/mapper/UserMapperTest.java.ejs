@@ -59,7 +59,7 @@ class UserMapperTest {
         user = new <%= asEntity('User') %>();
         user.setLogin(DEFAULT_LOGIN);
 <%_ if (!authenticationTypeOauth2) { _%>
-        user.setPassword(RandomStringUtils.random(60));
+        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
 <%_ } _%>
         user.setActivated(true);
         user.setEmail("johndoe@localhost");
