@@ -29,9 +29,8 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const helper = require('../generator-base-private');
 
-const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J, MYSQL, MARIADB, POSTGRESQL, MSSQL } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -353,9 +352,54 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.srcTestDir = TEST_DIR;
 
         if (this.jhipsterConfig.databaseType === SQL) {
-          // sql
-          this.prodContainerVersion = helper.getSqlContainerVersion(this.jhipsterConfig.prodDatabaseType);
-          this.devContainerVersion = helper.getSqlContainerVersion(this.jhipsterConfig.devDatabaseType);
+          let pv;
+          switch (this.jhipsterConfig.devDatabaseType) {
+            case MYSQL:
+              pv = constants.DOCKER_MYSQL;
+              break;
+            case MARIADB:
+              pv = constants.DOCKER_MARIADB;
+              break;
+            case POSTGRESQL:
+              pv = constants.DOCKER_POSTGRESQL;
+              break;
+            case MSSQL:
+              pv = constants.DOCKER_MSSQL;
+              break;
+            case ORACLE:
+            default:
+              pv = null;
+          }
+          if (pv != null && pv.includes(':')) {
+            this.devContainerVersion = pv.split(':')[1];
+          } else {
+            this.devContainerVersion = 'latest';
+          }
+        }
+        if (this.jhipsterConfig.databaseType === SQL) {
+          let pv;
+          switch (this.jhipsterConfig.prodDatabaseType) {
+            case MYSQL:
+              pv = constants.DOCKER_MYSQL;
+              break;
+            case MARIADB:
+              pv = constants.DOCKER_MARIADB;
+              break;
+            case POSTGRESQL:
+              pv = constants.DOCKER_POSTGRESQL;
+              break;
+            case MSSQL:
+              pv = constants.DOCKER_MSSQL;
+              break;
+            case ORACLE:
+            default:
+              pv = null;
+          }
+          if (pv != null && pv.includes(':')) {
+            this.prodContainerVersion = pv.split(':')[1];
+          } else {
+            this.prodContainerVersion = 'latest';
+          }
         }
       },
     };

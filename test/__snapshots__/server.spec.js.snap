@@ -545,7 +545,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {

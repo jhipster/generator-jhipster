@@ -206,9 +206,9 @@ spring:
   liquibase:
     contexts: test
   <%_ if (reactive) { _%>
-    <%_ if (databaseTypeH2Memory) { _%>
-    url: <%- getR2DBCUrl(databaseType, { databaseName: lowercaseBaseName }) %>
-    <%_ } else if (databaseTypeH2Disk) { _%>
+    <%_ if (devDatabaseTypeH2Memory) { _%>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+    <%_ } else if (devDatabaseTypeH2Disk) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } else { _%>
     url: <%- getTCDBCUrl(devDatabaseType, 'jdbc', prodContainerVersion, { databaseName: baseName }) %>

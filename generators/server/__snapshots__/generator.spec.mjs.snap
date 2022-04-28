@@ -1784,7 +1784,8 @@ Object {
       "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
-        "config/application-testcontainers.yml",
+        "config/application-dev.yml",
+        "config/application-prod.yml",
       ],
     },
     Object {

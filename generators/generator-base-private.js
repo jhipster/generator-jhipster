@@ -1316,35 +1316,6 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
   }
 
   /**
-   * retreives the SQL container docker image version
-   * @param databaseType kind of database you want the container version for
-   * @returns {string|*} the version
-   */
-  getSqlContainerVersion(databaseType) {
-    let dbContainer;
-    switch (databaseType) {
-      case MYSQL:
-        dbContainer = constants.DOCKER_MYSQL;
-        break;
-      case MARIADB:
-        dbContainer = constants.DOCKER_MARIADB;
-        break;
-      case POSTGRESQL:
-        dbContainer = constants.DOCKER_POSTGRESQL;
-        break;
-      case MSSQL:
-        dbContainer = constants.DOCKER_MSSQL;
-        break;
-      case ORACLE:
-      default:
-        dbContainer = null;
-    }
-    if (dbContainer != null && dbContainer.includes(':')) {
-      return dbContainer.split(':')[1];
-    }
-    return 'latest';
-  }
-  /**
    * Returns the primary key value based on the primary key type, DB and default value
    *
    * @param {string} primaryKeyType - the primary key type

@@ -440,7 +440,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -883,7 +886,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -3179,7 +3185,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -5904,7 +5913,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -7274,7 +7286,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -8644,7 +8659,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -10035,7 +10053,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -11000,7 +11021,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -12373,7 +12397,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -13713,7 +13740,10 @@ Object {
   "src/test/resources/com/mycompany/myapp/cucumber/user.feature": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -15044,7 +15074,10 @@ Object {
   "src/test/javascript/protractor.conf.js": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
@@ -16414,7 +16447,10 @@ Object {
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": Object {
     "stateCleared": "modified",
   },
-  "src/test/resources/config/application-testcontainers.yml": Object {
+  "src/test/resources/config/application-dev.yml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/config/application-prod.yml": Object {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": Object {
