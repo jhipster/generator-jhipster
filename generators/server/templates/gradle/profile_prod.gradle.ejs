@@ -19,35 +19,36 @@
 <%_ if (databaseTypeSql) { _%>
 dependencies {
   <%_ if (prodDatabaseTypeMysql) { _%>
-    implementation "mysql:mysql-connector-java"
     <%_ if (reactive) { _%>
     implementation "dev.miku:r2dbc-mysql"
     <%_ } else { _%>
-    liquibaseRuntime "mysql:mysql-connector-java"
+    implementation "mysql:mysql-connector-java"
     <%_ } _%>
+    liquibaseRuntime "mysql:mysql-connector-java"
   <%_ } _%>
   <%_ if (prodDatabaseTypePostgres) { _%>
-    implementation "org.postgresql:postgresql"
     <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-postgresql"
     <%_ } else { _%>
-    liquibaseRuntime "org.postgresql:postgresql"
+    implementation "org.postgresql:postgresql"
     <%_ } _%>
+    liquibaseRuntime "org.postgresql:postgresql"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMariadb) { _%>
-    implementation "org.mariadb.jdbc:mariadb-java-client"
     <%_ if (reactive) { _%>
     implementation "org.mariadb:r2dbc-mariadb"
     <%_ } else { _%>
-    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+    implementation "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
+    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMssql) { _%>
-    implementation "com.microsoft.sqlserver:mssql-jdbc"
-    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
+    <%_ } else { _%>
+    implementation "com.microsoft.sqlserver:mssql-jdbc"
     <%_ } _%>
+    implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
   <%_ } _%>

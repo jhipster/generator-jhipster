@@ -406,7 +406,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.springframework.boot:spring-boot-starter-validation"
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || (databaseTypeSql)) { _%>
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || databaseTypeSql) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
