@@ -45,7 +45,7 @@ const HIBERNATE_VERSION = '5.6.8.Final';
 const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '7.1.1';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
-const ELASTICSEARCH_VERSION = '7.15.2'; // The version should be coherent with the one from spring-data-elasticsearch project
+const ELASTICSEARCH_VERSION = '7.17.2'; // The version should be coherent with the one from spring-data-elasticsearch project
 // Version of docker images
 const DOCKER_COMPOSE_FORMAT_VERSION = '3.8';
 // const DOCKER_JHIPSTER_REGISTRY = 'ghcr.io/jhipster/jhipster-registry:main';
