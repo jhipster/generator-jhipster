@@ -1247,7 +1247,7 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       dbcUrl = `${dbcUrl}?TC_TMPFS=/testtmpfs:rw`;
     }
     if (protocol === 'r2dbc' && containerVersion) {
-      dbcUrl = `&TC_IMAGE_TAG=${containerVersion}`;
+      dbcUrl = `${dbcUrl}&TC_IMAGE_TAG=${containerVersion}`;
     }
     return dbcUrl;
   }
