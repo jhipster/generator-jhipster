@@ -741,10 +741,7 @@ const expectedFiles = {
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`,
   ],
 
-  mysql: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
-    `${DOCKER_DIR}mysql.yml`,
-  ],
+  mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
 
   mariadb: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
@@ -754,10 +751,7 @@ const expectedFiles = {
     `${SERVER_TEST_RES_DIR}testcontainers/mariadb/my.cnf`,
   ],
 
-  mssql: [
-    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
-    `${DOCKER_DIR}mssql.yml`,
-  ],
+  mssql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mssql.yml`],
 
   postgresql: [
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,

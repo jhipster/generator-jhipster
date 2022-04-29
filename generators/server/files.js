@@ -1378,10 +1378,7 @@ const baseServerFiles = {
     {
       condition: generator => generator.databaseTypeSql && generator.devDatabaseType !== generator.prodDatabaseType,
       path: SERVER_TEST_RES_DIR,
-      templates: [
-        'config/application-dev.yml',
-        'config/application-prod.yml',
-      ],
+      templates: ['config/application-dev.yml', 'config/application-prod.yml'],
     },
     {
       condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,

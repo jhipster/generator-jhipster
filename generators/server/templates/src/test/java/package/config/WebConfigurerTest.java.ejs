@@ -76,20 +76,6 @@ class WebConfigurerTest {
         webConfigurer = new WebConfigurer(env, props);
     }
 
-    @Test
-    void shouldStartUpProdServletContext() throws ServletException {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-
-        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-    }
-
-    @Test
-    void shouldStartUpDevServletContext() throws ServletException {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
-
-        assertThatCode(() -> webConfigurer.onStartup(servletContext)).doesNotThrowAnyException();
-    }
-
 <%_ if (!skipClient) { _%>
     @Test
     void shouldCustomizeServletContainer() {
