@@ -44,7 +44,7 @@ class Statistics {
     this.doNotAskCounter = this.config.get('doNotAskCounter');
     this.optOut = this.config.get('optOut');
     this.isLinked = this.config.get('isLinked');
-    this.noInsight = process.argv.includes('--no-insight') || process.env.CI === 'true';
+    this.noInsight = process.argv.includes('--no-insight') || process.env.CI === 'true' || process.env.MOCHA_WORKER_ID;
     this.forceInsight = process.argv.includes('--force-insight');
     this.configInsight();
 
@@ -202,13 +202,14 @@ class Statistics {
    * @param {any} eventObject events that you want to send
    */
   sendInsightSubGenEvents(prefix, eventObject) {
-    if (this.noInsight) return;
+    if (this.noInsight || eventObject === null || eventObject === undefined) return;
     if (typeof eventObject === 'object') {
       Object.keys(eventObject).forEach(key => {
+        const value = eventObject[key];
         if (typeof eventObject[key] === 'object') {
-          this.sendInsightSubGenEvents(`${prefix}/${key}`, eventObject[key]);
-        } else if (eventObject[key]) {
-          this.insight.track(`${prefix}/${key}`, eventObject[key]);
+          this.sendInsightSubGenEvents(`${prefix}/${key}`, value);
+        } else {
+          this.insight.track(`${prefix}/${key}`, value);
         }
       });
     } else {
