@@ -48,7 +48,6 @@
 _%>
 
                 <div class="row mb-3"<% if (field.autoGenerate) { %> [hidden]="editForm.get('<%= primaryKey.name %>')!.value == null"<% } %>>
-                    <!-- TODO: 15964 Incomprehensible expression -->
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
     <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -80,8 +79,7 @@ _%>
                                 <fa-icon icon="times"></fa-icon>
                             </button>
                         </div>
-                        <!-- TODO: 15964 Incomprehensible expression -->
-                        <input type="file" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" (change)="setFileData($event, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" <%= jhiPrefix %>Translate="entity.action.addimage"<% } else { %>false)" <%= jhiPrefix %>Translate="entity.action.addblob"<% } %>/>
+                        <input type="file" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" (change)="setFileData($event, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entity.action.addimage"<% } %><% } else { %>false)"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entity.action.addblob"<% } %><% } %>/>
                     </div>
         <%_ } _%>
         <%_ if (field.fieldTypeLocalDate) { _%>

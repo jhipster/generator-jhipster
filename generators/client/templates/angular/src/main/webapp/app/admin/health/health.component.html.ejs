@@ -49,7 +49,6 @@
               [ngClass]="getBadgeClass(componentHealth.value!.status)"
               <%= jhiPrefix %>Translate="{{ 'health.status.' + componentHealth.value!.status }}"
             >
-              <!-- TODO: 15964 Dynamic key -->
               {{ <%- JSON.stringify(this._getClientTranslation('health.status')) %>[componentHealth.value!.status || 'UNKNOWN'] }}
             </span>
           </td>

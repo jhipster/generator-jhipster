@@ -35,7 +35,7 @@ _%>
                 <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span></dt>
                 <dd>
     <%_ if (field.fieldIsEnum) { _%>
-                    <!-- TODO: 15964 Dynamic key -->
+                    <%# TODO: import enum and use its key as label _%>
                     <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <div *ngIf="<%= entityInstance %>.<%= fieldName %>">

@@ -114,7 +114,7 @@ _%>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
     <%_ } else if (field.fieldIsEnum) { _%>
-                    <!-- TODO: 15964 Dynamic key -->
+                    <%# TODO: import enum and use its key as label _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
     <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
