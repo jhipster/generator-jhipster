@@ -383,7 +383,7 @@ module.exports = class JHipsterBaseBlueprintGenerator extends BaseGenerator {
   _isPriorityMissing(priorityName, destPriority = 'related') {
     const ownPrototype = Object.getPrototypeOf(this);
     const parentPrototype = Object.getPrototypeOf(ownPrototype);
-    priorityName = `${this.features.taskPrefix}${priorityName}`;
+    priorityName = `${this.features.taskPrefix || ''}${priorityName}`;
     if (
       parentPrototype !== JHipsterBaseBlueprintGenerator.prototype &&
       !Object.getOwnPropertyDescriptor(ownPrototype, priorityName) &&
