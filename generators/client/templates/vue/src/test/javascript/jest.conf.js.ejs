@@ -8,7 +8,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>', '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/router', '*.json'],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/<%= CLIENT_TEST_SRC_DIR %>', '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/router', '**/*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
     '.*\\.(vue)$': '<%= microfrontend ? '@vue/vue2-jest' : 'vue-jest' %>',
