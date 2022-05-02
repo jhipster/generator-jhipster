@@ -279,8 +279,12 @@ function askForTableName() {
     skipCheckLengthOfIdentifier ||
     !this.entityConfig.relationships ||
     this.entityConfig.relationships.length === 0 ||
+    /* All versions of Oracle with a 30 character name limit have gone end-of-life
     !((prodDatabaseType === ORACLE && entityTableName.length > 14) || entityTableName.length > 30)
-  ) {
+    */
+    // Current versions of Oracle support 128 character names
+    !(entityTableName.length > (prodDatabaseType === ORACLE ? 112 : 30))
+    ) {
     return undefined;
   }
   const prompts = [
@@ -295,10 +299,13 @@ function askForTableName() {
         if (input === '') {
           return 'The table name cannot be empty';
         }
+        /* All versions of Oracle with a 30 character name limit have gone end-of-life
         if (prodDatabaseType === 'oracle' && input.length > 14 && !skipCheckLengthOfIdentifier) {
           return 'The table name is too long for Oracle, try a shorter name';
         }
-        if (input.length > 30 && !skipCheckLengthOfIdentifier) {
+        */
+        // Current versions of Oracle support 128 character names [- 16 (since previous code checked for 14, 16 less than 30) = 112]
+        if (input.length > (prodDatabaseType === 'oracle' ? 112 : 30) && !skipCheckLengthOfIdentifier) {
           return 'The table name is too long, try a shorter name';
         }
         return true;
@@ -503,9 +510,11 @@ function askForField() {
         if ((clientFramework !== undefined || clientFramework === REACT) && isReservedFieldName(input, REACT)) {
           return 'Your field name cannot contain a Java or React reserved keyword';
         }
+        /* All versions of Oracle with a 30 character name limit have gone end-of-life
         if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
           return 'The field name cannot be of more than 30 characters';
         }
+        */
         // we don't know, if filtering will be used
         if (possibleFiltering && isReservedPaginationWords(input)) {
           return 'Your field name cannot be a value, which is used as a parameter by Spring for pagination';
