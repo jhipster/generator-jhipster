@@ -13,12 +13,6 @@ export function initFilters() {
         }
         return '';
     });
-    Vue.filter('formatMillis', value => {
-        if (value) {
-          return dayjs(value).format(DATE_TIME_FORMAT);
-        }
-        return '';
-    });
     Vue.filter('duration', value => {
         if (value) {
           const formatted = dayjs.duration(value).humanize();
