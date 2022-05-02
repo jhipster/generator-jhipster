@@ -25,6 +25,8 @@
   "fixturesFolder": "<%= CLIENT_TEST_SRC_DIR %>cypress/fixtures",
   "pluginsFile": "<%= CLIENT_TEST_SRC_DIR %>cypress/plugins/index.ts",
   "screenshotsFolder": "<%= BUILD_DIR %>cypress/screenshots",
+  "downloadsFolder": "<%= BUILD_DIR %>cypress/downloads",
+  "videosFolder": "<%= BUILD_DIR %>cypress/screenshots",
   "chromeWebSecurity": <% if(authenticationTypeOauth2) { %>false<% } else { %>true<% } %>,
 <%_ if (clientFrameworkReact) { _%>
   "scrollBehavior": "center",
