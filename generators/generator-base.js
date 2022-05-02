@@ -1756,12 +1756,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     const prefix = legacyDbNames ? '' : 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     let limit = 0;
-    if (prodDatabaseType === ORACLE && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
+    // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
+    if (prodDatabaseType === ORACLE && joinTableName.length > 128 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
-        `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
+        `The generated join table "${joinTableName}" is too long for Oracle (which has a 128 character limit). It will be truncated!`
       );
 
-      limit = 30;
+      limit = 128;
     } else if (prodDatabaseType === MYSQL && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
@@ -1805,12 +1806,13 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
     }
     let limit = 0;
-    if (prodDatabaseType === ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
+    // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
+    if (prodDatabaseType === ORACLE && constraintName.length >= 125 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
-        `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
+        `The generated constraint name "${constraintName}" is too long for Oracle (which has a 128 character limit). It will be truncated!`
       );
 
-      limit = 28;
+      limit = 125;
     } else if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
