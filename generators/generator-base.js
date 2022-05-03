@@ -1756,7 +1756,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     const prefix = legacyDbNames ? '' : 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
     let limit = 0;
-    // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
+    // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now  128
     if (prodDatabaseType === ORACLE && joinTableName.length > 128 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for Oracle (which has a 128 character limit). It will be truncated!`
