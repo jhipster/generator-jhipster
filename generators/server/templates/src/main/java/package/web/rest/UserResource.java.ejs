@@ -357,11 +357,10 @@ public class UserResource {
     @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
   <%_ if (reactive) { _%>
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
         return userService.deleteUser(login)
-            .map(it -> ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, <% if (enableTranslation) { %> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build());
+        .then(Mono.just(ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, <% if (enableTranslation) { %> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build()));
   <%_ } else { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
