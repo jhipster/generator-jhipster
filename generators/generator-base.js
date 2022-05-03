@@ -2706,6 +2706,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.legacyDbNames !== undefined) {
       this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
     }
+    if (options.enableTranslation !== undefined) {
+      this.jhipsterConfig.enableTranslation = options.enableTranslation;
+    }
     if (options.language) {
       // workaround double options parsing, remove once generator supports skipping parse options
       const languages = options.language.flat();

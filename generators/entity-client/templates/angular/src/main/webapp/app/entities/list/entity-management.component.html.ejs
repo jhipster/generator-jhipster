@@ -28,19 +28,19 @@
 _%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
-        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.title') %></span>
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info me-2" (click)="<%= refreshMethod %>" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</span>
+                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.refreshListLabel') %></span>
             </button>
             <%_ if (!readOnly) { _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityPage %>/new']">
                 <fa-icon icon="plus"></fa-icon>
                 <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">
-                Create a new <%= entityClassHumanized %>
+                <%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.createLabel') %>
                 </span>
             </button>
             <%_ } _%>
@@ -55,7 +55,7 @@ _%>
     <form name="searchForm" class="row row-cols-sm-auto align-items-center">
         <div class="col-sm-12">
             <div class="input-group w-100 mt-3">
-                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search">Query</label>
+                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.search') %></label>
                 <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
 
                 <button class="btn btn-info" (click)="search(currentSearch)">
@@ -71,7 +71,7 @@ _%>
 <%_ } _%>
 
     <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
-        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
+        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.home.notFound') %></span>
     </div>
 
     <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
@@ -79,7 +79,7 @@ _%>
             <thead>
                 <tr<% if (!paginationNo) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="<%= !paginationInfiniteScroll ? 'loadPage()' : 'reset()'%>"<% } %>>
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-                    <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"><%- this._getEntityClientTranslation(field.fieldTranslationKey) %></span><% if (!paginationNo) { %> <fa-icon <% if (searchEngine && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>*ngIf="!currentSearch" <% } %>icon="sort"></fa-icon><% } %></th>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
     <%_ if (relationship.relationshipManyToOne
@@ -87,7 +87,7 @@ _%>
             || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
         const fieldName = "." + relationship.otherEntityField;
     _%>
-                    <th scope="col" <% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (!paginationNo) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>><span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- this._getEntityClientTranslation(i18nKeyPrefix + '.' + relationship.relationshipName) %></span><% if (!paginationNo) { %> <fa-icon icon="sort"></fa-icon><% } %></th>
     <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
@@ -110,10 +110,11 @@ _%>
                     </td>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
-                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">open</a>
+                        <a *ngIf="<%= entityInstance %>.<%= fieldName %>" (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open"><%- this._getClientTranslation('entity.action.open') %></a>
                         <span *ngIf="<%= entityInstance %>.<%= fieldName %>">{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     </td>
     <%_ } else if (field.fieldIsEnum) { _%>
+                    <%# TODO: import enum and use its key as label _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
     <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
@@ -166,7 +167,7 @@ _%>
                                     class="btn btn-info btn-sm"
                                     data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">View</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view"><%- this._getClientTranslation('entity.action.view') %></span>
                             </button>
 <%_ if (!readOnly) { _%>
 
@@ -175,14 +176,14 @@ _%>
                                     class="btn btn-primary btn-sm"
                                     data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">Edit</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit"><%- this._getClientTranslation('entity.action.edit') %></span>
                             </button>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
                                     class="btn btn-danger btn-sm"
                                     data-cy="entityDeleteButton">
                                 <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">Delete</span>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete"><%- this._getClientTranslation('entity.action.delete') %></span>
                             </button>
 <%_ } _%>
                         </div>

@@ -234,6 +234,12 @@ module.exports = class JHipsterAppGenerator extends BaseBlueprintGenerator {
       required: false,
     });
 
+    this.option('enable-translation', {
+      desc: 'Enable translation',
+      type: Boolean,
+      required: false,
+    });
+
     this.option('language', {
       alias: 'l',
       desc: 'Language to be added to application (existing languages are not removed)',
