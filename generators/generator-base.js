@@ -1795,51 +1795,52 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} prodDatabaseType - database type
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    * @param {string} prefix - constraintName prefix for the constraintName
+   * @param {string} suffix - constraintName suffix for the constraintName
    */
-  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
+  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
     let constraintName;
     const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
     const separator = legacyDbNames ? '_' : '__';
     if (noSnakeCase) {
-      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
+      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
     } else {
-      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
+      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}${suffix}`;
     }
     let limit = 0;
     // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
-    if (prodDatabaseType === ORACLE && constraintName.length >= 125 && !this.skipCheckLengthOfIdentifier) {
+    if (prodDatabaseType === ORACLE && constraintName.length > 128 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for Oracle (which has a 128 character limit). It will be truncated!`
       );
 
-      limit = 125;
-    } else if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      limit = 128;
+    } else if (prodDatabaseType === MYSQL && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
       );
 
-      limit = 62;
-    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+      limit = 64;
+    } else if (prodDatabaseType === POSTGRESQL && constraintName.length > 63 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
       );
 
-      limit = 61;
-    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      limit = 63;
+    } else if (prodDatabaseType === MARIADB && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
       );
 
-      limit = 62;
+      limit = 64;
     }
     return limit === 0
       ? constraintName
-      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+      : `${calculateDbNameWithLimit(entityName, columnOrRelationName, limit - suffix.length, {
           separator,
           noSnakeCase,
           prefix,
           appendHash: !legacyDbNames,
-        });
+        })}${suffix}`;
   }
 
   /**
@@ -1864,7 +1865,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    return `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
+    return this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
   }
 
   /**
@@ -1876,7 +1877,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    return `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
+    return this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
   }
 
   /**
