@@ -1769,7 +1769,8 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       );
 
       limit = 64;
-    } else if (prodDatabaseType === POSTGRESQL && joinTableName.length > 63 && !this.skipCheckLengthOfIdentifier) {
+      // FIXME: In V8, this should validate if 'joinTableName.length > 63'
+    } else if (prodDatabaseType === POSTGRESQL && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
       );
@@ -1788,7 +1789,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
+   * get a constraint name for tables in JHipster preferred style
    *
    * @param {string} entityName - name of the entity
    * @param {string} columnOrRelationName - name of the column or related entity
@@ -1797,7 +1798,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} prefix - constraintName prefix for the constraintName
    * @param {string} suffix - constraintName suffix for the constraintName
    */
-  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
+  getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
     let constraintName;
     const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
     const separator = legacyDbNames ? '_' : '__';
@@ -1844,16 +1845,59 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
-   * get a foreign key constraint name for tables in JHipster preferred style.
+   * @deprecated Should be removed in V8
+   *
+   * get a constraint name for tables in JHipster preferred style after applying any length limits required.
    *
    * @param {string} entityName - name of the entity
-   * @param {string} relationshipName - name of the related entity
+   * @param {string} columnOrRelationName - name of the column or related entity
    * @param {string} prodDatabaseType - database type
    * @param {boolean} noSnakeCase - do not convert names to snakecase
+   * @param {string} prefix - constraintName prefix for the constraintName
    */
-  getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    // for backward compatibility
-    return this.getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase);
+  getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '') {
+    let constraintName;
+    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+    const separator = legacyDbNames ? '_' : '__';
+    if (noSnakeCase) {
+      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}`;
+    } else {
+      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
+    }
+    let limit = 0;
+    if (prodDatabaseType === ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
+      this.warning(
+        `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
+      );
+
+      limit = 28;
+    } else if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      this.warning(
+        `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
+      );
+
+      limit = 62;
+    } else if (prodDatabaseType === POSTGRESQL && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+      this.warning(
+        `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
+      );
+
+      limit = 61;
+    } else if (prodDatabaseType === MARIADB && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+      this.warning(
+        `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+      );
+
+      limit = 62;
+    }
+    return limit === 0
+      ? constraintName
+      : calculateDbNameWithLimit(entityName, columnOrRelationName, limit - 1, {
+          separator,
+          noSnakeCase,
+          prefix,
+          appendHash: !legacyDbNames,
+        });
   }
 
   /**
@@ -1865,7 +1909,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id');
+    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
+    return prodDatabaseType === ORACLE
+      ? this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id')
+      : `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
   }
 
   /**
@@ -1877,7 +1924,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    return this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_');
+    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
+    return prodDatabaseType === ORACLE
+      ? this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_')
+      : `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
   }
 
   /**
