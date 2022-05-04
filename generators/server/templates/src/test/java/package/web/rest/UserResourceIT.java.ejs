@@ -263,7 +263,7 @@ class UserResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
 <%_ } _%>
-<%_ if (!databaseTypeSql || reactive) { _%>
+<%_ if (!databaseTypeSql || !reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
         <%= asEntity('User') %> user = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
