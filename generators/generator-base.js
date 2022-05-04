@@ -1769,7 +1769,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       );
 
       limit = 64;
-    } else if (prodDatabaseType === POSTGRESQL && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+    } else if (prodDatabaseType === POSTGRESQL && joinTableName.length > 63 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
       );
