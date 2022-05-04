@@ -1030,7 +1030,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
           `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
         );
       }
-    // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
+      // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
     } else if (prodDatabaseType === ORACLE && entityTableName.length > 124 && !skipCheckLengthOfIdentifier) {
       return `The table name is too long for Oracle, try a shorter name.\n${instructions}`;
     } else if (prodDatabaseType === ORACLE && entityTableName.length > 112 && !skipCheckLengthOfIdentifier) {

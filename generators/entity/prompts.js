@@ -281,7 +281,7 @@ function askForTableName() {
     this.entityConfig.relationships.length === 0 ||
     // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
     !(entityTableName.length > (prodDatabaseType === ORACLE ? 112 : 30))
-    ) {
+  ) {
     return undefined;
   }
   const prompts = [
