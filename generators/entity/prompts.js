@@ -297,11 +297,11 @@ function askForTableName() {
           return 'The table name cannot be empty';
         }
         // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
-        if (prodDatabaseType === 'oracle' && input.length > 112 && !skipCheckLengthOfIdentifier) {
+        if (prodDatabaseType === ORACLE && input.length > 112 && !skipCheckLengthOfIdentifier) {
           return 'The table name is too long for Oracle, try a shorter name';
         }
         // Current versions of Oracle support 128 character names [- 16 (since previous code checked for 14, 16 less than 30) = 112]
-        if (input.length > (prodDatabaseType === 'oracle' ? 128 : 30) && !skipCheckLengthOfIdentifier) {
+        if (input.length > (prodDatabaseType === ORACLE ? 128 : 30) && !skipCheckLengthOfIdentifier) {
           return 'The table name is too long, try a shorter name';
         }
         return true;
