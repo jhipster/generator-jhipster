@@ -262,7 +262,8 @@ class UserResourceIT {
     public static <%= asEntity('User') %> initTestUser(UserRepository userRepository<% if (databaseTypeSql) { %>, EntityManager em<% } _%>) {
 <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
-<%_ } else { _%>
+<%_ } _%>
+<%_ if (!databaseTypeSql || !reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
         <%= asEntity('User') %> user = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
