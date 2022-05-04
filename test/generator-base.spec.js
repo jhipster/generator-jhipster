@@ -114,6 +114,68 @@ describe('Generator Base', () => {
         );
       });
     });
+    describe('when called with a long name and postgresql', () => {
+      it('returns a proper constraint name', () => {
+        expect(
+          BaseGenerator.getFKConstraintName(
+            'entityLongerNameWithPaginationAndDTO',
+            'relationshipLongerNameWithPaginationAndDTO',
+            POSTGRESQL
+          )
+        ).to.have.length(63);
+        expect(
+          BaseGenerator.getFKConstraintName(
+            'entityLongerNameWithPaginationAndDTO',
+            'relationshipLongerNameWithPaginationAndDTO',
+            POSTGRESQL
+          )
+        ).to.equal('fk_entity_longer_name_with_pagi__relationship_longer_name_b6_id');
+      });
+    });
+    describe('when called with a long name that is near limit and postgresql', () => {
+      it('returns a proper constraint name', () => {
+        expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', POSTGRESQL).length).to.be.lessThan(
+          64
+        );
+        expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToMany', POSTGRESQL)).to.equal(
+          'fk_test_custom_table_name__user_many_to_many_user_many_to_8c_id'
+        );
+        expect(
+          BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', POSTGRESQL).length
+        ).to.be.lessThan(64);
+        expect(BaseGenerator.getFKConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', POSTGRESQL)).to.equal(
+          'fk_test_custom_table_name__user_many_to_many_user_many_to_72_id'
+        );
+      });
+    });
+    describe('when called with a long name that is equal to limit and postgresql', () => {
+      it('returns a proper constraint name', () => {
+        expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.have.length(63);
+        expect(BaseGenerator.getFKConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.equal(
+          'fk_test_custom_table_names__user_many_to_many_user_many_t_50_id'
+        );
+      });
+    });
+    describe('when called with a long name and no snake case', () => {
+      it('returns a proper constraint name', () => {
+        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE, true)).to.have.length(30);
+        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE, true)).to.equal(
+          'fk_entityNameL__relation_03_id'
+        );
+      });
+    });
+  });
+  /**
+   * FIXME: Tests to be used in V8
+   *
+  describe('getFKConstraintName', () => {
+    describe('when called with a value', () => {
+      it('returns a constraint name', () => {
+        expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', POSTGRESQL)).to.equal(
+          'fk_entity_name__relationship_name_id'
+        );
+      });
+    });
     describe('when called with a value and no snake case', () => {
       it('returns a constraint name', () => {
         expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', POSTGRESQL, true)).to.equal(
@@ -142,7 +204,79 @@ describe('Generator Base', () => {
       });
     });
   });
+   **/
   describe('getUXConstraintName', () => {
+    describe('when called with a value', () => {
+      it('returns a constraint name', () => {
+        expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL)).to.equal('ux_entity_name__column_name');
+      });
+    });
+    describe('when called with a value and no snake case', () => {
+      it('returns a constraint name', () => {
+        expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL, true)).to.equal('ux_entityName__columnName');
+      });
+    });
+    describe('when called with a long name and oracle', () => {
+      it('returns a proper constraint name', () => {
+        expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', ORACLE)).to.have.length(30);
+        expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', ORACLE)).to.equal(
+          'ux_entity_name__column_long_29'
+        );
+      });
+    });
+    describe('when called with a long name and postgresql', () => {
+      it('returns a proper constraint name', () => {
+        expect(
+          BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', POSTGRESQL)
+        ).to.have.length(63);
+        expect(
+          BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', POSTGRESQL)
+        ).to.equal('ux_entity_longer_name_with_pagi__column_longer_name_with_pag_8b');
+      });
+    });
+    describe('when called with a long name that is near limit and postgresql', () => {
+      it('returns a proper constraint name', () => {
+        expect(
+          BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', POSTGRESQL).length
+        ).to.be.lessThan(64);
+        expect(BaseGenerator.getUXConstraintName('testCustomTableName', 'userManyToManyUserManyToManies', POSTGRESQL)).to.equal(
+          'ux_test_custom_table_name__user_many_to_many_user_many_to_ma_72'
+        );
+      });
+    });
+    describe('when called with a long name that is equal to limit and postgresql', () => {
+      it('returns a proper constraint name', () => {
+        expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.have.length(63);
+        expect(BaseGenerator.getUXConstraintName('testCustomTableNames', 'userManyToManyUserManyToManies', POSTGRESQL)).to.equal(
+          'ux_test_custom_table_names__user_many_to_many_user_many_to_m_50'
+        );
+      });
+    });
+    describe('when called with a long name and postgresql and no snake case', () => {
+      it('returns a proper constraint name', () => {
+        expect(
+          BaseGenerator.getUXConstraintName(
+            'entityLongerNameWithPaginationAndDTO',
+            'columnLongerNameWithPaginationAndDTO',
+            POSTGRESQL,
+            true
+          )
+        ).to.have.length(63);
+        expect(
+          BaseGenerator.getUXConstraintName(
+            'entityLongerNameWithPaginationAndDTO',
+            'columnLongerNameWithPaginationAndDTO',
+            POSTGRESQL,
+            true
+          )
+        ).to.equal('ux_entityLongerNameWithPaginati__columnLongerNameWithPaginat_8b');
+      });
+    });
+  });
+  /**
+ * FIXME: Tests to be used in V8
+ *
+ describe('getUXConstraintName', () => {
     describe('when called with a value', () => {
       it('returns a constraint name', () => {
         expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL)).to.equal('ux_entity_name__column_name');
@@ -174,6 +308,7 @@ describe('Generator Base', () => {
       });
     });
   });
+ **/
   describe('printJHipsterLogo', () => {
     describe('when called', () => {
       it('prints the logo', () => {
