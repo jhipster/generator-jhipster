@@ -471,10 +471,8 @@ function askForField() {
   const context = this.context;
   this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   const skipServer = context.skipServer;
-  const prodDatabaseType = context.prodDatabaseType;
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
-  const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
   const possibleFiltering = databaseType === SQL && !context.reactive;
   const prompts = [
     {
@@ -506,11 +504,6 @@ function askForField() {
         if ((clientFramework !== undefined || clientFramework === REACT) && isReservedFieldName(input, REACT)) {
           return 'Your field name cannot contain a Java or React reserved keyword';
         }
-        /* All versions of Oracle with a 30 character name limit have gone end-of-life
-        if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
-          return 'The field name cannot be of more than 30 characters';
-        }
-        */
         // we don't know, if filtering will be used
         if (possibleFiltering && isReservedPaginationWords(input)) {
           return 'Your field name cannot be a value, which is used as a parameter by Spring for pagination';
