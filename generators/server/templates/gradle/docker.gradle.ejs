@@ -19,6 +19,12 @@
 jib {
     from {
         image = "<%= DOCKER_JAVA_JRE %>"
+        platforms {
+            platform {
+                architecture = "${findProperty('jibArchitecture') ?: 'amd64'}"
+                os = "linux"
+            }
+        }
     }
     to {
         image = "<%= baseName.toLowerCase() %>:latest"
