@@ -56,7 +56,7 @@ const { stringify } = require('../../utils');
 const { GATEWAY, MICROSERVICE } = require('../../jdl/jhipster/application-types');
 const { NO: CLIENT_FRAMEWORK_NO } = require('../../jdl/jhipster/client-framework-types');
 const { NO: SEARCH_ENGINE_NO } = require('../../jdl/jhipster/search-engine-types');
-const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
 const {
   GENERATOR_ENTITIES,
   GENERATOR_ENTITY,
@@ -1010,7 +1010,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     const context = this.context;
     const prodDatabaseType = context.prodDatabaseType;
     const jhiTablePrefix = context.jhiTablePrefix;
-    const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${context.name}.json file and then run again 'jhipster entity ${context.name}.'`;
 
     if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
