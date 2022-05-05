@@ -364,12 +364,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         }
       },
 
-      /*
-       * Postpone entity table name prompt to wait entity table to be configured.
-       * It should be asked only when entity table name isn't valid.
-       */
-      askForTableName: prompts.askForTableName,
-
       configureEntity() {
         const context = this.context;
         const validation = this._validateTableName(context.entityTableName);

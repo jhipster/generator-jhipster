@@ -23,7 +23,6 @@ const constants = require('../generator-constants');
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
 const { CASSANDRA, SQL } = require('../../jdl/jhipster/database-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
-const { databaseData } = require('../sql-constants');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
 
@@ -56,7 +55,6 @@ module.exports = {
   askForFieldsToRemove,
   askForRelationships,
   askForRelationsToRemove,
-  askForTableName,
   askForDTO,
   askForService,
   askForFiltering,
@@ -266,47 +264,6 @@ function askForRelationsToRemove() {
         }
       }
       this.entityConfig.relationships = relationships;
-    }
-  });
-}
-
-function askForTableName() {
-  const context = this.context;
-  // don't prompt if there are no relationships
-  const entityTableName = context.entityTableName;
-  const prodDatabaseType = context.prodDatabaseType;
-  const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
-  const { tableNameMaxLength } = databaseData[prodDatabaseType] || {};
-  if (
-    skipCheckLengthOfIdentifier ||
-    !this.entityConfig.relationships ||
-    this.entityConfig.relationships.length === 0 ||
-    !tableNameMaxLength ||
-    entityTableName.length <= tableNameMaxLength
-  ) {
-    return undefined;
-  }
-  const prompts = [
-    {
-      type: 'input',
-      name: 'entityTableName',
-      message: 'The table name for this entity is too long to form constraint names. Please use a shorter table name',
-      validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-          return 'The table name cannot contain special characters';
-        }
-        if (input === '') {
-          return 'The table name cannot be empty';
-        }
-        return true;
-      },
-      default: entityTableName,
-    },
-  ];
-  return this.prompt(prompts).then(props => {
-    /* overwrite the table name for the entity using name obtained from the user */
-    if (props.entityTableName !== this.entityConfig.entityTableName) {
-      context.entityTableName = this.entityConfig.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
     }
   });
 }
