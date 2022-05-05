@@ -23,6 +23,10 @@ import java.util.List;
 <%_ if (databaseTypeCassandra) { _%>
 import org.cassandraunit.CQLDataLoader;
 <%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+import java.util.Arrays;
+import tech.jhipster.config.JHipsterConstants;
+<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +67,12 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 <%_ if (databaseTypeNeo4j) { _%>
     private static Neo4jTestContainer neo4jBean;
 <%_ } _%>
+<%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
+    private static SqlTestContainer devTestContainer;
+<%_ } _%>
+<%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
+    private static SqlTestContainer prodTestContainer;
+<%_ } _%>
 
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
@@ -96,6 +106,58 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
             }
 <%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+            EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
+            if (null != sqlAnnotation) {
+                log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
+                log.info("Warming up the sql database");
+  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
+                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+                    if (null == devTestContainer) {
+                        try {
+                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
+                            devTestContainer = beanFactory.createBean(containerClass);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+    <%_ if (reactive) { _%>
+                    testValues = testValues.and("spring.r2dbc.url=" + devTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc") + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.username=" + devTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.r2dbc.password=" + devTestContainer.getTestContainer().getPassword());
+                    testValues = testValues.and("spring.liquibase.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>" );
+    <%_ } else { _%>
+                    testValues = testValues.and("spring.datasource.url=" + devTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(devDatabaseType) %>");
+                    testValues = testValues.and("spring.datasource.username=" + devTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.datasource.password=" + devTestContainer.getTestContainer().getPassword());
+    <%_ } _%>
+                }
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
+                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+                    if (null == prodTestContainer) {
+                        try {
+                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
+                            prodTestContainer = beanFactory.createBean(containerClass);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+    <%_ if (reactive) { _%>
+                    testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc") + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
+                    testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- getDBCExtraOption(prodDatabaseType) %>");
+    <%_ } else { _%>
+                    testValues = testValues.and("spring.datasource.url=" + prodTestContainer.getTestContainer().getJdbcUrl() + "<%- getDBCExtraOption(prodDatabaseType) %>");
+                    testValues = testValues.and("spring.datasource.username=" + prodTestContainer.getTestContainer().getUsername());
+                    testValues = testValues.and("spring.datasource.password=" + prodTestContainer.getTestContainer().getPassword());
+    <%_ } _%>
+                }
+  <%_ } _%>
+            }
+<%_ } _%>
+
 <%_ if (databaseTypeCassandra) { _%>
             EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
             if (null != cassandraAnnotation) {

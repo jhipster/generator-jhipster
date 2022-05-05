@@ -109,7 +109,7 @@ import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (implementsEagerLoadApis || databaseTypeNeo4j || reactiveSqlTestContainers) { _%>
+<%_ if (implementsEagerLoadApis || databaseTypeNeo4j) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -1041,18 +1041,6 @@ _%>
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
-    }
-
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
-        // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.notEquals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.notEquals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
     @Test<%= transactionalAnnotation %>

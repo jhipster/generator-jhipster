@@ -16,6 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (devDatabaseType !== prodDatabaseType && (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgres)) { _%>
+sourceSets {
+    test {
+        java {
+            exclude '<%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java'
+        }
+    }
+}
+<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 dependencies {
   <%_ if (devDatabaseTypeH2Any) { _%>
@@ -24,38 +33,33 @@ dependencies {
     <%_ } else { _%>
     implementation "com.h2database:h2"
     <%_ } _%>
-    liquibaseRuntime "com.h2database:h2"
   <%_ } _%>
   <%_ if (devDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
     implementation "dev.miku:r2dbc-mysql"
-    <%_ } else { _%>
-    implementation "mysql:mysql-connector-java"
     <%_ } _%>
+    implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
   <%_ } _%>
   <%_ if (devDatabaseTypePostgres) { _%>
     <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-postgresql"
-    <%_ } else { _%>
-    implementation "org.postgresql:postgresql"
     <%_ } _%>
+    implementation "org.postgresql:postgresql"
     liquibaseRuntime "org.postgresql:postgresql"
   <%_ } _%>
   <%_ if (devDatabaseTypeMariadb) { _%>
     <%_ if (reactive) { _%>
     implementation "org.mariadb:r2dbc-mariadb"
-    <%_ } else { _%>
-    implementation "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
+    implementation "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
   <%_ } _%>
   <%_ if (devDatabaseTypeMssql) { _%>
     <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-mssql"
-    <%_ } else { _%>
-    implementation "com.microsoft.sqlserver:mssql-jdbc"
     <%_ } _%>
+    implementation "com.microsoft.sqlserver:mssql-jdbc"
     implementation "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
     liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%= LIQUIBASE_VERSION %>"
@@ -189,7 +193,9 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m -Dspring.profiles.active=dev'
+    jvmArgs += '-Xmx512m'
+    systemProperty('spring.profiles.active', 'dev')
+    systemProperty('java.security.egd', 'file:/dev/./urandom')
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true

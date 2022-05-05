@@ -35,6 +35,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
       generator.removeFile(`${javaDir}domain/util/FixedPostgreSQL82Dialect`);
     }
   }
+  if (generator.isJhipsterVersionLessThan('7.8.1')) {
+    generator.removeFile(`${testResourceDir}config/application-testcontainers.yml`);
+  }
 }
 
 module.exports = {

@@ -30,18 +30,7 @@ const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 
-const {
-  CASSANDRA,
-  COUCHBASE,
-  ORACLE,
-  SQL,
-  MONGODB,
-  NEO4J,
-  MYSQL,
-  MARIADB,
-  POSTGRESQL,
-  MSSQL,
-} = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -183,6 +172,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
+        this.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_SONAR = constants.DOCKER_SONAR;
@@ -361,57 +351,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.testResourceDir = SERVER_TEST_RES_DIR;
         this.srcMainDir = MAIN_DIR;
         this.srcTestDir = TEST_DIR;
-
-        if (this.jhipsterConfig.databaseType === SQL) {
-          let pv;
-          switch (this.jhipsterConfig.devDatabaseType) {
-            case MYSQL:
-              pv = constants.DOCKER_MYSQL;
-              break;
-            case MARIADB:
-              pv = constants.DOCKER_MARIADB;
-              break;
-            case POSTGRESQL:
-              pv = constants.DOCKER_POSTGRESQL;
-              break;
-            case MSSQL:
-              pv = constants.DOCKER_MSSQL;
-              break;
-            case ORACLE:
-            default:
-              pv = null;
-          }
-          if (pv != null && pv.includes(':')) {
-            this.devContainerVersion = pv.split(':')[1];
-          } else {
-            this.devContainerVersion = 'latest';
-          }
-        }
-        if (this.jhipsterConfig.databaseType === SQL) {
-          let pv;
-          switch (this.jhipsterConfig.prodDatabaseType) {
-            case MYSQL:
-              pv = constants.DOCKER_MYSQL;
-              break;
-            case MARIADB:
-              pv = constants.DOCKER_MARIADB;
-              break;
-            case POSTGRESQL:
-              pv = constants.DOCKER_POSTGRESQL;
-              break;
-            case MSSQL:
-              pv = constants.DOCKER_MSSQL;
-              break;
-            case ORACLE:
-            default:
-              pv = null;
-          }
-          if (pv != null && pv.includes(':')) {
-            this.prodContainerVersion = pv.split(':')[1];
-          } else {
-            this.prodContainerVersion = 'latest';
-          }
-        }
       },
     };
   }
@@ -599,7 +538,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
-            'backend:unit:test:prod': `./mvnw -ntp${excludeWebapp} -Pprod verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });

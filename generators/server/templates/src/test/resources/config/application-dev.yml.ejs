@@ -38,8 +38,8 @@
 
 spring:
 <%_ if (reactive) { _%>
-  r2dbc:
   <%_ if (devDatabaseTypeH2Any) { _%>
+  r2dbc:
     <%_ if (devDatabaseTypeH2Memory) { _%>
     url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
     <%_ } else { _%>
@@ -48,21 +48,6 @@ spring:
     name:
     username:
     password:
-  <%_ } else { _%>
-    url: <%- getTCDBCUrl(devDatabaseType, 'r2dbc', devContainerVersion, { databaseName: baseName }) %>
-  <%_ } _%>
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    username: root
-    password:
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    username: system
-    password: oracle
   <%_ } _%>
 <%_ } else { _%>
   datasource:
@@ -76,76 +61,24 @@ spring:
     name:
     username:
     password:
-  <%_ } else { _%>
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: <%- getTCDBCUrl(devDatabaseType, 'jdbc', devContainerVersion, { databaseName: baseName }) %>
   <%_ } _%>
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb) { _%>
-    username: root
-    password:
-  <%_ } else if (devDatabaseTypePostgres) { _%>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    username: system
-    password: oracle
-  <%_ } _%>
-  hikari:
-    poolName: Hikari
-    auto-commit: false
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      maximum-pool-size: 1
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql) { _%>
-    data-source-properties:
-      cachePrepStmts: true
-      prepStmtCacheSize: 250
-      prepStmtCacheSqlLimit: 2048
-      useServerPrepStmts: true
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
   <%_ } _%>
+  <%_ if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { _%>
   jpa:
-  <%_ if (devDatabaseTypeH2Any) { _%>
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
-    open-in-view: false
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-      properties:
-        hibernate.id.new_generator_mappings: true
-        hibernate.connection.provider_disables_autocommit: true
-        hibernate.cache.use_second_level_cache: false
-        hibernate.cache.use_query_cache: false
-        hibernate.generate_statistics: false
-        hibernate.hbm2ddl.auto: validate
-        hibernate.jdbc.time_zone: UTC
-        hibernate.query.fail_on_pagination_over_collection_fetch: true
-  <%_ } else if (devDatabaseTypeMysql) { _%>
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-  <%_ } else if (devDatabaseTypeMariadb) { _%>
-    database-platform: org.hibernate.dialect.MariaDB103Dialect
-  <%_ } else if (devDatabaseTypePostgres) { _%>
+    <%_ if (devDatabaseTypePostgres) { _%>
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-  <%_ } else if (devDatabaseTypeOracle) { _%>
-    database-platform: org.hibernate.dialect.Oracle12cDialect
-  <%_ } else if (devDatabaseTypeMssql) { _%>
-    database-platform: org.hibernate.dialect.SQLServer2012Dialect
-  <%_ } else { _%>
+    <%_ } else if (devDatabaseTypeH2Any) { _%>
     database-platform: tech.jhipster.domain.util.FixedH2Dialect
-  <%_ } _%>
-<%_ } _%>
-  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
-  liquibase:
-    contexts: test
-<%_ if (reactive) { _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
-    <%_ if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
-    <%_ } else if (devDatabaseTypeH2Disk) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } _%>
-  <%_ } else { _%>
-    url: <%- getTCDBCUrl(devDatabaseType, 'jdbc', devContainerVersion, { databaseName: baseName }) %>
   <%_ } _%>
 <%_ } _%>

@@ -386,6 +386,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "org.testcontainers:r2dbc"
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
   <%_ } else { _%>
+    testImplementation "org.testcontainers:jdbc"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   <%_ } _%>
 <%_ } _%>

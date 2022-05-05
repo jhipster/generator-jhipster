@@ -1372,28 +1372,86 @@ const baseServerFiles = {
       ],
     },
     {
+      condition: generator => generator.databaseTypeSql,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/EmbeddedSQL.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedSQL.java`,
+        },
+        {
+          file: 'package/config/SqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/SqlTestContainer.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.devDatabaseTypeMysql || generator.prodDatabaseTypeMysql,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MysqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MysqlTestContainer.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.devDatabaseTypeMariadb || generator.prodDatabaseTypeMariadb,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MariadbTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MariadbTestContainer.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.devDatabaseTypeMssql || generator.prodDatabaseTypeMssql,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MsSqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MsSqlTestContainer.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.devDatabaseTypePostgres || generator.prodDatabaseTypePostgres,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/PostgreSqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/PostgreSqlTestContainer.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.databaseTypeSql,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['testcontainers.properties', 'META-INF/spring.factories'],
+    },
+    {
       path: SERVER_TEST_RES_DIR,
       templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
     {
-      condition: generator => generator.databaseTypeSql && generator.devDatabaseType !== generator.prodDatabaseType,
+      condition: generator => generator.databaseTypeSql,
       path: SERVER_TEST_RES_DIR,
-      templates: ['config/application-dev.yml', 'config/application-prod.yml'],
+      templates: ['config/application-dev.yml'],
+    },
+    {
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['config/application-prod.yml'],
     },
     {
       condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,
       path: SERVER_TEST_RES_DIR,
       templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
-    },
-    {
-      condition: generator => generator.reactiveSqlTestContainers,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/ReactiveSqlTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}ReactiveSqlTestContainerExtension.java`,
-        },
-      ],
     },
     {
       // TODO : add these tests to reactive

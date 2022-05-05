@@ -38,8 +38,8 @@ import <%= packageName %>.config.EmbeddedElasticsearch;
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.config.EmbeddedNeo4j;
 <%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-import <%= packageName %>.ReactiveSqlTestContainerExtension;
+<%_ if (databaseTypeSql) { _%>
+import <%= packageName %>.config.EmbeddedSQL;
 <%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
 import <%= packageName %>.RedisTestContainerExtension;
@@ -47,7 +47,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProviderRedis || reactiveSqlTestContainers) { _%>
+<%_ if (cacheProviderRedis) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -87,8 +87,8 @@ import java.lang.annotation.Target;
 <%_ if (databaseTypeNeo4j) { _%>
 @EmbeddedNeo4j
 <%_ } _%>
-<%_ if (reactiveSqlTestContainers) { _%>
-@ExtendWith(ReactiveSqlTestContainerExtension.class)
+<%_ if (databaseTypeSql) { _%>
+@EmbeddedSQL
 <%_ } _%>
 public @interface IntegrationTest {
 <%_ if (reactive) { _%>

@@ -37,69 +37,20 @@
 # ===================================================================
 
 spring:
-<%_ if (!reactive) { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: <%- getTCDBCUrl(prodDatabaseType, 'jdbc', prodContainerVersion, { databaseName: baseName }) %>
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    username: root
-    password:
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    username: system
-    password: oracle
-  <%_ } _%>
     hikari:
       poolName: Hikari
       auto-commit: false
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql) { _%>
+      maximum-pool-size: 1
+<%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql) { _%>
       data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-  <%_ } _%>
+<%_ } _%>
+<%_ if (prodDatabaseTypePostgres) { _%>
   jpa:
-  <%_ if (prodDatabaseTypeMysql) { _%>
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-  <%_ } else if (prodDatabaseTypeMariadb) { _%>
-    database-platform: org.hibernate.dialect.MariaDB103Dialect
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    database-platform: org.hibernate.dialect.Oracle12cDialect
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    database-platform: org.hibernate.dialect.SQLServer2012Dialect
-  <%_ } else { _%>
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
-  <%_ } _%>
-<%_ } _%>
-<%_ if (reactive) { _%>
-  r2dbc:
-    url: <%- getTCDBCUrl(prodDatabaseType, 'r2dbc', prodContainerVersion, { databaseName: baseName }) %>
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
-    username: root
-    password:
-  <%_ } else if (prodDatabaseTypePostgres) { _%>
-    username: <%= baseName %>
-    password:
-  <%_ } else if (prodDatabaseTypeMssql) { _%>
-    username: SA
-    password: yourStrong(!)Password
-  <%_ } else if (prodDatabaseTypeOracle) { _%>
-    username: system
-    password: oracle
-  <%_ } _%>
-<%_ } _%>
-  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
-  liquibase:
-    contexts: test
-<%_ if (reactive) { _%>
-    url: <%- getTCDBCUrl(prodDatabaseType, 'jdbc', prodContainerVersion, { databaseName: baseName }) %>
 <%_ } _%>

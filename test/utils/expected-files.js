@@ -741,9 +741,24 @@ const expectedFiles = {
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`,
   ],
 
-  mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
+  mysql: [
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/MysqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/EmbeddedSQL.java`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
+    `${SERVER_TEST_RES_DIR}META-INF/service/spring.factories`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+    `${DOCKER_DIR}mysql.yml`,
+  ],
 
   mariadb: [
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/MariadbTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/EmbeddedSQL.java`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
+    `${SERVER_TEST_RES_DIR}META-INF/spring.factories`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
     `${DOCKER_DIR}mariadb.yml`,
     `${SERVER_TEST_RES_DIR}config/application-dev.yml`,
@@ -751,9 +766,24 @@ const expectedFiles = {
     `${SERVER_TEST_RES_DIR}testcontainers/mariadb/my.cnf`,
   ],
 
-  mssql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mssql.yml`],
+  mssql: [
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/MsSqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/EmbeddedSQL.java`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
+    `${SERVER_TEST_RES_DIR}META-INF/spring.factories`,
+    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+    `${DOCKER_DIR}mssql.yml`,
+  ],
 
   postgresql: [
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/PostgreSqlTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/EmbeddedSQL.java`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
+    `${SERVER_TEST_RES_DIR}META-INF/spring.factories`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
     `${DOCKER_DIR}postgresql.yml`,
     `${SERVER_TEST_RES_DIR}config/application-dev.yml`,

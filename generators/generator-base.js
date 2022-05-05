@@ -3068,11 +3068,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     dest.searchEngineCouchbase = dest.searchEngine === COUCHBASE;
     dest.searchEngineElasticsearch = dest.searchEngine === ELASTICSEARCH;
-
-    dest.reactiveSqlTestContainers =
-      dest.reactive &&
-      ([MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.prodDatabaseType) ||
-        [MYSQL, POSTGRESQL, MSSQL, MARIADB].includes(dest.devDatabaseType));
   }
 
   loadPlatformConfig(config = _.defaults({}, this.jhipsterConfig, this.jhipsterDefaults), dest = this) {
