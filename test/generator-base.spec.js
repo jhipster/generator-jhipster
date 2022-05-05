@@ -156,54 +156,7 @@ describe('Generator Base', () => {
         );
       });
     });
-    describe('when called with a long name and no snake case', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE, true)).to.have.length(30);
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE, true)).to.equal(
-          'fk_entityNameL__relation_03_id'
-        );
-      });
-    });
   });
-  /*
-  FIXME: Tests to be used in V8
-  describe('getFKConstraintName', () => {
-    describe('when called with a value', () => {
-      it('returns a constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', POSTGRESQL)).to.equal(
-          'fk_entity_name__relationship_name_id'
-        );
-      });
-    });
-    describe('when called with a value and no snake case', () => {
-      it('returns a constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', POSTGRESQL, true)).to.equal(
-          'fk_entityName__relationshipName_id'
-        );
-      });
-    });
-    describe('when called with a long name', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.equal(
-          'fk_entity_name_longer_for_postg__relationship_name_for_po_24_id'
-        );
-        expect(
-          BaseGenerator.getFKConstraintName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)
-        ).to.have.length(63);
-      });
-    });
-    describe('when called with a long name and no snake case', () => {
-      it('returns a proper constraint name', () => {
-        expect(
-          BaseGenerator.getFKConstraintName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL, true)
-        ).to.equal('fk_entityNameLongerForPostgresq__relationshipNameForPostg_24_id');
-        expect(
-          BaseGenerator.getFKConstraintName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL, true)
-        ).to.have.length(63);
-      });
-    });
-  });
-*/
   describe('getUXConstraintName', () => {
     describe('when called with a value', () => {
       it('returns a constraint name', () => {
@@ -213,14 +166,6 @@ describe('Generator Base', () => {
     describe('when called with a value and no snake case', () => {
       it('returns a constraint name', () => {
         expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL, true)).to.equal('ux_entityName__columnName');
-      });
-    });
-    describe('when called with a long name and oracle', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', ORACLE)).to.have.length(30);
-        expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', ORACLE)).to.equal(
-          'ux_entity_name__column_long_29'
-        );
       });
     });
     describe('when called with a long name and postgresql', () => {
@@ -272,41 +217,6 @@ describe('Generator Base', () => {
       });
     });
   });
-  /*
- FIXME: Tests to be used in V8
- describe('getUXConstraintName', () => {
-    describe('when called with a value', () => {
-      it('returns a constraint name', () => {
-        expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL)).to.equal('ux_entity_name__column_name');
-      });
-    });
-    describe('when called with a value and no snake case', () => {
-      it('returns a constraint name', () => {
-        expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL, true)).to.equal('ux_entityName__columnName');
-      });
-    });
-    describe('when called with a long name', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getUXConstraintName('entityNameLongerForPostgresql', 'columnLongerNameForPostgresql', POSTGRESQL)).to.equal(
-          'ux_entity_name_longer_for_postgr__column_longer_name_for_pos_54'
-        );
-        expect(
-          BaseGenerator.getUXConstraintName('entityNameLongerForPostgresql', 'columnLongerNameForPostgresql', POSTGRESQL)
-        ).to.have.length(63);
-      });
-    });
-    describe('when called with a long name and no snake case', () => {
-      it('returns a proper constraint name', () => {
-        expect(
-          BaseGenerator.getUXConstraintName('entityNameLongerForPostgresql', 'columnLongerNameForPostgresql', POSTGRESQL, true)
-        ).to.equal('ux_entityNameLongerForPostgresql__columnLongerNameForPostgresql');
-        expect(
-          BaseGenerator.getUXConstraintName('entityNameLongerForPostgresql', 'columnLongerNameForPostgresql', POSTGRESQL, true)
-        ).to.have.length(63);
-      });
-    });
-  });
-*/
   describe('printJHipsterLogo', () => {
     describe('when called', () => {
       it('prints the logo', () => {
