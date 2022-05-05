@@ -42,7 +42,7 @@ const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
-const databaseData = require('./sql-constants');
+const { databaseData } = require('./sql-constants');
 const { ANGULAR_X: ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 const {
   PRIORITY_NAMES: {
@@ -1756,7 +1756,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     const separator = legacyDbNames ? '_' : '__';
     const prefix = legacyDbNames ? '' : 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
-    const { name, tableNameMaxLength } = databaseData[prodDatabaseType];
+    const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
     // FIXME: In V8, remove specific condition for POSTGRESQL joinTableName.length === 63
     if (
       tableNameMaxLength &&
@@ -1766,10 +1766,9 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       this.warning(
         `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
+      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator, appendHash: !legacyDbNames });
     }
-    return !tableNameMaxLength
-      ? joinTableName
-      : calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator, appendHash: !legacyDbNames });
+    return joinTableName;
   }
 
   /**
@@ -1791,20 +1790,19 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     } else {
       constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}${suffix}`;
     }
-    const { name, constraintNameMaxLength } = databaseData[prodDatabaseType];
+    const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
     if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
       );
+      return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
+        separator,
+        noSnakeCase,
+        prefix,
+        appendHash: !legacyDbNames,
+      })}${suffix}`;
     }
-    return !constraintNameMaxLength
-      ? constraintName
-      : `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
-          separator,
-          noSnakeCase,
-          prefix,
-          appendHash: !legacyDbNames,
-        })}${suffix}`;
+    return constraintName;
   }
 
   /**
