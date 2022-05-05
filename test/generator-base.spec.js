@@ -165,9 +165,8 @@ describe('Generator Base', () => {
       });
     });
   });
-  /**
-   * FIXME: Tests to be used in V8
-   *
+  /*
+  FIXME: Tests to be used in V8
   describe('getFKConstraintName', () => {
     describe('when called with a value', () => {
       it('returns a constraint name', () => {
@@ -204,7 +203,7 @@ describe('Generator Base', () => {
       });
     });
   });
-   **/
+*/
   describe('getUXConstraintName', () => {
     describe('when called with a value', () => {
       it('returns a constraint name', () => {
@@ -273,9 +272,8 @@ describe('Generator Base', () => {
       });
     });
   });
-  /**
- * FIXME: Tests to be used in V8
- *
+  /*
+ FIXME: Tests to be used in V8
  describe('getUXConstraintName', () => {
     describe('when called with a value', () => {
       it('returns a constraint name', () => {
@@ -308,7 +306,7 @@ describe('Generator Base', () => {
       });
     });
   });
- **/
+*/
   describe('printJHipsterLogo', () => {
     describe('when called', () => {
       it('prints the logo', () => {
