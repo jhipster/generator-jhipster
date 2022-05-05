@@ -21,7 +21,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const constants = require('../generator-constants');
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { CASSANDRA, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, SQL } = require('../../jdl/jhipster/database-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
@@ -55,7 +55,6 @@ module.exports = {
   askForFieldsToRemove,
   askForRelationships,
   askForRelationsToRemove,
-  askForTableName,
   askForDTO,
   askForService,
   askForFiltering,
@@ -269,51 +268,6 @@ function askForRelationsToRemove() {
   });
 }
 
-function askForTableName() {
-  const context = this.context;
-  // don't prompt if there are no relationships
-  const entityTableName = context.entityTableName;
-  const prodDatabaseType = context.prodDatabaseType;
-  const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
-  if (
-    skipCheckLengthOfIdentifier ||
-    !this.entityConfig.relationships ||
-    this.entityConfig.relationships.length === 0 ||
-    !((prodDatabaseType === ORACLE && entityTableName.length > 14) || entityTableName.length > 30)
-  ) {
-    return undefined;
-  }
-  const prompts = [
-    {
-      type: 'input',
-      name: 'entityTableName',
-      message: 'The table name for this entity is too long to form constraint names. Please use a shorter table name',
-      validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-          return 'The table name cannot contain special characters';
-        }
-        if (input === '') {
-          return 'The table name cannot be empty';
-        }
-        if (prodDatabaseType === 'oracle' && input.length > 14 && !skipCheckLengthOfIdentifier) {
-          return 'The table name is too long for Oracle, try a shorter name';
-        }
-        if (input.length > 30 && !skipCheckLengthOfIdentifier) {
-          return 'The table name is too long, try a shorter name';
-        }
-        return true;
-      },
-      default: entityTableName,
-    },
-  ];
-  return this.prompt(prompts).then(props => {
-    /* overwrite the table name for the entity using name obtained from the user */
-    if (props.entityTableName !== this.entityConfig.entityTableName) {
-      context.entityTableName = this.entityConfig.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
-    }
-  });
-}
-
 function askForFiltering() {
   const context = this.context;
   // don't prompt if server is skipped, or the backend is not sql, or no service requested
@@ -468,10 +422,8 @@ function askForField() {
   const context = this.context;
   this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   const skipServer = context.skipServer;
-  const prodDatabaseType = context.prodDatabaseType;
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
-  const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
   const possibleFiltering = databaseType === SQL && !context.reactive;
   const prompts = [
     {
@@ -502,9 +454,6 @@ function askForField() {
         }
         if ((clientFramework !== undefined || clientFramework === REACT) && isReservedFieldName(input, REACT)) {
           return 'Your field name cannot contain a Java or React reserved keyword';
-        }
-        if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
-          return 'The field name cannot be of more than 30 characters';
         }
         // we don't know, if filtering will be used
         if (possibleFiltering && isReservedPaginationWords(input)) {

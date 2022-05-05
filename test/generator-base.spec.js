@@ -84,8 +84,12 @@ describe('Generator Base', () => {
     });
     describe('when called with a long name', () => {
       it('returns a proper join table name', () => {
-        expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', ORACLE)).to.equal('rel_entity_name_l__relation_be');
-        expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', ORACLE)).to.have.length(30);
+        expect(BaseGenerator.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.equal(
+          'rel_entity_name_longer_for_postgr__relationship_name_for_pos_24'
+        );
+        expect(BaseGenerator.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.have.length(
+          63
+        );
       });
     });
     describe('when legacyRelationshipTableName is set', () => {
@@ -93,10 +97,12 @@ describe('Generator Base', () => {
         function TestClass() {}
         TestClass.prototype = Object.create(Base.prototype);
         TestClass.prototype.jhipsterConfig = { legacyRelationshipTableName: true };
-        expect(TestClass.prototype.getJoinTableName('entityNameLonger', 'relationshipName', ORACLE)).to.equal(
-          'rel_entity_name_l__relation_be'
+        expect(TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)).to.equal(
+          'rel_entity_name_longer_for_postgr__relationship_name_for_pos_24'
         );
-        expect(TestClass.prototype.getJoinTableName('entityNameLonger', 'relationshipName', ORACLE)).to.have.length(30);
+        expect(
+          TestClass.prototype.getJoinTableName('entityNameLongerForPostgresql', 'relationshipNameForPostgresql', POSTGRESQL)
+        ).to.have.length(63);
       });
     });
   });
@@ -105,14 +111,6 @@ describe('Generator Base', () => {
       it('returns a constraint name', () => {
         expect(BaseGenerator.getFKConstraintName('entityName', 'relationshipName', POSTGRESQL)).to.equal(
           'fk_entity_name__relationship_name_id'
-        );
-      });
-    });
-    describe('when called with a long name and oracle', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE)).to.have.length(30);
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE)).to.equal(
-          'fk_entity_name__relation_03_id'
         );
       });
     });
@@ -158,14 +156,6 @@ describe('Generator Base', () => {
         );
       });
     });
-    describe('when called with a long name and no snake case', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE, true)).to.have.length(30);
-        expect(BaseGenerator.getFKConstraintName('entityNameLongerName', 'relationshipLongerName', ORACLE, true)).to.equal(
-          'fk_entityNameL__relation_03_id'
-        );
-      });
-    });
   });
   describe('getUXConstraintName', () => {
     describe('when called with a value', () => {
@@ -176,14 +166,6 @@ describe('Generator Base', () => {
     describe('when called with a value and no snake case', () => {
       it('returns a constraint name', () => {
         expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', POSTGRESQL, true)).to.equal('ux_entityName__columnName');
-      });
-    });
-    describe('when called with a long name and oracle', () => {
-      it('returns a proper constraint name', () => {
-        expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', ORACLE)).to.have.length(30);
-        expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', ORACLE)).to.equal(
-          'ux_entity_name__column_long_29'
-        );
       });
     });
     describe('when called with a long name and postgresql', () => {
