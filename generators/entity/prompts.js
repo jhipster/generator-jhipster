@@ -281,7 +281,8 @@ function askForTableName() {
     skipCheckLengthOfIdentifier ||
     !this.entityConfig.relationships ||
     this.entityConfig.relationships.length === 0 ||
-    !(tableNameMaxLength && entityTableName.length > tableNameMaxLength)
+    !tableNameMaxLength ||
+    entityTableName.length <= tableNameMaxLength
   ) {
     return undefined;
   }
