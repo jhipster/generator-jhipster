@@ -21,8 +21,9 @@ const fs = require('fs');
 const _ = require('lodash');
 const constants = require('../generator-constants');
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = require('../../jdl/jhipster/reserved-keywords');
-const { CASSANDRA, ORACLE, SQL } = require('../../jdl/jhipster/database-types');
+const { CASSANDRA, SQL } = require('../../jdl/jhipster/database-types');
 const databaseTypes = require('../../jdl/jhipster/database-types');
+const { databaseData } = require('../sql-constants');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
 const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = require('../../jdl/jhipster/entity-options');
 
@@ -275,12 +276,12 @@ function askForTableName() {
   const entityTableName = context.entityTableName;
   const prodDatabaseType = context.prodDatabaseType;
   const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
+  const { tableNameMaxLength } = databaseData[prodDatabaseType] || {};
   if (
     skipCheckLengthOfIdentifier ||
     !this.entityConfig.relationships ||
     this.entityConfig.relationships.length === 0 ||
-    // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
-    !(entityTableName.length > (prodDatabaseType === ORACLE ? 112 : 30))
+    !(tableNameMaxLength && entityTableName.length > tableNameMaxLength)
   ) {
     return undefined;
   }
@@ -295,14 +296,6 @@ function askForTableName() {
         }
         if (input === '') {
           return 'The table name cannot be empty';
-        }
-        // All versions of Oracle with a 30 character name limit have gone end-of-life, the limit is now 128
-        if (prodDatabaseType === ORACLE && input.length > 112 && !skipCheckLengthOfIdentifier) {
-          return 'The table name is too long for Oracle, try a shorter name';
-        }
-        // Current versions of Oracle support 128 character names [- 16 (since previous code checked for 14, 16 less than 30) = 112]
-        if (input.length > (prodDatabaseType === ORACLE ? 128 : 30) && !skipCheckLengthOfIdentifier) {
-          return 'The table name is too long, try a shorter name';
         }
         return true;
       },
