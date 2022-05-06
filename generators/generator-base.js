@@ -2800,6 +2800,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.cypressAudit !== undefined) {
       this.jhipsterConfig.cypressAudit = options.cypressAudit;
     }
+    // FIXME: V8 To be removed
     if (options.legacyDbNames !== undefined) {
       this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
     }
