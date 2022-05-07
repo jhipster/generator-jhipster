@@ -1,4 +1,4 @@
-const expect = require('expect');
+const { expect } = require('expect');
 const path = require('path');
 const sinon = require('sinon');
 const { existsSync } = require('fs');

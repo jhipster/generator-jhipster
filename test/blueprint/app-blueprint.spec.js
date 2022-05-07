@@ -3,7 +3,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const jestExpect = require('expect');
+const { expect: jestExpect } = require('expect');
 const jhipsterVersion = require('../../package.json').version;
 const EnvironmentBuilder = require('../../cli/environment-builder');
 

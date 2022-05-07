@@ -1,4 +1,4 @@
-const expect = require('expect');
+const { expect } = require('expect');
 const path = require('path');
 const { skipPrettierHelpers: helpers } = require('../utils/utils');
 const { OAUTH2 } = require('../../jdl/jhipster/authentication-types');
