@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
-const jestExpect = require('expect');
+const { expect: jestExpect } = require('expect');
 const sinon = require('sinon');
 const path = require('path');
 const assert = require('yeoman-assert');

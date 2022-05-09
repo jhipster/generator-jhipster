@@ -2,7 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const expect = require('expect');
+const { expect } = require('expect');
 
 const expectedFiles = {
   travis: ['.travis.yml'],
