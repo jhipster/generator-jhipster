@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const JDLEnums = require('../../../jdl/models/jdl-enums');
 const JDLEnum = require('../../../jdl/models/jdl-enum');
@@ -126,7 +127,12 @@ describe('JDLEnums', () => {
       });
 
       it('should use each enum name', () => {
-        expect(result).to.deep.equal(['A', 'B']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "A",
+  "B",
+]
+`);
       });
     });
   });

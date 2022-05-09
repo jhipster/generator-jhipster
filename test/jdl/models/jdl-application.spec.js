@@ -18,6 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const { OptionNames } = require('../../../jdl/jhipster/application-options');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
@@ -304,7 +305,12 @@ describe('JDLApplication', () => {
       });
 
       it('uses each entity name', () => {
-        expect(result).to.deep.equal(['A', 'B']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "A",
+  "B",
+]
+`);
       });
     });
   });

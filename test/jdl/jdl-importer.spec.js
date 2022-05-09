@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const fse = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
@@ -884,172 +885,6 @@ relationship OneToOne {
     context('when parsing multiple JDL files with applications and entities', () => {
       const APPLICATION_NAMES = ['myFirstApp', 'mySecondApp', 'myThirdApp'];
       const ENTITY_NAMES = ['A', 'B', 'E', 'F']; // C & D don't get to be generated
-      const expectedApplications = [
-        {
-          entities: ['A', 'B', 'E', 'F'],
-          'generator-jhipster': {
-            baseName: 'myFirstApp',
-            packageName: 'com.mycompany.myfirstapp',
-            packageFolder: 'com/mycompany/myfirstapp',
-            authenticationType: 'jwt',
-            websocket: false,
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            prodDatabaseType: 'postgresql',
-            buildTool: 'maven',
-            searchEngine: false,
-            enableTranslation: true,
-            applicationType: 'monolith',
-            cacheProvider: 'ehcache',
-            testFrameworks: [],
-            languages: [],
-            serverPort: '8080',
-            enableSwaggerCodegen: false,
-            gradleEnterpriseHost: '',
-            jhiPrefix: 'jhi',
-            messageBroker: false,
-            serviceDiscoveryType: false,
-            clientPackageManager: 'npm',
-            clientFramework: 'angularX',
-            clientTheme: 'yeti',
-            clientThemeVariant: 'primary',
-            skipUserManagement: false,
-            entitySuffix: '',
-            reactive: false,
-            withAdminUi: true,
-          },
-        },
-        {
-          entities: ['E'],
-          'generator-jhipster': {
-            baseName: 'mySecondApp',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            authenticationType: 'jwt',
-            websocket: false,
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            prodDatabaseType: 'postgresql',
-            reactive: false,
-            buildTool: 'maven',
-            searchEngine: false,
-            enableTranslation: true,
-            entitySuffix: '',
-            gradleEnterpriseHost: '',
-            applicationType: 'microservice',
-            cacheProvider: 'ehcache',
-            testFrameworks: [],
-            languages: [],
-            serverPort: '8091',
-            enableSwaggerCodegen: false,
-            jhiPrefix: 'jhi',
-            messageBroker: false,
-            serviceDiscoveryType: 'eureka',
-            clientPackageManager: 'npm',
-            skipUserManagement: true,
-            skipClient: true,
-          },
-        },
-        {
-          entities: ['F'],
-          'generator-jhipster': {
-            baseName: 'myThirdApp',
-            packageName: 'com.mycompany.myapp',
-            packageFolder: 'com/mycompany/myapp',
-            authenticationType: 'jwt',
-            websocket: false,
-            enableHibernateCache: true,
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            prodDatabaseType: 'postgresql',
-            reactive: false,
-            buildTool: 'maven',
-            searchEngine: false,
-            enableTranslation: true,
-            entitySuffix: '',
-            gradleEnterpriseHost: '',
-            applicationType: 'microservice',
-            cacheProvider: 'ehcache',
-            testFrameworks: [],
-            languages: [],
-            serverPort: '8092',
-            enableSwaggerCodegen: false,
-            jhiPrefix: 'jhi',
-            messageBroker: false,
-            serviceDiscoveryType: 'eureka',
-            clientPackageManager: 'npm',
-            skipUserManagement: true,
-            skipClient: true,
-          },
-        },
-      ];
-      const expectedEntities = [
-        {
-          name: 'A',
-          fields: [],
-          relationships: [],
-          entityTableName: 'a',
-          dto: 'no',
-          pagination: 'no',
-          readOnly: false,
-          embedded: false,
-          service: 'no',
-          jpaMetamodelFiltering: false,
-          fluentMethods: true,
-          applications: ['myFirstApp'],
-        },
-        {
-          name: 'B',
-          fields: [],
-          relationships: [],
-          entityTableName: 'b',
-          dto: 'no',
-          pagination: 'no',
-          readOnly: false,
-          embedded: false,
-          service: 'no',
-          jpaMetamodelFiltering: false,
-          fluentMethods: true,
-          applications: ['myFirstApp'],
-        },
-        {
-          name: 'E',
-          fields: [],
-          relationships: [],
-          entityTableName: 'e',
-          dto: 'no',
-          pagination: 'no',
-          readOnly: false,
-          embedded: false,
-          service: 'no',
-          jpaMetamodelFiltering: false,
-          fluentMethods: true,
-          applications: ['myFirstApp', 'mySecondApp'],
-          microserviceName: 'mySecondApp',
-        },
-        {
-          name: 'F',
-          fields: [],
-          relationships: [],
-          entityTableName: 'f',
-          dto: 'no',
-          pagination: 'no',
-          readOnly: false,
-          embedded: false,
-          service: 'no',
-          jpaMetamodelFiltering: false,
-          fluentMethods: true,
-          applications: ['myFirstApp', 'myThirdApp'],
-        },
-      ];
       let importState;
       before(() => {
         const importer = createImporterFromFiles([
@@ -1070,34 +905,34 @@ relationship OneToOne {
         expect(importState.exportedEntities.length).to.eql(4);
       });
 
-      it('should export the applications', () => {
-        APPLICATION_NAMES.forEach((applicationName, index) => {
+      APPLICATION_NAMES.forEach(applicationName => {
+        it(`should export ${applicationName} applications`, () => {
           expect(fse.statSync(path.join(applicationName)).isDirectory()).to.be.true;
           const appConfPath = path.join(applicationName, '.yo-rc.json');
           expect(fse.statSync(appConfPath).isFile()).to.be.true;
           const readJSON = JSON.parse(fse.readFileSync(appConfPath, 'utf-8').toString());
-          expect(readJSON).to.deep.equal(expectedApplications[index]);
+          jestExpect(readJSON).toMatchSnapshot();
         });
       });
 
-      it('should export the entities for each application', () => {
-        APPLICATION_NAMES.forEach(applicationName => {
+      APPLICATION_NAMES.forEach(applicationName => {
+        it(`should export the entities for ${applicationName}`, () => {
           let readJSON;
           expect(fse.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
           switch (applicationName) {
             case 'myFirstApp': // A, B, E, F
-              ENTITY_NAMES.forEach((entityName, index) => {
+              ENTITY_NAMES.forEach(entityName => {
                 readJSON = JSON.parse(fse.readFileSync(path.join(applicationName, '.jhipster', `${entityName}.json`), 'utf-8').toString());
-                expect(readJSON).to.deep.equal(expectedEntities[index]);
+                jestExpect(readJSON).toMatchSnapshot();
               });
               break;
             case 'mySecondApp': // only E
               readJSON = JSON.parse(fse.readFileSync(path.join(applicationName, '.jhipster', 'E.json'), 'utf-8').toString());
-              expect(readJSON).to.deep.equal(expectedEntities[2]);
+              jestExpect(readJSON).toMatchSnapshot();
               break;
             case 'myThirdApp': // only F
               readJSON = JSON.parse(fse.readFileSync(path.join(applicationName, '.jhipster', 'F.json'), 'utf-8').toString());
-              expect(readJSON).to.deep.equal(expectedEntities[3]);
+              jestExpect(readJSON).toMatchSnapshot();
               break;
             default:
             // nothing to do
@@ -1408,53 +1243,6 @@ relationship OneToOne {
     });
     context('when parsing deployment config', () => {
       const contents = [];
-      const expectedContents = [
-        {
-          'generator-jhipster': {
-            appsFolders: ['tata', 'titi'],
-            directoryPath: '../',
-            gatewayType: 'SpringCloudGateway',
-            clusteredDbApps: [],
-            deploymentType: 'docker-compose',
-            serviceDiscoveryType: 'eureka',
-            dockerRepositoryName: 'test',
-            monitoring: 'no',
-          },
-        },
-        {
-          'generator-jhipster': {
-            appsFolders: ['tata', 'titi'],
-            clusteredDbApps: [],
-            directoryPath: '../',
-            deploymentType: 'kubernetes',
-            dockerPushCommand: 'docker push',
-            dockerRepositoryName: 'test',
-            ingressDomain: '',
-            kubernetesUseDynamicStorage: false,
-            kubernetesStorageClassName: 'KubernetesStorageClassName',
-            istio: false,
-            kubernetesNamespace: 'default',
-            kubernetesServiceType: 'LoadBalancer',
-            monitoring: 'no',
-            serviceDiscoveryType: 'eureka',
-          },
-        },
-        {
-          'generator-jhipster': {
-            appsFolders: ['tata', 'titi'],
-            clusteredDbApps: [],
-            directoryPath: '../',
-            deploymentType: 'openshift',
-            dockerPushCommand: 'docker push',
-            dockerRepositoryName: 'test',
-            monitoring: 'no',
-            registryReplicas: 2,
-            openshiftNamespace: 'default',
-            serviceDiscoveryType: 'eureka',
-            storageType: 'ephemeral',
-          },
-        },
-      ];
       const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
 
       before(() => {
@@ -1478,182 +1266,11 @@ relationship OneToOne {
         });
       });
       it('should export the deployment contents', () => {
-        expect(contents).to.deep.equal(expectedContents);
+        jestExpect(contents).toMatchSnapshot();
       });
     });
     context('when parsing JDL applications and deployment config with a realistic sample', () => {
       const contents = [];
-      const expectedContents = [
-        {
-          'generator-jhipster': {
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            enableHibernateCache: false,
-            enableSwaggerCodegen: false,
-            enableTranslation: true,
-            jhiPrefix: 'jhi',
-            languages: [],
-            messageBroker: false,
-            packageName: 'com.jhipster.demo.store',
-            packageFolder: 'com/jhipster/demo/store',
-            prodDatabaseType: 'mysql',
-            reactive: true,
-            searchEngine: false,
-            serviceDiscoveryType: false,
-            testFrameworks: ['protractor'],
-            websocket: false,
-            baseName: 'store',
-            applicationType: 'gateway',
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            buildTool: 'gradle',
-            entitySuffix: '',
-            gradleEnterpriseHost: '',
-            clientFramework: 'react',
-            clientTheme: 'none',
-            clientThemeVariant: '',
-            skipUserManagement: false,
-            clientPackageManager: 'npm',
-            serverPort: '8080',
-            withAdminUi: true,
-          },
-          entities: ['Customer', 'Product', 'ProductCategory', 'ProductOrder', 'OrderItem', 'Invoice', 'Shipment', 'Notification'],
-        },
-        {
-          'generator-jhipster': {
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            enableHibernateCache: true,
-            enableSwaggerCodegen: false,
-            enableTranslation: true,
-            jhiPrefix: 'jhi',
-            languages: [],
-            messageBroker: false,
-            packageName: 'com.jhipster.demo.product',
-            packageFolder: 'com/jhipster/demo/product',
-            prodDatabaseType: 'mysql',
-            reactive: false,
-            searchEngine: false,
-            serviceDiscoveryType: false,
-            entitySuffix: '',
-            gradleEnterpriseHost: '',
-            skipClient: true,
-            testFrameworks: [],
-            websocket: false,
-            baseName: 'product',
-            applicationType: 'microservice',
-            authenticationType: 'jwt',
-            cacheProvider: 'hazelcast',
-            buildTool: 'gradle',
-            serverPort: '8081',
-            skipUserManagement: true,
-            clientPackageManager: 'npm',
-          },
-          entities: ['Product', 'ProductCategory', 'ProductOrder', 'OrderItem'],
-        },
-        {
-          'generator-jhipster': {
-            databaseType: 'sql',
-            devDatabaseType: 'h2Disk',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            enableHibernateCache: true,
-            enableSwaggerCodegen: false,
-            enableTranslation: true,
-            jhiPrefix: 'jhi',
-            languages: [],
-            messageBroker: false,
-            packageName: 'com.jhipster.demo.invoice',
-            packageFolder: 'com/jhipster/demo/invoice',
-            prodDatabaseType: 'mysql',
-            reactive: false,
-            searchEngine: false,
-            serviceDiscoveryType: false,
-            skipClient: true,
-            testFrameworks: [],
-            websocket: false,
-            baseName: 'invoice',
-            entitySuffix: '',
-            gradleEnterpriseHost: '',
-            applicationType: 'microservice',
-            authenticationType: 'jwt',
-            buildTool: 'gradle',
-            serverPort: '8082',
-            skipUserManagement: true,
-            clientPackageManager: 'npm',
-            cacheProvider: 'ehcache',
-          },
-          entities: ['Invoice', 'Shipment'],
-        },
-        {
-          'generator-jhipster': {
-            databaseType: 'mongodb',
-            devDatabaseType: 'mongodb',
-            dtoSuffix: 'DTO',
-            enableGradleEnterprise: false,
-            enableHibernateCache: false,
-            enableSwaggerCodegen: false,
-            enableTranslation: true,
-            entitySuffix: '',
-            gradleEnterpriseHost: '',
-            jhiPrefix: 'jhi',
-            languages: [],
-            messageBroker: false,
-            packageName: 'com.jhipster.demo.notification',
-            packageFolder: 'com/jhipster/demo/notification',
-            prodDatabaseType: 'mongodb',
-            reactive: false,
-            searchEngine: false,
-            serviceDiscoveryType: false,
-            skipClient: true,
-            testFrameworks: [],
-            websocket: false,
-            baseName: 'notification',
-            applicationType: 'microservice',
-            authenticationType: 'jwt',
-            cacheProvider: 'no',
-            buildTool: 'gradle',
-            serverPort: '8083',
-            skipUserManagement: true,
-            clientPackageManager: 'npm',
-          },
-          entities: ['Notification'],
-        },
-        {
-          'generator-jhipster': {
-            deploymentType: 'docker-compose',
-            gatewayType: 'SpringCloudGateway',
-            monitoring: 'no',
-            directoryPath: '../',
-            appsFolders: ['store', 'invoice', 'notification', 'product'],
-            clusteredDbApps: [],
-            serviceDiscoveryType: false,
-            dockerRepositoryName: 'deepu105',
-          },
-        },
-        {
-          'generator-jhipster': {
-            deploymentType: 'kubernetes',
-            monitoring: 'no',
-            directoryPath: '../',
-            appsFolders: ['store', 'invoice', 'notification', 'product'],
-            clusteredDbApps: [],
-            serviceDiscoveryType: false,
-            dockerRepositoryName: 'deepu105',
-            dockerPushCommand: 'docker push',
-            kubernetesNamespace: 'default',
-            kubernetesServiceType: 'LoadBalancer',
-            kubernetesStorageClassName: '',
-            ingressDomain: '',
-            istio: false,
-            kubernetesUseDynamicStorage: false,
-          },
-        },
-      ];
       const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
 
       before(() => {
@@ -1677,7 +1294,7 @@ relationship OneToOne {
         });
       });
       it('should export the application & deployment contents', () => {
-        expect(contents).to.deep.equal(expectedContents);
+        jestExpect(contents).toMatchSnapshot();
       });
     });
     context('when parsing entities and enums with custom values', () => {
@@ -1761,90 +1378,116 @@ paginate * with infinite-scroll
       });
 
       it('should set them', () => {
-        expect(entityA).to.deep.equal({
-          applications: ['tata'],
-          dto: 'no',
-          embedded: false,
-          entityTableName: 'a',
-          fields: [],
-          fluentMethods: true,
-          jpaMetamodelFiltering: false,
-          name: 'A',
-          pagination: 'pagination',
-          readOnly: false,
-          relationships: [],
-          service: 'no',
-        });
-        expect(entityB).to.deep.equal({
-          applications: ['tata'],
-          dto: 'no',
-          embedded: false,
-          entityTableName: 'b',
-          fields: [],
-          fluentMethods: true,
-          jpaMetamodelFiltering: false,
-          name: 'B',
-          pagination: 'infinite-scroll',
-          readOnly: false,
-          relationships: [],
-          service: 'no',
-        });
-        expect(entityCInTata).to.deep.equal({
-          applications: ['tata', 'tutu'],
-          dto: 'no',
-          embedded: false,
-          entityTableName: 'c',
-          fields: [],
-          fluentMethods: true,
-          jpaMetamodelFiltering: false,
-          name: 'C',
-          pagination: 'pagination',
-          readOnly: false,
-          relationships: [],
-          service: 'no',
-        });
-        expect(entityCInTutu).to.deep.equal({
-          applications: ['tata', 'tutu'],
-          dto: 'no',
-          embedded: false,
-          entityTableName: 'c',
-          fields: [],
-          fluentMethods: true,
-          jpaMetamodelFiltering: false,
-          name: 'C',
-          pagination: 'pagination',
-          readOnly: false,
-          relationships: [],
-          service: 'no',
-        });
-        expect(entityD).to.deep.equal({
-          applications: ['tutu'],
-          dto: 'mapstruct',
-          embedded: false,
-          entityTableName: 'd',
-          fields: [],
-          fluentMethods: true,
-          jpaMetamodelFiltering: false,
-          name: 'D',
-          pagination: 'infinite-scroll',
-          readOnly: false,
-          relationships: [],
-          service: 'serviceClass',
-        });
-        expect(entityE).to.deep.equal({
-          applications: ['tutu'],
-          dto: 'no',
-          embedded: false,
-          entityTableName: 'e',
-          fields: [],
-          fluentMethods: true,
-          jpaMetamodelFiltering: false,
-          name: 'E',
-          pagination: 'infinite-scroll',
-          readOnly: false,
-          relationships: [],
-          service: 'no',
-        });
+        jestExpect(entityA).toMatchInlineSnapshot(`
+Object {
+  "applications": Array [
+    "tata",
+  ],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
+        jestExpect(entityB).toMatchInlineSnapshot(`
+Object {
+  "applications": Array [
+    "tata",
+  ],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "b",
+  "fields": Array [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "B",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
+        jestExpect(entityCInTata).toMatchInlineSnapshot(`
+Object {
+  "applications": Array [
+    "tata",
+    "tutu",
+  ],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "c",
+  "fields": Array [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "C",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
+        jestExpect(entityCInTutu).toMatchInlineSnapshot(`
+Object {
+  "applications": Array [
+    "tata",
+    "tutu",
+  ],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "c",
+  "fields": Array [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "C",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
+        jestExpect(entityD).toMatchInlineSnapshot(`
+Object {
+  "applications": Array [
+    "tutu",
+  ],
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "d",
+  "fields": Array [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "D",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "serviceClass",
+}
+`);
+        jestExpect(entityE).toMatchInlineSnapshot(`
+Object {
+  "applications": Array [
+    "tutu",
+  ],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "e",
+  "fields": Array [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "E",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
       });
       it('should not generate entity not in any app', () => {
         expect(entityF).to.be.false;
@@ -2252,23 +1895,32 @@ relationship OneToOne {
       });
 
       it('should export them', () => {
-        expect(relationshipOnSource).to.deep.equal({
-          options: { notId: 'value', something: true },
-          otherEntityName: 'b',
-          otherEntityRelationshipName: 'a',
-          ownerSide: true,
-          relationshipName: 'b',
-          relationshipType: 'one-to-one',
-          useJPADerivedIdentifier: true,
-        });
-        expect(relationshipOnDestination).to.deep.equal({
-          options: { id: true },
-          otherEntityName: 'a',
-          otherEntityRelationshipName: 'b',
-          ownerSide: false,
-          relationshipName: 'a',
-          relationshipType: 'one-to-one',
-        });
+        jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
+Object {
+  "options": Object {
+    "notId": "value",
+    "something": true,
+  },
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+  "useJPADerivedIdentifier": true,
+}
+`);
+        jestExpect(relationshipOnDestination).toMatchInlineSnapshot(`
+Object {
+  "options": Object {
+    "id": true,
+  },
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "one-to-one",
+}
+`);
       });
     });
   });

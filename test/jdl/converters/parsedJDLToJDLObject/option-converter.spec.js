@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
+const { expect } = require('expect');
 const JDLUnaryOption = require('../../../../jdl/models/jdl-unary-option');
 const JDLBinaryOption = require('../../../../jdl/models/jdl-binary-option');
 const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
@@ -33,23 +33,15 @@ describe('OptionConverter', () => {
   describe('convertOptions', () => {
     context('when not passing options', () => {
       it('should fail', () => {
-        expect(() => convertOptions()).to.throw(/^Options have to be passed so as to be converted\.$/);
+        expect(() => convertOptions()).toThrow(/^Options have to be passed so as to be converted\.$/);
       });
     });
     context('when passing options', () => {
       UnaryOptions.forEach(unaryOptionName => {
         context(`such as ${unaryOptionName}`, () => {
-          let expectedOptions;
           let convertedOptions;
 
           before(() => {
-            expectedOptions = [
-              new JDLUnaryOption({
-                name: unaryOptionName,
-                entityNames: ['A'],
-                excludedNames: ['B'],
-              }),
-            ];
             convertedOptions = convertOptions(
               {
                 [unaryOptionName]: { list: ['A'], excluded: ['B'] },
@@ -59,7 +51,7 @@ describe('OptionConverter', () => {
           });
 
           it('should convert it', () => {
-            expect(convertedOptions).to.deep.equal(expectedOptions);
+            expect(convertedOptions).toMatchSnapshot();
           });
         });
       });
@@ -74,18 +66,9 @@ describe('OptionConverter', () => {
       ]);
       binaryOptions.forEach((optionValue, optionName) => {
         context(`such as ${optionName}`, () => {
-          let expectedOptions;
           let convertedOptions;
 
           before(() => {
-            expectedOptions = [
-              new JDLBinaryOption({
-                name: optionName,
-                value: optionValue,
-                entityNames: ['A'],
-                excludedNames: ['B'],
-              }),
-            ];
             convertedOptions = convertOptions(
               {
                 [optionName]: {
@@ -97,7 +80,7 @@ describe('OptionConverter', () => {
           });
 
           it('should convert it', () => {
-            expect(convertedOptions).to.deep.equal(expectedOptions);
+            expect(convertedOptions).toMatchSnapshot();
           });
         });
       });
@@ -121,26 +104,39 @@ describe('OptionConverter', () => {
           ]);
         });
         it('should convert them', () => {
-          expect(convertedOptions).to.deep.equal([
-            new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
-              value: BinaryOptions.Values[BinaryOptions.Options.DTO].MAPSTRUCT,
-              entityNames: ['*'],
-              excludedNames: ['B'],
-            }),
-            new JDLBinaryOption({
-              name: BinaryOptions.Options.SEARCH,
-              value: BinaryOptions.Values[BinaryOptions.Options.SEARCH].COUCHBASE,
-              entityNames: ['*'],
-              excludedNames: ['B'],
-            }),
-            new JDLBinaryOption({
-              name: BinaryOptions.Options.PAGINATION,
-              value: BinaryOptions.Values[BinaryOptions.Options.PAGINATION].PAGINATION,
-              entityNames: ['A', 'C'],
-              excludedNames: [],
-            }),
-          ]);
+          expect(convertedOptions).toMatchInlineSnapshot(`
+Array [
+  JDLBinaryOption {
+    "entityNames": Set {
+      "*",
+    },
+    "excludedNames": Set {
+      "B",
+    },
+    "name": "dto",
+    "value": "mapstruct",
+  },
+  JDLBinaryOption {
+    "entityNames": Set {
+      "*",
+    },
+    "excludedNames": Set {
+      "B",
+    },
+    "name": "search",
+    "value": "couchbase",
+  },
+  JDLBinaryOption {
+    "entityNames": Set {
+      "A",
+      "C",
+    },
+    "excludedNames": Set {},
+    "name": "pagination",
+    "value": "pagination",
+  },
+]
+`);
         });
       });
       context('that do not exist', () => {
@@ -161,14 +157,20 @@ describe('OptionConverter', () => {
           ]);
         });
         it('should not convert them', () => {
-          expect(convertedOptions).to.deep.equal([
-            new JDLBinaryOption({
-              name: BinaryOptions.Options.DTO,
-              value: BinaryOptions.Values[BinaryOptions.Options.DTO].MAPSTRUCT,
-              entityNames: ['*'],
-              excludedNames: ['B'],
-            }),
-          ]);
+          expect(convertedOptions).toMatchInlineSnapshot(`
+Array [
+  JDLBinaryOption {
+    "entityNames": Set {
+      "*",
+    },
+    "excludedNames": Set {
+      "B",
+    },
+    "name": "dto",
+    "value": "mapstruct",
+  },
+]
+`);
         });
       });
     });

@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
@@ -107,7 +108,7 @@ describe('JHipsterEntityExporter', () => {
           });
         });
         it('should return an empty list', () => {
-          expect(returned).to.deep.equal([]);
+          jestExpect(returned).toMatchInlineSnapshot(`Array []`);
         });
         it('should not create a .jhipster folder', () => {
           expect(FileUtils.doesDirectoryExist('.jhipster')).to.be.false;
@@ -164,28 +165,30 @@ describe('JHipsterEntityExporter', () => {
         });
 
         it('should return the exported entities', () => {
-          expect(returned).to.deep.equal([
-            {
-              name: 'A',
-              applications: [],
-              changelogDate: '42',
-              dto: 'no',
-              entityTableName: 'a',
-              fields: [
-                {
-                  fieldName: 'myEnum',
-                  fieldType: 'MyEnum',
-                  fieldValues: 'FRENCH,ENGLISH',
-                },
-              ],
-              fluentMethods: true,
-              javadoc: '',
-              jpaMetamodelFiltering: false,
-              pagination: NO_PAGINATION,
-              relationships: [],
-              service: NO_SERVICE,
-            },
-          ]);
+          jestExpect(returned).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "applications": Array [],
+    "changelogDate": "42",
+    "dto": "no",
+    "entityTableName": "a",
+    "fields": Array [
+      Object {
+        "fieldName": "myEnum",
+        "fieldType": "MyEnum",
+        "fieldValues": "FRENCH,ENGLISH",
+      },
+    ],
+    "fluentMethods": true,
+    "javadoc": "",
+    "jpaMetamodelFiltering": false,
+    "name": "A",
+    "pagination": "no",
+    "relationships": Array [],
+    "service": "no",
+  },
+]
+`);
         });
         it('should export it with same changelogDate', () => {
           expect(newChangelogDate).to.equal(previousChangelogDate);
@@ -301,95 +304,97 @@ describe('JHipsterEntityExporter', () => {
           });
 
           it('should return the exported entities', () => {
-            expect(returned).to.deep.equal([
-              {
-                name: 'Client',
-                fields: [],
-                relationships: [
-                  {
-                    relationshipType: 'many-to-one',
-                    relationshipName: 'location',
-                    otherEntityName: 'location',
-                  },
-                ],
-                changelogDate: '20180303092308',
-                entityTableName: 'client',
-                dto: NO_DTO,
-                pagination: NO_PAGINATION,
-                service: SERVICE_CLASS,
-                jpaMetamodelFiltering: true,
-                fluentMethods: true,
-                applications: '*',
-                microserviceName: 'client',
-              },
-              {
-                name: 'Location',
-                fields: [],
-                relationships: [
-                  {
-                    relationshipType: 'one-to-many',
-                    relationshipName: 'clients',
-                    otherEntityName: 'client',
-                    otherEntityRelationshipName: 'location',
-                  },
-                ],
-                changelogDate: '20180303092309',
-                entityTableName: 'location',
-                dto: NO_DTO,
-                pagination: NO_PAGINATION,
-                service: SERVICE_CLASS,
-                jpaMetamodelFiltering: true,
-                fluentMethods: true,
-                applications: '*',
-                microserviceName: 'client',
-              },
-              {
-                name: 'LocalStore',
-                fields: [],
-                relationships: [
-                  {
-                    relationshipType: 'one-to-many',
-                    relationshipName: 'products',
-                    otherEntityName: 'product',
-                    otherEntityRelationshipName: 'store',
-                  },
-                ],
-                changelogDate: '20180303092310',
-                entityTableName: 'local_store',
-                dto: NO_DTO,
-                pagination: NO_PAGINATION,
-                service: SERVICE_CLASS,
-                jpaMetamodelFiltering: true,
-                fluentMethods: true,
-                applications: '*',
-                microserviceName: 'store',
-              },
-              {
-                name: 'Product',
-                fields: [
-                  {
-                    fieldName: 'name',
-                    fieldType: 'String',
-                  },
-                ],
-                relationships: [
-                  {
-                    relationshipType: 'many-to-one',
-                    relationshipName: 'store',
-                    otherEntityName: 'localStore',
-                  },
-                ],
-                changelogDate: '20180303092311',
-                entityTableName: 'product',
-                dto: NO_DTO,
-                pagination: NO_PAGINATION,
-                service: SERVICE_CLASS,
-                jpaMetamodelFiltering: true,
-                fluentMethods: true,
-                applications: '*',
-                microserviceName: 'store',
-              },
-            ]);
+            jestExpect(returned).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "applications": "*",
+    "changelogDate": "20180303092308",
+    "dto": "no",
+    "entityTableName": "client",
+    "fields": Array [],
+    "fluentMethods": true,
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "client",
+    "name": "Client",
+    "pagination": "no",
+    "relationships": Array [
+      Object {
+        "otherEntityName": "location",
+        "relationshipName": "location",
+        "relationshipType": "many-to-one",
+      },
+    ],
+    "service": "serviceClass",
+  },
+  Object {
+    "applications": "*",
+    "changelogDate": "20180303092309",
+    "dto": "no",
+    "entityTableName": "location",
+    "fields": Array [],
+    "fluentMethods": true,
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "client",
+    "name": "Location",
+    "pagination": "no",
+    "relationships": Array [
+      Object {
+        "otherEntityName": "client",
+        "otherEntityRelationshipName": "location",
+        "relationshipName": "clients",
+        "relationshipType": "one-to-many",
+      },
+    ],
+    "service": "serviceClass",
+  },
+  Object {
+    "applications": "*",
+    "changelogDate": "20180303092310",
+    "dto": "no",
+    "entityTableName": "local_store",
+    "fields": Array [],
+    "fluentMethods": true,
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "store",
+    "name": "LocalStore",
+    "pagination": "no",
+    "relationships": Array [
+      Object {
+        "otherEntityName": "product",
+        "otherEntityRelationshipName": "store",
+        "relationshipName": "products",
+        "relationshipType": "one-to-many",
+      },
+    ],
+    "service": "serviceClass",
+  },
+  Object {
+    "applications": "*",
+    "changelogDate": "20180303092311",
+    "dto": "no",
+    "entityTableName": "product",
+    "fields": Array [
+      Object {
+        "fieldName": "name",
+        "fieldType": "String",
+      },
+    ],
+    "fluentMethods": true,
+    "jpaMetamodelFiltering": true,
+    "microserviceName": "store",
+    "name": "Product",
+    "pagination": "no",
+    "relationships": Array [
+      Object {
+        "otherEntityName": "localStore",
+        "relationshipName": "store",
+        "relationshipType": "many-to-one",
+      },
+    ],
+    "service": "serviceClass",
+  },
+]
+`);
           });
           it('should export every entity', () => {
             expect(FileUtils.doesFileExist('.jhipster/Client.json'));

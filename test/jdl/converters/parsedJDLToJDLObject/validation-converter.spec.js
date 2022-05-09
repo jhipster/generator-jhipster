@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
+const { expect } = require('expect');
 const JDLValidation = require('../../../../jdl/models/jdl-validation');
 const { convertValidations } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/validation-converter');
 
@@ -25,21 +25,26 @@ describe('ValidationConverter', () => {
   describe('convertValidations', () => {
     context('when not passing validations', () => {
       it('should fail', () => {
-        expect(() => convertValidations()).to.throw(/^Validations have to be passed so as to be converted.$/);
+        expect(() => convertValidations()).toThrow(/^Validations have to be passed so as to be converted.$/);
       });
     });
     context('when passing validations', () => {
       context('with all the attributes', () => {
-        let expectedValidations;
         let convertedJDLValidations;
 
         before(() => {
           convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], () => {});
-          expectedValidations = [new JDLValidation({ name: 'min', value: 0 })];
         });
 
         it('should convert it', () => {
-          expect(convertedJDLValidations).to.deep.equal(expectedValidations);
+          expect(convertedJDLValidations).toMatchInlineSnapshot(`
+Array [
+  JDLValidation {
+    "name": "min",
+    "value": 0,
+  },
+]
+`);
         });
       });
       context('having for value a constant', () => {
@@ -52,7 +57,7 @@ describe('ValidationConverter', () => {
         });
 
         it('should use it', () => {
-          expect(valueFromTheConvertedValidation).to.equal(42);
+          expect(valueFromTheConvertedValidation).toEqual(42);
         });
       });
       context('having for name the pattern validation', () => {
@@ -73,7 +78,7 @@ describe('ValidationConverter', () => {
           });
 
           it('should not format the value', () => {
-            expect(valueFromTheConvertedValidation).to.equal('/d+/');
+            expect(valueFromTheConvertedValidation).toMatch('/d+/');
           });
         });
         context('with the pattern having single quotes', () => {
@@ -93,21 +98,26 @@ describe('ValidationConverter', () => {
           });
 
           it('should format it', () => {
-            expect(valueFromTheConvertedValidation).to.equal("/[A-Z\\\\']/\\");
+            expect(valueFromTheConvertedValidation).toMatch("/[A-Z\\\\']/\\");
           });
         });
       });
       context('having one falsy element', () => {
-        let expectedValidations;
         let convertedJDLValidations;
 
         before(() => {
           convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], () => {});
-          expectedValidations = [new JDLValidation({ name: 'min', value: 0 })];
         });
 
         it('should ignore it', () => {
-          expect(convertedJDLValidations).to.deep.equal(expectedValidations);
+          expect(convertedJDLValidations).toMatchInlineSnapshot(`
+Array [
+  JDLValidation {
+    "name": "min",
+    "value": 0,
+  },
+]
+`);
         });
       });
     });

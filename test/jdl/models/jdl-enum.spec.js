@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const JDLEnum = require('../../../jdl/models/jdl-enum');
 
@@ -70,10 +71,12 @@ describe('JDLEnum', () => {
     });
 
     it('returns the comments by enum value', () => {
-      expect(result).to.deep.equal({
-        A: 'first comment',
-        B: 'second comment',
-      });
+      jestExpect(result).toMatchInlineSnapshot(`
+Object {
+  "A": "first comment",
+  "B": "second comment",
+}
+`);
     });
   });
   describe('toString', () => {
