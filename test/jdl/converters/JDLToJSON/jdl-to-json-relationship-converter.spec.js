@@ -18,6 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const JDLRelationship = require('../../../../jdl/models/jdl-relationship');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-relationship-converter');
@@ -81,62 +82,66 @@ describe('JDLToJSONRelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(relationshipsForA).to.deep.equal([
-            {
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-            },
-            {
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'one-to-many',
-            },
-            {
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'many-to-one',
-            },
-            {
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'many-to-many',
-            },
-          ]);
-          expect(relationshipsForB).to.deep.equal([
-            {
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'one-to-one',
-            },
-            {
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'many-to-one',
-            },
-            {
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'one-to-many',
-            },
-            {
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'many-to-many',
-            },
-          ]);
+          jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "one-to-one",
+  },
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "relationshipName": "b",
+    "relationshipType": "one-to-many",
+  },
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "relationshipName": "b",
+    "relationshipType": "many-to-one",
+  },
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "many-to-many",
+  },
+]
+`);
+          jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "one-to-one",
+  },
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "relationshipName": "a",
+    "relationshipType": "many-to-one",
+  },
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "relationshipName": "a",
+    "relationshipType": "one-to-many",
+  },
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "many-to-many",
+  },
+]
+`);
         });
       });
       context('with options', () => {
@@ -161,16 +166,18 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedRelationship).to.deep.equal({
-              options: {
-                custom: 42,
-              },
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-            });
+            jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+Object {
+  "options": Object {
+    "custom": 42,
+  },
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
           });
         });
         context('being regular options', () => {
@@ -194,14 +201,16 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedRelationship).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-              useJPADerivedIdentifier: true,
-            });
+            jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+  "useJPADerivedIdentifier": true,
+}
+`);
           });
         });
       });
@@ -225,26 +234,30 @@ describe('JDLToJSONRelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(relationshipsForA).to.deep.equal([
-            {
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-              relationshipValidateRules: 'required',
-            },
-          ]);
-          expect(relationshipsForB).to.deep.equal([
-            {
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'one-to-one',
-              relationshipValidateRules: 'required',
-            },
-          ]);
+          jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "one-to-one",
+    "relationshipValidateRules": "required",
+  },
+]
+`);
+          jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "one-to-one",
+    "relationshipValidateRules": "required",
+  },
+]
+`);
         });
       });
       context('with comments', () => {
@@ -267,26 +280,30 @@ describe('JDLToJSONRelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(relationshipsForA).to.deep.equal([
-            {
-              javadoc: 'A to B',
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-            },
-          ]);
-          expect(relationshipsForB).to.deep.equal([
-            {
-              javadoc: 'A to B but in the destination',
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'one-to-one',
-            },
-          ]);
+          jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "javadoc": "A to B",
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "one-to-one",
+  },
+]
+`);
+          jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "javadoc": "A to B but in the destination",
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "one-to-one",
+  },
+]
+`);
         });
       });
       context("when the injected field in the destination side isn't present", () => {
@@ -307,13 +324,15 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
           });
           it('should not add the relationship for the destination entity', () => {
             expect(relationshipFromDestinationToSource).to.be.undefined;
@@ -336,20 +355,24 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'one-to-many',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "one-to-many",
+}
+`);
           });
           it('should add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'many-to-one',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "many-to-one",
+}
+`);
           });
         });
         context('for a Many-to-One relationship', () => {
@@ -369,12 +392,14 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'many-to-one',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "many-to-one",
+}
+`);
           });
           it('should not add the relationship for the destination entity', () => {
             expect(relationshipFromDestinationToSource).to.be.undefined;
@@ -397,22 +422,26 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'many-to-many',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "many-to-many",
+}
+`);
           });
           it('should add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'many-to-many',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "many-to-many",
+}
+`);
           });
         });
       });
@@ -434,22 +463,26 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
           });
           it('should add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'one-to-one',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "one-to-one",
+}
+`);
           });
         });
         context('for a One-to-Many relationship', () => {
@@ -469,20 +502,24 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'one-to-many',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "one-to-many",
+}
+`);
           });
           it('should add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'many-to-one',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "many-to-one",
+}
+`);
           });
         });
         context('for a Many-to-One relationship', () => {
@@ -502,20 +539,24 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              relationshipName: 'b',
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipType: 'many-to-one',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "many-to-one",
+}
+`);
           });
           it('should add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'one-to-many',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "one-to-many",
+}
+`);
           });
         });
         context('for a Many-to-Many relationship', () => {
@@ -535,22 +576,26 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'many-to-many',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "many-to-many",
+}
+`);
           });
           it('should add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'many-to-many',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "many-to-many",
+}
+`);
           });
         });
       });
@@ -573,24 +618,28 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add it for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'one-to-one',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
           });
           it('should ignore it for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'one-to-one',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "one-to-one",
+}
+`);
           });
         });
         context('for a One-to-Many relationship', () => {
@@ -611,22 +660,26 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should ignore it for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'one-to-many',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "one-to-many",
+}
+`);
           });
           it('should add it for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'many-to-one',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "many-to-one",
+}
+`);
           });
         });
         context('for a Many-to-One relationship', () => {
@@ -647,22 +700,26 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add it for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              relationshipName: 'b',
-              relationshipType: 'many-to-one',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "many-to-one",
+}
+`);
           });
           it('should ignore it for the source entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              relationshipName: 'a',
-              relationshipType: 'one-to-many',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "one-to-many",
+}
+`);
           });
         });
         context('for a Many-to-Many relationship', () => {
@@ -683,24 +740,28 @@ describe('JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add it for the source entity', () => {
-            expect(relationshipFromSourceToDestination).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'b',
-              otherEntityRelationshipName: 'a',
-              ownerSide: true,
-              relationshipName: 'b',
-              relationshipType: 'many-to-many',
-            });
+            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "many-to-many",
+}
+`);
           });
           it('should add it for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.deep.equal({
-              otherEntityField: 'name',
-              otherEntityName: 'a',
-              otherEntityRelationshipName: 'b',
-              ownerSide: false,
-              relationshipName: 'a',
-              relationshipType: 'many-to-many',
-            });
+            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "many-to-many",
+}
+`);
           });
         });
       });

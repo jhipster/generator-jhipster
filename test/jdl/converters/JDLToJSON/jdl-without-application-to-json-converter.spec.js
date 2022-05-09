@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -154,21 +155,23 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
         });
 
         it('should convert the entity', () => {
-          expect(convertedEntity).to.deep.equal({
-            applications: '*',
-            dto: NO_DTO,
-            embedded: false,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: true,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: false,
-            name: 'A',
-            pagination: NO_PAGINATION,
-            readOnly: false,
-            relationships: [],
-            service: NO_SERVICE,
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
         });
       });
       context('with options', () => {
@@ -254,27 +257,29 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
         });
 
         it('should convert the entity', () => {
-          expect(convertedEntity).to.deep.equal({
-            angularJSSuffix: 'suffix',
-            applications: '*',
-            clientRootFolder: '../client_root_folder',
-            dto: MAPSTRUCT,
-            embedded: true,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: false,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: true,
-            microserviceName: 'myMs',
-            name: 'A',
-            pagination: PAGINATION,
-            readOnly: true,
-            relationships: [],
-            searchEngine: COUCHBASE,
-            service: SERVICE_IMPL,
-            skipClient: true,
-            skipServer: true,
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "angularJSSuffix": "suffix",
+  "applications": "*",
+  "clientRootFolder": "../client_root_folder",
+  "dto": "mapstruct",
+  "embedded": true,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": false,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "myMs",
+  "name": "A",
+  "pagination": "pagination",
+  "readOnly": true,
+  "relationships": Array [],
+  "searchEngine": "couchbase",
+  "service": "serviceImpl",
+  "skipClient": true,
+  "skipServer": true,
+}
+`);
         });
       });
       context('when setting the DTO option without the service option', () => {
@@ -317,21 +322,23 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          expect(convertedEntity).to.deep.equal({
-            applications: '*',
-            dto: MAPSTRUCT,
-            embedded: false,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: true,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: false,
-            name: 'A',
-            pagination: NO_PAGINATION,
-            readOnly: false,
-            relationships: [],
-            service: SERVICE_CLASS,
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when setting the filtering option without the service option', () => {
@@ -373,21 +380,23 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          expect(convertedEntity).to.deep.equal({
-            applications: '*',
-            dto: NO_DTO,
-            embedded: false,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: true,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: true,
-            name: 'A',
-            pagination: NO_PAGINATION,
-            readOnly: false,
-            relationships: [],
-            service: SERVICE_CLASS,
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": true,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when the searching option is set with exclusions', () => {
@@ -419,22 +428,24 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
         });
 
         it('should prevent the entities from being searched', () => {
-          expect(convertedEntity).to.deep.equal({
-            applications: '*',
-            dto: NO_DTO,
-            embedded: false,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: true,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: false,
-            name: 'A',
-            pagination: NO_PAGINATION,
-            readOnly: false,
-            relationships: [],
-            searchEngine: false,
-            service: 'no',
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "searchEngine": false,
+  "service": "no",
+}
+`);
         });
       });
       context('with fields', () => {
@@ -469,30 +480,32 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedEntity).to.deep.equal({
-              applications: '*',
-              dto: NO_DTO,
-              embedded: false,
-              entityTableName: 'entity_a',
-              fields: [
-                {
-                  fieldName: 'firstField',
-                  fieldType: 'String',
-                },
-                {
-                  fieldName: 'secondField',
-                  fieldType: 'Integer',
-                },
-              ],
-              fluentMethods: true,
-              javadoc: 'The best entity',
-              jpaMetamodelFiltering: false,
-              name: 'A',
-              pagination: NO_PAGINATION,
-              readOnly: false,
-              relationships: [],
-              service: NO_SERVICE,
-            });
+            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [
+    Object {
+      "fieldName": "firstField",
+      "fieldType": "String",
+    },
+    Object {
+      "fieldName": "secondField",
+      "fieldType": "Integer",
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
           });
         });
         context('when having blobs', () => {
@@ -536,42 +549,44 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedEntity).to.deep.equal({
-              applications: '*',
-              dto: NO_DTO,
-              embedded: false,
-              entityTableName: 'entity_a',
-              fields: [
-                {
-                  fieldName: 'anyBlobField',
-                  fieldType: 'byte[]',
-                  fieldTypeBlobContent: 'any',
-                },
-                {
-                  fieldName: 'textBlobField',
-                  fieldType: 'byte[]',
-                  fieldTypeBlobContent: 'text',
-                },
-                {
-                  fieldName: 'blobField',
-                  fieldType: 'byte[]',
-                  fieldTypeBlobContent: 'any',
-                },
-                {
-                  fieldName: 'imageBlobField',
-                  fieldType: 'byte[]',
-                  fieldTypeBlobContent: 'image',
-                },
-              ],
-              fluentMethods: true,
-              javadoc: 'The best entity',
-              jpaMetamodelFiltering: false,
-              name: 'A',
-              pagination: NO_PAGINATION,
-              readOnly: false,
-              relationships: [],
-              service: NO_SERVICE,
-            });
+            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [
+    Object {
+      "fieldName": "anyBlobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+    },
+    Object {
+      "fieldName": "textBlobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+    },
+    Object {
+      "fieldName": "blobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+    },
+    Object {
+      "fieldName": "imageBlobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
           });
         });
         context('with field types being enums', () => {
@@ -601,27 +616,29 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedEntity).to.deep.equal({
-              applications: '*',
-              dto: NO_DTO,
-              embedded: false,
-              entityTableName: 'a',
-              fields: [
-                {
-                  fieldName: 'enumField',
-                  fieldType: 'CustomEnum',
-                  fieldValues: 'AA,AB',
-                },
-              ],
-              fluentMethods: true,
-              javadoc: 'The best entity',
-              jpaMetamodelFiltering: false,
-              name: 'A',
-              pagination: NO_PAGINATION,
-              readOnly: false,
-              relationships: [],
-              service: NO_SERVICE,
-            });
+            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "a",
+  "fields": Array [
+    Object {
+      "fieldName": "enumField",
+      "fieldType": "CustomEnum",
+      "fieldValues": "AA,AB",
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
           });
         });
         context('with comments', () => {
@@ -651,27 +668,29 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedEntity).to.deep.equal({
-              applications: '*',
-              dto: NO_DTO,
-              embedded: false,
-              entityTableName: 'entity_a',
-              fields: [
-                {
-                  fieldName: 'firstField',
-                  fieldType: 'String',
-                  javadoc: 'The best field',
-                },
-              ],
-              fluentMethods: true,
-              javadoc: 'The best entity',
-              jpaMetamodelFiltering: false,
-              name: 'A',
-              pagination: NO_PAGINATION,
-              readOnly: false,
-              relationships: [],
-              service: NO_SERVICE,
-            });
+            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [
+    Object {
+      "fieldName": "firstField",
+      "fieldType": "String",
+      "javadoc": "The best field",
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
           });
         });
         context('with validations', () => {
@@ -756,45 +775,59 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedEntity).to.deep.equal({
-              applications: '*',
-              dto: NO_DTO,
-              embedded: false,
-              entityTableName: 'entity_a',
-              fields: [
-                {
-                  fieldName: 'stringField',
-                  fieldType: 'String',
-                  fieldValidateRules: ['required', 'unique', 'minlength', 'maxlength', 'pattern'],
-                  fieldValidateRulesMaxlength: 10,
-                  fieldValidateRulesMinlength: 0,
-                  fieldValidateRulesPattern: '^d$',
-                },
-                {
-                  fieldName: 'integerField',
-                  fieldType: 'Integer',
-                  fieldValidateRules: ['min', 'max'],
-                  fieldValidateRulesMax: 10,
-                  fieldValidateRulesMin: 0,
-                },
-                {
-                  fieldName: 'blobField',
-                  fieldType: 'byte[]',
-                  fieldTypeBlobContent: 'any',
-                  fieldValidateRules: ['minbytes', 'maxbytes'],
-                  fieldValidateRulesMaxbytes: 10,
-                  fieldValidateRulesMinbytes: 0,
-                },
-              ],
-              fluentMethods: true,
-              javadoc: 'The best entity',
-              jpaMetamodelFiltering: false,
-              name: 'A',
-              pagination: NO_PAGINATION,
-              readOnly: false,
-              relationships: [],
-              service: NO_SERVICE,
-            });
+            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [
+    Object {
+      "fieldName": "stringField",
+      "fieldType": "String",
+      "fieldValidateRules": Array [
+        "required",
+        "unique",
+        "minlength",
+        "maxlength",
+        "pattern",
+      ],
+      "fieldValidateRulesMaxlength": 10,
+      "fieldValidateRulesMinlength": 0,
+      "fieldValidateRulesPattern": "^d$",
+    },
+    Object {
+      "fieldName": "integerField",
+      "fieldType": "Integer",
+      "fieldValidateRules": Array [
+        "min",
+        "max",
+      ],
+      "fieldValidateRulesMax": 10,
+      "fieldValidateRulesMin": 0,
+    },
+    Object {
+      "fieldName": "blobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+      "fieldValidateRules": Array [
+        "minbytes",
+        "maxbytes",
+      ],
+      "fieldValidateRulesMaxbytes": 10,
+      "fieldValidateRulesMinbytes": 0,
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
           });
         });
         context('with options', () => {
@@ -827,30 +860,32 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedEntity).to.deep.equal({
-              applications: '*',
-              dto: NO_DTO,
-              embedded: false,
-              entityTableName: 'entity_a',
-              fields: [
-                {
-                  fieldName: 'firstField',
-                  fieldType: 'String',
-                  javadoc: 'The best field',
-                  options: {
-                    id: 42,
-                  },
-                },
-              ],
-              fluentMethods: true,
-              javadoc: 'The best entity',
-              jpaMetamodelFiltering: false,
-              name: 'A',
-              pagination: NO_PAGINATION,
-              readOnly: false,
-              relationships: [],
-              service: NO_SERVICE,
-            });
+            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": "*",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [
+    Object {
+      "fieldName": "firstField",
+      "fieldType": "String",
+      "javadoc": "The best field",
+      "options": Object {
+        "id": 42,
+      },
+    },
+  ],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
           });
         });
       });
@@ -908,62 +943,66 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(relationshipsForA).to.deep.equal([
-              {
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-              },
-              {
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                relationshipName: 'b',
-                relationshipType: 'one-to-many',
-              },
-              {
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                relationshipName: 'b',
-                relationshipType: 'many-to-one',
-              },
-              {
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'many-to-many',
-              },
-            ]);
-            expect(relationshipsForB).to.deep.equal([
-              {
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'one-to-one',
-              },
-              {
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                relationshipName: 'a',
-                relationshipType: 'many-to-one',
-              },
-              {
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                relationshipName: 'a',
-                relationshipType: 'one-to-many',
-              },
-              {
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'many-to-many',
-              },
-            ]);
+            jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "one-to-one",
+  },
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "relationshipName": "b",
+    "relationshipType": "one-to-many",
+  },
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "relationshipName": "b",
+    "relationshipType": "many-to-one",
+  },
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "many-to-many",
+  },
+]
+`);
+            jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "one-to-one",
+  },
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "relationshipName": "a",
+    "relationshipType": "many-to-one",
+  },
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "relationshipName": "a",
+    "relationshipType": "one-to-many",
+  },
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "many-to-many",
+  },
+]
+`);
           });
         });
         context('with options', () => {
@@ -999,16 +1038,18 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should convert them', () => {
-              expect(convertedRelationship).to.deep.equal({
-                options: {
-                  custom: 42,
-                },
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-              });
+              jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+Object {
+  "options": Object {
+    "custom": 42,
+  },
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
             });
           });
           context('being regular options', () => {
@@ -1043,14 +1084,16 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should convert them', () => {
-              expect(convertedRelationship).to.deep.equal({
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-                useJPADerivedIdentifier: true,
-              });
+              jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+  "useJPADerivedIdentifier": true,
+}
+`);
             });
           });
         });
@@ -1085,26 +1128,30 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(relationshipsForA).to.deep.equal([
-              {
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-                relationshipValidateRules: 'required',
-              },
-            ]);
-            expect(relationshipsForB).to.deep.equal([
-              {
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'one-to-one',
-                relationshipValidateRules: 'required',
-              },
-            ]);
+            jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "one-to-one",
+    "relationshipValidateRules": "required",
+  },
+]
+`);
+            jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "one-to-one",
+    "relationshipValidateRules": "required",
+  },
+]
+`);
           });
         });
         context('with comments', () => {
@@ -1138,26 +1185,30 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(relationshipsForA).to.deep.equal([
-              {
-                javadoc: 'A to B',
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-              },
-            ]);
-            expect(relationshipsForB).to.deep.equal([
-              {
-                javadoc: 'A to B but in the destination',
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'one-to-one',
-              },
-            ]);
+            jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "javadoc": "A to B",
+    "otherEntityName": "b",
+    "otherEntityRelationshipName": "a",
+    "ownerSide": true,
+    "relationshipName": "b",
+    "relationshipType": "one-to-one",
+  },
+]
+`);
+            jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "javadoc": "A to B but in the destination",
+    "otherEntityName": "a",
+    "otherEntityRelationshipName": "b",
+    "ownerSide": false,
+    "relationshipName": "a",
+    "relationshipType": "one-to-one",
+  },
+]
+`);
           });
         });
         context("when the injected field in the destination side isn't present", () => {
@@ -1189,13 +1240,15 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add the relationship for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
             });
             it('should not add the relationship for the destination entity', () => {
               expect(relationshipFromDestinationToSource).to.be.undefined;
@@ -1229,20 +1282,24 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add the relationship for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                relationshipName: 'b',
-                relationshipType: 'one-to-many',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "one-to-many",
+}
+`);
             });
             it('should add the relationship for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.deep.equal({
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                relationshipName: 'a',
-                relationshipType: 'many-to-one',
-              });
+              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "many-to-one",
+}
+`);
             });
           });
           context('for a Many-to-One relationship', () => {
@@ -1273,12 +1330,14 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add the relationship for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                relationshipName: 'b',
-                relationshipType: 'many-to-one',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "many-to-one",
+}
+`);
             });
             it('should not add the relationship for the destination entity', () => {
               expect(relationshipFromDestinationToSource).to.be.undefined;
@@ -1312,22 +1371,26 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add the relationship for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'many-to-many',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "many-to-many",
+}
+`);
             });
             it('should add the relationship for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.deep.equal({
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'many-to-many',
-              });
+              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "many-to-many",
+}
+`);
             });
           });
         });
@@ -1361,24 +1424,28 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add it for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'one-to-one',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "one-to-one",
+}
+`);
             });
             it('should ignore it for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'one-to-one',
-              });
+              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "one-to-one",
+}
+`);
             });
           });
           context('for a One-to-Many relationship', () => {
@@ -1410,22 +1477,26 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should ignore it for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                relationshipName: 'b',
-                relationshipType: 'one-to-many',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "one-to-many",
+}
+`);
             });
             it('should add it for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                relationshipName: 'a',
-                relationshipType: 'many-to-one',
-              });
+              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "many-to-one",
+}
+`);
             });
           });
           context('for a Many-to-One relationship', () => {
@@ -1457,22 +1528,26 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add it for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                relationshipName: 'b',
-                relationshipType: 'many-to-one',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "relationshipName": "b",
+  "relationshipType": "many-to-one",
+}
+`);
             });
             it('should ignore it for the source entity', () => {
-              expect(relationshipFromDestinationToSource).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                relationshipName: 'a',
-                relationshipType: 'one-to-many',
-              });
+              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "relationshipName": "a",
+  "relationshipType": "one-to-many",
+}
+`);
             });
           });
           context('for a Many-to-Many relationship', () => {
@@ -1504,24 +1579,28 @@ describe('JDLWithoutApplicationToJSONConverter', () => {
             });
 
             it('should add it for the source entity', () => {
-              expect(relationshipFromSourceToDestination).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'b',
-                otherEntityRelationshipName: 'a',
-                ownerSide: true,
-                relationshipName: 'b',
-                relationshipType: 'many-to-many',
-              });
+              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "b",
+  "otherEntityRelationshipName": "a",
+  "ownerSide": true,
+  "relationshipName": "b",
+  "relationshipType": "many-to-many",
+}
+`);
             });
             it('should add it for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.deep.equal({
-                otherEntityField: 'name',
-                otherEntityName: 'a',
-                otherEntityRelationshipName: 'b',
-                ownerSide: false,
-                relationshipName: 'a',
-                relationshipType: 'many-to-many',
-              });
+              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+Object {
+  "otherEntityField": "name",
+  "otherEntityName": "a",
+  "otherEntityRelationshipName": "b",
+  "ownerSide": false,
+  "relationshipName": "a",
+  "relationshipType": "many-to-many",
+}
+`);
             });
           });
         });

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-const chai = require('chai');
+ const { expect: jestExpect } = require('expect');
+ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
@@ -137,21 +138,23 @@ describe('JDLToJSONOptionConverter', () => {
         });
 
         it('should convert the options', () => {
-          expect(convertedOptions).to.deep.equal({
-            angularJSSuffix: 'suffix',
-            clientRootFolder: '../client_root_folder',
-            dto: MAPSTRUCT,
-            embedded: true,
-            fluentMethods: false,
-            jpaMetamodelFiltering: true,
-            microserviceName: 'myMs',
-            pagination: PAGINATION,
-            readOnly: true,
-            searchEngine: COUCHBASE,
-            service: SERVICE_IMPL,
-            skipClient: true,
-            skipServer: true,
-          });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "angularJSSuffix": "suffix",
+  "clientRootFolder": "../client_root_folder",
+  "dto": "mapstruct",
+  "embedded": true,
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "myMs",
+  "pagination": "pagination",
+  "readOnly": true,
+  "searchEngine": "couchbase",
+  "service": "serviceImpl",
+  "skipClient": true,
+  "skipServer": true,
+}
+`);
         });
       });
       context('when setting the DTO option without the service option', () => {
@@ -189,10 +192,12 @@ describe('JDLToJSONOptionConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          expect(convertedOptions).to.deep.equal({
-            dto: 'mapstruct',
-            service: 'serviceClass',
-          });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "dto": "mapstruct",
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when setting the filtering option without the service option', () => {
@@ -229,10 +234,12 @@ describe('JDLToJSONOptionConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          expect(convertedOptions).to.deep.equal({
-            jpaMetamodelFiltering: true,
-            service: 'serviceClass',
-          });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "jpaMetamodelFiltering": true,
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when the searching option is set with exclusions', () => {
@@ -259,7 +266,11 @@ describe('JDLToJSONOptionConverter', () => {
         });
 
         it('should prevent the entities from being searched', () => {
-          expect(convertedOptions).to.deep.equal({ searchEngine: false });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "searchEngine": false,
+}
+`);
         });
       });
     });

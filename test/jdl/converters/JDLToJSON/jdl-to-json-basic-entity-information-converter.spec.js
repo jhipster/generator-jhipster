@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -101,21 +102,23 @@ describe('JDLToJSONBasicEntityConverter', () => {
         });
 
         it('should convert the entity', () => {
-          expect(convertedEntity).to.deep.equal({
-            applications: [],
-            dto: NO_DTO,
-            embedded: false,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: true,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: false,
-            name: 'A',
-            pagination: NO_PAGINATION,
-            readOnly: false,
-            relationships: [],
-            service: NO_SERVICE,
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": Array [],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
         });
       });
     });
