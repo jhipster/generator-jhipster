@@ -44,15 +44,6 @@ const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../../jdl/jhipster/relationship-types');
 const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/jhipster/relationship-options');
 const logger = require('../../../../jdl/utils/objects/logger');
-const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../../jdl/jhipster/entity-options');
-const { COUCHBASE } = require('../../../../jdl/jhipster/search-engine-types');
-
-const { MAPSTRUCT } = MapperTypes;
-const { PAGINATION } = PaginationTypes;
-const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-const NO_DTO = MapperTypes.NO;
-const NO_PAGINATION = PaginationTypes.NO;
-const NO_SERVICE = ServiceTypes.NO;
 
 describe('JDLWithoutApplicationToJSONConverter', () => {
   describe('convert', () => {

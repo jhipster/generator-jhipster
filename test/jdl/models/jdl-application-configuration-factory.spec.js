@@ -18,11 +18,6 @@
  */
 
 const { expect } = require('expect');
-const JDLApplicationConfiguration = require('../../../jdl/models/jdl-application-configuration');
-const StringJDLApplicationConfigurationOption = require('../../../jdl/models/string-jdl-application-configuration-option');
-const IntegerJDLApplicationConfigurationOption = require('../../../jdl/models/integer-jdl-application-configuration-option');
-const BooleanJDLApplicationConfigurationOption = require('../../../jdl/models/boolean-jdl-application-configuration-option');
-const ListJDLApplicationConfigurationOption = require('../../../jdl/models/list-jdl-application-configuration-option');
 const { OptionNames } = require('../../../jdl/jhipster/application-options');
 const { createApplicationConfigurationFromObject } = require('../../../jdl/models/jdl-application-configuration-factory');
 

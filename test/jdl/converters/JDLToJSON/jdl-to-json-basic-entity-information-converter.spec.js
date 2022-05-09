@@ -23,17 +23,12 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { expect } = require('chai');
-const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../../jdl/jhipster/entity-options');
 
 chai.use(sinonChai);
 
 const JDLEntity = require('../../../../jdl/models/jdl-entity');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-basic-entity-converter');
 const logger = require('../../../../jdl/utils/objects/logger');
-
-const NO_DTO = MapperTypes.NO;
-const NO_PAGINATION = PaginationTypes.NO;
-const NO_SERVICE = ServiceTypes.NO;
 
 describe('JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {

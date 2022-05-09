@@ -45,15 +45,6 @@ const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../..
 const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/jhipster/relationship-options');
 const logger = require('../../../../jdl/utils/objects/logger');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-with-applications-to-json-converter');
-const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../../jdl/jhipster/entity-options');
-const { COUCHBASE } = require('../../../../jdl/jhipster/search-engine-types');
-
-const { MAPSTRUCT } = MapperTypes;
-const { PAGINATION, INFINITE_SCROLL } = PaginationTypes;
-const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-const NO_DTO = MapperTypes.NO;
-const NO_PAGINATION = PaginationTypes.NO;
-const NO_SERVICE = ServiceTypes.NO;
 
 describe('JDLWithApplicationsToJSONConverter', () => {
   describe('convert', () => {

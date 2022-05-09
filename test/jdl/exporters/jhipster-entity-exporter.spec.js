@@ -108,7 +108,7 @@ describe('JHipsterEntityExporter', () => {
           });
         });
         it('should return an empty list', () => {
-          jestExpect(returned).toMatchInlineSnapshot(`Array []`);
+          jestExpect(returned).toMatchInlineSnapshot('Array []');
         });
         it('should not create a .jhipster folder', () => {
           expect(FileUtils.doesDirectoryExist('.jhipster')).to.be.false;

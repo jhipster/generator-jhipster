@@ -26,13 +26,8 @@ const path = require('path');
 const JHipsterDeploymentExporter = require('../../../jdl/exporters/jhipster-deployment-exporter');
 const JDLDeployment = require('../../../jdl/models/jdl-deployment');
 const { DeploymentTypes } = require('../../../jdl/jhipster/deployment-options');
-const { ServiceTypes } = require('../../../jdl/jhipster/kubernetes-platform-types');
-const { EUREKA } = require('../../../jdl/jhipster/service-discovery-types');
-const monitoringTypes = require('../../../jdl/jhipster/monitoring-types');
 
 const { DOCKERCOMPOSE, KUBERNETES } = DeploymentTypes;
-const NO_MONITORING = monitoringTypes.NO;
-const { LOAD_BALANCER } = ServiceTypes;
 
 describe('JHipsterDeploymentExporter', () => {
   describe('exportDeployments', () => {
