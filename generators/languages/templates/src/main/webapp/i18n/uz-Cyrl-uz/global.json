@@ -98,7 +98,8 @@
             "edit": "Ўзгартириш",
             "open": "Очиш",
             "save": "Сақлаш",
-            "view": "Кўриш"
+            "view": "Кўриш",
+            "show": "Show {{otherEntity}}"
         },
         "detail": {
             "field": "Майдон",
@@ -119,6 +120,11 @@
             "number": "Ушбу майдон сон бўлиши шарт.",
             "datetimelocal": "Ушбу майдон сана - вақт бирлиги бўлиши зарур.",
             "patternLogin": "Ушбу майдон фақат ҳарф, рақам ёки email манзил бўлиши мумкин."
+        },
+        "filters": {
+          "set": "Following filters are set",
+          "clear": "Clear filter",
+          "clearAll": "Clear all filters"
         }
     },
     "error": {

@@ -62,6 +62,9 @@ describe('<%= entityAngularName %> Management Component', () => {
                                 page: '1',
                                 size: '1',
                                 sort: '<%- primaryKey.name %>,desc',
+<%_ if (jpaMetamodelFiltering) { _%>
+                                'filter[someId.in]': 'dc4279ea-cfb9-11ec-9d64-0242ac120002',
+<%_ } _%>
                             })
                         ),
   <%_ if (searchEngine) { _%>
@@ -148,6 +151,19 @@ describe('<%= entityAngularName %> Management Component', () => {
         expect(comp.page).toEqual(0);
         expect(service.query).toHaveBeenCalledTimes(2);
         expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
+    });
+  <%_ } _%>
+
+  <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+    it('should calculate the filter attribute', () => {
+        // INIT
+        comp.ngOnInit();
+
+        // WHEN
+        comp.loadPage(1);
+
+        // THEN
+        expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': 'dc4279ea-cfb9-11ec-9d64-0242ac120002' }));
     });
   <%_ } _%>
 <%_ } _%>
