@@ -135,7 +135,7 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-    jvmArgs += '-Xmx512m'
+    jvmArgs += '-Xmx1G'
     systemProperty('spring.profiles.active', 'prod')
     systemProperty('java.security.egd', 'file:/dev/./urandom')
     // uncomment if the tests reports are not generated

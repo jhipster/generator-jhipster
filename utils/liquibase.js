@@ -129,12 +129,8 @@ function parseLiquibaseColumnType(entity, field) {
   }
 
   if (fieldType === BYTES && field.fieldTypeBlobContent !== TEXT) {
-    const { prodDatabaseType } = entity;
-    if (prodDatabaseType === MYSQL || prodDatabaseType === POSTGRESQL || prodDatabaseType === MARIADB) {
-      return 'longblob';
-    }
-
-    return 'blob';
+    // eslint-disable-next-line no-template-curly-in-string
+    return '${blobType}';
   }
 
   if (field.fieldTypeBlobContent === TEXT) {
@@ -169,7 +165,8 @@ function parseLiquibaseLoadColumnType(entity, field) {
     return columnType;
   }
 
-  if (columnType === 'blob' || columnType === 'longblob') {
+  // eslint-disable-next-line no-template-curly-in-string
+  if (columnType === '${blobType}') {
     return 'blob';
   }
 

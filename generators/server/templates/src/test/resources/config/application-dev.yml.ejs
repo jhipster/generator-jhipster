@@ -41,7 +41,7 @@ spring:
   <%_ if (devDatabaseTypeH2Any) { _%>
   r2dbc:
     <%_ if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+    url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
     <%_ } else { _%>
     url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } _%>
@@ -54,7 +54,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (devDatabaseTypeH2Any) { _%>
     <%_ if (devDatabaseTypeH2Memory) { _%>
-    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
+    url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true }) %>
     <%_ } else if (devDatabaseTypeH2Disk) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } _%>
@@ -63,22 +63,37 @@ spring:
     password:
   <%_ } _%>
     hikari:
-      poolName: Hikari
       auto-commit: false
+  <%_ if (!devDatabaseTypeH2Any) { _%>
+      poolName: Hikari
       maximum-pool-size: 1
-  <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql) { _%>
+    <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql) { _%>
       data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-  <%_ } _%>
-  <%_ if (devDatabaseTypePostgres || devDatabaseTypeH2Any) { _%>
-  jpa:
-    <%_ if (devDatabaseTypePostgres) { _%>
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-    <%_ } else if (devDatabaseTypeH2Any) { _%>
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
     <%_ } _%>
   <%_ } _%>
+  jpa:
+  <%_ if (devDatabaseTypePostgres) { _%>
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+  <%_ } else if (devDatabaseTypeH2Any) { _%>
+    database-platform: tech.jhipster.domain.util.FixedH2Dialect
+  <%_ } _%>
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.hbm2ddl.auto: validate
+      hibernate.jdbc.time_zone: UTC
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
 <%_ } _%>
