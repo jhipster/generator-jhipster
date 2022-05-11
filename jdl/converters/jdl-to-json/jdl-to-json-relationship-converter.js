@@ -85,9 +85,8 @@ function setRelationshipsFromEntity(relatedRelationships, entityName, conversion
       relationshipType: _.kebabCase(relationshipToConvert.type),
       otherEntityName: camelCase(relationshipToConvert.to),
     };
-    if (!unidirectionalRelationships || otherSplitField.relationshipName) {
-      convertedRelationship.otherEntityRelationshipName =
-        lowerFirst(otherSplitField.relationshipName) || camelCase(relationshipToConvert.from);
+    if (otherSplitField.relationshipName) {
+      convertedRelationship.otherEntityRelationshipName = lowerFirst(otherSplitField.relationshipName);
     }
     if (unidirectionalRelationships) {
       convertedRelationship.unidirectional = !otherSplitField.relationshipName;
