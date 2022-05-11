@@ -22,7 +22,6 @@ const { expect: jestExpect } = require('expect');
 const fse = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
-const { expect: jestExpect } = require('expect');
 
 const ApplicationTypes = require('../../jdl/jhipster/application-types');
 const DatabaseTypes = require('../../jdl/jhipster/database-types');
