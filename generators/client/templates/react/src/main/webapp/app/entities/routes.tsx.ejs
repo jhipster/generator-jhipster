@@ -17,13 +17,12 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
 <%_ if (microfrontend || applicationTypeGateway) { _%>
 import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
 
 import getStore from 'app/config/store';
 <%_ } _%>
-import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 <%_ if (microfrontend || applicationTypeGateway) { _%>
 
 import entitiesReducers from './reducers';
@@ -31,17 +30,17 @@ import entitiesReducers from './reducers';
 
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
-export default ({ match }) => {
+export default () => {
 <%_ if (microfrontend || applicationTypeGateway) { _%>
   const store = getStore();
   store.injectReducer('<%= lowercaseBaseName %>', combineReducers(entitiesReducers as ReducersMapObject));
 <%_ } _%>
   return (
     <div>
-      <Switch>
+      <Routes>
         {/* prettier-ignore */}
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
-      </Switch>
+      </Routes>
     </div>
   );
 };

@@ -1,24 +1,29 @@
 import React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { RouteProps, useLocation, Navigate } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
+
 import { useAppSelector } from 'app/config/store';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 
 interface IOwnProps extends RouteProps {
   hasAnyAuthorities?: string[];
+  children: React.ReactNode;
 }
 
-export const PrivateRouteComponent = ({ component: Component, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
+export const PrivateRouteComponent = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const sessionHasBeenFetched = useAppSelector(state => state.authentication.sessionHasBeenFetched);
   const account = useAppSelector(state => state.authentication.account);
   const isAuthorized = hasAnyAuthority(account.authorities, hasAnyAuthorities);
+  const location = useLocation();
 
-  const checkAuthorities = props =>
+  if (!children) {
+    throw new Error(`A component needs to be specified for private route for path ${(rest as any).path}`);
+  }
+
+  const checkAuthorities = () =>
     isAuthorized ? (
-      <ErrorBoundary>
-        <Component {...props} />
-      </ErrorBoundary>
+      <ErrorBoundary>{children}</ErrorBoundary>
     ) : (
       <div className="insufficient-authority">
         <div className="alert alert-danger">
@@ -27,28 +32,24 @@ export const PrivateRouteComponent = ({ component: Component, hasAnyAuthorities 
       </div>
     );
 
-    const renderRedirect = props => {
-      if (!sessionHasBeenFetched) {
-        return (<div></div>);
-      } else {
-        return isAuthenticated ? (
-          checkAuthorities(props)
-        ) : (
-          <Redirect
-            to={{
-              pathname: '<%_ if (authenticationTypeOauth2) { _%>/oauth2/authorization/oidc<%_ } else {_%>/login<%_ } _%>',
-              search: props.location.search,
-              state: { from: props.location }
-            }}
-          />
-        );
-      }
-    };
+  if (!sessionHasBeenFetched) {
+    return <div></div>;
+  }
 
+  if (isAuthenticated) {
+    return checkAuthorities();
+  }
 
-  if (!Component) throw new Error(`A component needs to be specified for private route for path ${(rest as any).path}`);
-
-  return <Route {...rest} render={renderRedirect} />;
+  return (
+    <Navigate
+      to={{
+        pathname: '<%_ if (authenticationTypeOauth2) { _%>/oauth2/authorization/oidc<%_ } else {_%>/login<%_ } _%>',
+        search: location.search,
+      }}
+      replace
+      state={{ from: location }}
+    />
+  );
 };
 
 export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string[]) => {

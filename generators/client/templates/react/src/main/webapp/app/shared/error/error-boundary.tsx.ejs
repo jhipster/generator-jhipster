@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface IErrorBoundaryProps {
-  readonly children: JSX.Element | JSX.Element[];
+  readonly children: React.ReactNode;
 }
 
 interface IErrorBoundaryState {
