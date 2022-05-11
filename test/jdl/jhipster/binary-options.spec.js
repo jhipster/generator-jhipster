@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
@@ -50,7 +51,17 @@ describe('BinaryOptions', () => {
       });
 
       it('should iterate over them', () => {
-        expect(result).to.deep.equal(['dto', 'service', 'pagination', 'microservice', 'search', 'angularSuffix', 'clientRootFolder']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "dto",
+  "service",
+  "pagination",
+  "microservice",
+  "search",
+  "angularSuffix",
+  "clientRootFolder",
+]
+`);
       });
     });
   });

@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
+const { expect } = require('expect');
 const { addAll, join } = require('../../../jdl/utils/set-utils');
 
 describe('SetUtils', () => {
   describe('addAll', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
-        expect(() => addAll()).to.throw(/^A Set must be passed so as to insert elements\.$/);
+        expect(() => addAll()).toThrow(/^A Set must be passed so as to insert elements\.$/);
       });
     });
     context('when not passing elements', () => {
@@ -36,7 +36,13 @@ describe('SetUtils', () => {
       });
 
       it('should return the set unchanged', () => {
-        expect(set).to.deep.equal(new Set([1, 2, 3]));
+        expect(set).toMatchInlineSnapshot(`
+Set {
+  1,
+  2,
+  3,
+}
+`);
       });
     });
     context('when passing an empty list as elements', () => {
@@ -48,7 +54,13 @@ describe('SetUtils', () => {
       });
 
       it('should return the set unchanged', () => {
-        expect(set).to.deep.equal(new Set([1, 2, 3]));
+        expect(set).toMatchInlineSnapshot(`
+Set {
+  1,
+  2,
+  3,
+}
+`);
       });
     });
     context('when passing elements', () => {
@@ -60,14 +72,21 @@ describe('SetUtils', () => {
       });
 
       it('should add them to the set', () => {
-        expect(set).to.deep.equal(new Set([1, 2, 3, 42]));
+        expect(set).toMatchInlineSnapshot(`
+Set {
+  1,
+  2,
+  3,
+  42,
+}
+`);
       });
     });
   });
   describe('join', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
-        expect(() => join()).to.throw(/^A Set must be passed so as to join elements\.$/);
+        expect(() => join()).toThrow(/^A Set must be passed so as to join elements\.$/);
       });
     });
     context('when not passing the separator', () => {
@@ -81,7 +100,7 @@ describe('SetUtils', () => {
       });
 
       it('should join the elements using a comma', () => {
-        expect(result).to.equal('42,a');
+        expect(result).toEqual('42,a');
       });
     });
     context('when passing a separator', () => {
@@ -96,7 +115,7 @@ describe('SetUtils', () => {
         });
 
         it('should join the elements using the separator', () => {
-          expect(result).to.equal('42, a');
+          expect(result).toEqual('42, a');
         });
       });
     });

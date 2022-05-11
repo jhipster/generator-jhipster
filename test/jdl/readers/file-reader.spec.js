@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const { expect: jestExpect } = require('expect');
 const fs = require('fs');
 const { expect } = require('chai');
 const FileReader = require('../../../jdl/readers/file-reader');
@@ -84,7 +85,12 @@ describe('FileReader', () => {
       });
 
       it('should read them', () => {
-        expect(content).to.deep.equal(['Hello...', ' World!']);
+        jestExpect(content).toMatchInlineSnapshot(`
+Array [
+  "Hello...",
+  " World!",
+]
+`);
       });
     });
   });

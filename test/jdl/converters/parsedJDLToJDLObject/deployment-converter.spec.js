@@ -17,20 +17,18 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLDeployment = require('../../../../jdl/models/jdl-deployment');
+const { expect } = require('expect');
 const { convertDeployments } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/deployment-converter');
 
 describe('DeploymentConverter', () => {
   describe('convertDeployments', () => {
     context('when not passing deployments', () => {
       it('should fail', () => {
-        expect(() => convertDeployments()).to.throw(/^Deployments have to be passed so as to be converted\.$/);
+        expect(() => convertDeployments()).toThrow(/^Deployments have to be passed so as to be converted\.$/);
       });
     });
     context('when passing deployments', () => {
       let convertedDeployments;
-      let expectedDeployments;
 
       before(() => {
         convertedDeployments = convertDeployments([
@@ -40,17 +38,29 @@ describe('DeploymentConverter', () => {
             dockerRepositoryName: 'test',
           },
         ]);
-        expectedDeployments = [
-          new JDLDeployment({
-            deploymentType: 'openshift',
-            appsFolders: ['tata', 'titi'],
-            dockerRepositoryName: 'test',
-          }),
-        ];
       });
 
       it('should convert them', () => {
-        expect(convertedDeployments).to.deep.equal(expectedDeployments);
+        expect(convertedDeployments).toMatchInlineSnapshot(`
+Array [
+  JDLDeployment {
+    "appsFolders": Set {
+      "tata",
+      "titi",
+    },
+    "clusteredDbApps": Set {},
+    "deploymentType": "openshift",
+    "directoryPath": "../",
+    "dockerPushCommand": "docker push",
+    "dockerRepositoryName": "test",
+    "monitoring": "no",
+    "openshiftNamespace": "default",
+    "registryReplicas": 2,
+    "serviceDiscoveryType": "eureka",
+    "storageType": "ephemeral",
+  },
+]
+`);
       });
     });
   });

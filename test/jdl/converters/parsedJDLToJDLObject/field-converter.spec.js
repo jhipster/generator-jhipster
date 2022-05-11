@@ -17,21 +17,19 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLField = require('../../../../jdl/models/jdl-field');
+const { expect } = require('expect');
 const { convertField } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/field-converter');
 
 describe('FieldConverter', () => {
   describe('convertField', () => {
     context('when not passing anything', () => {
       it('should fail', () => {
-        expect(() => convertField()).to.throw(/^A field has to be passed so as to be converted.$/);
+        expect(() => convertField()).toThrow(/^A field has to be passed so as to be converted.$/);
       });
     });
     context('when passing a parsed field', () => {
       context('with all the attributes', () => {
         let convertedField;
-        let jdlField;
 
         before(() => {
           convertedField = convertField({
@@ -39,15 +37,18 @@ describe('FieldConverter', () => {
             type: 'String',
             comment: 'An awesome comment!',
           });
-          jdlField = new JDLField({
-            name: 'anAwesomeField',
-            type: 'String',
-            javadoc: 'An awesome comment!',
-          });
         });
 
         it('should convert it', () => {
-          expect(convertedField).to.deep.equal(jdlField);
+          expect(convertedField).toMatchInlineSnapshot(`
+JDLField {
+  "comment": undefined,
+  "name": "anAwesomeField",
+  "options": Object {},
+  "type": "String",
+  "validations": Object {},
+}
+`);
         });
       });
       context('with a capitalized name', () => {
@@ -62,7 +63,7 @@ describe('FieldConverter', () => {
         });
 
         it('should lowercase it', () => {
-          expect(nameFromConvertedField).to.equal('anAwesomeField');
+          expect(nameFromConvertedField).toEqual('anAwesomeField');
         });
       });
       context('with a comment', () => {
@@ -78,7 +79,7 @@ describe('FieldConverter', () => {
         });
 
         it('should use it', () => {
-          expect(commentFromConvertedField).to.equal('An awesome comment!');
+          expect(commentFromConvertedField).toEqual('An awesome comment!');
         });
       });
     });

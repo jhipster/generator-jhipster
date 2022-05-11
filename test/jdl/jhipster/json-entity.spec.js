@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new,no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const JSONEntity = require('../../../jdl/jhipster/json-entity');
 
@@ -47,21 +48,23 @@ describe('JSONEntity', () => {
       });
 
       it('should set default values', () => {
-        expect(entity).to.deep.equal({
-          name: 'Toto',
-          dto: 'no',
-          entityTableName: 'toto',
-          fields: [],
-          fluentMethods: true,
-          javadoc: undefined,
-          jpaMetamodelFiltering: false,
-          pagination: 'no',
-          readOnly: false,
-          embedded: false,
-          relationships: [],
-          service: 'no',
-          applications: [],
-        });
+        jestExpect(entity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": Array [],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "toto",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": undefined,
+  "jpaMetamodelFiltering": false,
+  "name": "Toto",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
       });
     });
     context('when passing values', () => {
@@ -91,26 +94,33 @@ describe('JSONEntity', () => {
       });
 
       it('should use them', () => {
-        expect(entity).to.deep.equal({
-          name: 'Titi',
-          dto: 'mapstruct',
-          entityTableName: 'titi',
-          fields: [42],
-          fluentMethods: true,
-          javadoc: '',
-          jpaMetamodelFiltering: true,
-          pagination: 'pagination',
-          readOnly: true,
-          embedded: true,
-          relationships: [42, 43],
-          service: 'serviceClass',
-          microserviceName: 'nope',
-          angularJSSuffix: 'yes',
-          clientRootFolder: 'oh',
-          skipServer: true,
-          skipClient: true,
-          applications: [],
-        });
+        jestExpect(entity).toMatchInlineSnapshot(`
+JSONEntity {
+  "angularJSSuffix": "yes",
+  "applications": Array [],
+  "clientRootFolder": "oh",
+  "dto": "mapstruct",
+  "embedded": true,
+  "entityTableName": "titi",
+  "fields": Array [
+    42,
+  ],
+  "fluentMethods": true,
+  "javadoc": "",
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "nope",
+  "name": "Titi",
+  "pagination": "pagination",
+  "readOnly": true,
+  "relationships": Array [
+    42,
+    43,
+  ],
+  "service": "serviceClass",
+  "skipClient": true,
+  "skipServer": true,
+}
+`);
       });
     });
   });
@@ -260,21 +270,23 @@ describe('JSONEntity', () => {
       });
 
       it('should set them', () => {
-        expect(jsonEntity).to.deep.equal({
-          applications: [],
-          dto: 'mapstruct',
-          embedded: false,
-          entityTableName: 'toto',
-          fields: [],
-          fluentMethods: true,
-          javadoc: 'A comment',
-          jpaMetamodelFiltering: false,
-          name: 'Toto',
-          pagination: 'pagination',
-          readOnly: false,
-          relationships: [],
-          service: 'no',
-        });
+        jestExpect(jsonEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": Array [],
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "toto",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "A comment",
+  "jpaMetamodelFiltering": false,
+  "name": "Toto",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
       });
     });
   });

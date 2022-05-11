@@ -18,21 +18,17 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { expect } = require('chai');
-const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../../jdl/jhipster/entity-options');
 
 chai.use(sinonChai);
 
 const JDLEntity = require('../../../../jdl/models/jdl-entity');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-basic-entity-converter');
 const logger = require('../../../../jdl/utils/objects/logger');
-
-const NO_DTO = MapperTypes.NO;
-const NO_PAGINATION = PaginationTypes.NO;
-const NO_SERVICE = ServiceTypes.NO;
 
 describe('JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {
@@ -101,21 +97,23 @@ describe('JDLToJSONBasicEntityConverter', () => {
         });
 
         it('should convert the entity', () => {
-          expect(convertedEntity).to.deep.equal({
-            applications: [],
-            dto: NO_DTO,
-            embedded: false,
-            entityTableName: 'entity_a',
-            fields: [],
-            fluentMethods: true,
-            javadoc: 'The best entity',
-            jpaMetamodelFiltering: false,
-            name: 'A',
-            pagination: NO_PAGINATION,
-            readOnly: false,
-            relationships: [],
-            service: NO_SERVICE,
-          });
+          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+JSONEntity {
+  "applications": Array [],
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "entity_a",
+  "fields": Array [],
+  "fluentMethods": true,
+  "javadoc": "The best entity",
+  "jpaMetamodelFiltering": false,
+  "name": "A",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": Array [],
+  "service": "no",
+}
+`);
         });
       });
     });

@@ -17,32 +17,20 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLEnum = require('../../../../jdl/models/jdl-enum');
+const { expect } = require('expect');
 const { convertEnums } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
 
 describe('EnumConverter', () => {
   describe('convertEnums', () => {
     context('when not passing enumerations', () => {
       it('should fail', () => {
-        expect(() => convertEnums()).to.throw(/^Enumerations have to be passed so as to be converted.$/);
+        expect(() => convertEnums()).toThrow(/^Enumerations have to be passed so as to be converted.$/);
       });
     });
     context('when passing enumerations', () => {
-      let expectedEnums;
       let convertedEnums;
 
       before(() => {
-        expectedEnums = [
-          new JDLEnum({
-            name: 'Country',
-            values: [
-              { key: 'FRANCE', value: 'FRANCE' },
-              { key: 'ITALY', value: 'ITALY' },
-            ],
-            comment: 'A comment',
-          }),
-        ];
         convertedEnums = convertEnums([
           {
             name: 'Country',
@@ -56,7 +44,26 @@ describe('EnumConverter', () => {
       });
 
       it('should convert them', () => {
-        expect(convertedEnums).to.deep.equal(expectedEnums);
+        expect(convertedEnums).toMatchInlineSnapshot(`
+Array [
+  JDLEnum {
+    "comment": "A comment",
+    "name": "Country",
+    "values": Map {
+      "FRANCE" => JDLEnumValue {
+        "comment": undefined,
+        "name": "FRANCE",
+        "value": "FRANCE",
+      },
+      "ITALY" => JDLEnumValue {
+        "comment": undefined,
+        "name": "ITALY",
+        "value": "ITALY",
+      },
+    },
+  },
+]
+`);
       });
     });
   });

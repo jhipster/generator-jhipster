@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
+const { expect } = require('expect');
 const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
@@ -31,7 +31,7 @@ describe('AbstractJDLOption', () => {
             name: BinaryOptions.Options.SERVICE,
             value: BinaryOptions.Values.service.SERVICE_CLASS,
           }).resolveEntityNames();
-        }).to.throw(/^Entity names have to be passed to resolve the option's entities\.$/);
+        }).toThrow(/^Entity names have to be passed to resolve the option's entities\.$/);
       });
     });
     context('when passing entity names', () => {
@@ -47,7 +47,12 @@ describe('AbstractJDLOption', () => {
       });
 
       it("should resolve the option's entity names", () => {
-        expect(result).to.deep.equal(new Set(['B', 'A']));
+        expect(result).toMatchInlineSnapshot(`
+Set {
+  "A",
+  "B",
+}
+`);
       });
     });
   });

@@ -17,12 +17,7 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLApplicationConfiguration = require('../../../jdl/models/jdl-application-configuration');
-const StringJDLApplicationConfigurationOption = require('../../../jdl/models/string-jdl-application-configuration-option');
-const IntegerJDLApplicationConfigurationOption = require('../../../jdl/models/integer-jdl-application-configuration-option');
-const BooleanJDLApplicationConfigurationOption = require('../../../jdl/models/boolean-jdl-application-configuration-option');
-const ListJDLApplicationConfigurationOption = require('../../../jdl/models/list-jdl-application-configuration-option');
+const { expect } = require('expect');
 const { OptionNames } = require('../../../jdl/jhipster/application-options');
 const { createApplicationConfigurationFromObject } = require('../../../jdl/models/jdl-application-configuration-factory');
 
@@ -30,80 +25,107 @@ describe('JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {
     context('when passing no configuration', () => {
       let createdConfiguration;
-      let expectedConfiguration;
 
       before(() => {
         createdConfiguration = createApplicationConfigurationFromObject();
-        expectedConfiguration = new JDLApplicationConfiguration();
       });
 
       it('should a configuration without option', () => {
-        expect(createdConfiguration).to.deep.equal(expectedConfiguration);
+        expect(createdConfiguration).toMatchInlineSnapshot(`
+JDLApplicationConfiguration {
+  "options": Object {},
+}
+`);
       });
     });
     context('when passing a configuration', () => {
       context('containing a string option', () => {
         let createdConfiguration;
-        let expectedConfiguration;
 
         before(() => {
           createdConfiguration = createApplicationConfigurationFromObject({
             [OptionNames.BASE_NAME]: 'application',
           });
-          expectedConfiguration = new JDLApplicationConfiguration();
-          expectedConfiguration.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
         });
 
         it('should create it', () => {
-          expect(createdConfiguration).to.deep.equal(expectedConfiguration);
+          expect(createdConfiguration).toMatchInlineSnapshot(`
+JDLApplicationConfiguration {
+  "options": Object {
+    "baseName": StringJDLApplicationConfigurationOption {
+      "name": "baseName",
+      "quoted": false,
+      "value": "application",
+    },
+  },
+}
+`);
         });
       });
       context('containing a integer option', () => {
         let createdConfiguration;
-        let expectedConfiguration;
 
         before(() => {
           createdConfiguration = createApplicationConfigurationFromObject({
             [OptionNames.SERVER_PORT]: 8042,
           });
-          expectedConfiguration = new JDLApplicationConfiguration();
-          expectedConfiguration.setOption(new IntegerJDLApplicationConfigurationOption(OptionNames.SERVER_PORT, 8042));
         });
 
         it('should create it', () => {
-          expect(createdConfiguration).to.deep.equal(expectedConfiguration);
+          expect(createdConfiguration).toMatchInlineSnapshot(`
+JDLApplicationConfiguration {
+  "options": Object {
+    "serverPort": IntegerJDLApplicationConfigurationOption {
+      "name": "serverPort",
+      "value": 8042,
+    },
+  },
+}
+`);
         });
       });
       context('containing a boolean option', () => {
         let createdConfiguration;
-        let expectedConfiguration;
 
         before(() => {
           createdConfiguration = createApplicationConfigurationFromObject({
             [OptionNames.ENABLE_TRANSLATION]: true,
           });
-          expectedConfiguration = new JDLApplicationConfiguration();
-          expectedConfiguration.setOption(new BooleanJDLApplicationConfigurationOption(OptionNames.ENABLE_TRANSLATION, true));
         });
 
         it('should create it', () => {
-          expect(createdConfiguration).to.deep.equal(expectedConfiguration);
+          expect(createdConfiguration).toMatchInlineSnapshot(`
+JDLApplicationConfiguration {
+  "options": Object {
+    "enableTranslation": BooleanJDLApplicationConfigurationOption {
+      "name": "enableTranslation",
+      "value": true,
+    },
+  },
+}
+`);
         });
       });
       context('containing a list-based option', () => {
         let createdConfiguration;
-        let expectedConfiguration;
 
         before(() => {
           createdConfiguration = createApplicationConfigurationFromObject({
             [OptionNames.TEST_FRAMEWORKS]: [],
           });
-          expectedConfiguration = new JDLApplicationConfiguration();
-          expectedConfiguration.setOption(new ListJDLApplicationConfigurationOption(OptionNames.TEST_FRAMEWORKS, []));
         });
 
         it('should create it', () => {
-          expect(createdConfiguration).to.deep.equal(expectedConfiguration);
+          expect(createdConfiguration).toMatchInlineSnapshot(`
+JDLApplicationConfiguration {
+  "options": Object {
+    "testFrameworks": ListJDLApplicationConfigurationOption {
+      "name": "testFrameworks",
+      "value": Set {},
+    },
+  },
+}
+`);
         });
       });
     });

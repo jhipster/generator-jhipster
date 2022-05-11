@@ -19,6 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const { writeFileSync, unlinkSync } = require('fs');
 const path = require('path');
@@ -198,24 +199,30 @@ describe('JDLLinter', () => {
 
       it('reports the issues', () => {
         expect(reportedIssues.getNumberOfIssues()).to.equal(3);
-        expect(issueForAToB).to.deep.equal({
-          from: 'A',
-          ruleName: 'REL_INDIVIDUAL_DECL',
-          to: 'B',
-          type: 'OneToMany',
-        });
-        expect(issueForBToC).to.deep.equal({
-          from: 'B',
-          ruleName: 'REL_INDIVIDUAL_DECL',
-          to: 'C',
-          type: 'OneToMany',
-        });
-        expect(issueForAToC).to.deep.equal({
-          from: 'A',
-          ruleName: 'REL_INDIVIDUAL_DECL',
-          to: 'C',
-          type: 'OneToMany',
-        });
+        jestExpect(issueForAToB).toMatchInlineSnapshot(`
+RelationshipIssue {
+  "from": "A",
+  "ruleName": "REL_INDIVIDUAL_DECL",
+  "to": "B",
+  "type": "OneToMany",
+}
+`);
+        jestExpect(issueForBToC).toMatchInlineSnapshot(`
+RelationshipIssue {
+  "from": "B",
+  "ruleName": "REL_INDIVIDUAL_DECL",
+  "to": "C",
+  "type": "OneToMany",
+}
+`);
+        jestExpect(issueForAToC).toMatchInlineSnapshot(`
+RelationshipIssue {
+  "from": "A",
+  "ruleName": "REL_INDIVIDUAL_DECL",
+  "to": "C",
+  "type": "OneToMany",
+}
+`);
       });
     });
   });

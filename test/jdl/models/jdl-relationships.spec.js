@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 
 const JDLRelationship = require('../../../jdl/models/jdl-relationship');
@@ -438,18 +439,20 @@ describe('JDLRelationships', () => {
       });
 
       it('should use each relationship', () => {
-        expect(result).to.deep.equal([
-          {
-            from: 'Abc',
-            to: 'Abc2',
-            type: 'OneToOne',
-          },
-          {
-            from: 'Abc',
-            to: 'Abc2',
-            type: 'OneToMany',
-          },
-        ]);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "from": "Abc",
+    "to": "Abc2",
+    "type": "OneToOne",
+  },
+  Object {
+    "from": "Abc",
+    "to": "Abc2",
+    "type": "OneToMany",
+  },
+]
+`);
       });
     });
   });

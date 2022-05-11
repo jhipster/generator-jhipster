@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const { expect: jestExpect } = require('expect');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -32,12 +33,6 @@ const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-option-converter');
 const logger = require('../../../../jdl/utils/objects/logger');
-const { MapperTypes, PaginationTypes, ServiceTypes } = require('../../../../jdl/jhipster/entity-options');
-const { COUCHBASE } = require('../../../../jdl/jhipster/search-engine-types');
-
-const { MAPSTRUCT } = MapperTypes;
-const { PAGINATION } = PaginationTypes;
-const { SERVICE_IMPL } = ServiceTypes;
 
 describe('JDLToJSONOptionConverter', () => {
   describe('convert', () => {
@@ -137,21 +132,23 @@ describe('JDLToJSONOptionConverter', () => {
         });
 
         it('should convert the options', () => {
-          expect(convertedOptions).to.deep.equal({
-            angularJSSuffix: 'suffix',
-            clientRootFolder: '../client_root_folder',
-            dto: MAPSTRUCT,
-            embedded: true,
-            fluentMethods: false,
-            jpaMetamodelFiltering: true,
-            microserviceName: 'myMs',
-            pagination: PAGINATION,
-            readOnly: true,
-            searchEngine: COUCHBASE,
-            service: SERVICE_IMPL,
-            skipClient: true,
-            skipServer: true,
-          });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "angularJSSuffix": "suffix",
+  "clientRootFolder": "../client_root_folder",
+  "dto": "mapstruct",
+  "embedded": true,
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "myMs",
+  "pagination": "pagination",
+  "readOnly": true,
+  "searchEngine": "couchbase",
+  "service": "serviceImpl",
+  "skipClient": true,
+  "skipServer": true,
+}
+`);
         });
       });
       context('when setting the DTO option without the service option', () => {
@@ -189,10 +186,12 @@ describe('JDLToJSONOptionConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          expect(convertedOptions).to.deep.equal({
-            dto: 'mapstruct',
-            service: 'serviceClass',
-          });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "dto": "mapstruct",
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when setting the filtering option without the service option', () => {
@@ -229,10 +228,12 @@ describe('JDLToJSONOptionConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          expect(convertedOptions).to.deep.equal({
-            jpaMetamodelFiltering: true,
-            service: 'serviceClass',
-          });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "jpaMetamodelFiltering": true,
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when the searching option is set with exclusions', () => {
@@ -259,7 +260,11 @@ describe('JDLToJSONOptionConverter', () => {
         });
 
         it('should prevent the entities from being searched', () => {
-          expect(convertedOptions).to.deep.equal({ searchEngine: false });
+          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+Object {
+  "searchEngine": false,
+}
+`);
         });
       });
     });
