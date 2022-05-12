@@ -70,7 +70,7 @@ _%>
     </form>
 <%_ } _%>
 
-<%_ if (jpaMetamodelFiltering && !paginationNo) { _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     <<%= jhiPrefixDashed %>-filter [filters]="filters" (filterChange)="<%= refreshMethod %>"></<%= jhiPrefixDashed %>-filter>
 <%_ } _%>
 
@@ -167,7 +167,7 @@ _%>
                     <td class="text-end">
                         <div class="btn-group">
     <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-        <%_ if (relationship.otherEntity.jpaMetamodelFiltering && !relationship.otherEntity.paginationNo && relationship.relationshipOneToMany && !relationship.ownerSide) { 
+        <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.relationshipOneToMany && !relationship.ownerSide) { 
             const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
         _%>
             <button type="submit"
