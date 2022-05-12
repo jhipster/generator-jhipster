@@ -48,7 +48,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 <%_ if (paginationInfiniteScroll) { _%>
 import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering) { _%>
+<%_ if (jpaMetamodelFiltering && !paginationNo) { _%>
 import { FilterOptions, IFilterOptions } from 'app/shared/filter/filter.model';
 <%_ } _%>
 

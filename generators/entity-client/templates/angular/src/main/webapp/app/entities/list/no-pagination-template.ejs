@@ -21,9 +21,6 @@
 <%_ if (searchEngine) { _%>
     currentSearch: string;
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering) { _%>
-    filters: IFilterOptions = new FilterOptions();
-<%_ } _%>
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
@@ -50,14 +47,6 @@
                 query: this.currentSearch,
             };
 
-            <%_ if (jpaMetamodelFiltering) { _%>
-            if (this.filters.hasAnyFilterSet()) {
-                this.filters.filterOptions.forEach(filterOption => {
-                  queryObject[filterOption.name] = filterOption.value;
-                });
-            }
-            <%_ } _%>
-
             this.<%= entityInstance %>Service.search(queryObject).subscribe({
                     next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                         this.isLoading = false;
@@ -71,16 +60,8 @@
         }
 <%_ } _%>
 
-        const queryObject<%_ if (jpaMetamodelFiltering) { _%>: any<%_ } _%> = {
+        const queryObject = {
         };
-
-        <%_ if (jpaMetamodelFiltering) { _%>
-        if (this.filters.hasAnyFilterSet()) {
-            this.filters.filterOptions.forEach(filterOption => {
-            queryObject[filterOption.name] = filterOption.value;
-            });
-        }
-        <%_ } _%>
 
         this.<%= entityInstance %>Service.query(queryObject).subscribe({
             next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
