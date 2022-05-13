@@ -11,8 +11,8 @@ import EntitiesMenu from '@/entities/entities-menu.vue';
   components: {
     'entities-menu': EntitiesMenu,
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-  <%_ for (const remote of remotes) { _%>
-    '<%= remote.lowercaseBaseName %>-menu': () => import('@<%= remote.lowercaseBaseName %>/entities-menu'),
+  <%_ for (const microfrontend of microfrontends) { _%>
+    '<%= microfrontend.lowercaseBaseName %>-menu': () => import('@<%= microfrontend.lowercaseBaseName %>/entities-menu'),
   <%_ } _%>
 <%_ } _%>
   },

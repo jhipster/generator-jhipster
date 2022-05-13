@@ -1923,5 +1923,29 @@ Object {
 `);
       });
     });
+    context('when importing a JDL application with microfrontends', () => {
+      it('should return the microfrontends attributes in the application', () => {
+        const importer = createImporterFromContent(
+          `application {
+  config {
+    microfrontends [foo, bar]
+  }
+}
+`,
+          { skipFileGeneration: true }
+        );
+        const importState = importer.import();
+        jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "baseName": "foo",
+  },
+  Object {
+    "baseName": "bar",
+  },
+]
+`);
+      });
+    });
   });
 });

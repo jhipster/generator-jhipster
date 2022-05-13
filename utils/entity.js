@@ -480,6 +480,11 @@ function loadRequiredConfigIntoEntity(entity, config) {
     // Workaround different paths
     clientFramework: config.clientFramework,
   });
+  if (config.applicationType === MICROSERVICE) {
+    _.defaults(entity, {
+      microserviceName: config.baseName,
+    });
+  }
   return entity;
 }
 
