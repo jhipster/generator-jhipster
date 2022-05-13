@@ -2,7 +2,7 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * Test focus:
- * - clientFramework: vue with microfrontend
+ * - clientFramework: vue with microservice/microfrontend
  * - serviceDiscovery: consul
  * - authenticationType: oauth2
  * - prodDatabaseType: mysql
@@ -32,10 +32,10 @@ application {
     testFrameworks [cypress]
     microfrontends [blog, notification, store]
   }
-  entities UserData
+  entities UserData, Product
 }
 
-/* imperative, maven */
+/* microfrontend, imperative, maven */
 application {
   config {
     applicationType microservice
@@ -55,7 +55,7 @@ application {
   entities Blog, Post, Tag
 }
 
-/* imperative, gradle, entitySuffix/dtoSuffix */
+/* microservice, imperative, gradle, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
@@ -63,7 +63,6 @@ application {
     baseName store,
     buildTool gradle
     cacheProvider memcached
-    clientFramework vue
     creationTimestamp 1617901618888
     dtoSuffix Rest
     entitySuffix Entity
@@ -77,7 +76,7 @@ application {
   entities Product
 }
 
-/* reactive, gradle, entitySuffix/dtoSuffix */
+/* microfrontend, reactive, gradle, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
@@ -153,6 +152,8 @@ paginate Product with pagination
 service Product with serviceClass
 service Notification with serviceImpl
 dto Blog, Post, Tag with mapstruct
+
+microservice Product with store
 
 deployment {
   deploymentType docker-compose,

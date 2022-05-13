@@ -2,7 +2,7 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * Test focus:
- * - clientFramework: react with microfrontend
+ * - clientFramework: react with microservice/microfrontend
  * - serviceDiscovery: eureka
  * - authenticationType: oauth2
  * - prodDatabaseType: mariadb
@@ -33,10 +33,10 @@ application {
     testFrameworks [cypress]
     microfrontends [blog, notification, store]
   }
-  entities UserData
+  entities UserData, Product
 }
 
-/* imperative, maven */
+/* microfrontend, imperative, maven */
 application {
   config {
     applicationType microservice
@@ -56,7 +56,7 @@ application {
   entities Blog, Post, Tag
 }
 
-/* imperative, gradle, entitySuffix/dtoSuffix */
+/* microservice, imperative, gradle, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
@@ -64,7 +64,6 @@ application {
     baseName store,
     buildTool gradle
     cacheProvider infinispan
-    clientFramework react
     creationTimestamp 1617901618888
     dtoSuffix Rest
     entitySuffix Entity
@@ -78,7 +77,7 @@ application {
   entities Product
 }
 
-/* reactive, gradle, entitySuffix/dtoSuffix */
+/* microfrontend, reactive, gradle, entitySuffix/dtoSuffix */
 application {
   config {
     applicationType microservice
@@ -154,6 +153,8 @@ paginate Product with pagination
 service Product with serviceClass
 service Notification with serviceImpl
 dto Blog, Post, Tag, Notification with mapstruct
+
+microservice Product with store
 
 deployment {
   deploymentType docker-compose,
