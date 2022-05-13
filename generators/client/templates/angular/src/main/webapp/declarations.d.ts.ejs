@@ -11,16 +11,11 @@ declare module '<%= remote.lowercaseBaseName %>/entity-routing' {
 declare module '<%= remote.lowercaseBaseName %>/entity-navbar-items' {
   export const EntityNavbarItems : []
 }
-<%_ if (enableTranslation) { _%>
+    <%_ if (enableTranslation) { _%>
+
 declare module '<%= remote.lowercaseBaseName %>/translation-module' {
   export class LazyTranslationModule {}
 }
-<%_ } _%>
-
-  <%_ } _%>
-  <%_ for (const entity of Object.values(this.configOptions.sharedEntities).filter(entity => entity.microserviceName)) { _%>
-declare module '<%= entity.microserviceName %>/<%= entity.entityFileName %>' {
-  export class <%= entity.microserviceName ? upperFirstCamelCase(entity.microserviceName) : '' %><%= entity.entityAngularName %>Module {}
-}
+    <%_ } _%>
   <%_ } _%>
 <%_ } _%>

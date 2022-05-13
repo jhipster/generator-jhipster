@@ -46,8 +46,8 @@
       "testcontainers": "false"
     },
     {
-      "name": "mf-vue-consul-oauth2-mysql-memcached",
-      "jdl-samples": "mf-vue-consul-oauth2-mysql-memcached",
+      "name": "ms-mf-vue-consul-oauth2-mysql-memcached",
+      "jdl-samples": "ms-mf-vue-consul-oauth2-mysql-memcached",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true",
       "testcontainers": "false"

@@ -18,7 +18,7 @@
  */
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = require('./application-types');
-const { COUCHBASE, CASSANDRA, MONGODB, SQL, H2_DISK, POSTGRESQL } = require('./database-types');
+const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, H2_DISK, POSTGRESQL } = require('./database-types');
 const databaseTypes = require('./database-types');
 
 const NO_DATABASE_TYPE = databaseTypes.NO;
@@ -239,7 +239,7 @@ function getDefaultConfigForNewApplication(customOptions = {}) {
   if (typeof options[ENTITY_SUFFIX] === 'boolean' || typeof options[ENTITY_SUFFIX] !== 'string') {
     options[ENTITY_SUFFIX] = OptionValues[ENTITY_SUFFIX];
   }
-  if ([MONGODB, COUCHBASE, CASSANDRA, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
+  if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
     options[DEV_DATABASE_TYPE] = options[DATABASE_TYPE];
     options[PROD_DATABASE_TYPE] = options[DATABASE_TYPE];
     if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
