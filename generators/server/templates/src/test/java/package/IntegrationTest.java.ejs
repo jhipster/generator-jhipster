@@ -50,7 +50,7 @@ import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ if (cacheProviderRedis) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
-
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.annotation.ElementType;
@@ -90,6 +90,7 @@ import java.lang.annotation.Target;
 <%_ if (databaseTypeSql) { _%>
 @EmbeddedSQL
 <%_ } _%>
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public @interface IntegrationTest {
 <%_ if (reactive) { _%>
     // 5s is the spring default https://github.com/spring-projects/spring-framework/blob/29185a3d28fa5e9c1b4821ffe519ef6f56b51962/spring-test/src/main/java/org/springframework/test/web/reactive/server/DefaultWebTestClient.java#L106
