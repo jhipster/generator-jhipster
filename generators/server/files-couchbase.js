@@ -17,9 +17,6 @@
  * limitations under the License.
  */
 const constants = require('../generator-constants');
-const { MONOLITH } = require('../../jdl/jhipster/application-types');
-const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const { COUCHBASE } = require('../../jdl/jhipster/database-types');
 
 /* Constants use throughout */
 const DOCKER_DIR = constants.DOCKER_DIR;
@@ -28,7 +25,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 const shouldSkipUserManagement = generator =>
-  generator.skipUserManagement && (generator.applicationType !== MONOLITH || generator.authenticationType !== OAUTH2);
+  generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
 const couchbaseFiles = {
   docker: [
@@ -48,7 +45,7 @@ const couchbaseFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === SESSION && !generator.reactive,
+      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationTypeSession && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -58,7 +55,7 @@ const couchbaseFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === COUCHBASE,
+      condition: generator => generator.searchEngineCouchbase,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -68,7 +65,7 @@ const couchbaseFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === COUCHBASE,
+      condition: generator => generator.searchEngineCouchbase,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -85,7 +82,7 @@ const couchbaseFiles = {
       templates: ['config/couchmove/changelog/V0__create_collections.n1ql', 'config/couchmove/changelog/V0.2__create_indexes.n1ql'],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         'config/couchmove/changelog/V0.1__initial_setup/authority/ROLE_ADMIN.json',
@@ -100,8 +97,12 @@ const couchbaseFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/CouchbaseTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}CouchbaseTestContainerExtension.java`,
+          file: 'package/config/CouchbaseTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/CouchbaseTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedCouchbase.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedCouchbase.java`,
         },
       ],
     },

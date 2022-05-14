@@ -1826,7 +1826,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mariadb:10.7.1
+              image: mariadb:10.7.3
               env:
                 #            - name: MYSQL_USER
                 #              value: root
@@ -2161,7 +2161,7 @@ objects:
               emptyDir: {}
           containers:
             - name: \${APPLICATION_NAME}
-              image: mongo:4.4.12
+              image: mongo:4.4.13
               env:
                 - name: MONGODB_DATABASE
                   value: \${DATABASE_NAME}

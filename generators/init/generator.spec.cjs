@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const expect = require('expect');
+const { expect } = require('expect');
 const path = require('path');
 const { access } = require('fs/promises');
 

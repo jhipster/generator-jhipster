@@ -2,13 +2,13 @@
 
 [![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url]
 
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Webflux Build Status][github-actions-webflux-image]][github-actions-url] [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
 
 Greetings, Java Hipster!
 
 Full documentation and information is available on our website at [https://www.jhipster.tech/][jhipster-url]
 
-Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here][issue-template]. For feature requests and queries you can use [this template][feature-template].
+Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here][issue-template]. For feature requests and queries you can use [this template][feature-template]. If you have found a potential security issue, please read our security policy and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 
 ## Contributing
 
@@ -133,7 +133,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
 [github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
 [github-actions-vue-image]: https://github.com/jhipster/generator-jhipster/workflows/Vue/badge.svg
-[github-actions-webflux-image]: https://github.com/jhipster/generator-jhipster/workflows/Webflux/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=70&width=890
 [backers-url]: https://opencollective.com/generator-jhipster

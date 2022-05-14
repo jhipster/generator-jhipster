@@ -42,6 +42,7 @@ const { formatDateForChangelog } = require('../utils/liquibase');
 const { calculateDbNameWithLimit, hibernateSnakeCase } = require('../utils/db');
 const defaultApplicationOptions = require('../jdl/jhipster/default-application-options');
 const databaseTypes = require('../jdl/jhipster/database-types');
+const { databaseData } = require('./sql-constants');
 const { ANGULAR_X: ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = require('../jdl/jhipster/client-framework-types');
 const {
   PRIORITY_NAMES: {
@@ -1755,38 +1756,58 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
     const separator = legacyDbNames ? '_' : '__';
     const prefix = legacyDbNames ? '' : 'rel_';
     const joinTableName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
-    let limit = 0;
-    if (prodDatabaseType === ORACLE && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
+    const { name, tableNameMaxLength } = databaseData[prodDatabaseType] || {};
+    // FIXME: In V8, remove specific condition for POSTGRESQL joinTableName.length === 63
+    if (
+      tableNameMaxLength &&
+      (joinTableName.length > tableNameMaxLength || (prodDatabaseType === POSTGRESQL && joinTableName.length === 63)) &&
+      !this.skipCheckLengthOfIdentifier
+    ) {
       this.warning(
-        `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
+        `The generated join table "${joinTableName}" is too long for ${name} (which has a ${tableNameMaxLength} character limit). It will be truncated!`
       );
-
-      limit = 30;
-    } else if (prodDatabaseType === MYSQL && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 64;
-    } else if (prodDatabaseType === POSTGRESQL && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
-      );
-
-      limit = 63;
-    } else if (prodDatabaseType === MARIADB && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated join table "${joinTableName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
-      );
-
-      limit = 64;
+      return calculateDbNameWithLimit(entityName, relationshipName, tableNameMaxLength, { prefix, separator, appendHash: !legacyDbNames });
     }
-    return limit === 0
-      ? joinTableName
-      : calculateDbNameWithLimit(entityName, relationshipName, limit, { prefix, separator, appendHash: !legacyDbNames });
+    return joinTableName;
   }
 
   /**
+   * get a constraint name for tables in JHipster preferred style
+   *
+   * @param {string} entityName - name of the entity
+   * @param {string} columnOrRelationName - name of the column or related entity
+   * @param {string} prodDatabaseType - database type
+   * @param {boolean} noSnakeCase - do not convert names to snakecase
+   * @param {string} prefix - constraintName prefix for the constraintName
+   * @param {string} suffix - constraintName suffix for the constraintName
+   */
+  getConstraintName(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, prefix = '', suffix = '') {
+    let constraintName;
+    const legacyDbNames = this.jhipsterConfig && this.jhipsterConfig.legacyDbNames;
+    const separator = legacyDbNames ? '_' : '__';
+    if (noSnakeCase) {
+      constraintName = `${prefix}${entityName}${separator}${columnOrRelationName}${suffix}`;
+    } else {
+      constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}${suffix}`;
+    }
+    const { name, constraintNameMaxLength } = databaseData[prodDatabaseType] || {};
+    if (constraintNameMaxLength && constraintName.length > constraintNameMaxLength && !this.skipCheckLengthOfIdentifier) {
+      this.warning(
+        `The generated constraint name "${constraintName}" is too long for ${name} (which has a ${constraintNameMaxLength} character limit). It will be truncated!`
+      );
+      return `${calculateDbNameWithLimit(entityName, columnOrRelationName, constraintNameMaxLength - suffix.length, {
+        separator,
+        noSnakeCase,
+        prefix,
+        appendHash: !legacyDbNames,
+      })}${suffix}`;
+    }
+    return constraintName;
+  }
+
+  /**
+   * @deprecated Should be removed in V8 in favour of getConstraintName
+   *
    * get a constraint name for tables in JHipster preferred style after applying any length limits required.
    *
    * @param {string} entityName - name of the entity
@@ -1805,13 +1826,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       constraintName = `${prefix}${this.getTableName(entityName)}${separator}${this.getTableName(columnOrRelationName)}`;
     }
     let limit = 0;
-    if (prodDatabaseType === ORACLE && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
-      this.warning(
-        `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
-      );
-
-      limit = 28;
-    } else if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+    if (prodDatabaseType === MYSQL && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
       this.warning(
         `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
       );
@@ -1848,21 +1863,11 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {string} prodDatabaseType - database type
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
-  getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    // for backward compatibility
-    return this.getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase);
-  }
-
-  /**
-   * get a foreign key constraint name for tables in JHipster preferred style.
-   *
-   * @param {string} entityName - name of the entity
-   * @param {string} relationshipName - name of the related entity
-   * @param {string} prodDatabaseType - database type
-   * @param {boolean} noSnakeCase - do not convert names to snakecase
-   */
   getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    return `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
+    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
+    return prodDatabaseType === ORACLE
+      ? this.getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_', '_id')
+      : `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
   }
 
   /**
@@ -1874,7 +1879,10 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * @param {boolean} noSnakeCase - do not convert names to snakecase
    */
   getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
-    return `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
+    // FIXME: In V8, this should use only this.getConstraintName that calculates constraint length correctly
+    return prodDatabaseType === ORACLE
+      ? this.getConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase, 'ux_')
+      : `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
   }
 
   /**
@@ -2706,6 +2714,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (options.legacyDbNames !== undefined) {
       this.jhipsterConfig.legacyDbNames = options.legacyDbNames;
     }
+    if (options.enableTranslation !== undefined) {
+      this.jhipsterConfig.enableTranslation = options.enableTranslation;
+    }
     if (options.language) {
       // workaround double options parsing, remove once generator supports skipping parse options
       const languages = options.language.flat();
@@ -2826,6 +2837,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     dest.skipUserManagement = config.skipUserManagement;
     dest.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
     dest.microfrontend = config.microfrontend;
+    dest.microfrontends = config.microfrontends;
 
     dest.skipServer = config.skipServer;
     dest.skipCommitHook = config.skipCommitHook;
@@ -2881,7 +2893,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.endpointPrefix = !dest.applicationType || dest.applicationTypeMicroservice ? `services/${dest.lowercaseBaseName}` : '';
     }
 
-    if (dest.remotes) {
+    if (dest.microfrontends && dest.microfrontends.length > 0) {
+      dest.microfrontends.forEach(microfrontend => {
+        const { baseName } = microfrontend;
+        microfrontend.lowercaseBaseName = baseName.toLowerCase();
+        microfrontend.capitalizedBaseName = _.upperFirst(baseName);
+        microfrontend.endpointPrefix = `services/${microfrontend.lowercaseBaseName}`;
+      });
+    } else if ((!dest.microfrontends || dest.microfrontends.length === 0) && dest.remotes) {
       dest.remotes.forEach(app => this.loadDerivedAppConfig(app));
       dest.microfrontends = dest.remotes.filter(r => r.clientFramework && r.clientFramework !== CLIENT_FRAMEWORK_NO);
     }
@@ -2889,6 +2908,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       dest.microfrontend ||
       (dest.applicationTypeMicroservice && !dest.skipClient) ||
       (dest.applicationTypeGateway && dest.microfrontends && dest.microfrontends.length > 0);
+
+    if (dest.microfrontend && dest.applicationTypeMicroservice && !dest.gatewayServerPort) {
+      dest.gatewayServerPort = 8080;
+    }
 
     dest.authenticationTypeSession = dest.authenticationType === SESSION;
     dest.authenticationTypeJwt = dest.authenticationType === JWT;

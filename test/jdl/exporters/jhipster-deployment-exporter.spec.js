@@ -19,19 +19,15 @@
 
 /* eslint-disable no-unused-expressions */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const JHipsterDeploymentExporter = require('../../../jdl/exporters/jhipster-deployment-exporter');
 const JDLDeployment = require('../../../jdl/models/jdl-deployment');
 const { DeploymentTypes } = require('../../../jdl/jhipster/deployment-options');
-const { ServiceTypes } = require('../../../jdl/jhipster/kubernetes-platform-types');
-const { EUREKA } = require('../../../jdl/jhipster/service-discovery-types');
-const monitoringTypes = require('../../../jdl/jhipster/monitoring-types');
 
 const { DOCKERCOMPOSE, KUBERNETES } = DeploymentTypes;
-const NO_MONITORING = monitoringTypes.NO;
-const { LOAD_BALANCER } = ServiceTypes;
 
 describe('JHipsterDeploymentExporter', () => {
   describe('exportDeployments', () => {
@@ -91,16 +87,21 @@ describe('JHipsterDeploymentExporter', () => {
           it('should format it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
-            expect(config).to.deep.equal({
-              deploymentType: 'docker-compose',
-              appsFolders: ['tata', 'titi'],
-              clusteredDbApps: [],
-              directoryPath: '../',
-              dockerRepositoryName: 'test',
-              gatewayType: 'SpringCloudGateway',
-              monitoring: NO_MONITORING,
-              serviceDiscoveryType: EUREKA,
-            });
+            jestExpect(config).toMatchInlineSnapshot(`
+Object {
+  "appsFolders": Array [
+    "tata",
+    "titi",
+  ],
+  "clusteredDbApps": Array [],
+  "deploymentType": "docker-compose",
+  "directoryPath": "../",
+  "dockerRepositoryName": "test",
+  "gatewayType": "SpringCloudGateway",
+  "monitoring": "no",
+  "serviceDiscoveryType": "eureka",
+}
+`);
           });
         });
         context('for the second deployment', () => {
@@ -128,22 +129,27 @@ describe('JHipsterDeploymentExporter', () => {
           it('should format it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
-            expect(config).to.deep.equal({
-              deploymentType: 'kubernetes',
-              appsFolders: ['tata', 'titi'],
-              clusteredDbApps: [],
-              directoryPath: '../',
-              dockerPushCommand: 'docker push',
-              dockerRepositoryName: 'test',
-              ingressDomain: '',
-              istio: false,
-              kubernetesNamespace: 'default',
-              kubernetesServiceType: LOAD_BALANCER,
-              monitoring: NO_MONITORING,
-              kubernetesUseDynamicStorage: false,
-              kubernetesStorageClassName: '',
-              serviceDiscoveryType: EUREKA,
-            });
+            jestExpect(config).toMatchInlineSnapshot(`
+Object {
+  "appsFolders": Array [
+    "tata",
+    "titi",
+  ],
+  "clusteredDbApps": Array [],
+  "deploymentType": "kubernetes",
+  "directoryPath": "../",
+  "dockerPushCommand": "docker push",
+  "dockerRepositoryName": "test",
+  "ingressDomain": "",
+  "istio": false,
+  "kubernetesNamespace": "default",
+  "kubernetesServiceType": "LoadBalancer",
+  "kubernetesStorageClassName": "",
+  "kubernetesUseDynamicStorage": false,
+  "monitoring": "no",
+  "serviceDiscoveryType": "eureka",
+}
+`);
           });
         });
       });

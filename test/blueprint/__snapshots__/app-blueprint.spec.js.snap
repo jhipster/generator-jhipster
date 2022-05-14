@@ -1238,6 +1238,9 @@ Object {
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {
     "stateCleared": "modified",
   },
@@ -2591,6 +2594,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/NoOpMailConfiguration.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": Object {

@@ -78,6 +78,11 @@ function cleanUpOptions(application) {
       name: blueprintName,
     }));
   }
+  if (application[GENERATOR_NAME].microfrontends) {
+    application[GENERATOR_NAME].microfrontends = application[GENERATOR_NAME].microfrontends.map(baseName => ({
+      baseName,
+    }));
+  }
   if (application[GENERATOR_NAME].otherModules) {
     application[GENERATOR_NAME].otherModules = application[GENERATOR_NAME].otherModules.map(moduleName => ({
       name: moduleName,

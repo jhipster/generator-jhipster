@@ -195,7 +195,7 @@ public class UserResource {
             .map(user -> {
                 try {
                     return ResponseEntity.created(new URI("/api/admin/users/" + user.getLogin()))
-                        .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", user.getLogin()))
+                        .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + user.getLogin()<% } %>, user.getLogin()))
                         .body(user);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -248,7 +248,7 @@ public class UserResource {
             })
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(user -> ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin()))
+                .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + userDTO.getLogin()<% } %>, userDTO.getLogin()))
                 .body(user)
             );
   <%_ } else { _%>
@@ -357,11 +357,10 @@ public class UserResource {
     @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
   <%_ if (reactive) { _%>
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
         return userService.deleteUser(login)
-            .map(it -> ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, "userManagement.deleted", login)).build());
+        .then(Mono.just(ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, <% if (enableTranslation) { %> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build()));
   <%_ } else { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);

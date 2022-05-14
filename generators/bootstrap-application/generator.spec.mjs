@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import expect from 'expect';
+import { expect } from 'expect';
 import lodash from 'lodash';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -492,6 +492,8 @@ Object {
   "microserviceName": undefined,
   "name": "User",
   "otherRelationships": Array [],
+  "packageFolder": "com/mycompany/myapp",
+  "packageName": "com.mycompany.myapp",
   "pagination": "no",
   "paginationInfiniteScroll": false,
   "paginationNo": true,
@@ -704,6 +706,8 @@ Object {
   "microserviceName": undefined,
   "name": "EntityA",
   "otherRelationships": Array [],
+  "packageFolder": "com/mycompany/myapp",
+  "packageName": "com.mycompany.myapp",
   "pagination": "no",
   "paginationInfiniteScroll": false,
   "paginationNo": true,
@@ -972,6 +976,8 @@ Object {
   "microserviceName": undefined,
   "name": "EntityA",
   "otherRelationships": Array [],
+  "packageFolder": "com/mycompany/myapp",
+  "packageName": "com.mycompany.myapp",
   "pagination": "no",
   "paginationInfiniteScroll": false,
   "paginationNo": true,

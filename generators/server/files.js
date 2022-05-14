@@ -18,22 +18,11 @@
  */
 const serverCleanup = require('./cleanup');
 const constants = require('../generator-constants');
-const { GATEWAY, MICROSERVICE, MONOLITH } = require('../../jdl/jhipster/application-types');
-const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
-const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
-const databaseTypes = require('../../jdl/jhipster/database-types');
-const { COUCHBASE, MARIADB, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
-const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
-const { KAFKA } = require('../../jdl/jhipster/message-broker-types');
-const { CONSUL, EUREKA } = require('../../jdl/jhipster/service-discovery-types');
 const { addSectionsCondition, mergeSections } = require('../utils');
 const { writeCouchbaseFiles } = require('./files-couchbase');
 const { writeSqlFiles } = require('./files-sql');
 
 /* Constants use throughout */
-const NO_DATABASE = databaseTypes.NO;
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
 const DOCKER_DIR = constants.DOCKER_DIR;
 const TEST_DIR = constants.TEST_DIR;
@@ -41,11 +30,9 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
-const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
-const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 const shouldSkipUserManagement = generator =>
-  generator.skipUserManagement && (generator.applicationType !== MONOLITH || generator.authenticationType !== OAUTH2);
+  generator.skipUserManagement && (!generator.applicationTypeMonolith || !generator.authenticationTypeOauth2);
 
 const h2Files = {
   serverResource: [
@@ -95,7 +82,7 @@ const mongoDbFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement || (generator.skipUserManagement && generator.authenticationType === OAUTH2),
+      condition: generator => !generator.skipUserManagement || (generator.skipUserManagement && generator.authenticationTypeOauth2),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -144,7 +131,7 @@ const neo4jFiles = {
   ],
   serverResource: [
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -158,7 +145,7 @@ const neo4jFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement || generator.authenticationType === OAUTH2,
+      condition: generator => !generator.skipUserManagement || generator.authenticationTypeOauth2,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/neo4j/migrations/user__admin.json', 'config/neo4j/migrations/user__user.json'],
     },
@@ -168,8 +155,27 @@ const neo4jFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/AbstractNeo4jIT.java',
-          renameTo: generator => `${generator.testDir}/AbstractNeo4jIT.java`,
+          file: 'package/config/Neo4jTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/Neo4jTestContainer.java`,
+        },
+        {
+          file: 'package/config/EmbeddedNeo4j.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedNeo4j.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
         },
       ],
     },
@@ -205,7 +211,7 @@ const cassandraFiles = {
     },
     {
       condition: generator =>
-        generator.applicationType !== MICROSERVICE && (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
+        !generator.applicationTypeMicroservice && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
       path: SERVER_MAIN_RES_DIR,
       templates: [
         { file: 'config/cql/changelog/create-tables.cql', renameTo: () => 'config/cql/changelog/00000000000000_create-tables.cql' },
@@ -289,27 +295,27 @@ const baseServerFiles = {
       templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }],
     },
     {
-      condition: generator => generator.cacheProvider === HAZELCAST,
+      condition: generator => generator.cacheProviderHazelcast,
       path: DOCKER_DIR,
       templates: ['hazelcast-management-center.yml'],
     },
     {
-      condition: generator => generator.cacheProvider === MEMCACHED,
+      condition: generator => generator.cacheProviderMemcached,
       path: DOCKER_DIR,
       templates: ['memcached.yml'],
     },
     {
-      condition: generator => generator.cacheProvider === REDIS,
+      condition: generator => generator.cacheProviderRedis,
       path: DOCKER_DIR,
       templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
     },
     {
-      condition: generator => generator.searchEngine === ELASTICSEARCH,
+      condition: generator => generator.searchEngineElasticsearch,
       path: DOCKER_DIR,
       templates: ['elasticsearch.yml'],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA,
+      condition: generator => generator.messageBrokerKafka,
       path: DOCKER_DIR,
       templates: ['kafka.yml'],
     },
@@ -319,7 +325,7 @@ const baseServerFiles = {
       templates: [{ file: 'config/README.md', renameTo: () => 'central-server-config/README.md' }],
     },
     {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === CONSUL,
+      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryConsul,
       path: DOCKER_DIR,
       templates: [
         'consul.yml',
@@ -328,7 +334,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === EUREKA,
+      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryEureka,
       path: DOCKER_DIR,
       templates: [
         'jhipster-registry.yml',
@@ -348,7 +354,7 @@ const baseServerFiles = {
       templates: ['swagger-editor.yml'],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2 && generator.applicationType !== MICROSERVICE,
+      condition: generator => generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice,
       path: DOCKER_DIR,
       templates: [
         'keycloak.yml',
@@ -371,7 +377,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.buildTool === GRADLE,
+      condition: generator => generator.buildToolGradle,
       templates: [
         'build.gradle',
         'settings.gradle',
@@ -389,11 +395,11 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.buildTool === GRADLE && !!generator.enableSwaggerCodegen,
+      condition: generator => generator.buildToolGradle && !!generator.enableSwaggerCodegen,
       templates: ['gradle/swagger.gradle'],
     },
     {
-      condition: generator => generator.buildTool === MAVEN,
+      condition: generator => generator.buildToolMaven,
       templates: [
         { file: 'mvnw', method: 'copy', noEjs: true },
         { file: 'mvnw.cmd', method: 'copy', noEjs: true },
@@ -413,7 +419,7 @@ const baseServerFiles = {
   ],
   serverResource: [
     {
-      condition: generator => generator.clientFramework === REACT,
+      condition: generator => generator.clientFrameworkReact,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -425,7 +431,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.clientFramework === VUE,
+      condition: generator => generator.clientFrameworkVue,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -437,7 +443,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.clientFramework !== REACT && generator.clientFramework !== VUE,
+      condition: generator => !generator.clientFrameworkReact && !generator.clientFrameworkVue,
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'banner.txt', method: 'copy', noEjs: true }],
     },
@@ -463,8 +469,7 @@ const baseServerFiles = {
   serverJavaAuthConfig: [
     {
       condition: generator =>
-        !generator.reactive &&
-        (generator.databaseType === SQL || generator.databaseType === MONGODB || generator.databaseType === COUCHBASE),
+        !generator.reactive && (generator.databaseTypeSql || generator.databaseTypeMongodb || generator.databaseTypeCouchbase),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -511,7 +516,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === JWT,
+      condition: generator => generator.authenticationTypeJwt,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -529,7 +534,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === JWT && !generator.reactive,
+      condition: generator => generator.authenticationTypeJwt && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -539,7 +544,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && generator.applicationType === GATEWAY && generator.authenticationType === JWT,
+      condition: generator => generator.reactive && generator.applicationTypeGateway && generator.authenticationTypeJwt,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -569,7 +574,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === SESSION && !generator.reactive,
+      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationTypeSession && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -585,9 +590,9 @@ const baseServerFiles = {
     {
       condition: generator =>
         !shouldSkipUserManagement(generator) &&
-        generator.authenticationType === SESSION &&
+        generator.authenticationTypeSession &&
         !generator.reactive &&
-        generator.databaseType !== COUCHBASE,
+        !generator.databaseTypeCouchbase,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -597,7 +602,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2,
+      condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -615,7 +620,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2,
+      condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -631,8 +636,8 @@ const baseServerFiles = {
     {
       condition: generator =>
         !generator.reactive &&
-        generator.authenticationType === OAUTH2 &&
-        (generator.applicationType === MICROSERVICE || generator.applicationType === GATEWAY),
+        generator.authenticationTypeOauth2 &&
+        (generator.applicationTypeMicroservice || generator.applicationTypeGateway),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -642,7 +647,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== OAUTH2,
+      condition: generator => !shouldSkipUserManagement(generator) && !generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -656,7 +661,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType !== MICROSERVICE && generator.authenticationType === JWT,
+      condition: generator => !generator.applicationTypeMicroservice && generator.authenticationTypeJwt,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -680,7 +685,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.authenticationType === OAUTH2 && generator.applicationType === MONOLITH,
+      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -690,7 +695,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.authenticationType === OAUTH2 && generator.applicationType === MONOLITH,
+      condition: generator => !generator.reactive && generator.authenticationTypeOauth2 && generator.applicationTypeMonolith,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -702,7 +707,7 @@ const baseServerFiles = {
   ],
   serverJavaGateway: [
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryType,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/web/rest/vm/RouteVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java` },
@@ -713,8 +718,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator =>
-        generator.authenticationType === OAUTH2 && (generator.applicationType === MONOLITH || generator.applicationType === GATEWAY),
+      condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -725,9 +729,9 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.authenticationType === OAUTH2 &&
+        generator.authenticationTypeOauth2 &&
         !generator.reactive &&
-        (generator.applicationType === MONOLITH || generator.applicationType === GATEWAY),
+        (generator.applicationTypeMonolith || generator.applicationTypeGateway),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -738,9 +742,7 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.authenticationType === OAUTH2 &&
-        generator.reactive &&
-        (generator.applicationType === MONOLITH || generator.applicationType === GATEWAY),
+        generator.authenticationTypeOauth2 && generator.reactive && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -750,7 +752,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType && generator.reactive,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryType && generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -760,7 +762,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType && generator.reactive,
+      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryType && generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -774,8 +776,8 @@ const baseServerFiles = {
     {
       condition: generator =>
         !generator.reactive &&
-        (generator.applicationType === MICROSERVICE || generator.applicationType === GATEWAY) &&
-        generator.authenticationType === JWT,
+        (generator.applicationTypeMicroservice || generator.applicationTypeGateway) &&
+        generator.authenticationTypeJwt,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -791,8 +793,8 @@ const baseServerFiles = {
     {
       condition: generator =>
         !generator.reactive &&
-        generator.authenticationType === OAUTH2 &&
-        (generator.applicationType === MICROSERVICE || generator.applicationType === GATEWAY),
+        generator.authenticationTypeOauth2 &&
+        (generator.applicationTypeMicroservice || generator.applicationTypeGateway),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -818,7 +820,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.reactive && generator.applicationType === GATEWAY && !generator.serviceDiscoveryType,
+      condition: generator => !generator.reactive && generator.applicationTypeGateway && !generator.serviceDiscoveryType,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -828,7 +830,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType === MICROSERVICE,
+      condition: generator => generator.applicationTypeMicroservice,
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'static/microservices_index.html', renameTo: () => 'static/index.html' }],
     },
@@ -865,6 +867,10 @@ const baseServerFiles = {
         {
           file: 'package/IntegrationTest.java',
           renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
+        },
+        {
+          file: 'package/config/SpringBootTestClassOrderer.java',
+          renameTo: generator => `${generator.testDir}config/SpringBootTestClassOrderer.java`,
         },
       ],
     },
@@ -925,7 +931,12 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement || [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),
+      condition: generator =>
+        !generator.skipUserManagement ||
+        generator.databaseTypeSql ||
+        generator.databaseTypeMongodb ||
+        generator.databaseTypeCouchbase ||
+        generator.databaseTypeNeo4j,
       path: SERVER_MAIN_SRC_DIR,
       templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }],
     },
@@ -955,8 +966,13 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        [EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(generator.cacheProvider) ||
-        generator.applicationType === GATEWAY,
+        generator.cacheProviderEhCache ||
+        generator.cacheProviderCaffeine ||
+        generator.cacheProviderHazelcast ||
+        generator.cacheProviderInfinispan ||
+        generator.cacheProviderMemcached ||
+        generator.cacheProviderRedis ||
+        generator.applicationTypeGateway,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -966,7 +982,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.cacheProvider === INFINISPAN,
+      condition: generator => generator.cacheProviderInfinispan,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -976,7 +992,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.cacheProvider === REDIS,
+      condition: generator => generator.cacheProviderRedis,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -986,7 +1002,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseType !== NO_DATABASE,
+      condition: generator => !generator.databaseTypeNo,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -996,7 +1012,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseType === SQL,
+      condition: generator => generator.databaseTypeSql,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1006,7 +1022,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseType === SQL && generator.reactive,
+      condition: generator => generator.databaseTypeSql && generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1021,7 +1037,7 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.databaseType === SQL && generator.reactive && (!generator.skipUserManagement || generator.authenticationType === OAUTH2),
+        generator.databaseTypeSql && generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1031,7 +1047,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.websocket === SPRING_WEBSOCKET,
+      condition: generator => generator.communicationSpringWebsocket,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1045,7 +1061,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === ELASTICSEARCH,
+      condition: generator => generator.searchEngineElasticsearch,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1061,7 +1077,8 @@ const baseServerFiles = {
       templates: [{ file: 'package/domain/package-info.java', renameTo: generator => `${generator.javaDir}domain/package-info.java` }],
     },
     {
-      condition: generator => [SQL, MONGODB, NEO4J, COUCHBASE].includes(generator.databaseType),
+      condition: generator =>
+        generator.databaseTypeSql || generator.databaseTypeMongodb || generator.databaseTypeNeo4j || generator.databaseTypeCouchbase,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1073,7 +1090,7 @@ const baseServerFiles = {
   ],
   serverJavaPackageInfo: [
     {
-      condition: generator => generator.searchEngine === ELASTICSEARCH,
+      condition: generator => generator.searchEngineElasticsearch,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1115,7 +1132,7 @@ const baseServerFiles = {
       templates: [{ file: 'package/service/package-info.java', renameTo: generator => `${generator.javaDir}service/package-info.java` }],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA,
+      condition: generator => generator.messageBrokerKafka,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1209,7 +1226,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA && generator.reactive,
+      condition: generator => generator.messageBrokerKafka && generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1219,7 +1236,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA && !generator.reactive,
+      condition: generator => generator.messageBrokerKafka && !generator.reactive,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1231,7 +1248,7 @@ const baseServerFiles = {
   ],
   serverJavaWebsocket: [
     {
-      condition: generator => generator.websocket === SPRING_WEBSOCKET,
+      condition: generator => generator.communicationSpringWebsocket,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1341,7 +1358,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.databaseType === SQL && !generator.reactive,
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1363,12 +1380,12 @@ const baseServerFiles = {
       templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
     {
-      condition: generator => generator.databaseType === SQL && !generator.reactive,
+      condition: generator => generator.databaseTypeSql && !generator.reactive,
       path: SERVER_TEST_RES_DIR,
       templates: ['config/application-testcontainers.yml'],
     },
     {
-      condition: generator => generator.prodDatabaseType === MARIADB && !generator.reactive,
+      condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,
       path: SERVER_TEST_RES_DIR,
       templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
     },
@@ -1414,8 +1431,7 @@ const baseServerFiles = {
       templates: ['config/bootstrap.yml'],
     },
     {
-      condition: generator =>
-        generator.authenticationType === OAUTH2 && (generator.applicationType === MONOLITH || generator.applicationType === GATEWAY),
+      condition: generator => generator.authenticationTypeOauth2 && (generator.applicationTypeMonolith || generator.applicationTypeGateway),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1455,7 +1471,7 @@ const baseServerFiles = {
       templates: [{ file: 'package/features/gitkeep', renameTo: generator => `${generator.testDir}cucumber/gitkeep`, noEjs: true }],
     },
     {
-      condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== OAUTH2,
+      condition: generator => !shouldSkipUserManagement(generator) && !generator.authenticationTypeOauth2,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         // Create auth config test files
@@ -1466,7 +1482,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA,
+      condition: generator => generator.messageBrokerKafka,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1484,7 +1500,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA && !generator.reactive,
+      condition: generator => generator.messageBrokerKafka && !generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1494,7 +1510,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA && generator.reactive,
+      condition: generator => generator.messageBrokerKafka && generator.reactive,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1504,7 +1520,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.messageBroker === KAFKA,
+      condition: generator => generator.messageBrokerKafka,
       path: SERVER_TEST_RES_DIR,
       templates: [
         {
@@ -1540,20 +1556,20 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        (generator.authenticationType === OAUTH2 && generator.applicationType !== MICROSERVICE) ||
-        (!generator.skipUserManagement && generator.databaseType === SQL),
+        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice) ||
+        (!generator.skipUserManagement && generator.databaseTypeSql),
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/user.csv'],
     },
     {
       condition: generator =>
-        (generator.authenticationType === OAUTH2 && generator.applicationType !== MICROSERVICE && generator.databaseType === SQL) ||
-        (!generator.skipUserManagement && generator.databaseType === SQL),
+        (generator.authenticationTypeOauth2 && !generator.applicationTypeMicroservice && generator.databaseTypeSql) ||
+        (!generator.skipUserManagement && generator.databaseTypeSql),
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv'],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2,
+      condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
@@ -1573,7 +1589,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2 && generator.databaseType !== NO_DATABASE,
+      condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1599,7 +1615,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.skipUserManagement && [MONOLITH, GATEWAY].includes(generator.applicationType),
+      condition: generator => generator.skipUserManagement && (generator.applicationTypeGateway || generator.applicationTypeMonolith),
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1609,7 +1625,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2,
+      condition: generator => generator.authenticationTypeOauth2,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1619,7 +1635,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2 && generator.databaseType !== NO_DATABASE,
+      condition: generator => generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1638,7 +1654,9 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.skipUserManagement && generator.authenticationType !== OAUTH2 && [MONOLITH, GATEWAY].includes(generator.applicationType),
+        generator.skipUserManagement &&
+        !generator.authenticationTypeOauth2 &&
+        (generator.applicationTypeGateway || generator.applicationTypeMonolith),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1649,7 +1667,9 @@ const baseServerFiles = {
     },
     {
       condition: generator =>
-        generator.skipUserManagement && generator.authenticationType === OAUTH2 && [MONOLITH, GATEWAY].includes(generator.applicationType),
+        generator.skipUserManagement &&
+        generator.authenticationTypeOauth2 &&
+        (generator.applicationTypeGateway || generator.applicationTypeMonolith),
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1659,22 +1679,12 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === OAUTH2 && generator.searchEngine === ELASTICSEARCH,
+      condition: generator => generator.authenticationTypeOauth2 && generator.searchEngineElasticsearch,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
           file: 'package/repository/search/UserSearchRepository.java',
           renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.authenticationType === OAUTH2 && generator.searchEngine === ELASTICSEARCH,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java',
-          renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java`,
         },
       ],
     },
@@ -1741,7 +1751,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.searchEngine === ELASTICSEARCH,
+      condition: generator => !generator.skipUserManagement && generator.searchEngineElasticsearch,
       path: SERVER_MAIN_SRC_DIR,
       templates: [
         {
@@ -1751,17 +1761,56 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.searchEngine === ELASTICSEARCH,
+      condition: generator => generator.databaseTypeCouchbase,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java',
-          renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java`,
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
         },
       ],
     },
     {
-      condition: generator => generator.authenticationType === JWT,
+      condition: generator => generator.databaseTypeCouchbase,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+        {
+          file: 'testcontainers.properties',
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngineElasticsearch,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/EmbeddedElasticsearch.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedElasticsearch.java`,
+        },
+        {
+          file: 'package/config/ElasticsearchTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
+        },
+        {
+          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
+          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => generator.searchEngineElasticsearch,
+      path: SERVER_TEST_RES_DIR,
+      templates: [
+        {
+          file: 'META-INF/spring.factories',
+        },
+      ],
+    },
+    {
+      condition: generator => generator.authenticationTypeJwt,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1783,7 +1832,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationType !== MICROSERVICE && generator.authenticationType === JWT,
+      condition: generator => !generator.applicationTypeMicroservice && generator.authenticationTypeJwt,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1858,7 +1907,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.authenticationType !== OAUTH2,
+      condition: generator => !generator.skipUserManagement && !generator.authenticationTypeOauth2,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1868,7 +1917,7 @@ const baseServerFiles = {
       ],
     },
     {
-      condition: generator => !generator.skipUserManagement && generator.authenticationType === OAUTH2,
+      condition: generator => !generator.skipUserManagement && generator.authenticationTypeOauth2,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -1907,19 +1956,11 @@ function writeFiles() {
       this.generateKeyStore();
     },
 
-    cleanupFiles() {
-      if (this.isJhipsterVersionLessThan('7.6.1')) {
-        if (this.authenticationTypeOauth2 && !this.databaseTypeNo) {
-          this.removeFile(`${this.mainJavaPackageDir}web/rest/UserResource.java`);
-        }
-      }
-    },
-
     cleanupOldServerFiles() {
       serverCleanup.cleanupOldServerFiles(
         this,
-        `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`,
-        `${SERVER_TEST_SRC_DIR}/${this.testDir}`,
+        `${SERVER_MAIN_SRC_DIR}${this.javaDir}`,
+        `${SERVER_TEST_SRC_DIR}${this.testDir}`,
         SERVER_MAIN_RES_DIR,
         SERVER_TEST_RES_DIR
       );
@@ -1928,9 +1969,7 @@ function writeFiles() {
     writeFiles() {
       return this.writeFilesToDisk(serverFiles);
     },
-
     ...writeCouchbaseFiles(),
-
     ...writeSqlFiles(),
   };
 }

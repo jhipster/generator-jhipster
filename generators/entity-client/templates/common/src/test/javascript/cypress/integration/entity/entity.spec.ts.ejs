@@ -315,7 +315,7 @@ describe('<%= entityClass %> e2e test', () => {
       cy.get(`[data-cy="<%= fieldName %>"]`).select('<%= fieldValue %>');
 
     <%_ } else if (field.fieldTypeString || field.fieldTypeNumeric || field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { _%>
-      cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').should('have.value', '<%= fieldValue %>');
+      cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>')<% if (field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { %>.blur()<% } %>.should('have.value', '<%= fieldValue %>');
 
     <%_ } else { _%>
       cy.get(`[data-cy="<%= fieldName %>"]`).type('<%= fieldValue %>').invoke('val').should('match', new RegExp('<%= fieldValue %>'));

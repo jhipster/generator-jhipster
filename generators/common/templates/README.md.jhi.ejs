@@ -50,7 +50,7 @@ This application is configured for Service Discovery and Configuration with <% i
 
 Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husk, and others that are well known and you can find references in the web.
+In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
 
 <%_ if (configOptions.backendName === 'Java') { %>
 `/src/*` structure follows default <%= configOptions.backendName %> structure.
@@ -233,7 +233,7 @@ See Cypress' documentation for setting OS [environment variables](https://docs.c
 <%_ } _%>
 
 <%_ if (enableSwaggerCodegen) { _%>
-### Doing API-First development using openapi-generator
+### Doing API-First development using openapi-generator-cli
 
 [OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
     <%_ if (buildToolMaven) { _%>
@@ -399,7 +399,13 @@ You can also fully dockerize your application and all the services that it depen
 To achieve this, first build a docker image of your app by running:
 
 ```
-<% if (buildToolMaven) { %>./mvnw -Pprod verify jib:dockerBuild<% } %><% if (buildToolGradle) { %>./gradlew bootJar -Pprod jibDockerBuild<% } %>
+npm run java:docker
+```
+
+Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
+
+```
+npm run java:docker:arm64
 ```
 
 Then run:
@@ -407,6 +413,8 @@ Then run:
 ```
 docker-compose -f src/main/docker/app.yml up -d
 ```
+
+When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 

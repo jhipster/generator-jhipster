@@ -53,7 +53,7 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <%= officialDatabaseType %> reactive repository for the <%= persistClass %> entity.
+ * <%= springDataDescription %> repository for the <%= persistClass %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
@@ -144,8 +144,8 @@ interface <%= entityClass %>RepositoryInternal {
     Flux<<%= persistClass %>> findAll();
 
     Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
-
-    Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
+    // this is not supported at the moment because of https://github.com/jhipster/generator-jhipster/issues/18269
+    // Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
 
   <%_ if (implementsEagerLoadApis) { _%>
 

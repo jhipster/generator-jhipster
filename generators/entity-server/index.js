@@ -116,8 +116,19 @@ module.exports = class extends BaseBlueprintGenerator {
       loadConfigIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
 
-        this.testsNeedCsrf = [OAUTH2, SESSION].includes(this.entity.authenticationType);
-        this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.entity.databaseType];
+        const { databaseType, authenticationType, reactive } = this.entity;
+        this.testsNeedCsrf = [OAUTH2, SESSION].includes(authenticationType);
+        this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[databaseType];
+        let springDataDatabase;
+        if (this.databaseType !== SQL) {
+          springDataDatabase = this.officialDatabaseType;
+          if (reactive) {
+            springDataDatabase += ' reactive';
+          }
+        } else {
+          springDataDatabase = reactive ? 'R2DBC' : 'JPA';
+        }
+        this.springDataDescription = `Spring Data ${springDataDatabase}`;
       },
 
       /**
@@ -190,15 +201,6 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _writing() {
     return {
-      cleanupOldElasticSearchFiles() {
-        if (!this.searchEngineElasticsearch) return;
-        if (this.isJhipsterVersionLessThan('7.6.1')) {
-          this.removeFile(`${this.entityAbsoluteFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
-        }
-        if (this.isJhipsterVersionLessThan('7.7.1')) {
-          this.removeFile(`${this.entityAbsoluteFolder}/repository/search/SortToSortBuilderListConverter.java`);
-        }
-      },
       ...writeFiles(),
       ...super._missingPostWriting(),
     };

@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const UnaryOptions = require('../../../jdl/jhipster/unary-options');
 
@@ -49,7 +50,16 @@ describe('UnaryOptions', () => {
       });
 
       it('should loop over the unary options', () => {
-        expect(result).to.deep.equal(['skipClient', 'skipServer', 'noFluentMethod', 'readOnly', 'filter', 'embedded']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "skipClient",
+  "skipServer",
+  "noFluentMethod",
+  "readOnly",
+  "filter",
+  "embedded",
+]
+`);
       });
     });
   });

@@ -4072,7 +4072,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.7.1
+          image: mariadb:10.7.3
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -4432,7 +4432,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.12
+          image: mongo:4.4.13
           command:
             - /work-dir/peer-finder
           args:
@@ -4462,7 +4462,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.12
+          image: mongo:4.4.13
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE
@@ -8527,7 +8527,7 @@ spec:
     spec:
       containers:
         - name: jhipster-grafana
-          image: grafana/grafana:8.4.1
+          image: grafana/grafana:8.5.0
           ports:
             - containerPort: 3000
               name: http
@@ -10267,7 +10267,7 @@ spec:
             claimName: msmariadb-mariadb-pvc
       containers:
         - name: mariadb
-          image: mariadb:10.7.1
+          image: mariadb:10.7.3
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -10627,7 +10627,7 @@ spec:
             - name: workdir
               mountPath: /work-dir
         - name: boot
-          image: mongo:4.4.12
+          image: mongo:4.4.13
           command:
             - /work-dir/peer-finder
           args:
@@ -10657,7 +10657,7 @@ spec:
               mountPath: /data/db
       containers:
         - name: mongodb
-          image: mongo:4.4.12
+          image: mongo:4.4.13
           imagePullPolicy: \\"IfNotPresent\\"
           env:
             - name: POD_NAMESPACE

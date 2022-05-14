@@ -17,20 +17,18 @@
  * limitations under the License.
  */
 
-const { expect } = require('chai');
-const JDLEntity = require('../../../../jdl/models/jdl-entity');
+const { expect } = require('expect');
 const { convertEntities } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/entity-converter');
 
 describe('EntityConverter', () => {
   describe('convertEntities', () => {
     context('when not passing entities', () => {
       it('should fail', () => {
-        expect(() => convertEntities()).to.throw(/^Entities have to be passed so as to be converted\.$/);
+        expect(() => convertEntities()).toThrow(/^Entities have to be passed so as to be converted\.$/);
       });
     });
     context('when passing entities', () => {
       let convertedEntities;
-      let expectedEntities;
 
       before(() => {
         convertedEntities = convertEntities(
@@ -46,20 +44,25 @@ describe('EntityConverter', () => {
           ],
           () => []
         );
-        expectedEntities = [
-          new JDLEntity({
-            name: 'A',
-            comment: '/** No comment */',
-          }),
-          new JDLEntity({
-            name: 'B',
-            tableName: 'b_table',
-          }),
-        ];
       });
 
       it('should convert them', () => {
-        expect(convertedEntities).to.deep.equal(expectedEntities);
+        expect(convertedEntities).toMatchInlineSnapshot(`
+Array [
+  JDLEntity {
+    "comment": "/** No comment */",
+    "fields": Object {},
+    "name": "A",
+    "tableName": "A",
+  },
+  JDLEntity {
+    "comment": undefined,
+    "fields": Object {},
+    "name": "B",
+    "tableName": "b_table",
+  },
+]
+`);
       });
     });
   });

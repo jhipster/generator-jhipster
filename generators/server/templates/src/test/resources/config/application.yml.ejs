@@ -144,12 +144,6 @@ spring:
     cassandra:
       compression: NONE
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-  couchbase:
-    bucket:
-      name: jhipster
-      password: password
-<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
   liquibase:
     contexts: test

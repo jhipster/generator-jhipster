@@ -431,7 +431,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     if (this.options.reproducible) {
       return projectNameReproducibleConfigForTests.baseName;
     }
-    return /^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())) ? path.basename(process.cwd()) : 'jhipster';
+    return /^[a-zA-Z0-9_-]+$/.test(path.basename(process.cwd()))
+      ? path.basename(process.cwd()).replace('generator-jhipster-', '')
+      : 'jhipster';
   }
 
   /**

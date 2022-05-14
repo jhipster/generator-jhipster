@@ -122,6 +122,7 @@ module.exports = class extends BaseBlueprintGenerator {
             const uniqueRelationships = this.entity.relationships.filter(rel => rel.unique && (rel.relationshipRequired || rel.id));
             return _.min([this.entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
           },
+          configurable: true,
         });
 
         for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {

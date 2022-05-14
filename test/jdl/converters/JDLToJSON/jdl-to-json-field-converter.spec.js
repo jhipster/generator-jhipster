@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const JDLObject = require('../../../../jdl/models/jdl-object');
 const JDLEntity = require('../../../../jdl/models/jdl-entity');
@@ -56,10 +57,12 @@ describe('JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedField).to.deep.equal({
-            fieldName: 'firstField',
-            fieldType: 'String',
-          });
+          jestExpect(convertedField).toMatchInlineSnapshot(`
+Object {
+  "fieldName": "firstField",
+  "fieldType": "String",
+}
+`);
         });
       });
       context('when having blobs', () => {
@@ -99,28 +102,30 @@ describe('JDLToJSONFieldConverter', () => {
           });
 
           it('should convert them', () => {
-            expect(convertedFields).to.deep.equal([
-              {
-                fieldName: 'anyBlobField',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'any',
-              },
-              {
-                fieldName: 'textBlobField',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'text',
-              },
-              {
-                fieldName: 'blobField',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'any',
-              },
-              {
-                fieldName: 'imageBlobField',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'image',
-              },
-            ]);
+            jestExpect(convertedFields).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "fieldName": "anyBlobField",
+    "fieldType": "byte[]",
+    "fieldTypeBlobContent": "any",
+  },
+  Object {
+    "fieldName": "textBlobField",
+    "fieldType": "byte[]",
+    "fieldTypeBlobContent": "text",
+  },
+  Object {
+    "fieldName": "blobField",
+    "fieldType": "byte[]",
+    "fieldTypeBlobContent": "any",
+  },
+  Object {
+    "fieldName": "imageBlobField",
+    "fieldType": "byte[]",
+    "fieldTypeBlobContent": "image",
+  },
+]
+`);
           });
 
           it('should convert the blob content', () => {});
@@ -148,11 +153,13 @@ describe('JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedField).to.deep.equal({
-            fieldName: 'enumField',
-            fieldType: 'CustomEnum',
-            fieldValues: 'AA,AB',
-          });
+          jestExpect(convertedField).toMatchInlineSnapshot(`
+Object {
+  "fieldName": "enumField",
+  "fieldType": "CustomEnum",
+  "fieldValues": "AA,AB",
+}
+`);
         });
       });
       context('with field types being enums with comments', () => {
@@ -181,16 +188,18 @@ describe('JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedField).to.deep.equal({
-            fieldName: 'enumField',
-            fieldType: 'CustomEnum',
-            fieldTypeJavadoc: 'enum comment',
-            fieldValuesJavadocs: {
-              AA: 'some comment',
-              AB: 'some comment',
-            },
-            fieldValues: 'AA,AB',
-          });
+          jestExpect(convertedField).toMatchInlineSnapshot(`
+Object {
+  "fieldName": "enumField",
+  "fieldType": "CustomEnum",
+  "fieldTypeJavadoc": "enum comment",
+  "fieldValues": "AA,AB",
+  "fieldValuesJavadocs": Object {
+    "AA": "some comment",
+    "AB": "some comment",
+  },
+}
+`);
         });
       });
       context('with comments', () => {
@@ -215,11 +224,13 @@ describe('JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedField).to.deep.equal({
-            fieldName: 'firstField',
-            fieldType: 'String',
-            javadoc: 'The best field',
-          });
+          jestExpect(convertedField).toMatchInlineSnapshot(`
+Object {
+  "fieldName": "firstField",
+  "fieldType": "String",
+  "javadoc": "The best field",
+}
+`);
         });
       });
       context('with validations', () => {
@@ -299,31 +310,45 @@ describe('JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedFields).to.deep.equal([
-            {
-              fieldName: 'stringField',
-              fieldType: 'String',
-              fieldValidateRules: ['required', 'unique', 'minlength', 'maxlength', 'pattern'],
-              fieldValidateRulesMaxlength: 10,
-              fieldValidateRulesMinlength: 0,
-              fieldValidateRulesPattern: '^d$',
-            },
-            {
-              fieldName: 'integerField',
-              fieldType: 'Integer',
-              fieldValidateRules: ['min', 'max'],
-              fieldValidateRulesMax: 10,
-              fieldValidateRulesMin: 0,
-            },
-            {
-              fieldName: 'blobField',
-              fieldType: 'byte[]',
-              fieldTypeBlobContent: 'any',
-              fieldValidateRules: ['minbytes', 'maxbytes'],
-              fieldValidateRulesMaxbytes: 10,
-              fieldValidateRulesMinbytes: 0,
-            },
-          ]);
+          jestExpect(convertedFields).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "fieldName": "stringField",
+    "fieldType": "String",
+    "fieldValidateRules": Array [
+      "required",
+      "unique",
+      "minlength",
+      "maxlength",
+      "pattern",
+    ],
+    "fieldValidateRulesMaxlength": 10,
+    "fieldValidateRulesMinlength": 0,
+    "fieldValidateRulesPattern": "^d$",
+  },
+  Object {
+    "fieldName": "integerField",
+    "fieldType": "Integer",
+    "fieldValidateRules": Array [
+      "min",
+      "max",
+    ],
+    "fieldValidateRulesMax": 10,
+    "fieldValidateRulesMin": 0,
+  },
+  Object {
+    "fieldName": "blobField",
+    "fieldType": "byte[]",
+    "fieldTypeBlobContent": "any",
+    "fieldValidateRules": Array [
+      "minbytes",
+      "maxbytes",
+    ],
+    "fieldValidateRulesMaxbytes": 10,
+    "fieldValidateRulesMinbytes": 0,
+  },
+]
+`);
         });
       });
       context('with options', () => {
@@ -351,14 +376,16 @@ describe('JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedField).to.deep.equal({
-            fieldName: 'firstField',
-            fieldType: 'String',
-            javadoc: 'The best field',
-            options: {
-              id: 42,
-            },
-          });
+          jestExpect(convertedField).toMatchInlineSnapshot(`
+Object {
+  "fieldName": "firstField",
+  "fieldType": "String",
+  "javadoc": "The best field",
+  "options": Object {
+    "id": 42,
+  },
+}
+`);
         });
       });
     });

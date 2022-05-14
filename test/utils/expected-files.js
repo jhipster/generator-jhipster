@@ -141,10 +141,7 @@ const expectedFiles = {
       // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
       `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
     ],
-    entitySearchSpecific: [
-      `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`,
-      `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepositoryMockConfiguration.java`,
-    ],
+    entitySearchSpecific: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`],
     fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
     serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
     gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`],
@@ -803,7 +800,11 @@ const expectedFiles = {
   ],
 
   neo4j: [
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/AbstractNeo4jIT.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/EmbeddedNeo4j.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/Neo4jTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
+    `${SERVER_TEST_RES_DIR}testcontainers.properties`,
+    `${SERVER_TEST_RES_DIR}META-INF/spring.factories`,
     `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__admin.json`,
     `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
     `${DOCKER_DIR}neo4j.yml`,
@@ -832,7 +833,6 @@ const expectedFiles = {
   elasticsearch: [
     `${DOCKER_DIR}elasticsearch.yml`,
     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
-    `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`,
   ],
 
   cucumber: [

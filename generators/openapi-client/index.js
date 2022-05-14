@@ -64,6 +64,8 @@ module.exports = class extends BaseBlueprintGenerator {
       },
       getConfig() {
         this.openApiClients = this.config.get('openApiClients') || {};
+        this.loadAppConfig();
+        this.loadServerConfig();
       },
     };
   }

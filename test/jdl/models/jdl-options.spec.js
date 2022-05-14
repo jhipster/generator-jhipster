@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 
 const JDLOptions = require('../../../jdl/models/jdl-options');
@@ -161,7 +162,12 @@ describe('JDLOptions', () => {
       });
 
       it('should use each option', () => {
-        expect(result).to.deep.equal(['skipClient', 'skipServer']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "skipClient",
+  "skipServer",
+]
+`);
       });
     });
   });

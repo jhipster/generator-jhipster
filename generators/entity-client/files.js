@@ -437,7 +437,7 @@ function addSampleRegexTestingStrings(generator) {
 function writeFiles() {
   return {
     writeClientFiles() {
-      if (this.skipClient || (this.microfrontend && this.applicationTypeGateway && this.microserviceName)) return undefined;
+      if (this.skipClient) return undefined;
       if (this.protractorTests) {
         addSampleRegexTestingStrings(this);
       }

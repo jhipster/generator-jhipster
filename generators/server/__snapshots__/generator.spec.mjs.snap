@@ -332,6 +332,10 @@ Object {
           "file": "package/IntegrationTest.java",
           "renameTo": [Function],
         },
+        Object {
+          "file": "package/config/SpringBootTestClassOrderer.java",
+          "renameTo": [Function],
+        },
       ],
     },
     Object {
@@ -1075,16 +1079,6 @@ Object {
     },
     Object {
       "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/search/UserSearchRepositoryMockConfiguration.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
       "path": "src/main/resources/",
       "templates": Array [
         "templates/mail/activationEmail.html",
@@ -1169,8 +1163,47 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/repository/search/UserSearchRepositoryMockConfiguration.java",
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
           "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+        Object {
+          "file": "testcontainers.properties",
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/EmbeddedElasticsearch.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/ElasticsearchTestContainer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
         },
       ],
     },
@@ -1923,8 +1956,28 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
-          "file": "package/AbstractNeo4jIT.java",
+          "file": "package/config/Neo4jTestContainer.java",
           "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/EmbeddedNeo4j.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "META-INF/spring.factories",
+        },
+        Object {
+          "file": "testcontainers.properties",
         },
       ],
     },

@@ -18,12 +18,12 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const path = require('path');
 const { matchEntity } = require('../../matchers/entity-matcher');
 const JDLReader = require('../../../../jdl/readers/jdl-reader');
 const ParsedJDLToJDLObjectConverter = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
-const { createJDLApplication } = require('../../../../jdl/models/jdl-application-factory');
 const JDLEntity = require('../../../../jdl/models/jdl-entity');
 const JDLEnum = require('../../../../jdl/models/jdl-enum');
 const JDLField = require('../../../../jdl/models/jdl-field');
@@ -36,24 +36,15 @@ const Validations = require('../../../../jdl/jhipster/validations');
 const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../../jdl/jhipster/binary-options').Options;
 const BinaryOptionValues = require('../../../../jdl/jhipster/binary-options').Values;
-const { MONOLITH } = require('../../../../jdl/jhipster/application-types');
 const { MapperTypes, ServiceTypes, PaginationTypes } = require('../../../../jdl/jhipster/entity-options');
 const { OptionNames } = require('../../../../jdl/jhipster/application-options');
 const { Options } = require('../../../../jdl/jhipster/binary-options');
-const { MAVEN } = require('../../../../jdl/jhipster/build-tool-types');
-const { EHCACHE } = require('../../../../jdl/jhipster/cache-types');
-const { JWT } = require('../../../../jdl/jhipster/authentication-types');
-const { ANGULAR_X } = require('../../../../jdl/jhipster/client-framework-types');
-const { SQL, H2_DISK, POSTGRESQL } = require('../../../../jdl/jhipster/database-types');
-const { EUREKA } = require('../../../../jdl/jhipster/service-discovery-types');
-const monitoringTypes = require('../../../../jdl/jhipster/monitoring-types');
 
 const { DTO } = Options;
 const { SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
-const NO_MONITORING = monitoringTypes.NO;
 
 describe('ParsedJDLToJDLObjectConverter', () => {
   describe('parse', () => {
@@ -500,7 +491,6 @@ describe('ParsedJDLToJDLObjectConverter', () => {
       });
       context('when parsing applications', () => {
         let parsedConfig;
-        let expectedConfig;
 
         before(() => {
           const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', 'test-files', 'application.jdl')]);
@@ -508,37 +498,174 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             parsedContent: input,
           });
           parsedConfig = jdlObject.applications.toto;
-          expectedConfig = createJDLApplication({
-            applicationType: MONOLITH,
-            authenticationType: JWT,
-            baseName: 'toto',
-            buildTool: MAVEN,
-            cacheProvider: EHCACHE,
-            clientFramework: ANGULAR_X,
-            clientTheme: 'none',
-            clientThemeVariant: '',
-            clientPackageManager: 'npm',
-            databaseType: SQL,
-            devDatabaseType: H2_DISK,
-            enableHibernateCache: true,
-            enableSwaggerCodegen: false,
-            enableTranslation: false,
-            jhiPrefix: 'jhi',
-            messageBroker: false,
-            packageFolder: 'com/mathieu/sample',
-            packageName: 'com.mathieu.sample',
-            prodDatabaseType: POSTGRESQL,
-            searchEngine: false,
-            serverPort: '8080',
-            serviceDiscoveryType: false,
-            skipUserManagement: false,
-            websocket: false,
-            withAdminUi: true,
-          });
         });
 
         it('should parse it', () => {
-          expect(parsedConfig).to.deep.equal(expectedConfig);
+          jestExpect(parsedConfig).toMatchInlineSnapshot(`
+JDLApplication {
+  "config": JDLApplicationConfiguration {
+    "options": Object {
+      "applicationType": StringJDLApplicationConfigurationOption {
+        "name": "applicationType",
+        "quoted": false,
+        "value": "monolith",
+      },
+      "authenticationType": StringJDLApplicationConfigurationOption {
+        "name": "authenticationType",
+        "quoted": false,
+        "value": "jwt",
+      },
+      "baseName": StringJDLApplicationConfigurationOption {
+        "name": "baseName",
+        "quoted": false,
+        "value": "toto",
+      },
+      "buildTool": StringJDLApplicationConfigurationOption {
+        "name": "buildTool",
+        "quoted": false,
+        "value": "maven",
+      },
+      "cacheProvider": StringJDLApplicationConfigurationOption {
+        "name": "cacheProvider",
+        "quoted": false,
+        "value": "ehcache",
+      },
+      "clientFramework": StringJDLApplicationConfigurationOption {
+        "name": "clientFramework",
+        "quoted": false,
+        "value": "angularX",
+      },
+      "clientPackageManager": StringJDLApplicationConfigurationOption {
+        "name": "clientPackageManager",
+        "quoted": false,
+        "value": "npm",
+      },
+      "clientTheme": StringJDLApplicationConfigurationOption {
+        "name": "clientTheme",
+        "quoted": false,
+        "value": "none",
+      },
+      "clientThemeVariant": StringJDLApplicationConfigurationOption {
+        "name": "clientThemeVariant",
+        "quoted": false,
+        "value": "",
+      },
+      "databaseType": StringJDLApplicationConfigurationOption {
+        "name": "databaseType",
+        "quoted": false,
+        "value": "sql",
+      },
+      "devDatabaseType": StringJDLApplicationConfigurationOption {
+        "name": "devDatabaseType",
+        "quoted": false,
+        "value": "h2Disk",
+      },
+      "dtoSuffix": StringJDLApplicationConfigurationOption {
+        "name": "dtoSuffix",
+        "quoted": false,
+        "value": "DTO",
+      },
+      "enableGradleEnterprise": BooleanJDLApplicationConfigurationOption {
+        "name": "enableGradleEnterprise",
+        "value": false,
+      },
+      "enableHibernateCache": BooleanJDLApplicationConfigurationOption {
+        "name": "enableHibernateCache",
+        "value": true,
+      },
+      "enableSwaggerCodegen": BooleanJDLApplicationConfigurationOption {
+        "name": "enableSwaggerCodegen",
+        "value": false,
+      },
+      "enableTranslation": BooleanJDLApplicationConfigurationOption {
+        "name": "enableTranslation",
+        "value": false,
+      },
+      "entitySuffix": StringJDLApplicationConfigurationOption {
+        "name": "entitySuffix",
+        "quoted": false,
+        "value": "",
+      },
+      "gradleEnterpriseHost": StringJDLApplicationConfigurationOption {
+        "name": "gradleEnterpriseHost",
+        "quoted": true,
+        "value": "",
+      },
+      "jhiPrefix": StringJDLApplicationConfigurationOption {
+        "name": "jhiPrefix",
+        "quoted": false,
+        "value": "jhi",
+      },
+      "languages": ListJDLApplicationConfigurationOption {
+        "name": "languages",
+        "value": Set {},
+      },
+      "messageBroker": StringJDLApplicationConfigurationOption {
+        "name": "messageBroker",
+        "quoted": false,
+        "value": false,
+      },
+      "packageFolder": StringJDLApplicationConfigurationOption {
+        "name": "packageFolder",
+        "quoted": false,
+        "value": "com/mathieu/sample",
+      },
+      "packageName": StringJDLApplicationConfigurationOption {
+        "name": "packageName",
+        "quoted": false,
+        "value": "com.mathieu.sample",
+      },
+      "prodDatabaseType": StringJDLApplicationConfigurationOption {
+        "name": "prodDatabaseType",
+        "quoted": false,
+        "value": "postgresql",
+      },
+      "reactive": BooleanJDLApplicationConfigurationOption {
+        "name": "reactive",
+        "value": false,
+      },
+      "searchEngine": StringJDLApplicationConfigurationOption {
+        "name": "searchEngine",
+        "quoted": false,
+        "value": false,
+      },
+      "serverPort": IntegerJDLApplicationConfigurationOption {
+        "name": "serverPort",
+        "value": "8080",
+      },
+      "serviceDiscoveryType": StringJDLApplicationConfigurationOption {
+        "name": "serviceDiscoveryType",
+        "quoted": false,
+        "value": false,
+      },
+      "skipUserManagement": BooleanJDLApplicationConfigurationOption {
+        "name": "skipUserManagement",
+        "value": false,
+      },
+      "testFrameworks": ListJDLApplicationConfigurationOption {
+        "name": "testFrameworks",
+        "value": Set {},
+      },
+      "websocket": StringJDLApplicationConfigurationOption {
+        "name": "websocket",
+        "quoted": false,
+        "value": false,
+      },
+      "withAdminUi": BooleanJDLApplicationConfigurationOption {
+        "name": "withAdminUi",
+        "value": true,
+      },
+    },
+  },
+  "entityNames": JDLApplicationEntities {
+    "entityNames": Set {},
+  },
+  "options": JDLOptions {
+    "optionSize": 0,
+    "options": Object {},
+  },
+}
+`);
         });
       });
       context('when parsing deployments', () => {
@@ -557,14 +684,16 @@ describe('ParsedJDLToJDLObjectConverter', () => {
           delete deployment.appsFolders;
           delete deployment.clusteredDbApps;
 
-          expect(deployment).to.deep.equal({
-            deploymentType: 'docker-compose',
-            directoryPath: '../',
-            dockerRepositoryName: 'test',
-            gatewayType: 'SpringCloudGateway',
-            monitoring: NO_MONITORING,
-            serviceDiscoveryType: EUREKA,
-          });
+          jestExpect(deployment).toMatchInlineSnapshot(`
+JDLDeployment {
+  "deploymentType": "docker-compose",
+  "directoryPath": "../",
+  "dockerRepositoryName": "test",
+  "gatewayType": "SpringCloudGateway",
+  "monitoring": "no",
+  "serviceDiscoveryType": "eureka",
+}
+`);
         });
       });
       context('when parsing filtered entities', () => {
@@ -675,7 +804,11 @@ describe('ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should add the application entities in the application object', () => {
-          expect(entityNames).to.deep.equal(['BankAccount']);
+          jestExpect(entityNames).toMatchInlineSnapshot(`
+Array [
+  "BankAccount",
+]
+`);
         });
       });
       context('when parsing a relationship with no injected field', () => {
@@ -749,12 +882,16 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             expect(customBinaryOption.value).to.deep.equal('customValue');
             expect(customBinaryOption2.value).to.deep.equal('customValue2');
             expect(fieldAnnotation).to.deep.equal(true);
-            expect(relationshipAnnotationOnSource).to.deep.equal({
-              annotationOnSource: 'toto',
-            });
-            expect(relationshipAnnotationOnDestination).to.deep.equal({
-              annotationOnDestination: true,
-            });
+            jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
+Object {
+  "annotationOnSource": "toto",
+}
+`);
+            jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
+Object {
+  "annotationOnDestination": true,
+}
+`);
           });
         });
         context('that are capitalized', () => {
@@ -801,12 +938,16 @@ describe('ParsedJDLToJDLObjectConverter', () => {
             expect(customBinaryOption.value).to.deep.equal('customValue');
             expect(customBinaryOption2.value).to.deep.equal('customValue2');
             expect(fieldAnnotation).to.deep.equal(true);
-            expect(relationshipAnnotationOnSource).to.deep.equal({
-              annotationOnSource: true,
-            });
-            expect(relationshipAnnotationOnDestination).to.deep.equal({
-              annotationOnDestination: true,
-            });
+            jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
+Object {
+  "annotationOnSource": true,
+}
+`);
+            jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
+Object {
+  "annotationOnDestination": true,
+}
+`);
           });
         });
       });

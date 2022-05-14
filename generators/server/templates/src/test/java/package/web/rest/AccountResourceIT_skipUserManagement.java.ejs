@@ -69,11 +69,6 @@ class AccountResourceIT {
 <%_ } else { _%>
     private MockMvc restAccountMockMvc;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && reactive) { _%>
-
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
-<%_ } _%>
 
     @Test
     @WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)

@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 
 const { MONOLITH } = require('../../../jdl/jhipster/application-types');
@@ -61,7 +62,7 @@ describe('JDLObject', () => {
       });
 
       it('should work', () => {
-        expect(addedApplication).to.deep.equal(originalApplication);
+        expect(addedApplication).to.equal(originalApplication);
       });
     });
   });
@@ -217,7 +218,12 @@ describe('JDLObject', () => {
       });
 
       it('should use each entity name', () => {
-        expect(result).to.deep.equal(['A', 'B']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "A",
+  "B",
+]
+`);
       });
     });
   });
@@ -325,7 +331,16 @@ describe('JDLObject', () => {
       });
 
       it('should return them in an array', () => {
-        expect(returnedEntities).to.deep.equal([entity]);
+        jestExpect(returnedEntities).toMatchInlineSnapshot(`
+Array [
+  JDLEntity {
+    "comment": undefined,
+    "fields": Object {},
+    "name": "toto",
+    "tableName": "toto",
+  },
+]
+`);
       });
     });
   });
@@ -408,7 +423,12 @@ describe('JDLObject', () => {
       });
 
       it('should use each entity name', () => {
-        expect(result).to.deep.equal(['A', 'B']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "A",
+  "B",
+]
+`);
       });
     });
   });
@@ -557,7 +577,12 @@ describe('JDLObject', () => {
       });
 
       it('should use each enum name', () => {
-        expect(result).to.deep.equal(['A', 'B']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "A",
+  "B",
+]
+`);
       });
     });
   });
@@ -695,7 +720,12 @@ describe('JDLObject', () => {
       });
 
       it('should use each relationship', () => {
-        expect(result).to.deep.equal(['OneToOne', 'OneToMany']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "OneToOne",
+  "OneToMany",
+]
+`);
       });
     });
   });
@@ -833,7 +863,12 @@ describe('JDLObject', () => {
       });
 
       it('should use each option', () => {
-        expect(result).to.deep.equal(['skipClient', 'skipServer']);
+        jestExpect(result).toMatchInlineSnapshot(`
+Array [
+  "skipClient",
+  "skipServer",
+]
+`);
       });
     });
   });

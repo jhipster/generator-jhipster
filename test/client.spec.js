@@ -1,4 +1,4 @@
-const expect = require('expect');
+const { expect } = require('expect');
 const path = require('path');
 const assert = require('yeoman-assert');
 const { JWT } = require('../jdl/jhipster/authentication-types');

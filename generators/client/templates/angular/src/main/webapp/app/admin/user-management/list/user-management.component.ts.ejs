@@ -72,7 +72,7 @@ export class UserManagementComponent implements OnInit {
     this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(index: number, item: User): <%= getTypescriptKeyType(user.primaryKey.type) %> {
+  trackIdentity(_index: number, item: User): <%= getTypescriptKeyType(user.primaryKey.type) %> {
     return item.id!;
   }
 

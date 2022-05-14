@@ -20,16 +20,25 @@ import expect from 'expect';
 
 import { helpers, lookups } from '#test-utils';
 
+const SUB_GENERATOR = '<%= subGenerator %>';
+<%_ if (customGenerator) { _%>
+const SUB_GENERATOR_NAMESPACE = `jhipster-<%= application.baseName %>:${SUB_GENERATOR}`;
+<%_ } else { _%>
+const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
+<%_ } _%>
+
 describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
     let result;
     before(async function() {
       result = await helpers
-        .create('jhipster:<%= subGenerator %>')
+        .create(<%= customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
         .withOptions({
           reproducible: true,
           defaults: true,
+<%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
+<%_ } _%>
         })
         .withLookups(lookups)
         .run();

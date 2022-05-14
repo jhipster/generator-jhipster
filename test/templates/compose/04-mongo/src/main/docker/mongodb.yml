@@ -1,7 +1,7 @@
 version: '2'
 services:
     msmongodb-mongodb:
-        image: mongo:4.4.11
+        image: mongo:4.4.13
         ports:
             - "27017:27017"
         # volumes:

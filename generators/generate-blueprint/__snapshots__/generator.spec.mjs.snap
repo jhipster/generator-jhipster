@@ -17,12 +17,6 @@ Object {
   ".gitignore": Object {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.cjs": Object {
-    "stateCleared": "modified",
-  },
   ".mocharc.cjs": Object {
     "stateCleared": "modified",
   },
@@ -605,12 +599,6 @@ Object {
     "stateCleared": "modified",
   },
   ".gitignore": Object {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": Object {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.cjs": Object {
     "stateCleared": "modified",
   },
   ".mocharc.cjs": Object {

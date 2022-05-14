@@ -179,7 +179,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     @Bean
     @Profile({JHipsterConstants.SPRING_PROFILE_TEST, JHipsterConstants.SPRING_PROFILE_E2E})
     public Couchmove waitForIndexes(Couchmove couchmove) {
-        couchmove.waitForN1qlIndexes(getScopeName(), Duration.ofSeconds(60));
+        couchmove.waitForN1qlIndexes(getScopeName(), Duration.ofMinutes(15));
         return couchmove;
     }
 

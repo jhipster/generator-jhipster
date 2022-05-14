@@ -19,6 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const { parseFromContent } = require('../../../jdl/readers/jdl-reader');
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../jdl/jhipster/relationship-types');
@@ -41,7 +42,12 @@ MAX = 43`);
       });
 
       it('should parse them', () => {
-        expect(constants).to.deep.equal({ MIN: '42', MAX: '43' });
+        jestExpect(constants).toMatchInlineSnapshot(`
+Object {
+  "MAX": "43",
+  "MIN": "42",
+}
+`);
       });
     });
     context('with decimal values', () => {
@@ -53,7 +59,11 @@ MAX = 43`);
       });
 
       it('should parse them', () => {
-        expect(constants).to.deep.equal({ MIN: '42.42' });
+        jestExpect(constants).toMatchInlineSnapshot(`
+Object {
+  "MIN": "42.42",
+}
+`);
       });
     });
   });
@@ -67,12 +77,14 @@ MAX = 43`);
       });
 
       it('should parse it', () => {
-        expect(application).to.deep.equal({
-          config: {},
-          entities: [],
-          options: {},
-          useOptions: [],
-        });
+        jestExpect(application).toMatchInlineSnapshot(`
+Object {
+  "config": Object {},
+  "entities": Array [],
+  "options": Object {},
+  "useOptions": Array [],
+}
+`);
       });
     });
     context('with a custom configuration', () => {
@@ -89,14 +101,16 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          expect(application).to.deep.equal({
-            config: {
-              applicationType: 'monolith',
-            },
-            entities: [],
-            options: {},
-            useOptions: [],
-          });
+          jestExpect(application).toMatchInlineSnapshot(`
+Object {
+  "config": Object {
+    "applicationType": "monolith",
+  },
+  "entities": Array [],
+  "options": Object {},
+  "useOptions": Array [],
+}
+`);
         });
       });
       context('when setting the baseName', () => {
@@ -112,14 +126,16 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          expect(application).to.deep.equal({
-            config: {
-              baseName: 'toto',
-            },
-            entities: [],
-            options: {},
-            useOptions: [],
-          });
+          jestExpect(application).toMatchInlineSnapshot(`
+Object {
+  "config": Object {
+    "baseName": "toto",
+  },
+  "entities": Array [],
+  "options": Object {},
+  "useOptions": Array [],
+}
+`);
         });
       });
       context('when setting the blueprints', () => {
@@ -135,14 +151,19 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          expect(application).to.deep.equal({
-            config: {
-              blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs'],
-            },
-            entities: [],
-            options: {},
-            useOptions: [],
-          });
+          jestExpect(application).toMatchInlineSnapshot(`
+Object {
+  "config": Object {
+    "blueprints": Array [
+      "generator-jhipster-vuejs",
+      "generator-jhipster-nodejs",
+    ],
+  },
+  "entities": Array [],
+  "options": Object {},
+  "useOptions": Array [],
+}
+`);
         });
       });
     });
@@ -168,26 +189,28 @@ application {
       });
 
       it('should parse them', () => {
-        expect(applications).to.deep.equal([
-          {
-            config: {
-              baseName: 'superApp2',
-              applicationType: 'monolith',
-            },
-            entities: [],
-            options: {},
-            useOptions: [],
-          },
-          {
-            config: {
-              baseName: 'superApp1',
-              applicationType: 'monolith',
-            },
-            entities: [],
-            options: {},
-            useOptions: [],
-          },
-        ]);
+        jestExpect(applications).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "config": Object {
+      "applicationType": "monolith",
+      "baseName": "superApp2",
+    },
+    "entities": Array [],
+    "options": Object {},
+    "useOptions": Array [],
+  },
+  Object {
+    "config": Object {
+      "applicationType": "monolith",
+      "baseName": "superApp1",
+    },
+    "entities": Array [],
+    "options": Object {},
+    "useOptions": Array [],
+  },
+]
+`);
       });
     });
     context('when having entities', () => {
@@ -349,13 +372,15 @@ entity C
       });
 
       it('should parse it', () => {
-        expect(parsedEntity).to.deep.equal({
-          annotations: [],
-          body: [],
-          javadoc: null,
-          name: 'A',
-          tableName: 'A',
-        });
+        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [],
+  "body": Array [],
+  "javadoc": null,
+  "name": "A",
+  "tableName": "A",
+}
+`);
       });
     });
     context('with a name and a table name', () => {
@@ -367,13 +392,15 @@ entity C
       });
 
       it('should parse it', () => {
-        expect(parsedEntity).to.deep.equal({
-          annotations: [],
-          body: [],
-          javadoc: null,
-          name: 'A',
-          tableName: 'a_table',
-        });
+        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [],
+  "body": Array [],
+  "javadoc": null,
+  "name": "A",
+  "tableName": "a_table",
+}
+`);
       });
     });
     context('without fields', () => {
@@ -409,48 +436,50 @@ entity A`);
       });
 
       it('should parse it', () => {
-        expect(parsedEntity).to.deep.equal({
-          annotations: [
-            {
-              optionValue: 'mapstruct',
-              optionName: 'dto',
-              type: 'BINARY',
-            },
-            {
-              optionValue: 'serviceClass',
-              optionName: 'service',
-              type: 'BINARY',
-            },
-            {
-              optionName: 'readOnly',
-              type: 'UNARY',
-            },
-            {
-              optionName: 'customAnnotation',
-              optionValue: 'value1',
-              type: 'BINARY',
-            },
-            {
-              optionName: 'customAnnotation2',
-              optionValue: '2',
-              type: 'BINARY',
-            },
-            {
-              optionName: 'customAnnotation3',
-              optionValue: '2.42',
-              type: 'BINARY',
-            },
-            {
-              optionName: 'customAnnotation4',
-              optionValue: 'foo bar $',
-              type: 'BINARY',
-            },
-          ],
-          body: [],
-          javadoc: null,
-          name: 'A',
-          tableName: 'A',
-        });
+        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [
+    Object {
+      "optionName": "dto",
+      "optionValue": "mapstruct",
+      "type": "BINARY",
+    },
+    Object {
+      "optionName": "service",
+      "optionValue": "serviceClass",
+      "type": "BINARY",
+    },
+    Object {
+      "optionName": "readOnly",
+      "type": "UNARY",
+    },
+    Object {
+      "optionName": "customAnnotation",
+      "optionValue": "value1",
+      "type": "BINARY",
+    },
+    Object {
+      "optionName": "customAnnotation2",
+      "optionValue": "2",
+      "type": "BINARY",
+    },
+    Object {
+      "optionName": "customAnnotation3",
+      "optionValue": "2.42",
+      "type": "BINARY",
+    },
+    Object {
+      "optionName": "customAnnotation4",
+      "optionValue": "foo bar $",
+      "type": "BINARY",
+    },
+  ],
+  "body": Array [],
+  "javadoc": null,
+  "name": "A",
+  "tableName": "A",
+}
+`);
       });
     });
     context('with comments', () => {
@@ -463,13 +492,15 @@ entity A`);
         });
 
         it('should parse it', () => {
-          expect(parsedEntity).to.deep.equal({
-            annotations: [],
-            body: [],
-            javadoc: 'A comment',
-            name: 'A',
-            tableName: 'A',
-          });
+          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [],
+  "body": Array [],
+  "javadoc": "A comment",
+  "name": "A",
+  "tableName": "A",
+}
+`);
         });
       });
       context('with multi-line comments', () => {
@@ -485,13 +516,18 @@ entity A`);
         });
 
         it('should parse it', () => {
-          expect(parsedEntity).to.deep.equal({
-            annotations: [],
-            body: [],
-            javadoc: '\n * Big\n * comment.\n',
-            name: 'A',
-            tableName: 'A',
-          });
+          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [],
+  "body": Array [],
+  "javadoc": "
+ * Big
+ * comment.
+",
+  "name": "A",
+  "tableName": "A",
+}
+`);
         });
       });
     });
@@ -510,18 +546,20 @@ entity A`);
         });
 
         it('should parse it', () => {
-          expect(parsedEntity).to.deep.equal({
-            annotations: [
-              {
-                optionName: 'id',
-                type: 'UNARY',
-              },
-            ],
-            body: [],
-            javadoc: 'A comment',
-            name: 'A',
-            tableName: 'A',
-          });
+          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [
+    Object {
+      "optionName": "id",
+      "type": "UNARY",
+    },
+  ],
+  "body": Array [],
+  "javadoc": "A comment",
+  "name": "A",
+  "tableName": "A",
+}
+`);
         });
       });
       context('when comments appear after annotations', () => {
@@ -555,26 +593,28 @@ entity A`);
           });
 
           it('should parse it', () => {
-            expect(parsedEntity).to.deep.equal({
-              annotations: [],
-              body: [
-                {
-                  annotations: [
-                    {
-                      optionName: 'something',
-                      type: 'UNARY',
-                    },
-                  ],
-                  javadoc: 'field comment',
-                  name: 'name',
-                  type: 'String',
-                  validations: [],
-                },
-              ],
-              javadoc: null,
-              name: 'A',
-              tableName: 'A',
-            });
+            jestExpect(parsedEntity).toMatchInlineSnapshot(`
+Object {
+  "annotations": Array [],
+  "body": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "optionName": "something",
+          "type": "UNARY",
+        },
+      ],
+      "javadoc": "field comment",
+      "name": "name",
+      "type": "String",
+      "validations": Array [],
+    },
+  ],
+  "javadoc": null,
+  "name": "A",
+  "tableName": "A",
+}
+`);
           });
         });
         context('when comments appear after annotations', () => {
@@ -977,21 +1017,23 @@ entity A {
       });
 
       it('should parse them', () => {
-        expect(parsedEnum).to.deep.equal({
-          javadoc: null,
-          name: 'MyEnum',
-          values: [
-            {
-              key: 'FRANCE',
-            },
-            {
-              key: 'ENGLAND',
-            },
-            {
-              key: 'ICELAND',
-            },
-          ],
-        });
+        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": null,
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "key": "FRANCE",
+    },
+    Object {
+      "key": "ENGLAND",
+    },
+    Object {
+      "key": "ICELAND",
+    },
+  ],
+}
+`);
       });
     });
     context('with values separated by whitespaces', () => {
@@ -1009,25 +1051,27 @@ entity A {
       });
 
       it('should parse them', () => {
-        expect(parsedEnum).to.deep.equal({
-          javadoc: null,
-          name: 'MyEnum',
-          values: [
-            {
-              key: 'FRANCE',
-            },
-            {
-              key: 'ENGLAND',
-              value: 'aaa bbb ccc',
-            },
-            {
-              key: 'ICELAND',
-            },
-            {
-              key: 'GERMANY',
-            },
-          ],
-        });
+        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": null,
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "key": "FRANCE",
+    },
+    Object {
+      "key": "ENGLAND",
+      "value": "aaa bbb ccc",
+    },
+    Object {
+      "key": "ICELAND",
+    },
+    Object {
+      "key": "GERMANY",
+    },
+  ],
+}
+`);
       });
     });
     context('without custom values', () => {
@@ -1046,21 +1090,23 @@ entity A {
       });
 
       it('should parse it', () => {
-        expect(parsedEnum).to.deep.equal({
-          javadoc: null,
-          name: 'MyEnum',
-          values: [
-            {
-              key: 'FRANCE',
-            },
-            {
-              key: 'ENGLAND',
-            },
-            {
-              key: 'ICELAND',
-            },
-          ],
-        });
+        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": null,
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "key": "FRANCE",
+    },
+    Object {
+      "key": "ENGLAND",
+    },
+    Object {
+      "key": "ICELAND",
+    },
+  ],
+}
+`);
       });
     });
 
@@ -1085,36 +1131,38 @@ entity A {
       });
 
       it('should parse it', () => {
-        expect(parsedEnum).to.deep.equal({
-          javadoc: 'country enum',
-          name: 'MyEnum',
-          values: [
-            {
-              comment: 'some comment',
-              key: 'FRANCE',
-            },
-            {
-              comment: 'some comment',
-              key: 'ITALY',
-            },
-            {
-              comment: 'some comment',
-              key: 'ENGLAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'ICELAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'IRELAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'CANADA',
-            },
-          ],
-        });
+        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": "country enum",
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "comment": "some comment",
+      "key": "FRANCE",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ITALY",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ENGLAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ICELAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "IRELAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "CANADA",
+    },
+  ],
+}
+`);
       });
     });
 
@@ -1138,38 +1186,40 @@ entity A {
       });
 
       it('should parse it', () => {
-        expect(parsedEnum).to.deep.equal({
-          javadoc: 'country enum',
-          name: 'MyEnum',
-          values: [
-            {
-              comment: 'some comment',
-              key: 'FRANCE',
-              value: 'cheese and wine country',
-            },
-            {
-              comment: 'some comment',
-              key: 'ITALY',
-            },
-            {
-              comment: 'some comment',
-              key: 'ENGLAND',
-              value: 'not a tea country',
-            },
-            {
-              comment: 'some comment',
-              key: 'ICELAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'IRELAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'CANADA',
-            },
-          ],
-        });
+        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": "country enum",
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "comment": "some comment",
+      "key": "FRANCE",
+      "value": "cheese and wine country",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ITALY",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ENGLAND",
+      "value": "not a tea country",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ICELAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "IRELAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "CANADA",
+    },
+  ],
+}
+`);
       });
     });
 
@@ -1192,38 +1242,40 @@ entity A {
       });
 
       it('should parse it', () => {
-        expect(parsedEnum).to.deep.equal({
-          javadoc: null,
-          name: 'MyEnum',
-          values: [
-            {
-              comment: 'some comment',
-              key: 'FRANCE',
-              value: 'cheese_and_wine_country',
-            },
-            {
-              comment: 'some comment',
-              key: 'ITALY',
-            },
-            {
-              comment: 'some comment',
-              key: 'ENGLAND',
-              value: 'not_a_tea_country',
-            },
-            {
-              comment: 'some comment',
-              key: 'ICELAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'IRELAND',
-            },
-            {
-              comment: 'some comment',
-              key: 'CANADA',
-            },
-          ],
-        });
+        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": null,
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "comment": "some comment",
+      "key": "FRANCE",
+      "value": "cheese_and_wine_country",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ITALY",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ENGLAND",
+      "value": "not_a_tea_country",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "ICELAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "IRELAND",
+    },
+    Object {
+      "comment": "some comment",
+      "key": "CANADA",
+    },
+  ],
+}
+`);
       });
     });
 
@@ -1244,23 +1296,25 @@ entity A {
         });
 
         it('should parse it', () => {
-          expect(parsedEnum).to.deep.equal({
-            javadoc: null,
-            name: 'MyEnum',
-            values: [
-              {
-                key: 'FRANCE',
-                value: 'cheese_and_wine_country',
-              },
-              {
-                key: 'ENGLAND',
-                value: 'not_a_tea_country',
-              },
-              {
-                key: 'ICELAND',
-              },
-            ],
-          });
+          jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": null,
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "key": "FRANCE",
+      "value": "cheese_and_wine_country",
+    },
+    Object {
+      "key": "ENGLAND",
+      "value": "not_a_tea_country",
+    },
+    Object {
+      "key": "ICELAND",
+    },
+  ],
+}
+`);
         });
       });
       context('with spaces', () => {
@@ -1279,23 +1333,25 @@ entity A {
         });
 
         it('should parse it', () => {
-          expect(parsedEnum).to.deep.equal({
-            javadoc: null,
-            name: 'MyEnum',
-            values: [
-              {
-                key: 'FRANCE',
-                value: 'cheese and wine country',
-              },
-              {
-                key: 'ENGLAND',
-                value: 'not a tea country',
-              },
-              {
-                key: 'ICELAND',
-              },
-            ],
-          });
+          jestExpect(parsedEnum).toMatchInlineSnapshot(`
+Object {
+  "javadoc": null,
+  "name": "MyEnum",
+  "values": Array [
+    Object {
+      "key": "FRANCE",
+      "value": "cheese and wine country",
+    },
+    Object {
+      "key": "ENGLAND",
+      "value": "not a tea country",
+    },
+    Object {
+      "key": "ICELAND",
+    },
+  ],
+}
+`);
         });
       });
     });
@@ -1324,24 +1380,26 @@ entity A {
       });
 
       it('should parse them', () => {
-        expect(relationship).to.deep.equal({
-          options: {
-            global: [],
-            destination: [],
-            source: [],
-          },
-          cardinality: 'OneToOne',
-          from: {
-            injectedField: null,
-            javadoc: null,
-            name: 'A',
-          },
-          to: {
-            injectedField: null,
-            javadoc: null,
-            name: 'B',
-          },
-        });
+        jestExpect(relationship).toMatchInlineSnapshot(`
+Object {
+  "cardinality": "OneToOne",
+  "from": Object {
+    "injectedField": null,
+    "javadoc": null,
+    "name": "A",
+  },
+  "options": Object {
+    "destination": Array [],
+    "global": Array [],
+    "source": Array [],
+  },
+  "to": Object {
+    "injectedField": null,
+    "javadoc": null,
+    "name": "B",
+  },
+}
+`);
       });
     });
     context('with an injected field in the source', () => {
@@ -1521,72 +1579,74 @@ entity A {
         });
 
         it('should add them', () => {
-          expect(relationships).to.deep.equal([
-            {
-              cardinality: 'OneToOne',
-              from: {
-                injectedField: null,
-                javadoc: null,
-                name: 'A',
-              },
-              options: {
-                global: [
-                  {
-                    optionName: 'jpaDerivedIdentifier',
-                    type: 'UNARY',
-                  },
-                ],
-                destination: [],
-                source: [],
-              },
-              to: {
-                injectedField: null,
-                javadoc: null,
-                name: 'B',
-              },
-            },
-            {
-              cardinality: 'OneToOne',
-              from: {
-                injectedField: null,
-                javadoc: null,
-                name: 'B',
-              },
-              options: {
-                global: [],
-                destination: [],
-                source: [],
-              },
-              to: {
-                injectedField: null,
-                javadoc: null,
-                name: 'C',
-              },
-            },
-            {
-              cardinality: 'OneToOne',
-              from: {
-                injectedField: null,
-                javadoc: null,
-                name: 'D',
-              },
-              options: {
-                global: [
-                  {
-                    optionName: 'jpaDerivedIdentifier',
-                    type: 'UNARY',
-                  },
-                ],
-                destination: [],
-                source: [],
-              },
-              to: {
-                injectedField: null,
-                javadoc: null,
-                name: 'E',
-              },
-            },
-          ]);
+          jestExpect(relationships).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "cardinality": "OneToOne",
+    "from": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "A",
+    },
+    "options": Object {
+      "destination": Array [],
+      "global": Array [
+        Object {
+          "optionName": "jpaDerivedIdentifier",
+          "type": "UNARY",
+        },
+      ],
+      "source": Array [],
+    },
+    "to": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "B",
+    },
+  },
+  Object {
+    "cardinality": "OneToOne",
+    "from": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "B",
+    },
+    "options": Object {
+      "destination": Array [],
+      "global": Array [],
+      "source": Array [],
+    },
+    "to": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "C",
+    },
+  },
+  Object {
+    "cardinality": "OneToOne",
+    "from": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "D",
+    },
+    "options": Object {
+      "destination": Array [],
+      "global": Array [
+        Object {
+          "optionName": "jpaDerivedIdentifier",
+          "type": "UNARY",
+        },
+      ],
+      "source": Array [],
+    },
+    "to": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "E",
+    },
+  },
+]
+`);
         });
       });
     });
@@ -1600,31 +1660,33 @@ entity A {
         });
 
         it('should parse them', () => {
-          expect(relationships).to.deep.equal([
-            {
-              cardinality: 'OneToOne',
-              from: {
-                injectedField: null,
-                javadoc: null,
-                name: 'A',
-              },
-              options: {
-                global: [],
-                destination: [],
-                source: [
-                  {
-                    optionName: 'id',
-                    type: 'UNARY',
-                  },
-                ],
-              },
-              to: {
-                injectedField: null,
-                javadoc: null,
-                name: 'B',
-              },
-            },
-          ]);
+          jestExpect(relationships).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "cardinality": "OneToOne",
+    "from": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "A",
+    },
+    "options": Object {
+      "destination": Array [],
+      "global": Array [],
+      "source": Array [
+        Object {
+          "optionName": "id",
+          "type": "UNARY",
+        },
+      ],
+    },
+    "to": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "B",
+    },
+  },
+]
+`);
         });
       });
       context('only in the destination side', () => {
@@ -1636,31 +1698,33 @@ entity A {
         });
 
         it('should parse them', () => {
-          expect(relationships).to.deep.equal([
-            {
-              cardinality: 'OneToOne',
-              from: {
-                injectedField: null,
-                javadoc: null,
-                name: 'A',
-              },
-              options: {
-                global: [],
-                destination: [
-                  {
-                    optionName: 'id',
-                    type: 'UNARY',
-                  },
-                ],
-                source: [],
-              },
-              to: {
-                injectedField: null,
-                javadoc: null,
-                name: 'B',
-              },
-            },
-          ]);
+          jestExpect(relationships).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "cardinality": "OneToOne",
+    "from": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "A",
+    },
+    "options": Object {
+      "destination": Array [
+        Object {
+          "optionName": "id",
+          "type": "UNARY",
+        },
+      ],
+      "global": Array [],
+      "source": Array [],
+    },
+    "to": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "B",
+    },
+  },
+]
+`);
         });
       });
       context('in both sides', () => {
@@ -1672,36 +1736,38 @@ entity A {
         });
 
         it('should parse them', () => {
-          expect(relationships).to.deep.equal([
-            {
-              cardinality: 'OneToOne',
-              from: {
-                injectedField: null,
-                javadoc: null,
-                name: 'A',
-              },
-              options: {
-                global: [],
-                destination: [
-                  {
-                    optionName: 'id',
-                    type: 'UNARY',
-                  },
-                ],
-                source: [
-                  {
-                    optionName: 'id',
-                    type: 'UNARY',
-                  },
-                ],
-              },
-              to: {
-                injectedField: null,
-                javadoc: null,
-                name: 'B',
-              },
-            },
-          ]);
+          jestExpect(relationships).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "cardinality": "OneToOne",
+    "from": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "A",
+    },
+    "options": Object {
+      "destination": Array [
+        Object {
+          "optionName": "id",
+          "type": "UNARY",
+        },
+      ],
+      "global": Array [],
+      "source": Array [
+        Object {
+          "optionName": "id",
+          "type": "UNARY",
+        },
+      ],
+    },
+    "to": Object {
+      "injectedField": null,
+      "javadoc": null,
+      "name": "B",
+    },
+  },
+]
+`);
         });
       });
     });
@@ -1717,10 +1783,16 @@ entity A {
         });
 
         it('should add the exclusions', () => {
-          expect(parsedOption).to.deep.equal({
-            excluded: ['A'],
-            list: ['*'],
-          });
+          jestExpect(parsedOption).toMatchInlineSnapshot(`
+Object {
+  "excluded": Array [
+    "A",
+  ],
+  "list": Array [
+    "*",
+  ],
+}
+`);
         });
       });
       [READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER, FILTER, NO_FLUENT_METHOD].forEach(option => {
@@ -1752,12 +1824,16 @@ entity A {
           });
 
           it('should parse it', () => {
-            expect(parsedOption).to.deep.equal({
-              client: {
-                excluded: [],
-                list: ['*'],
-              },
-            });
+            jestExpect(parsedOption).toMatchInlineSnapshot(`
+Object {
+  "client": Object {
+    "excluded": Array [],
+    "list": Array [
+      "*",
+    ],
+  },
+}
+`);
           });
         });
         context('in the path form', () => {
@@ -1769,12 +1845,16 @@ entity A {
           });
 
           it('should parse it', () => {
-            expect(parsedOption).to.deep.equal({
-              '"../../toto"': {
-                excluded: [],
-                list: ['*'],
-              },
-            });
+            jestExpect(parsedOption).toMatchInlineSnapshot(`
+Object {
+  "\\"../../toto\\"": Object {
+    "excluded": Array [],
+    "list": Array [
+      "*",
+    ],
+  },
+}
+`);
           });
         });
       });
@@ -1787,12 +1867,18 @@ entity A {
         });
 
         it('should add the exclusions', () => {
-          expect(parsedOption).to.deep.equal({
-            mapstruct: {
-              excluded: ['A'],
-              list: ['*'],
-            },
-          });
+          jestExpect(parsedOption).toMatchInlineSnapshot(`
+Object {
+  "mapstruct": Object {
+    "excluded": Array [
+      "A",
+    ],
+    "list": Array [
+      "*",
+    ],
+  },
+}
+`);
         });
       });
       [SEARCH, SERVICE, PAGINATION, DTO].forEach(option => {
@@ -1842,12 +1928,16 @@ entity A {
       });
 
       it("should parse it as '*'", () => {
-        expect(parsedOption).to.deep.equal({
-          client: {
-            excluded: [],
-            list: ['*'],
-          },
-        });
+        jestExpect(parsedOption).toMatchInlineSnapshot(`
+Object {
+  "client": Object {
+    "excluded": Array [],
+    "list": Array [
+      "*",
+    ],
+  },
+}
+`);
       });
     });
     context("using the '*' keyword", () => {
@@ -1859,12 +1949,16 @@ entity A {
       });
 
       it('should parse it', () => {
-        expect(parsedOption).to.deep.equal({
-          client: {
-            excluded: [],
-            list: ['*'],
-          },
-        });
+        jestExpect(parsedOption).toMatchInlineSnapshot(`
+Object {
+  "client": Object {
+    "excluded": Array [],
+    "list": Array [
+      "*",
+    ],
+  },
+}
+`);
       });
     });
     context('using the use-form', () => {
@@ -1906,9 +2000,11 @@ entity A {
         });
 
         it('should parse it', () => {
-          expect(parsedDeployment).to.deep.equal({
-            kubernetesStorageClassName: '',
-          });
+          jestExpect(parsedDeployment).toMatchInlineSnapshot(`
+Object {
+  "kubernetesStorageClassName": "",
+}
+`);
         });
       });
       context('being set', () => {
@@ -1925,9 +2021,11 @@ entity A {
         });
 
         it('should parse it', () => {
-          expect(parsedDeployment).to.deep.equal({
-            kubernetesStorageClassName: 'SetValue',
-          });
+          jestExpect(parsedDeployment).toMatchInlineSnapshot(`
+Object {
+  "kubernetesStorageClassName": "SetValue",
+}
+`);
         });
       });
     });

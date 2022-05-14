@@ -16,15 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 id="requestMetrics" <%= jhiPrefix %>Translate="metrics.jvm.http.title">HTTP requests (time in millisecond)</h3>
+<h3 id="requestMetrics" <%= jhiPrefix %>Translate="metrics.jvm.http.title"><%- this._getClientTranslation('metrics.jvm.http.title') %></h3>
 
 <table class="table table-striped" *ngIf="!updating && requestMetrics" aria-describedby="requestMetrics">
   <thead>
     <tr>
-      <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.code">Code</th>
-      <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.count">Count</th>
-      <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.jvm.http.table.mean">Mean</th>
-      <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.jvm.http.table.max">Max</th>
+      <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.code"><%- this._getClientTranslation('metrics.jvm.http.table.code') %></th>
+      <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.count"><%- this._getClientTranslation('metrics.jvm.http.table.count') %></th>
+      <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.jvm.http.table.mean"><%- this._getClientTranslation('metrics.jvm.http.table.mean') %></th>
+      <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.jvm.http.table.max"><%- this._getClientTranslation('metrics.jvm.http.table.max') %></th>
     </tr>
   </thead>
   <tbody>

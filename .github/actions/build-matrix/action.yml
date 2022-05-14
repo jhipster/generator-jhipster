@@ -88,9 +88,9 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/setup-node@v2.4.0
+    - uses: actions/setup-node@v3
       with:
-        node-version: 14
+        node-version: 16
     - name: 'Check changes'
       id: build-changes
       run: |

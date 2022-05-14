@@ -46,11 +46,14 @@ const {
   ENABLE_SWAGGER_CODEGEN,
   ENABLE_TRANSLATION,
   ENTITY_SUFFIX,
+  GATEWAY_SERVER_PORT,
   JHIPSTER_VERSION,
   JHI_PREFIX,
   JWT_SECRET_KEY,
   LANGUAGES,
   MESSAGE_BROKER,
+  MICROFRONTEND,
+  MICROFRONTENDS,
   NATIVE_LANGUAGE,
   OTHER_MODULES,
   PACKAGE_NAME,
@@ -77,6 +80,7 @@ const applicationConfigTokens = [
   { name: 'BLUEPRINT', pattern: BLUEPRINT },
   { name: 'EMBEDDABLE_LAUNCH_SCRIPT', pattern: EMBEDDABLE_LAUNCH_SCRIPT },
   { name: 'CREATION_TIMESTAMP', pattern: CREATION_TIMESTAMP },
+  { name: 'GATEWAY_SERVER_PORT', pattern: GATEWAY_SERVER_PORT },
   { name: 'OTHER_MODULES', pattern: OTHER_MODULES },
   { name: 'PACKAGE_NAME', pattern: PACKAGE_NAME },
   { name: 'AUTHENTICATION_TYPE', pattern: AUTHENTICATION_TYPE },
@@ -114,6 +118,8 @@ const applicationConfigTokens = [
   { name: 'REMEMBER_ME_KEY', pattern: REMEMBER_ME_KEY },
   { name: 'ENABLE_GRADLE_ENTERPRISE', pattern: ENABLE_GRADLE_ENTERPRISE },
   { name: 'GRADLE_ENTERPRISE_HOST', pattern: GRADLE_ENTERPRISE_HOST },
+  { name: 'MICROFRONTENDS', pattern: MICROFRONTENDS },
+  { name: 'MICROFRONTEND', pattern: MICROFRONTEND },
 ].map(tokenConfig => {
   tokenConfig.categories = [applicationConfigCategoryToken];
   // This is actually needed as the skipClient & skipServer options are both entity & app options...

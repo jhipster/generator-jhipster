@@ -4,15 +4,21 @@ on:
     - cron: 0 0 * * 6
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write # for peter-evans/create-pull-request to create branch
+      pull-requests: write # for peter-evans/create-pull-request to create a PR
     name: Bump transitional dependencies
     if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: 16
       - run: npm install -g npm@latest
       - uses: actions/checkout@v3
       - uses: actions/cache@v3

@@ -19,6 +19,7 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 const fs = require('fs');
+const entityServerCleanup = require('./cleanup');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = require('../../jdl/jhipster/database-types');
@@ -317,17 +318,6 @@ const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.searchEngine === ELASTICSEARCH && !generator.embedded,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: 'package/repository/search/EntitySearchRepositoryMockConfiguration.java',
-          renameTo: generator =>
-            `${generator.entityAbsoluteFolder}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`,
-        },
-      ],
-    },
-    {
       condition: generator => generator.gatlingTests,
       path: TEST_DIR,
       templates: [
@@ -378,6 +368,15 @@ module.exports = {
 
 function writeFiles() {
   return {
+    setUp() {
+      this.javaDir = `${this.packageFolder}/`;
+      this.testDir = `${this.packageFolder}/`;
+    },
+
+    cleanupOldServerFiles() {
+      entityServerCleanup.cleanupOldFiles(this, `${SERVER_MAIN_SRC_DIR}${this.javaDir}`, `${SERVER_TEST_SRC_DIR}${this.testDir}`);
+    },
+
     writeServerFiles() {
       if (this.skipServer) return undefined;
 

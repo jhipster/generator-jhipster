@@ -31,12 +31,21 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
+permissions:
+  contents: read
+
 jobs:
   generate-blueprint:
+    permissions:
+      contents: none
     uses: ./.github/workflows/generator-generate-blueprint.yml
   database-changelog-liquibase:
+    permissions:
+      contents: none
     uses: ./.github/workflows/generator-database-changelog-liquibase.yml
   check-generators:
+    permissions:
+      contents: none
     runs-on: ubuntu-latest
     needs: [generate-blueprint, database-changelog-liquibase]
     if: always()

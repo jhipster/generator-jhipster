@@ -25,6 +25,7 @@ const { PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRI
 
 const { writeFiles, addToMenu, replaceTranslations } = require('./files');
 const { entityClientI18nFiles } = require('../entity-i18n/files');
+const { clientI18nFiles } = require('../languages/files');
 
 const utils = require('../utils');
 const {
@@ -50,9 +51,6 @@ module.exports = class extends BaseBlueprintGenerator {
   // Public API method used by the getter and also by Blueprints
   _preparing() {
     return {
-      async loadNativeLanguage() {
-        await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
-      },
       async prepareReact() {
         const entity = this.entity;
         if (!entity.clientFrameworkReact) return;
@@ -72,6 +70,20 @@ module.exports = class extends BaseBlueprintGenerator {
   _default() {
     return {
       ...super._missingPreDefault(),
+
+      async loadNativeLanguage() {
+        await this._loadEntityClientTranslations(this.entity, this.jhipsterConfig);
+
+        const context = {};
+        this.loadAppConfig(undefined, context);
+        this.loadDerivedAppConfig(context);
+        this.loadClientConfig(undefined, context);
+        this.loadDerivedClientConfig(context);
+        this.loadServerConfig(undefined, context);
+        this.loadPlatformConfig(undefined, context);
+        this.loadTranslationConfig(undefined, context);
+        await this._loadClientTranslations(context);
+      },
 
       loadConfigIntoGenerator() {
         utils.copyObjectProps(this, this.entity);
@@ -164,12 +176,12 @@ module.exports = class extends BaseBlueprintGenerator {
   _postWriting() {
     return {
       addToMenu() {
-        if (this.skipClient || (this.microfrontend && this.applicationTypeGateway && this.microserviceName)) return undefined;
+        if (this.skipClient) return undefined;
         return addToMenu.call(this);
       },
 
       replaceTranslations() {
-        if (this.skipClient || (this.microfrontend && this.applicationTypeGateway && this.microserviceName)) return undefined;
+        if (this.skipClient) return undefined;
         return replaceTranslations.call(this);
       },
     };
@@ -184,10 +196,12 @@ module.exports = class extends BaseBlueprintGenerator {
    * @experimental
    * Load entity client native translation.
    */
-  async _loadEntityClientTranslations(entity, configContext = this) {
+  async _loadEntityClientTranslations(entity, configContext = this, entityClientTranslations = entity.entityClientTranslations) {
     const { frontendAppName = this.getFrontendAppName(), nativeLanguage = 'en' } = configContext;
-    entity.entityClientTranslations = entity.entityClientTranslations || {};
-    const { entityClientTranslations } = entity;
+    if (!entityClientTranslations) {
+      entity.entityClientTranslations = entity.entityClientTranslations || {};
+      entityClientTranslations = entity.entityClientTranslations;
+    }
     const rootTemplatesPath = this.fetchFromInstalledJHipster('entity-i18n/templates/');
     const translationFiles = await this.writeFiles({
       sections: entityClientI18nFiles,
@@ -207,13 +221,101 @@ module.exports = class extends BaseBlueprintGenerator {
       _.merge(entityClientTranslations, this.readDestinationJSON(translationFile));
       delete this.env.sharedFs.get(translationFile).state;
     }
+
+    if (!this.configOptions.entitiesClientTranslations) {
+      this.configOptions.entitiesClientTranslations = {};
+    }
+    this.entitiesClientTranslations = this.configOptions.entitiesClientTranslations;
+    _.merge(this.entitiesClientTranslations, entityClientTranslations);
   }
 
   /**
    * @experimental
    * Get translation value for a key.
+   *
+   * @param translationKey {string} - key to be translated
+   * @param [data] {object} - template data in case translated value is a template
    */
-  _getEntityClientTranslation(translationKey) {
-    return _.get(this.entityClientTranslations, translationKey, `Translation missing for ${translationKey}`);
+  _getEntityClientTranslation(translationKey, data) {
+    if (translationKey.startsWith('global.')) {
+      return this._getClientTranslation(translationKey, data);
+    }
+    const translatedValue = _.get(this.entitiesClientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const errorMessage = `Entity translation missing for ${translationKey}`;
+      this.warning(`${errorMessage} at ${JSON.stringify(this.entityClientTranslations)}`);
+      return errorMessage;
+    }
+    if (!data) {
+      return translatedValue;
+    }
+    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    return compiledTemplate(data);
+  }
+
+  /**
+   * @experimental
+   * Load client native translation.
+   */
+  async _loadClientTranslations(configContext = this) {
+    if (this.configOptions.clientTranslations) {
+      this.clientTranslations = this.configOptions.clientTranslations;
+      return;
+    }
+    const { nativeLanguage } = configContext;
+    this.clientTranslations = this.configOptions.clientTranslations = {};
+    const rootTemplatesPath = this.fetchFromInstalledJHipster('languages/templates/');
+
+    // Prepare and load en translation
+    const translationFiles = await this.writeFiles({
+      sections: clientI18nFiles,
+      rootTemplatesPath,
+      context: {
+        ...configContext,
+        lang: 'en',
+        clientSrcDir: '__tmp__',
+      },
+    });
+
+    // Prepare and load native translation
+    configContext.lang = configContext.nativeLanguage;
+    if (nativeLanguage && nativeLanguage !== 'en') {
+      translationFiles.push(
+        ...(await this.writeFiles({
+          sections: clientI18nFiles,
+          rootTemplatesPath,
+          context: {
+            ...configContext,
+            lang: configContext.nativeLanguage,
+            clientSrcDir: '__tmp__',
+          },
+        }))
+      );
+    }
+    for (const translationFile of translationFiles) {
+      _.merge(this.clientTranslations, this.readDestinationJSON(translationFile));
+      delete this.env.sharedFs.get(translationFile).state;
+    }
+  }
+
+  /**
+   * @experimental
+   * Get translation value for a key.
+   *
+   * @param translationKey {string} - key to be translated
+   * @param [data] {object} - template data in case translated value is a template
+   */
+  _getClientTranslation(translationKey, data) {
+    const translatedValue = _.get(this.clientTranslations, translationKey);
+    if (translatedValue === undefined) {
+      const errorMessage = `Translation missing for ${translationKey}`;
+      this.warning(`${errorMessage} at ${JSON.stringify(this.clientTranslations)}`);
+      return errorMessage;
+    }
+    if (!data) {
+      return translatedValue;
+    }
+    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    return compiledTemplate(data);
   }
 };

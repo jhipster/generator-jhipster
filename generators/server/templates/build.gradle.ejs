@@ -122,7 +122,7 @@ test {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -143,10 +143,8 @@ modernizer {
 }
 
 task integrationTest(type: Test) {
-<%_ if (databaseTypeCouchbase) { _%>
     minHeapSize = "128m"
     maxHeapSize = "512m"
-<%_ } _%>
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
@@ -157,7 +155,7 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx256m'
+    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
 <%_ if (databaseTypeSql) { _%>
     if (project.hasProperty('testcontainers')) {
   <%_ if (reactive) { _%>
@@ -427,6 +425,8 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
   <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
+    testImplementation "org.testcontainers:elasticsearch"
+    testImplementation "org.apache.commons:commons-collections4"
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 <%_ } _%>
 <%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
@@ -560,7 +560,11 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.github.differentway:couchmove"
     implementation "com.couchbase.client:java-client"
 <%_ } _%>
+<%_ if (reactive) { _%>
+    implementation ("org.springdoc:springdoc-openapi-webflux-core")
+<%_ } else { _%>
     implementation ("org.springdoc:springdoc-openapi-webmvc-core")
+<%_ } _%>
 <%_ if (prodDatabaseTypeMysql) { _%>
     implementation "mysql:mysql-connector-java"
   <%_ if (reactive) { _%>
@@ -633,13 +637,6 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     testImplementation "com.h2database:h2"
   <%_ if (reactive) { _%>
     testImplementation "io.r2dbc:r2dbc-h2"
-  <%_ } _%>
-<%_ } _%>
-<%_ if (devDatabaseTypeH2Any) { _%>
-  <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-h2"
-  <%_ } else { _%>
-    liquibaseRuntime "com.h2database:h2"
   <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseTypeOracle) { _%>

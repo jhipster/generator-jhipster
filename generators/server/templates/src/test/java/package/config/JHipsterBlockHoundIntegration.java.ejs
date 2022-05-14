@@ -28,11 +28,17 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler$BoundedState", "dispose");
         builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler", "schedule");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
-    <%_ if (databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
         builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
-    <%_} _%>
+<%_} _%>
+<%_ if (searchEngineElasticsearch) { _%>
+        //Disabling real blocking check because elasticreactive is executing a blocking call within it's constructor org.springframework.data.elasticsearch.repository.support, see https://github.com/reactor/BlockHound/issues/174
+        builder.blockingMethodCallback(it ->
+            new Error(it.toString()).printStackTrace()
+        );
+<%_} _%>
     }
 
 }

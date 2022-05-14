@@ -75,6 +75,7 @@ function checkForValidValues(jdlApplication) {
     'jwtSecretKey',
     'rememberMeKey',
     'languages',
+    'microfrontend',
     'nativeLanguage',
     'jhipsterVersion',
     'dtoSuffix',
@@ -110,7 +111,8 @@ function checkSpecificOptions(option) {
   switch (option.name) {
     case 'clientTheme':
     case 'clientThemeVariant':
-      return;
+    case 'microfrontends':
+      break;
     case 'testFrameworks':
       checkTestFrameworkValues(option.getValue());
       break;

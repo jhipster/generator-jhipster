@@ -19,6 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
+const { expect: jestExpect } = require('expect');
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
@@ -150,43 +151,45 @@ describe('JHipsterApplicationExporter', () => {
         });
 
         it('should add the read content to the exported application', () => {
-          expect(content).to.deep.equal({
-            test: 1234,
-            'generator-jhipster': {
-              applicationType: MONOLITH,
-              authenticationType: JWT,
-              baseName: 'toto',
-              buildTool: MAVEN,
-              cacheProvider: EHCACHE,
-              clientFramework: ANGULAR_X,
-              clientTheme: 'none',
-              clientThemeVariant: '',
-              clientPackageManager: 'npm',
-              databaseType: SQL,
-              devDatabaseType: H2_DISK,
-              enableHibernateCache: true,
-              enableSwaggerCodegen: false,
-              enableTranslation: false,
-              jhiPrefix: 'jhi',
-              jhipsterVersion: '4.9.0',
-              languages: [],
-              messageBroker: false,
-              packageFolder: 'com/mathieu/sample',
-              packageName: 'com.mathieu.sample',
-              prodDatabaseType: MYSQL,
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
-              skipClient: false,
-              skipServer: false,
-              skipUserManagement: false,
-              testFrameworks: [],
-              websocket: false,
-              jwtSecretKey: '1234',
-              creationTimestamp: 'old',
-              withAdminUi: true,
-            },
-          });
+          jestExpect(content).toMatchInlineSnapshot(`
+Object {
+  "generator-jhipster": Object {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "toto",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angularX",
+    "clientPackageManager": "npm",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": "old",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "enableTranslation": false,
+    "jhiPrefix": "jhi",
+    "jhipsterVersion": "4.9.0",
+    "jwtSecretKey": "1234",
+    "languages": Array [],
+    "messageBroker": false,
+    "packageFolder": "com/mathieu/sample",
+    "packageName": "com.mathieu.sample",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "serverPort": "8080",
+    "serviceDiscoveryType": false,
+    "skipClient": false,
+    "skipServer": false,
+    "skipUserManagement": false,
+    "testFrameworks": Array [],
+    "websocket": false,
+    "withAdminUi": true,
+  },
+  "test": 1234,
+}
+`);
         });
       });
     });

@@ -64,7 +64,7 @@
 
     <properties>
         <!-- Build properties -->
-        <maven.version>3.8.4</maven.version>
+        <maven.version>3.8.5</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
 <%_ if (!skipClient) { _%>
         <node.version>v<%= NODE_VERSION %></node.version>
@@ -115,7 +115,7 @@
         <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-        <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
+        <jaxb-runtime.version>2.3.6</jaxb-runtime.version>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
         <!-- The cassandra driver version should match the one managed by
@@ -128,24 +128,24 @@
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
-        <caffeine.version>3.0.5</caffeine.version>
+        <caffeine.version>3.0.6</caffeine.version>
         <typesafe.version>1.4.2</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
-        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <maven-site-plugin.version>3.11.0</maven-site-plugin.version>
-        <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>3.3.2</maven-javadoc-plugin.version>
+        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+        <maven-site-plugin.version>3.12.0</maven-site-plugin.version>
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+        <maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M6</maven-failsafe-plugin.version>
         <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <checkstyle.version>9.3</checkstyle.version>
+        <checkstyle.version>10.1</checkstyle.version>
         <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
@@ -153,7 +153,7 @@
         <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
-        <modernizer-maven-plugin.version>2.3.0</modernizer-maven-plugin.version>
+        <modernizer-maven-plugin.version>2.4.0</modernizer-maven-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <jib-maven-plugin.image><%= DOCKER_JAVA_JRE %></jib-maven-plugin.image>
@@ -162,7 +162,7 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <openapi-generator-maven-plugin.version>5.4.0</openapi-generator-maven-plugin.version>
 <%_ } _%>
-        <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
+        <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
@@ -531,6 +531,16 @@
   <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
@@ -1001,7 +1011,7 @@
 <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
                 <!--
-                    Plugin that provides API-first development using openapi-generator to
+                    Plugin that provides API-first development using openapi-generator-cli to
                     generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
                 -->
                 <groupId>org.openapitools</groupId>
@@ -1464,7 +1474,7 @@
 <%_ if (enableSwaggerCodegen) { _%>
                 <plugin>
                     <!--
-                        Plugin that provides API-first development using openapi-generator to
+                        Plugin that provides API-first development using openapi-generator-cli to
                         generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
                     -->
                     <groupId>org.openapitools</groupId>

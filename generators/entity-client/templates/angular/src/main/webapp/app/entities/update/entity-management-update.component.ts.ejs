@@ -220,7 +220,7 @@ _%>
     }
     <%_ for (reference of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.reference.owned && rel.otherEntity.primaryKey)).map(arr => arr[0].reference)) { _%>
 
-    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
+    track<%= reference.relationship.otherEntity.entityAngularName %>By<%= reference.relationship.otherEntity.primaryKey.nameCapitalized %>(_index: number, item: I<%= reference.relationship.otherEntity.entityAngularName %>): <%= getTypescriptKeyType(reference.relationship.otherEntity.primaryKey.type) %> {
         return item.<%= reference.relationship.otherEntity.primaryKey.name %>!;
     }
     <%_ } _%>

@@ -23,14 +23,20 @@ import <%= packageName %>.<%= mainClass %>;
 import org.springframework.test.context.ActiveProfiles;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 import <%= packageName %>.config.EmbeddedMongo;
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import <%= packageName %>.config.EmbeddedCassandra;
+<%_ } _%>
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+    import <%= packageName %>.config.EmbeddedCouchbase;
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+import <%= packageName %>.config.EmbeddedElasticsearch;
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+import <%= packageName %>.config.EmbeddedNeo4j;
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 import <%= packageName %>.ReactiveSqlTestContainerExtension;
@@ -41,7 +47,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-<%_ if (cacheProviderRedis || databaseTypeNeo4j || databaseTypeCouchbase || reactiveSqlTestContainers) { _%>
+<%_ if (cacheProviderRedis || reactiveSqlTestContainers) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 
@@ -65,8 +71,8 @@ import java.lang.annotation.Target;
 <%_ if (cacheProviderRedis) { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-@ExtendWith(CouchbaseTestContainerExtension.class)
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+@EmbeddedCouchbase
 @ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
@@ -75,8 +81,11 @@ import java.lang.annotation.Target;
 <%_ if (databaseTypeCassandra) { _%>
 @EmbeddedCassandra
 <%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+@EmbeddedElasticsearch
+<%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
-@ExtendWith(AbstractNeo4jIT.class)
+@EmbeddedNeo4j
 <%_ } _%>
 <%_ if (reactiveSqlTestContainers) { _%>
 @ExtendWith(ReactiveSqlTestContainerExtension.class)

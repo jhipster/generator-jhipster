@@ -30,6 +30,9 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
+permissions:
+  contents: read
+
 jobs:
   check-npm-test:
     if: >-
@@ -42,7 +45,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.14.0
+          node-version: 16.15.0
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v3
         with:

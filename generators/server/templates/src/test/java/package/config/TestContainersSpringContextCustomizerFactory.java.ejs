@@ -54,6 +54,15 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 <%_ if (databaseTypeCassandra) { _%>
     private static CassandraTestContainer cassandraBean;
 <%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+    private static ElasticsearchTestContainer elasticsearchBean;
+<%_ } _%>
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+    private static CouchbaseTestContainer couchbaseBean;
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+    private static Neo4jTestContainer neo4jBean;
+<%_ } _%>
 
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
@@ -61,51 +70,84 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
         return (context, mergedConfig) -> {
             ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
             TestPropertyValues testValues = TestPropertyValues.empty();
-<%_ if (databaseTypeMongodb) { _%>
-        EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
-        if (null != mongoAnnotation) {
-            log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
-            if (mongoDbBean == null) {
-                log.info("Warming up the mongo database");
-                mongoDbBean =  new MongoDbTestContainer();
-                beanFactory.initializeBean(mongoDbBean, MongoDbTestContainer.class.getName().toLowerCase());
-                beanFactory.registerSingleton(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
-                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName().toLowerCase(), mongoDbBean);
+<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+            EmbeddedCouchbase couchbaseAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCouchbase.class);
+            if (null != couchbaseAnnotation) {
+                log.debug("detected the EmbeddedCouchbase annotation on class {}", testClass.getName());
+                log.info("Warming up the Couchbase database");
+                if (null == couchbaseBean) {
+                    couchbaseBean = beanFactory.createBean(CouchbaseTestContainer.class);
+                }
+                testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
+                testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
+                testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
+                testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getBucketName());
+                testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
             }
-            testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
-        }
+<%_ } _%>
+<%_ if (databaseTypeMongodb) { _%>
+            EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
+            if (null != mongoAnnotation) {
+                log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
+                log.info("Warming up the mongo database");
+                if (null == mongoDbBean) {
+                    mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
+                }
+                testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
+            }
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-        EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
-        if (null != cassandraAnnotation) {
-            log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
-            if (cassandraBean == null) {
+            EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
+            if (null != cassandraAnnotation) {
+                log.debug("detected the EmbeddedCassandra annotation on class {}", testClass.getName());
                 log.info("Warming up the cassandra database");
-                cassandraBean =  new CassandraTestContainer();
-                beanFactory.initializeBean(cassandraBean, CassandraTestContainer.class.getName().toLowerCase());
-                beanFactory.registerSingleton(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-                ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName().toLowerCase(), cassandraBean);
-            }
-            testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
+                if (null == cassandraBean) {
+                    cassandraBean = beanFactory.createBean(CassandraTestContainer.class);
+                }
+                testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
                     .and("spring.data.cassandra.contact-points=" +  cassandraBean.getCassandraContainer().getHost())
                     .and("spring.data.cassandra.keyspace-name=" + CQLDataLoader.DEFAULT_KEYSPACE_NAME)
                     .and("spring.data.cassandra.local-datacenter=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getAllHosts().iterator().next().getDatacenter())
                     .and("spring.data.cassandra.cluster-name=" + cassandraBean.getCassandraContainer().getCluster().getMetadata().getClusterName());
-        }
+            }
 <%_ } _%>
-
+<%_ if (databaseTypeNeo4j) { _%>
+            EmbeddedNeo4j neo4jAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedNeo4j.class);
+            if (null != neo4jAnnotation) {
+                log.debug("detected the EmbeddedNeo4j annotation on class {}", testClass.getName());
+                log.info("Warming up the neo4j database");
+                if (null == neo4jBean) {
+                    neo4jBean = beanFactory.createBean(Neo4jTestContainer.class);
+                }
+                testValues =
+                    testValues.and(
+                        "spring.neo4j.uri=" + neo4jBean.getNeo4jContainer().getBoltUrl()
+                    );
+            }
+<%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
             EmbeddedKafka kafkaAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedKafka.class);
             if (null != kafkaAnnotation) {
                 log.debug("detected the EmbeddedKafka annotation on class {}", testClass.getName());
-                if (kafkaBean == null) {
-                    log.info("Warming up the kafka broker");
-                    kafkaBean = new KafkaTestContainer();
-                    beanFactory.initializeBean(kafkaBean, KafkaTestContainer.class.getName().toLowerCase());
-                    beanFactory.registerSingleton(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
-                    ((DefaultSingletonBeanRegistry)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName().toLowerCase(), kafkaBean);
+                log.info("Warming up the kafka broker");
+                if (null == kafkaBean) {
+                    kafkaBean = beanFactory.createBean(KafkaTestContainer.class);
                 }
                 testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getMappedPort(KafkaContainer.KAFKA_PORT));
+            }
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
+            EmbeddedElasticsearch elasticsearchAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedElasticsearch.class);
+            if (null != elasticsearchAnnotation) {
+                log.debug("detected the EmbeddedElasticsearch annotation on class {}", testClass.getName());
+                log.info("Warming up the elastic database");
+                if (null == elasticsearchBean) {
+                    elasticsearchBean = beanFactory.createBean(ElasticsearchTestContainer.class);
+                }
+                testValues =
+                    testValues.and(
+                        "spring.elasticsearch.uris=http://" + elasticsearchBean.getElasticsearchContainer().getHttpHostAddress()
+                    );
             }
 <%_ } _%>
             testValues.applyTo(context);

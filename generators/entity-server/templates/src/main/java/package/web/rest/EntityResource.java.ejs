@@ -406,9 +406,6 @@ public class <%= entityClass %>Resource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
-  <%_ if (reactive) { _%>
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-  <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%= entityClass %>(@PathVariable <%= primaryKey.type %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService, fromResource: true}); -%>
@@ -418,8 +415,8 @@ public class <%= entityClass %>Resource {
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
             );
     <%_ } else { %>
-            .map(result -> ResponseEntity.noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build()
+            .then(Mono.just(ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
         );
     <%_ } _%>
   <%_ } else { _%>
