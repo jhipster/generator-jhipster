@@ -35,6 +35,7 @@ import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 <%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
@@ -389,7 +390,8 @@ public class SecurityConfiguration {
                     .flatMap(jwt -> enrich(token, jwt));
             }
 
-            private Mono<Jwt> enrich(String token, Jwt jwt) {
+            @Cacheable(key="#token")
+            public Mono<Jwt> enrich(String token, Jwt jwt) {
                 WebClient webClient = WebClient.create();
 
                 return webClient.get()
