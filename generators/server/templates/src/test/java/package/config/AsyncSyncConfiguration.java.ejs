@@ -18,25 +18,19 @@
 -%>
 package <%=packageName%>.config;
 
-import <%=packageName%>.service.MailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.SyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 
 @Configuration
-public class NoOpMailConfiguration {
-    private final MailService mockMailService;
+public class AsyncSyncConfiguration {
 
-    public NoOpMailConfiguration() {
-        mockMailService = mock(MailService.class);
-        doNothing().when(mockMailService).sendActivationEmail(any());
-    }
-
-    @Bean
-    public MailService mailService() {
-        return mockMailService;
+    @Bean(name = "taskExecutor")
+    @Primary
+    public TaskExecutor taskExecutor() {
+        return new SyncTaskExecutor();
     }
 }

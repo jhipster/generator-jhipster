@@ -191,6 +191,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.databaseTypeNeo4j) {
       generator.removeFile(`${testDir}AbstractNeo4jIT.java`);
     }
+    generator.removeFile(`${testDir}NoOpMailConfiguration.java`);
   }
   if (generator.isJhipsterVersionLessThan('7.8.2')) {
     generator.removeFile(`${constants.DOCKER_DIR}realm-config/jhipster-users-0.json`);

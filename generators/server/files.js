@@ -1947,10 +1947,6 @@ const baseServerFiles = {
           renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`,
         },
         {
-          file: 'package/config/NoOpMailConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`,
-        },
-        {
           file: 'package/web/rest/PublicUserResourceIT.java',
           renameTo: generator => `${generator.testDir}web/rest/PublicUserResourceIT.java`,
         },
@@ -1986,6 +1982,10 @@ const baseServerFiles = {
         {
           file: 'package/web/rest/WithUnauthenticatedMockUser.java',
           renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`,
+        },
+        {
+          file: 'package/config/AsyncSyncConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/AsyncSyncConfiguration.java`,
         },
       ],
     },
