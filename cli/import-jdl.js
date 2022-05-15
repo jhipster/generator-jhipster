@@ -425,7 +425,7 @@ class JDLProcessor {
       })
     );
 
-    applicationsWithEntities.forEach((applicationWithEntities, idx) => {
+    applicationsWithEntities.forEach(applicationWithEntities => {
       const microfrontends = applicationWithEntities.config.microfrontends || [];
 
       const relatedApplications = Object.entries(allApplications).filter(
