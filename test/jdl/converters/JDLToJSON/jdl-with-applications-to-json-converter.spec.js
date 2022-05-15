@@ -1322,7 +1322,6 @@ Array [
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
 Object {
   "otherEntityName": "b",
-  "otherEntityRelationshipName": "a",
   "ownerSide": true,
   "relationshipName": "b",
   "relationshipType": "one-to-one",
@@ -1420,7 +1419,6 @@ Object {
               jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
 Object {
   "otherEntityName": "b",
-  "otherEntityRelationshipName": "a",
   "relationshipName": "b",
   "relationshipType": "many-to-one",
 }
