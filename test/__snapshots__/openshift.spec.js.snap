@@ -858,8 +858,6 @@ objects:
       name: \${APPLICATION_NAME}
       labels:
         app: \${APPLICATION_NAME}
-      annotations:
-        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
     spec:
       ports:
         - name: http-bc
@@ -869,6 +867,7 @@ objects:
           port: 80
           targetPort: 8761
       clusterIP: None
+      publishNotReadyAddresses: true
       selector:
         app: \${APPLICATION_NAME}
   - apiVersion: v1
@@ -3160,8 +3159,6 @@ objects:
       name: \${APPLICATION_NAME}
       labels:
         app: \${APPLICATION_NAME}
-      annotations:
-        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
     spec:
       ports:
         - name: http-bc
@@ -3171,6 +3168,7 @@ objects:
           port: 80
           targetPort: 8761
       clusterIP: None
+      publishNotReadyAddresses: true
       selector:
         app: \${APPLICATION_NAME}
   - apiVersion: v1
@@ -4304,8 +4302,6 @@ objects:
       name: \${APPLICATION_NAME}
       labels:
         app: \${APPLICATION_NAME}
-      annotations:
-        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
     spec:
       ports:
         - name: http-bc
@@ -4315,6 +4311,7 @@ objects:
           port: 80
           targetPort: 8761
       clusterIP: None
+      publishNotReadyAddresses: true
       selector:
         app: \${APPLICATION_NAME}
   - apiVersion: v1
@@ -5344,8 +5341,6 @@ objects:
       name: \${APPLICATION_NAME}
       labels:
         app: \${APPLICATION_NAME}
-      annotations:
-        service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
     spec:
       ports:
         - name: http-bc
@@ -5355,6 +5350,7 @@ objects:
           port: 80
           targetPort: 8761
       clusterIP: None
+      publishNotReadyAddresses: true
       selector:
         app: \${APPLICATION_NAME}
   - apiVersion: v1

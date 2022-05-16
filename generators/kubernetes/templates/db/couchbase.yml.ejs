@@ -208,8 +208,6 @@ metadata:
   namespace: <%= kubernetesNamespace %>
   labels:
     app: <%= app.baseName.toLowerCase() %>-couchbase
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
   ports:
     -
@@ -234,6 +232,7 @@ spec:
       targetPort: 11210
   clusterIP: None
   type: ClusterIP
+  publishNotReadyAddresses: true
   selector:
     app: <%= app.baseName.toLowerCase() %>-couchbase
 ---
