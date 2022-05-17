@@ -131,6 +131,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "expect": "28.1.0",
     "fs-extra": "10.1.0",
+    "jest-mock": "28.1.0",
     "jsdoc": "3.6.10",
     "mocha": "9.2.2",
     "mocha-expect-snapshot": "4.0.0",

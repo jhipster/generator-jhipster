@@ -78,11 +78,12 @@ const SQL = databaseTypes.SQL;
  * @param {object} generator reference to the generator
  */
 function rewriteFile(args, generator) {
+  const { path: rewritePath, file } = args;
   let fullPath;
-  if (args.path) {
-    fullPath = generator.destinationPath(path.join(args.path, args.file));
+  if (rewritePath) {
+    fullPath = generator.destinationPath(path.join(rewritePath, file));
   } else {
-    fullPath = generator.destinationPath(args.file);
+    fullPath = generator.destinationPath(file);
   }
   if (!generator.env.sharedFs.existsInMemory(fullPath) && generator.env.sharedFs.existsInMemory(`${fullPath}.jhi`)) {
     fullPath = `${fullPath}.jhi`;
@@ -152,60 +153,53 @@ function convertToPrettierExpressions(str) {
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
  * @param {string[]} args.splicable       - content to be added.
  * @param {boolean} [args.prettierAware]  - apply prettier aware expressions before looking for applied needles.
- * @param {string|RegExp} [args.regexp]    - use another content for looking for applied needles.
- * @returns {*} re-written file
+ * @param {string|RegExp} [args.regexp]   - use another content to looking for applied needles.
+ * @param {string} [args.haystack]        - file content
+ * @param {string} [args.needle]          - needle to be looked for
+ * @param {string} [args.file]            - file path for logging purposes
+ * @returns {string} re-written content
  */
 function rewrite(args) {
+  const { regexp, splicable, prettierAware, haystack, needle, file } = args;
   // check if splicable is already in the body text
   let re;
-  if (args.regexp) {
-    re = args.regexp;
+  if (regexp) {
+    re = regexp;
     if (!re.test) {
       re = escapeRegExp(re);
     }
   } else {
-    re = args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
+    re = splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
   }
   if (!re.test) {
-    if (args.prettierAware) {
+    if (prettierAware) {
       re = convertToPrettierExpressions(re);
     }
     re = new RegExp(re);
   }
 
-  if (re.test(normalizeLineEndings(args.haystack))) {
-    return args.haystack;
+  const normalizedContent = normalizeLineEndings(haystack);
+  if (re.test(normalizedContent)) {
+    return haystack;
   }
 
-  const lines = args.haystack.split('\n');
-
-  let otherwiseLineIndex = -1;
-  lines.forEach((line, i) => {
-    if (line.includes(args.needle)) {
-      otherwiseLineIndex = i;
+  const needleIndex = normalizedContent.lastIndexOf(needle);
+  if (needleIndex === -1) {
+    if (file) {
+      console.warn(`Needle ${needle} not found at file ${file}`);
     }
-  });
-
-  if (otherwiseLineIndex === -1) {
-    console.warn(`Needle ${args.needle} not found at file ${args.file}`);
-    return args.haystack;
+    return normalizedContent;
   }
 
-  let spaces = 0;
-  while (lines[otherwiseLineIndex].charAt(spaces) === ' ') {
-    spaces += 1;
-  }
+  const needleLineIndex = normalizedContent.lastIndexOf('\n', needleIndex);
+  const beforeContent = normalizedContent.substring(0, needleLineIndex + 1);
+  const afterContent = normalizedContent.substring(needleLineIndex + 1);
+  const needleLine = afterContent.split('\n', 2)[0];
+  const identLength = needleLine.length - needleLine.trimStart().length;
+  const ident = ' '.repeat(identLength);
+  args.contentAdded = true;
 
-  let spaceStr = '';
-
-  // eslint-disable-next-line no-cond-assign
-  while ((spaces -= 1) >= 0) {
-    spaceStr += ' ';
-  }
-
-  lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
-
-  return lines.join('\n');
+  return `${beforeContent}${splicable.map(line => ident + line).join('\n')}\n${afterContent}`;
 }
 
 /**
