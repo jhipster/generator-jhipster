@@ -122,6 +122,7 @@ import org.springframework.security.web.server.util.matcher.OrServerWebExchangeM
 <%_ if (skipUserManagement && !authenticationTypeOauth2) { _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
+import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 <%_ if (authenticationTypeSession || authenticationTypeOauth2) { _%>
 import reactor.core.publisher.Mono;
@@ -161,8 +162,9 @@ public class SecurityConfiguration {
   <%_ } _%>
 <%_ } _%>
     private final SecurityProblemSupport problemSupport;
+    private final CorsWebFilter corsWebFilter;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && applicationTypeGateway) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement && !authenticationTypeOauth2) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationTypeJwt) { %>TokenProvider tokenProvider, <% } %><% if (authenticationTypeOauth2 && applicationTypeGateway) { %> ReactiveClientRegistrationRepository clientRegistrationRepository, <% } %>JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport, CorsWebFilter corsWebFilter) {
 <%_ if (authenticationTypeOauth2 && applicationTypeGateway) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
@@ -174,6 +176,7 @@ public class SecurityConfiguration {
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
         this.problemSupport = problemSupport;
+        this.corsWebFilter = corsWebFilter;
     }
 
 <%_ if (!skipUserManagement && !authenticationTypeOauth2) { _%>
@@ -224,6 +227,7 @@ public class SecurityConfiguration {
 <%_ } else { _%>
                 .disable()
 <%_ } _%>
+            .addFilterBefore(corsWebFilter, SecurityWebFiltersOrder.REACTOR_CONTEXT)
 <%_ if (!skipClient) { _%>
             .addFilterAt(new SpaWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
 <%_ } _%>
