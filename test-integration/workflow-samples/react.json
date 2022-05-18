@@ -32,8 +32,8 @@
       "testcontainers": "false"
     },
     {
-      "name": "mf-react-eureka-oauth2-mariadb-infinispan",
-      "jdl-samples": "mf-react-eureka-oauth2-mariadb-infinispan",
+      "name": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
+      "jdl-samples": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true",
       "testcontainers": "false"

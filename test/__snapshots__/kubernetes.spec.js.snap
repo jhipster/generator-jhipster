@@ -1232,13 +1232,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -1807,13 +1806,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -2546,13 +2544,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -3412,13 +3409,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -4548,13 +4544,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
   name: msmongodb-mongodb
   namespace: default
 spec:
   type: ClusterIP
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: peer
       port: 27017
@@ -5331,13 +5326,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -9043,13 +9037,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -9611,13 +9604,12 @@ metadata:
   namespace: mynamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -10743,13 +10735,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
   name: msmongodb-mongodb
   namespace: default
 spec:
   type: ClusterIP
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: peer
       port: 27017
@@ -11526,13 +11517,12 @@ metadata:
   namespace: default
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---
@@ -12101,13 +12091,12 @@ metadata:
   namespace: jhipsternamespace
   labels:
     app: jhipster-registry
-  annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: \\"true\\"
 spec:
   ports:
     - port: 8761
       name: http
   clusterIP: None
+  publishNotReadyAddresses: true
   selector:
     app: jhipster-registry
 ---

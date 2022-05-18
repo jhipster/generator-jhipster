@@ -153,11 +153,11 @@ _%>
         <%_ } else { _%>
             <%_ if (relationship.relationshipManyToMany) { _%>
                         <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                            <a class="form-control-static" [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
             <%_ } else { _%>
                         <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
-                            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance %>.<%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
+                            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance %>.<%= relationshipFieldName %>?.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %> }}</a>
                         </div>
             <%_ } _%>
         <%_ } _%>

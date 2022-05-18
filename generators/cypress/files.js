@@ -61,7 +61,11 @@ const cypressFiles = {
       templates: ['integration/account/login-page.spec.ts'],
     },
     {
-      condition: generator => generator.cypressTests && !generator.authenticationTypeOauth2 && !generator.databaseTypeNo,
+      condition: generator =>
+        generator.cypressTests &&
+        !generator.authenticationTypeOauth2 &&
+        !generator.databaseTypeNo &&
+        !generator.applicationTypeMicroservice,
       path: `${TEST_SRC_DIR}/cypress/`,
       templates: [
         'integration/account/register-page.spec.ts',

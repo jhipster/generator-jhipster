@@ -6,9 +6,9 @@
     "cypress": "9.6.1",
     "cypress-audit": "1.1.0",
     "eslint-plugin-cypress": "2.12.1",
-    "lighthouse": "9.5.0",
+    "lighthouse": "9.6.1",
     "nyc": "15.1.0",
-    "swagger-ui-dist": "4.11.0"
+    "swagger-ui-dist": "4.11.1"
   },
   "dependencies": {
     "dayjs": "1.11.2"

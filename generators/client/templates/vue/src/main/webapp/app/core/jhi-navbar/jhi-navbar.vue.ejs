@@ -35,8 +35,8 @@
           </span>
           <entities-menu></entities-menu>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-  <%_ for (const remote of remotes) { _%>
-          <<%= remote.lowercaseBaseName %>-menu></<%= remote.lowercaseBaseName %>-menu>
+  <%_ for (const microfrontend of microfrontends) { _%>
+          <<%= microfrontend.lowercaseBaseName %>-menu></<%= microfrontend.lowercaseBaseName %>-menu>
   <%_ } _%>
 <%_ } _%>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

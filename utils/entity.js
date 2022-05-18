@@ -213,7 +213,7 @@ function prepareEntityForTemplates(entityWithConfig, generator) {
   const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
   entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
   entityWithConfig.entityPage =
-    microfrontend && microserviceName && (entityWithConfig.applicationType === MICROSERVICE || entityWithConfig.applicationType === GATEWAY)
+    microfrontend && microserviceName && entityWithConfig.applicationType === MICROSERVICE
       ? `${microserviceName.toLowerCase()}/${entityFileName}`
       : `${entityFileName}`;
 
@@ -480,6 +480,11 @@ function loadRequiredConfigIntoEntity(entity, config) {
     // Workaround different paths
     clientFramework: config.clientFramework,
   });
+  if (config.applicationType === MICROSERVICE) {
+    _.defaults(entity, {
+      microserviceName: config.baseName,
+    });
+  }
   return entity;
 }
 
