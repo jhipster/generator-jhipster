@@ -18,7 +18,8 @@
 -%>
 import React from 'react';
 
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import ErrorBoundary from 'app/shared/error/error-boundary';
 <%_ if (!skipUserManagement) { _%>
 import UserManagement from './user-management';
 <%_ } _%>
@@ -38,8 +39,16 @@ import Tracker from './tracker/tracker';
 
 const AdministrationRoutes = () => (
   <div>
+    <Routes>
+      <Route
+        element={
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
+        }
+      >
 <%_ if (!skipUserManagement) { _%>
-    <ErrorBoundaryRoute path={`${match.url}/user-management`} component={UserManagement} />
+        <Route path="user-management/*" element={<UserManagement />} />
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     <ErrorBoundaryRoute exact path={`${match.url}/tracker`} component={Tracker} />
@@ -48,20 +57,13 @@ const AdministrationRoutes = () => (
     <ErrorBoundaryRoute exact path={`${match.url}/gateway`} component={Gateway} />
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-    <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />
-    <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />
-    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />
-    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />
+        <Route path="health" element={<Health />} />
+        <Route path="metrics" element={<Metrics />} />
+        <Route path="configuration" element={<Configuration />} />
+        <Route path="logs" element={<Logs />} />
   <%_ } _%>
-    <Routes>
-      <Route
-        path="docs"
-        element={
-          <ErrorBoundary>
-            <Docs />
-          </ErrorBoundary>
-        }
-      />
+        <Route path="docs" element={<Docs />} />
+      </Route>
     </Routes>
   </div>
 );

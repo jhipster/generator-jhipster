@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React<% if (applicationTypeGateway && microfrontend) { %>, { Suspense }<% } %> from 'react';
-import { Route, Routes <% if (communicationSpringWebsocket) { %>, useLocation <% } %>} from 'react-router-dom';
+import { Outlet, Route, Routes <% if (communicationSpringWebsocket) { %>, useLocation <% } %>} from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -73,80 +73,69 @@ const AppRoutes = () => {
   return (
     <div className="view-routes">
       <Routes>
+        <Route
+          element={
+            <ErrorBoundary>
+              <Outlet />
+            </ErrorBoundary>
+          }
+        >
+          <Route path="/" element={<Home />} />
 <%_ if (!authenticationTypeOauth2) { _%>
-        <Route
-          path="/login"
-          element={
-            <ErrorBoundary>
-              <Login />
-            </ErrorBoundary>
-          }
-        />
+          <Route path="/login" element={<Login />} />
 <%_ } _%>
-        <Route
-          path="/logout"
-          element={
-            <ErrorBoundary>
-              <Logout />
-            </ErrorBoundary>
-          }
-        />
+          <Route path="/logout" element={<Logout />} />
 <%_ if (!skipUserManagement) { _%>
-        <ErrorBoundaryRoute path="/account/register" component={Register} />
-        <ErrorBoundaryRoute path="/account/activate/:key?" component={Activate} />
-        <ErrorBoundaryRoute path="/account/reset/request" component={PasswordResetInit} />
-        <ErrorBoundaryRoute path="/account/reset/finish/:key?" component={PasswordResetFinish} />
+          <Route path="/account">
+            <Route
+              path="*"
+              element={
+                <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+                  <Account />
+                </PrivateRoute>
+              }
+            />
+            <Route path="register" element={<Register />} />
+            <Route path="activate" element={<Activate />} />
+            <Route path="reset">
+              <Route path="request" element={<PasswordResetInit />} />
+              <Route path="finish" element={<PasswordResetFinish />} />
+            </Route>
+          </Route>
 <%_ } _%>
-        <Route
-          path="/admin/*"
-          element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
-              <Admin />
-            </PrivateRoute>
-          }
-        />
-<%_ if (!skipUserManagement) { _%>
-        <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
-<%_ } _%>
-        <Route
-          path="/"
-          element={
-            <ErrorBoundary>
-              <Home />
-            </ErrorBoundary>
-          }
-        />
+          <Route
+            path="/admin/*"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+                <Admin />
+              </PrivateRoute>
+            }
+          />
 <%_ if (authenticationTypeOauth2) { _%>
-        <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
+          <ErrorBoundaryRoute path="/oauth2/authorization/oidc" component={LoginRedirect} />
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-        <Route path="/<%= remote.lowercaseBaseName %>/">
-          <Suspense fallback={loading}>
-            <PrivateRoute component={<%= remote.capitalizedBaseName %>Routes} hasAnyAuthorities={[AUTHORITIES.USER]} />
-          </Suspense>
-        </Route>
+          <Route path="/<%= remote.lowercaseBaseName %>/">
+            <Suspense fallback={loading}>
+              <PrivateRoute component={<%= remote.capitalizedBaseName %>Routes} hasAnyAuthorities={[AUTHORITIES.USER]} />
+            </Suspense>
+          </Route>
   <%_ } _%>
 <%_ } _%>
 <%_ if (false) { _%>
-        <PrivateRoute path="/<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
+          <PrivateRoute path="/<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
 <%_ } _%>
-        <Route
-          path="/*" // TODO: this probably ain't right
-          element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
-              <EntitiesRoutes />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <ErrorBoundary>
-              <PageNotFound />
-            </ErrorBoundary>
-          }
-        />
+          <Route
+            path="/*" // TODO: this probably ain't right
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+                <EntitiesRoutes />
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
       </Routes>
     </div>
   );

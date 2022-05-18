@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link,  useSearchParams } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
-import { Translate, getUrlParameter } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { activateAction, reset } from './activate.reducer';
@@ -43,10 +43,14 @@ const failureAlert = (
   </Alert>
 );
 
-export const ActivatePage = (props: RouteComponentProps<{ key: any }>) => {
+export const ActivatePage = () => {
   const dispatch = useAppDispatch();
+
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
-    const key = getUrlParameter('key', props.location.search);
+    const key = searchParams.get("key");
+
     dispatch(activateAction(key));
     return () => {
       dispatch(reset());
