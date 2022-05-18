@@ -60,10 +60,7 @@
         }
 <%_ } _%>
 
-        const queryObject = {
-        };
-
-        this.<%= entityInstance %>Service.query(queryObject).subscribe({
+        this.<%= entityInstance %>Service.query().subscribe({
             next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.isLoading = false;
                 this.<%= entityInstancePlural %> = res.body ?? [];

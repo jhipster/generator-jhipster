@@ -4,7 +4,7 @@
   <ul>
     <li *ngFor="let filterOption of filters.filterOptions">
       <span>{{ filterOption.name }}:</span> {{ filterOption.value }}
-      <fa-icon icon="times" (click)="clearFilter(filterOption.name)" title="{{ 'entity.filters.clear' | translate }}"></fa-icon >
+      <fa-icon icon="times" (click)="clearFilter(filterOption.name)" title="{{ 'entity.filters.clear' | translate }}"></fa-icon>
     </li>
   </ul>
 </div>
