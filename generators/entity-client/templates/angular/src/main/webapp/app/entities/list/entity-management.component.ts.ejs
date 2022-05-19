@@ -120,9 +120,9 @@ _%>
             const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
             const predicate = sort[0];
             const ascending = sort[1] === ASC;
-            <%_ if (jpaMetamodelFiltering) { _%>
+        <%_ if (jpaMetamodelFiltering) { _%>
             const updatedFilters = this.filters.initializeFromParams(params);
-            <%_ } _%>
+        <%_ } _%>
 
             if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending<%_ if (jpaMetamodelFiltering) { _%> || updatedFilters<%_ } _%>) {
                 this.predicate = predicate;
@@ -143,19 +143,19 @@ _%>
             const queryParamsObj<%_ if (jpaMetamodelFiltering) { _%>: any<%_ } _%> = {
                 page: this.page,
                 size: this.itemsPerPage,
-            <%_ if (searchEngine) { _%>
+        <%_ if (searchEngine) { _%>
                 search: this.currentSearch,
-            <%_ } _%>
+        <%_ } _%>
                 sort: this.predicate + ',' + (this.ascending ? ASC : DESC)
             };
 
-            <%_ if (jpaMetamodelFiltering) { _%>
+        <%_ if (jpaMetamodelFiltering) { _%>
             if (this.filters.hasAnyFilterSet()) {
                 this.filters.filterOptions.forEach(filterOption => {
                     queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.value;
                 });
             }
-            <%_ } _%>
+        <%_ } _%>
             this.router.navigate(['/<%= entityPage %>'], {
                 queryParams: queryParamsObj
             });

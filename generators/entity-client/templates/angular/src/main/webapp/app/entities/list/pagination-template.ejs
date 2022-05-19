@@ -60,13 +60,13 @@
                 sort: this.sort()
             };
 
-            <%_ if (jpaMetamodelFiltering) { _%>
+        <%_ if (jpaMetamodelFiltering) { _%>
             if (this.filters.hasAnyFilterSet()) {
                 this.filters.filterOptions.forEach(filterOption => {
                   queryObject[filterOption.name] = filterOption.value;
                 });
             }
-            <%_ } _%>
+        <%_ } _%>
 
             this.<%= entityInstance %>Service.search(queryObject).subscribe({
                     next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {
@@ -87,13 +87,13 @@
             sort: this.sort()
         };
 
-        <%_ if (jpaMetamodelFiltering) { _%>
+<%_ if (jpaMetamodelFiltering) { _%>
         if (this.filters.hasAnyFilterSet()) {
             this.filters.filterOptions.forEach(filterOption => {
             queryObject[filterOption.name] = filterOption.value;
             });
         }
-        <%_ } _%>
+<%_ } _%>
 
         this.<%= entityInstance %>Service.query(queryObject).subscribe({
                 next: (res: HttpResponse<I<%= entityAngularName %>[]>) => {

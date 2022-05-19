@@ -166,20 +166,20 @@ _%>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
-    <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-        <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.relationshipOneToMany && !relationship.ownerSide) { 
-            const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
-        _%>
-            <button type="submit"
-                    [routerLink]="['/<%= relationship.otherEntity.entityPage %>']"
-                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<%= primaryKey.name %> }"
-                    class="btn btn-info btn-sm"
-                    data-cy="filterOtherEntityButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- this._getClientTranslation('entity.action.show', {'otherEntity' : 'Other entity' }) %></span>
-            </button>
-        <%_ } _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
+    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.relationshipOneToMany && !relationship.ownerSide) { 
+        const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
+    _%>
+                            <button type="submit"
+                                    [routerLink]="['/<%= relationship.otherEntity.entityPage %>']"
+                                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<%= primaryKey.name %> }"
+                                    class="btn btn-info btn-sm"
+                                    data-cy="filterOtherEntityButton">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }"><%- this._getClientTranslation('entity.action.show', {'otherEntity' : 'Other entity' }) %></span>
+                            </button>
     <%_ } _%>
+<%_ } _%>
                             <button type="submit"
                                     [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
                                     class="btn btn-info btn-sm"
