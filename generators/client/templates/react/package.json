@@ -46,7 +46,7 @@
     "core-js": "3.22.5",
     "cross-env": "7.0.3",
     "css-loader": "6.7.1",
-    "css-minimizer-webpack-plugin": "3.4.1",
+    "css-minimizer-webpack-plugin": "4.0.0",
     "eslint": "8.15.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-react": "7.30.0",
