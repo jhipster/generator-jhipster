@@ -40,7 +40,7 @@ const JHIPSTER_DEPENDENCIES_VERSION = '7.8.2-SNAPSHOT';
 const SPRING_BOOT_VERSION = '2.7.0';
 const LIQUIBASE_VERSION = '4.10.0';
 const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('.');
-const HIBERNATE_VERSION = '5.6.8.Final';
+const HIBERNATE_VERSION = '5.6.9.Final';
 
 const JACOCO_VERSION = '0.8.8';
 const KAFKA_VERSION = '7.1.1';
