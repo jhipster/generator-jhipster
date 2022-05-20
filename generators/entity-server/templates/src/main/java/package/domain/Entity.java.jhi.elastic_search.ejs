@@ -23,3 +23,11 @@
 <&_ if (fragment.annotationSection) { -&>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <&_ } -&>
+
+<%_ for (const field of fields) { -%>
+  <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
+    <%_ if (field.id && field.fieldName != 'id') { _%>
+    @org.springframework.data.annotation.Id
+    <%_ } _%>
+  <&_ } -&>
+<%_ } -%>
