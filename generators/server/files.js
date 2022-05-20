@@ -1441,12 +1441,12 @@ const baseServerFiles = {
     {
       condition: generator => generator.databaseTypeSql,
       path: SERVER_TEST_RES_DIR,
-      templates: ['config/application-dev.yml'],
+      templates: ['config/application-testdev.yml'],
     },
     {
       condition: generator => generator.databaseTypeSql && !generator.reactive,
       path: SERVER_TEST_RES_DIR,
-      templates: ['config/application-prod.yml'],
+      templates: ['config/application-testprod.yml'],
     },
     {
       condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,
@@ -1982,10 +1982,6 @@ const baseServerFiles = {
         {
           file: 'package/web/rest/WithUnauthenticatedMockUser.java',
           renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`,
-        },
-        {
-          file: 'package/config/AsyncSyncConfiguration.java',
-          renameTo: generator => `${generator.testDir}config/AsyncSyncConfiguration.java`,
         },
       ],
     },

@@ -19,7 +19,6 @@
 package <%= packageName %>;
 
 import <%= packageName %>.<%= mainClass %>;
-import <%= packageName %>.config.AsyncSyncConfiguration;
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.test.context.ActiveProfiles;
 import tech.jhipster.config.JHipsterConstants;
@@ -64,7 +63,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@SpringBootTest(classes = {<%= mainClass %>.class, AsyncSyncConfiguration.class<% if (authenticationTypeOauth2) { %>, TestSecurityConfiguration.class<% } %>})
+@SpringBootTest(classes = {<%= mainClass %>.class<% if (authenticationTypeOauth2) { %>, TestSecurityConfiguration.class<% } %>})
 <%_ if (cacheProviderRedis) { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>

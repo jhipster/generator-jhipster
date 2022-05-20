@@ -1675,8 +1675,8 @@
                 </dependency>
 <%_ } _%>
             </dependencies>
-<%_ if (databaseTypeSql) { _%>
             <build>
+<%_ if (databaseTypeSql) { _%>
                 <plugins>
   <%_ if (devDatabaseType !== prodDatabaseType && (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgres)) { _%>
                     <plugin>
@@ -1689,11 +1689,9 @@
                         </configuration>
                     </plugin>
   <%_ } _%>
-                    <plugin>
-                        <groupId>org.liquibase</groupId>
-                        <artifactId>liquibase-maven-plugin</artifactId>
-                    </plugin>
+
                 </plugins>
+<%_ } _%>
                 <pluginManagement>
                     <plugins>
                         <plugin>
@@ -1712,9 +1710,9 @@
                                 </includes>
   <%_ if (reactive) { _%>
                                 <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=dev</argLine>
+                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testdev</argLine>
   <%_ } else { _%>
-                                <argLine>${argLine} -Dspring.profiles.active=dev</argLine>
+                                <argLine>${argLine} -Dspring.profiles.active=testdev</argLine>
   <%_ } _%>
                             </configuration>
                             <executions>
@@ -1732,7 +1730,7 @@
                                 </execution>
                             </executions>
                         </plugin>
-  <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql) { _%>
                         <plugin>
                             <groupId>org.liquibase</groupId>
                             <artifactId>liquibase-maven-plugin</artifactId>
@@ -1749,9 +1747,9 @@
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
                                 <contexts>!test</contexts>
-    <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
                                 <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
-    <%_ } _%>
+  <%_ } _%>
                             </configuration>
                             <dependencies>
                                 <dependency>
@@ -1774,27 +1772,26 @@
                                     <artifactId>validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-    <%_ if (devDatabaseTypePostgres) { _%>
+  <%_ if (devDatabaseTypePostgres) { _%>
                                 <dependency>
                                     <groupId>tech.jhipster</groupId>
                                     <artifactId>jhipster-framework</artifactId>
                                     <version>${jhipster-dependencies.version}</version>
                                 </dependency>
-    <%_ } _%>
-    <%_ if (devDatabaseTypeH2Disk) { _%>
+  <%_ } _%>
+  <%_ if (devDatabaseTypeH2Disk) { _%>
                                 <dependency>
                                     <groupId>com.h2database</groupId>
                                     <artifactId>h2</artifactId>
                                     <version>${h2.version}</version>
                                 </dependency>
-    <%_ } _%>
+  <%_ } _%>
                             </dependencies>
                         </plugin>
-  <%_ } _%>
+<%_ } _%>
                     </plugins>
                 </pluginManagement>
             </build>
-<%_ } _%>
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}<%_ if (databaseTypeSql) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
@@ -1899,9 +1896,9 @@
                                 </includes>
 <%_ if (reactive) { _%>
                                 <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=prod</argLine>
+                                <argLine>${argLine} -XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods -Dspring.profiles.active=testprod</argLine>
 <%_ } else { _%>
-                                <argLine>${argLine} -Dspring.profiles.active=prod</argLine>
+                                <argLine>${argLine} -Dspring.profiles.active=testprod</argLine>
 <%_ } _%>
                             </configuration>
                             <executions>
@@ -1919,7 +1916,7 @@
                                 </execution>
                             </executions>
                         </plugin>
-  <%_ if (!reactive) { _%>
+<%_ if (databaseTypeSql) { _%>
                         <plugin>
                             <groupId>org.liquibase</groupId>
                             <artifactId>liquibase-maven-plugin</artifactId>
@@ -1936,9 +1933,9 @@
                                 <verbose>true</verbose>
                                 <logging>debug</logging>
                                 <contexts>!test</contexts>
-    <%_ if (authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
                                 <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
-    <%_ } _%>
+  <%_ } _%>
                             </configuration>
                             <dependencies>
                                 <dependency>
@@ -1961,16 +1958,16 @@
                                     <artifactId>validation-api</artifactId>
                                     <version>${validation-api.version}</version>
                                 </dependency>
-    <%_ if (prodDatabaseTypePostgres) { _%>
+  <%_ if (prodDatabaseTypePostgres) { _%>
                                 <dependency>
                                     <groupId>tech.jhipster</groupId>
                                     <artifactId>jhipster-framework</artifactId>
                                     <version>${jhipster-dependencies.version}</version>
                                 </dependency>
-    <%_ } _%>
+  <%_ } _%>
                             </dependencies>
                         </plugin>
-  <%_ } _%>
+<%_ } _%>
                     </plugins>
                 </pluginManagement>
                 <plugins>

@@ -28,7 +28,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.mail.Multipart;
 import javax.mail.Session;
@@ -67,7 +67,7 @@ class MailServiceIT {
     private JHipsterProperties jHipsterProperties;
 
     @MockBean
-    private JavaMailSenderImpl javaMailSender;
+    private JavaMailSender javaMailSender;
 
     @Captor
     private ArgumentCaptor<MimeMessage> messageCaptor;

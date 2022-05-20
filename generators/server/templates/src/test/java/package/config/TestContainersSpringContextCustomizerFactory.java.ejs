@@ -117,7 +117,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
                 log.info("Warming up the sql database");
   <%_ if (devDatabaseTypeMysql || devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres) { _%>
-                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
                     if (null == devTestContainer) {
                         try {
                             Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
@@ -141,7 +141,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 }
   <%_ } _%>
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres) { _%>
-                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+                if (Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
                     if (null == prodTestContainer) {
                         try {
                             Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");

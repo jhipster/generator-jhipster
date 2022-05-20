@@ -136,7 +136,7 @@ task integrationTest(type: Test) {
         events 'FAILED', 'SKIPPED'
     }
     jvmArgs += '-Xmx1G'
-    systemProperty('spring.profiles.active', 'prod')
+    systemProperty('spring.profiles.active', 'testprod')
     systemProperty('java.security.egd', 'file:/dev/./urandom')
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
