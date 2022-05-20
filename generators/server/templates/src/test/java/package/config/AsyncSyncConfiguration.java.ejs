@@ -23,14 +23,15 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.SyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
+
+import java.util.concurrent.Executor;
 
 @Configuration
 public class AsyncSyncConfiguration {
 
-    @Bean(name = "taskExecutor")
+    @Bean
     @Primary
-    public TaskExecutor taskExecutor() {
+    public Executor taskExecutor() {
         return new SyncTaskExecutor();
     }
 }
