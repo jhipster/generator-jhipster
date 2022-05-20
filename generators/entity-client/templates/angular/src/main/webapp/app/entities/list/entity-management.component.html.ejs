@@ -167,7 +167,7 @@ _%>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.relationshipOneToMany && !relationship.ownerSide) { 
+    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && (relationship.relationshipOneToMany || relationship.relationshipManyToMany) && !relationship.ownerSide) { 
         const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
     _%>
                             <button type="submit"
