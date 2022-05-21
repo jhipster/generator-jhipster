@@ -34,9 +34,9 @@ public class MsSqlServerContainer implements SqlTestContainer {
 
     @Override
     public void destroy() {
-//        if (null != mSSQLServerContainer && mSSQLServerContainer.isRunning()) {
-//            mSSQLServerContainer.stop();
-//        }
+        if (null != mSSQLServerContainer && mSSQLServerContainer.isRunning()) {
+            mSSQLServerContainer.stop();
+        }
     }
     @Override
     public void afterPropertiesSet() {

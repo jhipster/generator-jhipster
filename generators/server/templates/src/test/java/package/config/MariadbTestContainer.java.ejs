@@ -34,9 +34,9 @@ public class MariadbTestContainer implements SqlTestContainer {
 
     @Override
     public void destroy() {
-//        if (null != mariaDBContainer && mariaDBContainer.isRunning()) {
-//            mariaDBContainer.stop();
-//        }
+        if (null != mariaDBContainer && mariaDBContainer.isRunning()) {
+            mariaDBContainer.stop();
+        }
     }
 
     @Override

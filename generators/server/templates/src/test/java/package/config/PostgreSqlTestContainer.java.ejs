@@ -34,9 +34,9 @@ public class PostgreSqlTestContainer implements SqlTestContainer {
 
     @Override
     public void destroy() {
-//        if (null != postgreSQLContainer && postgreSQLContainer.isRunning()) {
-//            postgreSQLContainer.stop();
-//        }
+        if (null != postgreSQLContainer && postgreSQLContainer.isRunning()) {
+            postgreSQLContainer.stop();
+        }
     }
     @Override
     public void afterPropertiesSet() {

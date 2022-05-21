@@ -33,9 +33,9 @@ public class KafkaTestContainer implements InitializingBean, DisposableBean {
 
     @Override
     public void destroy() {
-//        if (null != kafkaContainer && kafkaContainer.isRunning()) {
-//            kafkaContainer.close();
-//        }
+        if (null != kafkaContainer && kafkaContainer.isRunning()) {
+            kafkaContainer.close();
+        }
     }
 
     @Override

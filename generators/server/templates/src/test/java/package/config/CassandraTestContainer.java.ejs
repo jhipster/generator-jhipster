@@ -63,9 +63,9 @@ public class CassandraTestContainer implements InitializingBean, DisposableBean 
 
     @Override
     public void destroy() {
-//        if (null != cassandraContainer && cassandraContainer.isRunning()) {
-//            cassandraContainer.close();
-//        }
+        if (null != cassandraContainer && cassandraContainer.isRunning()) {
+            cassandraContainer.close();
+        }
     }
 
     @Override
