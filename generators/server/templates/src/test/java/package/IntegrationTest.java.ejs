@@ -31,10 +31,13 @@ import <%= packageName %>.config.EmbeddedMongo;
 import <%= packageName %>.config.EmbeddedCassandra;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
-    import <%= packageName %>.config.EmbeddedCouchbase;
+import <%= packageName %>.config.EmbeddedCouchbase;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.config.EmbeddedElasticsearch;
+<%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+import <%= packageName %>.config.EmbeddedKafka;
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.config.EmbeddedNeo4j;
@@ -80,6 +83,9 @@ import java.lang.annotation.Target;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 @EmbeddedElasticsearch
+<%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+@EmbeddedKafka
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
 @EmbeddedNeo4j
