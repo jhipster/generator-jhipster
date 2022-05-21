@@ -51,9 +51,9 @@ spring:
         useServerPrepStmts: true
 <%_ } _%>
   jpa:
-  <%_ if (prodDatabaseTypePostgres) { _%>
+<%_ if (prodDatabaseTypePostgres) { _%>
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
-  <%_ } _%>
+<%_ } _%>
     open-in-view: false
     hibernate:
       ddl-auto: none
@@ -69,9 +69,3 @@ spring:
       hibernate.hbm2ddl.auto: validate
       hibernate.jdbc.time_zone: UTC
       hibernate.query.fail_on_pagination_over_collection_fetch: true
-<%_ if (!skipUserManagement) { _%>
-jhipster:
-  mail:
-    from: test@localhost
-    base-url: http://127.0.0.1:8080
-<%_ } _%>

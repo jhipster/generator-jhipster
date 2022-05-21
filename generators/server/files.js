@@ -861,6 +861,10 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
+          file: 'package/config/AsyncSyncConfiguration.java',
+          renameTo: generator => `${generator.testDir}config/AsyncSyncConfiguration.java`,
+        },
+        {
           file: 'package/IntegrationTest.java',
           renameTo: generator => `${generator.testDir}/IntegrationTest.java`,
         },
@@ -1745,6 +1749,11 @@ const baseServerFiles = {
     {
       condition: generator => !generator.skipUserManagement,
       path: SERVER_MAIN_RES_DIR,
+      templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
+    },
+    {
+      condition: generator => !generator.skipUserManagement,
+      path: SERVER_TEST_RES_DIR,
       templates: ['templates/mail/activationEmail.html', 'templates/mail/creationEmail.html', 'templates/mail/passwordResetEmail.html'],
     },
     {
