@@ -1287,7 +1287,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         regex = new RegExp(
           [
             /([\s\n\r]+[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/, // jhiTranslate
-            /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+            /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|\(|\)|\||-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
             /([\s\n\r]+translate-compile)/, // translate-compile
             /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
           ]

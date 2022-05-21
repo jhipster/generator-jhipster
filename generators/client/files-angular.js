@@ -378,6 +378,11 @@ const files = {
         'shared/alert/alert-error.component.ts',
         'shared/alert/alert-error.component.html',
         'shared/alert/alert-error.model.ts',
+        // filtering options
+        { file: 'shared/filter/filter.component.html', method: 'processHtml' },
+        'shared/filter/filter.component.ts',
+        'shared/filter/filter.model.spec.ts',
+        'shared/filter/filter.model.ts',
       ],
     },
     {

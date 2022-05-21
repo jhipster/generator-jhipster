@@ -998,6 +998,18 @@ Object {
   "src/main/webapp2/app/shared/date/format-medium-datetime.pipe.ts": Object {
     "stateCleared": "modified",
   },
+  "src/main/webapp2/app/shared/filter/filter.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/filter/filter.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/filter/filter.model.spec.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp2/app/shared/filter/filter.model.ts": Object {
+    "stateCleared": "modified",
+  },
   "src/main/webapp2/app/shared/language/find-language-from-key.pipe.ts": Object {
     "stateCleared": "modified",
   },

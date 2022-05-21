@@ -259,6 +259,7 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
       switch (type) {
         case 'html':
           body = replacePlaceholders(body, generator);
+          body = replaceTitleAttributes(body, generator);
           break;
         case 'js':
           body = replaceTitle(body, generator);
@@ -368,7 +369,28 @@ function replaceTranslationKeysWithText(body, generator, regex) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-  const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
+  return replaceAttributeWithTranslation('placeholder', body, generator);
+}
+
+/**
+ *
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @returns string with titles replaced
+ */
+function replaceTitleAttributes(body, generator) {
+  return replaceAttributeWithTranslation('title', body, generator);
+}
+
+/**
+ *
+ * @param {string} attributeName
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @returns string with attributeName replaced
+ */
+function replaceAttributeWithTranslation(attributeName, body, generator) {
+  const re = new RegExp(`${attributeName}=['|"]([{]{2}\\s*['|"]([a-zA-Z0-9.\\-_]+)['|"][\\s][|][\\s](translate)\\s*[}]{2})['|"]`, 'g');
   let match;
 
   // eslint-disable-next-line no-cond-assign
