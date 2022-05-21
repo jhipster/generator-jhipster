@@ -160,46 +160,56 @@ function convertToPrettierExpressions(str) {
  * @returns {string} re-written content
  */
 function rewrite(args) {
-  const { regexp, splicable, prettierAware, haystack, needle, file } = args;
   // check if splicable is already in the body text
   let re;
-  if (regexp) {
-    re = regexp;
+  if (args.regexp) {
+    re = args.regexp;
     if (!re.test) {
       re = escapeRegExp(re);
     }
   } else {
-    re = splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
+    re = args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n');
   }
   if (!re.test) {
-    if (prettierAware) {
+    if (args.prettierAware) {
       re = convertToPrettierExpressions(re);
     }
     re = new RegExp(re);
   }
 
-  const normalizedContent = normalizeLineEndings(haystack);
-  if (re.test(normalizedContent)) {
-    return haystack;
+  if (re.test(normalizeLineEndings(args.haystack))) {
+    return args.haystack;
   }
 
-  const needleIndex = normalizedContent.lastIndexOf(needle);
-  if (needleIndex === -1) {
-    if (file) {
-      console.warn(`Needle ${needle} not found at file ${file}`);
+  const lines = args.haystack.split('\n');
+
+  let otherwiseLineIndex = -1;
+  lines.forEach((line, i) => {
+    if (line.includes(args.needle)) {
+      otherwiseLineIndex = i;
     }
-    return normalizedContent;
+  });
+
+  if (otherwiseLineIndex === -1) {
+    console.warn(`Needle ${args.needle} not found at file ${args.file}`);
+    return args.haystack;
   }
 
-  const needleLineIndex = normalizedContent.lastIndexOf('\n', needleIndex);
-  const beforeContent = normalizedContent.substring(0, needleLineIndex + 1);
-  const afterContent = normalizedContent.substring(needleLineIndex + 1);
-  const needleLine = afterContent.split('\n', 2)[0];
-  const identLength = needleLine.length - needleLine.trimStart().length;
-  const ident = ' '.repeat(identLength);
-  args.contentAdded = true;
+  let spaces = 0;
+  while (lines[otherwiseLineIndex].charAt(spaces) === ' ') {
+    spaces += 1;
+  }
 
-  return `${beforeContent}${splicable.map(line => ident + line).join('\n')}\n${afterContent}`;
+  let spaceStr = '';
+
+  // eslint-disable-next-line no-cond-assign
+  while ((spaces -= 1) >= 0) {
+    spaceStr += ' ';
+  }
+
+  lines.splice(otherwiseLineIndex, 0, args.splicable.map(line => spaceStr + line).join('\n'));
+
+  return lines.join('\n');
 }
 
 /**
