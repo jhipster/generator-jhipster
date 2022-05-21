@@ -35,6 +35,7 @@ import org.elasticsearch.search.sort.SortBuilder;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
+
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
@@ -93,11 +94,11 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         queryBuilder.withSorts(builders);
 
         NativeSearchQuery nativeSearchQuery = queryBuilder.build();
-  <%_ } else { _%>
-        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-  <%_ if (!paginationNo) { _%>
         nativeSearchQuery.setPageable(pageable);
-  <%_ } _%>
+
+<%_ } else { _%>
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+<%_ } _%>
         return search(nativeSearchQuery);
     }
     public Flux<<%= persistClass %>> search(Query query) {
