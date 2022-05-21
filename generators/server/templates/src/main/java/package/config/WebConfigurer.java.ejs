@@ -41,6 +41,9 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 <%_ if (reactive && !skipClient) { _%>
 import org.springframework.boot.autoconfigure.web.reactive.ResourceHandlerRegistrationCustomizer;
 <%_ } _%>
+<%_ if (messageBrokerKafka) { _%>
+import org.springframework.cloud.stream.annotation.EnableBinding;
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (reactive) { _%>
@@ -91,6 +94,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Configuration of web application with Servlet 3.0 APIs.
  */
+<%_ if (messageBrokerKafka) { _%>
+@EnableBinding({KafkaSseConsumer.class, KafkaSseProducer.class})
+<%_ } _%>
 @Configuration
 public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<% if (!skipClient) { %>, WebServerFactoryCustomizer<WebServerFactory><% } %><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
 

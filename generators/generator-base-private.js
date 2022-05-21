@@ -1230,9 +1230,9 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
       }
     } else if (databaseType === H2_MEMORY) {
       if (protocol === 'r2dbc') {
-        dbcUrl = `${protocol}:h2:mem:///${options.databaseName}${options.itests?':12344':''}`;
+        dbcUrl = `${protocol}:h2:mem:///${options.databaseName}${options.itests ? ':12344' : ''}`;
       } else {
-        dbcUrl = `${protocol}:h2:mem:${options.databaseName}${options.itests?':12344':''}`;
+        dbcUrl = `${protocol}:h2:mem:${options.databaseName}${options.itests ? ':12344' : ''}`;
       }
     } else {
       throw new Error(`${databaseType} databaseType is not supported`);

@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGeneratorPrivate = require('../generators/generator-base-private').prototype;
 const BaseGenerator = require('../generators/generator-base').prototype; // TODO remove in favor of a cleaner architecture
-const { CASSANDRA, MONGODB, MYSQL, SQL, MARIADB, POSTGRESQL, ORACLE, MSSQL } = require('../jdl/jhipster/database-types');
+const { CASSANDRA, MONGODB, MYSQL, SQL } = require('../jdl/jhipster/database-types');
 const { MapperTypes } = require('../jdl/jhipster/entity-options');
 
 const NO_DTO = MapperTypes.NO;
@@ -282,94 +282,6 @@ export * from './entityFolderName/entityFileName.state';`;
     describe('when passing ../../foo', () => {
       it('throw an error', () => {
         expect(() => BaseGeneratorPrivate.getEntityParentPathAddition('../../foo')).to.throw();
-      });
-    });
-  });
-
-  describe('getTCDBCUrlJDBC', () => {
-    describe('when passing mysql', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(MYSQL, 'jdbc', '1.0', { databaseName: 'test' })).to.equal(
-          'jdbc:tc:mysql:1.0:///test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw'
-        );
-      });
-    });
-    describe('when passing mariadb', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(MARIADB, 'jdbc', '1.0', { databaseName: 'test' })).to.equal(
-          'jdbc:tc:mariadb:1.0:///test?useLegacyDatetimeCode=false&serverTimezone=UTC&TC_MY_CNF=testcontainers/mariadb&TC_TMPFS=/testtmpfs:rw'
-        );
-      });
-    });
-    describe('when passing postgres', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(POSTGRESQL, 'jdbc', '1.0', { databaseName: 'test' })).to.equal(
-          'jdbc:tc:postgresql:1.0:///test?TC_TMPFS=/testtmpfs:rw'
-        );
-      });
-    });
-    describe('when passing oracle', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(ORACLE, 'jdbc', null, { databaseName: 'test' })).to.equal(
-          'jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw'
-        );
-      });
-    });
-    describe('when passing mssql', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(MSSQL, 'jdbc', '1.0', { databaseName: 'test' })).to.equal(
-          'jdbc:tc:sqlserver:1.0://;database=test?TC_TMPFS=/testtmpfs:rw'
-        );
-      });
-    });
-    describe('when passing mysql and no databasename', () => {
-      it('throw an error', () => {
-        expect(() => BaseGeneratorPrivate.getTCDBCUrl(MYSQL, 'jdbc', '1.0')).to.throw("option 'databaseName' is required");
-      });
-    });
-    describe('when passing an unsupprted databasetype', () => {
-      it('throw an error', () => {
-        expect(() => BaseGeneratorPrivate.getTCDBCUrl('foodb', 'jdbc', '1.0', { databaseName: 'test' })).to.throw(
-          'foodb databaseType is not supported'
-        );
-      });
-    });
-  });
-
-  describe('getTCDBCUrlR2DBC', () => {
-    describe('when passing mysql', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(MYSQL, 'r2dbc', '1.0', { databaseName: 'test' })).to.equal(
-          'r2dbc:tc:mysql:///test?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw&TC_IMAGE_TAG=1.0'
-        );
-      });
-    });
-    describe('when passing mariadb', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(MARIADB, 'r2dbc', '1.0', { databaseName: 'test' })).to.equal(
-          'r2dbc:tc:mariadb:///test?useLegacyDatetimeCode=false&serverTimezone=UTC&TC_MY_CNF=testcontainers/mariadb&TC_TMPFS=/testtmpfs:rw&TC_IMAGE_TAG=1.0'
-        );
-      });
-    });
-    describe('when passing postgres', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(POSTGRESQL, 'r2dbc', '1.0', { databaseName: 'test' })).to.equal(
-          'r2dbc:tc:postgresql:///test?TC_TMPFS=/testtmpfs:rw&TC_IMAGE_TAG=1.0'
-        );
-      });
-    });
-    describe('when passing oracle', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(ORACLE, 'r2dbc', null, { databaseName: 'test' })).to.equal(
-          'r2dbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw'
-        );
-      });
-    });
-    describe('when passing mssql', () => {
-      it('returns correct connection string', () => {
-        expect(BaseGeneratorPrivate.getTCDBCUrl(MSSQL, 'r2dbc', '1.0', { databaseName: 'test' })).to.equal(
-          'r2dbc:tc:mssql://;database=test?TC_TMPFS=/testtmpfs:rw&TC_IMAGE_TAG=1.0'
-        );
       });
     });
   });

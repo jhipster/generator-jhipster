@@ -324,6 +324,10 @@ Object {
       "path": "src/test/java/",
       "templates": Array [
         Object {
+          "file": "package/config/AsyncSyncConfiguration.java",
+          "renameTo": [Function],
+        },
+        Object {
           "file": "package/IntegrationTest.java",
           "renameTo": [Function],
         },
@@ -1083,6 +1087,15 @@ Object {
     },
     Object {
       "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "templates/mail/activationEmail.html",
+        "templates/mail/creationEmail.html",
+        "templates/mail/passwordResetEmail.html",
+      ],
+    },
+    Object {
+      "condition": [Function],
       "path": "src/main/java/",
       "templates": Array [
         Object {
@@ -1282,10 +1295,6 @@ Object {
         },
         Object {
           "file": "package/service/mapper/UserMapperTest.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/NoOpMailConfiguration.java",
           "renameTo": [Function],
         },
         Object {
@@ -1773,6 +1782,72 @@ Object {
       ],
     },
     Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/EmbeddedSQL.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/SqlTestContainer.java",
+          "renameTo": [Function],
+        },
+        Object {
+          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/MysqlTestContainer.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/MariadbTestContainer.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/MsSqlTestContainer.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/java/",
+      "templates": Array [
+        Object {
+          "file": "package/config/PostgreSqlTestContainer.java",
+          "renameTo": [Function],
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "testcontainers.properties",
+        "META-INF/spring.factories",
+      ],
+    },
+    Object {
       "path": "src/test/resources/",
       "templates": Array [
         "config/application.yml",
@@ -1784,8 +1859,14 @@ Object {
       "condition": [Function],
       "path": "src/test/resources/",
       "templates": Array [
-        "config/application-dev.yml",
-        "config/application-prod.yml",
+        "config/application-testdev.yml",
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        "config/application-testprod.yml",
       ],
     },
     Object {
@@ -1796,16 +1877,6 @@ Object {
           "file": "testcontainers/mariadb/my.cnf",
           "method": "copy",
           "noEjs": true,
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/ReactiveSqlTestContainerExtension.java",
-          "renameTo": [Function],
         },
       ],
     },

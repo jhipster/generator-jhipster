@@ -45,8 +45,7 @@ spring:
     <%_ } else { _%>
     url: <%- getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } _%>
-    name:
-    username:
+    username: <%= lowercaseBaseName %>
     password:
   <%_ } _%>
 <%_ } else { _%>
@@ -58,8 +57,7 @@ spring:
     <%_ } else if (devDatabaseTypeH2Disk) { _%>
     url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/testdb` }) %>
     <%_ } _%>
-    name:
-    username:
+    username: <%= lowercaseBaseName %>
     password:
   <%_ } _%>
     hikari:
