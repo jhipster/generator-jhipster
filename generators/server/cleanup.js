@@ -29,6 +29,7 @@ const cleanupKafka = require('./cleanup-kafka');
 const cleanupReactive = require('./cleanup-reactive');
 const cleanupCucumber = require('./cleanup-cucumber');
 const cleanupMaven = require('./cleanup-maven');
+const constants = require('../generator-constants');
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
@@ -194,6 +195,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.databaseTypeNeo4j) {
       generator.removeFile(`${testDir}AbstractNeo4jIT.java`);
     }
+  }
+  if (generator.isJhipsterVersionLessThan('7.8.2')) {
+    generator.removeFile(`${constants.DOCKER_DIR}realm-config/jhipster-users-0.json`);
   }
 }
 

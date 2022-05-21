@@ -119,11 +119,6 @@ Object {
           "file": "config/realm-config/jhipster-realm.json",
           "renameTo": [Function],
         },
-        Object {
-          "file": "config/realm-config/jhipster-users-0.json",
-          "method": "copy",
-          "renameTo": [Function],
-        },
       ],
     },
     Object {

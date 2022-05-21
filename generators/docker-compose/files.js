@@ -26,6 +26,10 @@ module.exports = {
 
 function writeFiles() {
   return {
+    cleanup() {
+      this.removeFile('realm-config/jhipster-users-0.json');
+    },
+
     writeDockerCompose() {
       this.template('docker-compose.yml.ejs', 'docker-compose.yml');
       this.template('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
@@ -40,7 +44,6 @@ function writeFiles() {
     writeKeycloakFiles() {
       if (this.authenticationType === OAUTH2 && this.applicationType !== MICROSERVICE) {
         this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
-        this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
       }
     },
 
