@@ -35,7 +35,6 @@ import org.elasticsearch.search.sort.SortBuilder;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 
-
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
@@ -104,7 +103,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
     public Flux<<%= persistClass %>> search(Query query) {
 
         return reactiveElasticsearchTemplate
-            .search(query, <%= persistClass %>.class)
+            .search(nativeSearchQuery, <%= entityClass %>.class)
             .map(SearchHit::getContent);
     }
 }
