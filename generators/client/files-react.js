@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const { replaceReactTranslations } = require('./transform-react.cjs');
 const { SPRING_WEBSOCKET } = require('../../jdl/jhipster/websocket-types');
 const { OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
 const { GATEWAY } = require('../../jdl/jhipster/application-types');
@@ -23,11 +24,10 @@ const constants = require('../generator-constants');
 
 const { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR, REACT_DIR } = constants;
 
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
 const files = {
+  _: {
+    transform: [replaceReactTranslations],
+  },
   common: [
     {
       templates: [
@@ -41,7 +41,7 @@ const files = {
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
         'webpack/utils.js',
-        { file: 'webpack/logo-jhipster.png', method: 'copy' },
+        'webpack/logo-jhipster.png',
       ],
     },
     {
@@ -58,9 +58,9 @@ const files = {
     {
       path: REACT_DIR,
       templates: [
-        { file: 'app.tsx', method: 'processJsx' },
-        { file: 'index.tsx', method: 'processJsx' },
-        { file: 'routes.tsx', method: 'processJsx' },
+        'app.tsx',
+        'index.tsx',
+        'routes.tsx',
         'setup-tests.ts',
         'typings.d.ts',
         'config/constants.ts',
@@ -91,33 +91,23 @@ const files = {
   reactEntities: [
     {
       path: REACT_DIR,
-      templates: [
-        'entities/reducers.ts',
-        { file: 'entities/menu.tsx', method: 'processJsx' },
-        { file: 'entities/routes.tsx', method: 'processJsx' },
-      ],
+      templates: ['entities/reducers.ts', 'entities/menu.tsx', 'entities/routes.tsx'],
     },
   ],
   reactMain: [
     {
       path: REACT_DIR,
-      templates: [
-        { file: 'modules/home/home.tsx', method: 'processJsx' },
-        { file: 'modules/login/logout.tsx', method: 'processJsx' },
-      ],
+      templates: ['modules/home/home.tsx', 'modules/login/logout.tsx'],
     },
     {
       condition: generator => generator.authenticationType !== OAUTH2,
       path: REACT_DIR,
-      templates: [
-        { file: 'modules/login/login.tsx', method: 'processJsx' },
-        { file: 'modules/login/login-modal.tsx', method: 'processJsx' },
-      ],
+      templates: ['modules/login/login.tsx', 'modules/login/login-modal.tsx'],
     },
     {
       condition: generator => generator.authenticationType === OAUTH2,
       path: REACT_DIR,
-      templates: [{ file: 'modules/login/login-redirect.tsx', method: 'processJsx' }],
+      templates: ['modules/login/login-redirect.tsx'],
     },
     {
       path: REACT_DIR,
@@ -150,33 +140,33 @@ const files = {
       condition: generator => !generator.skipUserManagement,
       path: REACT_DIR,
       templates: [
-        { file: 'modules/account/index.tsx', method: 'processJsx' },
-        { file: 'modules/account/activate/activate.tsx', method: 'processJsx' },
-        { file: 'modules/account/password/password.tsx', method: 'processJsx' },
-        { file: 'modules/account/register/register.tsx', method: 'processJsx' },
-        { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
-        { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
-        { file: 'modules/account/settings/settings.tsx', method: 'processJsx' },
-        { file: 'modules/account/register/register.reducer.ts', method: 'processJsx' },
-        { file: 'modules/account/activate/activate.reducer.ts', method: 'processJsx' },
-        { file: 'modules/account/password-reset/password-reset.reducer.ts', method: 'processJsx' },
-        { file: 'modules/account/password/password.reducer.ts', method: 'processJsx' },
-        { file: 'modules/account/settings/settings.reducer.ts', method: 'processJsx' },
+        'modules/account/index.tsx',
+        'modules/account/activate/activate.tsx',
+        'modules/account/password/password.tsx',
+        'modules/account/register/register.tsx',
+        'modules/account/password-reset/init/password-reset-init.tsx',
+        'modules/account/password-reset/finish/password-reset-finish.tsx',
+        'modules/account/settings/settings.tsx',
+        'modules/account/register/register.reducer.ts',
+        'modules/account/activate/activate.reducer.ts',
+        'modules/account/password-reset/password-reset.reducer.ts',
+        'modules/account/password/password.reducer.ts',
+        'modules/account/settings/settings.reducer.ts',
       ],
     },
     {
       condition: generator => generator.authenticationType === SESSION && !generator.skipUserManagement,
       path: REACT_DIR,
-      templates: [{ file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' }, 'modules/account/sessions/sessions.reducer.ts'],
+      templates: ['modules/account/sessions/sessions.tsx', 'modules/account/sessions/sessions.reducer.ts'],
     },
   ],
   adminModule: [
     {
       path: REACT_DIR,
       templates: [
-        { file: 'modules/administration/index.tsx', method: 'processJsx' },
+        'modules/administration/index.tsx',
         'modules/administration/administration.reducer.ts',
-        { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
+        'modules/administration/docs/docs.tsx',
         'modules/administration/docs/docs.scss',
       ],
     },
@@ -184,34 +174,34 @@ const files = {
       condition: generator => generator.withAdminUi,
       path: REACT_DIR,
       templates: [
-        { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
-        { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
-        { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
-        { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
-        { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
+        'modules/administration/configuration/configuration.tsx',
+        'modules/administration/health/health.tsx',
+        'modules/administration/health/health-modal.tsx',
+        'modules/administration/logs/logs.tsx',
+        'modules/administration/metrics/metrics.tsx',
       ],
     },
     {
       condition: generator => generator.websocket === SPRING_WEBSOCKET,
       path: REACT_DIR,
-      templates: [{ file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }],
+      templates: ['modules/administration/tracker/tracker.tsx'],
     },
     {
       condition: generator => !generator.skipUserManagement,
       path: REACT_DIR,
       templates: [
-        { file: 'modules/administration/user-management/index.tsx', method: 'processJsx' },
-        { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
-        { file: 'modules/administration/user-management/user-management-update.tsx', method: 'processJsx' },
-        { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
-        { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' },
+        'modules/administration/user-management/index.tsx',
+        'modules/administration/user-management/user-management.tsx',
+        'modules/administration/user-management/user-management-update.tsx',
+        'modules/administration/user-management/user-management-detail.tsx',
+        'modules/administration/user-management/user-management-delete-dialog.tsx',
         'modules/administration/user-management/user-management.reducer.ts',
       ],
     },
     {
       condition: generator => generator.applicationType === GATEWAY && generator.serviceDiscoveryType,
       path: REACT_DIR,
-      templates: [{ file: 'modules/administration/gateway/gateway.tsx', method: 'processJsx' }],
+      templates: ['modules/administration/gateway/gateway.tsx'],
     },
   ],
   reactShared: [
@@ -219,26 +209,26 @@ const files = {
       path: REACT_DIR,
       templates: [
         // layouts
-        { file: 'shared/layout/footer/footer.tsx', method: 'processJsx' },
-        { file: 'shared/layout/header/header.tsx', method: 'processJsx' },
-        { file: 'shared/layout/header/header-components.tsx', method: 'processJsx' },
+        'shared/layout/footer/footer.tsx',
+        'shared/layout/header/header.tsx',
+        'shared/layout/header/header-components.tsx',
         'shared/layout/menus/index.ts',
-        { file: 'shared/layout/menus/admin.tsx', method: 'processJsx' },
-        { file: 'shared/layout/menus/account.tsx', method: 'processJsx' },
-        { file: 'shared/layout/menus/entities.tsx', method: 'processJsx' },
-        { file: 'shared/layout/menus/menu-components.tsx', method: 'processJsx' },
-        { file: 'shared/layout/menus/menu-item.tsx', method: 'processJsx' },
-        { file: 'shared/layout/password/password-strength-bar.tsx', method: 'processJsx' },
+        'shared/layout/menus/admin.tsx',
+        'shared/layout/menus/account.tsx',
+        'shared/layout/menus/entities.tsx',
+        'shared/layout/menus/menu-components.tsx',
+        'shared/layout/menus/menu-item.tsx',
+        'shared/layout/password/password-strength-bar.tsx',
         // util
         'shared/util/date-utils.ts',
         'shared/util/pagination.constants.ts',
         'shared/util/entity-utils.ts',
         // components
-        { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
-        { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
-        { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
-        { file: 'shared/error/page-not-found.tsx', method: 'processJsx' },
-        { file: 'shared/DurationFormat.tsx', method: 'processJsx' },
+        'shared/auth/private-route.tsx',
+        'shared/error/error-boundary.tsx',
+        'shared/error/error-boundary-route.tsx',
+        'shared/error/page-not-found.tsx',
+        'shared/DurationFormat.tsx',
         // model
         'shared/model/user.model.ts',
       ],
@@ -246,7 +236,7 @@ const files = {
     {
       condition: generator => generator.enableTranslation,
       path: REACT_DIR,
-      templates: [{ file: 'shared/layout/menus/locale.tsx', method: 'processJsx' }],
+      templates: ['shared/layout/menus/locale.tsx'],
     },
     {
       condition: generator => generator.authenticationType === OAUTH2,
@@ -326,13 +316,6 @@ const files = {
       path: REACT_DIR,
       templates: ['shared/reducers/user-management.spec.ts'],
     },
-    // {
-    //     condition: generator => generator.authenticationType === 'session',
-    //     path: REACT_DIR,
-    //     templates: [
-    //         'modules/account/sessions/sessions.reducer.spec.ts',
-    //     ]
-    // },
     {
       condition: generator => generator.protractorTests,
       path: CLIENT_TEST_SRC_DIR,
@@ -375,6 +358,8 @@ function cleanup() {
 }
 
 function writeFiles() {
-  // write React files
-  return this.writeFilesToDisk(files, 'react');
+  return this.writeFiles({
+    sections: files,
+    rootTemplatesPath: 'react',
+  });
 }
