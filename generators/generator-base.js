@@ -107,6 +107,7 @@ const isWin32 = os.platform() === 'win32';
 
 /**
  * @callback EditFileCallback
+ * @param {JHipsterBaseGenerator} this
  * @param {string} content
  * @param {string} filePath
  * @returns {string} new content
@@ -121,7 +122,7 @@ const isWin32 = os.platform() === 'win32';
  *
  * @extends {import('yeoman-generator')}
  */
-module.exports = class JHipsterBaseGenerator extends PrivateBase {
+class JHipsterBaseGenerator extends PrivateBase {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -3407,4 +3408,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     this.writeDestination(filePath, content);
     return content;
   }
-};
+}
+
+module.exports = JHipsterBaseGenerator;
