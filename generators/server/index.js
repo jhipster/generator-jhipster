@@ -531,7 +531,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
               );
             } else if (dockerConfig === 'keycloak') {
               dockerAwaitScripts.push(
-                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/auth/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
+                `echo "Waiting for keycloak to start" && wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9080/realms/jhipster && echo "keycloak started" || echo "keycloak not running, make sure oauth2 server is running"`
               );
             }
 
