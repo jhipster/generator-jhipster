@@ -215,7 +215,7 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
+                pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
                 pathMatchers(HttpMethod.OPTIONS, "/**")
             )))
             .csrf()
@@ -279,13 +279,17 @@ public class SecurityConfiguration {
             .pathMatchers("/api/account/reset-password/init").permitAll()
             .pathMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
             .pathMatchers("/api/auth-info").permitAll()
+<%_ } _%>
             .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
+  <%_ if (microfrontend) { _%>
             // microfrontend resources are loaded by webpack without authentication, they need to be public
             .pathMatchers("/services/*/*.js").permitAll()
             .pathMatchers("/services/*/*.js.map").permitAll()
+  <%_ } _%>
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
 <%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
