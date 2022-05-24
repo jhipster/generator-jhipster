@@ -425,7 +425,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "io.netty:netty-tcnative-boringssl-static"
+    runtimeOnly "io.netty:netty-tcnative-boringssl-static"
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.boot:spring-boot-starter-websocket"
@@ -513,9 +513,9 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "com.couchbase.client:java-client"
 <%_ } _%>
 <%_ if (reactive) { _%>
-    implementation ("org.springdoc:springdoc-openapi-webflux-core")
+    implementation "org.springdoc:springdoc-openapi-webflux-core"
 <%_ } else { _%>
-    implementation ("org.springdoc:springdoc-openapi-webmvc-core")
+    implementation "org.springdoc:springdoc-openapi-webmvc-core"
 <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"

@@ -87,7 +87,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the Couchbase database");
                 if (null == couchbaseBean) {
                     couchbaseBean = beanFactory.createBean(CouchbaseTestContainer.class);
-                    // beanFactory.registerSingleton(CouchbaseTestContainer.class.getName(), couchbaseBean);
+                    beanFactory.registerSingleton(CouchbaseTestContainer.class.getName(), couchbaseBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName(), couchbaseBean);
                 }
                 testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
@@ -104,7 +104,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the mongo database");
                 if (null == mongoDbBean) {
                     mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
-                    // beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
+                    beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
                 }
                 testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
@@ -121,7 +121,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         try {
                             Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
                             devTestContainer = beanFactory.createBean(containerClass);
-                            // beanFactory.registerSingleton(containerClass.getName(), devTestContainer);
+                            beanFactory.registerSingleton(containerClass.getName(), devTestContainer);
                             // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), devTestContainer);
                         } catch (ClassNotFoundException e) {
                             throw new RuntimeException(e);
@@ -145,7 +145,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                         try {
                             Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer");
                             prodTestContainer = beanFactory.createBean(containerClass);
-                            // beanFactory.registerSingleton(containerClass.getName(), prodTestContainer);
+                            beanFactory.registerSingleton(containerClass.getName(), prodTestContainer);
                             // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), prodTestContainer);
                         } catch (ClassNotFoundException e) {
                             throw new RuntimeException(e);
@@ -165,7 +165,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
   <%_ } _%>
             }
 <%_ } _%>
-
 <%_ if (databaseTypeCassandra) { _%>
             EmbeddedCassandra cassandraAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCassandra.class);
             if (null != cassandraAnnotation) {
@@ -173,7 +172,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the cassandra database");
                 if (null == cassandraBean) {
                     cassandraBean = beanFactory.createBean(CassandraTestContainer.class);
-                    // beanFactory.registerSingleton(CassandraTestContainer.class.getName(), cassandraBean);
+                    beanFactory.registerSingleton(CassandraTestContainer.class.getName(), cassandraBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CassandraTestContainer.class.getName(), cassandraBean);
                 }
                 testValues = testValues.and("spring.data.cassandra.port=" +  cassandraBean.getCassandraContainer().getMappedPort(CassandraContainer.CQL_PORT))
@@ -190,7 +189,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the neo4j database");
                 if (null == neo4jBean) {
                     neo4jBean = beanFactory.createBean(Neo4jTestContainer.class);
-                    // beanFactory.registerSingleton(Neo4jTestContainer.class.getName(), neo4jBean);
+                    beanFactory.registerSingleton(Neo4jTestContainer.class.getName(), neo4jBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(Neo4jTestContainer.class.getName(), neo4jBean);
                 }
                 testValues =
@@ -206,7 +205,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the kafka broker");
                 if (null == kafkaBean) {
                     kafkaBean = beanFactory.createBean(KafkaTestContainer.class);
-                    // beanFactory.registerSingleton(KafkaTestContainer.class.getName(), kafkaBean);
+                    beanFactory.registerSingleton(KafkaTestContainer.class.getName(), kafkaBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(KafkaTestContainer.class.getName(), kafkaBean);
                 }
                 testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getMappedPort(KafkaContainer.KAFKA_PORT));
@@ -219,7 +218,7 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.info("Warming up the elastic database");
                 if (null == elasticsearchBean) {
                     elasticsearchBean = beanFactory.createBean(ElasticsearchTestContainer.class);
-                    // beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
+                    beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
                     // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
                 }
                 testValues =
