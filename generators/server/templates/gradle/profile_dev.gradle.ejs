@@ -27,7 +27,8 @@ sourceSets {
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 dependencies {
-  <%_ if (devDatabaseTypeH2Any) { _%>
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+<%_ if (devDatabaseTypeH2Any) { _%>
     <%_ if (reactive) { _%>
     implementation "io.r2dbc:r2dbc-h2"
     <%_ } else { _%>
@@ -36,7 +37,11 @@ dependencies {
   <%_ } _%>
   <%_ if (devDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    implementation "dev.miku:r2dbc-mysql"
+    implementation ("dev.miku:r2dbc-mysql") {
+        exclude group: "io.projectreactor", module: "reactor-core"
+        exclude group: "io.projectreactor.addons", module: "reactor-extra"
+        exclude group: "io.projectreactor.netty", module: "reactor-netty"
+    }
     <%_ } _%>
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"

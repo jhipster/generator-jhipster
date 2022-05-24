@@ -247,14 +247,12 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
         </dependency>
-<%_ } _%>
-<%_ if (cacheProviderHazelcast && enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate53</artifactId>
         </dependency>
-<%_ } _%>
-<%_ if (cacheProviderHazelcast) { _%>
+  <%_ } _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -292,17 +290,17 @@
             <artifactId>xmemcached</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (cacheProviderRedis && enableHibernateCache) { _%>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
         </dependency>
+  <%_ if (enableHibernateCache) { _%>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka) { _%>
         <dependency>
@@ -324,12 +322,6 @@
             <artifactId>springdoc-openapi-webmvc-core</artifactId>
 <%_ } _%>
         </dependency>
-<%_ if (!reactive) { _%>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -1608,6 +1600,24 @@
                 <dependency>
                     <groupId>dev.miku</groupId>
                     <artifactId>r2dbc-mysql</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.projectreactor</groupId>
+                            <artifactId>reactor-core</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.projectreactor.addons</groupId>
+                            <artifactId>reactor-extra</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.projectreactor.netty</groupId>
+                            <artifactId>reactor-netty</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
   <%_ } _%>
 <%_ } _%>
@@ -1826,6 +1836,24 @@
                 <dependency>
                     <groupId>dev.miku</groupId>
                     <artifactId>r2dbc-mysql</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.projectreactor</groupId>
+                            <artifactId>reactor-core</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.projectreactor.addons</groupId>
+                            <artifactId>reactor-extra</artifactId>
+                        </exclusion>
+                    </exclusions>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>io.projectreactor.netty</groupId>
+                            <artifactId>reactor-netty</artifactId>
+                        </exclusion>
+                    </exclusions>
                 </dependency>
     <%_ } _%>
   <%_ } _%>

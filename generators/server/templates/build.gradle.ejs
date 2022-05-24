@@ -283,33 +283,29 @@ dependencies {
     implementation group: "tech.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
+    implementation "javax.annotation:javax.annotation-api"
 <%_ // This is useful for major Spring Boot migration
 if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') > -1) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
-    implementation "javax.annotation:javax.annotation-api"
 <%_ if (!cacheProviderNo) { _%>
     implementation "org.springframework.boot:spring-boot-starter-cache"
 <%_ } _%>
-    implementation "io.dropwizard.metrics:metrics-core"
-    implementation "io.micrometer:micrometer-registry-prometheus"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 <%_ if (databaseTypeSql) { _%>
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
-  <%_ if (!reactive) { _%>
+  <%_ if (reactive) { _%>
+    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
+  <%_ } else { _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
   <%_ } _%>
 <%_ } _%>
-    implementation "com.fasterxml.jackson.core:jackson-annotations"
-    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 <%_ if (cacheProviderHazelcast) { _%>
     implementation "com.hazelcast:hazelcast"
-<%_ } _%>
-<%_ if (cacheProviderHazelcast && enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
     implementation "com.hazelcast:hazelcast-hibernate53"
-<%_ } _%>
-<%_ if (cacheProviderHazelcast) { _%>
+  <%_ } _%>
     implementation "com.hazelcast:hazelcast-spring"
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
@@ -329,15 +325,17 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
     implementation "org.hibernate:hibernate-jcache"
   <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
-    implementation "javax.cache:cache-api"
+<%_ if (cacheProviderRedis || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || messageBrokerKafka || databaseTypeSql) { _%>
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:testcontainers"
+<%_ } _%>
+<%_ if (reactive) { _%>
+    implementation "org.springdoc:springdoc-openapi-webflux-core"
+<%_ } else { _%>
+    implementation "org.springdoc:springdoc-openapi-webmvc-core"
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-    implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
-  <%_ if (reactive) { _%>
-    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
-  <%_ } _%>
 <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
 <%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
@@ -346,10 +344,22 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
 <%_ } _%>
-    implementation "javax.transaction:javax.transaction-api"
+<%_ if (databaseTypeCouchbase) { _%>
+    testImplementation "org.testcontainers:couchbase"
+    implementation "com.couchbase.client:java-client"
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
+    implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+    testImplementation "org.testcontainers:neo4j"
+<%_ } _%>
+<%_ if (cacheProviderEhCache || cacheProviderCaffeine || cacheProviderHazelcast || cacheProviderInfinispan || cacheProviderMemcached) { _%>
+    implementation "javax.cache:cache-api"
+<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-    testImplementation "org.testcontainers:cassandra"
     implementation "org.lz4:lz4-java"
+    testImplementation "org.cassandraunit:cassandra-unit-spring"
+    testImplementation "org.testcontainers:cassandra"
 <%_ } _%>
 <%_ if (cacheProviderEhCache) { _%>
     implementation "org.ehcache:ehcache"
@@ -366,9 +376,8 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
-  <%_ if (!reactive) { _%>
-    implementation "org.hibernate:hibernate-entitymanager"
-  <%_ } _%>
+    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
+    implementation "org.hibernate:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase:liquibase-core"
@@ -510,52 +519,135 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.github.differentway:couchmove"
-    implementation "com.couchbase.client:java-client"
-<%_ } _%>
-<%_ if (reactive) { _%>
-    implementation "org.springdoc:springdoc-openapi-webflux-core"
-<%_ } else { _%>
-    implementation "org.springdoc:springdoc-openapi-webmvc-core"
 <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-<%_ if (databaseTypeSql) { _%>
-    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernateVersion}"
-    annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxbRuntimeVersion}"
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"
-<%_ } _%>
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
-<%_ if (databaseTypeCassandra) { _%>
-    testImplementation ("org.cassandraunit:cassandra-unit-spring") {
-        exclude(group: "org.slf4j")
-    }
-    testImplementation "org.testcontainers:database-commons"
+    implementation "org.springframework.boot:spring-boot-loader-tools"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+    testImplementation "org.testcontainers:r2dbc"
+  <%_ } else { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    testImplementation "org.testcontainers:jdbc"
+  <%_ } _%>
 <%_ } _%>
-<%_ if (cucumberTests) { _%>
-    testImplementation "org.junit.platform:junit-platform-console"
-    testImplementation "io.cucumber:cucumber-junit-platform-engine"
-    testImplementation "io.cucumber:cucumber-java"
-    testImplementation "io.cucumber:cucumber-spring"
-    testImplementation "org.testng:testng"
+<%_ if (searchEngineElasticsearch) { _%>
+    testImplementation "org.apache.commons:commons-collections4"
+    testImplementation "org.testcontainers:elasticsearch"
+    implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 <%_ } _%>
+<%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
+<%_ } _%>
+<%_ if (reactive) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.data:spring-data-commons"
+    runtimeOnly "io.netty:netty-tcnative-boringssl-static"
+<%_ } _%>
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-mail"
+<%_ if (!authenticationTypeOauth2) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-security"
+<%_ } _%>
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    implementation "org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
+    testImplementation "org.springframework.security:spring-security-test"
 <%_ if (reactive) { _%>
     testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
 <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}"
-<%_ if (databaseTypeCouchbase) { _%>
-    testImplementation "org.testcontainers:couchbase"
-<%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
+    implementation "org.springframework.cloud:spring-cloud-stream"
+    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+    testImplementation "org.springframework.cloud:spring-cloud-stream-test-support"
     testImplementation "org.testcontainers:kafka"
 <%_ } _%>
-    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+    implementation "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
+<%_ if (!reactive) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
+<%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-websocket"
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+<%_ } else if (authenticationTypeJwt) { _%>
+    implementation "io.jsonwebtoken:jjwt-api"
+    if (!project.hasProperty("gae")) {
+    runtimeOnly "io.jsonwebtoken:jjwt-impl"
+    <% if (reactive) { %>implementation<% } else { %>runtimeOnly<% } %> "io.jsonwebtoken:jjwt-jackson"
+    } else {
+    implementation "io.jsonwebtoken:jjwt-impl"
+    implementation "io.jsonwebtoken:jjwt-jackson"
+    }
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+    implementation "com.datastax.oss:java-driver-mapper-runtime"
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-gateway"
+    implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
+    implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
+  <%_ if (authenticationTypeOauth2 && reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-security"
+  <%_ } _%>
+<%_ } _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter"
+  <%_ if (reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
+    implementation "com.playtika.reactivefeign:feign-reactor-webclient"
+    implementation "com.playtika.reactivefeign:feign-reactor-cloud"
+    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
+  <%_ } else { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+  <%_ } _%>
+    implementation "org.springframework.retry:spring-retry"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+<%_ } _%>
+<%_ if (serviceDiscoveryType) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
+  <%_ if (serviceDiscoveryEureka) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+    implementation "org.springframework.cloud:spring-cloud-starter-config"
+  <%_ } _%>
+  <%_ if (serviceDiscoveryConsul) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
+    implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
+  <%_ } _%>
+<%_ } _%>
+<%_ if (!reactive && databaseTypeSql) { _%>
+    implementation "org.springframework.security:spring-security-data"
+<%_ } _%>
+    implementation "io.micrometer:micrometer-registry-prometheus"
+    implementation "io.dropwizard.metrics:metrics-core"
+<%_ if (communicationSpringWebsocket) { _%>
+    implementation "org.springframework.security:spring-security-messaging"
+<%_ } _%>
+<%_ if (cucumberTests) { _%>
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
+    testImplementation "io.cucumber:cucumber-java"
+    testImplementation "io.cucumber:cucumber-spring"
+    testImplementation "org.junit.platform:junit-platform-console"
+    testImplementation "org.testng:testng"
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+    liquibaseRuntime sourceSets.main.compileClasspath
+  <%_ if (!reactive) { _%>
+    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
+  <%_ } _%>
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"
+<%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

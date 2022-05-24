@@ -29,7 +29,11 @@ sourceSets {
 dependencies {
   <%_ if (prodDatabaseTypeMysql) { _%>
     <%_ if (reactive) { _%>
-    implementation "dev.miku:r2dbc-mysql"
+    implementation ("dev.miku:r2dbc-mysql") {
+        exclude group: "io.projectreactor", module: "reactor-core"
+        exclude group: "io.projectreactor.addons", module: "reactor-extra"
+        exclude group: "io.projectreactor.netty", module: "reactor-netty"
+    }
     <%_ } _%>
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
