@@ -2037,7 +2037,7 @@ class JHipsterBaseGenerator extends PrivateBase {
    * Return the user home
    */
   getUserHome() {
-    return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
+    return process.env[isWin32 ? 'USERPROFILE' : 'HOME'];
   }
 
   /**
@@ -2173,7 +2173,7 @@ class JHipsterBaseGenerator extends PrivateBase {
       buildCmd += ' -Pwar';
     }
 
-    if (os.platform() !== 'win32') {
+    if (!isWin32) {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
@@ -2199,7 +2199,7 @@ class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `gradlew -x ${command}`;
     }
 
-    if (os.platform() !== 'win32') {
+    if (!isWin32) {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
