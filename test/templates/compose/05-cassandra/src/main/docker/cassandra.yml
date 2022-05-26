@@ -1,7 +1,7 @@
 version: '2'
 services:
     mscassandra-cassandra:
-        image: cassandra:3.11.11
+        image: cassandra:3.11.12
         # volumes:
         #     - ~/volumes/jhipster/mscassandra/cassandra/:/var/lib/cassandra/data
         ports:
