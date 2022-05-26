@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { upperFirst } = require('lodash');
-
 const { createBaseNeedle } = require('../../lib/support/needles.cjs');
 
 /**
@@ -70,8 +68,9 @@ const insertContentIntoApplicationProperties = (generator, needles) => {
     {
       generator,
       filePath: generator ? `${generator.SERVER_MAIN_SRC_DIR}${generator.javaDir}config/ApplicationProperties.java` : undefined,
+      needlesPrefix: 'application-properties',
     },
-    Object.fromEntries(Object.entries(needles).map(([key, value]) => [`applicationProperties${upperFirst(key)}`, value]))
+    needles
   );
 };
 
