@@ -102,9 +102,7 @@ import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.apache.commons.collections4.IterableUtils;
-import static org.awaitility.Awaitility.await;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.junit.jupiter.api.AfterEach;
@@ -225,7 +223,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
-
+<%_ if (searchEngineElasticsearch) { _%>
+import static org.awaitility.Awaitility.await;
+<%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) {
   if (field.fieldIsEnum) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
