@@ -1,7 +1,7 @@
 version: '2'
 services:
     zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.5
+    image: confluentinc/cp-zookeeper:5.5.7
     environment:
         ZOOKEEPER_CLIENT_PORT: 2181
         ZOOKEEPER_TICK_TIME: 2000
