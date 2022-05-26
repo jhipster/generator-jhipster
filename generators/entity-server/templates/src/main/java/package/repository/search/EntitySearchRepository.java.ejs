@@ -164,8 +164,6 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
   <%_ } _%>
 
     @Override
-    @Async
-    @Transactional(propagation =  Propagation.REQUIRES_NEW, readOnly = true, isolation = Isolation.READ_COMMITTED)
     public void index(<%= persistClass %> entity) {
         repository.find<% if (implementsEagerLoadApis ) { %>OneWithEagerRelationships<% } else { %>ById<% } %>(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
