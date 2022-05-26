@@ -84,26 +84,15 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
 
     @Override
     public Flux<<%= persistClass %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
-  <%_ if (!paginationNo) { _%>
-        List<SortBuilder<?>> builders = new SortToSortBuilderListConverter().convert(pageable.getSort());
-
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder().withQuery(queryStringQuery(query))
-            .withPageable(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
-
-        queryBuilder.withSorts(builders);
-
-        NativeSearchQuery nativeSearchQuery = queryBuilder.build();
-        nativeSearchQuery.setPageable(pageable);
-
-<%_ } else { _%>
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
-<%_ } _%>
+  <%_ if (!paginationNo) { _%>
+        nativeSearchQuery.setPageable(pageable);
+  <%_ }_%>
         return search(nativeSearchQuery);
     }
 
     @Override
     public Flux<<%= persistClass %>> search(Query query) {
-
         return reactiveElasticsearchTemplate
             .search(query, <%= persistClass %>.class)
             .map(SearchHit::getContent);
