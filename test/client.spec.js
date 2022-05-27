@@ -321,12 +321,10 @@ describe('JHipster client generator', () => {
       it('index.tsx should contains routes', () => {
         runResult.assertFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`,
-          /* eslint-disable no-template-curly-in-string */
-          '    <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />'
-          /* eslint-enable no-template-curly-in-string */
+          `<Route path="health" element={<Health />} />
+        <Route path="metrics" element={<Metrics />} />
+        <Route path="configuration" element={<Configuration />} />
+        <Route path="logs" element={<Logs />} />`
         );
       });
 
@@ -397,16 +395,13 @@ describe('JHipster client generator', () => {
         assert.noFile(expectedFiles.i18nAdminJson);
       });
 
-      it('index.tsx should contains routes', () => {
+      it('index.tsx should not contains routes', () => {
         runResult.assertNoFileContent(
           `${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`,
-          /* eslint-disable no-template-curly-in-string */
-          '    <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/docs`} component={Docs} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />\n' +
-            '    <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />'
-          /* eslint-enable no-template-curly-in-string */
+          `<Route path="health" element={<Health />} />
+        <Route path="metrics" element={<Metrics />} />
+        <Route path="configuration" element={<Configuration />} />
+        <Route path="logs" element={<Logs />} />`
         );
       });
 
