@@ -29,6 +29,8 @@ import java.util.Collections;
 public class MysqlTestContainer implements SqlTestContainer {
 
     private static final Logger log = LoggerFactory.getLogger(MysqlTestContainer.class);
+    private long memoryInBytes = 100 * 1024 * 1024;
+    private long memorySwapInBytes = 200 * 1024 * 1024;
 
     private MySQLContainer<?> mysqlContainer;
 
@@ -47,7 +49,12 @@ public class MysqlTestContainer implements SqlTestContainer {
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true)
                 .withPrivilegedMode(true)
-                .withConfigurationOverride("testcontainers/mysql");
+                .withConfigurationOverride("testcontainers/mysql")
+                .withCreateContainerCmdModifier(cmd ->
+                    cmd.getHostConfig()
+                        .withMemory(memoryInBytes)
+                        .withMemorySwap(memorySwapInBytes)
+                );
 
         }
         if (!mysqlContainer.isRunning()) {
