@@ -236,7 +236,6 @@ const files = {
         // components
         { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
         { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
-        { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
         { file: 'shared/error/page-not-found.tsx', method: 'processJsx' },
         { file: 'shared/DurationFormat.tsx', method: 'processJsx' },
         // model
@@ -294,7 +293,6 @@ const files = {
         'shared/util/entity-utils.spec.ts',
         'shared/auth/private-route.spec.tsx',
         'shared/error/error-boundary.spec.tsx',
-        'shared/error/error-boundary-route.spec.tsx',
         'shared/layout/header/header.spec.tsx',
         'shared/layout/menus/account.spec.tsx',
         'modules/administration/administration.reducer.spec.ts',
