@@ -39,11 +39,11 @@ const AccountRoutes = () => (
       >
         <Route path="settings" element={<Settings />} />
         <Route path="password" element={<Password />} />
+<%_ if (authenticationTypeSession) { _%>
+        <Route path="sessions" element={<Sessions />} />
+<%_ } _%>
       </Route>
     </Routes>
-<%_ if (authenticationTypeSession) { _%>
-    <ErrorBoundaryRoute path={`${match.url}/sessions`} component={Sessions} />
-<%_ } _%>
   </div>
 );
 
