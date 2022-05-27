@@ -300,6 +300,11 @@ describe('JHipster client generator', () => {
       });
     });
 
+    const REACT_ADMIN_ROUTES = `<Route path="health" element={<Health />} />
+        <Route path="metrics" element={<Metrics />} />
+        <Route path="configuration" element={<Configuration />} />
+        <Route path="logs" element={<Logs />} />`;
+
     describe('selected and React', () => {
       let runResult;
       before(async () => {
@@ -319,13 +324,7 @@ describe('JHipster client generator', () => {
       });
 
       it('index.tsx should contains routes', () => {
-        runResult.assertFileContent(
-          `${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`,
-          `<Route path="health" element={<Health />} />
-        <Route path="metrics" element={<Metrics />} />
-        <Route path="configuration" element={<Configuration />} />
-        <Route path="logs" element={<Logs />} />`
-        );
+        runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`, REACT_ADMIN_ROUTES);
       });
 
       it('admin reducer should contains admin component related code', () => {
@@ -396,13 +395,7 @@ describe('JHipster client generator', () => {
       });
 
       it('index.tsx should not contains routes', () => {
-        runResult.assertNoFileContent(
-          `${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`,
-          `<Route path="health" element={<Health />} />
-        <Route path="metrics" element={<Metrics />} />
-        <Route path="configuration" element={<Configuration />} />
-        <Route path="logs" element={<Logs />} />`
-        );
+        runResult.assertNoFileContent(`${CLIENT_MAIN_SRC_DIR}app/modules/administration/index.tsx`, REACT_ADMIN_ROUTES);
       });
 
       it('admin reducer should not contains admin component related code', () => {
