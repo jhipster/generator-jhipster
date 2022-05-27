@@ -20,7 +20,7 @@ import React, { useState, useEffect } from 'react';
 <%_ if (paginationInfiniteScroll) { _%>
 import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
   <%_ if (blobFields.length > 0) { _%>
@@ -61,7 +61,7 @@ import {
 <%_ } _%>
 } from './<%= entityFileName %>.reducer';
 
-export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>) => {
+export const <%= entityReactName %> = () => {
   const dispatch = useAppDispatch();
 
 <%_ if (searchEngine) { _%>
@@ -282,8 +282,6 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
 <%_ } _%>
   };
 
-  const { match } = props;
-
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
@@ -324,7 +322,7 @@ export const <%= entityReactName %> = (props: RouteComponentProps<{url: string}>
 <%_ } _%>
       <div className="table-responsive">
 <%_ if (paginationInfiniteScroll) { _%>
-        <InfiniteScroll dataLength={<%= entityInstance %>List ? <%= entityInstance %>List.length : 0} 
+        <InfiniteScroll dataLength={<%= entityInstance %>List ? <%= entityInstance %>List.length : 0}
                         next={handleLoadMore}
                         hasMore={paginationState.activePage - 1 < links.next}
                         loader={<div className="loader">Loading ...</div>}>
