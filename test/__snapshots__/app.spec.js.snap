@@ -2003,6 +2003,9 @@ Object {
   "src/main/docker/app.yml": Object {
     "stateCleared": "modified",
   },
+  "src/main/docker/config/mariadb/my.cnf": Object {
+    "stateCleared": "modified",
+  },
   "src/main/docker/grafana/provisioning/dashboards/JVM.json": Object {
     "stateCleared": "modified",
   },

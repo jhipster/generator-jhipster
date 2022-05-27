@@ -1882,6 +1882,39 @@ Object {
     },
     Object {
       "condition": [Function],
+      "path": "src/test/resources/",
+      "templates": Array [
+        Object {
+          "file": "testcontainers/mysql/my.cnf",
+          "method": "copy",
+          "noEjs": true,
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        Object {
+          "file": "config/mariadb/my.cnf",
+          "method": "copy",
+          "noEjs": true,
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
+      "path": "src/main/docker/",
+      "templates": Array [
+        Object {
+          "file": "config/mysql/my.cnf",
+          "method": "copy",
+          "noEjs": true,
+        },
+      ],
+    },
+    Object {
+      "condition": [Function],
       "path": "src/test/java/",
       "templates": Array [
         Object {

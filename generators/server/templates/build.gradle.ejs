@@ -536,6 +536,7 @@ if (SPRING_BOOT_VERSION.indexOf('M') > -1 || SPRING_BOOT_VERSION.indexOf('RC') >
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.apache.commons:commons-collections4"
+    testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
     testImplementation "org.testcontainers:elasticsearch"
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 <%_ } _%>
