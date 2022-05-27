@@ -80,13 +80,13 @@ const AppRoutes = () => {
             </ErrorBoundary>
           }
         >
-          <Route path="/" element={<Home />} />
+          <Route index element={<Home />} />
 <%_ if (!authenticationTypeOauth2) { _%>
-          <Route path="/login" element={<Login />} />
+          <Route path="login" element={<Login />} />
 <%_ } _%>
-          <Route path="/logout" element={<Logout />} />
+          <Route path="logout" element={<Logout />} />
 <%_ if (!skipUserManagement) { _%>
-          <Route path="/account">
+          <Route path="account">
             <Route
               path="*"
               element={
@@ -104,7 +104,7 @@ const AppRoutes = () => {
           </Route>
 <%_ } _%>
           <Route
-            path="/admin/*"
+            path="admin/*"
             element={
               <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
                 <Admin />
@@ -127,7 +127,7 @@ const AppRoutes = () => {
           <PrivateRoute path="/<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>" component={EntitiesRoutes} hasAnyAuthorities={[AUTHORITIES.USER]}/>
 <%_ } _%>
           <Route
-            path="/*"
+            path="*"
             element={
               <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
                 <EntitiesRoutes />
