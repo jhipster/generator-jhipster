@@ -41,12 +41,10 @@ const commonFiles = {
         {
           file: 'gitattributes',
           renameTo: () => '.gitattributes',
-          method: 'copy',
         },
         {
           file: 'editorconfig',
           renameTo: () => '.editorconfig',
-          method: 'copy',
         },
         {
           file: 'sonar-project.properties',
@@ -58,12 +56,7 @@ const commonFiles = {
   commitHooks: [
     {
       condition: generator => !generator.skipCommitHook,
-      templates: [
-        '.lintstagedrc.js',
-        {
-          file: '.husky/pre-commit',
-        },
-      ],
+      templates: ['.lintstagedrc.js', '.husky/pre-commit'],
     },
   ],
 };
@@ -71,7 +64,7 @@ const commonFiles = {
 function writeFiles() {
   return {
     writeFiles() {
-      return this.writeFilesToDisk(commonFiles);
+      return this.writeFiles({ sections: commonFiles });
     },
   };
 }
