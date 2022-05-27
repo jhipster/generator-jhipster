@@ -18,6 +18,8 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
+const chalk = require('chalk');
+const fs = require('fs');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const {
@@ -28,6 +30,7 @@ const {
   DEFAULT_PRIORITY,
   WRITING_PRIORITY,
   POST_WRITING_PRIORITY,
+  INSTALL_PRIORITY,
 } = require('../../lib/constants/priorities.cjs').compat;
 
 const writeFiles = require('./files').writeFiles;
@@ -215,5 +218,26 @@ module.exports = class JHipsterCommonGenerator extends BaseBlueprintGenerator {
   get [POST_WRITING_PRIORITY]() {
     if (this.delegateToBlueprint) return {};
     return this._postWriting();
+  }
+
+  _install() {
+    return {
+      makeHuskyScriptExecutable() {
+        try {
+          fs.chmodSync('.husky/pre-commit', '755');
+        } catch (err) {
+          this.log(
+            `${chalk.yellow.bold(
+              'WARNING!'
+            )} Failed to make '.husky/pre-commit' executable, you may need to run 'chmod +x .husky/pre-commit'`
+          );
+        }
+      },
+    };
+  }
+
+  get [INSTALL_PRIORITY]() {
+    if (this.delegateToBlueprint) return;
+    return this._install();
   }
 };
