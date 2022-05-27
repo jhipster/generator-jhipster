@@ -20,7 +20,7 @@ import React, { useState, useEffect } from 'react';
 <%_ if (paginationInfiniteScroll) { _%>
 import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, <% if (searchEngine) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
   <%_ if (blobFields.length > 0) { _%>
@@ -64,11 +64,14 @@ import {
 export const <%= entityReactName %> = () => {
   const dispatch = useAppDispatch();
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
 <%_ if (searchEngine) { _%>
   const [search, setSearch] = useState('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), props.location.search));
+  const [paginationState, setPaginationState] = useState(overridePaginationStateWithQueryParams(getSortState(location, ITEMS_PER_PAGE, '<%= primaryKey.name %>'), location.search));
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
   const [sorting, setSorting] = useState(false);
@@ -208,8 +211,8 @@ export const <%= entityReactName %> = () => {
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
-    if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
+    if (location.search !== endURL) {
+      navigate(`${location.pathname}${endURL}`);
     }
   };
   <%_ } _%>
@@ -227,7 +230,7 @@ export const <%= entityReactName %> = () => {
 
   <%_ if (paginationPagination) { _%>
   useEffect(() => {
-    const params = new URLSearchParams(props.location.search);
+    const params = new URLSearchParams(location.search);
     const page = params.get('page');
     const sort = params.get(SORT);
     if (page && sort) {
@@ -239,7 +242,7 @@ export const <%= entityReactName %> = () => {
         order: sortSplit[1]
       });
     }
-  }, [props.location.search]);
+  }, [location.search]);
   <%_ } _%>
 
   const sort = p => () => {

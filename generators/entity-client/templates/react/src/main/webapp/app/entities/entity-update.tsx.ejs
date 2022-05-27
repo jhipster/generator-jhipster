@@ -127,8 +127,9 @@ export const <%= entityReactName %>Update = () => {
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
   const <%- _.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
   <%_ }); _%>
+
   const handleClose = () => {
-    navigate('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + props.location.search<%_ } _%>);
+    navigate('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
   }
 
   useEffect(() => {
