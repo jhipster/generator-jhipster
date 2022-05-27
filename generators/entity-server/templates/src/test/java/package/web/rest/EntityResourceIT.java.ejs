@@ -102,6 +102,7 @@ import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.apache.commons.collections4.IterableUtils;
+import java.util.concurrent.TimeUnit;
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 import org.junit.jupiter.api.AfterEach;
@@ -222,7 +223,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
-
+<%_ if (searchEngineElasticsearch) { _%>
+import static org.awaitility.Awaitility.await;
+<%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) {
   if (field.fieldIsEnum) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
@@ -640,8 +643,10 @@ _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+            assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
+        });
   <%_ } _%>
         <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
   <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
@@ -1413,9 +1418,10 @@ _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-        List<<%= persistClass %>> <%= entityInstance %>SearchList = IterableUtils.toList(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+            assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+            List<<%= persistClass %>> <%= entityInstance %>SearchList = IterableUtils.toList(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         <%= persistClass %> test<%= entityClass %>Search = <%= entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
     <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
       <%_ if (field.fieldTypeZonedDateTime) { _%>
@@ -1429,7 +1435,7 @@ _%>
             assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ } _%>
     <%_ } _%>
-
+      });
   <%_ } _%>
     }
 
@@ -1717,11 +1723,13 @@ _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
+        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } _%>
 
     int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
   <%_ } _%>
 
         // Delete the <%= entityInstance %>
@@ -1744,7 +1752,7 @@ _%>
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
-        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
   <%_ } _%>
 
     }

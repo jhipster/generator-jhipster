@@ -67,7 +67,7 @@ if (isUsingMapsId) {
     <%_ } _%>
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
+        <%= entityInstance %>SearchRepository.index(<%= resultEntity %>);
     <%_ if (returnDirectly) { _%>
         return result;
     <%_ } _%>
