@@ -102,6 +102,8 @@ _%>
     image: <%= DOCKER_MYSQL %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    volumes:
+      - ./config/mysql:/etc/mysql/conf.d
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
@@ -116,6 +118,8 @@ _%>
     image: <%= DOCKER_MARIADB %>
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+    volumes:
+      - ./config/mariadb:/etc/mysql/conf.d
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
@@ -254,7 +258,7 @@ _%>
       - 127.0.0.1:9200:9200
       - 127.0.0.1:9300:9300
     environment:
-      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
       - "discovery.type=single-node"
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>

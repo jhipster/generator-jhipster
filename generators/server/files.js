@@ -1453,9 +1453,24 @@ const baseServerFiles = {
       templates: ['config/application-testprod.yml'],
     },
     {
-      condition: generator => generator.prodDatabaseTypeMariadb && !generator.reactive,
+      condition: generator => generator.devDatabaseTypeMariadb || generator.prodDatabaseTypeMariadb,
       path: SERVER_TEST_RES_DIR,
       templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
+    },
+    {
+      condition: generator => generator.devDatabaseTypeMysql || generator.prodDatabaseTypeMysql,
+      path: SERVER_TEST_RES_DIR,
+      templates: [{ file: 'testcontainers/mysql/my.cnf', method: 'copy', noEjs: true }],
+    },
+    {
+      condition: generator => generator.devDatabaseTypeMariadb || generator.prodDatabaseTypeMariadb,
+      path: DOCKER_DIR,
+      templates: [{ file: 'config/mariadb/my.cnf', method: 'copy', noEjs: true }],
+    },
+    {
+      condition: generator => generator.devDatabaseTypeMysql || generator.prodDatabaseTypeMysql,
+      path: DOCKER_DIR,
+      templates: [{ file: 'config/mysql/my.cnf', method: 'copy', noEjs: true }],
     },
     {
       // TODO : add these tests to reactive
