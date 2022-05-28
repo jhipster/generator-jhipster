@@ -29,8 +29,6 @@ import java.util.Collections;
 public class MariadbTestContainer implements SqlTestContainer {
 
     private static final Logger log = LoggerFactory.getLogger(MariadbTestContainer.class);
-    private long memoryInBytes = 64 * 1024 * 1024;
-    private long memorySwapInBytes = 128 * 1024 * 1024;
 
     private MariaDBContainer<?> mariaDBContainer;
 
@@ -49,12 +47,7 @@ public class MariadbTestContainer implements SqlTestContainer {
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true)
-                .withConfigurationOverride("testcontainers/mariadb")
-                .withCreateContainerCmdModifier(cmd ->
-                    cmd.getHostConfig()
-                        .withMemory(memoryInBytes)
-                        .withMemorySwap(memorySwapInBytes)
-                );
+                .withConfigurationOverride("testcontainers/mariadb");
         }
         if (!mariaDBContainer.isRunning()) {
             mariaDBContainer.start();

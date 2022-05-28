@@ -63,7 +63,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 
     @Override
 <%_ if (databaseTypeSql) { _%>
-    @Transactional
+    @Transactional(readOnly = true)
 <%_ } _%>
     public <% if (reactive) { %>Mono<UserDetails> findByUsername<% } else { %>UserDetails loadUserByUsername<% } %>(final String login) {
         log.debug("Authenticating {}", login);

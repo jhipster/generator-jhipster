@@ -170,7 +170,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
             .map(<%= entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
 <%_ } else { _%>
-        return <%= entityInstance %>Repository.findAll<% if (reactive) { %>By<% } %>(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
+        return <%= entityInstance %>Repository.findAll<% if (reactive) { %>By<% } %>(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%= entityToDtoReference %>);<% } %>
 <%_ } _%>
     }
