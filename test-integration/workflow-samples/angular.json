@@ -84,8 +84,9 @@
       "testcontainers": "false"
     },
     {
-      "name": "ngx-webflux-gradle-session-mariadb-es",
-      "app-sample": "webflux-gradle-session-mariadb-es",
+      "name": "ngx-webflux-gradle-session-h2mem-es",
+      "app-sample": "webflux-gradle-session-h2mem-es",
+      "environment": "dev",
       "entity": "sqllight",
       "testcontainers": "false"
     },
