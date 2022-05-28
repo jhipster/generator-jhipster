@@ -127,8 +127,7 @@ processResources {
 }
 
 task integrationTest(type: Test) {
-    minHeapSize = "128m"
-    maxHeapSize = "512m"
+    maxHeapSize = "1G"
     useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
@@ -139,7 +138,6 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
-    jvmArgs += '-Xmx1G'
     systemProperty('spring.profiles.active', 'testprod')
     systemProperty('java.security.egd', 'file:/dev/./urandom')
     // uncomment if the tests reports are not generated
