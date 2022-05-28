@@ -343,7 +343,7 @@ spec:
               value: \\"org.apache.kafka.common.serialization.StringDeserializer\\"
             - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
               value: \\"org.apache.kafka.common.serialization.StringDeserializer\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -758,7 +758,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -952,7 +952,7 @@ spec:
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -1523,7 +1523,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -2095,7 +2095,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -2359,7 +2359,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -2975,7 +2975,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -3697,7 +3697,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -3994,7 +3994,7 @@ spec:
                   key: mariadb-root-password
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -4203,7 +4203,7 @@ spec:
               value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -4647,7 +4647,7 @@ spec:
                   key: secret
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -4852,7 +4852,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -5046,7 +5046,7 @@ spec:
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -5671,7 +5671,7 @@ spec:
               value: jdbc:mysql://samplemysql-mysql.default.svc.cluster.local:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://samplemysql-elasticsearch.default.svc.cluster.local:9200
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -8826,7 +8826,7 @@ spec:
               value: \\"true\\"
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -9411,7 +9411,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -9888,7 +9888,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -10185,7 +10185,7 @@ spec:
                   key: mariadb-root-password
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -10394,7 +10394,7 @@ spec:
               value: \\"mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017\\"
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -10838,7 +10838,7 @@ spec:
                   key: secret
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -11043,7 +11043,7 @@ spec:
               value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -11237,7 +11237,7 @@ spec:
               value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
@@ -11819,7 +11819,7 @@ spec:
               value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: \\"x-request-id,x-ot-span-context\\"
-            - name: JAVA_OPTS
+            - name: JAVA_TOOL_OPTIONS
               value: \\" -Xmx256m -Xms256m\\"
             - name: SERVER_SHUTDOWN
               value: graceful
