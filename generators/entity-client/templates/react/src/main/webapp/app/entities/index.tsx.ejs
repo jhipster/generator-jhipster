@@ -46,8 +46,8 @@ const <%= entityReactName %>Routes = () => (
 <%_ if (!readOnly) { _%>
         <Route path="edit" element={<<%= entityReactName %>Update />} />
         <Route path="delete" element={<<%= entityReactName %>DeleteDialog />} />
-      </Route>
 <%_ } _%>
+      </Route>
     </Route>
   </Routes>
 );
