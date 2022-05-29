@@ -51,10 +51,10 @@ const AdministrationRoutes = () => (
         <Route path="user-management/*" element={<UserManagement />} />
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-        <Route exact path="tracker" element={<Tracker />} />
+        <Route path="tracker" element={<Tracker />} />
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryType) { _%>
-        <Route exact path="gateway" element={<Gateway />} />
+        <Route path="gateway" element={<Gateway />} />
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
         <Route path="health" element={<Health />} />
