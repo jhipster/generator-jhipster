@@ -20,15 +20,6 @@ Object {
       "condition": [Function],
       "path": "src/main/docker/",
       "templates": Array [
-        Object {
-          "file": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/docker/",
-      "templates": Array [
         "hazelcast-management-center.yml",
       ],
     },
@@ -709,40 +700,6 @@ Object {
       "path": "src/main/java/",
       "templates": Array [
         Object {
-          "file": "package/config/LiquibaseConfiguration.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/rowmapper/ColumnConverter.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/repository/EntityManager.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
-          "file": "package/repository/rowmapper/UserRowMapper.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/java/",
-      "templates": Array [
-        Object {
           "file": "package/config/WebsocketConfiguration.java",
           "renameTo": [Function],
         },
@@ -1164,6 +1121,13 @@ Object {
           "file": "package/repository/search/UserSearchRepository.java",
           "renameTo": [Function],
         },
+      ],
+    },
+    Object {
+      "path": "src/test/resources/",
+      "templates": Array [
+        "testcontainers.properties",
+        "META-INF/spring.factories",
       ],
     },
     Object {
@@ -1596,16 +1560,6 @@ Object {
       "path": "src/main/resources/",
       "templates": Array [
         Object {
-          "file": "h2.server.properties",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/resources/",
-      "templates": Array [
-        Object {
           "file": "config/liquibase/changelog/initial_schema.xml",
           "options": Object {
             "interpolate": /<%:\\(\\[\\\\s\\\\S\\]\\+\\?\\)%>/g,
@@ -1764,153 +1718,11 @@ Object {
       ],
     },
     Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/timezone/HibernateTimeZoneIT.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/repository/timezone/DateTimeWrapper.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/repository/timezone/DateTimeWrapperRepository.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/EmbeddedSQL.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/SqlTestContainer.java",
-          "renameTo": [Function],
-        },
-        Object {
-          "file": "package/config/TestContainersSpringContextCustomizerFactory.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/MysqlTestContainer.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/MariadbTestContainer.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/MsSqlTestContainer.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/java/",
-      "templates": Array [
-        Object {
-          "file": "package/config/PostgreSqlTestContainer.java",
-          "renameTo": [Function],
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/resources/",
-      "templates": Array [
-        "testcontainers.properties",
-        "META-INF/spring.factories",
-      ],
-    },
-    Object {
       "path": "src/test/resources/",
       "templates": Array [
         "config/application.yml",
         "logback.xml",
         "junit-platform.properties",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/resources/",
-      "templates": Array [
-        "config/application-testdev.yml",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/resources/",
-      "templates": Array [
-        "config/application-testprod.yml",
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/resources/",
-      "templates": Array [
-        Object {
-          "file": "testcontainers/mariadb/my.cnf",
-          "method": "copy",
-          "noEjs": true,
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/test/resources/",
-      "templates": Array [
-        Object {
-          "file": "testcontainers/mysql/my.cnf",
-          "method": "copy",
-          "noEjs": true,
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/docker/",
-      "templates": Array [
-        Object {
-          "file": "config/mariadb/my.cnf",
-          "method": "copy",
-          "noEjs": true,
-        },
-      ],
-    },
-    Object {
-      "condition": [Function],
-      "path": "src/main/docker/",
-      "templates": Array [
-        Object {
-          "file": "config/mysql/my.cnf",
-          "method": "copy",
-          "noEjs": true,
-        },
       ],
     },
     Object {

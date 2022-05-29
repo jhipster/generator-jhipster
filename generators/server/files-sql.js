@@ -16,7 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { SERVER_MAIN_SRC_DIR } = require('../generator-constants');
+const { mergeSections, addSectionsCondition } = require('../utils');
+const constants = require('../generator-constants');
+
+const DOCKER_DIR = constants.DOCKER_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+
+const dockerFiles = {
+  docker: [
+    {
+      condition: generator => !generator.prodDatabaseTypeOracle,
+      path: DOCKER_DIR,
+      templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }],
+    },
+    {
+      condition: generator => !generator.devDatabaseTypeOracle && !generator.devDatabaseTypeH2Any,
+      path: DOCKER_DIR,
+      templates: [{ file: generator => `${generator.devDatabaseType}.yml` }],
+    },
+  ],
+};
 
 const sqlFiles = {
   reactiveJavaUserManagement: [
@@ -30,8 +52,180 @@ const sqlFiles = {
         },
       ],
     },
+    {
+      condition: generator => generator.reactive && (!generator.skipUserManagement || generator.authenticationTypeOauth2),
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/rowmapper/UserRowMapper.java',
+          renameTo: generator => `${generator.javaDir}repository/rowmapper/UserRowMapper.java`,
+        },
+      ],
+    },
+  ],
+  reactiveCommon: [
+    {
+      condition: generator => generator.reactive,
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/repository/rowmapper/ColumnConverter.java',
+          renameTo: generator => `${generator.javaDir}repository/rowmapper/ColumnConverter.java`,
+        },
+        {
+          file: 'package/repository/EntityManager.java',
+          renameTo: generator => `${generator.javaDir}repository/EntityManager.java`,
+        },
+      ],
+    },
+  ],
+  liquibase: [
+    {
+      path: SERVER_MAIN_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/LiquibaseConfiguration.java',
+          renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java`,
+        },
+      ],
+    },
+  ],
+  hibernate: [
+    {
+      condition: generator => !generator.reactive,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/timezone/HibernateTimeZoneIT.java',
+          renameTo: generator => `${generator.testDir}config/timezone/HibernateTimeZoneIT.java`,
+        },
+        {
+          file: 'package/repository/timezone/DateTimeWrapper.java',
+          renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapper.java`,
+        },
+        {
+          file: 'package/repository/timezone/DateTimeWrapperRepository.java',
+          renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapperRepository.java`,
+        },
+      ],
+    },
+  ],
+  testContainers: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/EmbeddedSQL.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedSQL.java`,
+        },
+        {
+          file: 'package/config/SqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/SqlTestContainer.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: ['config/application-testdev.yml'],
+    },
+    {
+      condition: generator => !generator.reactive,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['config/application-testprod.yml'],
+    },
   ],
 };
+
+const h2Files = {
+  serverResource: [
+    {
+      path: SERVER_MAIN_RES_DIR,
+      templates: [{ file: 'h2.server.properties', renameTo: () => '.h2.server.properties' }],
+    },
+  ],
+};
+
+const mysqlFiles = {
+  serverTestSources: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MysqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MysqlTestContainer.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [{ file: 'testcontainers/mysql/my.cnf', method: 'copy', noEjs: true }],
+    },
+    {
+      path: DOCKER_DIR,
+      templates: [{ file: 'config/mysql/my.cnf', method: 'copy', noEjs: true }],
+    },
+  ],
+};
+
+const mariadbFiles = {
+  serverTestSources: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MariadbTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MariadbTestContainer.java`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_RES_DIR,
+      templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
+    },
+    {
+      path: DOCKER_DIR,
+      templates: [{ file: 'config/mariadb/my.cnf', method: 'copy', noEjs: true }],
+    },
+  ],
+};
+
+const mssqlFiles = {
+  serverTestSources: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/MsSqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/MsSqlTestContainer.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const postgresFiles = {
+  serverTestSources: [
+    {
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: 'package/config/PostgreSqlTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/PostgreSqlTestContainer.java`,
+        },
+      ],
+    },
+  ],
+};
+
+const serverFiles = mergeSections(
+  sqlFiles,
+  dockerFiles,
+  addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
+  addSectionsCondition(mysqlFiles, context => context.devDatabaseTypeMysql || context.prodDatabaseTypeMysql),
+  addSectionsCondition(mariadbFiles, context => context.devDatabaseTypeMariadb || context.prodDatabaseTypeMariadb),
+  addSectionsCondition(mssqlFiles, context => context.devDatabaseTypeMssql || context.prodDatabaseTypeMssql),
+  addSectionsCondition(postgresFiles, context => context.devDatabaseTypePostgres || context.prodDatabaseTypePostgres)
+);
 
 function writeSqlFiles() {
   return {
@@ -39,14 +233,13 @@ function writeSqlFiles() {
       if (!this.databaseTypeSql) return;
 
       await this.writeFiles({
-        sections: sqlFiles,
-        rootTemplatesPath: ['sql/reactive', 'sql'],
+        sections: serverFiles,
+        rootTemplatesPath: ['sql/reactive', 'sql/common'],
       });
     },
   };
 }
 
 module.exports = {
-  sqlFiles,
   writeSqlFiles,
 };

@@ -34,6 +34,7 @@ const { languageToJavaLanguage } = require('./utils');
 const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
 const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 const { stringify } = require('../utils');
+const { databaseData } = require('./sql-constants');
 
 const { ANGULAR, REACT, VUE } = SUPPORTED_CLIENT_FRAMEWORKS;
 const dbTypes = require('../jdl/jhipster/field-types');
@@ -1203,59 +1204,41 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
     }
     if ([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL].includes(databaseType) && !options.hostname) {
       throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
-    }
-    let dbcUrl;
-    if (databaseType === MYSQL) {
-      dbcUrl = `${protocol}:mysql://${options.hostname}:3306/${options.databaseName}`;
-    } else if (databaseType === MARIADB) {
-      dbcUrl = `${protocol}:mariadb://${options.hostname}:3306/${options.databaseName}`;
-    } else if (databaseType === POSTGRESQL) {
-      dbcUrl = `${protocol}:postgresql://${options.hostname}:5432/${options.databaseName}`;
-    } else if (databaseType === ORACLE) {
-      dbcUrl = `${protocol}:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
-    } else if (databaseType === MSSQL) {
-      if (protocol === 'r2dbc') {
-        dbcUrl = `${protocol}:mssql://${options.hostname}:1433/${options.databaseName}`;
-      } else {
-        dbcUrl = `${protocol}:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
-      }
-    } else if (databaseType === H2_DISK) {
-      if (!options.localDirectory) {
-        throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
-      }
-      if (protocol === 'r2dbc') {
-        dbcUrl = `${protocol}:h2:file://${options.localDirectory}/${options.databaseName}`;
-      } else {
-        dbcUrl = `${protocol}:h2:file:${options.localDirectory}/${options.databaseName}`;
-      }
-    } else if (databaseType === H2_MEMORY) {
-      if (protocol === 'r2dbc') {
-        dbcUrl = `${protocol}:h2:mem:///${options.databaseName}${options.itests ? ':12344' : ''}`;
-      } else {
-        dbcUrl = `${protocol}:h2:mem:${options.databaseName}${options.itests ? ':12344' : ''}`;
-      }
-    } else {
+    } else if (![MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY].includes(databaseType)) {
       throw new Error(`${databaseType} databaseType is not supported`);
     }
-
-    if (!options.skipExtraOptions) {
-      dbcUrl += this.getDBCExtraOption(databaseType);
+    let databaseDataForType = databaseData[databaseType];
+    if (databaseDataForType[protocol]) {
+      databaseDataForType = {
+        ...databaseDataForType,
+        ...databaseDataForType[protocol],
+      };
     }
-    return dbcUrl;
+    const { protocolSuffix = '', extraOptions = '', useDirectory = false } = databaseDataForType;
+    let { port = '' } = databaseDataForType;
+    if (useDirectory && !options.localDirectory) {
+      throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
+    }
+    const databaseHasHost = options.hostname;
+    if (options.itests && H2_MEMORY === databaseType) {
+      port = ':12344';
+    }
+    let url = `${protocol}:${protocolSuffix}`;
+    if (options.localDirectory) {
+      url += `${options.localDirectory}/`;
+    } else {
+      url += databaseHasHost ? options.hostname : options.databaseName;
+      url += port;
+    }
+    if (databaseHasHost || options.localDirectory) {
+      url += options.databaseName;
+    }
+    return `${url}${options.skipExtraOptions ? '' : extraOptions}`;
   }
 
   getDBCExtraOption(databaseType) {
-    let extraOptions = '';
-    if (databaseType === MYSQL) {
-      extraOptions =
-        '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
-    } else if (databaseType === MARIADB) {
-      extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
-    } else if (databaseType === H2_DISK) {
-      extraOptions = ';DB_CLOSE_DELAY=-1';
-    } else if (databaseType === H2_MEMORY) {
-      extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
-    }
+    const databaseDataForType = databaseData[databaseType];
+    const { extraOptions = '' } = databaseDataForType;
     return extraOptions;
   }
 

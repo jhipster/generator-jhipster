@@ -18,28 +18,62 @@
  */
 const databaseTypes = require('../jdl/jhipster/database-types');
 
-const { MARIADB, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
+const { H2_DISK, H2_MEMORY, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 
 const databaseData = {
+  [MSSQL]: {
+    protocolSuffix: 'sqlserver://',
+    port: ':1433;database=',
+    r2dbc: {
+      protocolSuffix: 'mssql://',
+      port: ':1433/',
+    },
+  },
   [MARIADB]: {
     name: 'MariaDB',
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
+    protocolSuffix: 'mariadb://',
+    port: ':3306/',
+    extraOptions: '?useLegacyDatetimeCode=false&serverTimezone=UTC',
   },
   [MYSQL]: {
     name: 'MySQL',
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
+    protocolSuffix: 'mysql://',
+    port: ':3306/',
+    extraOptions:
+      '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true',
   },
   [ORACLE]: {
     name: 'Oracle',
     tableNameMaxLength: 128,
     constraintNameMaxLength: 128,
+    protocolSuffix: 'oracle:thin:@',
+    port: ':1521:',
   },
   [POSTGRESQL]: {
     name: 'PostgreSQL',
     tableNameMaxLength: 63,
     constraintNameMaxLength: 63,
+    protocolSuffix: 'postgresql://',
+    port: ':5432/',
+  },
+  [H2_DISK]: {
+    protocolSuffix: 'h2:file:',
+    useDirectory: true,
+    extraOptions: ';DB_CLOSE_DELAY=-1',
+    r2dbc: {
+      protocolSuffix: 'h2:file://',
+    },
+  },
+  [H2_MEMORY]: {
+    protocolSuffix: 'h2:mem:',
+    extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE',
+    r2dbc: {
+      protocolSuffix: 'h2:mem:///',
+    },
   },
 };
 
