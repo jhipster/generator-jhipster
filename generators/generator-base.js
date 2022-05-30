@@ -68,6 +68,7 @@ const {
     END,
   },
 } = require('../lib/constants/priorities.cjs');
+const { insertContentIntoApplicationProperties } = require('./server/needles.cjs');
 
 const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -102,14 +103,26 @@ const NO_SEARCH_ENGINE = searchEngineTypes.FALSE;
 const NO_MESSAGE_BROKER = messageBrokerTypes.NO;
 const NO_WEBSOCKET = websocketTypes.FALSE;
 
+const isWin32 = os.platform() === 'win32';
+
+/**
+ * @callback EditFileCallback
+ * @param {JHipsterBaseGenerator} this
+ * @param {string} content
+ * @param {string} filePath
+ * @returns {string} new content
+ */
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
  * The public API methods can be directly utilized as well using commonJS require.
  *
  * The method signatures in public API should not be changed without a major version change
+ *
+ * @extends {import('yeoman-generator')}
  */
-module.exports = class JHipsterBaseGenerator extends PrivateBase {
+class JHipsterBaseGenerator extends PrivateBase {
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -1224,6 +1237,15 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
   }
 
   /**
+   * Insert content into ApplicationProperties class
+   * @param {import("./server/needles.cjs").ApplicationPropertiesNeedles} needlesContent
+   * @returns {string} ApplicationProperties contents
+   */
+  insertContentIntoApplicationProperties(needlesContent) {
+    return insertContentIntoApplicationProperties(this, needlesContent);
+  }
+
+  /**
    * Generate a date to be used by Liquibase changelogs.
    *
    * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
@@ -2015,7 +2037,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
    * Return the user home
    */
   getUserHome() {
-    return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
+    return process.env[isWin32 ? 'USERPROFILE' : 'HOME'];
   }
 
   /**
@@ -2151,7 +2173,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       buildCmd += ' -Pwar';
     }
 
-    if (os.platform() !== 'win32') {
+    if (!isWin32) {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
@@ -2177,7 +2199,7 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
       buildCmd = `gradlew -x ${command}`;
     }
 
-    if (os.platform() !== 'win32') {
+    if (!isWin32) {
       buildCmd = `./${buildCmd}`;
     }
     buildCmd += ` -P${profile}`;
@@ -3354,4 +3376,33 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       LANG: 'en',
     });
   }
-};
+
+  /**
+   * Edit file content
+   * @param {string} file
+   * @param {...EditFileCallback} transformCallbacks
+   */
+  editFile(file, ...transformCallbacks) {
+    let filePath = this.destinationPath(file);
+    if (!this.env.sharedFs.existsInMemory(filePath) && this.env.sharedFs.existsInMemory(`${filePath}.jhi`)) {
+      filePath = `${filePath}.jhi`;
+    }
+    let content = this.readDestination(filePath);
+    if (isWin32 && content.match(/\r\n/)) {
+      transformCallbacks = [content => content.replace(/\r\n/g, '\n')].concat(transformCallbacks, content =>
+        content.replace(/\n/g, '\r\n')
+      );
+    }
+    try {
+      for (const cb of transformCallbacks) {
+        content = cb.call(this, content, filePath);
+      }
+    } catch (error) {
+      throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+    }
+    this.writeDestination(filePath, content);
+    return content;
+  }
+}
+
+module.exports = JHipsterBaseGenerator;
