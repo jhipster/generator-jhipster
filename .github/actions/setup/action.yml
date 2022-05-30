@@ -48,10 +48,6 @@ inputs:
     description: 'Application packaging'
     required: false
     default: jar
-  enable-testcontainers:
-    description: 'Enable test containers'
-    required: false
-    default: 'true'
   generator-jhipster-directory:
     description: 'JHipster Generator path'
     required: false
@@ -132,8 +128,6 @@ runs:
 
         echo "JHI_PROFILE=${{inputs.application-environment}}" >> $GITHUB_ENV
         test ${{inputs.application-packaging}} != war || echo "JHI_WAR=1" >> $GITHUB_ENV
-        test ${{inputs.enable-testcontainers}} != true || echo "JHI_TESTCONTAINERS=true" >> $GITHUB_ENV
-        test ${{inputs.enable-testcontainers}} != true || echo "SPRING_PROFILES_ACTIVE=testcontainers" >> $GITHUB_ENV
 
         echo "JHI_GENERATE_SKIP_CONFIG=1" >> $GITHUB_ENV
         echo "JHI_DISABLE_WEBPACK_LOGS=true" >> $GITHUB_ENV

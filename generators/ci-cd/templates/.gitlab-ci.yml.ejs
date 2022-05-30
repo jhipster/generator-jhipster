@@ -106,7 +106,7 @@ gradle-integration-test:
 
     stage: test
     script:
-        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseTypeSql && !reactive) { %>-Ptestcontainers<% } %>
+        - ./gradlew integrationTest -PnodeInstall --no-daemon
     artifacts:
         reports:
             junit: build/test-results/integrationTest/TEST-*.xml
@@ -218,7 +218,6 @@ maven-compile:
 maven-test:
     <%_ if (insideDocker) { _%>
         <%_ if (cacheProviderRedis || databaseTypeSql || databaseTypeCassandra || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
-    # DinD service is required for Testcontainers
     services:
         - docker:dind
 
@@ -232,7 +231,7 @@ maven-test:
 
     stage: test
     script:
-        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseTypeSql) { %>-Dspring.profiles.active=testcontainers<% } %>
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit:
