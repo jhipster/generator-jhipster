@@ -76,8 +76,7 @@ spring:
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
   elasticsearch:
-    rest:
-      uris: ${BONSAI_URL}
+    uris: ${BONSAI_URL}
 <%_ } _%>
 <%_ if (useOkta) { _%>
   security:
