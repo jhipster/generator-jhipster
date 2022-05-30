@@ -48,7 +48,7 @@ dependencies {
   <%_ } _%>
   <%_ if (devDatabaseTypePostgres) { _%>
     <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-postgresql"
+    implementation "org.postgresql:r2dbc-postgresql"
     <%_ } _%>
     implementation "org.postgresql:postgresql"
     liquibaseRuntime "org.postgresql:postgresql"
