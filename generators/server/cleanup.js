@@ -18,8 +18,7 @@
  */
 const cleanupCassandra = require('./cleanup-cassandra');
 const cleanupMongodb = require('./cleanup-mongodb');
-const cleanupH2 = require('./cleanup-h2');
-const cleanupPostgresql = require('./cleanup-postgresql');
+const cleanupSql = require('./cleanup-sql');
 const cleanupElasticsearch = require('./cleanup-elasticsearch');
 const cleanupHazelcast = require('./cleanup-hazelcast');
 const cleanupAngular = require('./cleanup-angular');
@@ -42,6 +41,9 @@ const constants = require('../generator-constants');
  * @param {string} testResourceDir - Test resources directory
  */
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
+  if (generator.databaseTypeSql) {
+    cleanupSql.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
+  }
   if (generator.databaseTypeCassandra) {
     cleanupCassandra.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
@@ -50,12 +52,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   }
   if (generator.cacheProviderHazelcast) {
     cleanupHazelcast.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
-  if (generator.devDatabaseTypeH2Any) {
-    cleanupH2.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
-  }
-  if (generator.devDatabaseTypePostgres || generator.prodDatabaseTypePostgres) {
-    cleanupPostgresql.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
   }
   if (generator.clientFrameworkAngular) {
     cleanupAngular.cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir);
@@ -198,6 +194,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
   }
   if (generator.isJhipsterVersionLessThan('7.8.2')) {
     generator.removeFile(`${constants.DOCKER_DIR}realm-config/jhipster-users-0.json`);
+    generator.removeFile(`${testDir}NoOpMailConfiguration.java`);
   }
 }
 

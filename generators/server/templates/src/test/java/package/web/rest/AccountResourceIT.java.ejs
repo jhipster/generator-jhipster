@@ -1280,6 +1280,7 @@ class AccountResourceIT {
         user.setActivated(true);
         user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
+        user.setLangKey("en");
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
@@ -1312,6 +1313,7 @@ class AccountResourceIT {
         user.setActivated(true);
         user.setLogin("password-reset-upper-case");
         user.setEmail("password-reset-upper-case@example.com");
+        user.setLangKey("en");
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>

@@ -99,7 +99,6 @@ jobs:
           jdl-sample: ${{ matrix.jdl-samples || '' }}
           application-environment: ${{ matrix.environment || 'prod' }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
-          enable-testcontainers: ${{ matrix.testcontainers != 'false' }}
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
@@ -186,9 +185,6 @@ jobs:
       - name: 'PREPARE: npm install'
         if: steps.compare.outputs.equals != 'true'
         run: ${{ (matrix.workspaces == 'true' && 'npm') || './npmw' }} install
-      - name: 'TESTS: Start docker-compose containers for e2e and backend tests'
-        if: steps.compare.outputs.equals != 'true' && matrix.testcontainers == 'false' && matrix.workspaces != 'true'
-        run: npm run ci:e2e:prepare
       - name: 'TESTS: backend'
         id: backend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 1 && needs.build-matrix.outputs.server != 'false'
@@ -201,7 +197,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
       - name: 'TESTS: Start docker-compose containers for e2e tests'
-        if: steps.compare.outputs.equals != 'true' && (matrix.testcontainers != 'false' ||  matrix.workspaces == 'true')
+        if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:prepare
       - name: 'E2E: Run'
         id: e2e

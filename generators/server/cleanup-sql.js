@@ -28,9 +28,18 @@
  */
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
   if (generator.isJhipsterVersionLessThan('4.0.0')) {
-    generator.removeFile(`${javaDir}domain/util/FixedPostgreSQL82Dialect`);
+    if (generator.devDatabaseTypeH2Any) {
+      generator.removeFile(`${javaDir}domain/util/FixedH2Dialect.java`);
+    }
+    if (generator.devDatabaseTypePostgres || generator.prodDatabaseTypePostgres) {
+      generator.removeFile(`${javaDir}domain/util/FixedPostgreSQL82Dialect`);
+    }
+  }
+  if (generator.isJhipsterVersionLessThan('7.8.2')) {
+    generator.removeFile(`${testResourceDir}config/application-testcontainers.yml`);
   }
 }
+
 module.exports = {
   cleanupOldServerFiles,
 };

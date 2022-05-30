@@ -29,18 +29,8 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { defaultConfig } = require('../generator-defaults');
 const { JWT, OAUTH2, SESSION } = require('../../jdl/jhipster/authentication-types');
-const {
-  CASSANDRA,
-  COUCHBASE,
-  MARIADB,
-  MSSQL,
-  MYSQL,
-  ORACLE,
-  POSTGRESQL,
-  SQL,
-  MONGODB,
-  NEO4J,
-} = require('../../jdl/jhipster/database-types');
+
+const { CASSANDRA, COUCHBASE, ORACLE, SQL, MONGODB, NEO4J } = require('../../jdl/jhipster/database-types');
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = require('../../jdl/jhipster/cache-types');
 const { GRADLE, MAVEN } = require('../../jdl/jhipster/build-tool-types');
 const { ELASTICSEARCH } = require('../../jdl/jhipster/search-engine-types');
@@ -182,6 +172,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_ELASTICSEARCH_CONTAINER = constants.DOCKER_ELASTICSEARCH_CONTAINER;
         this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
         this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
+        this.DOCKER_KEYCLOAK_VERSION = constants.DOCKER_KEYCLOAK_VERSION;
         this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
         this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
         this.DOCKER_SONAR = constants.DOCKER_SONAR;
@@ -360,33 +351,6 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.testResourceDir = SERVER_TEST_RES_DIR;
         this.srcMainDir = MAIN_DIR;
         this.srcTestDir = TEST_DIR;
-
-        if (this.jhipsterConfig.databaseType === SQL) {
-          // sql
-          let dbContainer;
-          switch (this.jhipsterConfig.prodDatabaseType) {
-            case MYSQL:
-              dbContainer = this.DOCKER_MYSQL;
-              break;
-            case MARIADB:
-              dbContainer = this.DOCKER_MARIADB;
-              break;
-            case POSTGRESQL:
-              dbContainer = this.DOCKER_POSTGRESQL;
-              break;
-            case MSSQL:
-              dbContainer = this.DOCKER_MSSQL;
-              break;
-            case ORACLE:
-            default:
-              dbContainer = null;
-          }
-          if (dbContainer != null && dbContainer.includes(':')) {
-            this.containerVersion = dbContainer.split(':')[1];
-          } else {
-            this.containerVersion = 'latest';
-          }
-        }
       },
     };
   }

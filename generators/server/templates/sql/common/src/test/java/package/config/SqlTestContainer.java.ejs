@@ -16,27 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
-import <%=packageName%>.service.MailService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.testcontainers.containers.JdbcDatabaseContainer;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
+public interface SqlTestContainer extends InitializingBean, DisposableBean {
 
-@Configuration
-public class NoOpMailConfiguration {
-    private final MailService mockMailService;
-
-    public NoOpMailConfiguration() {
-        mockMailService = mock(MailService.class);
-        doNothing().when(mockMailService).sendActivationEmail(any());
-    }
-
-    @Bean
-    public MailService mailService() {
-        return mockMailService;
-    }
+    JdbcDatabaseContainer<?> getTestContainer();
 }

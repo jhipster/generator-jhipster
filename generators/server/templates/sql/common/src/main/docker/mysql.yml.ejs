@@ -22,7 +22,8 @@ services:
   <%= baseName.toLowerCase() %>-mysql:
     image: <%= DOCKER_MYSQL %>
     platform: linux/x86_64
-    # volumes:
+    volumes:
+      - ./config/mysql:/etc/mysql/conf.d
     #   - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
