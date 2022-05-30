@@ -74,7 +74,44 @@ describe(`JHipster ${generator} generator`, () => {
         });
 
         it('should match snapshot', () => {
-          expect(snapshot).toMatchInlineSnapshot(`Object {}`);
+          expect(snapshot).toMatchInlineSnapshot(`
+Object {
+  "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": Object {
+    "contents": "package com.mycompany.myapp.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+/**
+ * Properties specific to JHipster.
+ * <p>
+ * Properties are configured in the {@code application.yml} file.
+ * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
+ */
+@ConfigurationProperties(prefix = \\"application\\", ignoreUnknownFields = false)
+public class ApplicationProperties {
+    private Foo foo;
+    // jhipster-needle-application-properties-property
+
+    private Foo getFoo() {
+        return foo;
+    };
+    // jhipster-needle-application-properties-property-getter
+
+    public static Foo{} {
+        private String bar;
+
+        public String getBar() {
+          return bar;
+        }
+    };
+    // jhipster-needle-application-properties-property-class
+}
+",
+    "state": "modified",
+    "stateCleared": "modified",
+  },
+}
+`);
         });
 
         it('should not be add the content at second call', () => {
