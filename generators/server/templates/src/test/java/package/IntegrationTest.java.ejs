@@ -46,7 +46,7 @@ import <%= packageName %>.config.EmbeddedNeo4j;
 import <%= packageName %>.config.EmbeddedSQL;
 <%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
-import <%= packageName %>.RedisTestContainerExtension;
+import <%= packageName %>.config.EmbeddedRedis;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
@@ -69,7 +69,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = {<%= mainClass %>.class, AsyncSyncConfiguration.class<% if (authenticationTypeOauth2) { %>, TestSecurityConfiguration.class<% } %>})
 <%_ if (cacheProviderRedis) { _%>
-@ExtendWith(RedisTestContainerExtension.class)
+@EmbeddedRedis
 <%_ } _%>
 <%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
 @EmbeddedCouchbase

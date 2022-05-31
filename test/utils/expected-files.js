@@ -272,7 +272,9 @@ const expectedFiles = {
     `${DOCKER_DIR}redis-cluster.yml`,
     `${DOCKER_DIR}redis/connectRedisCluster.sh`,
     `${DOCKER_DIR}redis/Redis-Cluster.Dockerfile`,
-    `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/RedisTestContainerExtension.java`,
+    `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/config/EmbeddedRedis.java`,
+    `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/config/RedisTestContainer.java`,
+    `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/config/TestContainersSpringContextCustomizerFactory.java`,
   ],
 
   gatling: [`${TEST_DIR}gatling/conf/gatling.conf`],

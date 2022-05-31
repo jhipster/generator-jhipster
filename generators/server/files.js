@@ -92,21 +92,6 @@ const mongoDbFiles = {
           file: 'package/config/EmbeddedMongo.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedMongo.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
-        },
       ],
     },
   ],
@@ -151,21 +136,6 @@ const neo4jFiles = {
         {
           file: 'package/config/EmbeddedNeo4j.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedNeo4j.java`,
-        },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -227,21 +197,6 @@ const cassandraFiles = {
         {
           file: 'package/config/EmbeddedCassandra.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedCassandra.java`,
-        },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -981,8 +936,12 @@ const baseServerFiles = {
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
-          file: 'package/RedisTestContainerExtension.java',
-          renameTo: generator => `${generator.testDir}RedisTestContainerExtension.java`,
+          file: 'package/config/EmbeddedRedis.java',
+          renameTo: generator => `${generator.testDir}config/EmbeddedRedis.java`,
+        },
+        {
+          file: 'package/config/RedisTestContainer.java',
+          renameTo: generator => `${generator.testDir}config/RedisTestContainer.java`,
         },
       ],
     },
@@ -1405,10 +1364,6 @@ const baseServerFiles = {
           file: 'package/config/EmbeddedKafka.java',
           renameTo: generator => `${generator.testDir}config/EmbeddedKafka.java`,
         },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
       ],
     },
     {
@@ -1428,18 +1383,6 @@ const baseServerFiles = {
         {
           file: 'package/web/rest/KafkaResourceIT_reactive.java',
           renameTo: generator => `${generator.testDir}web/rest/${generator.upperFirstCamelCase(generator.baseName)}KafkaResourceIT.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.messageBrokerKafka,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -1682,24 +1625,11 @@ const baseServerFiles = {
       templates: ['testcontainers.properties', 'META-INF/spring.factories'],
     },
     {
-      condition: generator => generator.databaseTypeCouchbase || generator.databaseTypeSql,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
           file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
           renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.databaseTypeCouchbase,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
-        },
-        {
-          file: 'testcontainers.properties',
         },
       ],
     },
@@ -1714,19 +1644,6 @@ const baseServerFiles = {
         {
           file: 'package/config/ElasticsearchTestContainer.java',
           renameTo: generator => `${generator.testDir}config/ElasticsearchTestContainer.java`,
-        },
-        {
-          file: 'package/config/TestContainersSpringContextCustomizerFactory.java',
-          renameTo: generator => `${generator.testDir}config/TestContainersSpringContextCustomizerFactory.java`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.searchEngineElasticsearch,
-      path: SERVER_TEST_RES_DIR,
-      templates: [
-        {
-          file: 'META-INF/spring.factories',
         },
       ],
     },

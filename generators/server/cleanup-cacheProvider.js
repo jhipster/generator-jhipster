@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
@@ -27,9 +28,16 @@
  * @param {string} testResourceDir - Test resources directory
  */
 function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
-  if (generator.isJhipsterVersionLessThan('3.12.0')) {
-    generator.removeFile(`${javaDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
-    generator.removeFile(`${javaDir}config/hazelcast/package-info.java`);
+  if (generator.cacheProviderHazelcast) {
+    if (generator.isJhipsterVersionLessThan('3.12.0')) {
+      generator.removeFile(`${javaDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
+      generator.removeFile(`${javaDir}config/hazelcast/package-info.java`);
+    }
+  }
+  if (generator.cacheProviderRedis) {
+    if (generator.isJhipsterVersionLessThan('7.8.2')) {
+      generator.removeFile(`${testDir}RedisTestContainerExtension.java`);
+    }
   }
 }
 
