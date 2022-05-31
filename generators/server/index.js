@@ -158,6 +158,7 @@ module.exports = class JHipsterServerGenerator extends BaseBlueprintGenerator {
         this.DOCKER_JHIPSTER_CONTROL_CENTER = constants.DOCKER_JHIPSTER_CONTROL_CENTER;
         this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
         this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
+        this.DOCKER_MYSQL_VERSION = constants.DOCKER_MYSQL_VERSION;
         this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
         this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
         this.DOCKER_MONGODB = constants.DOCKER_MONGODB;

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.Collections;
 
@@ -43,7 +44,7 @@ public class MysqlTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mysqlContainer) {
-            mysqlContainer = new MySQLContainer<>("<%= DOCKER_MYSQL %>")
+            mysqlContainer = new MySQLContainer<>(DockerImageName.parse("<%= DOCKER_MYSQL %>").asCompatibleSubstituteFor("mysql:<%= DOCKER_MYSQL_VERSION %>"))
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
