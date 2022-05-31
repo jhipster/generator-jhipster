@@ -43,7 +43,7 @@ const LIQUIBASE_DTD_VERSION = LIQUIBASE_VERSION.split('.', 3).slice(0, 2).join('
 const HIBERNATE_VERSION = '5.6.8.Final';
 
 const JACOCO_VERSION = '0.8.8';
-const KAFKA_VERSION = '5.5.7';
+const KAFKA_VERSION = '7.1.1';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.2';
 const ELASTICSEARCH_VERSION = '7.15.2'; // The version should be coherent with the one from spring-data-elasticsearch project
 // Version of docker images
