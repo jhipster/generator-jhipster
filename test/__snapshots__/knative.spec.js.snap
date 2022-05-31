@@ -13481,7 +13481,7 @@ spec:
           emptyDir: {}
       containers:
         - name: mysql
-          image: mcr.microsoft.com/mssql/server:2019-CU15-ubuntu-20.04
+          image: mcr.microsoft.com/mssql/server:2019-CU16-ubuntu-20.04
           env:
             - name: MSSQL_PID
               value: \\"Express\\"
