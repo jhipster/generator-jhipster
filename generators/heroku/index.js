@@ -490,10 +490,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.log(chalk.bold('\nProvisioning addons'));
         if (this.searchEngine === ELASTICSEARCH) {
           this.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          ChildProcess.exec(
-            `heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-              addonCreateCallback.bind('Elasticsearch', err, stdout, stderr);
-            });
+          ChildProcess.exec(`heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+            addonCreateCallback.bind('Elasticsearch', err, stdout, stderr);
+          });
         }
 
         if (this.useOkta) {
