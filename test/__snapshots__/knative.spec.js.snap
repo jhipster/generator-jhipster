@@ -9857,7 +9857,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.2
+          image: postgres:14.3
           env:
             - name: POSTGRES_USER
               value: mspsql
@@ -13968,7 +13968,7 @@ spec:
           emptyDir: {}
       containers:
         - name: postgres
-          image: postgres:14.2
+          image: postgres:14.3
           env:
             - name: POSTGRES_USER
               value: mspsql

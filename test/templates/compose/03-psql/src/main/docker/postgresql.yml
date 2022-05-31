@@ -1,7 +1,7 @@
 version: '2'
 services:
     mspsql-postgresql:
-        image: postgres:14.2
+        image: postgres:14.3
         # volumes:
         #     - ~/volumes/jhipster/mspsql/postgresql/:/var/lib/postgresql/
         environment:
